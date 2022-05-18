@@ -7,7 +7,7 @@ import 'package:front_lomba/model/models.dart';
 class UserList extends StatelessWidget {
   const UserList({Key? key}) : super(key: key);
 
-  static const appTitle = 'Organizaciones';
+  static const appTitle = 'Lomba';
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +43,10 @@ class UserListPage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            TitleSection(title: "Organizacion",subtitle: "Administrador",),
-            ListSection(user: "organizacion 1",),
-            ListSection(user: "organizacion 2",),
-            ListSection(user: "organizacion 3",),
+            TitleSection(title: "Usuarios de Lomba",subtitle: "Organizaciones / Lomba / Usuarios",),
+            ListSection(user: "user 1",),
+            ListSection(user: "user 2",),
+            ListSection(user: "user 3",),
             //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
           ],
         ),

@@ -24,7 +24,7 @@ class ListSection extends StatelessWidget {
           ),
           Expanded(
             child: Container(
-              child: Text(this.user),
+              child: Text(this.user, style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.4),),
             )
           ),
           SizedBox(
@@ -39,7 +39,7 @@ class ListSection extends StatelessWidget {
           ),
           FloatingActionButton(  
           onPressed: () {},  
-          child: Icon(Icons.supervised_user_circle),
+          child: Icon(Icons.cancel),
           ),
         ],
       ),

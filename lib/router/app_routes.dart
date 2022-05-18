@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:front_lomba/screens/home_screen.dart';
-import 'package:front_lomba/screens/permit_screen.dart';
-import 'package:front_lomba/screens/user_screen.dart';
-import 'package:front_lomba/screens/organization_screen.dart';
-import 'package:front_lomba/screens/alert_screen.dart';
-import 'package:front_lomba/screens/login_screen.dart';
+import 'package:front_lomba/model/models.dart';
 
 class MenuOption {
 
@@ -25,12 +20,13 @@ class MenuOption {
 
 class AppRoutes {
 
-  static const initialRoute = '/home';
+  static const initialRoute = '/organizaciones';
 
   static final menuOptions = <MenuOption>[
     
     MenuOption(route: '/permisos', name: 'permisos', screen: const Permit(), icon: Icons.list_alt ),
     MenuOption(route: '/usuarios', name: 'usuarios', screen: const User(), icon: Icons.list_alt ),
+    MenuOption(route: '/usuarioslist', name: 'usuarios_list', screen: const UserList(), icon: Icons.list_alt ),
     MenuOption(route: '/organizaciones', name: 'organizaciones', screen: const Organization(), icon: Icons.list_alt ),
     MenuOption(route: '/login', name: 'login', screen: const Login(), icon: Icons.list_alt ),
   ];

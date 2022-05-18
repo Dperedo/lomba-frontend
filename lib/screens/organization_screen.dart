@@ -7,7 +7,7 @@ import 'package:front_lomba/model/models.dart';
 class Organization extends StatelessWidget {
   const Organization({Key? key}) : super(key: key);
 
-  static const appTitle = 'Organizaciones';
+  static const appTitle = 'Lomba';
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +43,11 @@ class OrganizationPage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            TitleSection(title: "Organizacion",subtitle: "Administrador",),
-            CardSection(organizacion: "organizacion 1",),
-            CardSection(organizacion: "organizacion 2",),
-            CardSection(organizacion: "organizacion 3",),
+            TitleSection(title: "Organizaciones",subtitle: "Administrador / Organizaciones",),
+            FilterSection(),
+            CardSection(organizacion: "Organizacion 1",),
+            CardSection(organizacion: "Organizacion 2",),
+            CardSection(organizacion: "Organizacion 3",),
             //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
           ],
         ),
