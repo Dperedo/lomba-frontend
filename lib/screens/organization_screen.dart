@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:front_lomba/screens/permit_screen.dart';
-import 'package:front_lomba/screens/user_screen.dart';
-import 'package:front_lomba/styles/styles.dart';
+import 'package:front_lomba/model/models.dart';
 
 //void main() => runApp(const Permisos());
 
@@ -26,6 +24,8 @@ class OrganizationPage extends StatelessWidget {
 
   final String title;
 
+  //Array organizacion = ['organizacion 1','organizacion 2','organizacion 3'] as Array<NativeType>,
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,9 +43,10 @@ class OrganizationPage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            CircularProgressIndicator(),
-            Divider(),
-            Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
+            CardSection(organizacion: "organizacion 1",),
+            CardSection(organizacion: "organizacion 2",),
+            CardSection(organizacion: "organizacion 3",),
+            //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
           ],
         )
       ),
