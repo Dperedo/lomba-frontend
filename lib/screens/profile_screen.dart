@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front_lomba/model/models.dart';
 
 import 'package:front_lomba/screens/permit_screen.dart';
 import 'package:front_lomba/screens/user_screen.dart';
@@ -36,10 +37,7 @@ class ProfilePage extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('Perfil',style: Theme.of(context).textTheme.headline3),
-              Text('Usuario: Diego',style: Theme.of(context).textTheme.headline5),
-              Text('Correo electronico: dperedo@gmail.com',style: Theme.of(context).textTheme.headline5),
-              Text('Permisos: Super administrador',style: Theme.of(context).textTheme.headline5),
+              ProfileSection(),
             ],
           ),
       ),

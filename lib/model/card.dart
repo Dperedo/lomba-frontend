@@ -15,7 +15,7 @@ class CardSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: new EdgeInsets.all(28.0),
+      padding: new EdgeInsets.all(15.0),
       child: Row(
         children: [
           Icon(Icons.business),
@@ -38,7 +38,9 @@ class CardSection extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(  
-          onPressed: () {},  
+          onPressed: () {
+            //Navigator.push(context, MaterialPageRoute(builder: (context) => UserList()));
+          },  
           child: Icon(Icons.supervised_user_circle),
           ),
         ],

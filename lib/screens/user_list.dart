@@ -4,8 +4,8 @@ import 'package:front_lomba/model/models.dart';
 
 //void main() => runApp(const Permisos());
 
-class Organization extends StatelessWidget {
-  const Organization({Key? key}) : super(key: key);
+class UserList extends StatelessWidget {
+  const UserList({Key? key}) : super(key: key);
 
   static const appTitle = 'Organizaciones';
 
@@ -14,13 +14,13 @@ class Organization extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: appTitle,
-      home: OrganizationPage(title: appTitle),
+      home: UserListPage(title: appTitle),
     );
   }
 }
 
-class OrganizationPage extends StatelessWidget {
-  const OrganizationPage({ Key? key, required this.title }) : super(key: key);
+class UserListPage extends StatelessWidget {
+  const UserListPage({ Key? key, required this.title }) : super(key: key);
 
   final String title;
 
@@ -44,9 +44,9 @@ class OrganizationPage extends StatelessWidget {
         child: Column(
           children: [
             TitleSection(title: "Organizacion",subtitle: "Administrador",),
-            CardSection(organizacion: "organizacion 1",),
-            CardSection(organizacion: "organizacion 2",),
-            CardSection(organizacion: "organizacion 3",),
+            ListSection(user: "organizacion 1",),
+            ListSection(user: "organizacion 2",),
+            ListSection(user: "organizacion 3",),
             //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
           ],
         ),

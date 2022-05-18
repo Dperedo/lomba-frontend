@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:front_lomba/screens/permit_screen.dart';
-import 'package:front_lomba/screens/organization_screen.dart';
-import 'package:front_lomba/styles/styles.dart';
+import 'package:front_lomba/model/models.dart';
 
 //void main() => runApp(const Permisos());
 
@@ -42,6 +40,17 @@ class UserPage extends StatelessWidget {
         ]
       ),
       body: Center(
+        child: Column(
+          children: [
+            TitleSection(title: "Usuarios",subtitle: "Administrador",),
+            CardSection(organizacion: "user 1",),
+            CardSection(organizacion: "user 2",),
+            CardSection(organizacion: "user 3",),
+            //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
+          ],
+        ),
+      ),
+      /*body: Center(
       child: ListView(
           children: <Widget>[
             Container(
@@ -73,7 +82,7 @@ class UserPage extends StatelessWidget {
             )
           ]
         )
-      ),
+      ),*/
       
       backgroundColor: Styles.defaultGreengroundColor,
       drawer: Drawer(
