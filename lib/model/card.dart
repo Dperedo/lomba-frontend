@@ -6,13 +6,13 @@ class CardSection extends StatelessWidget {
 
   final String organizacion;
   final IconData icon;
-  final Widget bottonCancel;
+  //final Widget bottonCancel;
   
   const CardSection({
     Key? key, 
     required this.organizacion,
     required this.icon,
-    required this.bottonCancel,
+    //required this.bottonCancel,
   }) : super(key: key);
 
 
@@ -36,7 +36,8 @@ class CardSection extends StatelessWidget {
           ),
           FloatingActionButton(  
           onPressed: () {
-            showCancel1(context);
+            //showCancel1(context);
+            
           },  
           child: Icon(Icons.do_not_disturb_on),
           ),
