@@ -5,10 +5,14 @@ import 'package:front_lomba/model/models.dart';
 class CardSection extends StatelessWidget {
 
   final String organizacion;
+  final IconData icon;
+  final Widget bottonCancel;
   
   const CardSection({
     Key? key, 
-    required this.organizacion
+    required this.organizacion,
+    required this.icon,
+    required this.bottonCancel,
   }) : super(key: key);
 
 
@@ -18,7 +22,7 @@ class CardSection extends StatelessWidget {
       padding: new EdgeInsets.all(15.0),
       child: Row(
         children: [
-          Icon(Icons.business),
+          Icon(this.icon),
           SizedBox(
             width: 20,
           ),
@@ -32,7 +36,7 @@ class CardSection extends StatelessWidget {
           ),
           FloatingActionButton(  
           onPressed: () {
-            showCancel(context);
+            showCancel1(context);
           },  
           child: Icon(Icons.do_not_disturb_on),
           ),
@@ -51,7 +55,7 @@ class CardSection extends StatelessWidget {
   }
 }
 
-showCancel(BuildContext context) {
+showCancel1(BuildContext context) {
 
   Widget cancelButton = TextButton(
     child: Text("No"),

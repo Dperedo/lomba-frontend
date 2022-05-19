@@ -44,6 +44,7 @@ class UserListPage extends StatelessWidget {
         child: Column(
           children: [
             TitleSection(title: "Usuarios de Lomba",subtitle: "Organizaciones / Lomba / Usuarios",),
+            FilterSection(),
             ListSection(user: "user 1",),
             ListSection(user: "user 2",),
             ListSection(user: "user 3",),

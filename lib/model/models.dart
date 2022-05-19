@@ -11,4 +11,5 @@ export 'package:front_lomba/model/list.dart';
 export 'package:front_lomba/model/profile.dart';
 export 'package:front_lomba/model/title.dart';
 export 'package:front_lomba/model/filter.dart';
+export 'package:front_lomba/model/notificacion.dart';
 export 'package:front_lomba/styles/styles.dart';

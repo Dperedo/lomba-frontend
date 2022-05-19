@@ -45,9 +45,9 @@ class OrganizationPage extends StatelessWidget {
           children: [
             TitleSection(title: "Organizaciones",subtitle: "Administrador / Organizaciones",),
             FilterSection(),
-            CardSection(organizacion: "Organizacion 1",),
-            CardSection(organizacion: "Organizacion 2",),
-            CardSection(organizacion: "Organizacion 3",),
+            CardSection(organizacion: "Organizacion 1",icon: Icons.business,bottonCancel: showCancel(context)),
+            CardSection(organizacion: "Organizacion 2",icon: Icons.business,bottonCancel: showCancel(context)),
+            CardSection(organizacion: "Organizacion 3",icon: Icons.business,bottonCancel: showCancel(context)),
             //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
           ],
         ),
@@ -88,4 +88,31 @@ class OrganizationPage extends StatelessWidget {
       ),
     );
   }
+}
+
+showCancel(BuildContext context) {
+
+  Widget cancelButton = TextButton(
+    child: Text("No"),
+    onPressed:  () {},
+  );
+  Widget continueButton = TextButton(
+    child: Text("Si"),
+    onPressed:  () {},
+  );
+
+  AlertDialog alert = AlertDialog(
+    content: Text("¿Seguro deseas desactivar la organización Lomba?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

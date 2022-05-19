@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front_lomba/model/models.dart';
 
 //import 'package:front_lomba/model/models.dart';
 
@@ -18,7 +19,7 @@ class ListSection extends StatelessWidget {
       padding: new EdgeInsets.all(15.0),
       child: Row(
         children: [
-          Icon(Icons.business),
+          Icon(Icons.person),
           SizedBox(
             width: 20,
           ),
@@ -31,18 +32,42 @@ class ListSection extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(  
-          onPressed: () {},  
+          onPressed: () {
+            showdDelete(context);
+          },  
           child: Icon(Icons.do_not_disturb_on),
           ),
           SizedBox(
             width: 20,
           ),
           FloatingActionButton(  
-          onPressed: () {},  
+          onPressed: () {
+            NotificacionSection();
+          },  
           child: Icon(Icons.cancel),
           ),
         ],
       ),
     );
   }
+}
+
+showdDelete(BuildContext context) {
+
+  Widget cancelButton = TextButton(
+    child: Text("No"),
+    onPressed:  () {},
+  );
+  Widget continueButton = TextButton(
+    child: Text("Si"),
+    onPressed:  () {},
+  );
+
+  AlertDialog alert = AlertDialog(
+    content: Text("¿Seguro deseas desactivar al usuario?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
 }

@@ -44,9 +44,10 @@ class UserPage extends StatelessWidget {
         child: Column(
           children: [
             TitleSection(title: "Usuarios",subtitle: "Administrador / Usuarios",),
-            CardSection(organizacion: "ususario 1",),
-            CardSection(organizacion: "ususario 2",),
-            CardSection(organizacion: "ususario 3",),
+            FilterSection(),
+            CardSection(organizacion: "ususario 1",icon: Icons.person,bottonCancel: showCancelUser(context),),
+            CardSection(organizacion: "ususario 2",icon: Icons.person,bottonCancel: showCancelUser(context),),
+            CardSection(organizacion: "ususario 3",icon: Icons.person,bottonCancel: showCancelUser(context),),
             //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
           ],
         ),
@@ -215,6 +216,31 @@ class _LoadingIcon extends StatelessWidget {
   }
 }
 
+showCancelUser(BuildContext context) {
 
+  Widget cancelButton = TextButton(
+    child: Text("No"),
+    onPressed:  () {},
+  );
+  Widget continueButton = TextButton(
+    child: Text("Si"),
+    onPressed:  () {},
+  );
+
+  AlertDialog alert = AlertDialog(
+    content: Text("¿Seguro deseas desactivar la organización Lomba?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
 
 
