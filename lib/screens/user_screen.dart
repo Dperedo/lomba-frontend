@@ -45,9 +45,13 @@ class UserPage extends StatelessWidget {
           children: [
             TitleSection(title: "Usuarios",subtitle: "Administrador / Usuarios",),
             FilterSection(),
+            Divider(),
             CardSection(organizacion: "ususario 1",icon: Icons.person,),
+            Divider(),
             CardSection(organizacion: "ususario 2",icon: Icons.person,),
+            Divider(),
             CardSection(organizacion: "ususario 3",icon: Icons.person,),
+            Divider(),
             //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
           ],
         ),
