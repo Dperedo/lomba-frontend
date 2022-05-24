@@ -17,8 +17,8 @@ class AlertSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-            title: const Text('this.title'),
-            content: const Text('this.dialog'),
+            title: Text(this.title),
+            content: Text(this.dialog),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.pop(context, 'No'),

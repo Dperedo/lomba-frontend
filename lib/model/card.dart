@@ -57,8 +57,8 @@ final snackBar = SnackBar(
             //showCancel1(context, this.snackBar);
             //ScaffoldMessenger.of(context).showSnackBar(this.snackBar);
             showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertSection(title: 'Aviso',dialog: 'Desea cambiar',));
+              context: context,
+              builder: (BuildContext context) => AlertSection(title: 'Aviso',dialog: 'Desea cambiar',));
             //AlertSection(title: 'Aviso',dialog: 'Desea cambiar',);
           },  
           child: Icon(Icons.do_not_disturb_on),
