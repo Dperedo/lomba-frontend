@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:front_lomba/model/models.dart';
+
 class FilterSection extends StatelessWidget {
   
   const FilterSection({
@@ -29,19 +31,24 @@ class FilterSection extends StatelessWidget {
               child: Text(""),
             )
           ),
-          FloatingActionButton(  
-          onPressed: () {
-          },  
-          child: Icon(Icons.filter_alt),
+          IconButton(
+            icon: Icon(Icons.filter_alt), 
+            color: Colors.blue,
+            onPressed: () {
+            },
           ),
           SizedBox(
             width: 20,
           ),
-          FloatingActionButton(  
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(FilterSection.snackBar);
-          },  
-          child: Icon(Icons.filter_list_rounded),
+          IconButton(
+            icon: Icon(Icons.filter_list_rounded), 
+            color: Colors.blue,
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(FilterSection.snackBar);
+            },
+          ),
+          SizedBox(
+            width: 20,
           ),
         ],
       ),

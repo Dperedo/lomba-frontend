@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:front_lomba/screens/user_screen.dart';
-import 'package:front_lomba/screens/organization_screen.dart';
-import 'package:front_lomba/styles/styles.dart';
+import 'package:front_lomba/model/models.dart';
 
 class Permit extends StatelessWidget {
   const Permit({Key? key}) : super(key: key);
@@ -50,38 +48,7 @@ class PermitPage extends StatelessWidget {
       ),
       
       backgroundColor: Styles.defaultGreengroundColor,
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text('Cuenta'),
-            ),
-            ListTile(
-              title: const Text('Organizaciones'),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Organization()));
-              },
-            ),
-            ListTile(
-              title: const Text('Usuarios'),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => User()));
-              },
-            ),
-            ListTile(
-              title: const Text('Permisos'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Permit()));
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: DrawerSection(),
     );
   }
 }

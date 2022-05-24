@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:front_lomba/model/models.dart';
+import 'package:front_lomba/router/app_routes.dart';
 
 //void main() => runApp(const Permisos());
 
@@ -24,10 +25,11 @@ class OrganizationPage extends StatelessWidget {
 
   final String title;
 
-  //Array organizacion = ['organizacion 1','organizacion 2','organizacion 3'] as Array<NativeType>,
+  //Array organizacion = ['organizacion 1','organizacion 2','organizacion 3'] as Array<NativeType>, 
 
   @override
   Widget build(BuildContext context) {
+    final menuOptions = AppRoutes.menuOptions;
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -36,6 +38,7 @@ class OrganizationPage extends StatelessWidget {
             icon: const Icon(Icons.account_circle_rounded),
             tooltip: 'Perfil',
             onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
             },
           )
         ]
@@ -59,37 +62,7 @@ class OrganizationPage extends StatelessWidget {
       
       
       backgroundColor: Styles.defaultGreengroundColor,
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text('Cuenta'),
-            ),
-            ListTile(
-              title: const Text('Organizaciones'),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Organization()));
-              },
-            ),
-            ListTile(
-              title: const Text('Usuarios'),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => User()));
-              },
-            ),
-            ListTile(
-              title: const Text('Permisos'),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Permit()));
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: DrawerSection(),
     );
   }
 }

@@ -37,8 +37,16 @@ final snackBar = SnackBar(
             width: 20,
           ),
           Expanded(
-            child: Container(
-              child: Text(this.organizacion, style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.4),),
+            child: Center(
+              child: Align(
+                //child: Text(this.organizacion, style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.4),),
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  child: Text(this.organizacion, style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.4),),
+                  onPressed: () {
+                  },
+                )
+              ),
             )
           ),
           SizedBox(
@@ -46,10 +54,12 @@ final snackBar = SnackBar(
           ),
           FloatingActionButton(  
           onPressed: () {
-            
             //showCancel1(context, this.snackBar);
-            ScaffoldMessenger.of(context).showSnackBar(this.snackBar);
-            
+            //ScaffoldMessenger.of(context).showSnackBar(this.snackBar);
+            showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertSection(title: 'Aviso',dialog: 'Desea cambiar',));
+            //AlertSection(title: 'Aviso',dialog: 'Desea cambiar',);
           },  
           child: Icon(Icons.do_not_disturb_on),
           ),
@@ -78,11 +88,11 @@ showCancel1(BuildContext context,SnackBar snack) {
   Widget continueButton = TextButton(
     child: Text("Si"),
     onPressed:  () {
-      //Navigator.of(context).pop();
+      Navigator.pop(context, 'Si');
       
       // Find the ScaffoldMessenger in the widget tree
       // and use it to show a SnackBar.
-      ScaffoldMessenger.of(context).showSnackBar(snack);
+      //ScaffoldMessenger.of(context).showSnackBar(snack);
     }, 
   );
 
@@ -101,3 +111,4 @@ showCancel1(BuildContext context,SnackBar snack) {
     },
   );
 }
+
