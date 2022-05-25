@@ -5,8 +5,8 @@ import 'package:front_lomba/model/models.dart';
 //void main() => runApp(const Permisos());
 
 
-class User extends StatelessWidget {
-  const User({Key? key}) : super(key: key);
+class UserScreen extends StatelessWidget {
+  const UserScreen({Key? key}) : super(key: key);
 
   static const appTitle = 'Lomba';
 

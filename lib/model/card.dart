@@ -15,7 +15,7 @@ class CardSection extends StatelessWidget {
     //required this.bottonCancel,
   }) : super(key: key);
 
-final snackBar = SnackBar(
+final _snackBar = SnackBar(
               content: const Text('Se a desactivado la organización'),
               action: SnackBarAction(
           label: 'Ok',
@@ -42,9 +42,13 @@ final snackBar = SnackBar(
                 //child: Text(this.organizacion, style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.4),),
                 alignment: Alignment.centerLeft,
                 child: TextButton(
-                  child: Text(this.organizacion, style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.4),),
-                  onPressed: () {
-                  },
+                  child: Text(
+                    this.organizacion,
+                    style: DefaultTextStyle.of(context)
+                        .style
+                        .apply(fontSizeFactor: 1.4),
+                  ),
+                  onPressed: () {},
                 )
               ),
             )
@@ -52,16 +56,30 @@ final snackBar = SnackBar(
           SizedBox(
             width: 20,
           ),
-          FloatingActionButton(  
-          onPressed: () {
-            //showCancel1(context, this.snackBar);
-            //ScaffoldMessenger.of(context).showSnackBar(this.snackBar);
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertSection(title: 'Aviso',dialog: 'Desea cambiar',));
-            //AlertSection(title: 'Aviso',dialog: 'Desea cambiar',);
-          },  
-          child: Icon(Icons.do_not_disturb_on),
+          FloatingActionButton(
+            onPressed: () {
+              //showCancel1(context, this.snackBar);
+
+              showDialog<String>(
+                context: context,
+                builder: (context) => GestureDetector(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Scaffold(
+                    backgroundColor: Colors.transparent,
+                    body: Builder(
+                      builder: (context) => GestureDetector(
+                          onTap: () {},
+                          child: AlertSection(
+                            title: 'Aviso',
+                            dialog: 'Desea cambiar',
+                          )),
+                    ),
+                  ),
+                ),
+              ).then((value) =>
+                  ScaffoldMessenger.of(context).showSnackBar(this._snackBar));
+            },
+            child: Icon(Icons.do_not_disturb_on),
           ),
           SizedBox(
             width: 20,

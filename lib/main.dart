@@ -24,7 +24,9 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const Home(),
         // When navigating to the "/second" route, build the SecondScreen widget.
         '/organizaciones': (context) => const Organization(),
-        '/usuarios': (context) => const User(),
+        '/usuarios': (context) => const UserScreen(),
+        '/usuarios_list': (context) => const UserList(),
+        '/profile_edit': (context) =>  EditProfilePage(),
       },
       //onGenerateRoute: AppRoutes.onGenerateRoute,
       //theme: AppTheme.lightTheme

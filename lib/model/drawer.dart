@@ -32,7 +32,7 @@ class DrawerSection extends StatelessWidget {
             title: const Text('Usuarios'),
             onTap: () {
               //Navigator.push(context, MaterialPageRoute(builder: (context) => User()));
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const User()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const UserScreen()));
             },
           ),
           ListTile(

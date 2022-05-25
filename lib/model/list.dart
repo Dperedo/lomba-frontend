@@ -7,10 +7,29 @@ class ListSection extends StatelessWidget {
 
   final String user;
   
-  const ListSection({
+  ListSection({
     Key? key, 
     required this.user
   }) : super(key: key);
+
+  final _snackBar = SnackBar(
+    action: SnackBarAction(
+      label: 'Action',
+      onPressed: () {
+        // Code to execute.
+      },
+    ),
+    content: const Text('Awesome SnackBar!'),
+    duration: const Duration(milliseconds: 1500),
+    width: 280.0, // Width of the SnackBar.
+    padding: const EdgeInsets.symmetric(
+      horizontal: 8.0, // Inner padding for SnackBar content.
+    ),
+    behavior: SnackBarBehavior.floating,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10.0),
+    ),
+  );
 
 
   @override
@@ -24,8 +43,22 @@ class ListSection extends StatelessWidget {
             width: 20,
           ),
           Expanded(
-            child: Container(
-              child: Text(this.user, style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.4),),
+              child: Center(
+            child: Align(
+                //child: Text(this.organizacion, style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.4),),
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  child: Text(
+                    this.user,
+                    style: DefaultTextStyle.of(context)
+                        .style
+                        .apply(fontSizeFactor: 1.4),
+                  ),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage()));
+                  },
+                )
+              ),
             )
           ),
           SizedBox(
@@ -33,7 +66,25 @@ class ListSection extends StatelessWidget {
           ),
           FloatingActionButton(  
           onPressed: () {
-            showdDelete(context);
+            //showdDelete(context);
+            showDialog<String>(
+                context: context,
+                builder: (context) => GestureDetector(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Scaffold(
+                    backgroundColor: Colors.transparent,
+                    body: Builder(
+                      builder: (context) => GestureDetector(
+                          onTap: () {},
+                          child: AlertSection(
+                            title: 'Aviso',
+                            dialog: 'Desea cambiar',
+                          )),
+                    ),
+                  ),
+                ),
+              ).then((value) =>
+                  ScaffoldMessenger.of(context).showSnackBar(this._snackBar));
           },  
           child: Icon(Icons.do_not_disturb_on),
           ),

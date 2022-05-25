@@ -25,7 +25,7 @@ class AppRoutes {
   static final menuOptions = <MenuOption>[
     
     MenuOption(route: '/permisos', name: 'permisos', screen: const Permit(), icon: Icons.list_alt ),
-    MenuOption(route: '/usuarios', name: 'usuarios', screen: const User(), icon: Icons.account_circle_rounded ),
+    MenuOption(route: '/usuarios', name: 'usuarios', screen: const UserScreen(), icon: Icons.account_circle_rounded ),
     MenuOption(route: '/usuarioslist', name: 'usuarios_list', screen: const UserList(), icon: Icons.list_alt ),
     MenuOption(route: '/organizaciones', name: 'organizaciones', screen: const Organization(), icon: Icons.business ),
     MenuOption(route: '/login', name: 'login', screen: const Login(), icon: Icons.list_alt ),
