@@ -20,7 +20,7 @@ class UserList extends StatelessWidget {
 }
 
 class UserListPage extends StatelessWidget {
-  const UserListPage({ Key? key, required this.title }) : super(key: key);
+  const UserListPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -29,36 +29,41 @@ class UserListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.account_circle_rounded),
-            tooltip: 'Perfil',
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
-            },
-          )
-        ]
-      ),
+      appBar: AppBar(title: Text(title), actions: [
+        IconButton(
+          icon: const Icon(Icons.account_circle_rounded),
+          tooltip: 'Perfil',
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Profile()));
+          },
+        )
+      ]),
       body: Center(
         child: Column(
           children: [
-            TitleSection(title: "Usuarios de Lomba",subtitle: "Organizaciones / Lomba / Usuarios",),
+            TitleSection(
+              title: "Usuarios de Lomba",
+              subtitle: "Organizaciones / Lomba / Usuarios",
+            ),
             FilterSection(),
             Divider(),
-            ListSection(user: "user 1",),
+            ListSection(
+              user: "user 1",
+            ),
             Divider(),
-            ListSection(user: "user 2",),
+            ListSection(
+              user: "user 2",
+            ),
             Divider(),
-            ListSection(user: "user 3",),
+            ListSection(
+              user: "user 3",
+            ),
             Divider(),
-            //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,), 
+            //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
           ],
         ),
       ),
-      
-      
       backgroundColor: Styles.defaultGreengroundColor,
       drawer: DrawerSection(),
     );
@@ -93,4 +98,3 @@ class MyStatelessWidget extends StatelessWidget {
     );
   }
 }
-
