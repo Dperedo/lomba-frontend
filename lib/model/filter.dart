@@ -44,7 +44,7 @@ class FilterSection extends StatelessWidget {
             icon: Icon(Icons.filter_list_rounded), 
             color: Colors.blue,
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(FilterSection.snackBar);
+              //ScaffoldMessenger.of(context).showSnackBar(FilterSection.snackBar);
             },
           ),
           SizedBox(

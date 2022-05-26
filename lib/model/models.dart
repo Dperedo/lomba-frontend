@@ -7,6 +7,7 @@ export 'package:front_lomba/screens/login_screen.dart';
 export 'package:front_lomba/screens/home_screen.dart';
 export 'package:front_lomba/screens/user_list.dart';
 export 'package:front_lomba/screens/profile_edit.dart';
+export 'package:front_lomba/screens/user_detail.dart';
 //export 'package:front_lomba/router/app_routes.dart';
 export 'package:front_lomba/model/card.dart';
 export 'package:front_lomba/model/list.dart';

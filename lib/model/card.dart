@@ -16,13 +16,13 @@ class CardSection extends StatelessWidget {
   }) : super(key: key);
 
 final _snackBar = SnackBar(
-              content: const Text('Se a desactivado la organización'),
-              action: SnackBarAction(
+              content: Text('Se a desactivado la organización'),
+              /*action: SnackBarAction(
           label: 'Ok',
           onPressed: () {
             // Some code to undo the change.
           },
-        ),
+        ),*/
         duration: const Duration(milliseconds: 1000),
       );
 
@@ -59,7 +59,6 @@ final _snackBar = SnackBar(
           FloatingActionButton(
             onPressed: () {
               //showCancel1(context, this.snackBar);
-
               showDialog<String>(
                 context: context,
                 builder: (context) => GestureDetector(
@@ -70,14 +69,17 @@ final _snackBar = SnackBar(
                       builder: (context) => GestureDetector(
                           onTap: () {},
                           child: AlertSection(
-                            title: 'Aviso',
-                            dialog: 'Desea cambiar',
+                            title: 'Desactivar organización',
+                            dialog: 'Desea desactivar la organización ' + this.organizacion,
                           )),
                     ),
                   ),
                 ),
-              ).then((value) =>
-                  ScaffoldMessenger.of(context).showSnackBar(this._snackBar));
+              ).then((value) =>{
+                  if (value == 'Si') {
+                    ScaffoldMessenger.of(context).showSnackBar(this._snackBar)  
+                  },
+                });
             },
             child: Icon(Icons.do_not_disturb_on),
           ),
