@@ -4,13 +4,9 @@ import 'package:front_lomba/model/models.dart';
 //import 'package:front_lomba/model/models.dart';
 
 class ListSection extends StatelessWidget {
-
   final String user;
-  
-  ListSection({
-    Key? key, 
-    required this.user
-  }) : super(key: key);
+
+  ListSection({Key? key, required this.user}) : super(key: key);
 
   final _snackBarCancel = SnackBar(
     /*action: SnackBarAction(
@@ -36,7 +32,6 @@ class ListSection extends StatelessWidget {
     duration: const Duration(milliseconds: 1500),
   );
 
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -61,33 +56,30 @@ class ListSection extends StatelessWidget {
                   ),
                   onPressed: () {
                     showDialog<String>(
-                context: context,
-                builder: (context) => GestureDetector(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: Scaffold(
-                    backgroundColor: Colors.transparent,
-                    body: Builder(
+                      context: context,
                       builder: (context) => GestureDetector(
-                          onTap: () {},
-                          child: UserDetailSection()),
-                    ),
-                  ),
-                ),
-              );
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Scaffold(
+                          backgroundColor: Colors.transparent,
+                          body: Builder(
+                            builder: (context) => GestureDetector(
+                                onTap: () {}, child: UserDetailSection()),
+                          ),
+                        ),
+                      ),
+                    );
                     //UserDetailSection();
                     //Navigator.push(context, MaterialPageRoute(builder: (context) => UserDetailSection()));
                   },
-                )
-              ),
-            )
-          ),
+                )),
+          )),
           SizedBox(
             width: 20,
           ),
-          FloatingActionButton(  
-          onPressed: () {
-            //showdDelete(context);
-            showDialog<String>(
+          FloatingActionButton(
+            onPressed: () {
+              //showdDelete(context);
+              showDialog<String>(
                 context: context,
                 builder: (context) => GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
@@ -103,42 +95,46 @@ class ListSection extends StatelessWidget {
                     ),
                   ),
                 ),
-              ).then((value) =>{
-                  if (value == 'Si') {
-                    ScaffoldMessenger.of(context).showSnackBar(this._snackBarCancel)  
-                  },
-                });
-          },  
-          child: Icon(Icons.do_not_disturb_on),
+              ).then((value) => {
+                    if (value == 'Sí')
+                      {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(this._snackBarCancel)
+                      },
+                  });
+            },
+            child: Icon(Icons.do_not_disturb_on),
           ),
           SizedBox(
             width: 20,
           ),
-          FloatingActionButton(  
-          onPressed: () {
-            showDialog<String>(
-                  context: context,
-                  builder: (context) => GestureDetector(
-                    onTap: () => Navigator.of(context).pop(),
-                    child: Scaffold(
-                      backgroundColor: Colors.transparent,
-                      body: Builder(
-                        builder: (context) => GestureDetector(
-                            onTap: () {},
-                            child: AlertSection(
-                              title: 'Eliminar Usuario',
-                              dialog: 'Desea eliminar al usuario ' + this.user,
-                            )),
-                      ),
+          FloatingActionButton(
+            onPressed: () {
+              showDialog<String>(
+                context: context,
+                builder: (context) => GestureDetector(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Scaffold(
+                    backgroundColor: Colors.transparent,
+                    body: Builder(
+                      builder: (context) => GestureDetector(
+                          onTap: () {},
+                          child: AlertSection(
+                            title: 'Eliminar Usuario',
+                            dialog: 'Desea eliminar al usuario ' + this.user,
+                          )),
                     ),
                   ),
-                ).then((value) =>{
-                  if (value == 'Si') {
-                    ScaffoldMessenger.of(context).showSnackBar(this._snackBarDelete)  
-                  },
-                });
-        }, 
-          child: Icon(Icons.cancel),
+                ),
+              ).then((value) => {
+                    if (value == 'Sí')
+                      {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(this._snackBarDelete)
+                      },
+                  });
+            },
+            child: Icon(Icons.cancel),
           ),
         ],
       ),
@@ -147,14 +143,13 @@ class ListSection extends StatelessWidget {
 }
 
 showdDelete(BuildContext context) {
-
   Widget cancelButton = TextButton(
     child: Text("No"),
-    onPressed:  () {},
+    onPressed: () {},
   );
   Widget continueButton = TextButton(
     child: Text("Si"),
-    onPressed:  () {},
+    onPressed: () {},
   );
 
   AlertDialog alert = AlertDialog(

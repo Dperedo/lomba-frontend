@@ -9,7 +9,7 @@ import 'package:front_lomba/styles/styles.dart';
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);
 
-  static const appTitle = 'Menu';
+  static const appTitle = 'Lomba';
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class Profile extends StatelessWidget {
 }
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({ Key? key, required this.title }) : super(key: key);
+  const ProfilePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -34,15 +34,13 @@ class ProfilePage extends StatelessWidget {
       ),
       body: Center(
         child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ProfileSection(),
-            ],
-          ),
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ProfileSection(),
+          ],
+        ),
       ),
-      
-      
       backgroundColor: Styles.defaultGreengroundColor,
       drawer: DrawerSection(),
     );

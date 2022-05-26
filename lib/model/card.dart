@@ -3,28 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:front_lomba/model/models.dart';
 
 class CardSection extends StatelessWidget {
-
   final String organizacion;
   final IconData icon;
   //final Widget bottonCancel;
-  
-   CardSection({
-    Key? key, 
+
+  CardSection({
+    Key? key,
     required this.organizacion,
     required this.icon,
     //required this.bottonCancel,
   }) : super(key: key);
 
-final _snackBar = SnackBar(
-              content: Text('Se a desactivado la organización'),
-              /*action: SnackBarAction(
+  final _snackBar = SnackBar(
+    content: Text('Se a desactivado la organización'),
+    /*action: SnackBarAction(
           label: 'Ok',
           onPressed: () {
             // Some code to undo the change.
           },
         ),*/
-        duration: const Duration(milliseconds: 1000),
-      );
+    duration: const Duration(milliseconds: 1000),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +36,8 @@ final _snackBar = SnackBar(
             width: 20,
           ),
           Expanded(
-            child: Center(
-              child: Align(
+              child: Center(
+            child: Align(
                 //child: Text(this.organizacion, style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.4),),
                 alignment: Alignment.centerLeft,
                 child: TextButton(
@@ -49,10 +48,8 @@ final _snackBar = SnackBar(
                         .apply(fontSizeFactor: 1.4),
                   ),
                   onPressed: () {},
-                )
-              ),
-            )
-          ),
+                )),
+          )),
           SizedBox(
             width: 20,
           ),
@@ -70,50 +67,52 @@ final _snackBar = SnackBar(
                           onTap: () {},
                           child: AlertSection(
                             title: 'Desactivar organización',
-                            dialog: 'Desea desactivar la organización ' + this.organizacion,
+                            dialog: 'Desea desactivar la organización ' +
+                                this.organizacion,
                           )),
                     ),
                   ),
                 ),
-              ).then((value) =>{
-                  if (value == 'Si') {
-                    ScaffoldMessenger.of(context).showSnackBar(this._snackBar)  
-                  },
-                });
+              ).then((value) => {
+                    if (value == 'Sí')
+                      {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(this._snackBar)
+                      },
+                  });
             },
             child: Icon(Icons.do_not_disturb_on),
           ),
           SizedBox(
             width: 20,
           ),
-          FloatingActionButton(    
-          child: Icon(Icons.supervised_user_circle),
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => UserList()));
-          },
+          FloatingActionButton(
+            child: Icon(Icons.supervised_user_circle),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => UserList()));
+            },
           ),
-          
         ],
       ),
     );
   }
 }
 
-showCancel1(BuildContext context,SnackBar snack) {
-
+showCancel1(BuildContext context, SnackBar snack) {
   Widget cancelButton = TextButton(
     child: Text("No"),
-    onPressed:  () {},
+    onPressed: () {},
   );
   Widget continueButton = TextButton(
     child: Text("Si"),
-    onPressed:  () {
-      Navigator.pop(context, 'Si');
-      
+    onPressed: () {
+      Navigator.pop(context, 'Sí');
+
       // Find the ScaffoldMessenger in the widget tree
       // and use it to show a SnackBar.
       //ScaffoldMessenger.of(context).showSnackBar(snack);
-    }, 
+    },
   );
 
   AlertDialog alert = AlertDialog(
@@ -131,4 +130,3 @@ showCancel1(BuildContext context,SnackBar snack) {
     },
   );
 }
-
