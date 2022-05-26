@@ -12,23 +12,28 @@ class ListSection extends StatelessWidget {
     required this.user
   }) : super(key: key);
 
-  final _snackBar = SnackBar(
-    action: SnackBarAction(
+  final _snackBarCancel = SnackBar(
+    /*action: SnackBarAction(
       label: 'Action',
       onPressed: () {
         // Code to execute.
       },
-    ),
-    content: const Text('Awesome SnackBar!'),
+    ),*/
+    content: const Text('Se a desactivado el usuario'),
     duration: const Duration(milliseconds: 1500),
-    width: 280.0, // Width of the SnackBar.
+    /*width: 280.0, // Width of the SnackBar.
     padding: const EdgeInsets.symmetric(
       horizontal: 8.0, // Inner padding for SnackBar content.
     ),
     behavior: SnackBarBehavior.floating,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10.0),
-    ),
+    ),*/
+  );
+
+  final _snackBarDelete = SnackBar(
+    content: const Text('Se ha eliminado el usuario'),
+    duration: const Duration(milliseconds: 1500),
   );
 
 
@@ -55,7 +60,22 @@ class ListSection extends StatelessWidget {
                         .apply(fontSizeFactor: 1.4),
                   ),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage()));
+                    showDialog<String>(
+                context: context,
+                builder: (context) => GestureDetector(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Scaffold(
+                    backgroundColor: Colors.transparent,
+                    body: Builder(
+                      builder: (context) => GestureDetector(
+                          onTap: () {},
+                          child: UserDetailSection()),
+                    ),
+                  ),
+                ),
+              );
+                    //UserDetailSection();
+                    //Navigator.push(context, MaterialPageRoute(builder: (context) => UserDetailSection()));
                   },
                 )
               ),
@@ -77,14 +97,17 @@ class ListSection extends StatelessWidget {
                       builder: (context) => GestureDetector(
                           onTap: () {},
                           child: AlertSection(
-                            title: 'Aviso',
-                            dialog: 'Desea cambiar',
+                            title: 'Desactivar Usuario',
+                            dialog: 'Desea desactivar al usuario ' + this.user,
                           )),
                     ),
                   ),
                 ),
-              ).then((value) =>
-                  ScaffoldMessenger.of(context).showSnackBar(this._snackBar));
+              ).then((value) =>{
+                  if (value == 'Si') {
+                    ScaffoldMessenger.of(context).showSnackBar(this._snackBarCancel)  
+                  },
+                });
           },  
           child: Icon(Icons.do_not_disturb_on),
           ),
@@ -93,19 +116,27 @@ class ListSection extends StatelessWidget {
           ),
           FloatingActionButton(  
           onPressed: () {
-          final snackBar = SnackBar(
-            content: const Text('Yay! A SnackBar!'),
-            action: SnackBarAction(
-              label: 'Ok',
-              onPressed: () {
-                // Some code to undo the change.
-              },
-            ),
-          );
-
-          // Find the ScaffoldMessenger in the widget tree
-          // and use it to show a SnackBar.
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            showDialog<String>(
+                  context: context,
+                  builder: (context) => GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Scaffold(
+                      backgroundColor: Colors.transparent,
+                      body: Builder(
+                        builder: (context) => GestureDetector(
+                            onTap: () {},
+                            child: AlertSection(
+                              title: 'Eliminar Usuario',
+                              dialog: 'Desea eliminar al usuario ' + this.user,
+                            )),
+                      ),
+                    ),
+                  ),
+                ).then((value) =>{
+                  if (value == 'Si') {
+                    ScaffoldMessenger.of(context).showSnackBar(this._snackBarDelete)  
+                  },
+                });
         }, 
           child: Icon(Icons.cancel),
           ),
