@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/model/models.dart';
-import 'package:front_lomba/router/app_routes.dart';
+import 'package:front_lomba/widgets/lomba_sidemenu.dart';
+import 'package:provider/provider.dart';
+import 'package:front_lomba/providers/theme_provider.dart';
 
 class Organization extends StatelessWidget {
   const Organization({Key? key}) : super(key: key);
@@ -9,10 +11,11 @@ class Organization extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: appTitle,
       home: OrganizationPage(title: appTitle),
+      theme: Provider.of<ThemeProvider>(context).currentTheme,
     );
   }
 }
@@ -24,7 +27,6 @@ class OrganizationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final menuOptions = AppRoutes.menuOptions;
     return Scaffold(
       appBar: AppBar(title: Text(title), actions: [
         IconButton(
@@ -36,7 +38,7 @@ class OrganizationPage extends StatelessWidget {
           },
         )
       ]),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             TitleSection(
@@ -64,8 +66,7 @@ class OrganizationPage extends StatelessWidget {
           ],
         ),
       ),
-      backgroundColor: Styles.defaultGreengroundColor,
-      drawer: DrawerSection(),
+      drawer: LombaSideMenu(),
     );
   }
 }
