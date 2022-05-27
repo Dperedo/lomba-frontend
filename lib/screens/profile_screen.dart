@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/model/models.dart';
-
+import 'package:front_lomba/widgets/lomba_sidemenu.dart';
+import 'package:provider/provider.dart';
+import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/screens/permit_screen.dart';
 import 'package:front_lomba/screens/user_screen.dart';
 import 'package:front_lomba/screens/organization_screen.dart';
@@ -13,10 +15,11 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: appTitle,
       home: ProfilePage(title: appTitle),
+      theme: Provider.of<ThemeProvider>(context).currentTheme,
     );
   }
 }
@@ -41,8 +44,7 @@ class ProfilePage extends StatelessWidget {
           ],
         ),
       ),
-      backgroundColor: Styles.defaultGreengroundColor,
-      drawer: DrawerSection(),
+      drawer: LombaSideMenu(),
     );
   }
 }

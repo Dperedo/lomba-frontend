@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:front_lomba/model/models.dart';
+import 'package:front_lomba/widgets/lomba_sidemenu.dart';
+import 'package:provider/provider.dart';
+import 'package:front_lomba/providers/theme_provider.dart';
 
 //void main() => runApp(const Permisos());
-
 
 class UserScreen extends StatelessWidget {
   const UserScreen({Key? key}) : super(key: key);
@@ -12,16 +14,17 @@ class UserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: appTitle,
       home: UserPage(title: appTitle),
+      theme: Provider.of<ThemeProvider>(context).currentTheme,
     );
   }
 }
 
 class UserPage extends StatelessWidget {
-  const UserPage({ Key? key, required this.title }) : super(key: key);
+  const UserPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
   //final String icon = Icons.supervisor_account;
@@ -29,79 +32,52 @@ class UserPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.account_circle_rounded),
-            tooltip: 'Perfil',
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
-            },
-          )
-        ]
-      ),
-      body: Center(
+      appBar: AppBar(title: Text(title), actions: [
+        IconButton(
+          icon: const Icon(Icons.account_circle_rounded),
+          tooltip: 'Perfil',
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Profile()));
+          },
+        )
+      ]),
+      body: SingleChildScrollView(
         child: Column(
           children: [
-            TitleSection(title: "Usuarios",subtitle: "Administrador / Usuarios",),
+            TitleSection(
+              title: "Todos los usuarios",
+              subtitle: "Administrador / Todos usuarios",
+            ),
             FilterSection(),
             Divider(),
-            CardSection(organizacion: "ususario 1",icon: Icons.person,),
+            CardSection(
+              organizacion: "username 1",
+              icon: Icons.person,
+            ),
             Divider(),
-            CardSection(organizacion: "ususario 2",icon: Icons.person,),
+            CardSection(
+              organizacion: "username 2",
+              icon: Icons.person,
+            ),
             Divider(),
-            CardSection(organizacion: "ususario 3",icon: Icons.person,),
+            CardSection(
+              organizacion: "username 3",
+              icon: Icons.person,
+            ),
             Divider(),
-            //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
           ],
         ),
       ),
-      /*body: Center(
-      child: ListView(
-          children: <Widget>[
-            Container(
-              child: const _LoadingIcon()
-            ),
-            Container(
-              child: ElevatedButton(
-                child: const Text('Alerta'),
-                  onPressed: () {
-                    showAlertDialog(context);
-                  }
-              ),
-            ),
-            Container(
-              child: ElevatedButton(
-                child: const Text('Mensaje'),
-                  onPressed: () {
-                    showAlertMensaje(context);
-                  }
-              ),
-            ),
-            Container(
-              child: ElevatedButton(
-                child: const Text('Notificador'),
-                  onPressed: () {
-                    Notificacion();
-                  }
-              ),
-            )
-          ]
-        )
-      ),*/
-      
-      backgroundColor: Styles.defaultGreengroundColor,
-      drawer: DrawerSection(),
+      drawer: LombaSideMenu(),
     );
   }
 }
 
 showAlertDialog(BuildContext context) {
-
   Widget okButton = TextButton(
     child: Text("OK"),
-    onPressed: () { 
+    onPressed: () {
       Navigator.of(context).pop();
     },
   );
@@ -123,14 +99,13 @@ showAlertDialog(BuildContext context) {
 }
 
 showAlertMensaje(BuildContext context) {
-
   Widget cancelButton = TextButton(
     child: Text("Cancelar"),
-    onPressed:  () {},
+    onPressed: () {},
   );
   Widget continueButton = TextButton(
     child: Text("Continuar"),
-    onPressed:  () {},
+    onPressed: () {},
   );
 
   AlertDialog alert = AlertDialog(
@@ -153,18 +128,20 @@ showAlertMensaje(BuildContext context) {
 class Notificacion extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Banners'),),
+      appBar: AppBar(
+        title: Text('Banners'),
+      ),
       body: MaterialBanner(
         content: const Text('Error message text'),
         leading: CircleAvatar(child: Icon(Icons.delete)),
         actions: [
           FlatButton(
             child: const Text('ACTION 1'),
-            onPressed: () { },
+            onPressed: () {},
           ),
           FlatButton(
             child: const Text('ACTION 2'),
-            onPressed: () { },
+            onPressed: () {},
           ),
         ],
       ),
@@ -184,22 +161,19 @@ class _LoadingIcon extends StatelessWidget {
       height: 60,
       width: 60,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
-        shape: BoxShape.circle
-      ),
+          color: Colors.white.withOpacity(0.9), shape: BoxShape.circle),
     );
   }
 }
 
 showCancelUser(BuildContext context) {
-
   Widget cancelButton = TextButton(
     child: Text("No"),
-    onPressed:  () {},
+    onPressed: () {},
   );
   Widget continueButton = TextButton(
     child: Text("Si"),
-    onPressed:  () {},
+    onPressed: () {},
   );
 
   AlertDialog alert = AlertDialog(
@@ -217,5 +191,3 @@ showCancelUser(BuildContext context) {
     },
   );
 }
-
-
