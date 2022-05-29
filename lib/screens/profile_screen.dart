@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/model/models.dart';
 
-import 'package:front_lomba/screens/permit_screen.dart';
-import 'package:front_lomba/screens/user_screen.dart';
-import 'package:front_lomba/screens/organization_screen.dart';
-import 'package:front_lomba/styles/styles.dart';
+
 
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);

@@ -26,7 +26,6 @@ class ListPermissionSection extends StatelessWidget {
           Expanded(
               child: Center(
             child: Align(
-                //child: Text(this.organizacion, style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.4),),
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   child: Text(

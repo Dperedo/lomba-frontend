@@ -16,12 +16,6 @@ class CardSection extends StatelessWidget {
 
   final _snackBar = SnackBar(
     content: Text('Se a desactivado la organización'),
-    /*action: SnackBarAction(
-          label: 'Ok',
-          onPressed: () {
-            // Some code to undo the change.
-          },
-        ),*/
     duration: const Duration(milliseconds: 1000),
   );
 
@@ -38,7 +32,6 @@ class CardSection extends StatelessWidget {
           Expanded(
               child: Center(
             child: Align(
-                //child: Text(this.organizacion, style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.4),),
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   child: Text(
@@ -55,7 +48,6 @@ class CardSection extends StatelessWidget {
           ),
           FloatingActionButton(
             onPressed: () {
-              //showCancel1(context, this.snackBar);
               showDialog<String>(
                 context: context,
                 builder: (context) => GestureDetector(
@@ -108,10 +100,6 @@ showCancel1(BuildContext context, SnackBar snack) {
     child: Text("Si"),
     onPressed: () {
       Navigator.pop(context, 'Sí');
-
-      // Find the ScaffoldMessenger in the widget tree
-      // and use it to show a SnackBar.
-      //ScaffoldMessenger.of(context).showSnackBar(snack);
     },
   );
 

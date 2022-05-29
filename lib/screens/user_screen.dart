@@ -57,40 +57,6 @@ class UserPage extends StatelessWidget {
           ],
         ),
       ),
-      /*body: Center(
-      child: ListView(
-          children: <Widget>[
-            Container(
-              child: const _LoadingIcon()
-            ),
-            Container(
-              child: ElevatedButton(
-                child: const Text('Alerta'),
-                  onPressed: () {
-                    showAlertDialog(context);
-                  }
-              ),
-            ),
-            Container(
-              child: ElevatedButton(
-                child: const Text('Mensaje'),
-                  onPressed: () {
-                    showAlertMensaje(context);
-                  }
-              ),
-            ),
-            Container(
-              child: ElevatedButton(
-                child: const Text('Notificador'),
-                  onPressed: () {
-                    Notificacion();
-                  }
-              ),
-            )
-          ]
-        )
-      ),*/
-      
       backgroundColor: Styles.defaultGreengroundColor,
       drawer: DrawerSection(),
     );
