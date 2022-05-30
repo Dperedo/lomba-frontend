@@ -58,7 +58,7 @@ class CardUserSection extends StatelessWidget {
                       builder: (context) => GestureDetector(
                           onTap: () {},
                           child: AlertSection(
-                            title: 'Desactivar usuario',
+                            title: 'Desactivar usuario ',
                             dialog: 'Desea desactivar el usuario ' +
                                 this.organizacion,
                           )),
