@@ -26,16 +26,19 @@ class OrganizationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final menuOptions = AppRoutes.menuOptions;
     return Scaffold(
-      appBar: AppBar(title: Text(title), actions: [
-        IconButton(
-          icon: const Icon(Icons.account_circle_rounded),
-          tooltip: 'Perfil',
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Profile()));
-          },
-        )
-      ]),
+      appBar: AppBar(
+        title: Text(title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.account_circle_rounded),
+            tooltip: 'Perfil',
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Profile()));
+            },
+          )
+        ]
+      ),
       body: Center(
         child: Column(
           children: [

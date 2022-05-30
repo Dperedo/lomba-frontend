@@ -3,8 +3,48 @@ import 'package:flutter/material.dart';
 
 import 'package:front_lomba/model/models.dart';
 
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+class EditProfile extends StatelessWidget {
+  const EditProfile({Key? key}) : super(key: key);
 
+  static const appTitle = 'Lomba';
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: appTitle,
+      home: EditProfilePage(title: appTitle),
+    );
+  }
+}
+
+class EditProfilePage extends StatelessWidget {
+  const EditProfilePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            TitleSection(
+              title: "Editar usuario",
+              subtitle: "Perfil / Editar Perfil",
+            ),
+            EditSection(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/*
 class EditProfilePage extends StatefulWidget {
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
@@ -228,8 +268,4 @@ class UserPreferences {
   );
 }
 
-//-----------------------------------------------------------
-
-
-
-//-----------------------------------------------------------
+*/

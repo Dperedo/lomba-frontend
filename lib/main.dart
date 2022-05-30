@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Material App',
       //initialRoute: AppRoutes.initialRoute,
-      initialRoute: '/organizaciones',
+      initialRoute: '/usuarios',
       //routes: AppRoutes.getAppRoutes(),
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         '/organizaciones': (context) => const Organization(),
         '/usuarios': (context) => const UserScreen(),
         '/usuarios_list': (context) => const UserList(),
-        '/profile_edit': (context) =>  EditProfilePage(),
+        '/profile_edit': (context) =>  EditProfile(),
       },
       //onGenerateRoute: AppRoutes.onGenerateRoute,
       //theme: AppTheme.lightTheme
