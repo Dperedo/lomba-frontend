@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/model/models.dart';
-import 'package:front_lomba/widgets/lomba_sidemenu.dart';
-import 'package:provider/provider.dart';
-import 'package:front_lomba/providers/theme_provider.dart';
-import 'package:front_lomba/screens/permit_screen.dart';
-import 'package:front_lomba/screens/user_screen.dart';
-import 'package:front_lomba/screens/organization_screen.dart';
-import 'package:front_lomba/styles/styles.dart';
+
 
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);
@@ -32,8 +26,16 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
+      appBar: AppBar(title: Text(title), actions: [
+        IconButton(
+          icon: const Icon(Icons.settings),
+          tooltip: 'Perfil',
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => EditProfile()));
+          },
+        )
+      ]
       ),
       body: Center(
         child: Column(

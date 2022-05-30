@@ -9,12 +9,6 @@ class ListSection extends StatelessWidget {
   ListSection({Key? key, required this.user}) : super(key: key);
 
   final _snackBarCancel = SnackBar(
-    /*action: SnackBarAction(
-      label: 'Action',
-      onPressed: () {
-        // Code to execute.
-      },
-    ),*/
     content: const Text('Se a desactivado el usuario'),
     duration: const Duration(milliseconds: 1500),
     /*width: 280.0, // Width of the SnackBar.
@@ -45,7 +39,6 @@ class ListSection extends StatelessWidget {
           Expanded(
               child: Center(
             child: Align(
-                //child: Text(this.organizacion, style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.4),),
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   child: Text(
@@ -63,13 +56,15 @@ class ListSection extends StatelessWidget {
                           backgroundColor: Colors.transparent,
                           body: Builder(
                             builder: (context) => GestureDetector(
-                                onTap: () {}, child: UserDetailSection()),
+                                onTap: () {
+                                  //Navigator.of(context).push(_createAlertRoute());
+                                }, 
+                                child: UserDetailSection()
+                                ),
                           ),
                         ),
                       ),
                     );
-                    //UserDetailSection();
-                    //Navigator.push(context, MaterialPageRoute(builder: (context) => UserDetailSection()));
                   },
                 )),
           )),
@@ -78,7 +73,6 @@ class ListSection extends StatelessWidget {
           ),
           FloatingActionButton(
             onPressed: () {
-              //showdDelete(context);
               showDialog<String>(
                 context: context,
                 builder: (context) => GestureDetector(
@@ -160,46 +154,3 @@ showdDelete(BuildContext context) {
     ],
   );
 }
-
-
-/*class SnackBarsDemo extends StatelessWidget {
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Snackbars'),
-        actions: [SnackbarButton()],
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(
-                'replace with url for snackbars-background.jpg after merge'),
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SnackbarButton extends StatelessWidget {
-  Widget build(BuildContext context) {
-    return RaisedButton(
-      onPressed: () {
-        final snackBar = SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Text('Text label'),
-          action: SnackBarAction(
-            label: 'Action',
-            onPressed: () {},
-          ),
-        );
-
-        // Find the Scaffold in the widget tree and use
-        // it to show a SnackBar.
-        Scaffold.of(context).showSnackBar(snackBar);
-      },
-      child: Text('Show SnackBar'),
-    );
-  }
-}*/

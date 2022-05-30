@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+
 import 'package:front_lomba/model/models.dart';
 
-//import 'package:front_lomba/model/models.dart';
+class CardUserSection extends StatelessWidget {
+  final String organizacion;
+  final IconData icon;
+  //final Widget bottonCancel;
 
-class ListPermissionSection extends StatelessWidget {
-  final String permission;
+  CardUserSection({
+    Key? key,
+    required this.organizacion,
+    required this.icon,
+    //required this.bottonCancel,
+  }) : super(key: key);
 
-  ListPermissionSection({Key? key, required this.permission}) : super(key: key);
-
-  final _snackBarCancel = SnackBar(
-    content: const Text('Se ha desactivado el permiso'),
-    duration: const Duration(milliseconds: 2000),
+  final _snackBar = SnackBar(
+    content: Text('Se a desactivado el usuario'),
+    duration: const Duration(milliseconds: 1000),
   );
 
   @override
@@ -19,7 +25,7 @@ class ListPermissionSection extends StatelessWidget {
       padding: new EdgeInsets.all(15.0),
       child: Row(
         children: [
-          Icon(Icons.key),
+          Icon(this.icon),
           SizedBox(
             width: 20,
           ),
@@ -29,7 +35,7 @@ class ListPermissionSection extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   child: Text(
-                    this.permission,
+                    this.organizacion,
                     style: DefaultTextStyle.of(context)
                         .style
                         .apply(fontSizeFactor: 1.4),
@@ -42,7 +48,6 @@ class ListPermissionSection extends StatelessWidget {
           ),
           FloatingActionButton(
             onPressed: () {
-              //showdDelete(context);
               showDialog<String>(
                 context: context,
                 builder: (context) => GestureDetector(
@@ -53,10 +58,9 @@ class ListPermissionSection extends StatelessWidget {
                       builder: (context) => GestureDetector(
                           onTap: () {},
                           child: AlertSection(
-                            title: 'Desactivar Permiso',
-                            dialog: '¿Desea desactivar el permiso ' +
-                                this.permission +
-                                '?',
+                            title: 'Desactivar usuario',
+                            dialog: 'Desea desactivar el usuario ' +
+                                this.organizacion,
                           )),
                     ),
                   ),
@@ -65,7 +69,7 @@ class ListPermissionSection extends StatelessWidget {
                     if (value == 'Sí')
                       {
                         ScaffoldMessenger.of(context)
-                            .showSnackBar(this._snackBarCancel)
+                            .showSnackBar(this._snackBar)
                       },
                   });
             },
@@ -74,8 +78,16 @@ class ListPermissionSection extends StatelessWidget {
           SizedBox(
             width: 20,
           ),
+          FloatingActionButton(
+            child: Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => EditProfile()));
+            },
+          ),
         ],
       ),
     );
   }
 }
+

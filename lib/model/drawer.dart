@@ -40,9 +40,6 @@ class DrawerSection extends StatelessWidget {
             title: const Text('Permisos'),
             onTap: () {
               Navigator.of(context).push(_createPermissionRoute());
-
-              // Navigator.push(
-              //     context, MaterialPageRoute(builder: (context) => Permission()));
             },
           ),
         ],
