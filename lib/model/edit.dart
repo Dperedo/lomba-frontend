@@ -41,15 +41,6 @@ class EditSection extends StatelessWidget {
             child: TextFormField(
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
-                labelText: 'Apellido',
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
                 labelText: 'Username',
               ),
             ),

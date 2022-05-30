@@ -51,17 +51,17 @@ class UserPage extends StatelessWidget {
             ),
             FilterSection(),
             Divider(),
-            CardSection(
+            CardUserSection(
               organizacion: "username 1",
               icon: Icons.person,
             ),
             Divider(),
-            CardSection(
+            CardUserSection(
               organizacion: "username 2",
               icon: Icons.person,
             ),
             Divider(),
-            CardSection(
+            CardUserSection(
               organizacion: "username 3",
               icon: Icons.person,
             ),
