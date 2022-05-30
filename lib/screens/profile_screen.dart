@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/model/models.dart';
+import 'package:front_lomba/providers/theme_provider.dart';
+import 'package:front_lomba/widgets/lomba_sidemenu.dart';
+import 'package:provider/provider.dart';
 
 
 class Profile extends StatelessWidget {
