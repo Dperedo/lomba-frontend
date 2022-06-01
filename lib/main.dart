@@ -27,13 +27,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Material App',
-      initialRoute: '/usuarios',
+      initialRoute: '/profile_edit',
       routes: {
         '/home': (context) => const Home(),
         '/organizaciones': (context) => const Organization(),
         '/usuarios': (context) => const UserScreen(),
         '/usuarios_list': (context) => const UserList(),
         '/profile_edit': (context) =>  EditProfile(),
+        '/profile': (context) =>  Profile(),
       },
       theme: Provider.of<ThemeProvider>(context).currentTheme,
     );
