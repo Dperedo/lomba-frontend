@@ -29,16 +29,17 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title), actions: [
-        IconButton(
-          icon: const Icon(Icons.settings),
-          tooltip: 'Perfil',
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => EditProfile()));
-          },
-        )
-      ]
+      appBar: AppBar(title: Text(title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            tooltip: 'Perfil',
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => EditProfile()));
+            },
+          )
+        ]
       ),
       body: Center(
         child: Column(

@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 
 import 'package:front_lomba/model/models.dart';
+import 'package:provider/provider.dart';
+import 'package:front_lomba/providers/theme_provider.dart';
+import 'package:front_lomba/helpers/route_animation.dart';
 
 class CardUserSection extends StatelessWidget {
-  final String organizacion;
+  final String username;
   final IconData icon;
   //final Widget bottonCancel;
 
   CardUserSection({
     Key? key,
-    required this.organizacion,
+    required this.username,
     required this.icon,
     //required this.bottonCancel,
   }) : super(key: key);
@@ -35,14 +38,46 @@ class CardUserSection extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   child: Text(
-                    this.organizacion,
+                    this.username,
                     style: DefaultTextStyle.of(context)
                         .style
                         .apply(fontSizeFactor: 1.4),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog<String>(
+                      context: context,
+                      builder: (context) => GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Scaffold(
+                          backgroundColor: Colors.transparent,
+                          body: Builder(
+                            builder: (context) => GestureDetector(
+                                onTap: () {
+                                  //Navigator.of(context).push(_createAlertRoute());
+                                }, 
+                                child: UserDetailSection()
+                                ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 )),
           )),
+          SizedBox(
+            width: 20,
+          ),
+          Container(
+            width: 50,
+            height: 50,
+            child: Center(
+              child: Text('1')
+              ),
+            decoration: new BoxDecoration(
+              color: Provider.of<ThemeProvider>(context).currentTheme.indicatorColor,
+              shape: BoxShape.circle,
+            )
+          ),
           SizedBox(
             width: 20,
           ),
@@ -60,7 +95,7 @@ class CardUserSection extends StatelessWidget {
                           child: AlertSection(
                             title: 'Desactivar usuario',
                             dialog: 'Desea desactivar el usuario ' +
-                                this.organizacion,
+                                this.username,
                           )),
                     ),
                   ),
@@ -79,10 +114,10 @@ class CardUserSection extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(
-            child: Icon(Icons.settings),
+            child: Icon(Icons.edit),
             onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => EditProfile()));
+              Navigator.of(context)
+                  .push(RouteAnimation.animatedTransition(EditProfile()));
             },
           ),
         ],

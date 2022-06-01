@@ -4,8 +4,7 @@ import 'package:front_lomba/model/models.dart';
 import 'package:front_lomba/widgets/lomba_sidemenu.dart';
 import 'package:provider/provider.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
-
-//void main() => runApp(const Permisos());
+import '../helpers/route_animation.dart';
 
 class UserScreen extends StatelessWidget {
   const UserScreen({Key? key}) : super(key: key);
@@ -37,8 +36,8 @@ class UserPage extends StatelessWidget {
           icon: const Icon(Icons.account_circle_rounded),
           tooltip: 'Perfil',
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Profile()));
+            Navigator.of(context)
+                  .push(RouteAnimation.animatedTransition(Profile()));
           },
         )
       ]),
@@ -52,17 +51,17 @@ class UserPage extends StatelessWidget {
             FilterSection(),
             Divider(),
             CardUserSection(
-              organizacion: "username 1",
+              username: "username 1",
               icon: Icons.person,
             ),
             Divider(),
             CardUserSection(
-              organizacion: "username 2",
+              username: "username 2",
               icon: Icons.person,
             ),
             Divider(),
             CardUserSection(
-              organizacion: "username 3",
+              username: "username 3",
               icon: Icons.person,
             ),
             Divider(),
