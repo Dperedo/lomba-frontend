@@ -13,9 +13,12 @@ class EditSection extends StatefulWidget {
 class _EditSection extends State<EditSection> {
 
   bool _visible = false;
+  bool isChecked1 = false;
+  bool isChecked2 = false;
+  bool isChecked3 = false;
 
   static final snackBar_guardar = SnackBar(
-              content: const Text('Se a guardado correctamente'),
+              content: const Text('Se ha guardado correctamente'),
               action: SnackBarAction(
           label: 'Ok',
           onPressed: () {
@@ -25,7 +28,7 @@ class _EditSection extends State<EditSection> {
         duration: const Duration(milliseconds: 1000),
       );
   static final snackBar_eliminar = SnackBar(
-              content: const Text('Se a eliminado correctamente'),
+              content: const Text('Se ha eliminado correctamente'),
               action: SnackBarAction(
           label: 'Ok',
           onPressed: () {
@@ -34,7 +37,7 @@ class _EditSection extends State<EditSection> {
         ),
         duration: const Duration(milliseconds: 1000),
       );
-  String dropdownValue = 'Lomba';
+  String dropdownValue = 'lomba';
   List<String> dropdownItems = ['One', 'Two', 'Free', 'Four'];
 
   @override
@@ -101,6 +104,9 @@ class _EditSection extends State<EditSection> {
                           IconButton(
                             icon: Icon(Icons.edit),
                             onPressed: (() {
+                              setState(() {
+                                _visible = !_visible;
+                              });
                             }),
                           ),
                           IconButton(
@@ -131,6 +137,9 @@ class _EditSection extends State<EditSection> {
                           IconButton(
                             icon: Icon(Icons.edit),
                             onPressed: (() {
+                              setState(() {
+                                _visible = !_visible;
+                              });
                             }),
                           ),
                           IconButton(
@@ -148,6 +157,9 @@ class _EditSection extends State<EditSection> {
               ),
             ),
           ),
+          SizedBox(
+            width: 20,
+          ),
           ElevatedButton(
             onPressed: () {
               setState(() {
@@ -161,16 +173,108 @@ class _EditSection extends State<EditSection> {
                           ),
                         ),
           ),
+          SizedBox(
+            width: 20,
+          ),
           AnimatedOpacity(
           // Si el Widget debe ser visible, anime a 1.0 (completamente visible). Si
           // el Widget debe estar oculto, anime a 0.0 (invisible).
             opacity: _visible ? 1.0 : 0.0,
             duration: Duration(milliseconds: 500),
           // El cuadro verde debe ser el hijo de AnimatedOpacity
-            child: Container(
-              width: 200.0,
-              height: 200.0,
-              color: Colors.green,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                width: 200.0,
+                //height: 200.0,
+                //color: Colors.green,
+                child: Column(
+                  children: [
+                    DropdownButton(
+                      value: dropdownValue,
+                      items: [
+                        DropdownMenuItem(
+                          child: Text('santander'),
+                          value: 'santander',
+                        ),
+                        DropdownMenuItem(
+                          child: Text('pawafa'),
+                          value: 'pawafa',
+                        ),
+                        DropdownMenuItem(
+                          child: Text('lomba'),
+                          value: 'lomba',
+                        ),
+                      ],
+                      onChanged: (String? valor) {
+                        setState(() {
+                        //texto = valor;
+                        dropdownValue = valor!;
+                        });
+                      },
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          checkColor: Colors.white,
+                          //fillColor: MaterialStateProperty.resolveWith(getColor),
+                          value: isChecked1,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isChecked1 = value!;
+                            });
+                          },
+                        ),
+                        Text('Super admin'),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          checkColor: Colors.white,
+                          //fillColor: MaterialStateProperty.resolveWith(getColor),
+                          value: isChecked2,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isChecked2 = value!;
+                            });
+                          },
+                        ),
+                        Text('Admin'),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          checkColor: Colors.white,
+                          //fillColor: MaterialStateProperty.resolveWith(getColor),
+                          value: isChecked3,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isChecked3 = value!;
+                            });
+                          },
+                        ),
+                        Text('Sistema'),
+                      ],
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _visible = !_visible;
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar_guardar);
+                      }, 
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Guardar',
+                          style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.3),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
