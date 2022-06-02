@@ -33,9 +33,20 @@ class EditProfilePage extends StatelessWidget {
         title: Text(title),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context)
-                  .push(RouteAnimation.animatedTransition(UserScreen())),
-          ), 
+          onPressed: () {Navigator.of(context)
+                  .push(RouteAnimation.animatedTransition(UserScreen()));
+                  }
+          ),
+        actions: [
+        IconButton(
+          icon: const Icon(Icons.save),
+          tooltip: 'Guardar',
+          onPressed: () {
+            Navigator.of(context)
+                  .push(RouteAnimation.animatedTransition(UserScreen()));
+          },
+        )
+      ] 
       ),
       body: Center(
         child: Column(
