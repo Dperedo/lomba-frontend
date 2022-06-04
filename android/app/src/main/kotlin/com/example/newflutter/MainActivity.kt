@@ -1,4 +1,4 @@
-package com.example.front_lomba
+package com.example.newflutter
 
 import io.flutter.embedding.android.FlutterActivity
 

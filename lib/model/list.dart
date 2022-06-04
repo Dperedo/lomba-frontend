@@ -71,6 +71,7 @@ class ListSection extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(
+            heroTag: null,
             onPressed: () {
               showDialog<String>(
                 context: context,
@@ -102,6 +103,7 @@ class ListSection extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(
+            heroTag: null,
             onPressed: () {
               showDialog<String>(
                 context: context,

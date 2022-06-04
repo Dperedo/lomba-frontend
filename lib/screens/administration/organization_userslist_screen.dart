@@ -116,6 +116,7 @@ class OrganizationUsersListItem extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(
+            heroTag: null,
             tooltip: 'Desactivar usuario de la organización',
             onPressed: () {
               showDialog<String>(
@@ -144,6 +145,7 @@ class OrganizationUsersListItem extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(
+            heroTag: null,
             tooltip: 'Quitar usuario de la organización',
             onPressed: () {
               showDialog<String>(

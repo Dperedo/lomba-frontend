@@ -112,6 +112,7 @@ class OrganizationListItem extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(
+            heroTag: null,
             onPressed: () {
               showDialog<String>(
                 context: context,
@@ -140,6 +141,7 @@ class OrganizationListItem extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(
+            heroTag: null,
             tooltip: 'Ver usuarios de la organización',
             child: Icon(Icons.supervised_user_circle_outlined),
             onPressed: () {

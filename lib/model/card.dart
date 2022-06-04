@@ -47,6 +47,7 @@ class CardSection extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(
+            heroTag: null,
             onPressed: () {
               showDialog<String>(
                 context: context,
@@ -79,6 +80,7 @@ class CardSection extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(
+            heroTag: null,
             child: Icon(Icons.supervised_user_circle),
             onPressed: () {
               //    Navigator.push(

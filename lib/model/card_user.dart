@@ -67,6 +67,7 @@ class CardUserSection extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(
+            heroTag: null,
             onPressed: () {},
             child: Text('1', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
@@ -74,6 +75,7 @@ class CardUserSection extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(
+            heroTag: null,
             onPressed: () {
               showDialog<String>(
                 context: context,
@@ -106,6 +108,7 @@ class CardUserSection extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(
+            heroTag: null,
             child: Icon(Icons.edit),
             onPressed: () {
               Navigator.of(context)

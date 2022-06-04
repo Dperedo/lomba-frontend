@@ -239,6 +239,7 @@ class _UserEditForm extends State<UserEditForm> {
             width: 20,
           ),
           FloatingActionButton.extended(
+              heroTag: null,
               onPressed: () {
                 setState(() {
                   _visible = !_visible;
@@ -332,6 +333,7 @@ class _UserEditForm extends State<UserEditForm> {
                       ],
                     ),
                     FloatingActionButton.extended(
+                        heroTag: null,
                         onPressed: () {
                           setState(() {
                             _visible = !_visible;

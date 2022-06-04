@@ -112,6 +112,7 @@ class AllUsersListItem extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(
+            heroTag: null,
             tooltip: 'Organizaciones del usuario',
             onPressed: () {},
             child: Text('1', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -120,6 +121,7 @@ class AllUsersListItem extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(
+            heroTag: null,
             tooltip: 'Desactivar al usuario',
             onPressed: () {
               showDialog<String>(
@@ -147,6 +149,7 @@ class AllUsersListItem extends StatelessWidget {
             width: 20,
           ),
           FloatingActionButton(
+            heroTag: null,
             tooltip: 'Editar usuario',
             child: Icon(Icons.edit),
             onPressed: () {
