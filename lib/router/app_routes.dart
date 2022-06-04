@@ -27,17 +27,12 @@ class AppRoutes {
     MenuOption(
         route: '/usuarios',
         name: 'usuarios',
-        screen: const UserScreen(),
+        screen: const AllUsers(),
         icon: Icons.account_circle_rounded),
-    MenuOption(
-        route: '/usuarioslist',
-        name: 'usuarios_list',
-        screen: const UserList(),
-        icon: Icons.list_alt),
     MenuOption(
         route: '/organizaciones',
         name: 'organizaciones',
-        screen: const Organization(),
+        screen: const Organizations(),
         icon: Icons.business),
     MenuOption(
         route: '/login',
@@ -75,7 +70,7 @@ void main() {
         // When navigating to the "/" route, build the FirstScreen widget.
         '/home': (context) => const Home(),
         // When navigating to the "/second" route, build the SecondScreen widget.
-        '/organizaciones': (context) => const Organization(),
+        '/organizaciones': (context) => const Organizations(),
       },
     ),
   );

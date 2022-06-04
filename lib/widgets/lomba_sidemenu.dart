@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/helpers/route_animation.dart';
 import 'package:front_lomba/model/models.dart';
+import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/screens/administration/settings_screen.dart';
+import 'package:front_lomba/screens/democolors_screen.dart';
+import 'package:provider/provider.dart';
 
 class LombaSideMenu extends StatelessWidget {
   const LombaSideMenu({
@@ -14,18 +17,20 @@ class LombaSideMenu extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
+          DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Provider.of<ThemeProvider>(context).getPrimaryColor(),
             ),
-            child: Text('Menú principal'),
+            child: Text('Menú principal',
+                style: TextStyle(
+                    color: Provider.of<ThemeProvider>(context).getTextColor())),
           ),
           ListTile(
             leading: const Icon(Icons.business_center),
             title: const Text('Organizaciones'),
             onTap: () {
               Navigator.of(context)
-                  .push(RouteAnimation.animatedTransition(Organization()));
+                  .push(RouteAnimation.animatedTransition(Organizations()));
             },
           ),
           ListTile(
@@ -33,7 +38,7 @@ class LombaSideMenu extends StatelessWidget {
             title: const Text('Todos los usuarios'),
             onTap: () {
               Navigator.of(context)
-                  .push(RouteAnimation.animatedTransition(UserScreen()));
+                  .push(RouteAnimation.animatedTransition(AllUsers()));
             },
           ),
           ListTile(
@@ -50,6 +55,14 @@ class LombaSideMenu extends StatelessWidget {
             onTap: () {
               Navigator.of(context)
                   .push(RouteAnimation.animatedTransition(Settings()));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.colorize),
+            title: const Text('Colores'),
+            onTap: () {
+              Navigator.of(context)
+                  .push(RouteAnimation.animatedTransition(DemoColors()));
             },
           ),
         ],

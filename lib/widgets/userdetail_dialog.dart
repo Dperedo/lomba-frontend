@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:front_lomba/providers/theme_provider.dart';
+import 'package:provider/provider.dart';
 
-//import 'package:front_lomba/model/models.dart';
-
-class UserDetailSection extends StatelessWidget {
-  const UserDetailSection({
+class UserDetailDialog extends StatelessWidget {
+  const UserDetailDialog({
     Key? key,
   }) : super(key: key);
 
@@ -16,7 +16,7 @@ class UserDetailSection extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Provider.of<ThemeProvider>(context).getPrimaryColor(),
                   image: DecorationImage(
                       image: NetworkImage(''), fit: BoxFit.cover)),
               child: Container(
@@ -25,9 +25,9 @@ class UserDetailSection extends StatelessWidget {
                 child: Container(
                   alignment: Alignment(0.0, 2.5),
                   child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        'https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80'),
-                    backgroundColor: Colors.blue,
+                    backgroundImage: AssetImage('assets/hatori.jpg'),
+                    backgroundColor:
+                        Provider.of<ThemeProvider>(context).getPrimaryColor(),
                     radius: 60.0,
                   ),
                 ),
@@ -39,12 +39,8 @@ class UserDetailSection extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                  "Diego Peredo",
-                  style: TextStyle(
-                  fontSize: 25.0,
-                  color: Colors.blueGrey,
-                  letterSpacing: 2.0,
-                  fontWeight: FontWeight.w400),
+                "Diego Peredo",
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w400),
               ),
             ),
             SizedBox(
@@ -54,11 +50,7 @@ class UserDetailSection extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Text(
                 "Nombre de usuario: ",
-                style: TextStyle(
-                  fontSize: 15.0,
-                  color: Colors.blue[700],
-                  letterSpacing: 2.0,
-                  fontWeight: FontWeight.w300),
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300),
               ),
             ),
             Align(
@@ -66,10 +58,10 @@ class UserDetailSection extends StatelessWidget {
               child: Text(
                 "dperedo",
                 style: TextStyle(
-                  fontSize: 15.0,
-                  color: Colors.black,
-                  letterSpacing: 2.0,
-                  fontWeight: FontWeight.w300),
+                    fontSize: 15.0,
+                    color:
+                        Provider.of<ThemeProvider>(context).getIndicatorColor(),
+                    fontWeight: FontWeight.w300),
               ),
             ),
             SizedBox(
@@ -79,11 +71,7 @@ class UserDetailSection extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Text(
                 "Correo: ",
-                style: TextStyle(
-                  fontSize: 15.0,
-                  color: Colors.blue[700],
-                  letterSpacing: 2.0,
-                  fontWeight: FontWeight.w300),
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300),
               ),
             ),
             Align(
@@ -92,9 +80,9 @@ class UserDetailSection extends StatelessWidget {
                 "dperedo@gmail.com",
                 style: TextStyle(
                   fontSize: 15.0,
-                  color: Colors.black,
-                  letterSpacing: 2.0,
-                  fontWeight: FontWeight.w300),
+                  color:
+                      Provider.of<ThemeProvider>(context).getIndicatorColor(),
+                ),
               ),
             ),
             SizedBox(
@@ -104,11 +92,7 @@ class UserDetailSection extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Text(
                 "Organización: ",
-                style: TextStyle(
-                  fontSize: 15.0,
-                  color: Colors.blue[700],
-                  letterSpacing: 2.0,
-                  fontWeight: FontWeight.w300),
+                style: TextStyle(fontSize: 15.0),
               ),
             ),
             Align(
@@ -117,9 +101,9 @@ class UserDetailSection extends StatelessWidget {
                 "Lomba, Dellorto",
                 style: TextStyle(
                   fontSize: 15.0,
-                  color: Colors.black,
-                  letterSpacing: 2.0,
-                  fontWeight: FontWeight.w300),
+                  color:
+                      Provider.of<ThemeProvider>(context).getIndicatorColor(),
+                ),
               ),
             ),
             SizedBox(

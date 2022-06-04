@@ -58,9 +58,8 @@ class ListSection extends StatelessWidget {
                             builder: (context) => GestureDetector(
                                 onTap: () {
                                   //Navigator.of(context).push(_createAlertRoute());
-                                }, 
-                                child: UserDetailSection()
-                                ),
+                                },
+                                child: UserDetailDialog()),
                           ),
                         ),
                       ),

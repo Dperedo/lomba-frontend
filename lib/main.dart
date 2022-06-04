@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front_lomba/screens/democolors_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:front_lomba/model/models.dart';
@@ -27,14 +28,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Material App',
-      initialRoute: '/profile_edit',
+      initialRoute: '/user_edit',
       routes: {
         '/home': (context) => const Home(),
-        '/organizaciones': (context) => const Organization(),
-        '/usuarios': (context) => const UserScreen(),
-        '/usuarios_list': (context) => const UserList(),
-        '/profile_edit': (context) =>  EditProfile(),
-        '/profile': (context) =>  Profile(),
+        '/organizations': (context) => const Organizations(),
+        '/allusers': (context) => const AllUsers(),
+        '/organizations_userlist': (context) => const OrganizationUsersList(),
+        '/user_edit': (context) => UserEdit(),
+        '/profile': (context) => Profile(),
+        '/colors': (context) => DemoColors(),
       },
       theme: Provider.of<ThemeProvider>(context).currentTheme,
     );

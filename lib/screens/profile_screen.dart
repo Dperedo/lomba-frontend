@@ -4,7 +4,6 @@ import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/widgets/lomba_sidemenu.dart';
 import 'package:provider/provider.dart';
 
-
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);
 
@@ -29,18 +28,16 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            tooltip: 'Perfil',
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => EditProfile()));
-            },
-          )
-        ]
-      ),
+      appBar: AppBar(title: Text(title), actions: [
+        IconButton(
+          icon: const Icon(Icons.edit),
+          tooltip: 'Perfil',
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => UserEdit()));
+          },
+        )
+      ]),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.max,

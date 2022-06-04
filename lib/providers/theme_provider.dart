@@ -15,4 +15,24 @@ class ThemeProvider extends ChangeNotifier {
     currentTheme = ThemeData.dark();
     notifyListeners();
   }
+
+  Color getPrimaryColor() {
+    return currentTheme.primaryColor;
+  }
+
+  Color getTextColor() {
+    return currentTheme.backgroundColor;
+  }
+
+  Color getIndicatorColor() {
+    return currentTheme.indicatorColor;
+  }
+
+  Color getHoverColor() {
+    return currentTheme.hoverColor;
+  }
+
+  Color getFocusColor() {
+    return currentTheme.focusColor;
+  }
 }

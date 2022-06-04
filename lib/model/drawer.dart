@@ -24,7 +24,7 @@ class DrawerSection extends StatelessWidget {
             title: const Text('Organizaciones'),
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Organization()));
+                  MaterialPageRoute(builder: (context) => Organizations()));
             },
           ),
           ListTile(
@@ -32,7 +32,7 @@ class DrawerSection extends StatelessWidget {
             title: const Text('Usuarios'),
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const UserScreen()));
+                  MaterialPageRoute(builder: (context) => const AllUsers()));
             },
           ),
           ListTile(

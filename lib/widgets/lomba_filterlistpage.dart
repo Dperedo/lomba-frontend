@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
-class FilterSection extends StatelessWidget {
-  const FilterSection({
+class LombaFilterListPage extends StatelessWidget {
+  const LombaFilterListPage({
     Key? key,
   }) : super(key: key);
 
@@ -40,7 +40,7 @@ class FilterSection extends StatelessWidget {
             icon: Icon(Icons.filter_list_rounded),
             color: Provider.of<ThemeProvider>(context).getIndicatorColor(),
             onPressed: () {
-              //ScaffoldMessenger.of(context).showSnackBar(FilterSection.snackBar);
+              //ScaffoldMessenger.of(context).showSnackBar(LombaFilterListPage.snackBar);
             },
           ),
           SizedBox(
