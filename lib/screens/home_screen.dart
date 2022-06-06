@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:front_lomba/model/models.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
-import 'package:front_lomba/screens/login_screen.dart';
-import 'package:front_lomba/styles/styles.dart';
 import 'package:front_lomba/widgets/lomba_appbar.dart';
 import 'package:front_lomba/widgets/lomba_sidemenu.dart';
 import 'package:front_lomba/widgets/lomba_titlepage.dart';
@@ -21,8 +18,8 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: appTitle + ' - ' + pageTitle,
-      home: MyHomePage(title: appTitle + ' - ' + pageTitle),
+      title: '$appTitle - $pageTitle',
+      home: const MyHomePage(title: '$appTitle - $pageTitle'),
       theme: Provider.of<ThemeProvider>(context).currentTheme,
     );
   }

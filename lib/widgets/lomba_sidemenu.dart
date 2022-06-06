@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/helpers/route_animation.dart';
-import 'package:front_lomba/model/models.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
+import 'package:front_lomba/screens/administration/allusers_screen.dart';
+import 'package:front_lomba/screens/administration/organization_screen.dart';
+import 'package:front_lomba/screens/administration/permissions_screen.dart';
 import 'package:front_lomba/screens/administration/settings_screen.dart';
 import 'package:front_lomba/screens/democolors_screen.dart';
+import 'package:front_lomba/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
 class LombaSideMenu extends StatelessWidget {

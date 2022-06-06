@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/helpers/snackbars.dart';
 
-import 'package:front_lomba/model/models.dart';
 import 'package:front_lomba/helpers/route_animation.dart';
+import 'package:front_lomba/screens/administration/allusers_screen.dart';
+import 'package:front_lomba/widgets/lomba_titlepage.dart';
 import 'package:provider/provider.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 
@@ -16,8 +17,8 @@ class UserEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: appTitle + ' - ' + pageTitle,
-      home: UserEditPage(title: appTitle + ' - ' + pageTitle),
+      title: '$appTitle - $pageTitle',
+      home: const UserEditPage(title: '$appTitle - $pageTitle'),
       theme: Provider.of<ThemeProvider>(context).currentTheme,
     );
   }
@@ -35,11 +36,11 @@ class UserEditPage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            TitleSection(
+            const LombaTitlePage(
               title: "Editar usuario",
               subtitle: "Administrador / Todos usuarios / Editar Perfil",
             ),
-            UserEditForm(),
+            const UserEditForm(),
           ],
         ),
       ),
@@ -50,10 +51,10 @@ class UserEditPage extends StatelessWidget {
     return AppBar(
         title: Text(title),
         leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.of(context).pushReplacement(
-                  RouteAnimation.animatedTransition(AllUsers()));
+                  RouteAnimation.animatedTransition(const AllUsers()));
             }),
         actions: [
           IconButton(
@@ -65,7 +66,7 @@ class UserEditPage extends StatelessWidget {
                       'Cambios guardados'));
 
               Navigator.of(context)
-                  .push(RouteAnimation.animatedTransition(AllUsers()))
+                  .push(RouteAnimation.animatedTransition(const AllUsers()))
                   .then((value) => ScaffoldMessenger.of(context).showSnackBar(
                       SnackBarGenerator.getNotificationMessage(
                           'Cambios guardados')));
@@ -76,13 +77,13 @@ class UserEditPage extends StatelessWidget {
 }
 
 class UserEditForm extends StatefulWidget {
-  UserEditForm({Key? key}) : super(key: key);
+  const UserEditForm({Key? key}) : super(key: key);
 
   @override
-  _UserEditForm createState() => _UserEditForm();
+  UserEditFormState createState() => UserEditFormState();
 }
 
-class _UserEditForm extends State<UserEditForm> {
+class UserEditFormState extends State<UserEditForm> {
   bool _visible = false;
   bool isChecked1 = false;
   bool isChecked2 = false;
@@ -94,16 +95,16 @@ class _UserEditForm extends State<UserEditForm> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: new EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(10.0),
       child: Column(
         children: [
-          LombaTextFieldForm(
+          const LombaTextFieldForm(
             labelText: 'Nombre',
           ),
-          LombaTextFieldForm(
+          const LombaTextFieldForm(
             labelText: 'Username',
           ),
-          LombaTextFieldForm(
+          const LombaTextFieldForm(
             labelText: 'Correo electrónico',
           ),
           Padding(
@@ -113,14 +114,14 @@ class _UserEditForm extends State<UserEditForm> {
                 children: [
                   Align(
                       alignment: Alignment.centerLeft,
-                      child: new Text(
+                      child: Text(
                         'Organizaciones:',
                         style: DefaultTextStyle.of(context)
                             .style
                             .apply(fontSizeFactor: 1.2),
                       )),
-                  Divider(),
-                  Container(
+                  const Divider(),
+                  SizedBox(
                     width: 225,
                     child: Card(
                       shape: RoundedRectangleBorder(
@@ -138,7 +139,7 @@ class _UserEditForm extends State<UserEditForm> {
                             ),
                           ),
                           IconButton(
-                            icon: Icon(Icons.edit),
+                            icon: const Icon(Icons.edit),
                             onPressed: (() {
                               setState(() {
                                 _visible = !_visible;
@@ -146,7 +147,7 @@ class _UserEditForm extends State<UserEditForm> {
                             }),
                           ),
                           IconButton(
-                            icon: Icon(Icons.cancel),
+                            icon: const Icon(Icons.cancel),
                             onPressed: (() {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBarGenerator.getNotificationMessage(
@@ -157,7 +158,7 @@ class _UserEditForm extends State<UserEditForm> {
                       ),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: 225,
                     child: Card(
                       shape: RoundedRectangleBorder(
@@ -175,7 +176,7 @@ class _UserEditForm extends State<UserEditForm> {
                             ),
                           ),
                           IconButton(
-                            icon: Icon(Icons.edit),
+                            icon: const Icon(Icons.edit),
                             onPressed: (() {
                               setState(() {
                                 _visible = !_visible;
@@ -183,7 +184,7 @@ class _UserEditForm extends State<UserEditForm> {
                             }),
                           ),
                           IconButton(
-                            icon: Icon(Icons.cancel),
+                            icon: const Icon(Icons.cancel),
                             onPressed: (() {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBarGenerator.getNotificationMessage(
@@ -194,7 +195,7 @@ class _UserEditForm extends State<UserEditForm> {
                       ),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: 225,
                     child: Card(
                       shape: RoundedRectangleBorder(
@@ -212,7 +213,7 @@ class _UserEditForm extends State<UserEditForm> {
                             ),
                           ),
                           IconButton(
-                            icon: Icon(Icons.edit),
+                            icon: const Icon(Icons.edit),
                             onPressed: (() {
                               setState(() {
                                 _visible = !_visible;
@@ -220,7 +221,7 @@ class _UserEditForm extends State<UserEditForm> {
                             }),
                           ),
                           IconButton(
-                            icon: Icon(Icons.cancel),
+                            icon: const Icon(Icons.cancel),
                             onPressed: (() {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBarGenerator.getNotificationMessage(
@@ -235,7 +236,7 @@ class _UserEditForm extends State<UserEditForm> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           FloatingActionButton.extended(
@@ -246,14 +247,14 @@ class _UserEditForm extends State<UserEditForm> {
                 });
               },
               label: const Text('Agregar Organización')),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           AnimatedOpacity(
             // Si el Widget debe ser visible, anime a 1.0 (completamente visible). Si
             // el Widget debe estar oculto, anime a 0.0 (invisible).
             opacity: _visible ? 1.0 : 0.0,
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             // El cuadro verde debe ser el hijo de AnimatedOpacity
             child: Align(
               alignment: Alignment.centerLeft,
@@ -266,18 +267,18 @@ class _UserEditForm extends State<UserEditForm> {
                     const Divider(),
                     DropdownButton(
                       value: dropdownValue,
-                      items: [
+                      items: const [
                         DropdownMenuItem(
-                          child: Text('santander'),
                           value: 'santander',
+                          child: Text('santander'),
                         ),
                         DropdownMenuItem(
-                          child: Text('pawafa'),
                           value: 'pawafa',
+                          child: Text('pawafa'),
                         ),
                         DropdownMenuItem(
-                          child: Text('lomba'),
                           value: 'lomba',
+                          child: Text('lomba'),
                         ),
                       ],
                       onChanged: (String? valor) {
@@ -299,7 +300,7 @@ class _UserEditForm extends State<UserEditForm> {
                             });
                           },
                         ),
-                        Text('Super Admin'),
+                        const Text('Super Admin'),
                       ],
                     ),
                     Row(
@@ -314,7 +315,7 @@ class _UserEditForm extends State<UserEditForm> {
                             });
                           },
                         ),
-                        Text('Admin'),
+                        const Text('Admin'),
                       ],
                     ),
                     Row(
@@ -329,7 +330,7 @@ class _UserEditForm extends State<UserEditForm> {
                             });
                           },
                         ),
-                        Text('Sistema'),
+                        const Text('Sistema'),
                       ],
                     ),
                     FloatingActionButton.extended(
@@ -388,8 +389,8 @@ class LombaTextFieldForm extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: TextFormField(
         decoration: InputDecoration(
-          border: UnderlineInputBorder(),
-          labelText: this.labelText,
+          border: const UnderlineInputBorder(),
+          labelText: labelText,
         ),
       ),
     );

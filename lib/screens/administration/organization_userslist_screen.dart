@@ -4,9 +4,9 @@ import 'package:front_lomba/widgets/lomba_appbar.dart';
 import 'package:front_lomba/widgets/lomba_dialog_notyes.dart';
 import 'package:front_lomba/widgets/lomba_filterlistpage.dart';
 import 'package:front_lomba/widgets/lomba_titlepage.dart';
+import 'package:front_lomba/widgets/userdetail_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
-import 'package:front_lomba/model/models.dart';
 import 'package:front_lomba/widgets/lomba_sidemenu.dart';
 
 class OrganizationUsersList extends StatelessWidget {
@@ -19,8 +19,8 @@ class OrganizationUsersList extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: appTitle + ' - ' + pageTitle,
-      home: OrganizationUsersListPage(title: appTitle + ' - ' + pageTitle),
+      title: '$appTitle - $pageTitle',
+      home: const OrganizationUsersListPage(title: '$appTitle - $pageTitle'),
       theme: Provider.of<ThemeProvider>(context).currentTheme,
     );
   }
@@ -38,7 +38,7 @@ class OrganizationUsersListPage extends StatelessWidget {
       appBar: LombaAppBar(title: title),
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children: const [
             LombaTitlePage(
               title: "Usuarios de la Organización",
               subtitle: "Organizaciones / _ / Usuarios",
@@ -61,7 +61,7 @@ class OrganizationUsersListPage extends StatelessWidget {
           ],
         ),
       ),
-      drawer: LombaSideMenu(),
+      drawer: const LombaSideMenu(),
     );
   }
 }
@@ -69,16 +69,17 @@ class OrganizationUsersListPage extends StatelessWidget {
 class OrganizationUsersListItem extends StatelessWidget {
   final String user;
 
-  OrganizationUsersListItem({Key? key, required this.user}) : super(key: key);
+  const OrganizationUsersListItem({Key? key, required this.user})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: new EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(15.0),
       child: Row(
         children: [
-          Icon(Icons.person),
-          SizedBox(
+          const Icon(Icons.person),
+          const SizedBox(
             width: 20,
           ),
           Expanded(
@@ -87,7 +88,7 @@ class OrganizationUsersListItem extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   child: Text(
-                    this.user,
+                    user,
                     style: DefaultTextStyle.of(context)
                         .style
                         .apply(fontSizeFactor: 1.4),
@@ -104,7 +105,7 @@ class OrganizationUsersListItem extends StatelessWidget {
                                 onTap: () {
                                   //Navigator.of(context).push(_createAlertRoute());
                                 },
-                                child: UserDetailDialog()),
+                                child: const UserDetailDialog()),
                           ),
                         ),
                       ),
@@ -112,7 +113,7 @@ class OrganizationUsersListItem extends StatelessWidget {
                   },
                 )),
           )),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           FloatingActionButton(
@@ -139,9 +140,9 @@ class OrganizationUsersListItem extends StatelessWidget {
                       },
                   });
             },
-            child: Icon(Icons.do_not_disturb_on),
+            child: const Icon(Icons.do_not_disturb_on),
           ),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           FloatingActionButton(
@@ -168,7 +169,7 @@ class OrganizationUsersListItem extends StatelessWidget {
                       },
                   });
             },
-            child: Icon(Icons.cancel),
+            child: const Icon(Icons.cancel),
           ),
         ],
       ),

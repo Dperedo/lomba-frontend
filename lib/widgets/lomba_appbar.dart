@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:front_lomba/model/models.dart';
+import 'package:front_lomba/screens/profile_screen.dart';
 
 class LombaAppBar extends StatelessWidget implements PreferredSizeWidget {
   LombaAppBar({
@@ -21,7 +21,7 @@ class LombaAppBar extends StatelessWidget implements PreferredSizeWidget {
         tooltip: 'Perfil',
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Profile()));
+              context, MaterialPageRoute(builder: (context) => UserProfile()));
         },
       )
     ]);

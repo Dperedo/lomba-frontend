@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/helpers/route_animation.dart';
-import 'package:front_lomba/model/models.dart';
+import 'package:front_lomba/screens/administration/organization_userslist_screen.dart';
+
 import 'package:provider/provider.dart';
 import 'package:front_lomba/widgets/lomba_dialog_notyes.dart';
 import 'package:front_lomba/widgets/lomba_appbar.dart';
@@ -21,7 +22,7 @@ class Organizations extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: '$appTitle - $pageTitle',
-      home: OrganizationsPage(title: appTitle + ' - ' + pageTitle),
+      home: const OrganizationsPage(title: '$appTitle - $pageTitle'),
       theme: Provider.of<ThemeProvider>(context).currentTheme,
     );
   }
@@ -39,37 +40,37 @@ class OrganizationsPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            LombaTitlePage(
+            const LombaTitlePage(
               title: "Organizaciones",
               subtitle: "Administrador / Organizaciones",
             ),
-            LombaFilterListPage(),
-            Divider(),
+            const LombaFilterListPage(),
+            const Divider(),
             OrganizationListItem(
               organizacion: "Organizacion 1",
               icon: Icons.business,
             ),
-            Divider(),
+            const Divider(),
             OrganizationListItem(
               organizacion: "Organizacion 2",
               icon: Icons.business,
             ),
-            Divider(),
+            const Divider(),
             OrganizationListItem(
               organizacion: "Organizacion 3",
               icon: Icons.business,
             ),
-            Divider(),
+            const Divider(),
             OrganizationListItem(
               organizacion: "Organizacion 4",
               icon: Icons.business,
             ),
-            Divider(),
+            const Divider(),
             //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
           ],
         ),
       ),
-      drawer: LombaSideMenu(),
+      drawer: const LombaSideMenu(),
     );
   }
 }
@@ -78,7 +79,7 @@ class OrganizationListItem extends StatelessWidget {
   final String organizacion;
   final IconData icon;
 
-  OrganizationListItem({
+  const OrganizationListItem({
     Key? key,
     required this.organizacion,
     required this.icon,
@@ -87,11 +88,11 @@ class OrganizationListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: new EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(15.0),
       child: Row(
         children: [
-          Icon(this.icon),
-          SizedBox(
+          Icon(icon),
+          const SizedBox(
             width: 20,
           ),
           Expanded(
@@ -100,7 +101,7 @@ class OrganizationListItem extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   child: Text(
-                    this.organizacion,
+                    organizacion,
                     style: DefaultTextStyle.of(context)
                         .style
                         .apply(fontSizeFactor: 1.4),
@@ -108,7 +109,7 @@ class OrganizationListItem extends StatelessWidget {
                   onPressed: () {},
                 )),
           )),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           FloatingActionButton(
@@ -135,18 +136,18 @@ class OrganizationListItem extends StatelessWidget {
                   });
             },
             tooltip: 'Desactivar organización',
-            child: Icon(Icons.do_not_disturb_on),
+            child: const Icon(Icons.do_not_disturb_on),
           ),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           FloatingActionButton(
             heroTag: null,
             tooltip: 'Ver usuarios de la organización',
-            child: Icon(Icons.supervised_user_circle_outlined),
+            child: const Icon(Icons.supervised_user_circle_outlined),
             onPressed: () {
-              Navigator.of(context).push(
-                  RouteAnimation.animatedTransition(OrganizationUsersList()));
+              Navigator.of(context).push(RouteAnimation.animatedTransition(
+                  const OrganizationUsersList()));
             },
           ),
         ],

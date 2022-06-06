@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:front_lomba/screens/administration/allusers_screen.dart';
+import 'package:front_lomba/screens/administration/organization_screen.dart';
+import 'package:front_lomba/screens/administration/organization_userslist_screen.dart';
+import 'package:front_lomba/screens/administration/user_edit_screen.dart';
 import 'package:front_lomba/screens/democolors_screen.dart';
+import 'package:front_lomba/screens/home_screen.dart';
+import 'package:front_lomba/screens/profile_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'package:front_lomba/model/models.dart';
-import 'package:front_lomba/model/preferences.dart';
+import 'package:front_lomba/helpers/preferences.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 
 void main() async {
@@ -34,9 +39,9 @@ class MyApp extends StatelessWidget {
         '/organizations': (context) => const Organizations(),
         '/allusers': (context) => const AllUsers(),
         '/organizations_userlist': (context) => const OrganizationUsersList(),
-        '/user_edit': (context) => UserEdit(),
-        '/profile': (context) => Profile(),
-        '/colors': (context) => DemoColors(),
+        '/user_edit': (context) => const UserEdit(),
+        '/user_profile': (context) => const UserProfile(),
+        '/democolors': (context) => const DemoColors(),
       },
       theme: Provider.of<ThemeProvider>(context).currentTheme,
     );

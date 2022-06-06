@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/helpers/snackbars.dart';
+import 'package:front_lomba/screens/administration/user_edit_screen.dart';
 
-import 'package:front_lomba/model/models.dart';
 import 'package:front_lomba/widgets/lomba_appbar.dart';
 import 'package:front_lomba/widgets/lomba_dialog_notyes.dart';
 import 'package:front_lomba/widgets/lomba_filterlistpage.dart';
 import 'package:front_lomba/widgets/lomba_sidemenu.dart';
 import 'package:front_lomba/widgets/lomba_titlepage.dart';
+import 'package:front_lomba/widgets/userdetail_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 import '../../helpers/route_animation.dart';
@@ -21,8 +22,8 @@ class AllUsers extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: appTitle + ' - ' + pageTitle,
-      home: AllUsersPage(title: appTitle + ' - ' + pageTitle),
+      title: '$appTitle - $pageTitle',
+      home: const AllUsersPage(title: '$appTitle - $pageTitle'),
       theme: Provider.of<ThemeProvider>(context).currentTheme,
     );
   }
@@ -39,7 +40,7 @@ class AllUsersPage extends StatelessWidget {
       appBar: LombaAppBar(title: title),
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children: const [
             LombaTitlePage(
               title: "Todos los usuarios",
               subtitle: "Administrador / Todos los usuarios",
@@ -55,14 +56,14 @@ class AllUsersPage extends StatelessWidget {
           ],
         ),
       ),
-      drawer: LombaSideMenu(),
+      drawer: const LombaSideMenu(),
     );
   }
 }
 
 class AllUsersListItem extends StatelessWidget {
   final String username;
-  AllUsersListItem({
+  const AllUsersListItem({
     Key? key,
     required this.username,
   }) : super(key: key);
@@ -70,11 +71,11 @@ class AllUsersListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: new EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(15.0),
       child: Row(
         children: [
-          Icon(Icons.person),
-          SizedBox(
+          const Icon(Icons.person),
+          const SizedBox(
             width: 20,
           ),
           Expanded(
@@ -83,7 +84,7 @@ class AllUsersListItem extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   child: Text(
-                    this.username,
+                    username,
                     style: DefaultTextStyle.of(context)
                         .style
                         .apply(fontSizeFactor: 1.4),
@@ -100,7 +101,7 @@ class AllUsersListItem extends StatelessWidget {
                                 onTap: () {
                                   //Navigator.of(context).push(_createAlertRoute());
                                 },
-                                child: UserDetailDialog()),
+                                child: const UserDetailDialog()),
                           ),
                         ),
                       ),
@@ -108,16 +109,17 @@ class AllUsersListItem extends StatelessWidget {
                   },
                 )),
           )),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           FloatingActionButton(
             heroTag: null,
             tooltip: 'Organizaciones del usuario',
             onPressed: () {},
-            child: Text('1', style: TextStyle(fontWeight: FontWeight.bold)),
+            child:
+                const Text('1', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           FloatingActionButton(
@@ -143,18 +145,18 @@ class AllUsersListItem extends StatelessWidget {
                       },
                   });
             },
-            child: Icon(Icons.do_not_disturb_on),
+            child: const Icon(Icons.do_not_disturb_on),
           ),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           FloatingActionButton(
             heroTag: null,
             tooltip: 'Editar usuario',
-            child: Icon(Icons.edit),
+            child: const Icon(Icons.edit),
             onPressed: () {
               Navigator.of(context)
-                  .push(RouteAnimation.animatedTransition(UserEdit()));
+                  .push(RouteAnimation.animatedTransition(const UserEdit()));
             },
           ),
         ],

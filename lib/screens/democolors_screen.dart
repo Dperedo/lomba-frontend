@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:front_lomba/model/models.dart';
-import 'package:front_lomba/model/preferences.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
+import 'package:front_lomba/widgets/lomba_appbar.dart';
 import 'package:front_lomba/widgets/lomba_sidemenu.dart';
+import 'package:front_lomba/widgets/lomba_titlepage.dart';
 import 'package:provider/provider.dart';
 
 class DemoColors extends StatefulWidget {
   const DemoColors({Key? key}) : super(key: key);
   static const appTitle = 'Lomba';
+  static const pageTitle = 'Permisos';
+
   @override
   State<DemoColors> createState() => _DemoColorsState();
 }
@@ -16,53 +18,44 @@ class _DemoColorsState extends State<DemoColors> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Lomba'), actions: [
-        IconButton(
-          icon: const Icon(Icons.account_circle_rounded),
-          tooltip: 'Perfil',
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Profile()));
-          },
-        )
-      ]),
+      appBar: LombaAppBar(title: 'Demo Colores'),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TitleSection(
+              const LombaTitlePage(
                 title: "Demo de colores",
                 subtitle: "Administración / Colores",
               ),
               const Divider(),
               TextButton(
                 onPressed: () {},
-                child: Text('Demo de color'),
+                child: const Text('Demo de color'),
               ),
               const Divider(),
               ElevatedButton(
                 onPressed: () {},
-                child: const Text('No botón'),
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.resolveWith(getBackgroundColor),
                     foregroundColor:
                         MaterialStateProperty.resolveWith(getTextColor)),
+                child: const Text('No botón'),
               ),
               const Divider(),
               ElevatedButton(
                 onPressed: () {},
+                style: const ButtonStyle(),
                 child: const Text('Hola sí'),
-                style: ButtonStyle(),
               )
             ],
           ),
         ),
       ),
       //backgroundColor: Styles.defaultGreengroundColor,
-      drawer: LombaSideMenu(),
+      drawer: const LombaSideMenu(),
     );
   }
 

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/helpers/snackbars.dart';
-import 'package:front_lomba/model/listpermission.dart';
-import 'package:front_lomba/model/models.dart';
 import 'package:front_lomba/widgets/lomba_appbar.dart';
 import 'package:front_lomba/widgets/lomba_dialog_notyes.dart';
 import 'package:front_lomba/widgets/lomba_filterlistpage.dart';
@@ -21,7 +19,7 @@ class Permissions extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: '$appTitle - $pageTitle',
-      home: PermissionsPage(title: '$appTitle - $pageTitle'),
+      home: const PermissionsPage(title: '$appTitle - $pageTitle'),
       theme: Provider.of<ThemeProvider>(context).currentTheme,
     );
   }
@@ -40,23 +38,23 @@ class PermissionsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LombaTitlePage(
+            const LombaTitlePage(
               title: "Permisos",
               subtitle: "Administración / Permisos",
             ),
-            LombaFilterListPage(),
-            Divider(),
+            const LombaFilterListPage(),
+            const Divider(),
             PermissionListItem(permission: "Permiso 1"),
-            Divider(),
+            const Divider(),
             PermissionListItem(permission: "Permiso 2"),
-            Divider(),
+            const Divider(),
             PermissionListItem(permission: "Permiso 3"),
-            Divider(),
+            const Divider(),
             //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
           ],
         ),
       ),
-      drawer: LombaSideMenu(),
+      drawer: const LombaSideMenu(),
     );
   }
 }
@@ -64,16 +62,17 @@ class PermissionsPage extends StatelessWidget {
 class PermissionListItem extends StatelessWidget {
   final String permission;
 
-  PermissionListItem({Key? key, required this.permission}) : super(key: key);
+  const PermissionListItem({Key? key, required this.permission})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: new EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(15.0),
       child: Row(
         children: [
-          Icon(Icons.key),
-          SizedBox(
+          const Icon(Icons.key),
+          const SizedBox(
             width: 20,
           ),
           Expanded(
@@ -82,7 +81,7 @@ class PermissionListItem extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   child: Text(
-                    this.permission,
+                    permission,
                     style: DefaultTextStyle.of(context)
                         .style
                         .apply(fontSizeFactor: 1.4),
@@ -90,7 +89,7 @@ class PermissionListItem extends StatelessWidget {
                   onPressed: () {},
                 )),
           )),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           FloatingActionButton(
@@ -117,9 +116,9 @@ class PermissionListItem extends StatelessWidget {
                   });
             },
             tooltip: 'Desactivar permiso',
-            child: Icon(Icons.do_not_disturb_on),
+            child: const Icon(Icons.do_not_disturb_on),
           ),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
         ],
