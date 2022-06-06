@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:front_lomba/helpers/route_animation.dart';
+import 'package:front_lomba/helpers/snackbars.dart';
+import 'package:front_lomba/model/listpermission.dart';
 import 'package:front_lomba/model/models.dart';
-import 'package:provider/provider.dart';
-import 'package:front_lomba/widgets/lomba_dialog_notyes.dart';
 import 'package:front_lomba/widgets/lomba_appbar.dart';
+import 'package:front_lomba/widgets/lomba_dialog_notyes.dart';
 import 'package:front_lomba/widgets/lomba_filterlistpage.dart';
 import 'package:front_lomba/widgets/lomba_sidemenu.dart';
 import 'package:front_lomba/widgets/lomba_titlepage.dart';
+import 'package:provider/provider.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
-import 'package:front_lomba/helpers/snackbars.dart';
 
-class Organizations extends StatelessWidget {
-  const Organizations({Key? key}) : super(key: key);
+class Permissions extends StatelessWidget {
+  const Permissions({Key? key}) : super(key: key);
 
   static const appTitle = 'Lomba';
-  static const pageTitle = 'Organizaciones';
+  static const pageTitle = 'Permisos';
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: '$appTitle - $pageTitle',
-      home: OrganizationsPage(title: appTitle + ' - ' + pageTitle),
+      home: PermissionsPage(title: '$appTitle - $pageTitle'),
       theme: Provider.of<ThemeProvider>(context).currentTheme,
     );
   }
 }
 
-class OrganizationsPage extends StatelessWidget {
-  const OrganizationsPage({Key? key, required this.title}) : super(key: key);
+class PermissionsPage extends StatelessWidget {
+  const PermissionsPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -38,32 +38,19 @@ class OrganizationsPage extends StatelessWidget {
       appBar: LombaAppBar(title: title),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             LombaTitlePage(
-              title: "Organizaciones",
-              subtitle: "Administrador / Organizaciones",
+              title: "Permisos",
+              subtitle: "Administración / Permisos",
             ),
             LombaFilterListPage(),
             Divider(),
-            OrganizationListItem(
-              organizacion: "Organizacion 1",
-              icon: Icons.business,
-            ),
+            PermissionListItem(permission: "Permiso 1"),
             Divider(),
-            OrganizationListItem(
-              organizacion: "Organizacion 2",
-              icon: Icons.business,
-            ),
+            PermissionListItem(permission: "Permiso 2"),
             Divider(),
-            OrganizationListItem(
-              organizacion: "Organizacion 3",
-              icon: Icons.business,
-            ),
-            Divider(),
-            OrganizationListItem(
-              organizacion: "Organizacion 4",
-              icon: Icons.business,
-            ),
+            PermissionListItem(permission: "Permiso 3"),
             Divider(),
             //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
           ],
@@ -74,15 +61,10 @@ class OrganizationsPage extends StatelessWidget {
   }
 }
 
-class OrganizationListItem extends StatelessWidget {
-  final String organizacion;
-  final IconData icon;
+class PermissionListItem extends StatelessWidget {
+  final String permission;
 
-  OrganizationListItem({
-    Key? key,
-    required this.organizacion,
-    required this.icon,
-  }) : super(key: key);
+  PermissionListItem({Key? key, required this.permission}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +72,7 @@ class OrganizationListItem extends StatelessWidget {
       padding: new EdgeInsets.all(15.0),
       child: Row(
         children: [
-          Icon(this.icon),
+          Icon(Icons.key),
           SizedBox(
             width: 20,
           ),
@@ -100,7 +82,7 @@ class OrganizationListItem extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   child: Text(
-                    this.organizacion,
+                    this.permission,
                     style: DefaultTextStyle.of(context)
                         .style
                         .apply(fontSizeFactor: 1.4),
@@ -114,40 +96,31 @@ class OrganizationListItem extends StatelessWidget {
           FloatingActionButton(
             heroTag: null,
             onPressed: () {
+              //showdDelete(context);
               showDialog<String>(
                 context: context,
                 builder: (context) => GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
                   child: LombaDialogNotYes(
-                    itemName: organizacion,
+                    itemName: permission,
                     titleMessage: 'Desactivar',
-                    dialogMessage: '¿Desea desactivar la organización?',
+                    dialogMessage: '¿Desea desactivar el permiso?',
                   ),
                 ),
               ).then((value) => {
-                    // ignore: unrelated_type_equality_checks
                     if (value == 'Sí')
                       {
                         ScaffoldMessenger.of(context).showSnackBar(
                             SnackBarGenerator.getNotificationMessage(
-                                'Se ha desactivado la organización'))
+                                'Se ha desactivado el permiso'))
                       },
                   });
             },
-            tooltip: 'Desactivar organización',
+            tooltip: 'Desactivar permiso',
             child: Icon(Icons.do_not_disturb_on),
           ),
           SizedBox(
             width: 20,
-          ),
-          FloatingActionButton(
-            heroTag: null,
-            tooltip: 'Ver usuarios de la organización',
-            child: Icon(Icons.supervised_user_circle_outlined),
-            onPressed: () {
-              Navigator.of(context).push(
-                  RouteAnimation.animatedTransition(OrganizationUsersList()));
-            },
           ),
         ],
       ),

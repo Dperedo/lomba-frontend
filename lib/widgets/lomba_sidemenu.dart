@@ -26,6 +26,14 @@ class LombaSideMenu extends StatelessWidget {
                     color: Provider.of<ThemeProvider>(context).getTextColor())),
           ),
           ListTile(
+            leading: const Icon(Icons.home),
+            title: const Text('Home'),
+            onTap: () {
+              Navigator.of(context)
+                  .push(RouteAnimation.animatedTransition(Home()));
+            },
+          ),
+          ListTile(
             leading: const Icon(Icons.business_center),
             title: const Text('Organizaciones'),
             onTap: () {
@@ -46,7 +54,7 @@ class LombaSideMenu extends StatelessWidget {
             title: const Text('Permisos'),
             onTap: () {
               Navigator.of(context)
-                  .push(RouteAnimation.animatedTransition(Permission()));
+                  .push(RouteAnimation.animatedTransition(Permissions()));
             },
           ),
           ListTile(

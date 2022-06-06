@@ -1,5 +1,5 @@
 export 'package:front_lomba/screens/alert_screen.dart';
-export 'package:front_lomba/screens/permit_screen.dart';
+export 'package:front_lomba/screens/administration/permissions_screen.dart';
 export 'package:front_lomba/screens/administration/organization_screen.dart';
 export 'package:front_lomba/screens/administration/allusers_screen.dart';
 export 'package:front_lomba/screens/profile_screen.dart';

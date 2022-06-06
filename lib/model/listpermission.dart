@@ -3,10 +3,11 @@ import 'package:front_lomba/model/models.dart';
 
 //import 'package:front_lomba/model/models.dart';
 
-class ListPermissionSection extends StatelessWidget {
+class ListPermissionsSection extends StatelessWidget {
   final String permission;
 
-  ListPermissionSection({Key? key, required this.permission}) : super(key: key);
+  ListPermissionsSection({Key? key, required this.permission})
+      : super(key: key);
 
   final _snackBarCancel = SnackBar(
     content: const Text('Se ha desactivado el permiso'),

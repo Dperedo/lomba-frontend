@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Lomba App',
-      initialRoute: '/organizations',
+      initialRoute: '/home',
       routes: {
         '/home': (context) => const Home(),
         '/organizations': (context) => const Organizations(),

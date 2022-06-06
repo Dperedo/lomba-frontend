@@ -22,7 +22,7 @@ class AppRoutes {
     MenuOption(
         route: '/permisos',
         name: 'permisos',
-        screen: const Permission(),
+        screen: const Permissions(),
         icon: Icons.list_alt),
     MenuOption(
         route: '/usuarios',

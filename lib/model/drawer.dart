@@ -39,7 +39,7 @@ class DrawerSection extends StatelessWidget {
             leading: const Icon(Icons.key_outlined),
             title: const Text('Permisos'),
             onTap: () {
-              Navigator.of(context).push(_createPermissionRoute());
+              Navigator.of(context).push(_createPermissionsRoute());
             },
           ),
         ],
@@ -47,10 +47,10 @@ class DrawerSection extends StatelessWidget {
     );
   }
 
-  Route _createPermissionRoute() {
+  Route _createPermissionsRoute() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
-          const Permission(),
+          const Permissions(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
         const end = Offset.zero;
