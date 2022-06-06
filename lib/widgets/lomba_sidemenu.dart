@@ -52,6 +52,14 @@ class LombaSideMenu extends StatelessWidget {
                   .push(RouteAnimation.animatedTransition(Settings()));
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.home),
+            title: const Text('Inicio'),
+            onTap: () {
+              Navigator.of(context)
+                  .push(RouteAnimation.animatedTransition(LoginScreen()));
+            },
+          ),
         ],
       ),
     );

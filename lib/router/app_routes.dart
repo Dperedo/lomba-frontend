@@ -39,11 +39,6 @@ class AppRoutes {
         name: 'organizaciones',
         screen: const Organization(),
         icon: Icons.business),
-    MenuOption(
-        route: '/login',
-        name: 'login',
-        screen: const Login(),
-        icon: Icons.list_alt),
   ];
 
   static Map<String, Widget Function(BuildContext)> getAppRoutes() {

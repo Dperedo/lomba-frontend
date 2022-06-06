@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:front_lomba/model/models.dart';
-import 'package:front_lomba/screens/login_screen.dart';
-import 'package:front_lomba/styles/styles.dart';
+import 'package:front_lomba/widgets/lomba_sidemenu.dart';
+import 'package:provider/provider.dart';
+import 'package:front_lomba/providers/theme_provider.dart';
 
 //void main() => runApp(const Home());
 
@@ -13,10 +14,11 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: appTitle,
       home: MyHomePage(title: appTitle),
+      theme: Provider.of<ThemeProvider>(context).currentTheme,
     );
   }
 }
@@ -42,10 +44,10 @@ class MyHomePage extends StatelessWidget {
         ]
         
       ),
-      body: Text('Lomba!',style: Theme.of(context).textTheme.headline3,),
+      body: Text('Lomba!',style: Theme.of(context).textTheme.headline3),
       
       backgroundColor: Styles.defaultGreengroundColor,
-      drawer: DrawerSection(),
+      drawer: LombaSideMenu(),
     );
   }
 }
