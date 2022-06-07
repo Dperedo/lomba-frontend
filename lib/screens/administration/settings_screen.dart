@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:front_lomba/model/models.dart';
-import 'package:front_lomba/model/preferences.dart';
+import 'package:front_lomba/helpers/preferences.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
+import 'package:front_lomba/screens/profile_screen.dart';
 import 'package:front_lomba/widgets/lomba_sidemenu.dart';
+import 'package:front_lomba/widgets/lomba_titlepage.dart';
 import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
@@ -16,13 +17,13 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Lomba'), actions: [
+      appBar: AppBar(title: const Text('Lomba'), actions: [
         IconButton(
           icon: const Icon(Icons.account_circle_rounded),
           tooltip: 'Perfil',
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Profile()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const UserProfile()));
           },
         )
       ]),
@@ -32,7 +33,7 @@ class _SettingsState extends State<Settings> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TitleSection(
+              const LombaTitlePage(
                 title: "Configuración",
                 subtitle: "Administración / Configuración",
               ),
@@ -57,7 +58,7 @@ class _SettingsState extends State<Settings> {
         ),
       ),
       //backgroundColor: Styles.defaultGreengroundColor,
-      drawer: LombaSideMenu(),
+      drawer: const LombaSideMenu(),
     );
   }
 }
