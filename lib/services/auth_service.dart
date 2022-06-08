@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-//import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:http/http.dart' as http;
 
 class AuthService extends ChangeNotifier {
 
-  final String _baseUrl = 'http://localhost:8187/';
+  final String _baseUrl = 'http://localhost:8187';
   final String token = '';
-  //final List<Product> prodocts = [];
+  final storage = const FlutterSecureStorage();
   bool isLoading = true;
 
 
@@ -20,8 +20,8 @@ class AuthService extends ChangeNotifier {
       'returnSecureToken': true
     };
 
-    final url = Uri.https(_baseUrl, '/v1/accounts:signInWithPassword', {
-      'key': _firebaseToken
+    final url = Uri.https(_baseUrl, '/api/v1/User/authenticate', {
+      'key': token
     });
 
     final resp = await http.post(url, body: json.encode(authData));
