@@ -198,13 +198,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.3"
-  pub_semver:
-    dependency: transitive
-    description:
-      name: pub_semver
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.1"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -308,13 +301,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.9"
-  update:
-    dependency: "direct main"
-    description:
-      name: update
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.1"
   vector_math:
     dependency: transitive
     description:

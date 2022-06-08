@@ -35,13 +35,12 @@ class UserEditPage extends StatelessWidget {
       appBar: appBarToBack(context),
       body: Center(
         child: Column(
-          // ignore: prefer_const_literals_to_create_immutables
-          children: [
-            const LombaTitlePage(
+          children: const [
+            LombaTitlePage(
               title: "Editar usuario",
               subtitle: "Administrador / Todos usuarios / Editar Perfil",
             ),
-            const UserEditForm(),
+            UserEditForm(),
           ],
         ),
       ),

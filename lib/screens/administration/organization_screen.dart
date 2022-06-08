@@ -39,37 +39,33 @@ class OrganizationsPage extends StatelessWidget {
       appBar: LombaAppBar(title: title),
       body: SingleChildScrollView(
         child: Column(
-          // ignore: prefer_const_literals_to_create_immutables
-          children: [
-            const LombaTitlePage(
+          children: const [
+            LombaTitlePage(
               title: "Organizaciones",
               subtitle: "Administrador / Organizaciones",
             ),
-            const LombaFilterListPage(),
-            const Divider(),
-            const OrganizationListItem(
+            LombaFilterListPage(),
+            Divider(),
+            OrganizationListItem(
               organizacion: "Organizacion 1",
               icon: Icons.business,
             ),
-            const Divider(),
-            // ignore: prefer_const_constructors
+            Divider(),
             OrganizationListItem(
               organizacion: "Organizacion 2",
               icon: Icons.business,
             ),
-            const Divider(),
-            // ignore: prefer_const_constructors
+            Divider(),
             OrganizationListItem(
               organizacion: "Organizacion 3",
               icon: Icons.business,
             ),
-            const Divider(),
-            // ignore: prefer_const_constructors
+            Divider(),
             OrganizationListItem(
               organizacion: "Organizacion 4",
               icon: Icons.business,
             ),
-            const Divider(),
+            Divider(),
             //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
           ],
         ),

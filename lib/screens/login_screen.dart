@@ -111,20 +111,21 @@ class _LoginForm extends StatelessWidget {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               disabledColor: Colors.grey,
               elevation: 0,
-              color: Color.fromARGB(255, 94, 97, 255),
+              color: const Color.fromARGB(255, 94, 97, 255),
               // ignore: sort_child_properties_last
               child: Container(
-                padding: EdgeInsets.symmetric( horizontal: 80, vertical: 15),
+                padding: const EdgeInsets.symmetric( horizontal: 80, vertical: 15),
                 child: Text(
                   loginForm.isLoading 
                     ? 'Espere'
                     : 'Ingresar',
-                  style: TextStyle( color: Colors.white ),
+                  style: const TextStyle( color: Colors.white ),
                 )
               ),
               onPressed: loginForm.isLoading ? null : () async {
                 
                 FocusScope.of(context).unfocus();
+                // final authService = Provider.of<AuthService>(context, listen: false);
                 
                 if( !loginForm.isValidForm() ) return;
 
@@ -133,6 +134,8 @@ class _LoginForm extends StatelessWidget {
                 await Future.delayed(Duration(seconds: 2 ));
 
                 // TODO: validar si el login es correcto
+                // final String? token = await authService.crateUser(loginForm.email, loginForm.password)
+
                 loginForm.isLoading = false;
 
                 Navigator.of(context).push(RouteAnimation.animatedTransition(Home()));
@@ -220,7 +223,7 @@ class _PurpleBox extends StatelessWidget {
   BoxDecoration _purpleBackground() => BoxDecoration(
     // ignore: prefer_const_constructors
     gradient: LinearGradient(
-      colors: [
+      colors: const [
         Color.fromARGB(255, 5, 5, 170),
         Color.fromARGB(255, 53, 98, 243)
       ]

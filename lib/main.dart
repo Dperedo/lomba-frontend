@@ -5,6 +5,7 @@ import 'package:front_lomba/screens/administration/organization_userslist_screen
 import 'package:front_lomba/screens/administration/user_edit_screen.dart';
 import 'package:front_lomba/screens/democolors_screen.dart';
 import 'package:front_lomba/screens/home_screen.dart';
+import 'package:front_lomba/screens/login_screen.dart';
 import 'package:front_lomba/screens/profile_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Lomba App',
-      initialRoute: '/home',
+      initialRoute: '/login',
       routes: {
         '/home': (context) => const Home(),
         '/organizations': (context) => const Organizations(),
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         '/user_edit': (context) => const UserEdit(),
         '/user_profile': (context) => const UserProfile(),
         '/democolors': (context) => const DemoColors(),
+        '/login': (context) => LoginScreen(),
       },
       theme: Provider.of<ThemeProvider>(context).currentTheme,
     );
