@@ -7,6 +7,7 @@ import 'package:front_lomba/screens/administration/permissions_screen.dart';
 import 'package:front_lomba/screens/administration/settings_screen.dart';
 import 'package:front_lomba/screens/democolors_screen.dart';
 import 'package:front_lomba/screens/home_screen.dart';
+import 'package:front_lomba/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
 class LombaSideMenu extends StatelessWidget {
@@ -74,6 +75,14 @@ class LombaSideMenu extends StatelessWidget {
             onTap: () {
               Navigator.of(context)
                   .push(RouteAnimation.animatedTransition(DemoColors()));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.keyboard_arrow_left),
+            title: const Text('Inicio'),
+            onTap: () {
+              Navigator.of(context)
+                  .push(RouteAnimation.animatedTransition(LoginScreen()));
             },
           ),
         ],

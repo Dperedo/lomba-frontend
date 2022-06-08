@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:front_lomba/screens/home_screen.dart';
-import 'package:front_lomba/model/auth_background.dart';
 import 'package:provider/provider.dart';
-import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/helpers/route_animation.dart';
  
 class LoginScreen extends StatelessWidget {
@@ -114,6 +112,7 @@ class _LoginForm extends StatelessWidget {
               disabledColor: Colors.grey,
               elevation: 0,
               color: Color.fromARGB(255, 94, 97, 255),
+              // ignore: sort_child_properties_last
               child: Container(
                 padding: EdgeInsets.symmetric( horizontal: 80, vertical: 15),
                 child: Text(
@@ -217,7 +216,9 @@ class _PurpleBox extends StatelessWidget {
     );
   }
 
+  // ignore: prefer_const_constructors
   BoxDecoration _purpleBackground() => BoxDecoration(
+    // ignore: prefer_const_constructors
     gradient: LinearGradient(
       colors: [
         Color.fromARGB(255, 5, 5, 170),

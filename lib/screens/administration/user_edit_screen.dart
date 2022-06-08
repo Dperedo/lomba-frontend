@@ -35,6 +35,7 @@ class UserEditPage extends StatelessWidget {
       appBar: appBarToBack(context),
       body: Center(
         child: Column(
+          // ignore: prefer_const_literals_to_create_immutables
           children: [
             const LombaTitlePage(
               title: "Editar usuario",
@@ -109,6 +110,7 @@ class UserEditFormState extends State<UserEditForm> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            // ignore: avoid_unnecessary_containers
             child: Container(
               child: Wrap(
                 children: [
@@ -258,6 +260,7 @@ class UserEditFormState extends State<UserEditForm> {
             // El cuadro verde debe ser el hijo de AnimatedOpacity
             child: Align(
               alignment: Alignment.centerLeft,
+              // ignore: sized_box_for_whitespace
               child: Container(
                 width: 200.0,
                 //height: 200.0,
