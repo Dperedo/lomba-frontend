@@ -17,6 +17,15 @@ class LombaSideMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> menu = [];
+    menu.add(DrawerHeader(
+            decoration: BoxDecoration(
+              color: Provider.of<ThemeProvider>(context).getPrimaryColor(),
+            ),
+            child: Text('Menú principal',
+                style: TextStyle(
+                    color: Provider.of<ThemeProvider>(context).getTextColor())),
+          ),);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,

@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 
 class AuthService extends ChangeNotifier {
   final String _baseUrl = 'http://localhost:8187';
+  final String token = '';
   final storage = const FlutterSecureStorage();
   bool isLoading = true;
 
@@ -30,7 +31,8 @@ class AuthService extends ChangeNotifier {
       resp = await http.post(url, body: json.encode(authData), headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Access-Control_Allow_Origin": "*"
+        "Access-Control_Allow_Origin": "*",
+        //'Authorization': 'Bearer ${readToken()}',
       });
       decodedResp = json.decode(resp.body);
       print(decodedResp);
@@ -38,7 +40,11 @@ class AuthService extends ChangeNotifier {
       print(e.toString());
     }
 
-    if (resp?.statusCode == 200) {}
+    if (resp?.statusCode == 200) {
+      print('resultado = 200');
+    } else {
+      print('error');
+    }
 
     print('3');
   }
