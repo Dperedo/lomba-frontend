@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:front_lomba/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:front_lomba/helpers/route_animation.dart';
+import 'package:front_lomba/providers/login_form_provider.dart';
+import 'package:front_lomba/services/auth_service.dart';
  
 class LoginScreen extends StatelessWidget {
 
@@ -73,13 +75,13 @@ class _LoginForm extends StatelessWidget {
               onChanged: ( value ) => loginForm.email = value,
               validator: ( value ) {
 
-                  String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                  /*String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
                   RegExp regExp  = new RegExp(pattern);
                   
                   return regExp.hasMatch(value ?? '')
                     ? null
                     : 'El valor ingresado no luce como un correo';
-
+                  */
               },
             ),
 
@@ -125,20 +127,51 @@ class _LoginForm extends StatelessWidget {
               onPressed: loginForm.isLoading ? null : () async {
                 
                 FocusScope.of(context).unfocus();
-                // final authService = Provider.of<AuthService>(context, listen: false);
+                final authService = Provider.of<AuthService>(context, listen: false);
                 
                 if( !loginForm.isValidForm() ) return;
 
                 loginForm.isLoading = true;
 
-                await Future.delayed(Duration(seconds: 2 ));
+                //await Future.delayed(Duration(seconds: 2 ));
+                
+                // TODO: validar si el login es correcto
+                final String? errorMessage = await authService.login(loginForm.email, loginForm.password);
+
+                if ( errorMessage == null ) {
+                  Navigator.of(context).push(RouteAnimation.animatedTransition(Home()));
+                } else {
+                  // TODO: mostrar error en pantalla
+                  // print( errorMessage );
+                  //NotificationsService.showSnackbar(errorMessage);
+                  loginForm.isLoading = false;
+                }
+
+                //loginForm.isLoading = false;
+
+                //Navigator.of(context).push(RouteAnimation.animatedTransition(Home()));
+                //--------------------------------------------------------------------------------------
+                /*
+                FocusScope.of(context).unfocus();
+                final authService = Provider.of<AuthService>(context, listen: false);
+                
+                if( !loginForm.isValidForm() ) return;
+
+                loginForm.isLoading = true;
+
 
                 // TODO: validar si el login es correcto
-                // final String? token = await authService.crateUser(loginForm.email, loginForm.password)
+                final String? errorMessage = await authService.login(loginForm.email, loginForm.password);
 
-                loginForm.isLoading = false;
-
-                Navigator.of(context).push(RouteAnimation.animatedTransition(Home()));
+                if ( errorMessage == null ) {
+                  Navigator.pushReplacementNamed(context, 'home');
+                } else {
+                  // TODO: mostrar error en pantalla
+                  // print( errorMessage );
+                  NotificationsService.showSnackbar(errorMessage);
+                  loginForm.isLoading = false;
+                  }
+                */
               }
             )
 

@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import 'package:front_lomba/helpers/preferences.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
+import 'package:front_lomba/services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +21,8 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
-          create: (_) => ThemeProvider(isDarkmode: Preferences.isDarkmode))
+          create: (_) => ThemeProvider(isDarkmode: Preferences.isDarkmode)),
+          ChangeNotifierProvider(create: ( _ ) => AuthService() ),
     ],
     child: const MyApp(),
   ));

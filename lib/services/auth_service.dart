@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -7,7 +9,7 @@ import 'package:http/http.dart' as http;
 class AuthService extends ChangeNotifier {
 
   final String _baseUrl = 'http://localhost:8187';
-  final String token = '';
+  //final String token = ''; 
   final storage = const FlutterSecureStorage();
   bool isLoading = true;
 
@@ -18,14 +20,16 @@ class AuthService extends ChangeNotifier {
       'email': email,
       'password': password,
       'returnSecureToken': true
-    };
+    };print('1');print(readToken());
 
     final url = Uri.https(_baseUrl, '/api/v1/User/authenticate', {
-      'key': token
-    });
+      //'key': token
+      'Headers': 'Bearer ${ readToken() }'
+    });print('2');
 
     final resp = await http.post(url, body: json.encode(authData));
     final Map<String, dynamic> decodedResp = json.decode( resp.body );
+    print(decodedResp);
 
     if ( decodedResp.containsKey('idToken') ) {
         // Token hay que guardarlo en un lugar seguro
