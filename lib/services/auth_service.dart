@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class AuthService extends ChangeNotifier {
   final String _baseUrl = 'http://localhost:8187';
-  final String token = '';
+  //final String token = '';
   final storage = const FlutterSecureStorage();
   bool isLoading = true;
 
@@ -42,8 +42,12 @@ class AuthService extends ChangeNotifier {
 
     if (resp?.statusCode == 200) {
       print('resultado = 200');
+      await storage.write(key: 'token', value: decodedResp!['token']);
+      await storage.write(key: 'user', value: decodedResp['username']);
+      return null;
     } else {
       print('error');
+      return decodedResp!['message'];
     }
 
     print('3');
@@ -57,4 +61,12 @@ class AuthService extends ChangeNotifier {
   Future<String> readToken() async {
     return await storage.read(key: 'token') ?? '';
   }
+
+  Future<String> readPermiso() async {
+    String token = '';
+    token = await storage.read(key: 'token') ?? '';
+    print(token);
+    return await storage.read(key: 'token') ?? '';
+  }
+
 }

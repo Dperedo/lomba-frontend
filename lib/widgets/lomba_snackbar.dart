@@ -8,7 +8,7 @@ class LombaSnackBar extends StatefulWidget implements SnackBar {
   Widget build(BuildContext context) {
     return SnackBar(
       content: Text(message),
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 2500),
     );
   }
 

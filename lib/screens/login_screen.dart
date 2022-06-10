@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:front_lomba/helpers/route_animation.dart';
 import 'package:front_lomba/providers/login_form_provider.dart';
 import 'package:front_lomba/services/auth_service.dart';
+
+import '../helpers/snackbars.dart';
  
 class LoginScreen extends StatelessWidget {
 
@@ -144,7 +146,11 @@ class _LoginForm extends StatelessWidget {
                   // TODO: mostrar error en pantalla
                   // print( errorMessage );
                   //NotificationsService.showSnackbar(errorMessage);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                errorMessage));
                   loginForm.isLoading = false;
+
                 }
 
                 //loginForm.isLoading = false;
