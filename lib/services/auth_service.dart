@@ -3,6 +3,7 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -63,10 +64,11 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<String> readPermiso() async {
-    String token = '';
+    String token;
     token = await storage.read(key: 'token') ?? '';
+    Map<String, dynamic> payload = Jwt.parseJwt(token);
     print(token);
-    return await storage.read(key: 'token') ?? '';
+    return payload['roles'];
   }
 
 }

@@ -20,11 +20,12 @@ class LombaSideMenu extends StatefulWidget {
 
 class _LombaSideMenuState extends State<LombaSideMenu> {
   @override
-  build(BuildContext context) async {
+  build(BuildContext context) {
     List<Widget> menu = [];
     final authService = Provider.of<AuthService>(context, listen: false);
     final String permiso = '';
-    String? token = await authService.readToken();
+    print('antes del TOKEN');
+    Future<String> token =  authService.readToken();
     print('TOKEN');
     print(token);
     //final String? errorMessage = await authService.readToken();
