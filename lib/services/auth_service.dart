@@ -63,11 +63,12 @@ class AuthService extends ChangeNotifier {
     return await storage.read(key: 'token') ?? '';
   }
 
-  Future<String> readPermiso() async {
+  Future<String?> readPermiso() async {
+    print('dentro de la funcion resd permiso');
     String token;
     token = await storage.read(key: 'token') ?? '';
     Map<String, dynamic> payload = Jwt.parseJwt(token);
-    print(token);
+    //print('dentro de la funcion resd permiso');
     return payload['roles'];
   }
 
