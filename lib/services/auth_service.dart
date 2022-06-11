@@ -63,6 +63,10 @@ class AuthService extends ChangeNotifier {
     return await storage.read(key: 'token') ?? '';
   }
 
+  String datoPrueba() {
+    return 'eltokenfalse';
+  }
+
   Future<String?> readPermiso() async {
     print('dentro de la funcion resd permiso');
     String token;
