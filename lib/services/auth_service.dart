@@ -71,7 +71,6 @@ class AuthService extends ChangeNotifier {
     String token;
     token = await storage.read(key: 'token') ?? '';
     Map<String, dynamic> payload = Jwt.parseJwt(token);
-    print(token);
-    return payload['roles'];
+    return payload['role'];
   }
 }
