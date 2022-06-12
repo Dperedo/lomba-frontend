@@ -22,7 +22,6 @@ class _LombaSideMenuState extends State<LombaSideMenu> {
   @override
   build(BuildContext context) async {
     final authService = Provider.of<AuthService>(context, listen: false);
-
     return Drawer(
       child: FutureBuilder(
           future: authService.readToken(),
@@ -153,12 +152,14 @@ class _LombaSideMenuState extends State<LombaSideMenu> {
                   ),
                 );
               }
-            });
-            return ListView(
-              padding: EdgeInsets.zero,
-              children: menu,
-            );
-          }),
+            }
+          );
+          return ListView(
+            padding: EdgeInsets.zero,
+            children: menu,
+          );
+        }
+      ),
     );
   }
 }

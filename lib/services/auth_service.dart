@@ -18,11 +18,8 @@ class AuthService extends ChangeNotifier {
       'username': email,
       'password': password
     };
-    print('1');
 
     final url = Uri.parse('http://localhost:8187/api/v1/User/authenticate');
-
-    print('2');
 
     http.Response? resp;
     Map<String, dynamic>? decodedResp;
@@ -51,7 +48,6 @@ class AuthService extends ChangeNotifier {
       return decodedResp!['message'];
     }
 
-    print('3');
   }
 
   Future logout() async {
