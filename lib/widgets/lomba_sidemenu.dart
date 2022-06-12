@@ -157,3 +157,21 @@ class _LombaSideMenuState extends State<LombaSideMenu> {
     );
   }
 }
+
+
+/*class MyWidget extends StatelessWidget {
+  @override
+  Widget build(context) {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    return FutureBuilder<String>(
+      future: authService.readToken(),
+      builder: (context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.hasData) {
+          return Text('');
+        } else {
+          return CircularProgressIndicator();
+        }
+      }
+    );
+  }
+}*/
