@@ -36,26 +36,30 @@ class PermissionsPage extends StatelessWidget {
     final permissionsService = Provider.of<PermissionsService>(context, listen: false);
     return Scaffold(
       appBar: LombaAppBar(title: title),
-      body: SingleChildScrollView(
+      body: Center(
         child: FutureBuilder(
           future: permissionsService.PermissionsList(),
           builder: (BuildContext context, AsyncSnapshot<List<dynamic>?> snapshot) {
+            if (snapshot.data == null) {
+              return Text('nada');
+            }
             print('lista');
             print(snapshot.data);
             final List<dynamic>? lista = snapshot.data;
-            print(lista);
+            print(lista![0]);
+            print('OK');
             //----
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ListView.separated(
-                  itemCount: lista!.length,
+            return Center(
+              //crossAxisAlignment: CrossAxisAlignment.start,
+              child: 
+                ListView.builder(
+                  itemCount: lista.length,
                   itemBuilder: (context, i) => ListTile(
-                    title: Text(lista[i]),
-                  ),
-                  separatorBuilder: ( _ , __ ) => const Divider(), 
+                    title: Text(lista[i].name),
+                  ), 
                 )
-              ],
+              
+                
               /*children: const[
                 LombaTitlePage(
                   title: "Permisos",
