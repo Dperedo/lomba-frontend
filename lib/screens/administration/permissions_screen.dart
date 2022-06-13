@@ -7,6 +7,7 @@ import 'package:front_lomba/widgets/lomba_sidemenu.dart';
 import 'package:front_lomba/widgets/lomba_titlepage.dart';
 import 'package:provider/provider.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
+import 'package:front_lomba/services/permission_service.dart';
 
 class Permissions extends StatelessWidget {
   const Permissions({Key? key}) : super(key: key);
@@ -19,12 +20,60 @@ class Permissions extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: '$appTitle - $pageTitle',
-      home: const PermissionsPage(title: '$appTitle - $pageTitle'),
+      home: const _PermissionsPage(title: '$appTitle - $pageTitle'),
       theme: Provider.of<ThemeProvider>(context).currentTheme,
     );
   }
 }
 
+class _PermissionsPage extends StatelessWidget {
+  const _PermissionsPage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  build(BuildContext context) {
+    final authService = Provider.of<PermissionsService>(context, listen: false);
+
+    return FutureBuilder(
+          future: authService.PermissionsList(),
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            if(snapshot.data) {
+              List<Widget> ListaDePermisos = snapshot.data;
+              Scaffold(
+                appBar: LombaAppBar(title: title),
+                body: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const[
+                      LombaTitlePage(
+                        title: "Permisos",
+                        subtitle: "Administración / Permisos",
+                      ),
+                      LombaFilterListPage(),
+                      Divider(),
+                      PermissionListItem(permission: "Permiso 1"),
+                      Divider(),
+                      PermissionListItem(permission: "Permiso 2"),
+                      Divider(),
+                      PermissionListItem(permission: "Permiso 3"),
+                      Divider(),
+                      //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
+                    ],
+                  ),
+                ),
+                drawer: const LombaSideMenu(),
+              );
+            }
+            //List<Widget> ListaDePermisos = snapshot.data;
+
+            //return null;
+          }
+      );
+    //);
+  }
+}
+/*
 class PermissionsPage extends StatelessWidget {
   const PermissionsPage({Key? key, required this.title}) : super(key: key);
 
@@ -37,19 +86,19 @@ class PermissionsPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const LombaTitlePage(
+          children: const[
+            LombaTitlePage(
               title: "Permisos",
               subtitle: "Administración / Permisos",
             ),
-            const LombaFilterListPage(),
-            const Divider(),
+            LombaFilterListPage(),
+            Divider(),
             PermissionListItem(permission: "Permiso 1"),
-            const Divider(),
+            Divider(),
             PermissionListItem(permission: "Permiso 2"),
-            const Divider(),
+            Divider(),
             PermissionListItem(permission: "Permiso 3"),
-            const Divider(),
+            Divider(),
             //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
           ],
         ),
@@ -57,7 +106,7 @@ class PermissionsPage extends StatelessWidget {
       drawer: const LombaSideMenu(),
     );
   }
-}
+}*/
 
 class PermissionListItem extends StatelessWidget {
   final String permission;
