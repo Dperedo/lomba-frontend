@@ -1,145 +1,140 @@
 import 'package:flutter/material.dart';
 
 import 'package:front_lomba/screens/home_screen.dart';
-import 'package:front_lomba/model/auth_background.dart';
 import 'package:provider/provider.dart';
-import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/helpers/route_animation.dart';
- 
-class LoginScreen extends StatelessWidget {
+import 'package:front_lomba/providers/login_form_provider.dart';
+import 'package:front_lomba/services/auth_service.dart';
 
+import '../helpers/snackbars.dart';
+
+class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AuthBackground(
-        child: SingleChildScrollView(
-          child: Column(
+        body: AuthBackground(
+            child: SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(height: 250),
+
+          CardContainer(
+              child: Column(
             children: [
+              SizedBox(height: 10),
+              Text('Login',
+                  style: TextStyle(
+                      color: Colors.grey.shade700,
+                      fontSize:
+                          45)), //Theme.of(context).textTheme.headline4,  ),
+              SizedBox(height: 30),
 
-              SizedBox( height: 250 ),
-
-              CardContainer(
-                child: Column(
-                  children: [
-
-                    SizedBox( height: 10 ),
-                    Text('Login', style: TextStyle(color: Colors.grey.shade700,fontSize: 45)),//Theme.of(context).textTheme.headline4,  ),
-                    SizedBox( height: 30 ),
-                    
-                    ChangeNotifierProvider(
-                      create: ( _ ) => LoginFormProvider(),
-                      child: _LoginForm()
-                    )
-                    
-
-                  ],
-                )
-              ),
-
-              SizedBox( height: 50 ),
-              //Text('Crear una nueva cuenta', style: TextStyle( fontSize: 18, fontWeight: FontWeight.bold ),),
-              SizedBox( height: 50 ),
+              ChangeNotifierProvider(
+                  create: (_) => LoginFormProvider(), child: _LoginForm())
             ],
-          ),
-        )
-      )
-   );
+          )),
+
+          SizedBox(height: 50),
+          //Text('Crear una nueva cuenta', style: TextStyle( fontSize: 18, fontWeight: FontWeight.bold ),),
+          SizedBox(height: 50),
+        ],
+      ),
+    )));
   }
 }
 
-
 class _LoginForm extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-
     final loginForm = Provider.of<LoginFormProvider>(context);
 
     return Container(
       child: Form(
         key: loginForm.formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
-
         child: Column(
           children: [
-            
             TextFormField(
               style: TextStyle(color: Colors.black),
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecorations.authInputDecoration(
-                hintText: '',
-                labelText: 'Correo electrónico',
-                prefixIcon: Icons.alternate_email_rounded
-              ),
-              onChanged: ( value ) => loginForm.email = value,
-              validator: ( value ) {
-
-                  String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                  hintText: '',
+                  labelText: 'Correo electrónico',
+                  prefixIcon: Icons.alternate_email_rounded),
+              onChanged: (value) => loginForm.email = value,
+              validator: (value) {
+                /*String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
                   RegExp regExp  = new RegExp(pattern);
                   
                   return regExp.hasMatch(value ?? '')
                     ? null
                     : 'El valor ingresado no luce como un correo';
-
+                  */
               },
             ),
-
-            SizedBox( height: 30 ),
-
+            SizedBox(height: 30),
             TextFormField(
               style: TextStyle(color: Colors.black),
               autocorrect: false,
               obscureText: true,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecorations.authInputDecoration(
-                hintText: '',
-                labelText: 'Contraseña',
-                prefixIcon: Icons.lock_outline
-              ),
-              onChanged: ( value ) => loginForm.password = value,
-              validator: ( value ) {
-
-                  return ( value != null && value.length >= 6 ) 
+                  hintText: '',
+                  labelText: 'Contraseña',
+                  prefixIcon: Icons.lock_outline),
+              onChanged: (value) => loginForm.password = value,
+              validator: (value) {
+                return (value != null && value.length >= 4)
                     ? null
-                    : 'La contraseña debe de ser de 6 caracteres';                                    
-                  
+                    : 'La contraseña debe de ser de 6 caracteres';
               },
             ),
-
-            SizedBox( height: 30 ),
-
+            SizedBox(height: 30),
             MaterialButton(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              disabledColor: Colors.grey,
-              elevation: 0,
-              color: Color.fromARGB(255, 94, 97, 255),
-              child: Container(
-                padding: EdgeInsets.symmetric( horizontal: 80, vertical: 15),
-                child: Text(
-                  loginForm.isLoading 
-                    ? 'Espere'
-                    : 'Ingresar',
-                  style: TextStyle( color: Colors.white ),
-                )
-              ),
-              onPressed: loginForm.isLoading ? null : () async {
-                
-                FocusScope.of(context).unfocus();
-                
-                if( !loginForm.isValidForm() ) return;
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                disabledColor: Colors.grey,
+                elevation: 0,
+                color: const Color.fromARGB(255, 94, 97, 255),
+                // ignore: sort_child_properties_last
+                child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 80, vertical: 15),
+                    child: Text(
+                      loginForm.isLoading ? 'Espere' : 'Ingresar',
+                      style: const TextStyle(color: Colors.white),
+                    )),
+                onPressed: loginForm.isLoading
+                    ? null
+                    : () async {
+                        FocusScope.of(context).unfocus();
+                        final authService =
+                            Provider.of<AuthService>(context, listen: false);
 
-                loginForm.isLoading = true;
+                        if (!loginForm.isValidForm()) return;
 
-                await Future.delayed(Duration(seconds: 2 ));
+                        loginForm.isLoading = true;
 
-                // TODO: validar si el login es correcto
-                loginForm.isLoading = false;
+                        //await Future.delayed(Duration(seconds: 2 ));
 
-                Navigator.of(context).push(RouteAnimation.animatedTransition(Home()));
-              }
-            )
+                        // TODO: validar si el login es correcto
+                        final String? errorMessage = await authService.login(
+                            loginForm.email, loginForm.password);
 
+                        if (errorMessage == null) {
+                          Navigator.of(context)
+                              .push(RouteAnimation.animatedTransition(Home()));
+                        } else {
+                          // TODO: mostrar error en pantalla
+                          // print( errorMessage );
+                          //NotificationsService.showSnackbar(errorMessage);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  errorMessage));
+                          loginForm.isLoading = false;
+                        }
+                      })
           ],
         ),
       ),
@@ -150,55 +145,43 @@ class _LoginForm extends StatelessWidget {
 //----------------------------------------------------------------------------
 
 class AuthBackground extends StatelessWidget {
-  
   final Widget child;
 
-  const AuthBackground({
-    Key? key, 
-    required this.child
-  }) : super(key: key);
+  const AuthBackground({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        // color: Colors.red,
-        width: double.infinity,
-        height: double.infinity,
-        child: Stack(
-          children: [
-
-            _PurpleBox(),
-
-            _HeaderIcon(),
-
-            this.child,
-
-          ],
-        ),
-    );
-  }
-}
-
-class _HeaderIcon extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        width: double.infinity,
-        margin: EdgeInsets.only( top: 30 ),
-        child: Icon( Icons.person_pin, color: Colors.white, size: 100 ),
+      // color: Colors.red,
+      width: double.infinity,
+      height: double.infinity,
+      child: Stack(
+        children: [
+          _PurpleBox(),
+          _HeaderIcon(),
+          this.child,
+        ],
       ),
     );
   }
 }
 
-
-class _PurpleBox extends StatelessWidget {
-
+class _HeaderIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return SafeArea(
+      child: Container(
+        width: double.infinity,
+        margin: EdgeInsets.only(top: 30),
+        child: Icon(Icons.person_pin, color: Colors.white, size: 100),
+      ),
+    );
+  }
+}
 
+class _PurpleBox extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
     return Container(
@@ -207,37 +190,34 @@ class _PurpleBox extends StatelessWidget {
       decoration: _purpleBackground(),
       child: Stack(
         children: [
-          Positioned(child: _Bubble(), top: 90, left: 30 ),
-          Positioned(child: _Bubble(), top: -40, left: -30 ),
-          Positioned(child: _Bubble(), top: -50, right: -20 ),
-          Positioned(child: _Bubble(), bottom: -50, left: 10 ),
-          Positioned(child: _Bubble(), bottom: 120, right: 20 ),
+          Positioned(child: _Bubble(), top: 90, left: 30),
+          Positioned(child: _Bubble(), top: -40, left: -30),
+          Positioned(child: _Bubble(), top: -50, right: -20),
+          Positioned(child: _Bubble(), bottom: -50, left: 10),
+          Positioned(child: _Bubble(), bottom: 120, right: 20),
         ],
       ),
     );
   }
 
+  // ignore: prefer_const_constructors
   BoxDecoration _purpleBackground() => BoxDecoration(
-    gradient: LinearGradient(
-      colors: [
+          // ignore: prefer_const_constructors
+          gradient: LinearGradient(colors: const [
         Color.fromARGB(255, 5, 5, 170),
         Color.fromARGB(255, 53, 98, 243)
-      ]
-    )
-  );
+      ]));
 }
 
 class _Bubble extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 100,
       height: 100,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        color: Color.fromRGBO(255, 255, 255, 0.05)
-      ),
+          borderRadius: BorderRadius.circular(100),
+          color: Color.fromRGBO(255, 255, 255, 0.05)),
     );
   }
 }
@@ -245,101 +225,79 @@ class _Bubble extends StatelessWidget {
 //--------------------------------------------------------------------------
 
 class CardContainer extends StatelessWidget {
-
   final Widget child;
 
-  const CardContainer({
-    Key? key, 
-    required this.child
-  }) : super(key: key);
+  const CardContainer({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric( horizontal: 30 ),
+      padding: EdgeInsets.symmetric(horizontal: 30),
       child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.all( 20 ),
-          decoration: _createCardShape(),
-          child: this.child,
+        width: double.infinity,
+        padding: EdgeInsets.all(20),
+        decoration: _createCardShape(),
+        child: this.child,
       ),
     );
   }
 
   BoxDecoration _createCardShape() => BoxDecoration(
-    color: Colors.white,
-    borderRadius: BorderRadius.circular(25),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black12,
-        blurRadius: 15,
-        offset: Offset(0, 5),
-      )
-    ]
-  );
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(25),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 15,
+              offset: Offset(0, 5),
+            )
+          ]);
 }
 
 //-----------------------------------------------------------------
 
 class LoginFormProvider extends ChangeNotifier {
-
   GlobalKey<FormState> formKey = new GlobalKey<FormState>();
 
-  String email    = '';
+  String email = '';
   String password = '';
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
-  
-  set isLoading( bool value ) {
+
+  set isLoading(bool value) {
     _isLoading = value;
     notifyListeners();
   }
 
-  
   bool isValidForm() {
-
     print(formKey.currentState?.validate());
 
     print('$email - $password');
 
     return formKey.currentState?.validate() ?? false;
   }
-
 }
 
 //----------------------------------------------------------------------------
 
 class InputDecorations {
-
-  static InputDecoration authInputDecoration({
-    required String hintText,
-    required String labelText,
-    IconData? prefixIcon
-  }) {
+  static InputDecoration authInputDecoration(
+      {required String hintText,
+      required String labelText,
+      IconData? prefixIcon}) {
     return InputDecoration(
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.blue
-          ),
+          borderSide: BorderSide(color: Colors.blue),
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.blue,
-            width: 2
-          )
-        ),
+            borderSide: BorderSide(color: Colors.blue, width: 2)),
         hintText: hintText,
         labelText: labelText,
-        labelStyle: TextStyle(
-          color: Colors.grey
-        ),
-        prefixIcon: prefixIcon != null 
-          ? Icon( prefixIcon, color: Colors.blue )
-          : null
-      );
-  }  
-
+        labelStyle: TextStyle(color: Colors.grey),
+        prefixIcon:
+            prefixIcon != null ? Icon(prefixIcon, color: Colors.blue) : null);
+  }
 }
 
 //----------------------------------------------------------------------------
