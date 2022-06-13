@@ -12,19 +12,19 @@ class PermissionsService extends ChangeNotifier {
   bool isLoading = true;
   //Map<String, dynamic>? decodedResp;
 
-  Future PermissionsList() async {
+  Future<List<dynamic>?> PermissionsList() async {
 
-    final url = Uri.parse('http://localhost:8187/api/v1/User/authenticate');
+    final url = Uri.parse('http://localhost:8187/api/v1/Role');
 
     http.Response? resp;
-    Map<String, dynamic>? decodedResp;
+    List<dynamic>? decodedResp;
 
     try {
       resp = await http.get(url, headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
         "Access-Control_Allow_Origin": "*",
-        'Authorization': 'Bearer ${readToken()}',
+        'Authorization': 'Bearer ${await readToken()}',
       });
       decodedResp = json.decode(resp.body);
       print(decodedResp);
@@ -38,7 +38,7 @@ class PermissionsService extends ChangeNotifier {
       return decodedResp;
     } else {
       print('error');
-      return decodedResp!['message'];
+      return null;
     }
 
   }

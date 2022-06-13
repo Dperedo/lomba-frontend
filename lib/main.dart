@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:front_lomba/helpers/preferences.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/services/auth_service.dart';
+import 'package:front_lomba/services/permission_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +24,7 @@ void main() async {
       ChangeNotifierProvider(
           create: (_) => ThemeProvider(isDarkmode: Preferences.isDarkmode)),
           ChangeNotifierProvider(create: ( _ ) => AuthService() ),
+          ChangeNotifierProvider(create: ( _ ) => PermissionsService() ),
     ],
     child: const MyApp(),
   ));
