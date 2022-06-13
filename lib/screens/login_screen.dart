@@ -134,32 +134,6 @@ class _LoginForm extends StatelessWidget {
                                   errorMessage));
                           loginForm.isLoading = false;
                         }
-
-                        //loginForm.isLoading = false;
-
-                        //Navigator.of(context).push(RouteAnimation.animatedTransition(Home()));
-                        //--------------------------------------------------------------------------------------
-                        /*
-                FocusScope.of(context).unfocus();
-                final authService = Provider.of<AuthService>(context, listen: false);
-                
-                if( !loginForm.isValidForm() ) return;
-
-                loginForm.isLoading = true;
-
-
-                // TODO: validar si el login es correcto
-                final String? errorMessage = await authService.login(loginForm.email, loginForm.password);
-
-                if ( errorMessage == null ) {
-                  Navigator.pushReplacementNamed(context, 'home');
-                } else {
-                  // TODO: mostrar error en pantalla
-                  // print( errorMessage );
-                  NotificationsService.showSnackbar(errorMessage);
-                  loginForm.isLoading = false;
-                  }
-                */
                       })
           ],
         ),
