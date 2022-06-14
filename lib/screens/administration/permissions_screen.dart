@@ -33,43 +33,63 @@ class _PermissionsPage extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    final authService = Provider.of<PermissionsService>(context, listen: false);
+    final permiService =
+        Provider.of<PermissionsService>(context, listen: false);
 
-    return FutureBuilder(
-          future: authService.PermissionsList(),
-          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-            if(snapshot.data) {
-              List<Widget> ListaDePermisos = snapshot.data;
-              Scaffold(
-                appBar: LombaAppBar(title: title),
-                body: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const[
-                      LombaTitlePage(
-                        title: "Permisos",
-                        subtitle: "Administración / Permisos",
-                      ),
-                      LombaFilterListPage(),
-                      Divider(),
-                      PermissionListItem(permission: "Permiso 1"),
-                      Divider(),
-                      PermissionListItem(permission: "Permiso 2"),
-                      Divider(),
-                      PermissionListItem(permission: "Permiso 3"),
-                      Divider(),
-                      //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
-                    ],
-                  ),
-                ),
-                drawer: const LombaSideMenu(),
+    return Scaffold(
+      appBar: LombaAppBar(title: title),
+      body: Column(
+        children: [
+          const LombaTitlePage(
+            title: "Permisos",
+            subtitle: "Administración / Permisos",
+          ),
+          Padding(
+            padding: EdgeInsets.zero,
+            child: Builder(builder: (BuildContext context) {
+              print('muere?');
+
+              return Padding(
+                padding: EdgeInsets.zero,
+                child: FutureBuilder(
+                    future: permiService.PermissionsList(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<dynamic>?> snapshot) {
+                      if (snapshot.data == null) {
+                        //IR a pantalla que indica
+                        //no cargó valores.
+                        return Text('nada');
+                      }
+
+                      final ps = snapshot.data;
+
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        // Let the ListView know how many items it needs to build.
+                        itemCount: ps?.length,
+                        // Provide a builder function. This is where the magic happens.
+                        // Convert each item into a widget based on the type of item it is.
+                        itemBuilder: (context, index) {
+                          final item = index.toString();
+
+                          return Column(
+                            children: [
+                              PermissionListItem(
+                                permission: ps?[index]["name"],
+                              ),
+                              const Divider()
+                            ],
+                          );
+                        },
+                      );
+                    }),
               );
-            }
-            //List<Widget> ListaDePermisos = snapshot.data;
-
-            //return null;
-          }
-      );
+            }),
+          ),
+        ],
+      ),
+      drawer: const LombaSideMenu(),
+    );
     //);
   }
 }
@@ -158,6 +178,9 @@ class PermissionListItem extends StatelessWidget {
               ).then((value) => {
                     if (value == 'Sí')
                       {
+                        //consumir servicio de PermissionService
+                        //para habilitar o deshabilitar el permiso
+
                         ScaffoldMessenger.of(context).showSnackBar(
                             SnackBarGenerator.getNotificationMessage(
                                 'Se ha desactivado el permiso'))
@@ -174,4 +197,45 @@ class PermissionListItem extends StatelessWidget {
       ),
     );
   }
+}
+
+/// The base class for the different types of items the list can contain.
+abstract class ListItem {
+  /// The title line to show in a list item.
+  Widget buildTitle(BuildContext context);
+
+  /// The subtitle line, if any, to show in a list item.
+  Widget buildSubtitle(BuildContext context);
+}
+
+/// A ListItem that contains data to display a heading.
+class HeadingItem implements ListItem {
+  final String heading;
+
+  HeadingItem(this.heading);
+
+  @override
+  Widget buildTitle(BuildContext context) {
+    return Text(
+      heading,
+      style: Theme.of(context).textTheme.headline5,
+    );
+  }
+
+  @override
+  Widget buildSubtitle(BuildContext context) => const SizedBox.shrink();
+}
+
+/// A ListItem that contains data to display a message.
+class MessageItem implements ListItem {
+  final String sender;
+  final String body;
+
+  MessageItem(this.sender, this.body);
+
+  @override
+  Widget buildTitle(BuildContext context) => Text(sender);
+
+  @override
+  Widget buildSubtitle(BuildContext context) => Text(body);
 }

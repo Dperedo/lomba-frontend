@@ -7,6 +7,7 @@ import 'package:front_lomba/screens/democolors_screen.dart';
 import 'package:front_lomba/screens/home_screen.dart';
 import 'package:front_lomba/screens/login_screen.dart';
 import 'package:front_lomba/screens/profile_screen.dart';
+import 'package:front_lomba/services/permission_service.dart';
 import 'package:provider/provider.dart';
 
 import 'package:front_lomba/helpers/preferences.dart';
@@ -22,7 +23,8 @@ void main() async {
     providers: [
       ChangeNotifierProvider(
           create: (_) => ThemeProvider(isDarkmode: Preferences.isDarkmode)),
-          ChangeNotifierProvider(create: ( _ ) => AuthService() ),
+      ChangeNotifierProvider(create: (_) => AuthService()),
+      ChangeNotifierProvider(create: (_) => PermissionsService()),
     ],
     child: const MyApp(),
   ));
