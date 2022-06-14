@@ -123,6 +123,8 @@ class OrganizationListItem extends StatelessWidget {
                     itemName: organizacion,
                     titleMessage: 'Desactivar',
                     dialogMessage: '¿Desea desactivar la organización?',
+                    name: '',
+                    habilitado: false,
                   ),
                 ),
               ).then((value) => {

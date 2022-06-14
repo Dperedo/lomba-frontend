@@ -129,6 +129,8 @@ class OrganizationUsersListItem extends StatelessWidget {
                     titleMessage: 'Desactivar',
                     dialogMessage:
                         '¿Desea desactivar al usuario de la organización?',
+                    name: '',
+                    habilitado: false,
                   ),
                 ),
               ).then((value) => {
@@ -158,6 +160,8 @@ class OrganizationUsersListItem extends StatelessWidget {
                     titleMessage: 'Quitar de la organización',
                     dialogMessage:
                         '¿Desea quitar al usuario de la organización?',
+                    name: '',
+                    habilitado: false,
                   ),
                 ),
               ).then((value) => {

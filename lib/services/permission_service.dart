@@ -43,9 +43,10 @@ class PermissionsService extends ChangeNotifier {
   Future<bool> EnableDisable(String name, bool disabled) async {
     Uri? url;
     http.Response? resp;
-    List<dynamic>? decodedResp;
+    Map<String, dynamic>? decodedResp;
 
     String? token = await readToken();
+    print(disabled);
 
     if (disabled) {
       url = Uri.parse('$_baseUrl/api/v1/Role/disable?name=$name');
@@ -74,24 +75,7 @@ class PermissionsService extends ChangeNotifier {
     }
   }
 
-/*
-  Future logout() async {
-    await storage.delete(key: 'token');
-    return;
-  }*/
-
   Future<String> readToken() async {
     return await storage.read(key: 'token') ?? '';
   }
-/*
-  String datoPrueba() {
-    return 'eltokenfalse';
-  }
-
-  Future<String> readPermiso() async {
-    String token;
-    token = await storage.read(key: 'token') ?? '';
-    Map<String, dynamic> payload = Jwt.parseJwt(token);
-    return payload['role'];
-  }*/
 }
