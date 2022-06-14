@@ -69,10 +69,7 @@ class _PermissionsPage extends StatelessWidget {
                           const Divider(),
                           ListView.builder(
                             shrinkWrap: true,
-                            // Let the ListView know how many items it needs to build.
                             itemCount: ps?.length,
-                            // Provide a builder function. This is where the magic happens.
-                            // Convert each item into a widget based on the type of item it is.
                             itemBuilder: (context, index) {
                               final item = index.toString();
 
@@ -80,7 +77,7 @@ class _PermissionsPage extends StatelessWidget {
                                 children: [
                                   PermissionListItem(
                                     permission: ps?[index]["name"],
-                                    habilitado: ps?[index]["isDisable"],
+                                    habilitado: ps?[index]["isDisabled"],
                                   ),
                                   const Divider()
                                 ],
@@ -142,7 +139,6 @@ class PermissionListItem extends StatelessWidget {
           FloatingActionButton(
             heroTag: null,
             onPressed: () async {
-              //showdDelete(context);
               showDialog<String>(
                 context: context,
                 builder: (context) => GestureDetector(
@@ -151,14 +147,12 @@ class PermissionListItem extends StatelessWidget {
                     itemName: permission,
                     titleMessage: 'Desactivar',
                     dialogMessage: '¿Desea desactivar el permiso?',
-                    name: permission,
-                    habilitado: false,
                   ),
                 ),
-              ).then((value) async => {
+              ).then((value) async {
                     if (value == 'Sí')
                       {
-                         bool respuesta = await permiService.EnableDisable(permission,habilitado),
+                        final bool respuesta = await permiService.EnableDisable(permission,!habilitado);
                         //consumir servicio de PermissionService
                         //para habilitar o deshabilitar el permiso
                         if (respuesta == true) {

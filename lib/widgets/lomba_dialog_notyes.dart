@@ -8,47 +8,29 @@ class LombaDialogNotYes extends StatefulWidget {
       {Key? key,
       required this.itemName,
       required this.titleMessage,
-      required this.dialogMessage,
-      required this.name,
-      required this.habilitado,})
+      required this.dialogMessage,})
       : super(key: key);
-/*
-      const LombaDialogNotYes.permission(
-      {Key? key,
-      required this.itemName,
-      required this.titleMessage,
-      required this.dialogMessage,
-      required this.name,
-      required this.habilitado,}):super(key:key);
-*/
+
   final String itemName;
   final String titleMessage;
   final String dialogMessage;
-  final String name;
-  final bool habilitado;
 
   @override
   State<LombaDialogNotYes> createState() => _LombaDialogNotYesState(
-      itemName: this.itemName,
-      titleMessage: this.titleMessage,
-      dialogMessage: this.dialogMessage,
-      name: this.name,
-      habilitado: habilitado);
+      itemName: itemName,
+      titleMessage: titleMessage,
+      dialogMessage: dialogMessage,);
 }
 
 class _LombaDialogNotYesState extends State<LombaDialogNotYes> {
   final String itemName;
   final String titleMessage;
   final String dialogMessage;
-  final String name;
-  final bool habilitado;
 
   _LombaDialogNotYesState(
       {required this.itemName,
       required this.titleMessage,
-      required this.dialogMessage,
-      required this.name,
-      required this.habilitado})
+      required this.dialogMessage,})
       : super();
 
   @override
@@ -72,11 +54,7 @@ class _LombaDialogNotYesState extends State<LombaDialogNotYes> {
                           MaterialStateProperty.resolveWith(getTextColor)),
                 ),
                 ElevatedButton(
-                  onPressed: () async {
-                    if(this.dialogMessage == '¿Desea desactivar el permiso?'){
-                      final permiService = Provider.of<PermissionsService>(context, listen: false);
-                      final bool resp = await permiService.EnableDisable(this.name,this.habilitado);
-                    }
+                  onPressed: () {
                     Navigator.pop(context, 'Sí');
                     },
                   child: const Text('Sí'),

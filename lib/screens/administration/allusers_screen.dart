@@ -134,8 +134,6 @@ class AllUsersListItem extends StatelessWidget {
                     itemName: username,
                     titleMessage: 'Desactivar',
                     dialogMessage: '¿Desea desactivar al usuario?',
-                    name: '',
-                    habilitado: false,
                   ),
                 ),
               ).then((value) => {
