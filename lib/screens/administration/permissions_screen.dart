@@ -33,9 +33,7 @@ class _PermissionsPage extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    final permiService =
-        Provider.of<PermissionsService>(context, listen: false);
-
+    final permiService = Provider.of<PermissionsService>(context, listen: false);
     return Scaffold(
       appBar: LombaAppBar(title: title),
       body: Column(
@@ -60,9 +58,7 @@ class _PermissionsPage extends StatelessWidget {
                         //no cargó valores.
                         return Text('nada');
                       }
-
                       final ps = snapshot.data;
-
                       return Column(
                         children: [
                           const LombaFilterListPage(),
@@ -159,7 +155,7 @@ class PermissionListItem extends StatelessWidget {
                         ScaffoldMessenger.of(context).showSnackBar(
                             SnackBarGenerator.getNotificationMessage(
                                 'Se ha desactivado el permiso'));
-                                } else {}
+                                }
                       }
                   }
                 );

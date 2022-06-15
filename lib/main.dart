@@ -7,7 +7,9 @@ import 'package:front_lomba/screens/democolors_screen.dart';
 import 'package:front_lomba/screens/home_screen.dart';
 import 'package:front_lomba/screens/login_screen.dart';
 import 'package:front_lomba/screens/profile_screen.dart';
+import 'package:front_lomba/services/organization_service.dart';
 import 'package:front_lomba/services/permission_service.dart';
+import 'package:front_lomba/services/organization_userslist_services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:front_lomba/helpers/preferences.dart';
@@ -25,6 +27,8 @@ void main() async {
           create: (_) => ThemeProvider(isDarkmode: Preferences.isDarkmode)),
       ChangeNotifierProvider(create: (_) => AuthService()),
       ChangeNotifierProvider(create: (_) => PermissionsService()),
+      ChangeNotifierProvider(create: (_) => OrganizationService()),
+      ChangeNotifierProvider(create: (_) => OrganizationUserslistService()),
     ],
     child: const MyApp(),
   ));
@@ -43,7 +47,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const Home(),
         '/organizations': (context) => const Organizations(),
         '/allusers': (context) => const AllUsers(),
-        '/organizations_userlist': (context) => const OrganizationUsersList(),
+        //'/organizations_userlist': (context) => const OrganizationUsersList(),
         '/user_edit': (context) => const UserEdit(),
         '/user_profile': (context) => const UserProfile(),
         '/democolors': (context) => const DemoColors(),
