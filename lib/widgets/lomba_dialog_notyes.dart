@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:front_lomba/services/permission_service.dart';
 
 class LombaDialogNotYes extends StatefulWidget {
   const LombaDialogNotYes(
       {Key? key,
       required this.itemName,
       required this.titleMessage,
-      required this.dialogMessage})
+      required this.dialogMessage,})
       : super(key: key);
 
   final String itemName;
@@ -16,9 +17,9 @@ class LombaDialogNotYes extends StatefulWidget {
 
   @override
   State<LombaDialogNotYes> createState() => _LombaDialogNotYesState(
-      itemName: this.itemName,
-      titleMessage: this.titleMessage,
-      dialogMessage: this.dialogMessage);
+      itemName: itemName,
+      titleMessage: titleMessage,
+      dialogMessage: dialogMessage,);
 }
 
 class _LombaDialogNotYesState extends State<LombaDialogNotYes> {
@@ -29,7 +30,7 @@ class _LombaDialogNotYesState extends State<LombaDialogNotYes> {
   _LombaDialogNotYesState(
       {required this.itemName,
       required this.titleMessage,
-      required this.dialogMessage})
+      required this.dialogMessage,})
       : super();
 
   @override
@@ -53,7 +54,9 @@ class _LombaDialogNotYesState extends State<LombaDialogNotYes> {
                           MaterialStateProperty.resolveWith(getTextColor)),
                 ),
                 ElevatedButton(
-                  onPressed: () => Navigator.pop(context, 'Sí'),
+                  onPressed: () {
+                    Navigator.pop(context, 'Sí');
+                    },
                   child: const Text('Sí'),
                   style: ButtonStyle(
                       backgroundColor:

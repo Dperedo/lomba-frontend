@@ -10,6 +10,7 @@ import 'package:front_lomba/widgets/lomba_sidemenu.dart';
 import 'package:front_lomba/widgets/lomba_titlepage.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/helpers/snackbars.dart';
+import 'package:front_lomba/services/organization_service.dart';
 
 class Organizations extends StatelessWidget {
   const Organizations({Key? key}) : super(key: key);
@@ -35,40 +36,62 @@ class OrganizationsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final organizationService = Provider.of<OrganizationService>(context, listen: false);
     return Scaffold(
       appBar: LombaAppBar(title: title),
-      body: SingleChildScrollView(
-        child: Column(
-          children: const [
-            LombaTitlePage(
-              title: "Organizaciones",
-              subtitle: "Administrador / Organizaciones",
-            ),
-            LombaFilterListPage(),
-            Divider(),
-            OrganizationListItem(
-              organizacion: "Organizacion 1",
-              icon: Icons.business,
-            ),
-            Divider(),
-            OrganizationListItem(
-              organizacion: "Organizacion 2",
-              icon: Icons.business,
-            ),
-            Divider(),
-            OrganizationListItem(
-              organizacion: "Organizacion 3",
-              icon: Icons.business,
-            ),
-            Divider(),
-            OrganizationListItem(
-              organizacion: "Organizacion 4",
-              icon: Icons.business,
-            ),
-            Divider(),
-            //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
-          ],
-        ),
+      body: Column(
+        children: [
+          const LombaTitlePage(
+            title: "Organizaciones",
+            subtitle: "Administrador / Organizaciones",
+          ),
+          Padding(
+            padding: EdgeInsets.zero,
+            child: Builder(builder: (BuildContext context) {
+              print('muere?');
+
+              return Padding(
+                padding: EdgeInsets.zero,
+                child: FutureBuilder(
+                    future: organizationService.OrganizationList(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<dynamic>?> snapshot) {
+                      if (snapshot.data == null) {
+                        //IR a pantalla que indica
+                        //no cargó valores.
+                        return Text('nada');
+                      }
+                      final ps = snapshot.data;
+                      return Column(
+                        children: [
+                          const LombaFilterListPage(),
+                          const Divider(),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: ps?.length,
+                            itemBuilder: (context, index) {
+                              final item = index.toString();
+
+                              return Column(
+                                children: [
+                                  OrganizationListItem(
+                                    id: ps?[index]["id"],
+                                    organizacion: ps?[index]["name"],
+                                    icon: Icons.business,
+                                    habilitado: ps?[index]["isDisabled"],
+                                  ),
+                                  const Divider()
+                                ],
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    }),
+              );
+            }),
+          ),
+        ],
       ),
       drawer: const LombaSideMenu(),
     );
@@ -76,17 +99,23 @@ class OrganizationsPage extends StatelessWidget {
 }
 
 class OrganizationListItem extends StatelessWidget {
+  final String id;
   final String organizacion;
   final IconData icon;
+  final bool habilitado;
+
 
   const OrganizationListItem({
     Key? key,
+    required this.id,
     required this.organizacion,
     required this.icon,
+    required this.habilitado
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final organizationService = Provider.of<OrganizationService>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Row(
@@ -114,7 +143,7 @@ class OrganizationListItem extends StatelessWidget {
           ),
           FloatingActionButton(
             heroTag: null,
-            onPressed: () {
+            onPressed: () async {
               showDialog<String>(
                 context: context,
                 builder: (context) => GestureDetector(
@@ -125,14 +154,16 @@ class OrganizationListItem extends StatelessWidget {
                     dialogMessage: '¿Desea desactivar la organización?',
                   ),
                 ),
-              ).then((value) => {
-                    // ignore: unrelated_type_equality_checks
+              ).then((value) async {
                     if (value == 'Sí')
                       {
+                        final bool respuesta = await organizationService.EnableDisable(id,!habilitado);
+                        if (respuesta == true) {
                         ScaffoldMessenger.of(context).showSnackBar(
                             SnackBarGenerator.getNotificationMessage(
-                                'Se ha desactivado la organización'))
-                      },
+                                'Se ha desactivado la organización'));
+                                }
+                      }
                   });
             },
             tooltip: 'Desactivar organización',
@@ -147,7 +178,7 @@ class OrganizationListItem extends StatelessWidget {
             child: const Icon(Icons.supervised_user_circle_outlined),
             onPressed: () {
               Navigator.of(context).push(RouteAnimation.animatedTransition(
-                  const OrganizationUsersList()));
+                  OrganizationUsersList(organizacion: id)));
             },
           ),
         ],

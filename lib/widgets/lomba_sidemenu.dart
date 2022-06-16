@@ -153,7 +153,8 @@ class _LombaSideMenuState extends State<LombaSideMenu> {
               padding: EdgeInsets.zero,
               children: menu,
             );
-          }),
+          }
+        ),
     );
   }
 }
