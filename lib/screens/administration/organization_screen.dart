@@ -39,59 +39,61 @@ class OrganizationsPage extends StatelessWidget {
     final organizationService = Provider.of<OrganizationService>(context, listen: false);
     return Scaffold(
       appBar: LombaAppBar(title: title),
-      body: Column(
-        children: [
-          const LombaTitlePage(
-            title: "Organizaciones",
-            subtitle: "Administrador / Organizaciones",
-          ),
-          Padding(
-            padding: EdgeInsets.zero,
-            child: Builder(builder: (BuildContext context) {
-              print('muere?');
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const LombaTitlePage(
+              title: "Organizaciones",
+              subtitle: "Administrador / Organizaciones",
+            ),
+            Padding(
+              padding: EdgeInsets.zero,
+              child: Builder(builder: (BuildContext context) {
+                print('muere?');
 
-              return Padding(
-                padding: EdgeInsets.zero,
-                child: FutureBuilder(
-                    future: organizationService.OrganizationList(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<dynamic>?> snapshot) {
-                      if (snapshot.data == null) {
-                        //IR a pantalla que indica
-                        //no cargó valores.
-                        return Text('nada');
-                      }
-                      final ps = snapshot.data;
-                      return Column(
-                        children: [
-                          const LombaFilterListPage(),
-                          const Divider(),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: ps?.length,
-                            itemBuilder: (context, index) {
-                              final item = index.toString();
+                return Padding(
+                  padding: EdgeInsets.zero,
+                  child: FutureBuilder(
+                      future: organizationService.OrganizationList(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<dynamic>?> snapshot) {
+                        if (snapshot.data == null) {
+                          //IR a pantalla que indica
+                          //no cargó valores.
+                          return Text('nada');
+                        }
+                        final ps = snapshot.data;
+                        return Column(
+                          children: [
+                            const LombaFilterListPage(),
+                            const Divider(),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: ps?.length,
+                              itemBuilder: (context, index) {
+                                //final item = index.toString();
 
-                              return Column(
-                                children: [
-                                  OrganizationListItem(
-                                    id: ps?[index]["id"],
-                                    organizacion: ps?[index]["name"],
-                                    icon: Icons.business,
-                                    habilitado: ps?[index]["isDisabled"],
-                                  ),
-                                  const Divider()
-                                ],
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    }),
-              );
-            }),
-          ),
-        ],
+                                return Column(
+                                  children: [
+                                    OrganizationListItem(
+                                      id: ps?[index]["id"],
+                                      organizacion: ps?[index]["name"],
+                                      icon: Icons.business,
+                                      habilitado: ps?[index]["isDisabled"],
+                                    ),
+                                    const Divider()
+                                  ],
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      }),
+                );
+              }),
+            ),
+          ],
+        ),
       ),
       drawer: const LombaSideMenu(),
     );

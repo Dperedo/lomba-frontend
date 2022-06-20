@@ -11,6 +11,7 @@ import 'package:front_lomba/widgets/userdetail_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 import '../../helpers/route_animation.dart';
+import 'package:front_lomba/services/alluser_service.dart';
 
 class AllUsers extends StatelessWidget {
   const AllUsers({Key? key}) : super(key: key);
@@ -36,23 +37,63 @@ class AllUsersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final allusersService = Provider.of<UserService>(context, listen: false);
     return Scaffold(
       appBar: LombaAppBar(title: title),
       body: SingleChildScrollView(
         child: Column(
-          children: const [
-            LombaTitlePage(
+          children: [
+            const LombaTitlePage(
               title: "Todos los usuarios",
               subtitle: "Administrador / Todos los usuarios",
             ),
-            LombaFilterListPage(),
-            Divider(),
-            AllUsersListItem(username: "username 1"),
-            Divider(),
-            AllUsersListItem(username: "username 2"),
-            Divider(),
-            AllUsersListItem(username: "username 3"),
-            Divider(),
+            Padding(
+              padding: EdgeInsets.zero,
+              child: Builder(builder: (BuildContext context) {
+                print('muere?');
+
+                return Padding(
+                  padding: EdgeInsets.zero,
+                  child: FutureBuilder(
+                      future: allusersService.UserList(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<dynamic>?> snapshot) {
+                        if (snapshot.data == null) {
+                          //IR a pantalla que indica
+                          //no cargó valores.
+                          return Text('nada');
+                        }
+                        final ps = snapshot.data;
+                        return Column(
+                          children: [
+                            const LombaFilterListPage(),
+                            const Divider(),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: ps?.length,
+                              itemBuilder: (context, index) {
+                                final item = index.toString();
+
+                                return Column(
+                                  children: [
+                                    AllUsersListItem(
+                                      id: ps?[index]["id"],
+                                      username: ps?[index]["username"],
+                                      habilitado: ps?[index]["isDisabled"],
+                                    ),
+                                    const Divider()
+                                  ],
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      }
+                    ),
+                  );
+                }
+              ),
+            ),
           ],
         ),
       ),
@@ -62,14 +103,19 @@ class AllUsersPage extends StatelessWidget {
 }
 
 class AllUsersListItem extends StatelessWidget {
+  final String id;
   final String username;
+  final bool habilitado;
   const AllUsersListItem({
     Key? key,
+    required this.id,
     required this.username,
+    required this.habilitado
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final allusersService = Provider.of<UserService>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Row(
@@ -125,7 +171,7 @@ class AllUsersListItem extends StatelessWidget {
           FloatingActionButton(
             heroTag: null,
             tooltip: 'Desactivar al usuario',
-            onPressed: () {
+            onPressed: () async {
               showDialog<String>(
                 context: context,
                 builder: (context) => GestureDetector(
@@ -136,13 +182,16 @@ class AllUsersListItem extends StatelessWidget {
                     dialogMessage: '¿Desea desactivar al usuario?',
                   ),
                 ),
-              ).then((value) => {
+              ).then((value) async {
                     if (value == 'Sí')
                       {
+                        final bool respuesta = await allusersService.EnableDisable(id,!habilitado);
+                        if (respuesta == true) {
                         ScaffoldMessenger.of(context).showSnackBar(
                             SnackBarGenerator.getNotificationMessage(
-                                'Se ha desactivado al usuario'))
-                      },
+                                'Se ha desactivado al usuario'));
+                                }
+                      }
                   });
             },
             child: const Icon(Icons.do_not_disturb_on),
