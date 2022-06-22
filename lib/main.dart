@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
         '/organizations': (context) => const Organizations(),
         '/allusers': (context) => const AllUsers(),
         //'/organizations_userlist': (context) => const OrganizationUsersList(),
-        '/user_edit': (context) => const UserEdit(),
+        //'/user_edit': (context) => const UserEdit(),
         '/user_profile': (context) => const UserProfile(),
         '/democolors': (context) => const DemoColors(),
         '/login': (context) => LoginScreen(),

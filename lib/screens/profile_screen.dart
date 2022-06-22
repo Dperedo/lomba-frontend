@@ -33,8 +33,7 @@ class UserProfilePage extends StatelessWidget {
           icon: const Icon(Icons.edit),
           tooltip: 'Perfil',
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const UserEdit()));
+            //Navigator.push(context,MaterialPageRoute(builder: (context) => const UserEdit()));
           },
         )
       ]),

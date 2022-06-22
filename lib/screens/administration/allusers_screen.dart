@@ -205,7 +205,7 @@ class AllUsersListItem extends StatelessWidget {
             child: const Icon(Icons.edit),
             onPressed: () {
               Navigator.of(context)
-                  .push(RouteAnimation.animatedTransition(const UserEdit()));
+                  .push(RouteAnimation.animatedTransition(UserEdit(user: id,)));
             },
           ),
         ],

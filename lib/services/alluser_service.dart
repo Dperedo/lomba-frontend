@@ -24,7 +24,7 @@ class UserService extends ChangeNotifier {
         'Authorization': 'Bearer $token',
       });
       decodedResp = json.decode(resp.body);
-      print(decodedResp);
+      //print(decodedResp);
     } catch (e) {
       print('ERROR!');
       print(e.toString());
@@ -32,7 +32,7 @@ class UserService extends ChangeNotifier {
 
     if (resp?.statusCode == 200) {
       print('resultado = 200');
-      print(decodedResp);
+      //print(decodedResp);
       return decodedResp;
     } else {
       print('error');
@@ -62,7 +62,7 @@ class UserService extends ChangeNotifier {
         'Authorization': 'Bearer $token',
       });
       decodedResp = json.decode(resp.body);
-      print(decodedResp);
+      //print(decodedResp);
     } catch (e) {
       print('ERROR!');
       print(e.toString());
@@ -72,6 +72,43 @@ class UserService extends ChangeNotifier {
       return true;
     } else {
       return false;
+    }
+  }
+
+  Future<List<dynamic>?> SearchUser(String id) async {
+    Uri? url;
+    http.Response? resp;
+    List<dynamic>? decodedResp;
+
+    String? token = await readToken();
+    //print(disabled);
+    url = Uri.parse('$_baseUrl/api/v1/User/$id/orgas');
+
+    /*if (disabled) {
+      url = Uri.parse('$_baseUrl/api/v1/User/disable?Id=$id');
+    } else {
+      url = Uri.parse('$_baseUrl/api/v1/User/enable?Id=$id');
+    }*/
+
+    try {
+      resp = await http.get(url, headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Access-Control_Allow_Origin": "*",
+        'Authorization': 'Bearer $token',
+      });
+      decodedResp = json.decode(resp.body);
+      //print('---------------------------------------------');
+      //print(decodedResp);
+    } catch (e) {
+      print('ERROR!');
+      print(e.toString());
+    }
+
+    if (resp?.statusCode == 200) {
+      return decodedResp;
+    } else {
+      return null;
     }
   }
 
