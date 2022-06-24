@@ -31,7 +31,7 @@ class UserService extends ChangeNotifier {
     }
 
     if (resp?.statusCode == 200) {
-      print('resultado = 200');
+      //print('resultado = 200');
       //print(decodedResp);
       return decodedResp;
     } else {
@@ -46,7 +46,7 @@ class UserService extends ChangeNotifier {
     Map<String, dynamic>? decodedResp;
 
     String? token = await readToken();
-    print(disabled);
+    //print(disabled);
 
     if (disabled) {
       url = Uri.parse('$_baseUrl/api/v1/User/disable?Id=$id');

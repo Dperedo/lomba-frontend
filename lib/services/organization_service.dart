@@ -24,6 +24,46 @@ class OrganizationService extends ChangeNotifier {
         'Authorization': 'Bearer $token',
       });
       decodedResp = json.decode(resp.body);
+      //print(decodedResp);
+    } catch (e) {
+      print('ERROR!');
+      print(e.toString());
+    }
+
+    if (resp?.statusCode == 200) {
+      //print('resultado = 200');
+      //print(decodedResp);
+      return decodedResp;
+    } else {
+      print('error');
+      return null;
+    }
+  }
+
+  Future<String?> OrganizationAdd(String idorga,String iduser,List<dynamic> roles) async {
+    final Map<String, dynamic> newData = {
+      'orgaId': idorga,
+      'userId': iduser,
+      'roles': roles
+    };
+    
+    final url = Uri.parse('$_baseUrl/api/v1/Orga/users');
+
+    http.Response? resp;
+    Map<String, dynamic>? decodedResp;
+
+    String? token = await readToken();
+
+    try {
+      //print(json.encode(newData));
+      resp = await http.post(url, body: json.encode(newData), headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Access-Control_Allow_Origin": "*",
+        'Authorization': 'Bearer $token',
+      });
+      decodedResp = json.decode(resp.body);
+      //print('antes del catch');
       print(decodedResp);
     } catch (e) {
       print('ERROR!');
@@ -33,10 +73,45 @@ class OrganizationService extends ChangeNotifier {
     if (resp?.statusCode == 200) {
       print('resultado = 200');
       print(decodedResp);
-      return decodedResp;
+      return null;
     } else {
       print('error');
+      return decodedResp!['message'];
+    }
+  }
+
+  Future<String?> OrganizationDelete(String idorga,String iduser,) async {
+    
+    final url = Uri.parse('$_baseUrl/api/v1/Orga/$idorga/users?userId=$iduser');
+
+    http.Response? resp;
+    Map<String, dynamic>? decodedResp;
+
+    String? token = await readToken();
+
+    try {
+      //print(json.encode(newData));
+      resp = await http.delete(url, headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Access-Control_Allow_Origin": "*",
+        'Authorization': 'Bearer $token',
+      });
+      decodedResp = json.decode(resp.body);
+      //print('antes del catch');
+      print(decodedResp);
+    } catch (e) {
+      print('ERROR!');
+      print(e.toString());
+    }
+
+    if (resp?.statusCode == 200) {
+      print('resultado = 200');
+      print(decodedResp);
       return null;
+    } else {
+      print('error');
+      return decodedResp!['message'];
     }
   }
 
@@ -62,7 +137,7 @@ class OrganizationService extends ChangeNotifier {
         'Authorization': 'Bearer $token',
       });
       decodedResp = json.decode(resp.body);
-      print(decodedResp);
+      //print(decodedResp);
     } catch (e) {
       print('ERROR!');
       print(e.toString());

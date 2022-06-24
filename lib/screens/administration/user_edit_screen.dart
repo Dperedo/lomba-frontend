@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/services/organization_service.dart';
 import 'package:front_lomba/services/alluser_service.dart';
+import 'package:front_lomba/services/organization_userslist_services.dart';
 
 class UserEdit extends StatelessWidget {
   const UserEdit({Key? key, required this.user}) : super(key: key);
@@ -41,17 +42,15 @@ class UserEditPage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: appBarToBack(context),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const LombaTitlePage(
-                title: "Editar usuario",
-                subtitle: "Administrador / Todos usuarios / Editar Perfil",
-              ),
-              UserEditForm(user: iduser),
-            ],
-          ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const LombaTitlePage(
+              title: "Editar usuario",
+              subtitle: "Administrador / Todos usuarios / Editar Perfil",
+            ),
+            UserEditForm(user: iduser),
+          ],
         ),
       ),
     );
@@ -107,18 +106,16 @@ class UserEditFormState extends State<UserEditForm> {
 
   String dropdownValue = 'Lomba';
   List<String> dropdownItems = ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4'];
-  
-  /*@override
-  void initState() {
-    String iduser = UserEditPage.;
-    super.initState();
-  }*/
+
+  String orgaid = '';
+  List<dynamic> roles = [];
 
   @override
   Widget build(BuildContext context) {
     
     final organizationService = Provider.of<OrganizationService>(context, listen: false);
     final userService = Provider.of<UserService>(context, listen: false);
+    final userEditService = Provider.of<OrganizationUserslistService>(context, listen: false);
 
     //FutureList<Map<String, dynamic>?>? Buscar (String )
 
@@ -149,11 +146,14 @@ class UserEditFormState extends State<UserEditForm> {
                   children: [
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Organizaciones:',
-                          style: DefaultTextStyle.of(context)
-                              .style
-                              .apply(fontSizeFactor: 1.2),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Text(
+                            'Organizaciones:',
+                            style: DefaultTextStyle.of(context)
+                                .style
+                                .apply(fontSizeFactor: 1.2),
+                          ),
                         )),
                     const Divider(),
                     SizedBox(
@@ -184,7 +184,7 @@ class UserEditFormState extends State<UserEditForm> {
                                       Row(
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.symmetric(horizontal: 15),
                                             child: Text(
                                               us?[index]["orga"]["name"],
                                               //'superuser',
@@ -203,13 +203,14 @@ class UserEditFormState extends State<UserEditForm> {
                                                   if (us?[index]["roles"][i]["name"] == 'superadmin') {// us?[index]!["roles"]["name"]
                                                     isChecked1 = true;
                                                   }
-                                                  if (us?[0]["roles"][i]["name"] == 'admin') {
+                                                  if (us?[index]["roles"][i]["name"] == 'admin') {
                                                     isChecked2 = true;
                                                   }
-                                                  if (us?[0]["roles"][i]["name"] == 'basic') {
+                                                  if (us?[index]["roles"][i]["name"] == 'basic') {
                                                     isChecked3 = true;
                                                   }
                                                 }
+                                                orgaid = us?[index]["orga"]["id"];
                                                 print(us?[index]["orga"]["name"]);
                                                 dropdownValue = us?[index]["orga"]["name"];
                                                 _visible = !_visible;
@@ -219,10 +220,17 @@ class UserEditFormState extends State<UserEditForm> {
                                           ),
                                           IconButton(
                                             icon: const Icon(Icons.cancel),
-                                            onPressed: (() {
-                                              ScaffoldMessenger.of(context).showSnackBar(
+                                            onPressed: (() async {
+                                              print('Antes de agregar la orga');
+                                              final bool message = await userEditService.DeleteUsers(us?[index]["orga"]["id"],iduser);
+                                              if(message == true) {
+                                                print('OK');
+                                                ScaffoldMessenger.of(context).showSnackBar(
                                                   SnackBarGenerator.getNotificationMessage(
                                                       'Se ha quitado organización del usuario'));
+                                              }else{
+                                                print('error');
+                                              }
                                             }),
                                           ),
                                         ],
@@ -243,17 +251,24 @@ class UserEditFormState extends State<UserEditForm> {
             const SizedBox(
               width: 20,
             ),
-            FloatingActionButton.extended(
-                heroTag: null,
-                onPressed: () {
-                  setState(() {
-                    isChecked1 == false;
-                    isChecked2 == false;
-                    isChecked3 == false;
-                    _visible = !_visible;
-                  });
-                },
-                label: const Text('Agregar Organización')),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                child: FloatingActionButton.extended(
+                    heroTag: null,
+                    onPressed: () {
+                      setState(() {
+                        isChecked1 = false;
+                        isChecked2 = false;
+                        isChecked3 = false;
+                        _visible = !_visible;
+                      });
+                    },
+                    label: const Text('+ Agregar Organización')
+                ),
+              ),
+            ),
             const SizedBox(
               width: 20,
             ),
@@ -267,7 +282,7 @@ class UserEditFormState extends State<UserEditForm> {
                 alignment: Alignment.centerLeft,
                 // ignore: sized_box_for_whitespace
                 child: Container(
-                  width: 200.0,
+                  width: 300.0,
                   //height: 200.0,
                   //color: Colors.green,
                   child: Column(
@@ -276,81 +291,119 @@ class UserEditFormState extends State<UserEditForm> {
                       FutureBuilder(
                         future: organizationService.OrganizationList(),
                         builder: (BuildContext context, AsyncSnapshot<List<dynamic>?> snapshot) {
-                          //final lista = snapshot.data;
-                          return DropdownButton(
-                            hint: Text('Seleccionar'),
-                            value: dropdownValue,
-                            items: snapshot.data?.map((fc) =>
-                              DropdownMenuItem<String>(
-                                value: fc?["name"],
-                                child: Text(fc?["name"]),
-                                )
-                            ).toList(), 
-                            onChanged: (newValue) {
-                              setState(() {
-                                //texto = valor;
-                                dropdownValue = newValue.toString();
-                              });
-                            },
+                          final orga = snapshot.data;
+                          final numOrgas = orga?.length;
+                          //print('resultado de orga');
+                          //print(orga?[0]["name"]);
+                          return Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 55),
+                              child: DropdownButton(
+                                hint: Text('Seleccionar'),
+                                value: dropdownValue,
+                                items: snapshot.data?.map((fc) =>
+                                  DropdownMenuItem<String>(
+                                    value: fc?["name"],
+                                    child: Text(fc?["name"]),
+                                    )
+                                ).toList(), 
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    for(var i=0; i<numOrgas!;i++){
+                                      if (orga?[i]["name"]==newValue.toString()){
+                                        orgaid = orga?[i]["id"];
+                                      }
+                                    }
+                                    dropdownValue = newValue.toString();
+                                  });
+                                },
+                              ),
+                            ),
                           );
                         }
                       ),
-                      Row(
-                        children: [
-                          Checkbox(
-                            checkColor: Colors.white,
-                            //fillColor: MaterialStateProperty.resolveWith(getColor),
-                            value: isChecked1,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                isChecked1 = value!;
-                              });
-                            },
-                          ),
-                          const Text('Super Admin'),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 50),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Checkbox(
+                                  checkColor: Colors.white,
+                                  //fillColor: MaterialStateProperty.resolveWith(getColor),
+                                  value: isChecked1,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      isChecked1 = value!;
+                                    });
+                                  },
+                                ),
+                                const Text('Super Admin'),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  checkColor: Colors.white,
+                                  //fillColor: MaterialStateProperty.resolveWith(getColor),
+                                  value: isChecked2,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      isChecked2 = value!;
+                                    });
+                                  },
+                                ),
+                                const Text('Admin'),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  checkColor: Colors.white,
+                                  //fillColor: MaterialStateProperty.resolveWith(getColor),
+                                  value: isChecked3,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      isChecked3 = value!;
+                                    });
+                                  },
+                                ),
+                                const Text('Basic'),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      Row(
-                        children: [
-                          Checkbox(
-                            checkColor: Colors.white,
-                            //fillColor: MaterialStateProperty.resolveWith(getColor),
-                            value: isChecked2,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                isChecked2 = value!;
-                              });
-                            },
-                          ),
-                          const Text('Admin'),
-                        ],
+                      const SizedBox(
+                        width: 20,
                       ),
-                      Row(
-                        children: [
-                          Checkbox(
-                            checkColor: Colors.white,
-                            //fillColor: MaterialStateProperty.resolveWith(getColor),
-                            value: isChecked3,
-                            onChanged: (bool? value) {
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: FloatingActionButton.extended(
+                            heroTag: null,
+                            onPressed: () async {
                               setState(() {
-                                isChecked3 = value!;
+                                if(isChecked1 == true) {
+                                  roles.add('superadmin');
+                                }
+                                if(isChecked2 == true) {
+                                  roles.add('admin');
+                                }
+                                if(isChecked3 == true) {
+                                  roles.add('basic');
+                                }
+                                _visible = !_visible;
                               });
+                              final String? errorMessage = await organizationService.OrganizationAdd(orgaid,iduser,roles);
+                              if (errorMessage == null ){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBarGenerator.getNotificationMessage(
+                                      'Se ha guardado correctamente'));
+                                      } else {print('no guardo');}
                             },
-                          ),
-                          const Text('Basic'),
-                        ],
+                            label: const Text('Asociar con usuario')),
                       ),
-                      FloatingActionButton.extended(
-                          heroTag: null,
-                          onPressed: () {
-                            setState(() {
-                              _visible = !_visible;
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBarGenerator.getNotificationMessage(
-                                    'Se ha guardado correctamente'));
-                          },
-                          label: const Text('Asociar con usuario')),
                     ],
                   ),
                 ),
