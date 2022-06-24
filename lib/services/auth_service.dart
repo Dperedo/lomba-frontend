@@ -25,7 +25,7 @@ class AuthService extends ChangeNotifier {
     Map<String, dynamic>? decodedResp;
 
     try {
-      print(json.encode(authData));
+      //print(json.encode(authData));
       resp = await http.post(url, body: json.encode(authData), headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -33,7 +33,7 @@ class AuthService extends ChangeNotifier {
         //'Authorization': 'Bearer ${readToken()}',
       });
       decodedResp = json.decode(resp.body);
-      print(decodedResp);
+      //print(decodedResp);
     } catch (e) {
       print(e.toString());
     }

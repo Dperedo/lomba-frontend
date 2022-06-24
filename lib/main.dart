@@ -10,6 +10,7 @@ import 'package:front_lomba/screens/profile_screen.dart';
 import 'package:front_lomba/services/organization_service.dart';
 import 'package:front_lomba/services/permission_service.dart';
 import 'package:front_lomba/services/organization_userslist_services.dart';
+import 'package:front_lomba/services/alluser_service.dart';
 import 'package:provider/provider.dart';
 
 import 'package:front_lomba/helpers/preferences.dart';
@@ -29,6 +30,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => PermissionsService()),
       ChangeNotifierProvider(create: (_) => OrganizationService()),
       ChangeNotifierProvider(create: (_) => OrganizationUserslistService()),
+      ChangeNotifierProvider(create: (_) => UserService()),
     ],
     child: const MyApp(),
   ));
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
         '/organizations': (context) => const Organizations(),
         '/allusers': (context) => const AllUsers(),
         //'/organizations_userlist': (context) => const OrganizationUsersList(),
-        '/user_edit': (context) => const UserEdit(),
+        //'/user_edit': (context) => const UserEdit(),
         '/user_profile': (context) => const UserProfile(),
         '/democolors': (context) => const DemoColors(),
         '/login': (context) => LoginScreen(),

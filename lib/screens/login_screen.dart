@@ -105,12 +105,9 @@ class _LoginForm extends StatelessWidget {
                       loginForm.isLoading ? 'Espere' : 'Ingresar',
                       style: const TextStyle(color: Colors.white),
                     )),
-                onPressed: loginForm.isLoading
-                    ? null
-                    : () async {
+                onPressed: loginForm.isLoading? null: () async {
                         FocusScope.of(context).unfocus();
-                        final authService =
-                            Provider.of<AuthService>(context, listen: false);
+                        final authService = Provider.of<AuthService>(context, listen: false);
 
                         if (!loginForm.isValidForm()) return;
 

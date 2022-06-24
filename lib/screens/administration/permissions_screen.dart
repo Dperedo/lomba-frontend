@@ -36,57 +36,59 @@ class _PermissionsPage extends StatelessWidget {
     final permiService = Provider.of<PermissionsService>(context, listen: false);
     return Scaffold(
       appBar: LombaAppBar(title: title),
-      body: Column(
-        children: [
-          const LombaTitlePage(
-            title: "Permisos",
-            subtitle: "Administración / Permisos",
-          ),
-          Padding(
-            padding: EdgeInsets.zero,
-            child: Builder(builder: (BuildContext context) {
-              print('muere?');
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const LombaTitlePage(
+              title: "Permisos",
+              subtitle: "Administración / Permisos",
+            ),
+            Padding(
+              padding: EdgeInsets.zero,
+              child: Builder(builder: (BuildContext context) {
+                print('muere?');
 
-              return Padding(
-                padding: EdgeInsets.zero,
-                child: FutureBuilder(
-                    future: permiService.PermissionsList(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<dynamic>?> snapshot) {
-                      if (snapshot.data == null) {
-                        //IR a pantalla que indica
-                        //no cargó valores.
-                        return Text('nada');
-                      }
-                      final ps = snapshot.data;
-                      return Column(
-                        children: [
-                          const LombaFilterListPage(),
-                          const Divider(),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: ps?.length,
-                            itemBuilder: (context, index) {
-                              final item = index.toString();
+                return Padding(
+                  padding: EdgeInsets.zero,
+                  child: FutureBuilder(
+                      future: permiService.PermissionsList(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<dynamic>?> snapshot) {
+                        if (snapshot.data == null) {
+                          //IR a pantalla que indica
+                          //no cargó valores.
+                          return Text('nada');
+                        }
+                        final ps = snapshot.data;
+                        return Column(
+                          children: [
+                            const LombaFilterListPage(),
+                            const Divider(),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: ps?.length,
+                              itemBuilder: (context, index) {
+                                final item = index.toString();
 
-                              return Column(
-                                children: [
-                                  PermissionListItem(
-                                    permission: ps?[index]["name"],
-                                    habilitado: ps?[index]["isDisabled"],
-                                  ),
-                                  const Divider()
-                                ],
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    }),
-              );
-            }),
-          ),
-        ],
+                                return Column(
+                                  children: [
+                                    PermissionListItem(
+                                      permission: ps?[index]["name"],
+                                      habilitado: ps?[index]["isDisabled"],
+                                    ),
+                                    const Divider()
+                                  ],
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      }),
+                );
+              }),
+            ),
+          ],
+        ),
       ),
       drawer: const LombaSideMenu(),
     );

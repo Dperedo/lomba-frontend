@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
-class OrganizationService extends ChangeNotifier {
+class UserService extends ChangeNotifier {
   final String _baseUrl = 'http://localhost:8187';
   final storage = const FlutterSecureStorage();
   bool isLoading = true;
 
-  Future<List<dynamic>?> OrganizationList() async {
-    final url = Uri.parse('$_baseUrl/api/v1/Orga');
+  Future<List<dynamic>?> UserList() async {
+    final url = Uri.parse('$_baseUrl/api/v1/User');
 
     http.Response? resp;
     List<dynamic>? decodedResp;
@@ -40,93 +40,18 @@ class OrganizationService extends ChangeNotifier {
     }
   }
 
-  Future<String?> OrganizationAdd(String idorga,String iduser,List<dynamic> roles) async {
-    final Map<String, dynamic> newData = {
-      'orgaId': idorga,
-      'userId': iduser,
-      'roles': roles
-    };
-    
-    final url = Uri.parse('$_baseUrl/api/v1/Orga/users');
-
-    http.Response? resp;
-    Map<String, dynamic>? decodedResp;
-
-    String? token = await readToken();
-
-    try {
-      //print(json.encode(newData));
-      resp = await http.post(url, body: json.encode(newData), headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Access-Control_Allow_Origin": "*",
-        'Authorization': 'Bearer $token',
-      });
-      decodedResp = json.decode(resp.body);
-      //print('antes del catch');
-      print(decodedResp);
-    } catch (e) {
-      print('ERROR!');
-      print(e.toString());
-    }
-
-    if (resp?.statusCode == 200) {
-      print('resultado = 200');
-      print(decodedResp);
-      return null;
-    } else {
-      print('error');
-      return decodedResp!['message'];
-    }
-  }
-
-  Future<String?> OrganizationDelete(String idorga,String iduser,) async {
-    
-    final url = Uri.parse('$_baseUrl/api/v1/Orga/$idorga/users?userId=$iduser');
-
-    http.Response? resp;
-    Map<String, dynamic>? decodedResp;
-
-    String? token = await readToken();
-
-    try {
-      //print(json.encode(newData));
-      resp = await http.delete(url, headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Access-Control_Allow_Origin": "*",
-        'Authorization': 'Bearer $token',
-      });
-      decodedResp = json.decode(resp.body);
-      //print('antes del catch');
-      print(decodedResp);
-    } catch (e) {
-      print('ERROR!');
-      print(e.toString());
-    }
-
-    if (resp?.statusCode == 200) {
-      print('resultado = 200');
-      print(decodedResp);
-      return null;
-    } else {
-      print('error');
-      return decodedResp!['message'];
-    }
-  }
-
   Future<bool> EnableDisable(String id, bool disabled) async {
     Uri? url;
     http.Response? resp;
     Map<String, dynamic>? decodedResp;
 
     String? token = await readToken();
-    print(disabled);
+    //print(disabled);
 
     if (disabled) {
-      url = Uri.parse('$_baseUrl/api/v1/Orga/disable?id=$id');
+      url = Uri.parse('$_baseUrl/api/v1/User/disable?Id=$id');
     } else {
-      url = Uri.parse('$_baseUrl/api/v1/Orga/enable?id=$id');
+      url = Uri.parse('$_baseUrl/api/v1/User/enable?Id=$id');
     }
 
     try {
@@ -147,6 +72,43 @@ class OrganizationService extends ChangeNotifier {
       return true;
     } else {
       return false;
+    }
+  }
+
+  Future<List<dynamic>?> SearchUser(String id) async {
+    Uri? url;
+    http.Response? resp;
+    List<dynamic>? decodedResp;
+
+    String? token = await readToken();
+    //print(disabled);
+    url = Uri.parse('$_baseUrl/api/v1/User/$id/orgas');
+
+    /*if (disabled) {
+      url = Uri.parse('$_baseUrl/api/v1/User/disable?Id=$id');
+    } else {
+      url = Uri.parse('$_baseUrl/api/v1/User/enable?Id=$id');
+    }*/
+
+    try {
+      resp = await http.get(url, headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Access-Control_Allow_Origin": "*",
+        'Authorization': 'Bearer $token',
+      });
+      decodedResp = json.decode(resp.body);
+      //print('---------------------------------------------');
+      //print(decodedResp);
+    } catch (e) {
+      print('ERROR!');
+      print(e.toString());
+    }
+
+    if (resp?.statusCode == 200) {
+      return decodedResp;
+    } else {
+      return null;
     }
   }
 
