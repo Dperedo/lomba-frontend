@@ -107,7 +107,7 @@ class UserEditFormState extends State<UserEditForm> {
   String dropdownValue = 'Lomba';
   List<String> dropdownItems = ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4'];
 
-  String orgaid = '';
+  String orgaid = '00000000-0000-0000-0000-000000000001';
   List<dynamic> roles = [];
 
   @override
