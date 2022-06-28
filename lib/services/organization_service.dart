@@ -20,7 +20,7 @@ class OrganizationService extends ChangeNotifier {
       resp = await http.get(url, headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Access-Control_Allow_Origin": "*",
+        "Access-Control-Allow-Origin": "*",
         'Authorization': 'Bearer $token',
       });
       decodedResp = json.decode(resp.body);
@@ -40,13 +40,14 @@ class OrganizationService extends ChangeNotifier {
     }
   }
 
-  Future<String?> OrganizationAdd(String idorga,String iduser,List<dynamic> roles) async {
+  Future<String?> OrganizationAdd(
+      String idorga, String iduser, List<dynamic> roles) async {
     final Map<String, dynamic> newData = {
       'orgaId': idorga,
       'userId': iduser,
       'roles': roles
     };
-    
+
     final url = Uri.parse('$_baseUrl/api/v1/Orga/users');
 
     http.Response? resp;
@@ -59,7 +60,7 @@ class OrganizationService extends ChangeNotifier {
       resp = await http.post(url, body: json.encode(newData), headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Access-Control_Allow_Origin": "*",
+        "Access-Control-Allow-Origin": "*",
         'Authorization': 'Bearer $token',
       });
       decodedResp = json.decode(resp.body);
@@ -80,8 +81,10 @@ class OrganizationService extends ChangeNotifier {
     }
   }
 
-  Future<String?> OrganizationDelete(String idorga,String iduser,) async {
-    
+  Future<String?> OrganizationDelete(
+    String idorga,
+    String iduser,
+  ) async {
     final url = Uri.parse('$_baseUrl/api/v1/Orga/$idorga/users?userId=$iduser');
 
     http.Response? resp;
@@ -94,7 +97,7 @@ class OrganizationService extends ChangeNotifier {
       resp = await http.delete(url, headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Access-Control_Allow_Origin": "*",
+        "Access-Control-Allow-Origin": "*",
         'Authorization': 'Bearer $token',
       });
       decodedResp = json.decode(resp.body);
@@ -133,7 +136,7 @@ class OrganizationService extends ChangeNotifier {
       resp = await http.put(url, headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Access-Control_Allow_Origin": "*",
+        "Access-Control-Allow-Origin": "*",
         'Authorization': 'Bearer $token',
       });
       decodedResp = json.decode(resp.body);

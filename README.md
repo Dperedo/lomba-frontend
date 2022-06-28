@@ -14,3 +14,11 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+Para crear el build del docker:
+
+docker build . -t flutter_docker
+
+Para levantar el contenedor:
+
+docker run -i -p 8080:80 -td flutter_docker

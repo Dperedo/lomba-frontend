@@ -29,7 +29,7 @@ class AuthService extends ChangeNotifier {
       resp = await http.post(url, body: json.encode(authData), headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Access-Control_Allow_Origin": "*",
+        "Access-Control-Allow-Origin": "*",
         //'Authorization': 'Bearer ${readToken()}',
       });
       decodedResp = json.decode(resp.body);
@@ -47,7 +47,6 @@ class AuthService extends ChangeNotifier {
       print('error');
       return decodedResp!['message'];
     }
-
   }
 
   Future logout() async {

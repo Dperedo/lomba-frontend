@@ -20,7 +20,7 @@ class PermissionsService extends ChangeNotifier {
       resp = await http.get(url, headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Access-Control_Allow_Origin": "*",
+        "Access-Control-Allow-Origin": "*",
         'Authorization': 'Bearer $token',
       });
       decodedResp = json.decode(resp.body);
@@ -58,7 +58,7 @@ class PermissionsService extends ChangeNotifier {
       resp = await http.put(url, headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Access-Control_Allow_Origin": "*",
+        "Access-Control-Allow-Origin": "*",
         'Authorization': 'Bearer $token',
       });
       decodedResp = json.decode(resp.body);
