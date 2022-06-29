@@ -8,6 +8,10 @@ import 'package:front_lomba/widgets/lomba_titlepage.dart';
 import 'package:provider/provider.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/services/permission_service.dart';
+import 'package:front_lomba/services/auth_service.dart';
+import 'package:front_lomba/widgets/lomba_dialog_error.dart';
+import 'package:front_lomba/screens/login_screen.dart';
+import 'package:front_lomba/helpers/route_animation.dart';
 
 class Permissions extends StatelessWidget {
   const Permissions({Key? key}) : super(key: key);
@@ -32,8 +36,16 @@ class _PermissionsPage extends StatelessWidget {
   final String title;
 
   @override
-  build(BuildContext context) {
+  build(BuildContext context)  {
     final permiService = Provider.of<PermissionsService>(context, listen: false);
+    final pingService = Provider.of<AuthService>(context, listen: false);
+    /*final bool resp = await pingService.Ping();
+      print('antes del login');
+      print(resp);
+    if( resp == true ){
+      print('navegar a login');
+      Navigator.of(context).push(RouteAnimation.animatedTransition(LoginScreen()));
+    }*/
     return Scaffold(
       appBar: LombaAppBar(title: title),
       body: SingleChildScrollView(
@@ -55,35 +67,49 @@ class _PermissionsPage extends StatelessWidget {
                       builder: (BuildContext context,
                           AsyncSnapshot<List<dynamic>?> snapshot) {
                         if (snapshot.data == null) {
-                          //IR a pantalla que indica
-                          //no cargó valores.
-                          return Text('nada');
-                        }
+                          return const CircularProgressIndicator();
+                        } 
                         final ps = snapshot.data;
-                        return Column(
-                          children: [
-                            const LombaFilterListPage(),
-                            const Divider(),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: ps?.length,
-                              itemBuilder: (context, index) {
-                                final item = index.toString();
+                        if ( !ps?[2] ){
+                          print('segundo if error');
+                          return const LombaDialogErrorDisconnect();
+                        }else if ( ps?[0].statusCode == 200){ 
+                          return Column(
+                            children: [
+                              const LombaFilterListPage(),
+                              const Divider(),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: ps?[1].length,
+                                itemBuilder: (context, index) {
+                                  final item = index.toString();
 
-                                return Column(
-                                  children: [
-                                    PermissionListItem(
-                                      permission: ps?[index]["name"],
-                                      habilitado: ps?[index]["isDisabled"],
-                                    ),
-                                    const Divider()
-                                  ],
-                                );
-                              },
-                            ),
-                          ],
-                        );
-                      }),
+                                  return Column(
+                                    children: [
+                                      PermissionListItem(
+                                        permission: ps?[1][index]["name"],
+                                        habilitado: ps?[1][index]["isDisabled"],
+                                      ),
+                                      const Divider()
+                                    ],
+                                  );
+                                },
+                              ),
+                            ],
+                          );
+                        } else if (ps?[0].statusCode >= 400 && ps?[0].statusCode <= 400) {
+                          print('400 error');
+                          if(ps?[0].statusCode == 401) {
+                            return const LombaDialogError401();
+                          } else if(ps?[0].statusCode == 403) {
+                            return const LombaDialogError403();
+                          }
+                          return const LombaDialogError400();
+                        } else {
+                          print('salio error');
+                          return const LombaDialogError();
+                        }
+                  }),
                 );
               }),
             ),
@@ -150,14 +176,39 @@ class PermissionListItem extends StatelessWidget {
               ).then((value) async {
                     if (value == 'Sí')
                       {
-                        final bool respuesta = await permiService.EnableDisable(permission,!habilitado);
+                        final List<dynamic>? respuesta = await permiService.EnableDisable(permission,!habilitado);
                         //consumir servicio de PermissionService
-                        //para habilitar o deshabilitar el permiso
-                        if (respuesta == true) {
-                        ScaffoldMessenger.of(context).showSnackBar(
+                        
+                        if ( !respuesta?[2] ){
+                          print('segundo if error');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Conexión con el servidor no establecido'));
+                        } else if ( respuesta?[0].statusCode == 200){
+                          ScaffoldMessenger.of(context).showSnackBar(
                             SnackBarGenerator.getNotificationMessage(
                                 'Se ha desactivado el permiso'));
-                                }
+                        } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
+                          if(respuesta?[0].statusCode == 401) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió un problema con la autentificación'));
+                          }else if(respuesta?[0].statusCode == 403) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió un problema con la Solicitud'));
+                          }else {
+                            print('400 error');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió una solicitud Incorrecta'));
+                          }
+                        } else {
+                          print('salio error');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Error con el servidor'));
+                        }
                       }
                   }
                 );

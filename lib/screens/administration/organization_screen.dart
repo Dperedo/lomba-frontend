@@ -8,6 +8,7 @@ import 'package:front_lomba/widgets/lomba_appbar.dart';
 import 'package:front_lomba/widgets/lomba_filterlistpage.dart';
 import 'package:front_lomba/widgets/lomba_sidemenu.dart';
 import 'package:front_lomba/widgets/lomba_titlepage.dart';
+import 'package:front_lomba/widgets/lomba_dialog_error.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/helpers/snackbars.dart';
 import 'package:front_lomba/services/organization_service.dart';
@@ -58,28 +59,29 @@ class OrganizationsPage extends StatelessWidget {
                       builder: (BuildContext context,
                           AsyncSnapshot<List<dynamic>?> snapshot) {
                         if (snapshot.data == null) {
-                          //IR a pantalla que indica
-                          //no cargó valores.
-                          return Text('nada');
+                          return const CircularProgressIndicator();
                         }
                         final ps = snapshot.data;
-                        return Column(
+                        if ( !ps?[2] ){
+                          return const LombaDialogErrorDisconnect();
+                        } else if ( ps?[0].statusCode == 200 ) {
+                          return Column(
                           children: [
                             const LombaFilterListPage(),
                             const Divider(),
                             ListView.builder(
                               shrinkWrap: true,
-                              itemCount: ps?.length,
+                              itemCount: ps?[1].length,
                               itemBuilder: (context, index) {
                                 //final item = index.toString();
 
                                 return Column(
                                   children: [
                                     OrganizationListItem(
-                                      id: ps?[index]["id"],
-                                      organizacion: ps?[index]["name"],
+                                      id: ps?[1][index]["id"],
+                                      organizacion: ps?[1][index]["name"],
                                       icon: Icons.business,
-                                      habilitado: ps?[index]["isDisabled"],
+                                      habilitado: ps?[1][index]["isDisabled"],
                                     ),
                                     const Divider()
                                   ],
@@ -88,6 +90,19 @@ class OrganizationsPage extends StatelessWidget {
                             ),
                           ],
                         );
+                        } else if (ps?[0].statusCode >= 400 && ps?[0].statusCode <= 400) {
+                          print('400 error');
+                          if(ps?[0].statusCode == 401) {
+                            return const LombaDialogError401();
+                          } else if(ps?[0].statusCode == 403) {
+                            return const LombaDialogError403();
+                          }
+                          return const LombaDialogError400();
+                        } else {
+                          print('entro error');
+                          return const LombaDialogError();
+                        }
+                        
                       }),
                 );
               }),
@@ -159,12 +174,38 @@ class OrganizationListItem extends StatelessWidget {
               ).then((value) async {
                     if (value == 'Sí')
                       {
-                        final bool respuesta = await organizationService.EnableDisable(id,!habilitado);
-                        if (respuesta == true) {
-                        ScaffoldMessenger.of(context).showSnackBar(
+                        final List<dynamic>? respuesta = await organizationService.EnableDisable(id,!habilitado);
+
+                        if ( !respuesta?[2] ){
+                          print('segundo if error');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Conexión con el servidor no establecido'));
+                        } else if ( respuesta?[0].statusCode == 200){
+                          ScaffoldMessenger.of(context).showSnackBar(
                             SnackBarGenerator.getNotificationMessage(
                                 'Se ha desactivado la organización'));
-                                }
+                        } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
+                          if(respuesta?[0].statusCode == 401) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió un problema con la autentificación'));
+                          }else if(respuesta?[0].statusCode == 403) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió un problema con la Solicitud'));
+                          }else {
+                            print('400 error');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió una solicitud Incorrecta'));
+                          }
+                        } else {
+                          print('salio error');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Error con el servidor'));
+                        }
                       }
                   });
             },
