@@ -5,6 +5,7 @@ import 'package:front_lomba/widgets/lomba_dialog_notyes.dart';
 import 'package:front_lomba/widgets/lomba_filterlistpage.dart';
 import 'package:front_lomba/widgets/lomba_titlepage.dart';
 import 'package:front_lomba/widgets/userdetail_dialog.dart';
+import 'package:front_lomba/widgets/lomba_dialog_error.dart';
 import 'package:provider/provider.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/widgets/lomba_sidemenu.dart';
@@ -60,36 +61,50 @@ class OrganizationUsersListPage extends StatelessWidget {
                     builder: (BuildContext context,
                         AsyncSnapshot<List<dynamic>?> snapshot) {
                       if (snapshot.data == null) {
-                        //IR a pantalla que indica
-                        //no cargó valores.
-                        return Text('nada');
+                        return const CircularProgressIndicator();
                       }
                       final ps = snapshot.data;
-                      return Column(
-                        children: [
-                          const LombaFilterListPage(),
-                          const Divider(),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: ps?.length,
-                            itemBuilder: (context, index) {
-                              final item = index.toString();
+                      if ( !ps?[2] ){
+                          print('segundo if error');
+                          return const LombaDialogErrorDisconnect();
+                      }else if ( ps?[0].statusCode == 200){
+                        return Column(
+                          children: [
+                            const LombaFilterListPage(),
+                            const Divider(),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: ps?[1].length,
+                              itemBuilder: (context, index) {
+                                final item = index.toString();
 
-                              return Column(
-                                children: [
-                                  OrganizationUsersListItem(
-                                    id: ps?[index]["orga"]["id"],
-                                    userId: ps?[index]["user"]["id"],
-                                    username: ps?[index]["user"]["username"],
-                                    habilitado: ps?[index]["user"]["isDisabled"],
-                                  ),
-                                  const Divider()
-                                ],
-                              );
-                            },
-                          ),
-                        ],
-                      );
+                                return Column(
+                                  children: [
+                                    OrganizationUsersListItem(
+                                      id: ps?[1][index]["orga"]["id"],
+                                      userId: ps?[1][index]["user"]["id"],
+                                      username: ps?[1][index]["user"]["username"],
+                                      habilitado: ps?[1][index]["user"]["isDisabled"],
+                                    ),
+                                    const Divider()
+                                  ],
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      } else if (ps?[0].statusCode >= 400 && ps?[0].statusCode <= 400) {
+                        print('400 error');
+                        if(ps?[0].statusCode == 401) {
+                            return const LombaDialogError401();
+                          } else if(ps?[0].statusCode == 403) {
+                            return const LombaDialogError403();
+                          }
+                        return const LombaDialogError400();
+                      } else {
+                        print('salio error');
+                        return const LombaDialogError();
+                      }
                     }),
               );
             }),
@@ -179,12 +194,38 @@ class OrganizationUsersListItem extends StatelessWidget {
                     if (value == 'Sí')
                       {
                         print(userId);
-                        final bool respuesta = await organizationUserslistService.EnableDisable(id,userId,!habilitado);
-                        if (respuesta == true) {
-                        ScaffoldMessenger.of(context).showSnackBar(
+                        final List<dynamic>? respuesta = await organizationUserslistService.EnableDisable(id,userId,!habilitado);
+
+                        if ( !respuesta?[2] ){
+                          print('segundo if error');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Conexión con el servidor no establecido'));
+                        } else if ( respuesta?[0].statusCode == 200){
+                          ScaffoldMessenger.of(context).showSnackBar(
                             SnackBarGenerator.getNotificationMessage(
                                 'Se ha desactivado al usuario de la organización'));
-                                }
+                        } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
+                          if(respuesta?[0].statusCode == 401) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió un problema con la autentificación'));
+                          }else if(respuesta?[0].statusCode == 403) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió un problema con la Solicitud'));
+                          }else {
+                            print('400 error');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió una solicitud Incorrecta'));
+                          }
+                        } else {
+                          print('salio error');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Error con el servidor'));
+                        }
                       }
                   });
             },
@@ -212,12 +253,38 @@ class OrganizationUsersListItem extends StatelessWidget {
                     if (value == 'Sí')
                       {
                         print(userId);
-                        final bool respuesta = await organizationUserslistService.DeleteUsers(id,userId);
-                        if (respuesta == true) {
-                        ScaffoldMessenger.of(context).showSnackBar(
+                        final List<dynamic>? respuesta = await organizationUserslistService.DeleteUsers(id,userId);
+
+                        if ( !respuesta?[2] ){
+                          print('segundo if error');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Conexión con el servidor no establecido'));
+                        } else if ( respuesta?[0].statusCode == 200){
+                          ScaffoldMessenger.of(context).showSnackBar(
                             SnackBarGenerator.getNotificationMessage(
                                 'Se ha quitado al usuario de la organización'));
-                                }
+                        } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
+                          if(respuesta?[0].statusCode == 401) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió un problema con la autentificación'));
+                          }else if(respuesta?[0].statusCode == 403) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió un problema con la Solicitud'));
+                          }else {
+                            print('400 error');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió una solicitud Incorrecta'));
+                          }
+                        } else {
+                          print('salio error');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Error con el servidor'));
+                        }
                       }
                   });
             },

@@ -14,6 +14,8 @@ class OrganizationUserslistService extends ChangeNotifier {
 
     http.Response? resp;
     List<dynamic>? decodedResp;
+    
+    final List<dynamic> datos = [resp,decodedResp,false];
 
     String? token = await readToken();
 
@@ -23,28 +25,34 @@ class OrganizationUserslistService extends ChangeNotifier {
         "Content-Type": "application/json",
         "Access-Control_Allow_Origin": "*",
         'Authorization': 'Bearer $token',
-      });
+      }).timeout(const Duration(seconds: 10));
+      datos[2]=true;
       decodedResp = json.decode(resp.body);
-      print(decodedResp);
+      datos[0]=resp;
+      datos[1]=decodedResp;
+      //print(decodedResp);
     } catch (e) {
       print('ERROR!');
       print(e.toString());
+      return datos;
     }
 
-    if (resp?.statusCode == 200) {
+    if (resp.statusCode == 200) {
       print('resultado = 200');
       print(decodedResp);
-      return decodedResp;
+      return datos;
     } else {
       print('error');
-      return null;
+      return datos;
     }
   }
 
-  Future<bool> EnableDisable(String id,String userId, bool disabled) async {
+  Future<List<dynamic>?> EnableDisable(String id,String userId, bool disabled) async {
     Uri? url;
     http.Response? resp;
     Map<String, dynamic>? decodedResp;
+
+    final List<dynamic> datos = [resp,decodedResp,false];
 
     String? token = await readToken();
     print(disabled);
@@ -61,25 +69,31 @@ class OrganizationUserslistService extends ChangeNotifier {
         "Content-Type": "application/json",
         "Access-Control_Allow_Origin": "*",
         'Authorization': 'Bearer $token',
-      });
+      }).timeout(const Duration(seconds: 10));
+      datos[2]=true;
       decodedResp = json.decode(resp.body);
+      datos[0]=resp;
+      datos[1]=decodedResp;
       print(decodedResp);
     } catch (e) {
       print('ERROR!');
       print(e.toString());
+      return datos;
     }
 
-    if (resp?.statusCode == 200) {
-      return true;
+    if (resp.statusCode == 200) {
+      return datos;
     } else {
-      return false;
+      return datos;
     }
   }
 
-  Future<bool> DeleteUsers(String id,String userId) async {
+  Future<List<dynamic>?> DeleteUsers(String id,String userId) async {
     Uri? url;
     http.Response? resp;
     Map<String, dynamic>? decodedResp;
+    
+    final List<dynamic> datos = [resp,decodedResp,false];
 
     String? token = await readToken();
 
@@ -91,18 +105,22 @@ class OrganizationUserslistService extends ChangeNotifier {
         "Content-Type": "application/json",
         "Access-Control_Allow_Origin": "*",
         'Authorization': 'Bearer $token',
-      });
+      }).timeout(const Duration(seconds: 10));
+      datos[2]=true;
       decodedResp = json.decode(resp.body);
+      datos[0]=resp;
+      datos[1]=decodedResp;
       print(decodedResp);
     } catch (e) {
       print('ERROR!');
       print(e.toString());
+      return datos;
     }
 
-    if (resp?.statusCode == 200) {
-      return true;
+    if (resp.statusCode == 200) {
+      return datos;
     } else {
-      return false;
+      return datos;
     }
   }
 

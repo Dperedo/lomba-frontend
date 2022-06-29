@@ -65,23 +65,7 @@ class UserEditPage extends StatelessWidget {
               Navigator.of(context).pushReplacement(
                   RouteAnimation.animatedTransition(const AllUsers()));
             }),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.save),
-            tooltip: 'Guardar',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBarGenerator.getNotificationMessage(
-                      'Cambios guardados'));
-
-              Navigator.of(context)
-                  .push(RouteAnimation.animatedTransition(const AllUsers()))
-                  .then((value) => ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBarGenerator.getNotificationMessage(
-                          'Cambios guardados')));
-            },
-          )
-        ]);
+        );
   }
 }
 
@@ -165,28 +149,26 @@ class UserEditFormState extends State<UserEditForm> {
                             child: FutureBuilder(future: userService.SearchUser(iduser),
                               builder: (BuildContext context, AsyncSnapshot<List<dynamic>?> snapshot) {
                               if (snapshot.data == null) {
-                                return Text('nada');
+                                return const CircularProgressIndicator();
                               }
                               final us = snapshot.data;
                               //print(us);
-                              print(us?.length);
+                              print(us?[1].length);
                               print('eso fue la lista de usuarios');
                               return Column(
                                 children: [
                                   //Text('data1'),
                                   ListView.builder(
                                     shrinkWrap: true,
-                                    itemCount: us?.length,
+                                    itemCount: us?[1].length,
                                     itemBuilder: (context, index){
-                                      //final object =us?[index]["orga"]["name"];
-                                      
                                       return //Text('data2');
                                       Row(
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 15),
                                             child: Text(
-                                              us?[index]["orga"]["name"],
+                                              us?[1][index]["orga"]["name"],
                                               //'superuser',
                                               style: DefaultTextStyle.of(context)
                                                   .style
@@ -198,21 +180,21 @@ class UserEditFormState extends State<UserEditForm> {
                                             onPressed: (() {
                                               setState(() {
                                                 print('antes del for');
-                                                for(var i=0; i<us?[index]["roles"].length;i++){
+                                                for(var i=0; i<us?[1][index]["roles"].length;i++){
                                                   print('hola');
-                                                  if (us?[index]["roles"][i]["name"] == 'superadmin') {// us?[index]!["roles"]["name"]
+                                                  if (us?[1][index]["roles"][i]["name"] == 'superadmin') {// us?[index]!["roles"]["name"]
                                                     isChecked1 = true;
                                                   }
-                                                  if (us?[index]["roles"][i]["name"] == 'admin') {
+                                                  if (us?[1][index]["roles"][i]["name"] == 'admin') {
                                                     isChecked2 = true;
                                                   }
-                                                  if (us?[index]["roles"][i]["name"] == 'basic') {
+                                                  if (us?[1][index]["roles"][i]["name"] == 'basic') {
                                                     isChecked3 = true;
                                                   }
                                                 }
-                                                orgaid = us?[index]["orga"]["id"];
-                                                print(us?[index]["orga"]["name"]);
-                                                dropdownValue = us?[index]["orga"]["name"];
+                                                orgaid = us?[1][index]["orga"]["id"];
+                                                print(us?[1][index]["orga"]["name"]);
+                                                dropdownValue = us?[1][index]["orga"]["name"];
                                                 _visible = !_visible;
                                                 print('despues del for');
                                               });
@@ -222,14 +204,37 @@ class UserEditFormState extends State<UserEditForm> {
                                             icon: const Icon(Icons.cancel),
                                             onPressed: (() async {
                                               print('Antes de agregar la orga');
-                                              final bool message = await userEditService.DeleteUsers(us?[index]["orga"]["id"],iduser);
-                                              if(message == true) {
-                                                print('OK');
+                                              final List<dynamic>? message = await userEditService.DeleteUsers(us?[1][index]["orga"]["id"],iduser);
+
+                                              if ( !message?[2] ){
+                                                print('segundo if error');
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  SnackBarGenerator.getNotificationMessage(
+                                                      'Conexión con el servidor no establecido'));
+                                              } else if ( message?[0].statusCode == 200){
                                                 ScaffoldMessenger.of(context).showSnackBar(
                                                   SnackBarGenerator.getNotificationMessage(
                                                       'Se ha quitado organización del usuario'));
-                                              }else{
-                                                print('error');
+                                              } else if (message?[0].statusCode >= 400 && message?[0].statusCode <= 400) {
+                                                if(message?[0].statusCode == 401) {
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                  SnackBarGenerator.getNotificationMessage(
+                                                      'Ocurrió un problema con la autentificación'));
+                                                }else if(message?[0].statusCode == 403) {
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                  SnackBarGenerator.getNotificationMessage(
+                                                      'Ocurrió un problema con la Solicitud'));
+                                                }else {
+                                                  print('400 error');
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                  SnackBarGenerator.getNotificationMessage(
+                                                      'Ocurrió una solicitud Incorrecta'));
+                                                }
+                                              } else {
+                                                print('salio error');
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  SnackBarGenerator.getNotificationMessage(
+                                                      'Error con el servidor'));
                                               }
                                             }),
                                           ),
@@ -289,12 +294,10 @@ class UserEditFormState extends State<UserEditForm> {
                     children: [
                       //const Divider(),
                       FutureBuilder(
-                        future: organizationService.OrganizationList(),
+                        future: organizationService.OrganizationList2(),
                         builder: (BuildContext context, AsyncSnapshot<List<dynamic>?> snapshot) {
                           final orga = snapshot.data;
                           final numOrgas = orga?.length;
-                          //print('resultado de orga');
-                          //print(orga?[0]["name"]);
                           return Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
@@ -457,22 +460,3 @@ class LombaTextFieldForm extends StatelessWidget {
     );
   }
 }
-/*class MyDropdownButton extends StatelessWidget {
-  const MyDropdownButton({Key? key}) : super(key: key);
-
-  
-  @override
-  Widget build(BuildContext context) {
-    final userService = Provider.of<UserService>(context, listen: false);
-    String dropdownValue = 'Lomba';
-    return Center(
-      child: FutureBuilder(
-                        future: userService.UserList(),
-                        builder: (BuildContext context, AsyncSnapshot<List<dynamic>?> snapshot) {
-                          //final lista = snapshot.data;
-                          //return 
-                        }
-                      ),
-    );
-  }
-}*/
