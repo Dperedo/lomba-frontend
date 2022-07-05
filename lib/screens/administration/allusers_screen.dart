@@ -9,6 +9,7 @@ import 'package:front_lomba/widgets/lomba_sidemenu.dart';
 import 'package:front_lomba/widgets/lomba_titlepage.dart';
 import 'package:front_lomba/widgets/userdetail_dialog.dart';
 import 'package:front_lomba/widgets/lomba_dialog_error.dart';
+import 'package:front_lomba/widgets/lomba_sized_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 import '../../helpers/route_animation.dart';
@@ -39,80 +40,101 @@ class AllUsersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final allusersService = Provider.of<UserService>(context, listen: false);
-    return Scaffold(
+    final screenWidth = MediaQuery.of(context).size.width;
+    const breakpoint = 1200.0;
+    if (screenWidth <= breakpoint) {
+      return SmallScreen(title: title, principal: AllUserBody(allusersService: allusersService));
+    } else {
+      return BigScreen(title: title, principal: AllUserBody(allusersService: allusersService));
+    }
+    /*return Scaffold(
       appBar: LombaAppBar(title: title),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const LombaTitlePage(
-              title: "Todos los usuarios",
-              subtitle: "Administrador / Todos los usuarios",
-            ),
-            Padding(
-              padding: EdgeInsets.zero,
-              child: Builder(builder: (BuildContext context) {
-                print('muere?');
-
-                return Padding(
-                  padding: EdgeInsets.zero,
-                  child: FutureBuilder(
-                      future: allusersService.UserList(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<dynamic>?> snapshot) {
-                        if (snapshot.data == null) {
-                          return const CircularProgressIndicator();
-                        }
-                        final ps = snapshot.data;
-                        if ( !ps?[2] ){
-                          print('segundo if error');
-                          return const LombaDialogErrorDisconnect();
-                        }else if ( ps?[0].statusCode == 200){
-                          return Column(
-                            children: [
-                              const LombaFilterListPage(),
-                              const Divider(),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: ps?[1].length,
-                                itemBuilder: (context, index) {
-                                  final item = index.toString();
-
-                                  return Column(
-                                    children: [
-                                      AllUsersListItem(
-                                        id: ps?[1][index]["id"],
-                                        username: ps?[1][index]["username"],
-                                        habilitado: ps?[1][index]["isDisabled"],
-                                      ),
-                                      const Divider()
-                                    ],
-                                  );
-                                },
-                              ),
-                            ],
-                          );
-                        } else if (ps?[0].statusCode >= 400 && ps?[0].statusCode <= 400) {
-                          print('400 error');
-                          if(ps?[0].statusCode == 401) {
-                            return const LombaDialogError401();
-                          } else if(ps?[0].statusCode == 403) {
-                            return const LombaDialogError403();
-                          }
-                          return const LombaDialogError400();
-                        } else {
-                          print('salio error');
-                          return const LombaDialogError();
-                        }
-                      }
-                    ),
-                  );
-                }
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: AllUserBody(allusersService: allusersService),
       drawer: const LombaSideMenu(),
+    );*/
+  }
+}
+
+class AllUserBody extends StatelessWidget {
+  const AllUserBody({
+    Key? key,
+    required this.allusersService,
+  }) : super(key: key);
+
+  final UserService allusersService;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const LombaTitlePage(
+            title: "Todos los usuarios",
+            subtitle: "Administrador / Todos los usuarios",
+          ),
+          Padding(
+            padding: EdgeInsets.zero,
+            child: Builder(builder: (BuildContext context) {
+              print('muere?');
+
+              return Padding(
+                padding: EdgeInsets.zero,
+                child: FutureBuilder(
+                    future: allusersService.UserList(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<dynamic>?> snapshot) {
+                      if (snapshot.data == null) {
+                        return const CircularProgressIndicator();
+                      }
+                      final ps = snapshot.data;
+                      if ( !ps?[2] ){
+                        print('segundo if error');
+                        return const LombaDialogErrorDisconnect();
+                      }else if ( ps?[0].statusCode == 200){
+                        return Column(
+                          children: [
+                            const LombaFilterListPage(),
+                            const Divider(),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: ps?[1].length,
+                              itemBuilder: (context, index) {
+                                final item = index.toString();
+
+                                return Column(
+                                  children: [
+                                    AllUsersListItem(
+                                      id: ps?[1][index]["id"],
+                                      username: ps?[1][index]["username"],
+                                      habilitado: ps?[1][index]["isDisabled"],
+                                    ),
+                                    const Divider()
+                                  ],
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      } else if (ps?[0].statusCode >= 400 && ps?[0].statusCode <= 400) {
+                        print('400 error');
+                        if(ps?[0].statusCode == 401) {
+                          return const LombaDialogError401();
+                        } else if(ps?[0].statusCode == 403) {
+                          return const LombaDialogError403();
+                        }
+                        return const LombaDialogError400();
+                      } else {
+                        print('salio error');
+                        return const LombaDialogError();
+                      }
+                    }
+                  ),
+                );
+              }
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

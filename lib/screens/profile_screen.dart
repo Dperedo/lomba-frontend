@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/screens/administration/user_edit_screen.dart';
 import 'package:front_lomba/widgets/lomba_sidemenu.dart';
+import 'package:front_lomba/widgets/lomba_appbar.dart';
+import 'package:front_lomba/widgets/lomba_sized_screen.dart';
 import 'package:provider/provider.dart';
 
 class UserProfile extends StatelessWidget {
@@ -27,17 +29,30 @@ class UserProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title), actions: [
-        IconButton(
-          icon: const Icon(Icons.edit),
-          tooltip: 'Perfil',
-          onPressed: () {
-            //Navigator.push(context,MaterialPageRoute(builder: (context) => const UserEdit()));
-          },
-        )
-      ]),
-      body: Center(
+    final screenWidth = MediaQuery.of(context).size.width;
+    const breakpoint = 1200.0;
+    if (screenWidth <= breakpoint) {
+      return SmallScreen(title: title, principal: const ProfileBody());
+    } else {
+      return BigScreen(title: title, principal: const ProfileBody());
+    }
+    /*return Scaffold(
+      appBar: LombaAppBar(title: title),
+      body: ProfileBody(),
+      drawer: const LombaSideMenu(),
+    );*/
+  }
+}
+
+class ProfileBody extends StatelessWidget {
+  const ProfileBody({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -46,7 +61,6 @@ class UserProfilePage extends StatelessWidget {
           ],
         ),
       ),
-      drawer: const LombaSideMenu(),
     );
   }
 }

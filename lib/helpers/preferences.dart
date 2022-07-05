@@ -3,6 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Preferences {
   static late SharedPreferences _prefs;
   static bool _isDarkmode = true;
+  static int maxScreen = 1200;
+  static int paddingLeft = 50;
+  static int paddingRight = 50;
 
   static Future init() async {
     _prefs = await SharedPreferences.getInstance();
