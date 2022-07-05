@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:front_lomba/helpers/snackbars.dart';
 
 import 'package:front_lomba/helpers/route_animation.dart';
+import 'package:front_lomba/helpers/preferences.dart';
 import 'package:front_lomba/screens/administration/allusers_screen.dart';
 import 'package:front_lomba/widgets/lomba_titlepage.dart';
 import 'package:front_lomba/widgets/lomba_sized_screen.dart';
@@ -41,7 +42,7 @@ class UserEditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    const breakpoint = 1200.0;
+    final int breakpoint = Preferences.maxScreen;
     if (screenWidth <= breakpoint) {
       return SmallScreen(title: title, principal: UserEditBody(iduser: iduser));
     } else {

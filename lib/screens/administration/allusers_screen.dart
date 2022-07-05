@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/helpers/snackbars.dart';
+import 'package:front_lomba/helpers/preferences.dart';
 import 'package:front_lomba/screens/administration/user_edit_screen.dart';
 
 import 'package:front_lomba/widgets/lomba_appbar.dart';
@@ -41,7 +42,7 @@ class AllUsersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final allusersService = Provider.of<UserService>(context, listen: false);
     final screenWidth = MediaQuery.of(context).size.width;
-    const breakpoint = 1200.0;
+    final int breakpoint = Preferences.maxScreen;
     if (screenWidth <= breakpoint) {
       return SmallScreen(title: title, principal: AllUserBody(allusersService: allusersService));
     } else {

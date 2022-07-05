@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
+import 'package:front_lomba/helpers/preferences.dart';
 import 'package:front_lomba/screens/administration/user_edit_screen.dart';
 import 'package:front_lomba/widgets/lomba_sidemenu.dart';
 import 'package:front_lomba/widgets/lomba_appbar.dart';
@@ -30,7 +31,7 @@ class UserProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    const breakpoint = 1200.0;
+    final int breakpoint = Preferences.maxScreen;
     if (screenWidth <= breakpoint) {
       return SmallScreen(title: title, principal: const ProfileBody());
     } else {

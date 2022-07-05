@@ -22,7 +22,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    const breakpoint = 1200.0;
+    final int breakpoint = Preferences.maxScreen;
     if (screenWidth <= breakpoint) {
       return SmallScreen(title: title, principal: SettingBody(context));
     } else {

@@ -36,7 +36,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    const breakpoint = 1200;
+    final int breakpoint = Preferences.maxScreen;
     if (screenWidth <= breakpoint) {
       return SmallScreen(title: title, principal: const HomePrincipal());
     } else {

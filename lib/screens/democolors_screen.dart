@@ -4,6 +4,7 @@ import 'package:front_lomba/widgets/lomba_appbar.dart';
 import 'package:front_lomba/widgets/lomba_sidemenu.dart';
 import 'package:front_lomba/widgets/lomba_titlepage.dart';
 import 'package:front_lomba/widgets/lomba_sized_screen.dart';
+import 'package:front_lomba/helpers/preferences.dart';
 import 'package:provider/provider.dart';
 
 class DemoColors extends StatefulWidget {
@@ -19,7 +20,7 @@ class _DemoColorsState extends State<DemoColors> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    const breakpoint = 1200.0;
+    final int breakpoint = Preferences.maxScreen;
     if (screenWidth <= breakpoint) {
       return SmallScreen(title: 'Demo Colores', principal: DemoBody());
     } else {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/helpers/snackbars.dart';
+import 'package:front_lomba/helpers/preferences.dart';
 import 'package:front_lomba/widgets/lomba_appbar.dart';
 import 'package:front_lomba/widgets/lomba_dialog_notyes.dart';
 import 'package:front_lomba/widgets/lomba_filterlistpage.dart';
@@ -43,7 +44,7 @@ class OrganizationUsersListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final organizationUserslistService = Provider.of<OrganizationUserslistService>(context, listen: false);
     final screenWidth = MediaQuery.of(context).size.width;
-    const breakpoint = 1200.0;
+    final int breakpoint = Preferences.maxScreen;
     if (screenWidth <= breakpoint) {
       return SmallScreen(title: title, principal: UserListBody(organizationUserslistService: organizationUserslistService, id: id));
     } else {

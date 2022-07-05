@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/helpers/route_animation.dart';
+import 'package:front_lomba/helpers/preferences.dart';
 import 'package:front_lomba/screens/administration/organization_userslist_screen.dart';
 
 import 'package:provider/provider.dart';
@@ -40,7 +41,7 @@ class OrganizationsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final organizationService = Provider.of<OrganizationService>(context, listen: false);
     final screenWidth = MediaQuery.of(context).size.width;
-    const breakpoint = 1200.0;
+    final int breakpoint = Preferences.maxScreen;
     if (screenWidth <= breakpoint) {
       return SmallScreen(title: title, principal: OrgaBody(organizationService: organizationService));
     } else {
