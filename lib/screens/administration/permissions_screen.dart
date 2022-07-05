@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/helpers/snackbars.dart';
+import 'package:front_lomba/helpers/preferences.dart';
 import 'package:front_lomba/widgets/lomba_appbar.dart';
 import 'package:front_lomba/widgets/lomba_dialog_notyes.dart';
 import 'package:front_lomba/widgets/lomba_filterlistpage.dart';
@@ -10,6 +11,7 @@ import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/services/permission_service.dart';
 import 'package:front_lomba/services/auth_service.dart';
 import 'package:front_lomba/widgets/lomba_dialog_error.dart';
+import 'package:front_lomba/widgets/lomba_sized_screen.dart';
 import 'package:front_lomba/screens/login_screen.dart';
 import 'package:front_lomba/helpers/route_animation.dart';
 
@@ -38,87 +40,99 @@ class _PermissionsPage extends StatelessWidget {
   @override
   build(BuildContext context)  {
     final permiService = Provider.of<PermissionsService>(context, listen: false);
-    final pingService = Provider.of<AuthService>(context, listen: false);
-    /*final bool resp = await pingService.Ping();
-      print('antes del login');
-      print(resp);
-    if( resp == true ){
-      print('navegar a login');
-      Navigator.of(context).push(RouteAnimation.animatedTransition(LoginScreen()));
-    }*/
-    return Scaffold(
+    final screenWidth = MediaQuery.of(context).size.width;
+    final int breakpoint = Preferences.maxScreen;
+    if (screenWidth <= breakpoint) {
+      return SmallScreen(title: title, principal: PermisoBody(permiService: permiService));
+    } else {
+      return BigScreen(title: title, principal: PermisoBody(permiService: permiService));
+    }
+    /*return Scaffold(
       appBar: LombaAppBar(title: title),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const LombaTitlePage(
-              title: "Permisos",
-              subtitle: "Administración / Permisos",
-            ),
-            Padding(
-              padding: EdgeInsets.zero,
-              child: Builder(builder: (BuildContext context) {
-                print('muere?');
-
-                return Padding(
-                  padding: EdgeInsets.zero,
-                  child: FutureBuilder(
-                      future: permiService.PermissionsList(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<dynamic>?> snapshot) {
-                        if (snapshot.data == null) {
-                          return const CircularProgressIndicator();
-                        } 
-                        final ps = snapshot.data;
-                        if ( !ps?[2] ){
-                          print('segundo if error');
-                          return const LombaDialogErrorDisconnect();
-                        }else if ( ps?[0].statusCode == 200){ 
-                          return Column(
-                            children: [
-                              const LombaFilterListPage(),
-                              const Divider(),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: ps?[1].length,
-                                itemBuilder: (context, index) {
-                                  final item = index.toString();
-
-                                  return Column(
-                                    children: [
-                                      PermissionListItem(
-                                        permission: ps?[1][index]["name"],
-                                        habilitado: ps?[1][index]["isDisabled"],
-                                      ),
-                                      const Divider()
-                                    ],
-                                  );
-                                },
-                              ),
-                            ],
-                          );
-                        } else if (ps?[0].statusCode >= 400 && ps?[0].statusCode <= 400) {
-                          print('400 error');
-                          if(ps?[0].statusCode == 401) {
-                            return const LombaDialogError401();
-                          } else if(ps?[0].statusCode == 403) {
-                            return const LombaDialogError403();
-                          }
-                          return const LombaDialogError400();
-                        } else {
-                          print('salio error');
-                          return const LombaDialogError();
-                        }
-                  }),
-                );
-              }),
-            ),
-          ],
-        ),
-      ),
+      body: PermisoBody(permiService: permiService),
       drawer: const LombaSideMenu(),
+    );*/
+  }
+}
+
+class PermisoBody extends StatelessWidget {
+  const PermisoBody({
+    Key? key,
+    required this.permiService,
+  }) : super(key: key);
+
+  final PermissionsService permiService;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const LombaTitlePage(
+            title: "Permisos",
+            subtitle: "Administración / Permisos",
+          ),
+          Padding(
+            padding: EdgeInsets.zero,
+            child: Builder(builder: (BuildContext context) {
+              print('muere?');
+
+              return Padding(
+                padding: EdgeInsets.zero,
+                child: FutureBuilder(
+                    future: permiService.PermissionsList(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<dynamic>?> snapshot) {
+                      if (snapshot.data == null) {
+                        return const CircularProgressIndicator();
+                      } 
+                      final ps = snapshot.data;
+                      if ( !ps?[2] ){
+                        print('segundo if error');
+                        return const LombaDialogErrorDisconnect();
+                      }else if ( ps?[0].statusCode == 200){ 
+                        return Column(
+                          children: [
+                            const LombaFilterListPage(),
+                            const Divider(),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: ps?[1].length,
+                              itemBuilder: (context, index) {
+                                final item = index.toString();
+
+                                return Column(
+                                  children: [
+                                    PermissionListItem(
+                                      permission: ps?[1][index]["name"],
+                                      habilitado: ps?[1][index]["isDisabled"],
+                                    ),
+                                    const Divider()
+                                  ],
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      } else if (ps?[0].statusCode >= 400 && ps?[0].statusCode <= 400) {
+                        print('400 error');
+                        if(ps?[0].statusCode == 401) {
+                          return const LombaDialogError401();
+                        } else if(ps?[0].statusCode == 403) {
+                          return const LombaDialogError403();
+                        }
+                        return const LombaDialogError400();
+                      } else {
+                        print('salio error');
+                        return const LombaDialogError();
+                      }
+                }),
+              );
+            }),
+          ),
+        ],
+      ),
     );
-    //);
   }
 }
 

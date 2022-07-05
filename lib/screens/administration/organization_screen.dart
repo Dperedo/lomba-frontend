@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_lomba/helpers/route_animation.dart';
+import 'package:front_lomba/helpers/preferences.dart';
 import 'package:front_lomba/screens/administration/organization_userslist_screen.dart';
 
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import 'package:front_lomba/widgets/lomba_filterlistpage.dart';
 import 'package:front_lomba/widgets/lomba_sidemenu.dart';
 import 'package:front_lomba/widgets/lomba_titlepage.dart';
 import 'package:front_lomba/widgets/lomba_dialog_error.dart';
+import 'package:front_lomba/widgets/lomba_sized_screen.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/helpers/snackbars.dart';
 import 'package:front_lomba/services/organization_service.dart';
@@ -38,79 +40,100 @@ class OrganizationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final organizationService = Provider.of<OrganizationService>(context, listen: false);
-    return Scaffold(
+    final screenWidth = MediaQuery.of(context).size.width;
+    final int breakpoint = Preferences.maxScreen;
+    if (screenWidth <= breakpoint) {
+      return SmallScreen(title: title, principal: OrgaBody(organizationService: organizationService));
+    } else {
+      return BigScreen(title: title, principal: OrgaBody(organizationService: organizationService));
+    }
+    /*return Scaffold(
       appBar: LombaAppBar(title: title),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const LombaTitlePage(
-              title: "Organizaciones",
-              subtitle: "Administrador / Organizaciones",
-            ),
-            Padding(
-              padding: EdgeInsets.zero,
-              child: Builder(builder: (BuildContext context) {
-                print('muere?');
-
-                return Padding(
-                  padding: EdgeInsets.zero,
-                  child: FutureBuilder(
-                      future: organizationService.OrganizationList(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<dynamic>?> snapshot) {
-                        if (snapshot.data == null) {
-                          return const CircularProgressIndicator();
-                        }
-                        final ps = snapshot.data;
-                        if ( !ps?[2] ){
-                          return const LombaDialogErrorDisconnect();
-                        } else if ( ps?[0].statusCode == 200 ) {
-                          return Column(
-                          children: [
-                            const LombaFilterListPage(),
-                            const Divider(),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: ps?[1].length,
-                              itemBuilder: (context, index) {
-                                //final item = index.toString();
-
-                                return Column(
-                                  children: [
-                                    OrganizationListItem(
-                                      id: ps?[1][index]["id"],
-                                      organizacion: ps?[1][index]["name"],
-                                      icon: Icons.business,
-                                      habilitado: ps?[1][index]["isDisabled"],
-                                    ),
-                                    const Divider()
-                                  ],
-                                );
-                              },
-                            ),
-                          ],
-                        );
-                        } else if (ps?[0].statusCode >= 400 && ps?[0].statusCode <= 400) {
-                          print('400 error');
-                          if(ps?[0].statusCode == 401) {
-                            return const LombaDialogError401();
-                          } else if(ps?[0].statusCode == 403) {
-                            return const LombaDialogError403();
-                          }
-                          return const LombaDialogError400();
-                        } else {
-                          print('entro error');
-                          return const LombaDialogError();
-                        }
-                        
-                      }),
-                );
-              }),
-            ),
-          ],
-        ),
-      ),
+      body: OrgaBody(organizationService: organizationService),
       drawer: const LombaSideMenu(),
+    );*/
+  }
+}
+
+class OrgaBody extends StatelessWidget {
+  const OrgaBody({
+    Key? key,
+    required this.organizationService,
+  }) : super(key: key);
+
+  final OrganizationService organizationService;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const LombaTitlePage(
+            title: "Organizaciones",
+            subtitle: "Administrador / Organizaciones",
+          ),
+          Padding(
+            padding: EdgeInsets.zero,
+            child: Builder(builder: (BuildContext context) {
+              print('muere?');
+
+              return Padding(
+                padding: EdgeInsets.zero,
+                child: FutureBuilder(
+                    future: organizationService.OrganizationList(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<dynamic>?> snapshot) {
+                      if (snapshot.data == null) {
+                        return const CircularProgressIndicator();
+                      }
+                      final ps = snapshot.data;
+                      if ( !ps?[2] ){
+                        return const LombaDialogErrorDisconnect();
+                      } else if ( ps?[0].statusCode == 200 ) {
+                        return Column(
+                        children: [
+                          const LombaFilterListPage(),
+                          const Divider(),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: ps?[1].length,
+                            itemBuilder: (context, index) {
+                              //final item = index.toString();
+
+                              return Column(
+                                children: [
+                                  OrganizationListItem(
+                                    id: ps?[1][index]["id"],
+                                    organizacion: ps?[1][index]["name"],
+                                    icon: Icons.business,
+                                    habilitado: ps?[1][index]["isDisabled"],
+                                  ),
+                                  const Divider()
+                                ],
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                      } else if (ps?[0].statusCode >= 400 && ps?[0].statusCode <= 400) {
+                        print('400 error');
+                        if(ps?[0].statusCode == 401) {
+                          return const LombaDialogError401();
+                        } else if(ps?[0].statusCode == 403) {
+                          return const LombaDialogError403();
+                        }
+                        return const LombaDialogError400();
+                      } else {
+                        print('entro error');
+                        return const LombaDialogError();
+                      }
+                      
+                    }),
+              );
+            }),
+          ),
+        ],
+      ),
     );
   }
 }

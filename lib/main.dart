@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:front_lomba/screens/administration/allusers_screen.dart';
 import 'package:front_lomba/screens/administration/organization_screen.dart';
 import 'package:front_lomba/screens/administration/organization_userslist_screen.dart';
@@ -19,6 +20,9 @@ import 'package:front_lomba/services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  /*SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]).then((_){
+           runApp(MyApp());
+           });*/
 
   await Preferences.init();
 

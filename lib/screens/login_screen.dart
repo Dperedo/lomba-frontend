@@ -8,40 +8,81 @@ import 'package:front_lomba/services/auth_service.dart';
 
 import '../helpers/snackbars.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: AuthBackground(
-            child: SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(height: 250),
-
-          CardContainer(
-              child: Column(
-            children: [
-              SizedBox(height: 10),
-              Text('Login',
-                  style: TextStyle(
-                      color: Colors.grey.shade700,
-                      fontSize:
-                          45)), //Theme.of(context).textTheme.headline4,  ),
-              SizedBox(height: 30),
-
-              ChangeNotifierProvider(
-                  create: (_) => LoginFormProvider(), child: _LoginForm())
-            ],
-          )),
-
-          SizedBox(height: 50),
-          //Text('Crear una nueva cuenta', style: TextStyle( fontSize: 18, fontWeight: FontWeight.bold ),),
-          SizedBox(height: 50),
-        ],
-      ),
-    )));
+      body: OrientationBuilder(
+        builder: (context, orientation) =>
+          orientation == Orientation.portrait ? buildPortrait() : buildLandscape(),
+        
+      ));
   }
 }
+
+  Widget buildPortrait() => AuthBackground(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(height: 250),
+
+                    CardContainer(
+                        child: Column(
+                      children: [
+                        SizedBox(height: 10),
+                        Text('Login',
+                            style: TextStyle(
+                                color: Colors.grey.shade700,
+                                fontSize:
+                                    45)), //Theme.of(context).textTheme.headline4,  ),
+                        SizedBox(height: 30),
+
+                        ChangeNotifierProvider(
+                            create: (_) => LoginFormProvider(), child: _LoginForm())
+                      ],
+                    )),
+
+                    SizedBox(height: 50),
+                    //Text('Crear una nueva cuenta', style: TextStyle( fontSize: 18, fontWeight: FontWeight.bold ),),
+                    SizedBox(height: 50),
+                  ],
+                ),
+    ));
+
+  Widget buildLandscape() => AuthBackground(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(height: 250),
+
+                    CardContainerLandscape(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 10),
+                            Text('Login',
+                                style: TextStyle(
+                                    color: Colors.grey.shade700,
+                                    fontSize:
+                                        45)), //Theme.of(context).textTheme.headline4,  ),
+                            SizedBox(height: 30),
+
+                            ChangeNotifierProvider(
+                                create: (_) => LoginFormProvider(), child: _LoginForm())
+                          ],
+                        )
+                      ),
+
+                    SizedBox(height: 50),
+                    //Text('Crear una nueva cuenta', style: TextStyle( fontSize: 18, fontWeight: FontWeight.bold ),),
+                    SizedBox(height: 50),
+                  ],
+                ),
+    ));
 
 class _LoginForm extends StatelessWidget {
   @override
@@ -241,7 +282,39 @@ class CardContainer extends StatelessWidget {
   BoxDecoration _createCardShape() => BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(25),
-          boxShadow: [
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 15,
+              offset: Offset(0, 5),
+            )
+          ]);
+}
+
+class CardContainerLandscape extends StatelessWidget {
+  final Widget child;
+
+  const CardContainerLandscape({Key? key, required this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 30),
+      child: Center(
+        child: Container(
+          width: 400,//double.infinity,
+          padding: EdgeInsets.all(20),
+          decoration: _createCardShape(),
+          child: this.child,
+        ),
+      ),
+    );
+  }
+
+  BoxDecoration _createCardShape() => BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(25),
+          boxShadow: const [
             BoxShadow(
               color: Colors.black12,
               blurRadius: 15,
@@ -297,4 +370,31 @@ class InputDecorations {
 }
 
 //----------------------------------------------------------------------------
+/*return AuthBackground(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(height: 250),
 
+                    CardContainer(
+                        child: Column(
+                      children: [
+                        SizedBox(height: 10),
+                        Text('Login',
+                            style: TextStyle(
+                                color: Colors.grey.shade700,
+                                fontSize:
+                                    45)), //Theme.of(context).textTheme.headline4,  ),
+                        SizedBox(height: 30),
+
+                        ChangeNotifierProvider(
+                            create: (_) => LoginFormProvider(), child: _LoginForm())
+                      ],
+                    )),
+
+                    SizedBox(height: 50),
+                    //Text('Crear una nueva cuenta', style: TextStyle( fontSize: 18, fontWeight: FontWeight.bold ),),
+                    SizedBox(height: 50),
+                  ],
+                ),
+            ));*/

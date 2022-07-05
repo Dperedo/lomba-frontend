@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/widgets/lomba_appbar.dart';
+import 'package:front_lomba/widgets/lomba_appmenu.dart';
 import 'package:front_lomba/widgets/lomba_sidemenu.dart';
 import 'package:front_lomba/widgets/lomba_titlepage.dart';
+import 'package:front_lomba/widgets/lomba_sized_screen.dart';
+import 'package:front_lomba/helpers/preferences.dart';
 import 'package:provider/provider.dart';
 
 //void main() => runApp(const Home());
@@ -32,21 +35,34 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: LombaAppBar(title: title),
-      body: SingleChildScrollView(
-        child: Column(
-          children: const [
-            LombaTitlePage(
-              title: "Inicio",
-              subtitle: "Home",
-            ),
-            Divider(),
-            //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
-          ],
-        ),
+    final screenWidth = MediaQuery.of(context).size.width;
+    final int breakpoint = Preferences.maxScreen;
+    if (screenWidth <= breakpoint) {
+      return SmallScreen(title: title, principal: const HomePrincipal());
+    } else {
+      return BigScreen(title: title, principal: const HomePrincipal());
+    }
+  }
+}
+
+class HomePrincipal extends StatelessWidget {
+  const HomePrincipal({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: const [
+          LombaTitlePage(
+            title: "Inicio",
+            subtitle: "Home",
+          ),
+          Divider(),
+          //Text('Organizaciones!',style: Theme.of(context).textTheme.headline3,),
+        ],
       ),
-      drawer: const LombaSideMenu(),
     );
   }
 }

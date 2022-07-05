@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:front_lomba/helpers/snackbars.dart';
 
 import 'package:front_lomba/helpers/route_animation.dart';
+import 'package:front_lomba/helpers/preferences.dart';
 import 'package:front_lomba/screens/administration/allusers_screen.dart';
 import 'package:front_lomba/widgets/lomba_titlepage.dart';
+import 'package:front_lomba/widgets/lomba_sized_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/services/organization_service.dart';
@@ -39,21 +41,18 @@ class UserEditPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final screenWidth = MediaQuery.of(context).size.width;
+    final int breakpoint = Preferences.maxScreen;
+    if (screenWidth <= breakpoint) {
+      return SmallScreen(title: title, principal: UserEditBody(iduser: iduser));
+    } else {
+      return BigScreen(title: title, principal: UserEditBody(iduser: iduser));
+    }
+    /*return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: appBarToBack(context),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const LombaTitlePage(
-              title: "Editar usuario",
-              subtitle: "Administrador / Todos usuarios / Editar Perfil",
-            ),
-            UserEditForm(user: iduser),
-          ],
-        ),
-      ),
-    );
+      body: UserEditBody(iduser: iduser),
+    );*/
   }
 
   AppBar appBarToBack(BuildContext context) {
@@ -66,6 +65,30 @@ class UserEditPage extends StatelessWidget {
                   RouteAnimation.animatedTransition(const AllUsers()));
             }),
         );
+  }
+}
+
+class UserEditBody extends StatelessWidget {
+  const UserEditBody({
+    Key? key,
+    required this.iduser,
+  }) : super(key: key);
+
+  final String iduser;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const LombaTitlePage(
+            title: "Editar usuario",
+            subtitle: "Administrador / Todos usuarios / Editar Perfil",
+          ),
+          UserEditForm(user: iduser),
+        ],
+      ),
+    );
   }
 }
 
