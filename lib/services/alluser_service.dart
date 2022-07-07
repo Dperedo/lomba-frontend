@@ -9,7 +9,7 @@ class UserService extends ChangeNotifier {
   bool isLoading = true;
 
   Future<List<dynamic>?> UserList() async {
-    final url = Uri.parse('$_baseUrl/api/v1/User');
+    final url = Uri.parse('$_baseUrl/api/v1/User/orgacount');
 
     http.Response? resp;
     List<dynamic>? decodedResp;

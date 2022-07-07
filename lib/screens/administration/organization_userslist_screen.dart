@@ -200,62 +200,122 @@ class OrganizationUsersListItem extends StatelessWidget {
           const SizedBox(
             width: 20,
           ),
-          FloatingActionButton(
-            heroTag: null,
-            tooltip: 'Desactivar usuario de la organización',
-            onPressed: () async {
-              showDialog<String>(
-                context: context,
-                builder: (context) => GestureDetector(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: LombaDialogNotYes(
-                    itemName: username,
-                    titleMessage: 'Desactivar',
-                    dialogMessage:
-                        '¿Desea desactivar al usuario de la organización?',
+          if(habilitado)...[
+            FloatingActionButton(
+              heroTag: null,
+              tooltip: 'Activar usuario de la organización',
+              onPressed: () async {
+                showDialog<String>(
+                  context: context,
+                  builder: (context) => GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: LombaDialogNotYes(
+                      itemName: username,
+                      titleMessage: 'Activar',
+                      dialogMessage:
+                          '¿Desea activar al usuario de la organización?',
+                    ),
                   ),
-                ),
-              ).then((value) async {
-                    if (value == 'Sí')
-                      {
-                        print(userId);
-                        final List<dynamic>? respuesta = await organizationUserslistService.EnableDisable(id,userId,!habilitado);
+                ).then((value) async {
+                      if (value == 'Sí')
+                        {
+                          print(userId);
+                          final List<dynamic>? respuesta = await organizationUserslistService.EnableDisable(id,userId,!habilitado);
 
-                        if ( !respuesta?[2] ){
-                          print('segundo if error');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Conexión con el servidor no establecido'));
-                        } else if ( respuesta?[0].statusCode == 200){
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Se ha desactivado al usuario de la organización'));
-                        } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
-                          if(respuesta?[0].statusCode == 401) {
+                          if ( !respuesta?[2] ){
+                            print('segundo if error');
                             ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Ocurrió un problema con la autentificación'));
-                          }else if(respuesta?[0].statusCode == 403) {
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Conexión con el servidor no establecido'));
+                          } else if ( respuesta?[0].statusCode == 200){
                             ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Ocurrió un problema con la Solicitud'));
-                          }else {
-                            print('400 error');
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Se ha activado al usuario de la organización'));
+                          } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
+                            if(respuesta?[0].statusCode == 401) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió un problema con la autentificación'));
+                            }else if(respuesta?[0].statusCode == 403) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió un problema con la Solicitud'));
+                            }else {
+                              print('400 error');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió una solicitud Incorrecta'));
+                            }
+                          } else {
+                            print('salio error');
                             ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Ocurrió una solicitud Incorrecta'));
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Error con el servidor'));
                           }
-                        } else {
-                          print('salio error');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Error con el servidor'));
                         }
-                      }
-                  });
-            },
-            child: const Icon(Icons.do_not_disturb_on),
-          ),
+                    });
+              },
+              backgroundColor: Colors.red[600],
+              child: const Icon(Icons.do_not_disturb_on),
+            ),
+          ]else...[
+            FloatingActionButton(
+              heroTag: null,
+              tooltip: 'Desactivar usuario de la organización',
+              onPressed: () async {
+                showDialog<String>(
+                  context: context,
+                  builder: (context) => GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: LombaDialogNotYes(
+                      itemName: username,
+                      titleMessage: 'Desactivar',
+                      dialogMessage:
+                          '¿Desea desactivar al usuario de la organización?',
+                    ),
+                  ),
+                ).then((value) async {
+                      if (value == 'Sí')
+                        {
+                          print(userId);
+                          final List<dynamic>? respuesta = await organizationUserslistService.EnableDisable(id,userId,!habilitado);
+
+                          if ( !respuesta?[2] ){
+                            print('segundo if error');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Conexión con el servidor no establecido'));
+                          } else if ( respuesta?[0].statusCode == 200){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Se ha desactivado al usuario de la organización'));
+                          } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
+                            if(respuesta?[0].statusCode == 401) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió un problema con la autentificación'));
+                            }else if(respuesta?[0].statusCode == 403) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió un problema con la Solicitud'));
+                            }else {
+                              print('400 error');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió una solicitud Incorrecta'));
+                            }
+                          } else {
+                            print('salio error');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Error con el servidor'));
+                          }
+                        }
+                    });
+              },
+              child: const Icon(Icons.done_rounded),
+            ),
+          ],
           const SizedBox(
             width: 20,
           ),

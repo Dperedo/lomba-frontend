@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:front_lomba/screens/home_screen.dart';
 import 'package:provider/provider.dart';
@@ -147,6 +148,7 @@ class _LoginForm extends StatelessWidget {
                       style: const TextStyle(color: Colors.white),
                     )),
                 onPressed: loginForm.isLoading? null: () async {
+                    
                         FocusScope.of(context).unfocus();
                         final authService = Provider.of<AuthService>(context, listen: false);
 

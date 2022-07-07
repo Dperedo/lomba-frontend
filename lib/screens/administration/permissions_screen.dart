@@ -62,8 +62,12 @@ class PermisoBody extends StatelessWidget {
   }) : super(key: key);
 
   final PermissionsService permiService;
+  //late Future<int> permiService.PermissionsList();
 
   @override
+  /*void initState() {
+    super.initState();
+  };*/
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
@@ -174,62 +178,130 @@ class PermissionListItem extends StatelessWidget {
           const SizedBox(
             width: 20,
           ),
-          FloatingActionButton(
-            heroTag: null,
-            onPressed: () async {
-              showDialog<String>(
-                context: context,
-                builder: (context) => GestureDetector(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: LombaDialogNotYes(
-                    itemName: permission,
-                    titleMessage: 'Desactivar',
-                    dialogMessage: '¿Desea desactivar el permiso?',
+          if(habilitado)...[
+            FloatingActionButton(
+              heroTag: null,
+              onPressed: () async {
+                showDialog<String>(
+                  context: context,
+                  builder: (context) => GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: LombaDialogNotYes(
+                      itemName: permission,
+                      titleMessage: 'Activar',
+                      dialogMessage: '¿Desea activar el permiso?',
+                    ),
                   ),
-                ),
-              ).then((value) async {
-                    if (value == 'Sí')
-                      {
-                        final List<dynamic>? respuesta = await permiService.EnableDisable(permission,!habilitado);
-                        //consumir servicio de PermissionService
-                        
-                        if ( !respuesta?[2] ){
-                          print('segundo if error');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Conexión con el servidor no establecido'));
-                        } else if ( respuesta?[0].statusCode == 200){
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Se ha desactivado el permiso'));
-                        } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
-                          if(respuesta?[0].statusCode == 401) {
+                ).then((value) async {
+                      if (value == 'Sí')
+                        {
+                          final List<dynamic>? respuesta = await permiService.EnableDisable(permission,!habilitado);
+                          //consumir servicio de PermissionService
+                          
+                          if ( !respuesta?[2] ){
+                            print('segundo if error');
                             ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Ocurrió un problema con la autentificación'));
-                          }else if(respuesta?[0].statusCode == 403) {
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Conexión con el servidor no establecido'));
+                          } else if ( respuesta?[0].statusCode == 200){
                             ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Ocurrió un problema con la Solicitud'));
-                          }else {
-                            print('400 error');
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Se ha Activado el permiso'));
+                          } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
+                            if(respuesta?[0].statusCode == 401) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió un problema con la autentificación'));
+                            }else if(respuesta?[0].statusCode == 403) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió un problema con la Solicitud'));
+                            }else {
+                              print('400 error');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió una solicitud Incorrecta'));
+                            }
+                          } else {
+                            print('salio error');
                             ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Ocurrió una solicitud Incorrecta'));
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Error con el servidor'));
                           }
-                        } else {
-                          print('salio error');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Error con el servidor'));
+                          //setState(() {});
                         }
-                      }
-                  }
-                );
-            },
-            tooltip: 'Desactivar permiso',
-            child: const Icon(Icons.do_not_disturb_on),
-          ),
+                    }
+                  );
+              },
+              tooltip: 'Activar permiso',
+              backgroundColor: Colors.red[600],
+              child: const Icon(Icons.do_not_disturb_on),
+            ),
+          ]else...[
+            FloatingActionButton(
+              heroTag: null,
+              onPressed: () async {
+                showDialog<String>(
+                  context: context,
+                  builder: (context) => GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: LombaDialogNotYes(
+                      itemName: permission,
+                      titleMessage: 'Desactivar',
+                      dialogMessage: '¿Desea desactivar el permiso?',
+                    ),
+                  ),
+                ).then((value) async {
+                      if (value == 'Sí')
+                        {
+                          final List<dynamic>? respuesta = await permiService.EnableDisable(permission,!habilitado);
+                          //consumir servicio de PermissionService
+                          
+                          if ( !respuesta?[2] ){
+                            print('segundo if error');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Conexión con el servidor no establecido'));
+                          } else if ( respuesta?[0].statusCode == 200){
+                            //print('en la alerta !!!!!!!!!!!!!');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Se ha desactivado el permiso'));
+                          } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
+                            if(respuesta?[0].statusCode == 401) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió un problema con la autentificación'));
+                            }else if(respuesta?[0].statusCode == 403) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió un problema con la Solicitud'));
+                            }else {
+                              print('400 error');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió una solicitud Incorrecta'));
+                            }
+                          } else {
+                            print('salio error');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Error con el servidor'));
+                          }
+                          permiService.PermissionsList();
+                          //print('despeus de la alerta !!!!!!!!!!!!!');
+                        }
+                    }
+                  );
+                  /*setState() {
+                    var ps = permiService.PermissionsList();
+                  };
+                  print('despeus del set !!!!!!!!!!!!!');*/
+              },
+              tooltip: 'Desactivar permiso',
+              child: const Icon(Icons.done_rounded),//do_not_disturb_on
+            ),
+          ],
           const SizedBox(
             width: 20,
           ),
