@@ -55,19 +55,28 @@ class _PermissionsPage extends StatelessWidget {
   }
 }
 
-class PermisoBody extends StatelessWidget {
+class PermisoBody extends StatefulWidget {
   const PermisoBody({
     Key? key,
     required this.permiService,
   }) : super(key: key);
 
   final PermissionsService permiService;
-  //late Future<int> permiService.PermissionsList();
 
   @override
-  /*void initState() {
+  State<PermisoBody> createState() => _PermisoBodyState();
+}
+
+class _PermisoBodyState extends State<PermisoBody> {
+late Future<List<dynamic>?> dataFuture;
+
+  @override
+  void initState() {
     super.initState();
-  };*/
+    dataFuture = widget.permiService.PermissionsList();
+  }
+  
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
@@ -84,7 +93,7 @@ class PermisoBody extends StatelessWidget {
               return Padding(
                 padding: EdgeInsets.zero,
                 child: FutureBuilder(
-                    future: permiService.PermissionsList(),
+                    future: dataFuture,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<dynamic>?> snapshot) {
                       if (snapshot.data == null) {
@@ -140,7 +149,7 @@ class PermisoBody extends StatelessWidget {
   }
 }
 
-class PermissionListItem extends StatelessWidget {
+class PermissionListItem extends StatefulWidget {
   final String permission;
   final bool habilitado;
 
@@ -148,8 +157,12 @@ class PermissionListItem extends StatelessWidget {
   required this.permission,
   required this.habilitado})
       : super(key: key);
-      
 
+  @override
+  State<PermissionListItem> createState() => _PermissionListItemState();
+}
+
+class _PermissionListItemState extends State<PermissionListItem> {
   @override
   Widget build(BuildContext context) {
     final permiService = Provider.of<PermissionsService>(context, listen: false);
@@ -167,7 +180,7 @@ class PermissionListItem extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   child: Text(
-                    permission,
+                    widget.permission,
                     style: DefaultTextStyle.of(context)
                         .style
                         .apply(fontSizeFactor: 1.4),
@@ -178,7 +191,7 @@ class PermissionListItem extends StatelessWidget {
           const SizedBox(
             width: 20,
           ),
-          if(habilitado)...[
+          if(widget.habilitado)...[
             FloatingActionButton(
               heroTag: null,
               onPressed: () async {
@@ -187,7 +200,7 @@ class PermissionListItem extends StatelessWidget {
                   builder: (context) => GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
                     child: LombaDialogNotYes(
-                      itemName: permission,
+                      itemName: widget.permission,
                       titleMessage: 'Activar',
                       dialogMessage: '¿Desea activar el permiso?',
                     ),
@@ -195,7 +208,7 @@ class PermissionListItem extends StatelessWidget {
                 ).then((value) async {
                       if (value == 'Sí')
                         {
-                          final List<dynamic>? respuesta = await permiService.EnableDisable(permission,!habilitado);
+                          final List<dynamic>? respuesta = await permiService.EnableDisable(widget.permission,!widget.habilitado);
                           //consumir servicio de PermissionService
                           
                           if ( !respuesta?[2] ){
@@ -228,7 +241,12 @@ class PermissionListItem extends StatelessWidget {
                               SnackBarGenerator.getNotificationMessage(
                                   'Error con el servidor'));
                           }
-                          //setState(() {});
+                          setState(() {
+                            print('entra setState?');
+                            _PermisoBodyState();//.dataFuture = permiService.PermissionsList();
+                            //_PermisoBodyState().initState();
+                            //dataFuture = widget.permiService.PermissionsList();
+                          });
                         }
                     }
                   );
@@ -246,7 +264,7 @@ class PermissionListItem extends StatelessWidget {
                   builder: (context) => GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
                     child: LombaDialogNotYes(
-                      itemName: permission,
+                      itemName: widget.permission,
                       titleMessage: 'Desactivar',
                       dialogMessage: '¿Desea desactivar el permiso?',
                     ),
@@ -254,7 +272,7 @@ class PermissionListItem extends StatelessWidget {
                 ).then((value) async {
                       if (value == 'Sí')
                         {
-                          final List<dynamic>? respuesta = await permiService.EnableDisable(permission,!habilitado);
+                          final List<dynamic>? respuesta = await permiService.EnableDisable(widget.permission,!widget.habilitado);
                           //consumir servicio de PermissionService
                           
                           if ( !respuesta?[2] ){
@@ -288,8 +306,12 @@ class PermissionListItem extends StatelessWidget {
                               SnackBarGenerator.getNotificationMessage(
                                   'Error con el servidor'));
                           }
-                          permiService.PermissionsList();
-                          //print('despeus de la alerta !!!!!!!!!!!!!');
+                          setState(() {
+                            print('entra setState?');
+                            _PermisoBodyState().dataFuture = permiService.PermissionsList();
+                            //_PermisoBodyState().initState();
+                            //dataFuture = widget.permiService.PermissionsList();
+                          });
                         }
                     }
                   );
