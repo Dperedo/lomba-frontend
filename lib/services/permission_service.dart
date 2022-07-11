@@ -33,14 +33,14 @@ class PermissionsService extends ChangeNotifier {
     } catch (e) {
       print('ERROR!');
       print(e.toString());
-      print(datos);
+      //print(datos);
       return datos;
     }
 
     if (resp.statusCode == 200) {
       print('resultado = 200');
-      print(decodedResp);
-      print(datos);
+      //print(decodedResp);
+      //print(datos);
       return datos;
     } else {
       print('error no 200');
@@ -75,7 +75,7 @@ class PermissionsService extends ChangeNotifier {
       decodedResp = json.decode(resp.body);
       datos[0]=resp;
       datos[1]=decodedResp;
-      print(decodedResp);
+      //print(decodedResp);
     } catch (e) {
       print('ERROR!');
       print(e.toString());
