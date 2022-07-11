@@ -9,7 +9,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService extends ChangeNotifier {
-  final String _baseUrl = 'http://localhost:8187';
+  final String _baseUrl = 'http://localhost:8287/';
   //final String token = '';
   final storage = const FlutterSecureStorage();
   bool isLoading = true;
@@ -20,7 +20,7 @@ class AuthService extends ChangeNotifier {
       'password': password
     };
 
-    final url = Uri.parse('http://localhost:8187/api/v1/User/authenticate');
+    final url = Uri.parse('http://localhost:8287/api/v1/User/authenticate');
 
     http.Response? resp;
     Map<String, dynamic>? decodedResp;
@@ -51,12 +51,10 @@ class AuthService extends ChangeNotifier {
       print('error');
       return decodedResp!['message'];
     }
-
   }
 
   Future<bool> Ping() async {
-
-    final url = Uri.parse('http://localhost:8187/api/Ping');
+    final url = Uri.parse('http://localhost:8287/api/Ping');
 
     http.Response? resp;
     Map<String, dynamic>? decodedResp;
@@ -75,7 +73,7 @@ class AuthService extends ChangeNotifier {
       print(e.toString());
       return false;
       //throw ('Tiempo de espera alcanzado');
-    } 
+    }
 
     if (resp.statusCode == 200) {
       print('resultado = 200');
@@ -84,7 +82,6 @@ class AuthService extends ChangeNotifier {
       print('error');
       return false;
     }
-
   }
 
   Future logout() async {

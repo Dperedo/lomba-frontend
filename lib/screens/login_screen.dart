@@ -17,71 +17,70 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: OrientationBuilder(
-        builder: (context, orientation) =>
-          orientation == Orientation.portrait ? buildPortrait() : buildLandscape(),
-        
-      ));
+        body: OrientationBuilder(
+      builder: (context, orientation) => orientation == Orientation.portrait
+          ? buildPortrait()
+          : buildLandscape(),
+    ));
   }
 }
 
-  Widget buildPortrait() => AuthBackground(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SizedBox(height: 250),
+Widget buildPortrait() => AuthBackground(
+        child: SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(height: 250),
 
-                    CardContainer(
-                        child: Column(
-                      children: [
-                        SizedBox(height: 10),
-                        Text('Login',
-                            style: TextStyle(
-                                color: Colors.grey.shade700,
-                                fontSize:
-                                    45)), //Theme.of(context).textTheme.headline4,  ),
-                        SizedBox(height: 30),
+          CardContainer(
+              child: Column(
+            children: [
+              SizedBox(height: 10),
+              Text('Login',
+                  style: TextStyle(
+                      color: Colors.grey.shade700,
+                      fontSize:
+                          45)), //Theme.of(context).textTheme.headline4,  ),
+              SizedBox(height: 30),
 
-                        ChangeNotifierProvider(
-                            create: (_) => LoginFormProvider(), child: _LoginForm())
-                      ],
-                    )),
+              ChangeNotifierProvider(
+                  create: (_) => LoginFormProvider(), child: _LoginForm())
+            ],
+          )),
 
-                    SizedBox(height: 50),
-                    //Text('Crear una nueva cuenta', style: TextStyle( fontSize: 18, fontWeight: FontWeight.bold ),),
-                    SizedBox(height: 50),
-                  ],
-                ),
+          SizedBox(height: 50),
+          //Text('Crear una nueva cuenta', style: TextStyle( fontSize: 18, fontWeight: FontWeight.bold ),),
+          SizedBox(height: 50),
+        ],
+      ),
     ));
 
-  Widget buildLandscape() => AuthBackground(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SizedBox(height: 250),
+Widget buildLandscape() => AuthBackground(
+        child: SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(height: 250),
 
-                    CardContainerLandscape(
-                        child: Column(
-                          children: [
-                            SizedBox(height: 10),
-                            Text('Login',
-                                style: TextStyle(
-                                    color: Colors.grey.shade700,
-                                    fontSize:
-                                        45)), //Theme.of(context).textTheme.headline4,  ),
-                            SizedBox(height: 30),
+          CardContainerLandscape(
+              child: Column(
+            children: [
+              SizedBox(height: 10),
+              Text('Login',
+                  style: TextStyle(
+                      color: Colors.grey.shade700,
+                      fontSize:
+                          45)), //Theme.of(context).textTheme.headline4,  ),
+              SizedBox(height: 30),
 
-                            ChangeNotifierProvider(
-                                create: (_) => LoginFormProvider(), child: _LoginForm())
-                          ],
-                        )
-                      ),
+              ChangeNotifierProvider(
+                  create: (_) => LoginFormProvider(), child: _LoginForm())
+            ],
+          )),
 
-                    SizedBox(height: 50),
-                    //Text('Crear una nueva cuenta', style: TextStyle( fontSize: 18, fontWeight: FontWeight.bold ),),
-                    SizedBox(height: 50),
-                  ],
-                ),
+          SizedBox(height: 50),
+          //Text('Crear una nueva cuenta', style: TextStyle( fontSize: 18, fontWeight: FontWeight.bold ),),
+          SizedBox(height: 50),
+        ],
+      ),
     ));
 
 class _LoginForm extends StatelessWidget {
@@ -96,6 +95,7 @@ class _LoginForm extends StatelessWidget {
         child: Column(
           children: [
             TextFormField(
+              key: const Key("input_login"),
               style: TextStyle(color: Colors.black),
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
@@ -116,6 +116,7 @@ class _LoginForm extends StatelessWidget {
             ),
             SizedBox(height: 30),
             TextFormField(
+              key: const Key("input_password"),
               style: TextStyle(color: Colors.black),
               autocorrect: false,
               obscureText: true,
@@ -133,6 +134,7 @@ class _LoginForm extends StatelessWidget {
             ),
             SizedBox(height: 30),
             MaterialButton(
+                key: const Key("button_enter"),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 disabledColor: Colors.grey,
@@ -146,9 +148,12 @@ class _LoginForm extends StatelessWidget {
                       loginForm.isLoading ? 'Espere' : 'Ingresar',
                       style: const TextStyle(color: Colors.white),
                     )),
-                onPressed: loginForm.isLoading? null: () async {
+                onPressed: loginForm.isLoading
+                    ? null
+                    : () async {
                         FocusScope.of(context).unfocus();
-                        final authService = Provider.of<AuthService>(context, listen: false);
+                        final authService =
+                            Provider.of<AuthService>(context, listen: false);
 
                         if (!loginForm.isValidForm()) return;
 
@@ -161,7 +166,8 @@ class _LoginForm extends StatelessWidget {
                             loginForm.email, loginForm.password);
 
                         if (errorMessage == null) {
-                          Navigator.of(context).push(RouteAnimation.animatedTransition(Home()));
+                          Navigator.of(context)
+                              .push(RouteAnimation.animatedTransition(Home()));
                         } else {
                           // TODO: mostrar error en pantalla
                           // print( errorMessage );
@@ -294,7 +300,8 @@ class CardContainer extends StatelessWidget {
 class CardContainerLandscape extends StatelessWidget {
   final Widget child;
 
-  const CardContainerLandscape({Key? key, required this.child}) : super(key: key);
+  const CardContainerLandscape({Key? key, required this.child})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -302,7 +309,7 @@ class CardContainerLandscape extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 30),
       child: Center(
         child: Container(
-          width: 400,//double.infinity,
+          width: 400, //double.infinity,
           padding: EdgeInsets.all(20),
           decoration: _createCardShape(),
           child: this.child,

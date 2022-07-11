@@ -56,6 +56,7 @@ class HomePrincipal extends StatelessWidget {
       child: Column(
         children: const [
           LombaTitlePage(
+            key: Key("page_inicio"),
             title: "Inicio",
             subtitle: "Home",
           ),

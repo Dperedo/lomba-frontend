@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:front_lomba/screens/administration/allusers_screen.dart';
 import 'package:front_lomba/screens/administration/organization_screen.dart';
-import 'package:front_lomba/screens/administration/organization_userslist_screen.dart';
-import 'package:front_lomba/screens/administration/user_edit_screen.dart';
 import 'package:front_lomba/screens/democolors_screen.dart';
 import 'package:front_lomba/screens/home_screen.dart';
 import 'package:front_lomba/screens/login_screen.dart';
