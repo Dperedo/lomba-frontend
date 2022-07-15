@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:front_lomba/helpers/preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class PermissionsService extends ChangeNotifier {
-  final String _baseUrl = 'http://localhost:8187';
+  final String _baseUrl = Preferences.baseUrl;
   final storage = const FlutterSecureStorage();
   bool isLoading = true;
 

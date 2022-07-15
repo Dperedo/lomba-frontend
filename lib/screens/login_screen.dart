@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:front_lomba/helpers/route_animation.dart';
 import 'package:front_lomba/providers/login_form_provider.dart';
 import 'package:front_lomba/services/auth_service.dart';
+import 'package:get/get.dart';
 
 import '../helpers/snackbars.dart';
 
@@ -100,6 +101,7 @@ class _LoginForm extends StatelessWidget {
               style: TextStyle(color: Colors.black),
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
+              initialValue: 'superadmin',
               decoration: InputDecorations.authInputDecoration(
                   hintText: '',
                   labelText: 'Correo electrónico',
@@ -121,6 +123,7 @@ class _LoginForm extends StatelessWidget {
               autocorrect: false,
               obscureText: true,
               keyboardType: TextInputType.emailAddress,
+              initialValue: 'superadmin',
               decoration: InputDecorations.authInputDecoration(
                   hintText: '',
                   labelText: 'Contraseña',
@@ -162,8 +165,10 @@ class _LoginForm extends StatelessWidget {
                         final String? errorMessage = await authService.login(
                             loginForm.email, loginForm.password);
 
+                        //print(errorMessage);
                         if (errorMessage == null) {
                           Navigator.of(context).push(RouteAnimation.animatedTransition(Home()));
+                          //Get.toNamed('/home');
                         } else {
                           // TODO: mostrar error en pantalla
                           // print( errorMessage );
