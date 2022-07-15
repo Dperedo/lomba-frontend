@@ -25,6 +25,17 @@ void main() {
 
       expect(find.byKey(const Key("page_inicio")), findsOneWidget);
 
+      final menu = find.byType(Drawer);
+      final moPermisos = find.byKey(const Key("menuopt_permisos"));
+      await tester.tap(menu);
+      await Future<void>.delayed(const Duration(milliseconds: 1000));
+      await tester.pumpAndSettle();
+      await tester.tap(moPermisos);
+      await Future<void>.delayed(const Duration(milliseconds: 1000));
+      await tester.pumpAndSettle();
+
+      expect(find.text("Permisos"), findsOneWidget);
+
 /*
       // Verify the counter starts at 0.
       expect(find.text('0'), findsOneWidget);

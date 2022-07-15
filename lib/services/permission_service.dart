@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class PermissionsService extends ChangeNotifier {
-  final String _baseUrl = 'http://localhost:8287/';
+  final String _baseUrl = 'http://localhost:8287';
   final storage = const FlutterSecureStorage();
   bool isLoading = true;
 
@@ -26,6 +26,7 @@ class PermissionsService extends ChangeNotifier {
         'Authorization': 'Bearer $token',
       }).timeout(const Duration(seconds: 10));
       datos[2] = true;
+      print(resp.body);
       decodedResp = json.decode(resp.body);
       datos[0] = resp;
       datos[1] = decodedResp;
