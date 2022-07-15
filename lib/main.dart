@@ -10,13 +10,16 @@ import 'package:front_lomba/services/permission_service.dart';
 import 'package:front_lomba/services/organization_userslist_services.dart';
 import 'package:front_lomba/services/alluser_service.dart';
 import 'package:provider/provider.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 import 'package:front_lomba/helpers/preferences.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/services/auth_service.dart';
+import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setPathUrlStrategy();
   /*SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]).then((_){
            runApp(MyApp());
            });*/
@@ -42,14 +45,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Lomba App',
       initialRoute: '/login',
-      routes: {
+      routes: <String, WidgetBuilder>{
         '/home': (context) => const Home(),
         '/organizations': (context) => const Organizations(),
         '/allusers': (context) => const AllUsers(),
+        '/permissions': (context) => const Permissions(),
         //'/organizations_userlist': (context) => const OrganizationUsersList(),
         //'/user_edit': (context) => const UserEdit(),
         '/user_profile': (context) => const UserProfile(),

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:front_lomba/helpers/preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class PermissionsService extends ChangeNotifier {
-  final String _baseUrl = 'http://localhost:8287';
+  final String _baseUrl = Preferences.baseUrl;
   final storage = const FlutterSecureStorage();
   bool isLoading = true;
 
@@ -34,14 +35,14 @@ class PermissionsService extends ChangeNotifier {
     } catch (e) {
       print('ERROR!');
       print(e.toString());
-      print(datos);
+      //print(datos);
       return datos;
     }
 
     if (resp.statusCode == 200) {
       print('resultado = 200');
-      print(decodedResp);
-      print(datos);
+      //print(decodedResp);
+      //print(datos);
       return datos;
     } else {
       print('error no 200');
@@ -76,7 +77,7 @@ class PermissionsService extends ChangeNotifier {
       decodedResp = json.decode(resp.body);
       datos[0] = resp;
       datos[1] = decodedResp;
-      print(decodedResp);
+      //print(decodedResp);
     } catch (e) {
       print('ERROR!');
       print(e.toString());

@@ -105,9 +105,10 @@ class AllUserBody extends StatelessWidget {
                                 return Column(
                                   children: [
                                     AllUsersListItem(
-                                      id: ps?[1][index]["id"],
-                                      username: ps?[1][index]["username"],
-                                      habilitado: ps?[1][index]["isDisabled"],
+                                      id: ps?[1][index]["user"]["id"],
+                                      username: ps?[1][index]["user"]["username"],
+                                      habilitado: ps?[1][index]["user"]["isDisabled"],
+                                      count: ps?[1][index]["orgaCount"],
                                     ),
                                     const Divider()
                                   ],
@@ -144,11 +145,13 @@ class AllUsersListItem extends StatelessWidget {
   final String id;
   final String username;
   final bool habilitado;
+  final int count;
   const AllUsersListItem({
     Key? key,
     required this.id,
     required this.username,
-    required this.habilitado
+    required this.habilitado,
+    required this.count
   }) : super(key: key);
 
   @override
@@ -201,65 +204,123 @@ class AllUsersListItem extends StatelessWidget {
             tooltip: 'Organizaciones del usuario',
             onPressed: () {},
             child:
-                const Text('1', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(count.toString(), style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           const SizedBox(
             width: 20,
           ),
-          FloatingActionButton(
-            heroTag: null,
-            tooltip: 'Desactivar al usuario',
-            onPressed: () async {
-              showDialog<String>(
-                context: context,
-                builder: (context) => GestureDetector(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: LombaDialogNotYes(
-                    itemName: username,
-                    titleMessage: 'Desactivar',
-                    dialogMessage: '¿Desea desactivar al usuario?',
+          if(habilitado)...[
+            FloatingActionButton(
+              heroTag: null,
+              tooltip: 'Activar al usuario',
+              onPressed: () async {
+                showDialog<String>(
+                  context: context,
+                  builder: (context) => GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: LombaDialogNotYes(
+                      itemName: username,
+                      titleMessage: 'Activar',
+                      dialogMessage: '¿Desea activar al usuario?',
+                    ),
                   ),
-                ),
-              ).then((value) async {
-                    if (value == 'Sí')
-                      {
-                        final List<dynamic>? respuesta = await allusersService.EnableDisable(id,!habilitado);
+                ).then((value) async {
+                      if (value == 'Sí')
+                        {
+                          final List<dynamic>? respuesta = await allusersService.EnableDisable(id,!habilitado);
 
-                        if ( !respuesta?[2] ){
-                          print('segundo if error');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Conexión con el servidor no establecido'));
-                        } else if ( respuesta?[0].statusCode == 200){
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Se ha desactivado al usuario'));
-                        } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
-                          if(respuesta?[0].statusCode == 401) {
+                          if ( !respuesta?[2] ){
+                            print('segundo if error');
                             ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Ocurrió un problema con la autentificación'));
-                          }else if(respuesta?[0].statusCode == 403) {
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Conexión con el servidor no establecido'));
+                          } else if ( respuesta?[0].statusCode == 200){
                             ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Ocurrió un problema con la Solicitud'));
-                          }else {
-                            print('400 error');
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Se ha activado al usuario'));
+                          } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
+                            if(respuesta?[0].statusCode == 401) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió un problema con la autentificación'));
+                            }else if(respuesta?[0].statusCode == 403) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió un problema con la Solicitud'));
+                            }else {
+                              print('400 error');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió una solicitud Incorrecta'));
+                            }
+                          } else {
+                            print('salio error');
                             ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Ocurrió una solicitud Incorrecta'));
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Error con el servidor'));
                           }
-                        } else {
-                          print('salio error');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Error con el servidor'));
                         }
-                      }
-                  });
-            },
-            child: const Icon(Icons.do_not_disturb_on),
-          ),
+                    });
+              },
+              backgroundColor: Colors.red[600],
+              child: const Icon(Icons.do_not_disturb_on),
+            ),
+          ]else...[
+            FloatingActionButton(
+              heroTag: null,
+              tooltip: 'Desactivar al usuario',
+              onPressed: () async {
+                showDialog<String>(
+                  context: context,
+                  builder: (context) => GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: LombaDialogNotYes(
+                      itemName: username,
+                      titleMessage: 'Desactivar',
+                      dialogMessage: '¿Desea desactivar al usuario?',
+                    ),
+                  ),
+                ).then((value) async {
+                      if (value == 'Sí')
+                        {
+                          final List<dynamic>? respuesta = await allusersService.EnableDisable(id,!habilitado);
+
+                          if ( !respuesta?[2] ){
+                            print('segundo if error');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Conexión con el servidor no establecido'));
+                          } else if ( respuesta?[0].statusCode == 200){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Se ha desactivado al usuario'));
+                          } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
+                            if(respuesta?[0].statusCode == 401) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió un problema con la autentificación'));
+                            }else if(respuesta?[0].statusCode == 403) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió un problema con la Solicitud'));
+                            }else {
+                              print('400 error');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Ocurrió una solicitud Incorrecta'));
+                            }
+                          } else {
+                            print('salio error');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBarGenerator.getNotificationMessage(
+                                  'Error con el servidor'));
+                          }
+                        }
+                    });
+              },
+              child: const Icon(Icons.done_rounded),
+            ),
+          ],
           const SizedBox(
             width: 20,
           ),

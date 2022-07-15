@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:front_lomba/helpers/preferences.dart';
 import 'package:http/http.dart' as http;
 
 class UserService extends ChangeNotifier {
-  final String _baseUrl = 'http://localhost:8287';
+  final String _baseUrl = Preferences.baseUrl;
   final storage = const FlutterSecureStorage();
   bool isLoading = true;
 
   Future<List<dynamic>?> UserList() async {
-    final url = Uri.parse('$_baseUrl/api/v1/User');
+    final url = Uri.parse('$_baseUrl/api/v1/User/orgacount');
 
     http.Response? resp;
     List<dynamic>? decodedResp;

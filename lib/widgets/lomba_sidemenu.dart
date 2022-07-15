@@ -10,6 +10,7 @@ import 'package:front_lomba/screens/home_screen.dart';
 import 'package:front_lomba/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:front_lomba/services/auth_service.dart';
+import 'package:get/get.dart';
 
 class LombaSideMenu extends StatefulWidget {
   const LombaSideMenu({Key? key}) : super(key: key);
@@ -52,8 +53,7 @@ class _LombaSideMenuState extends State<LombaSideMenu> {
                   leading: const Icon(Icons.home),
                   title: const Text('Home'),
                   onTap: () {
-                    Navigator.of(context)
-                        .push(RouteAnimation.animatedTransition(Home()));
+                    Navigator.of(context).push(RouteAnimation.animatedTransition(const Home()));
                   },
                 ),
               );

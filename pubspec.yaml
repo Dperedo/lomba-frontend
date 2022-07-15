@@ -41,6 +41,8 @@ dependencies:
   http: ^0.13.4
   flutter_secure_storage: ^5.0.2
   jwt_decode: ^0.3.1
+  url_strategy: ^0.2.0
+  get: ^4.6.5
 
 dev_dependencies:
   integration_test:

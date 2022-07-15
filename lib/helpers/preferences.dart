@@ -6,6 +6,7 @@ class Preferences {
   static int maxScreen = 1200;
   static int paddingLeft = 50;
   static int paddingRight = 50;
+  static const String baseUrl = 'http://localhost:8187';
 
   static Future init() async {
     _prefs = await SharedPreferences.getInstance();

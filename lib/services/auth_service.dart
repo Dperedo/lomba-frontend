@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:front_lomba/helpers/preferences.dart';
 
 import 'package:http/http.dart' as http;
 
 class AuthService extends ChangeNotifier {
-  final String _baseUrl = 'http://localhost:8287/';
+  final String _baseUrl = Preferences.baseUrl;
   //final String token = '';
   final storage = const FlutterSecureStorage();
   bool isLoading = true;
@@ -20,7 +21,7 @@ class AuthService extends ChangeNotifier {
       'password': password
     };
 
-    final url = Uri.parse('http://localhost:8287/api/v1/User/authenticate');
+    final url = Uri.parse('$_baseUrl/api/v1/User/authenticate');
 
     http.Response? resp;
     Map<String, dynamic>? decodedResp;
@@ -54,7 +55,7 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<bool> Ping() async {
-    final url = Uri.parse('http://localhost:8287/api/Ping');
+    final url = Uri.parse('$_baseUrl/api/Ping');
 
     http.Response? resp;
     Map<String, dynamic>? decodedResp;
