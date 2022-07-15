@@ -78,6 +78,7 @@ class _LombaAppMenuState extends State<LombaAppMenu> {
               );
               menu.add(
                 ListTile(
+                  key: const Key("menuopt_permisos"),
                   leading: const Icon(Icons.key_outlined),
                   title: const Text('Permisos'),
                   onTap: () {
@@ -153,8 +154,7 @@ class _LombaAppMenuState extends State<LombaAppMenu> {
               padding: EdgeInsets.zero,
               children: menu,
             );
-          }
-        ),
+          }),
     );
   }
 }

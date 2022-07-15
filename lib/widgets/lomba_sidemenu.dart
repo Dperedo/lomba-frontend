@@ -79,6 +79,7 @@ class _LombaSideMenuState extends State<LombaSideMenu> {
               );
               menu.add(
                 ListTile(
+                  key: const Key("menuopt_permisos"),
                   leading: const Icon(Icons.key_outlined),
                   title: const Text('Permisos'),
                   onTap: () {
