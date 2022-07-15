@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:front_lomba/widgets/lomba_sidemenu.dart';
 import 'package:integration_test/integration_test.dart';
 
 import "package:front_lomba/main.dart" as app;
@@ -134,7 +133,7 @@ void main() {
       await tester.pumpAndSettle();
 
       //Se verifica que aparezca el texto de confirmación en pantalla.
-      expect(find.text("Se ha desactivado el permiso"), findsOneWidget);
+      expect(find.text("Se ha Activado el permiso"), findsOneWidget);
     });
   });
 }

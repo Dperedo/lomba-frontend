@@ -1,16 +1,23 @@
-# newflutter
+# newflutter - lomba
 
 A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Para ejecutar el primer test del proyecto, es necesario hacer lo siguiente:
 
-A few resources to get you started if this is your first Flutter project:
+Primero revisar que la URL del backend sea la correcta. 
+Esto se revisa en el archivo /lib/helpers/preferences.dart
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Segundo: descargar chromedriver desde https://chromedriver.chromium.org/downloads
+Descargar en una carpeta y levantarlo con el siguiente comando desde una terminal o consola:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+´´´
+./chromedriver.exe --port=4444
+´´´
+
+Después, en la raíz del proyecto ejecutar el siguiente comando
+
+´´´
+flutter drive --driver=test_driver/integration_test.dart --target=integration_test/permissions_test.dart -d chrome
+´´´
