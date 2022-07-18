@@ -38,14 +38,17 @@ class _PermissionsPage extends StatelessWidget {
   final String title;
 
   @override
-  build(BuildContext context)  {
-    final permiService = Provider.of<PermissionsService>(context, listen: false);
+  build(BuildContext context) {
+    final permiService =
+        Provider.of<PermissionsService>(context, listen: false);
     final screenWidth = MediaQuery.of(context).size.width;
     final int breakpoint = Preferences.maxScreen;
     if (screenWidth <= breakpoint) {
-      return SmallScreen(title: title, principal: PermisoBody(permiService: permiService));
+      return SmallScreen(
+          title: title, principal: PermisoBody(permiService: permiService));
     } else {
-      return BigScreen(title: title, principal: PermisoBody(permiService: permiService));
+      return BigScreen(
+          title: title, principal: PermisoBody(permiService: permiService));
     }
     /*return Scaffold(
       appBar: LombaAppBar(title: title),
@@ -68,14 +71,14 @@ class PermisoBody extends StatefulWidget {
 }
 
 class _PermisoBodyState extends State<PermisoBody> {
-late Future<List<dynamic>?> dataFuture;
+  late Future<List<dynamic>?> dataFuture;
 
   @override
   void initState() {
     super.initState();
     dataFuture = widget.permiService.PermissionsList();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -98,12 +101,12 @@ late Future<List<dynamic>?> dataFuture;
                         AsyncSnapshot<List<dynamic>?> snapshot) {
                       if (snapshot.data == null) {
                         return const CircularProgressIndicator();
-                      } 
+                      }
                       final ps = snapshot.data;
-                      if ( !ps?[2] ){
+                      if (!ps?[2]) {
                         print('segundo if error');
                         return const LombaDialogErrorDisconnect();
-                      }else if ( ps?[0].statusCode == 200){ 
+                      } else if (ps?[0].statusCode == 200) {
                         return Column(
                           children: [
                             const LombaFilterListPage(),
@@ -119,6 +122,12 @@ late Future<List<dynamic>?> dataFuture;
                                     PermissionListItem(
                                       permission: ps?[1][index]["name"],
                                       habilitado: ps?[1][index]["isDisabled"],
+                                      onChanged: () {
+                                        setState(() {
+                                          dataFuture = widget.permiService
+                                              .PermissionsList();
+                                        });
+                                      },
                                     ),
                                     const Divider()
                                   ],
@@ -127,11 +136,12 @@ late Future<List<dynamic>?> dataFuture;
                             ),
                           ],
                         );
-                      } else if (ps?[0].statusCode >= 400 && ps?[0].statusCode <= 400) {
+                      } else if (ps?[0].statusCode >= 400 &&
+                          ps?[0].statusCode <= 400) {
                         print('400 error');
-                        if(ps?[0].statusCode == 401) {
+                        if (ps?[0].statusCode == 401) {
                           return const LombaDialogError401();
-                        } else if(ps?[0].statusCode == 403) {
+                        } else if (ps?[0].statusCode == 403) {
                           return const LombaDialogError403();
                         }
                         return const LombaDialogError400();
@@ -139,7 +149,7 @@ late Future<List<dynamic>?> dataFuture;
                         print('salio error');
                         return const LombaDialogError();
                       }
-                }),
+                    }),
               );
             }),
           ),
@@ -153,19 +163,24 @@ class PermissionListItem extends StatefulWidget {
   final String permission;
   final bool habilitado;
 
-  const PermissionListItem({Key? key, 
-  required this.permission,
-  required this.habilitado})
+  const PermissionListItem(
+      {Key? key,
+      required this.permission,
+      required this.habilitado,
+      required this.onChanged})
       : super(key: key);
 
   @override
   State<PermissionListItem> createState() => _PermissionListItemState();
+
+  final Function onChanged;
 }
 
 class _PermissionListItemState extends State<PermissionListItem> {
   @override
   Widget build(BuildContext context) {
-    final permiService = Provider.of<PermissionsService>(context, listen: false);
+    final permiService =
+        Provider.of<PermissionsService>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Row(
@@ -191,7 +206,7 @@ class _PermissionListItemState extends State<PermissionListItem> {
           const SizedBox(
             width: 20,
           ),
-          if(widget.habilitado)...[
+          if (widget.habilitado) ...[
             FloatingActionButton(
               heroTag: null,
               onPressed: () async {
@@ -206,56 +221,55 @@ class _PermissionListItemState extends State<PermissionListItem> {
                     ),
                   ),
                 ).then((value) async {
-                      if (value == 'Sí')
-                        {
-                          final List<dynamic>? respuesta = await permiService.EnableDisable(widget.permission,!widget.habilitado);
-                          //consumir servicio de PermissionService
-                          
-                          if ( !respuesta?[2] ){
-                            print('segundo if error');
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Conexión con el servidor no establecido'));
-                          } else if ( respuesta?[0].statusCode == 200){
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Se ha Activado el permiso'));
-                          } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
-                            if(respuesta?[0].statusCode == 401) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Ocurrió un problema con la autentificación'));
-                            }else if(respuesta?[0].statusCode == 403) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Ocurrió un problema con la Solicitud'));
-                            }else {
-                              print('400 error');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Ocurrió una solicitud Incorrecta'));
-                            }
-                          } else {
-                            print('salio error');
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Error con el servidor'));
-                          }
-                          setState(() {
-                            print('entra setState?');
-                            _PermisoBodyState();//.dataFuture = permiService.PermissionsList();
-                            //_PermisoBodyState().initState();
-                            //dataFuture = widget.permiService.PermissionsList();
-                          });
-                        }
+                  if (value == 'Sí') {
+                    final List<dynamic>? respuesta =
+                        await permiService.EnableDisable(
+                            widget.permission, !widget.habilitado);
+                    //consumir servicio de PermissionService
+
+                    if (!respuesta?[2]) {
+                      print('segundo if error');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBarGenerator.getNotificationMessage(
+                              'Conexión con el servidor no establecido'));
+                    } else if (respuesta?[0].statusCode == 200) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBarGenerator.getNotificationMessage(
+                              'Se ha Activado el permiso'));
+                    } else if (respuesta?[0].statusCode >= 400 &&
+                        respuesta?[0].statusCode <= 400) {
+                      if (respuesta?[0].statusCode == 401) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió un problema con la autentificación'));
+                      } else if (respuesta?[0].statusCode == 403) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió un problema con la Solicitud'));
+                      } else {
+                        print('400 error');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió una solicitud Incorrecta'));
+                      }
+                    } else {
+                      print('salio error');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBarGenerator.getNotificationMessage(
+                              'Error con el servidor'));
                     }
-                  );
+                    setState(() {
+                      print('En setState - Activar');
+                      widget.onChanged();
+                    });
+                  }
+                });
               },
               tooltip: 'Activar permiso',
               backgroundColor: Colors.red[600],
               child: const Icon(Icons.do_not_disturb_on),
             ),
-          ]else...[
+          ] else ...[
             FloatingActionButton(
               heroTag: null,
               onPressed: () async {
@@ -270,58 +284,62 @@ class _PermissionListItemState extends State<PermissionListItem> {
                     ),
                   ),
                 ).then((value) async {
-                      if (value == 'Sí')
-                        {
-                          final List<dynamic>? respuesta = await permiService.EnableDisable(widget.permission,!widget.habilitado);
-                          //consumir servicio de PermissionService
-                          
-                          if ( !respuesta?[2] ){
-                            print('segundo if error');
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Conexión con el servidor no establecido'));
-                          } else if ( respuesta?[0].statusCode == 200){
-                            //print('en la alerta !!!!!!!!!!!!!');
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Se ha desactivado el permiso'));
-                          } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
-                            if(respuesta?[0].statusCode == 401) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Ocurrió un problema con la autentificación'));
-                            }else if(respuesta?[0].statusCode == 403) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Ocurrió un problema con la Solicitud'));
-                            }else {
-                              print('400 error');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Ocurrió una solicitud Incorrecta'));
-                            }
-                          } else {
-                            print('salio error');
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Error con el servidor'));
-                          }
-                          setState(() {
-                            print('entra setState?');
-                            _PermisoBodyState().dataFuture = permiService.PermissionsList();
-                            //_PermisoBodyState().initState();
-                            //dataFuture = widget.permiService.PermissionsList();
-                          });
-                        }
+                  if (value == 'Sí') {
+                    final List<dynamic>? respuesta =
+                        await permiService.EnableDisable(
+                            widget.permission, !widget.habilitado);
+                    //consumir servicio de PermissionService
+
+                    if (!respuesta?[2]) {
+                      print('segundo if error');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBarGenerator.getNotificationMessage(
+                              'Conexión con el servidor no establecido'));
+                    } else if (respuesta?[0].statusCode == 200) {
+                      //print('en la alerta !!!!!!!!!!!!!');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBarGenerator.getNotificationMessage(
+                              'Se ha desactivado el permiso'));
+                    } else if (respuesta?[0].statusCode >= 400 &&
+                        respuesta?[0].statusCode <= 400) {
+                      if (respuesta?[0].statusCode == 401) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió un problema con la autentificación'));
+                      } else if (respuesta?[0].statusCode == 403) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió un problema con la Solicitud'));
+                      } else {
+                        print('400 error');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió una solicitud Incorrecta'));
+                      }
+                    } else {
+                      print('salio error');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBarGenerator.getNotificationMessage(
+                              'Error con el servidor'));
                     }
-                  );
-                  /*setState() {
+                    setState(() {
+                      print('En SETSTATE - DESACTIVAR');
+                      widget.onChanged();
+
+                      // _PermisoBodyState().dataFuture =
+                      //     permiService.PermissionsList();
+                      //_PermisoBodyState().initState();
+                      //dataFuture = widget.permiService.PermissionsList();
+                    });
+                  }
+                });
+                /*setState() {
                     var ps = permiService.PermissionsList();
                   };
                   print('despeus del set !!!!!!!!!!!!!');*/
               },
               tooltip: 'Desactivar permiso',
-              child: const Icon(Icons.done_rounded),//do_not_disturb_on
+              child: const Icon(Icons.done_rounded), //do_not_disturb_on
             ),
           ],
           const SizedBox(
