@@ -4,12 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:front_lomba/services/permission_service.dart';
 
 class LombaDialogNotYes extends StatefulWidget {
-  const LombaDialogNotYes(
-      {Key? key,
-      required this.itemName,
-      required this.titleMessage,
-      required this.dialogMessage,})
-      : super(key: key);
+  const LombaDialogNotYes({
+    Key? key,
+    required this.itemName,
+    required this.titleMessage,
+    required this.dialogMessage,
+  }) : super(key: key);
 
   final String itemName;
   final String titleMessage;
@@ -17,9 +17,10 @@ class LombaDialogNotYes extends StatefulWidget {
 
   @override
   State<LombaDialogNotYes> createState() => _LombaDialogNotYesState(
-      itemName: itemName,
-      titleMessage: titleMessage,
-      dialogMessage: dialogMessage,);
+        itemName: itemName,
+        titleMessage: titleMessage,
+        dialogMessage: dialogMessage,
+      );
 }
 
 class _LombaDialogNotYesState extends State<LombaDialogNotYes> {
@@ -27,11 +28,11 @@ class _LombaDialogNotYesState extends State<LombaDialogNotYes> {
   final String titleMessage;
   final String dialogMessage;
 
-  _LombaDialogNotYesState(
-      {required this.itemName,
-      required this.titleMessage,
-      required this.dialogMessage,})
-      : super();
+  _LombaDialogNotYesState({
+    required this.itemName,
+    required this.titleMessage,
+    required this.dialogMessage,
+  }) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,8 @@ class _LombaDialogNotYesState extends State<LombaDialogNotYes> {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context, 'Sí');
-                    },
+                  },
+                  key: const Key("button_yes"),
                   child: const Text('Sí'),
                   style: ButtonStyle(
                       backgroundColor:

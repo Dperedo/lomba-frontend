@@ -14,8 +14,8 @@ class OrganizationService extends ChangeNotifier {
 
     http.Response? resp;
     List<dynamic>? decodedResp;
-    
-    final List<dynamic> datos = [resp,decodedResp,false];
+
+    final List<dynamic> datos = [resp, decodedResp, false];
 
     String? token = await readToken();
 
@@ -26,10 +26,10 @@ class OrganizationService extends ChangeNotifier {
         "Access-Control_Allow_Origin": "*",
         'Authorization': 'Bearer $token',
       }).timeout(const Duration(seconds: 10));
-      datos[2]=true;
+      datos[2] = true;
       decodedResp = json.decode(resp.body);
-      datos[0]=resp;
-      datos[1]=decodedResp;
+      datos[0] = resp;
+      datos[1] = decodedResp;
       //print(decodedResp);
     } catch (e) {
       print('ERROR!');
@@ -79,13 +79,14 @@ class OrganizationService extends ChangeNotifier {
     }
   }
 
-  Future<String?> OrganizationAdd(String idorga,String iduser,List<dynamic> roles) async {
+  Future<String?> OrganizationAdd(
+      String idorga, String iduser, List<dynamic> roles) async {
     final Map<String, dynamic> newData = {
       'orgaId': idorga,
       'userId': iduser,
       'roles': roles
     };
-    
+
     final url = Uri.parse('$_baseUrl/api/v1/Orga/users');
 
     http.Response? resp;
@@ -119,14 +120,16 @@ class OrganizationService extends ChangeNotifier {
     }
   }
 
-  Future<String?> OrganizationDelete(String idorga,String iduser,) async {
-    
+  Future<String?> OrganizationDelete(
+    String idorga,
+    String iduser,
+  ) async {
     final url = Uri.parse('$_baseUrl/api/v1/Orga/$idorga/users?userId=$iduser');
 
     http.Response? resp;
     Map<String, dynamic>? decodedResp;
-    
-    final List<dynamic> datos = [resp,decodedResp,false];
+
+    final List<dynamic> datos = [resp, decodedResp, false];
 
     String? token = await readToken();
 
@@ -138,10 +141,10 @@ class OrganizationService extends ChangeNotifier {
         "Access-Control_Allow_Origin": "*",
         'Authorization': 'Bearer $token',
       }).timeout(const Duration(seconds: 10));
-      datos[2]=true;
+      datos[2] = true;
       decodedResp = json.decode(resp.body);
-      datos[0]=resp;
-      datos[1]=decodedResp;
+      datos[0] = resp;
+      datos[1] = decodedResp;
       //print('antes del catch');
       print(decodedResp);
     } catch (e) {
@@ -164,7 +167,7 @@ class OrganizationService extends ChangeNotifier {
     http.Response? resp;
     Map<String, dynamic>? decodedResp;
 
-    final List<dynamic> datos = [resp,decodedResp,false];
+    final List<dynamic> datos = [resp, decodedResp, false];
 
     String? token = await readToken();
     print(disabled);
@@ -182,10 +185,10 @@ class OrganizationService extends ChangeNotifier {
         "Access-Control_Allow_Origin": "*",
         'Authorization': 'Bearer $token',
       }).timeout(const Duration(seconds: 10));
-      datos[2]=true;
+      datos[2] = true;
       decodedResp = json.decode(resp.body);
-      datos[0]=resp;
-      datos[1]=decodedResp;
+      datos[0] = resp;
+      datos[1] = decodedResp;
       //print(decodedResp);
     } catch (e) {
       print('ERROR!');

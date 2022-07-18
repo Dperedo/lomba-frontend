@@ -15,8 +15,8 @@ class OrganizationUserslistService extends ChangeNotifier {
 
     http.Response? resp;
     List<dynamic>? decodedResp;
-    
-    final List<dynamic> datos = [resp,decodedResp,false];
+
+    final List<dynamic> datos = [resp, decodedResp, false];
 
     String? token = await readToken();
 
@@ -27,10 +27,10 @@ class OrganizationUserslistService extends ChangeNotifier {
         "Access-Control_Allow_Origin": "*",
         'Authorization': 'Bearer $token',
       }).timeout(const Duration(seconds: 10));
-      datos[2]=true;
+      datos[2] = true;
       decodedResp = json.decode(resp.body);
-      datos[0]=resp;
-      datos[1]=decodedResp;
+      datos[0] = resp;
+      datos[1] = decodedResp;
       //print(decodedResp);
     } catch (e) {
       print('ERROR!');
@@ -48,12 +48,13 @@ class OrganizationUserslistService extends ChangeNotifier {
     }
   }
 
-  Future<List<dynamic>?> EnableDisable(String id,String userId, bool disabled) async {
+  Future<List<dynamic>?> EnableDisable(
+      String id, String userId, bool disabled) async {
     Uri? url;
     http.Response? resp;
     Map<String, dynamic>? decodedResp;
 
-    final List<dynamic> datos = [resp,decodedResp,false];
+    final List<dynamic> datos = [resp, decodedResp, false];
 
     String? token = await readToken();
     print(disabled);
@@ -71,10 +72,10 @@ class OrganizationUserslistService extends ChangeNotifier {
         "Access-Control_Allow_Origin": "*",
         'Authorization': 'Bearer $token',
       }).timeout(const Duration(seconds: 10));
-      datos[2]=true;
+      datos[2] = true;
       decodedResp = json.decode(resp.body);
-      datos[0]=resp;
-      datos[1]=decodedResp;
+      datos[0] = resp;
+      datos[1] = decodedResp;
       print(decodedResp);
     } catch (e) {
       print('ERROR!');
@@ -89,17 +90,17 @@ class OrganizationUserslistService extends ChangeNotifier {
     }
   }
 
-  Future<List<dynamic>?> DeleteUsers(String id,String userId) async {
+  Future<List<dynamic>?> DeleteUsers(String id, String userId) async {
     Uri? url;
     http.Response? resp;
     Map<String, dynamic>? decodedResp;
-    
-    final List<dynamic> datos = [resp,decodedResp,false];
+
+    final List<dynamic> datos = [resp, decodedResp, false];
 
     String? token = await readToken();
 
     url = Uri.parse('$_baseUrl/api/v1/Orga/$id/users?userId=$userId');
-    
+
     try {
       resp = await http.delete(url, headers: {
         "Accept": "application/json",
@@ -107,10 +108,10 @@ class OrganizationUserslistService extends ChangeNotifier {
         "Access-Control_Allow_Origin": "*",
         'Authorization': 'Bearer $token',
       }).timeout(const Duration(seconds: 10));
-      datos[2]=true;
+      datos[2] = true;
       decodedResp = json.decode(resp.body);
-      datos[0]=resp;
-      datos[1]=decodedResp;
+      datos[0] = resp;
+      datos[1] = decodedResp;
       print(decodedResp);
     } catch (e) {
       print('ERROR!');

@@ -25,6 +25,7 @@ class _LombaSideMenuState extends State<LombaSideMenu> {
     final authService = Provider.of<AuthService>(context, listen: false);
 
     return Drawer(
+      key: const Key("menu_burguer"),
       child: FutureBuilder(
           future: authService.readPermiso(),
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -78,6 +79,7 @@ class _LombaSideMenuState extends State<LombaSideMenu> {
               );
               menu.add(
                 ListTile(
+                  key: const Key("menuopt_permisos"),
                   leading: const Icon(Icons.key_outlined),
                   title: const Text('Permisos'),
                   onTap: () {
@@ -153,8 +155,7 @@ class _LombaSideMenuState extends State<LombaSideMenu> {
               padding: EdgeInsets.zero,
               children: menu,
             );
-          }
-        ),
+          }),
     );
   }
 }

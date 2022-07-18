@@ -52,11 +52,9 @@ class AuthService extends ChangeNotifier {
       print('error');
       return decodedResp!['message'];
     }
-
   }
 
   Future<bool> Ping() async {
-
     final url = Uri.parse('$_baseUrl/api/Ping');
 
     http.Response? resp;
@@ -76,7 +74,7 @@ class AuthService extends ChangeNotifier {
       print(e.toString());
       return false;
       //throw ('Tiempo de espera alcanzado');
-    } 
+    }
 
     if (resp.statusCode == 200) {
       print('resultado = 200');
@@ -85,7 +83,6 @@ class AuthService extends ChangeNotifier {
       print('error');
       return false;
     }
-
   }
 
   Future logout() async {
