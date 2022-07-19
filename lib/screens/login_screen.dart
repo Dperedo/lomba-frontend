@@ -108,6 +108,7 @@ class _LoginForm extends StatelessWidget {
                   prefixIcon: Icons.alternate_email_rounded),
               onChanged: (value) => loginForm.email = value,
               validator: (value) {
+                loginForm.email = value!;
                 /*String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
                   RegExp regExp  = new RegExp(pattern);
                   
@@ -130,6 +131,7 @@ class _LoginForm extends StatelessWidget {
                   prefixIcon: Icons.lock_outline),
               onChanged: (value) => loginForm.password = value,
               validator: (value) {
+                loginForm.password = value!;
                 return (value != null && value.length >= 4)
                     ? null
                     : 'La contraseña debe de ser de 6 caracteres';
