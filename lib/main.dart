@@ -17,6 +17,7 @@ import 'package:front_lomba/helpers/preferences.dart';
 import 'package:front_lomba/providers/theme_provider.dart';
 import 'package:front_lomba/services/auth_service.dart';
 import 'package:get/get.dart';
+import 'package:front_lomba/providers/url_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

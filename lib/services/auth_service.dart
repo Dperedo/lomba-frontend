@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:front_lomba/helpers/preferences.dart';
+import 'package:front_lomba/providers/url_provider.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -25,7 +26,8 @@ class AuthService extends ChangeNotifier {
 
     http.Response? resp;
     Map<String, dynamic>? decodedResp;
-
+    //print(authData);
+    //print(menuProvider.loadData());
     try {
       //print(json.encode(authData));
       resp = await http.post(url, body: json.encode(authData), headers: {
