@@ -160,7 +160,7 @@ class _UserListBodyState extends State<UserListBody> {
   }
 }
 
-class OrganizationUsersListItem extends StatelessWidget {
+class OrganizationUsersListItem extends StatefulWidget {
   final String id;
   final String userId;
   final String username;
@@ -175,6 +175,11 @@ class OrganizationUsersListItem extends StatelessWidget {
   required this.onChanged
   }) : super(key: key);
 
+  @override
+  State<OrganizationUsersListItem> createState() => _OrganizationUsersListItemState();
+}
+
+class _OrganizationUsersListItemState extends State<OrganizationUsersListItem> {
   @override
   Widget build(BuildContext context) {
     final organizationUserslistService = Provider.of<OrganizationUserslistService>(context, listen: false);
@@ -192,7 +197,7 @@ class OrganizationUsersListItem extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   child: Text(
-                    username,
+                    widget.username,
                     style: DefaultTextStyle.of(context)
                         .style
                         .apply(fontSizeFactor: 1.4),
@@ -220,7 +225,7 @@ class OrganizationUsersListItem extends StatelessWidget {
           const SizedBox(
             width: 20,
           ),
-          if(habilitado)...[
+          if(widget.habilitado)...[
             FloatingActionButton(
               heroTag: null,
               tooltip: 'Activar usuario de la organización',
@@ -230,7 +235,7 @@ class OrganizationUsersListItem extends StatelessWidget {
                   builder: (context) => GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
                     child: LombaDialogNotYes(
-                      itemName: username,
+                      itemName: widget.username,
                       titleMessage: 'Activar',
                       dialogMessage:
                           '¿Desea activar al usuario de la organización?',
@@ -239,8 +244,8 @@ class OrganizationUsersListItem extends StatelessWidget {
                 ).then((value) async {
                       if (value == 'Sí')
                         {
-                          print(userId);
-                          final List<dynamic>? respuesta = await organizationUserslistService.EnableDisable(id,userId,!habilitado);
+                          print(widget.userId);
+                          final List<dynamic>? respuesta = await organizationUserslistService.EnableDisable(widget.id,widget.userId,!widget.habilitado);
 
                           if ( !respuesta?[2] ){
                             print('segundo if error');
@@ -272,7 +277,7 @@ class OrganizationUsersListItem extends StatelessWidget {
                               SnackBarGenerator.getNotificationMessage(
                                   'Error con el servidor'));
                           }
-                          onChanged();
+                          widget.onChanged();
                         }
                     });
               },
@@ -289,7 +294,7 @@ class OrganizationUsersListItem extends StatelessWidget {
                   builder: (context) => GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
                     child: LombaDialogNotYes(
-                      itemName: username,
+                      itemName: widget.username,
                       titleMessage: 'Desactivar',
                       dialogMessage:
                           '¿Desea desactivar al usuario de la organización?',
@@ -298,8 +303,8 @@ class OrganizationUsersListItem extends StatelessWidget {
                 ).then((value) async {
                       if (value == 'Sí')
                         {
-                          print(userId);
-                          final List<dynamic>? respuesta = await organizationUserslistService.EnableDisable(id,userId,!habilitado);
+                          print(widget.userId);
+                          final List<dynamic>? respuesta = await organizationUserslistService.EnableDisable(widget.id,widget.userId,!widget.habilitado);
 
                           if ( !respuesta?[2] ){
                             print('segundo if error');
@@ -331,7 +336,8 @@ class OrganizationUsersListItem extends StatelessWidget {
                               SnackBarGenerator.getNotificationMessage(
                                   'Error con el servidor'));
                           }
-                          onChanged();
+                          //print(widget.habilitado);
+                          widget.onChanged();
                         }
                     });
               },
@@ -350,7 +356,7 @@ class OrganizationUsersListItem extends StatelessWidget {
                 builder: (context) => GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
                   child: LombaDialogNotYes(
-                    itemName: username,
+                    itemName: widget.username,
                     titleMessage: 'Quitar de la organización',
                     dialogMessage:
                         '¿Desea quitar al usuario de la organización?',
@@ -359,8 +365,8 @@ class OrganizationUsersListItem extends StatelessWidget {
               ).then((value) async {
                     if (value == 'Sí')
                       {
-                        print(userId);
-                        final List<dynamic>? respuesta = await organizationUserslistService.DeleteUsers(id,userId);
+                        print(widget.userId);
+                        final List<dynamic>? respuesta = await organizationUserslistService.DeleteUsers(widget.id,widget.userId);
 
                         if ( !respuesta?[2] ){
                           print('segundo if error');
@@ -392,7 +398,7 @@ class OrganizationUsersListItem extends StatelessWidget {
                             SnackBarGenerator.getNotificationMessage(
                                 'Error con el servidor'));
                         }
-                        onChanged();
+                        widget.onChanged();
                       }
                   });
             },
