@@ -121,7 +121,7 @@ class _UserListBodyState extends State<UserListBody> {
                               return Column(
                                 children: [
                                   OrganizationUsersListItem(
-                                    id: ps?[1][index]["orga"]["id"],
+                                    orgaId: ps?[1][index]["orga"]["id"],
                                     userId: ps?[1][index]["user"]["id"],
                                     username: ps?[1][index]["user"]["username"],
                                     habilitado: ps?[1][index]["user"]["isDisabled"],
@@ -161,14 +161,14 @@ class _UserListBodyState extends State<UserListBody> {
 }
 
 class OrganizationUsersListItem extends StatefulWidget {
-  final String id;
+  final String orgaId;
   final String userId;
   final String username;
   final bool habilitado;
   final Function onChanged;
 
   const OrganizationUsersListItem({Key? key,
-  required this.id,
+  required this.orgaId,
   required this.userId,
   required this.username,
   required this.habilitado,
@@ -245,7 +245,7 @@ class _OrganizationUsersListItemState extends State<OrganizationUsersListItem> {
                       if (value == 'Sí')
                         {
                           print(widget.userId);
-                          final List<dynamic>? respuesta = await organizationUserslistService.EnableDisable(widget.id,widget.userId,!widget.habilitado);
+                          final List<dynamic>? respuesta = await organizationUserslistService.EnableDisable(widget.orgaId,widget.userId,!widget.habilitado);
 
                           if ( !respuesta?[2] ){
                             print('segundo if error');
@@ -304,7 +304,7 @@ class _OrganizationUsersListItemState extends State<OrganizationUsersListItem> {
                       if (value == 'Sí')
                         {
                           print(widget.userId);
-                          final List<dynamic>? respuesta = await organizationUserslistService.EnableDisable(widget.id,widget.userId,!widget.habilitado);
+                          final List<dynamic>? respuesta = await organizationUserslistService.EnableDisable(widget.orgaId,widget.userId,!widget.habilitado);
 
                           if ( !respuesta?[2] ){
                             print('segundo if error');
@@ -366,7 +366,7 @@ class _OrganizationUsersListItemState extends State<OrganizationUsersListItem> {
                     if (value == 'Sí')
                       {
                         print(widget.userId);
-                        final List<dynamic>? respuesta = await organizationUserslistService.DeleteUsers(widget.id,widget.userId);
+                        final List<dynamic>? respuesta = await organizationUserslistService.DeleteUsers(widget.orgaId,widget.userId);
 
                         if ( !respuesta?[2] ){
                           print('segundo if error');
