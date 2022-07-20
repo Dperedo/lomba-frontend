@@ -325,18 +325,9 @@ class _PermissionListItemState extends State<PermissionListItem> {
                     setState(() {
                       print('En SETSTATE - DESACTIVAR');
                       widget.onChanged();
-
-                      // _PermisoBodyState().dataFuture =
-                      //     permiService.PermissionsList();
-                      //_PermisoBodyState().initState();
-                      //dataFuture = widget.permiService.PermissionsList();
                     });
                   }
                 });
-                /*setState() {
-                    var ps = permiService.PermissionsList();
-                  };
-                  print('despeus del set !!!!!!!!!!!!!');*/
               },
               tooltip: 'Desactivar permiso',
               child: const Icon(Icons.done_rounded), //do_not_disturb_on

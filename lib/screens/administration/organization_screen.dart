@@ -55,7 +55,7 @@ class OrganizationsPage extends StatelessWidget {
   }
 }
 
-class OrgaBody extends StatelessWidget {
+class OrgaBody extends StatefulWidget {
   const OrgaBody({
     Key? key,
     required this.organizationService,
@@ -64,7 +64,20 @@ class OrgaBody extends StatelessWidget {
   final OrganizationService organizationService;
 
   @override
-  Widget build(BuildContext context) {
+  State<OrgaBody> createState() => _OrgaBodyState();
+}
+
+class _OrgaBodyState extends State<OrgaBody> {
+  late Future<List<dynamic>?> dataFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    dataFuture = widget.organizationService.OrganizationList();
+  }
+
+  @override
+  Widget build(BuildContext context) {//organizationService.OrganizationList()
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -80,7 +93,7 @@ class OrgaBody extends StatelessWidget {
               return Padding(
                 padding: EdgeInsets.zero,
                 child: FutureBuilder(
-                    future: organizationService.OrganizationList(),
+                    future: dataFuture,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<dynamic>?> snapshot) {
                       if (snapshot.data == null) {
@@ -107,6 +120,11 @@ class OrgaBody extends StatelessWidget {
                                     organizacion: ps?[1][index]["name"],
                                     icon: Icons.business,
                                     habilitado: ps?[1][index]["isDisabled"],
+                                    onChanged: () {
+                                      setState(() {
+                                        dataFuture = widget.organizationService.OrganizationList();
+                                      });
+                                    },
                                   ),
                                   const Divider()
                                 ],
@@ -143,6 +161,7 @@ class OrganizationListItem extends StatelessWidget {
   final String organizacion;
   final IconData icon;
   final bool habilitado;
+  final Function onChanged;
 
 
   const OrganizationListItem({
@@ -150,8 +169,10 @@ class OrganizationListItem extends StatelessWidget {
     required this.id,
     required this.organizacion,
     required this.icon,
-    required this.habilitado
+    required this.habilitado,
+    required this.onChanged
   }) : super(key: key);
+  
 
   @override
   Widget build(BuildContext context) {
@@ -230,6 +251,7 @@ class OrganizationListItem extends StatelessWidget {
                               SnackBarGenerator.getNotificationMessage(
                                   'Error con el servidor'));
                           }
+                          onChanged();
                         }
                     });
               },
@@ -286,6 +308,7 @@ class OrganizationListItem extends StatelessWidget {
                               SnackBarGenerator.getNotificationMessage(
                                   'Error con el servidor'));
                           }
+                          onChanged();
                         }
                     });
               },

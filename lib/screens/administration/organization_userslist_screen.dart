@@ -58,7 +58,7 @@ class OrganizationUsersListPage extends StatelessWidget {
   }
 }
 
-class UserListBody extends StatelessWidget {
+class UserListBody extends StatefulWidget {
   const UserListBody({
     Key? key,
     required this.organizationUserslistService,
@@ -67,6 +67,19 @@ class UserListBody extends StatelessWidget {
 
   final OrganizationUserslistService organizationUserslistService;
   final String id;
+
+  @override
+  State<UserListBody> createState() => _UserListBodyState();
+}
+
+class _UserListBodyState extends State<UserListBody> {
+  late Future<List<dynamic>?> dataFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    dataFuture = widget.organizationUserslistService.OrganizationUserslist(widget.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +97,7 @@ class UserListBody extends StatelessWidget {
             return Padding(
               padding: EdgeInsets.zero,
               child: FutureBuilder(
-                  future: organizationUserslistService.OrganizationUserslist(id),
+                  future: dataFuture,
                   builder: (BuildContext context,
                       AsyncSnapshot<List<dynamic>?> snapshot) {
                     if (snapshot.data == null) {
@@ -112,6 +125,11 @@ class UserListBody extends StatelessWidget {
                                     userId: ps?[1][index]["user"]["id"],
                                     username: ps?[1][index]["user"]["username"],
                                     habilitado: ps?[1][index]["user"]["isDisabled"],
+                                    onChanged: () {
+                                      setState(() {
+                                        dataFuture = widget.organizationUserslistService.OrganizationUserslist(widget.id);
+                                      });
+                                    },
                                   ),
                                   const Divider()
                                 ],
@@ -147,13 +165,15 @@ class OrganizationUsersListItem extends StatelessWidget {
   final String userId;
   final String username;
   final bool habilitado;
+  final Function onChanged;
 
   const OrganizationUsersListItem({Key? key,
   required this.id,
   required this.userId,
   required this.username,
-  required this.habilitado})
-      : super(key: key);
+  required this.habilitado,
+  required this.onChanged
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -252,6 +272,7 @@ class OrganizationUsersListItem extends StatelessWidget {
                               SnackBarGenerator.getNotificationMessage(
                                   'Error con el servidor'));
                           }
+                          onChanged();
                         }
                     });
               },
@@ -310,6 +331,7 @@ class OrganizationUsersListItem extends StatelessWidget {
                               SnackBarGenerator.getNotificationMessage(
                                   'Error con el servidor'));
                           }
+                          onChanged();
                         }
                     });
               },
@@ -370,6 +392,7 @@ class OrganizationUsersListItem extends StatelessWidget {
                             SnackBarGenerator.getNotificationMessage(
                                 'Error con el servidor'));
                         }
+                        onChanged();
                       }
                   });
             },

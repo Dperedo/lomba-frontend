@@ -56,13 +56,26 @@ class AllUsersPage extends StatelessWidget {
   }
 }
 
-class AllUserBody extends StatelessWidget {
+class AllUserBody extends StatefulWidget {
   const AllUserBody({
     Key? key,
     required this.allusersService,
   }) : super(key: key);
 
   final UserService allusersService;
+
+  @override
+  State<AllUserBody> createState() => _AllUserBodyState();
+}
+
+class _AllUserBodyState extends State<AllUserBody> {
+  late Future<List<dynamic>?> dataFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    dataFuture = widget.allusersService.UserList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +94,7 @@ class AllUserBody extends StatelessWidget {
               return Padding(
                 padding: EdgeInsets.zero,
                 child: FutureBuilder(
-                    future: allusersService.UserList(),
+                    future: dataFuture,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<dynamic>?> snapshot) {
                       if (snapshot.data == null) {
@@ -109,6 +122,11 @@ class AllUserBody extends StatelessWidget {
                                       username: ps?[1][index]["user"]["username"],
                                       habilitado: ps?[1][index]["user"]["isDisabled"],
                                       count: ps?[1][index]["orgaCount"],
+                                      onChanged: () {
+                                        setState(() {
+                                          dataFuture = widget.allusersService.UserList();
+                                        });
+                                      },
                                     ),
                                     const Divider()
                                   ],
@@ -141,19 +159,26 @@ class AllUserBody extends StatelessWidget {
   }
 }
 
-class AllUsersListItem extends StatelessWidget {
+class AllUsersListItem extends StatefulWidget {
   final String id;
   final String username;
   final bool habilitado;
   final int count;
+  final Function onChanged;
   const AllUsersListItem({
     Key? key,
     required this.id,
     required this.username,
     required this.habilitado,
-    required this.count
+    required this.count,
+    required this.onChanged
   }) : super(key: key);
 
+  @override
+  State<AllUsersListItem> createState() => _AllUsersListItemState();
+}
+
+class _AllUsersListItemState extends State<AllUsersListItem> {
   @override
   Widget build(BuildContext context) {
     final allusersService = Provider.of<UserService>(context, listen: false);
@@ -171,7 +196,7 @@ class AllUsersListItem extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   child: Text(
-                    username,
+                    widget.username,
                     style: DefaultTextStyle.of(context)
                         .style
                         .apply(fontSizeFactor: 1.4),
@@ -204,12 +229,12 @@ class AllUsersListItem extends StatelessWidget {
             tooltip: 'Organizaciones del usuario',
             onPressed: () {},
             child:
-                Text(count.toString(), style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(widget.count.toString(), style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           const SizedBox(
             width: 20,
           ),
-          if(habilitado)...[
+          if(widget.habilitado)...[
             FloatingActionButton(
               heroTag: null,
               tooltip: 'Activar al usuario',
@@ -219,7 +244,7 @@ class AllUsersListItem extends StatelessWidget {
                   builder: (context) => GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
                     child: LombaDialogNotYes(
-                      itemName: username,
+                      itemName: widget.username,
                       titleMessage: 'Activar',
                       dialogMessage: '¿Desea activar al usuario?',
                     ),
@@ -227,7 +252,7 @@ class AllUsersListItem extends StatelessWidget {
                 ).then((value) async {
                       if (value == 'Sí')
                         {
-                          final List<dynamic>? respuesta = await allusersService.EnableDisable(id,!habilitado);
+                          final List<dynamic>? respuesta = await allusersService.EnableDisable(widget.id,!widget.habilitado);
 
                           if ( !respuesta?[2] ){
                             print('segundo if error');
@@ -259,6 +284,7 @@ class AllUsersListItem extends StatelessWidget {
                               SnackBarGenerator.getNotificationMessage(
                                   'Error con el servidor'));
                           }
+                          widget.onChanged();
                         }
                     });
               },
@@ -275,7 +301,7 @@ class AllUsersListItem extends StatelessWidget {
                   builder: (context) => GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
                     child: LombaDialogNotYes(
-                      itemName: username,
+                      itemName: widget.username,
                       titleMessage: 'Desactivar',
                       dialogMessage: '¿Desea desactivar al usuario?',
                     ),
@@ -283,7 +309,7 @@ class AllUsersListItem extends StatelessWidget {
                 ).then((value) async {
                       if (value == 'Sí')
                         {
-                          final List<dynamic>? respuesta = await allusersService.EnableDisable(id,!habilitado);
+                          final List<dynamic>? respuesta = await allusersService.EnableDisable(widget.id,!widget.habilitado);
 
                           if ( !respuesta?[2] ){
                             print('segundo if error');
@@ -315,6 +341,7 @@ class AllUsersListItem extends StatelessWidget {
                               SnackBarGenerator.getNotificationMessage(
                                   'Error con el servidor'));
                           }
+                          widget.onChanged();
                         }
                     });
               },
@@ -330,7 +357,7 @@ class AllUsersListItem extends StatelessWidget {
             child: const Icon(Icons.edit),
             onPressed: () {
               Navigator.of(context)
-                  .push(RouteAnimation.animatedTransition(UserEdit(user: id,)));
+                  .push(RouteAnimation.animatedTransition(UserEdit(user: widget.id,)));
             },
           ),
         ],
