@@ -21,3 +21,16 @@ Después, en la raíz del proyecto ejecutar el siguiente comando
 ´´´
 flutter drive --driver=test_driver/integration_test.dart --target=integration_test/permissions_test.dart -d chrome
 ´´´
+
+Para dockerizar los comandos son los siguientes:
+
+´´´
+docker build --build-arg APIURL=http://localhost:8287  -t lombafrontend --no-cache .
+´´´
+El parámetro APIURL es opcional.
+
+Luego para levantar, hacer lo siguiente:
+
+´´´
+docker run -d -p 1201:80 --name frontlocal lombafrontend
+´´´

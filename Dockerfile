@@ -1,6 +1,10 @@
 #Stage 1 - Install dependencies and build the app
 FROM debian:latest AS build-env
 
+#Preparación de variable de URL
+ARG APIURL
+ENV APIURL=$APIURL
+
 # Install flutter dependencies
 RUN apt-get update 
 RUN apt-get install -y curl git wget unzip libgconf-2-4 gdb libstdc++6 libglu1-mesa fonts-droid-fallback lib32stdc++6 python3
@@ -18,13 +22,14 @@ RUN flutter doctor -v
 # Enable flutter web
 RUN flutter channel master
 RUN flutter upgrade
+
 RUN flutter config --enable-web
 
 # Copy files to container and build
 RUN mkdir /app/
 COPY . /app/
 WORKDIR /app/
-RUN flutter build web
+RUN flutter build web --release --dart-define APIURL=${APIURL:-}
 
 # Stage 2 - Create the run-time image
 FROM nginx:1.21.1-alpine
