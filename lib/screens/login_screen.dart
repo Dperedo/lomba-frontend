@@ -101,7 +101,7 @@ class _LoginForm extends StatelessWidget {
               style: TextStyle(color: Colors.black),
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
-              initialValue: '',
+              initialValue: 'superadmin',
               decoration: InputDecorations.authInputDecoration(
                   hintText: '',
                   labelText: 'Correo electrónico',
@@ -125,7 +125,7 @@ class _LoginForm extends StatelessWidget {
               autocorrect: false,
               obscureText: true,
               keyboardType: TextInputType.emailAddress,
-              initialValue: '',
+              initialValue: 'superadmin',
               decoration: InputDecorations.authInputDecoration(
                   hintText: '',
                   labelText: 'Contraseña',

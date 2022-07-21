@@ -40,7 +40,7 @@ class OrganizationUserslistService extends ChangeNotifier {
 
     if (resp.statusCode == 200) {
       print('resultado = 200');
-      print(decodedResp);
+      //print(decodedResp);
       return datos;
     } else {
       print('error');
@@ -93,7 +93,7 @@ class OrganizationUserslistService extends ChangeNotifier {
   Future<List<dynamic>?> DeleteUsers(String id, String userId) async {
     Uri? url;
     http.Response? resp;
-    Map<String, dynamic>? decodedResp;
+    List<dynamic>? decodedResp;
 
     final List<dynamic> datos = [resp, decodedResp, false];
 
@@ -112,6 +112,7 @@ class OrganizationUserslistService extends ChangeNotifier {
       decodedResp = json.decode(resp.body);
       datos[0] = resp;
       datos[1] = decodedResp;
+      print('resultado de decodedResp');
       print(decodedResp);
     } catch (e) {
       print('ERROR!');
