@@ -14,7 +14,8 @@ import 'package:front_lomba/widgets/lomba_sidemenu.dart';
 import 'package:front_lomba/services/organization_userslist_services.dart';
 
 class OrganizationUsersList extends StatelessWidget {
-  const OrganizationUsersList({Key? key, required this.organizacion}) : super(key: key);
+  const OrganizationUsersList({Key? key, required this.organizacion})
+      : super(key: key);
 
   final String organizacion;
   static const appTitle = 'Lomba';
@@ -25,30 +26,39 @@ class OrganizationUsersList extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: '$appTitle - $pageTitle',
-      home: OrganizationUsersListPage(title: '$appTitle - $pageTitle',id: organizacion),
+      home: OrganizationUsersListPage(
+          title: '$appTitle - $pageTitle', idorga: organizacion),
       theme: Provider.of<ThemeProvider>(context).currentTheme,
     );
   }
 }
 
 class OrganizationUsersListPage extends StatelessWidget {
-  const OrganizationUsersListPage({Key? key,
-  required this.title,
-  required this.id})
+  const OrganizationUsersListPage(
+      {Key? key, required this.title, required this.idorga})
       : super(key: key);
 
   final String title;
-  final String id;
+  final String idorga;
 
   @override
   Widget build(BuildContext context) {
-    final organizationUserslistService = Provider.of<OrganizationUserslistService>(context, listen: false);
+    final organizationUserslistService =
+        Provider.of<OrganizationUserslistService>(context, listen: false);
     final screenWidth = MediaQuery.of(context).size.width;
     final int breakpoint = Preferences.maxScreen;
     if (screenWidth <= breakpoint) {
-      return SmallScreen(title: title, principal: UserListBody(organizationUserslistService: organizationUserslistService, id: id));
+      return SmallScreen(
+          title: title,
+          principal: UserListBody(
+              organizationUserslistService: organizationUserslistService,
+              idorga: idorga));
     } else {
-      return BigScreen(title: title, principal: UserListBody(organizationUserslistService: organizationUserslistService, id: id));
+      return BigScreen(
+          title: title,
+          principal: UserListBody(
+              organizationUserslistService: organizationUserslistService,
+              idorga: idorga));
     }
     /*return Scaffold(
       appBar: LombaAppBar(title: title),
@@ -62,11 +72,11 @@ class UserListBody extends StatefulWidget {
   const UserListBody({
     Key? key,
     required this.organizationUserslistService,
-    required this.id,
+    required this.idorga,
   }) : super(key: key);
 
   final OrganizationUserslistService organizationUserslistService;
-  final String id;
+  final String idorga;
 
   @override
   State<UserListBody> createState() => _UserListBodyState();
@@ -78,7 +88,8 @@ class _UserListBodyState extends State<UserListBody> {
   @override
   void initState() {
     super.initState();
-    dataFuture = widget.organizationUserslistService.OrganizationUserslist(widget.id);
+    dataFuture = widget.organizationUserslistService
+        .OrganizationUserslist(widget.idorga);
   }
 
   @override
@@ -91,69 +102,74 @@ class _UserListBodyState extends State<UserListBody> {
             subtitle: "Organizaciones / _ / Usuarios",
           ),
           Padding(
-          padding: EdgeInsets.zero,
-          child: Builder(builder: (BuildContext context) {
-            print('muere?');
-            return Padding(
-              padding: EdgeInsets.zero,
-              child: FutureBuilder(
-                  future: dataFuture,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<dynamic>?> snapshot) {
-                    if (snapshot.data == null) {
-                      return const CircularProgressIndicator();
-                    }
-                    final ps = snapshot.data;
-                    if ( !ps?[2] ){
+            padding: EdgeInsets.zero,
+            child: Builder(builder: (BuildContext context) {
+              print('muere?');
+              return Padding(
+                padding: EdgeInsets.zero,
+                child: FutureBuilder(
+                    future: dataFuture,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<dynamic>?> snapshot) {
+                      if (snapshot.data == null) {
+                        return const CircularProgressIndicator();
+                      }
+                      final ps = snapshot.data;
+                      if (!ps?[2]) {
                         print('segundo if error');
                         return const LombaDialogErrorDisconnect();
-                    }else if ( ps?[0].statusCode == 200){
-                      return Column(
-                        children: [
-                          const LombaFilterListPage(),
-                          const Divider(),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: ps?[1].length,
-                            itemBuilder: (context, index) {
-                              final item = index.toString();
+                      } else if (ps?[0].statusCode == 200) {
+                        return Column(
+                          children: [
+                            const LombaFilterListPage(),
+                            const Divider(),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: ps?[1].length,
+                              itemBuilder: (context, index) {
+                                final item = index.toString();
 
-                              return Column(
-                                children: [
-                                  OrganizationUsersListItem(
-                                    orgaId: ps?[1][index]["orga"]["id"],
-                                    userId: ps?[1][index]["user"]["id"],
-                                    username: ps?[1][index]["user"]["username"],
-                                    habilitado: ps?[1][index]["user"]["isDisabled"],
-                                    onChanged: () {
-                                      setState(() {
-                                        dataFuture = widget.organizationUserslistService.OrganizationUserslist(widget.id);
-                                      });
-                                    },
-                                  ),
-                                  const Divider()
-                                ],
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    } else if (ps?[0].statusCode >= 400 && ps?[0].statusCode <= 400) {
-                      print('400 error');
-                      if(ps?[0].statusCode == 401) {
+                                return Column(
+                                  children: [
+                                    OrganizationUsersListItem(
+                                      orgaId: ps?[1][index]["orga"]["id"],
+                                      userId: ps?[1][index]["user"]["id"],
+                                      username: ps?[1][index]["user"]
+                                          ["username"],
+                                      habilitado: ps?[1][index]["isDisabled"],
+                                      onChanged: () {
+                                        setState(() {
+                                          dataFuture = widget
+                                              .organizationUserslistService
+                                              .OrganizationUserslist(
+                                                  widget.idorga);
+                                        });
+                                      },
+                                    ),
+                                    const Divider()
+                                  ],
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      } else if (ps?[0].statusCode >= 400 &&
+                          ps?[0].statusCode <= 400) {
+                        print('400 error');
+                        if (ps?[0].statusCode == 401) {
                           return const LombaDialogError401();
-                        } else if(ps?[0].statusCode == 403) {
+                        } else if (ps?[0].statusCode == 403) {
                           return const LombaDialogError403();
                         }
-                      return const LombaDialogError400();
-                    } else {
-                      print('salio error');
-                      return const LombaDialogError();
-                    }
-                  }),
-            );
-          }),
-        ),
+                        return const LombaDialogError400();
+                      } else {
+                        print('salio error');
+                        return const LombaDialogError();
+                      }
+                    }),
+              );
+            }),
+          ),
         ],
       ),
     );
@@ -167,22 +183,25 @@ class OrganizationUsersListItem extends StatefulWidget {
   final bool habilitado;
   final Function onChanged;
 
-  const OrganizationUsersListItem({Key? key,
-  required this.orgaId,
-  required this.userId,
-  required this.username,
-  required this.habilitado,
-  required this.onChanged
-  }) : super(key: key);
+  const OrganizationUsersListItem(
+      {Key? key,
+      required this.orgaId,
+      required this.userId,
+      required this.username,
+      required this.habilitado,
+      required this.onChanged})
+      : super(key: key);
 
   @override
-  State<OrganizationUsersListItem> createState() => _OrganizationUsersListItemState();
+  State<OrganizationUsersListItem> createState() =>
+      _OrganizationUsersListItemState();
 }
 
 class _OrganizationUsersListItemState extends State<OrganizationUsersListItem> {
   @override
   Widget build(BuildContext context) {
-    final organizationUserslistService = Provider.of<OrganizationUserslistService>(context, listen: false);
+    final organizationUserslistService =
+        Provider.of<OrganizationUserslistService>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Row(
@@ -225,7 +244,7 @@ class _OrganizationUsersListItemState extends State<OrganizationUsersListItem> {
           const SizedBox(
             width: 20,
           ),
-          if(widget.habilitado)...[
+          if (widget.habilitado) ...[
             FloatingActionButton(
               heroTag: null,
               tooltip: 'Activar usuario de la organización',
@@ -242,49 +261,51 @@ class _OrganizationUsersListItemState extends State<OrganizationUsersListItem> {
                     ),
                   ),
                 ).then((value) async {
-                      if (value == 'Sí')
-                        {
-                          print(widget.userId);
-                          final List<dynamic>? respuesta = await organizationUserslistService.EnableDisable(widget.orgaId,widget.userId,!widget.habilitado);
+                  if (value == 'Sí') {
+                    print(widget.userId);
+                    final List<dynamic>? respuesta =
+                        await organizationUserslistService.EnableDisable(
+                            widget.orgaId, widget.userId, !widget.habilitado);
 
-                          if ( !respuesta?[2] ){
-                            print('segundo if error');
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Conexión con el servidor no establecido'));
-                          } else if ( respuesta?[0].statusCode == 200){
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Se ha activado al usuario de la organización'));
-                          } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
-                            if(respuesta?[0].statusCode == 401) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Ocurrió un problema con la autentificación'));
-                            }else if(respuesta?[0].statusCode == 403) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Ocurrió un problema con la Solicitud'));
-                            }else {
-                              print('400 error');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Ocurrió una solicitud Incorrecta'));
-                            }
-                          } else {
-                            print('salio error');
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Error con el servidor'));
-                          }
-                          widget.onChanged();
-                        }
-                    });
+                    if (!respuesta?[2]) {
+                      print('segundo if error');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBarGenerator.getNotificationMessage(
+                              'Conexión con el servidor no establecido'));
+                    } else if (respuesta?[0].statusCode == 200) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBarGenerator.getNotificationMessage(
+                              'Se ha activado al usuario de la organización'));
+                    } else if (respuesta?[0].statusCode >= 400 &&
+                        respuesta?[0].statusCode <= 400) {
+                      if (respuesta?[0].statusCode == 401) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió un problema con la autentificación'));
+                      } else if (respuesta?[0].statusCode == 403) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió un problema con la Solicitud'));
+                      } else {
+                        print('400 error');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió una solicitud Incorrecta'));
+                      }
+                    } else {
+                      print('salio error');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBarGenerator.getNotificationMessage(
+                              'Error con el servidor'));
+                    }
+                    widget.onChanged();
+                  }
+                });
               },
               backgroundColor: Colors.red[600],
               child: const Icon(Icons.do_not_disturb_on),
             ),
-          ]else...[
+          ] else ...[
             FloatingActionButton(
               heroTag: null,
               tooltip: 'Desactivar usuario de la organización',
@@ -301,45 +322,47 @@ class _OrganizationUsersListItemState extends State<OrganizationUsersListItem> {
                     ),
                   ),
                 ).then((value) async {
-                      if (value == 'Sí')
-                        {
-                          print(widget.userId);
-                          final List<dynamic>? respuesta = await organizationUserslistService.EnableDisable(widget.orgaId,widget.userId,!widget.habilitado);
+                  if (value == 'Sí') {
+                    print(widget.userId);
+                    final List<dynamic>? respuesta =
+                        await organizationUserslistService.EnableDisable(
+                            widget.orgaId, widget.userId, !widget.habilitado);
 
-                          if ( !respuesta?[2] ){
-                            print('segundo if error');
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Conexión con el servidor no establecido'));
-                          } else if ( respuesta?[0].statusCode == 200){
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Se ha desactivado al usuario de la organización'));
-                          } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
-                            if(respuesta?[0].statusCode == 401) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Ocurrió un problema con la autentificación'));
-                            }else if(respuesta?[0].statusCode == 403) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Ocurrió un problema con la Solicitud'));
-                            }else {
-                              print('400 error');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Ocurrió una solicitud Incorrecta'));
-                            }
-                          } else {
-                            print('salio error');
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBarGenerator.getNotificationMessage(
-                                  'Error con el servidor'));
-                          }
-                          //print(widget.habilitado);
-                          widget.onChanged();
-                        }
-                    });
+                    if (!respuesta?[2]) {
+                      print('segundo if error');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBarGenerator.getNotificationMessage(
+                              'Conexión con el servidor no establecido'));
+                    } else if (respuesta?[0].statusCode == 200) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBarGenerator.getNotificationMessage(
+                              'Se ha desactivado al usuario de la organización'));
+                    } else if (respuesta?[0].statusCode >= 400 &&
+                        respuesta?[0].statusCode <= 400) {
+                      if (respuesta?[0].statusCode == 401) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió un problema con la autentificación'));
+                      } else if (respuesta?[0].statusCode == 403) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió un problema con la Solicitud'));
+                      } else {
+                        print('400 error');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBarGenerator.getNotificationMessage(
+                                'Ocurrió una solicitud Incorrecta'));
+                      }
+                    } else {
+                      print('salio error');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBarGenerator.getNotificationMessage(
+                              'Error con el servidor'));
+                    }
+                    //print(widget.habilitado);
+                    widget.onChanged();
+                  }
+                });
               },
               child: const Icon(Icons.done_rounded),
             ),
@@ -363,44 +386,46 @@ class _OrganizationUsersListItemState extends State<OrganizationUsersListItem> {
                   ),
                 ),
               ).then((value) async {
-                    if (value == 'Sí')
-                      {
-                        print(widget.userId);
-                        final List<dynamic>? respuesta = await organizationUserslistService.DeleteUsers(widget.orgaId,widget.userId);
+                if (value == 'Sí') {
+                  print(widget.userId);
+                  final List<dynamic>? respuesta =
+                      await organizationUserslistService.DeleteUsers(
+                          widget.orgaId, widget.userId);
 
-                        if ( !respuesta?[2] ){
-                          print('segundo if error');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Conexión con el servidor no establecido'));
-                        } else if ( respuesta?[0].statusCode == 200){
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Se ha quitado al usuario de la organización'));
-                        } else if (respuesta?[0].statusCode >= 400 && respuesta?[0].statusCode <= 400) {
-                          if(respuesta?[0].statusCode == 401) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Ocurrió un problema con la autentificación'));
-                          }else if(respuesta?[0].statusCode == 403) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Ocurrió un problema con la Solicitud'));
-                          }else {
-                            print('400 error');
-                            ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Ocurrió una solicitud Incorrecta'));
-                          }
-                        } else {
-                          print('salio error');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBarGenerator.getNotificationMessage(
-                                'Error con el servidor'));
-                        }
-                        widget.onChanged();
-                      }
-                  });
+                  if (!respuesta?[2]) {
+                    print('segundo if error');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBarGenerator.getNotificationMessage(
+                            'Conexión con el servidor no establecido'));
+                  } else if (respuesta?[0].statusCode == 200) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBarGenerator.getNotificationMessage(
+                            'Se ha quitado al usuario de la organización'));
+                  } else if (respuesta?[0].statusCode >= 400 &&
+                      respuesta?[0].statusCode <= 400) {
+                    if (respuesta?[0].statusCode == 401) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBarGenerator.getNotificationMessage(
+                              'Ocurrió un problema con la autentificación'));
+                    } else if (respuesta?[0].statusCode == 403) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBarGenerator.getNotificationMessage(
+                              'Ocurrió un problema con la Solicitud'));
+                    } else {
+                      print('400 error');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBarGenerator.getNotificationMessage(
+                              'Ocurrió una solicitud Incorrecta'));
+                    }
+                  } else {
+                    print('salio error');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBarGenerator.getNotificationMessage(
+                            'Error con el servidor'));
+                  }
+                  widget.onChanged();
+                }
+              });
             },
             child: const Icon(Icons.cancel),
           ),
