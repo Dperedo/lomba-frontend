@@ -1,36 +1,16 @@
-# newflutter - lomba
+# lomba_frontend
 
 A new Flutter project.
 
 ## Getting Started
 
-Para ejecutar el primer test del proyecto, es necesario hacer lo siguiente:
+This project is a starting point for a Flutter application.
 
-Primero revisar que la URL del backend sea la correcta. 
-Esto se revisa en el archivo /lib/helpers/preferences.dart
+A few resources to get you started if this is your first Flutter project:
 
-Segundo: descargar chromedriver desde https://chromedriver.chromium.org/downloads
-Descargar en una carpeta y levantarlo con el siguiente comando desde una terminal o consola:
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-´´´
-./chromedriver.exe --port=4444
-´´´
-
-Después, en la raíz del proyecto ejecutar el siguiente comando
-
-´´´
-flutter drive --driver=test_driver/integration_test.dart --target=integration_test/permissions_test.dart -d chrome
-´´´
-
-Para dockerizar los comandos son los siguientes:
-
-´´´
-docker build --build-arg APIURL=http://localhost:8287  -t lombafrontend --no-cache .
-´´´
-El parámetro APIURL es opcional.
-
-Luego para levantar, hacer lo siguiente:
-
-´´´
-docker run -d -p 1201:80 --name frontlocal lombafrontend
-´´´
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
