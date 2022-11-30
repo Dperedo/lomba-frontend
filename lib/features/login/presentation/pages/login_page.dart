@@ -72,6 +72,7 @@ class LoginPage extends StatelessWidget {
                       height: 20,
                     ),
                     ElevatedButton(
+                        key: const ValueKey("btn_login"),
                         onPressed: () {
                           if (_key.currentState?.validate() == true) {
                             context.read<LoginBloc>().add(OnLoginTriest(

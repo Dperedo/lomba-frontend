@@ -1,7 +1,7 @@
 class Validators {
   static String? validateEmail(String email) {
     if (email.isEmpty) {
-      return "Required Field";
+      return "Campo Requerido";
     }
 
     String pattern =
@@ -10,17 +10,17 @@ class Validators {
     RegExp regExp = RegExp(pattern);
 
     if (!regExp.hasMatch(email)) {
-      return "Please enter a valid email id";
+      return "Por favor ingresa un email válido";
     }
   }
 
   static String? validatePassword(String password) {
     if (password.isEmpty) {
-      return "Required Field";
+      return "Campo Requerido";
     }
 
     if (password.length < 8) {
-      return "Please enter atleast 8 charater for password";
+      return "Por favor ingresa una contraseña de al menos 4 caracteres";
     }
   }
 }
