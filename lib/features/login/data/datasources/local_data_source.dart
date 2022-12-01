@@ -8,6 +8,7 @@ import '../../../../core/exceptions.dart';
 abstract class LoginLocalDataSource {
   Future<TokenModel> getSavedToken();
   Future<void> saveToken(TokenModel token);
+  Future<bool> hasToken();
 }
 
 const CACHED_TOKEN_KEY = "TOKEN_KEY";
@@ -33,5 +34,10 @@ class LoginLocalDataSourceImpl implements LoginLocalDataSource {
       CACHED_TOKEN_KEY,
       json.encode(token.toJson()),
     );
+  }
+
+  @override
+  Future<bool> hasToken() {
+    return Future.value(sharedPreferences.containsKey(CACHED_TOKEN_KEY));
   }
 }

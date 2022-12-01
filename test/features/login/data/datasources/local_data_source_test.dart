@@ -85,4 +85,38 @@ void main() {
       },
     );
   });
+
+  group('consulta si token existe en el local', () {
+    final tTokenModel = TokenModel(id: "mp@mp.com", username: "mp@mp.com");
+    // arrange
+    mockSharedPreferences = MockSharedPreferences();
+    dataSource = LoginLocalDataSourceImpl(
+      sharedPreferences: mockSharedPreferences,
+    );
+    test(
+      'debe usar la SharedPreferences y clave existe',
+      () async {
+        //arrange
+        when(mockSharedPreferences.containsKey(any)).thenAnswer((_) => true);
+        // act
+        final hasToken = await dataSource.hasToken();
+        // assert
+        verify(mockSharedPreferences.containsKey(CACHED_TOKEN_KEY)).called(1);
+        expect(true, equals(hasToken));
+      },
+    );
+
+    test(
+      'debe usar la SharedPreferences y clave NO existe',
+      () async {
+        //arrange
+        when(mockSharedPreferences.containsKey(any)).thenAnswer((_) => false);
+        // act
+        final hasToken = await dataSource.hasToken();
+        // assert
+        verify(mockSharedPreferences.containsKey(CACHED_TOKEN_KEY)).called(1);
+        expect(false, equals(hasToken));
+      },
+    );
+  });
 }
