@@ -22,15 +22,15 @@ void main() {
   });
 
   group('obtener login', () {
-    const tToken = TokenModel(id: 'mp', username: 'mp');
+    const tToken = TokenModel(id: SystemKeys.token2030, username: 'mp');
     const tusername = 'mp';
     const tpassword = 'ps';
 
     test('debe retornar el token cuando la respuesta es 200', () async {
       //arrange
       when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
-          .thenAnswer((realInvocation) async =>
-              http.Response("{'token':'mp', 'username':'mp'}", 200));
+          .thenAnswer((realInvocation) async => http.Response(
+              "{'token':'${SystemKeys.token2030}', 'username':'mp'}", 200));
 
       //act
       final result = await dataSource.getAuthenticate(tusername, tpassword);

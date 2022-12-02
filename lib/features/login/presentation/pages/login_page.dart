@@ -40,11 +40,6 @@ class LoginPage extends StatelessWidget {
                       builder: (context) => const HomePage(),
                     ));
                   });
-                  //   Navigator.push(
-                  //     context,
-                  //   MaterialPageRoute(
-                  //   builder: (context) => const HomePage(),
-                  //  ));
                 } else if (state is LoginError) {
                   return const Center(
                     child: Text('Something went wrong!'),

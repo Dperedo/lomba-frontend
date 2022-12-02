@@ -1,3 +1,5 @@
+import 'package:jwt_decode/jwt_decode.dart';
+
 class Validators {
   static String? validateEmail(String email) {
     if (email.isEmpty) {
@@ -19,8 +21,20 @@ class Validators {
       return "Campo Requerido";
     }
 
-    if (password.length < 8) {
+    if (password.length < 4) {
       return "Por favor ingresa una contraseña de al menos 4 caracteres";
     }
+  }
+
+  static bool validateToken(String token) {
+    if (token == "") return false;
+
+    final payload = Jwt.parseJwt(token);
+
+    if (payload.containsKey("userId")) {
+      return true;
+    }
+
+    return false;
   }
 }

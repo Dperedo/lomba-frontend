@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:lomba_frontend/core/exceptions.dart';
-import 'package:lomba_frontend/features/login/data/datasources/local_data_source.dart';
+import 'package:lomba_frontend/features/login/data/datasources/localcache_data_source.dart';
 import 'package:lomba_frontend/features/login/data/models/token_model.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -12,7 +12,7 @@ import 'local_data_source_test.mocks.dart';
 
 @GenerateMocks([SharedPreferences])
 void main() {
-  LoginLocalDataSourceImpl dataSource;
+  LocalCacheDataSource dataSource;
   MockSharedPreferences mockSharedPreferences;
 
   setUp(() {

@@ -6,3 +6,13 @@ class Urls {
   static String weatherIcon(String iconCode) =>
       'http://openweathermap.org/img/wn/$iconCode@2x.png';
 }
+
+class SystemKeys {
+  static const String jwtsecretkey = "lomba";
+  static const String token20221230 =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidXNlck5hbWUiOiJtcEBtcC5jb20iLCJleHAiOiIyMDIyLTEyLTMwIn0.tjQEaiBkWX2jIfzq1AqkfHEEPBsD_jQFVDfM8A-O6M8";
+  static const String token2030 =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidXNlck5hbWUiOiJtcEBtcC5jb20iLCJleHAiOiIyMDMwLTEyLTMwIn0.DdeP9YJ4lWZHYVH44hfyVTRRItLdBM5FQDr99Rwj2SI";
+  static const String tokenWrong =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6Im1wQG1wLmNvbSIsImV4cCI6IjIwMjItMTEtMzAifQ.CxFOYF1ZAsnZTdsQD_kos9Fdq_XddOpTUBVKjyCuGlw";
+}

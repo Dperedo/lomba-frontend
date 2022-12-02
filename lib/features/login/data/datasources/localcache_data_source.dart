@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/exceptions.dart';
 
-abstract class LoginLocalDataSource {
+abstract class LocalCacheDataSource {
   Future<TokenModel> getSavedToken();
   Future<void> saveToken(TokenModel token);
   Future<bool> hasToken();
@@ -13,7 +13,7 @@ abstract class LoginLocalDataSource {
 
 const CACHED_TOKEN_KEY = "TOKEN_KEY";
 
-class LoginLocalDataSourceImpl implements LoginLocalDataSource {
+class LoginLocalDataSourceImpl implements LocalCacheDataSource {
   final SharedPreferences sharedPreferences;
 
   LoginLocalDataSourceImpl({required this.sharedPreferences});

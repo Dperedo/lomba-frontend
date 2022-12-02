@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:lomba_frontend/core/exceptions.dart';
 import 'package:lomba_frontend/core/failures.dart';
+import 'package:lomba_frontend/features/login/data/datasources/localcache_data_source.dart';
 import 'package:lomba_frontend/features/login/data/datasources/remote_data_source.dart';
 import 'package:lomba_frontend/features/login/data/models/token_model.dart';
 import 'package:lomba_frontend/features/login/data/repositories/login_repository_impl.dart';
@@ -13,14 +14,17 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'login_repository_impl_test.mocks.dart';
 
-@GenerateMocks([RemoteDataSource])
+@GenerateMocks([RemoteDataSource, LocalCacheDataSource])
 void main() {
   late MockRemoteDataSource mockRemoteDataSource;
+  late MockLocalCacheDataSource mockLocalCacheDataSource;
   late LoginRepositoryImpl repository;
 
   setUp(() {
     mockRemoteDataSource = MockRemoteDataSource();
+    mockLocalCacheDataSource = MockLocalCacheDataSource();
     repository = LoginRepositoryImpl(
+      localCacheDataSource: mockLocalCacheDataSource,
       remoteDataSource: mockRemoteDataSource,
     );
   });

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
+import 'package:lomba_frontend/features/login/domain/usecases/validate_login.dart';
 import 'package:rxdart/rxdart.dart';
 import 'login_event.dart';
 import 'login_state.dart';

@@ -5,6 +5,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
 
+import 'package:lomba_frontend/features/login/data/datasources/localcache_data_source.dart'
+    as _i5;
 import 'package:lomba_frontend/features/login/data/datasources/remote_data_source.dart'
     as _i3;
 import 'package:lomba_frontend/features/login/data/models/token_model.dart'
@@ -64,4 +66,46 @@ class MockRemoteDataSource extends _i1.Mock implements _i3.RemoteDataSource {
           ),
         )),
       ) as _i4.Future<_i2.TokenModel>);
+}
+
+/// A class which mocks [LocalCacheDataSource].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockLocalCacheDataSource extends _i1.Mock
+    implements _i5.LocalCacheDataSource {
+  MockLocalCacheDataSource() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<_i2.TokenModel> getSavedToken() => (super.noSuchMethod(
+        Invocation.method(
+          #getSavedToken,
+          [],
+        ),
+        returnValue: _i4.Future<_i2.TokenModel>.value(_FakeTokenModel_0(
+          this,
+          Invocation.method(
+            #getSavedToken,
+            [],
+          ),
+        )),
+      ) as _i4.Future<_i2.TokenModel>);
+  @override
+  _i4.Future<void> saveToken(_i2.TokenModel? token) => (super.noSuchMethod(
+        Invocation.method(
+          #saveToken,
+          [token],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<bool> hasToken() => (super.noSuchMethod(
+        Invocation.method(
+          #hasToken,
+          [],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 }
