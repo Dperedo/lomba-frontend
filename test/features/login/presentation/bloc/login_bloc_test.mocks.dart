@@ -7,8 +7,6 @@ import 'dart:async' as _i5;
 
 import 'package:dartz/dartz.dart' as _i3;
 import 'package:lomba_frontend/core/failures.dart' as _i6;
-import 'package:lomba_frontend/features/login/domain/entities/token.dart'
-    as _i7;
 import 'package:lomba_frontend/features/login/domain/repositories/login_repository.dart'
     as _i2;
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart'
@@ -64,7 +62,7 @@ class MockGetAuthenticate extends _i1.Mock implements _i4.GetAuthenticate {
         ),
       ) as _i2.LoginRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i7.Token>> execute(
+  _i5.Future<_i3.Either<_i6.Failure, bool>> execute(
     String? username,
     String? password,
   ) =>
@@ -76,8 +74,8 @@ class MockGetAuthenticate extends _i1.Mock implements _i4.GetAuthenticate {
             password,
           ],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, _i7.Token>>.value(
-            _FakeEither_1<_i6.Failure, _i7.Token>(
+        returnValue: _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
+            _FakeEither_1<_i6.Failure, bool>(
           this,
           Invocation.method(
             #execute,
@@ -87,5 +85,5 @@ class MockGetAuthenticate extends _i1.Mock implements _i4.GetAuthenticate {
             ],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, _i7.Token>>);
+      ) as _i5.Future<_i3.Either<_i6.Failure, bool>>);
 }

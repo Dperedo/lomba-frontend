@@ -2,8 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/exceptions.dart';
 import 'package:lomba_frontend/features/login/data/datasources/remote_data_source.dart';
-import 'package:lomba_frontend/features/login/data/models/token_model.dart';
-import 'package:lomba_frontend/features/login/domain/entities/token.dart';
+import 'package:lomba_frontend/features/login/data/models/login_access_model.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:http/http.dart' as http;
@@ -22,21 +21,26 @@ void main() {
   });
 
   group('obtener login', () {
-    const tToken = TokenModel(id: SystemKeys.token2030, username: 'mp');
-    const tusername = 'mp';
-    const tpassword = 'ps';
+    const tLoginAccess = LoginAccessModel(
+        token: SystemKeys.tokenSuperAdmin2023,
+        username: 'mp@mp.com',
+        name: 'Miguel');
 
-    test('debe retornar el token cuando la respuesta es 200', () async {
+    const tusername = 'mp@mp.com';
+    const tpassword = '12345';
+
+    test('debe retornar el login access cuando la respuesta es 200', () async {
       //arrange
       when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
           .thenAnswer((realInvocation) async => http.Response(
-              "{'token':'${SystemKeys.token2030}', 'username':'mp'}", 200));
+              "{'token':'${SystemKeys.tokenSuperAdmin2023}', 'username':'mp@mp.com', 'name': 'Miguel'}",
+              200));
 
       //act
       final result = await dataSource.getAuthenticate(tusername, tpassword);
 
       //assert
-      expect(result, equals(tToken));
+      expect(result, equals(tLoginAccess));
     });
 
     test(

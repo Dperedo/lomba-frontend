@@ -3,10 +3,10 @@ import '../../../../../core/exceptions.dart';
 
 import 'package:http/http.dart' as http;
 
-import '../models/token_model.dart';
+import '../models/login_access_model.dart';
 
 abstract class RemoteDataSource {
-  Future<TokenModel> getAuthenticate(String username, String password);
+  Future<LoginAccessModel> getAuthenticate(String username, String password);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -14,12 +14,16 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   RemoteDataSourceImpl({required this.client});
 
   @override
-  Future<TokenModel> getAuthenticate(String username, String password) async {
+  Future<LoginAccessModel> getAuthenticate(
+      String username, String password) async {
     final response =
         await client.get(Uri.parse(Urls.currentWeatherByName("London")));
 
     if (response.statusCode == 200) {
-      return TokenModel(id: SystemKeys.token2030, username: username);
+      return LoginAccessModel(
+          token: SystemKeys.tokenSuperAdmin2023,
+          username: username,
+          name: 'Miguel');
     } else {
       throw ServerException();
     }

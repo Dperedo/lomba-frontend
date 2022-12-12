@@ -1,7 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/core/domain/usecases/get_has_login.dart';
+import 'package:lomba_frontend/features/home/presentation/bloc/home_bloc.dart';
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
-import 'package:lomba_frontend/features/login/domain/usecases/validate_login.dart';
 import 'package:rxdart/rxdart.dart';
+import '../../../home/presentation/bloc/home_event.dart';
+import '../../../home/presentation/bloc/home_state.dart';
 import 'login_event.dart';
 import 'login_state.dart';
 
@@ -18,10 +21,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
         final result = await _getAuthenticate.execute(username, password);
         result.fold((failure) => {emit(LoginError(failure.message))},
-            (token) => {emit(LoginGot(token))});
+            (token) => {emit(LoginGoted(token))});
       },
-      transformer: debounce(const Duration(milliseconds: 500)),
+      transformer: debounce(const Duration(milliseconds: 0)),
     );
+
+    on<OnRestartLogin>((event, emit) async {
+      emit(LoginJumping());
+    });
   }
 
   EventTransformer<T> debounce<T>(Duration duration) {

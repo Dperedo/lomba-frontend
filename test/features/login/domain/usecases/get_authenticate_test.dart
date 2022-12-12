@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lomba_frontend/features/login/domain/entities/token.dart';
 import 'package:lomba_frontend/features/login/domain/repositories/login_repository.dart';
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
 import 'package:mockito/annotations.dart';
@@ -18,20 +17,19 @@ void main() {
     usecase = GetAuthenticate(mockLoginRepository);
   });
 
-  const tToken = Token(id: 'mp', username: 'mp');
-  const tusername = 'mp';
-  const tpassword = 'ps';
+  const tusername = 'mp@mp.com';
+  const tpassword = '12345';
 
   test('debe conseguir la autenticación correcta desde el repositorio',
       () async {
     //arrange
     when(mockLoginRepository.getAuthenticate(tusername, tpassword))
-        .thenAnswer((_) async => const Right(tToken));
+        .thenAnswer((_) async => const Right(true));
 
     //act
     final result = await usecase.execute(tusername, tpassword);
 
     //assert
-    expect(result, const Right(tToken));
+    expect(result, const Right(true));
   });
 }

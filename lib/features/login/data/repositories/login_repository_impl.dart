@@ -1,31 +1,33 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:lomba_frontend/features/login/data/datasources/localcache_data_source.dart';
-import 'package:lomba_frontend/features/login/domain/entities/token.dart';
+import 'package:lomba_frontend/core/data/models/session_model.dart';
 
+import '../../../../core/data/datasources/local_data_source.dart';
 import '../../../../core/exceptions.dart';
 import '../../../../core/failures.dart';
 import '../../domain/repositories/login_repository.dart';
 import '../datasources/remote_data_source.dart';
-import '../models/token_model.dart';
 
 class LoginRepositoryImpl implements LoginRepository {
   final RemoteDataSource remoteDataSource;
-  final LocalCacheDataSource localCacheDataSource;
+  final LocalDataSource localDataSource;
 
   LoginRepositoryImpl(
-      {required this.remoteDataSource, required this.localCacheDataSource});
+      {required this.remoteDataSource, required this.localDataSource});
 
   @override
-  Future<Either<Failure, Token>> getAuthenticate(
+  Future<Either<Failure, bool>> getAuthenticate(
       String username, String password) async {
     try {
       final result = await remoteDataSource.getAuthenticate(username, password);
 
-      localCacheDataSource.saveToken(result);
+      SessionModel session = SessionModel(
+          token: result.token, username: result.username, name: result.name);
 
-      return Right(result.toEntity());
+      localDataSource.saveSession(session);
+
+      return const Right(true);
     } on ServerException {
       return const Left(ServerFailure(''));
     } on SocketException {

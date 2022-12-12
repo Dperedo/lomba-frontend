@@ -10,7 +10,7 @@ import 'dart:typed_data' as _i7;
 import 'package:http/http.dart' as _i2;
 import 'package:lomba_frontend/features/login/data/datasources/remote_data_source.dart'
     as _i4;
-import 'package:lomba_frontend/features/login/data/models/token_model.dart'
+import 'package:lomba_frontend/features/login/data/models/login_access_model.dart'
     as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -35,8 +35,9 @@ class _FakeClient_0 extends _i1.SmartFake implements _i2.Client {
         );
 }
 
-class _FakeTokenModel_1 extends _i1.SmartFake implements _i3.TokenModel {
-  _FakeTokenModel_1(
+class _FakeLoginAccessModel_1 extends _i1.SmartFake
+    implements _i3.LoginAccessModel {
+  _FakeLoginAccessModel_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -84,7 +85,7 @@ class MockRemoteDataSourceImpl extends _i1.Mock
         ),
       ) as _i2.Client);
   @override
-  _i5.Future<_i3.TokenModel> getAuthenticate(
+  _i5.Future<_i3.LoginAccessModel> getAuthenticate(
     String? username,
     String? password,
   ) =>
@@ -96,7 +97,8 @@ class MockRemoteDataSourceImpl extends _i1.Mock
             password,
           ],
         ),
-        returnValue: _i5.Future<_i3.TokenModel>.value(_FakeTokenModel_1(
+        returnValue:
+            _i5.Future<_i3.LoginAccessModel>.value(_FakeLoginAccessModel_1(
           this,
           Invocation.method(
             #getAuthenticate,
@@ -106,7 +108,7 @@ class MockRemoteDataSourceImpl extends _i1.Mock
             ],
           ),
         )),
-      ) as _i5.Future<_i3.TokenModel>);
+      ) as _i5.Future<_i3.LoginAccessModel>);
 }
 
 /// A class which mocks [Client].

@@ -11,8 +11,10 @@ class OnLoginTriest extends LoginEvent {
   final String username;
   final String password;
 
-  OnLoginTriest(this.username, this.password);
+  const OnLoginTriest(this.username, this.password);
 
   @override
   List<Object?> get props => [username, password];
 }
+
+class OnRestartLogin extends LoginEvent {}

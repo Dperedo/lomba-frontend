@@ -3,13 +3,14 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i5;
 
-import 'package:lomba_frontend/features/login/data/datasources/localcache_data_source.dart'
-    as _i5;
+import 'package:lomba_frontend/core/data/datasources/local_data_source.dart'
+    as _i6;
+import 'package:lomba_frontend/core/data/models/session_model.dart' as _i3;
 import 'package:lomba_frontend/features/login/data/datasources/remote_data_source.dart'
-    as _i3;
-import 'package:lomba_frontend/features/login/data/models/token_model.dart'
+    as _i4;
+import 'package:lomba_frontend/features/login/data/models/login_access_model.dart'
     as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -24,8 +25,19 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeTokenModel_0 extends _i1.SmartFake implements _i2.TokenModel {
-  _FakeTokenModel_0(
+class _FakeLoginAccessModel_0 extends _i1.SmartFake
+    implements _i2.LoginAccessModel {
+  _FakeLoginAccessModel_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeSessionModel_1 extends _i1.SmartFake implements _i3.SessionModel {
+  _FakeSessionModel_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -37,13 +49,13 @@ class _FakeTokenModel_0 extends _i1.SmartFake implements _i2.TokenModel {
 /// A class which mocks [RemoteDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockRemoteDataSource extends _i1.Mock implements _i3.RemoteDataSource {
+class MockRemoteDataSource extends _i1.Mock implements _i4.RemoteDataSource {
   MockRemoteDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i2.TokenModel> getAuthenticate(
+  _i5.Future<_i2.LoginAccessModel> getAuthenticate(
     String? username,
     String? password,
   ) =>
@@ -55,7 +67,8 @@ class MockRemoteDataSource extends _i1.Mock implements _i3.RemoteDataSource {
             password,
           ],
         ),
-        returnValue: _i4.Future<_i2.TokenModel>.value(_FakeTokenModel_0(
+        returnValue:
+            _i5.Future<_i2.LoginAccessModel>.value(_FakeLoginAccessModel_0(
           this,
           Invocation.method(
             #getAuthenticate,
@@ -65,47 +78,46 @@ class MockRemoteDataSource extends _i1.Mock implements _i3.RemoteDataSource {
             ],
           ),
         )),
-      ) as _i4.Future<_i2.TokenModel>);
+      ) as _i5.Future<_i2.LoginAccessModel>);
 }
 
-/// A class which mocks [LocalCacheDataSource].
+/// A class which mocks [LocalDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLocalCacheDataSource extends _i1.Mock
-    implements _i5.LocalCacheDataSource {
-  MockLocalCacheDataSource() {
+class MockLocalDataSource extends _i1.Mock implements _i6.LocalDataSource {
+  MockLocalDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i2.TokenModel> getSavedToken() => (super.noSuchMethod(
+  _i5.Future<_i3.SessionModel> getSavedSession() => (super.noSuchMethod(
         Invocation.method(
-          #getSavedToken,
+          #getSavedSession,
           [],
         ),
-        returnValue: _i4.Future<_i2.TokenModel>.value(_FakeTokenModel_0(
+        returnValue: _i5.Future<_i3.SessionModel>.value(_FakeSessionModel_1(
           this,
           Invocation.method(
-            #getSavedToken,
+            #getSavedSession,
             [],
           ),
         )),
-      ) as _i4.Future<_i2.TokenModel>);
+      ) as _i5.Future<_i3.SessionModel>);
   @override
-  _i4.Future<void> saveToken(_i2.TokenModel? token) => (super.noSuchMethod(
+  _i5.Future<bool> saveSession(_i3.SessionModel? session) =>
+      (super.noSuchMethod(
         Invocation.method(
-          #saveToken,
-          [token],
+          #saveSession,
+          [session],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
   @override
-  _i4.Future<bool> hasToken() => (super.noSuchMethod(
+  _i5.Future<bool> hasSession() => (super.noSuchMethod(
         Invocation.method(
-          #hasToken,
+          #hasSession,
           [],
         ),
-        returnValue: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
 }

@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:lomba_frontend/features/login/domain/entities/token.dart';
 
 abstract class LoginState extends Equatable {
   const LoginState();
@@ -10,21 +9,23 @@ abstract class LoginState extends Equatable {
 
 class LoginEmpty extends LoginState {}
 
+class LoginJumping extends LoginState {}
+
 class LoginGetting extends LoginState {}
 
 class LoginError extends LoginState {
   final String message;
 
-  LoginError(this.message);
+  const LoginError(this.message);
 
   @override
   List<Object> get props => [message];
 }
 
-class LoginGot extends LoginState {
-  final Token result;
+class LoginGoted extends LoginState {
+  final bool result;
 
-  LoginGot(this.result);
+  const LoginGoted(this.result);
 
   @override
   List<Object> get props => [result];

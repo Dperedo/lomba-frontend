@@ -28,9 +28,9 @@ class Validators {
 
   static bool validateToken(String token) {
     if (token == "") return false;
+    if (Jwt.isExpired(token)) return false;
 
     final payload = Jwt.parseJwt(token);
-
     if (payload.containsKey("userId")) {
       return true;
     }

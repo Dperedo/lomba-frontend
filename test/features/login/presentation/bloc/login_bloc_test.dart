@@ -1,8 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/failures.dart';
-import 'package:lomba_frontend/features/login/domain/entities/token.dart';
+import 'package:lomba_frontend/features/login/data/models/login_access_model.dart';
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_event.dart';
@@ -22,7 +23,11 @@ void main() {
     loginBloc = LoginBloc(mockGetAuthenticate);
   });
 
-  const tToken = Token(id: 'mp@mp.com', username: 'mp@mp.com');
+  const tLoginAccessModel = LoginAccessModel(
+      token: SystemKeys.tokenSuperAdmin2023,
+      username: "mp@mp.com",
+      name: "Miguel");
+
   const tusername = "mp@mp.com";
   const tpassword = "12345678";
 
@@ -34,17 +39,17 @@ void main() {
   );
 
   blocTest<LoginBloc, LoginState>(
-    'debe emitir -getting- y -gottoken- cuando se consigue el token correctamente',
+    'debe emitir -getting- y -goted- cuando se consigue el token correctamente',
     build: () {
       when(mockGetAuthenticate.execute(tusername, tpassword))
-          .thenAnswer((_) async => Right(tToken));
+          .thenAnswer((_) async => const Right(true));
       return loginBloc;
     },
-    act: (bloc) => bloc.add(OnLoginTriest(tusername, tpassword)),
+    act: (bloc) => bloc.add(const OnLoginTriest(tusername, tpassword)),
     wait: const Duration(milliseconds: 500),
     expect: () => [
       LoginGetting(),
-      LoginGot(tToken),
+      const LoginGoted(true),
     ],
     verify: (bloc) {
       verify(mockGetAuthenticate.execute(tusername, tpassword));
@@ -55,14 +60,14 @@ void main() {
     'debe emitir getting y error cuando no consigue el token',
     build: () {
       when(mockGetAuthenticate.execute(tusername, tpassword))
-          .thenAnswer((_) async => Left(ServerFailure('Server failure')));
+          .thenAnswer((_) async => const Left(ServerFailure('Server failure')));
       return loginBloc;
     },
-    act: (bloc) => bloc.add(OnLoginTriest(tusername, tpassword)),
+    act: (bloc) => bloc.add(const OnLoginTriest(tusername, tpassword)),
     wait: const Duration(milliseconds: 500),
     expect: () => [
       LoginGetting(),
-      LoginError('Server failure'),
+      const LoginError('Server failure'),
     ],
     verify: (bloc) {
       verify(mockGetAuthenticate.execute(tusername, tpassword));
