@@ -64,6 +64,7 @@ void main() {
     final result = await usecase.execute();
 
     //assert
+    verify(mockLocalRepository.getSession()).called(1);
     expect(result, const Right(tEmptySessionModel));
   });
 }
