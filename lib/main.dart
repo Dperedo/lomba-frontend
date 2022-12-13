@@ -12,8 +12,11 @@ import 'features/home/presentation/pages/home_page.dart';
 import 'features/sidedrawer/presentation/bloc/sidedrawer_bloc.dart';
 import 'injection.dart' as di;
 
-void main() {
-  di.init();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await di.init();
+
   runApp(const MyApp());
 }
 
