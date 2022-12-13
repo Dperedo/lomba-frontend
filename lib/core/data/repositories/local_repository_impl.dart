@@ -31,6 +31,13 @@ class LocalRepositoryImpl implements LocalRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> doLogOff() async {
+    await localDataSource.cleanSession();
+
+    return const Right(true);
+  }
+
+  @override
   Future<Either<Failure, SessionModel>> getSession() async {
     try {
       if (!await localDataSource.hasSession()) {

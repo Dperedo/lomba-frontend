@@ -127,5 +127,20 @@ void main() {
         expect(false, equals(hasToken));
       },
     );
+
+    test(
+      'limpiar sessión para el logoff',
+      () async {
+        //arrange
+        when(mockSharedPreferences.setString(CACHED_SESSION_KEY, any))
+            .thenAnswer((_) async => true);
+        // act
+        final cleaned = await dataSource.cleanSession();
+        // assert
+        verify(mockSharedPreferences.setString(CACHED_SESSION_KEY, ""))
+            .called(1);
+        expect(true, equals(cleaned));
+      },
+    );
   });
 }

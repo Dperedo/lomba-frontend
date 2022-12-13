@@ -70,4 +70,12 @@ class MockLocalDataSource extends _i1.Mock implements _i3.LocalDataSource {
         ),
         returnValue: _i4.Future<bool>.value(false),
       ) as _i4.Future<bool>);
+  @override
+  _i4.Future<bool> cleanSession() => (super.noSuchMethod(
+        Invocation.method(
+          #cleanSession,
+          [],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 }

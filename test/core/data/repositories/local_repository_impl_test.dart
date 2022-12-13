@@ -269,4 +269,22 @@ void main() {
       },
     );
   });
+
+  group('cierre de sesión', () {
+    test(
+      'debe cerrar la sesión utilizando el data source',
+      () async {
+        //arrange
+        when(mockLocalDataSource.cleanSession())
+            .thenAnswer((realInvocation) async => true);
+        // act
+        final result = await repository.doLogOff();
+
+        // assert
+        verify(mockLocalDataSource.cleanSession()).called(1);
+
+        expect(result, equals(const Right(true)));
+      },
+    );
+  });
 }

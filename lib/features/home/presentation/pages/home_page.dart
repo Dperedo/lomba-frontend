@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/features/sidedrawer/presentation/widgets/sidedrawer.dart';
+import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
 
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
@@ -20,9 +20,9 @@ class HomePage extends StatelessWidget {
         child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
           if (state is HomeLoaded) {
             if (state.validLogin) {
-              return const Text("Bienvenido usuario!");
+              return const Text("Bienvenido usuario logueado!");
             } else {
-              return const Text("Welcome anonymous!");
+              return const Text("Usuario anónimo. Bienvenido.");
             }
           } else if (state is HomeLoading) {
             return const Center(
@@ -30,7 +30,7 @@ class HomePage extends StatelessWidget {
             );
           }
           context.read<HomeBloc>().add(const OnHomeLoading());
-          return const Text("Welcome!");
+          return const Text("Bienvenido...");
         }),
       ),
     );

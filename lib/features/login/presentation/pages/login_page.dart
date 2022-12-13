@@ -6,10 +6,14 @@ import 'package:lomba_frontend/features/home/presentation/bloc/home_event.dart';
 import 'package:lomba_frontend/features/home/presentation/bloc/home_state.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_event.dart';
+import 'package:lomba_frontend/features/sidedrawer/presentation/bloc/sidedrawer_event.dart';
+import 'package:lomba_frontend/features/sidedrawer/presentation/bloc/sidedrawer_state.dart';
+import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
 
 import '../../../../core/presentation/bloc/nav_bloc.dart';
 import '../../../../core/presentation/bloc/nav_event.dart';
 import '../../../../core/validators.dart';
+import '../../../sidedrawer/presentation/bloc/sidedrawer_bloc.dart';
 import '../bloc/login_state.dart';
 import '../../../home/presentation/pages/home_page.dart';
 
@@ -24,6 +28,12 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () {
+            context.read<NavBloc>().add(const NavigateTo(NavItem.page_home));
+          },
+        ),
         title: const Text(
           "Login",
           key: ValueKey("title"),
@@ -46,16 +56,12 @@ class LoginPage extends StatelessWidget {
                   Future.delayed(Duration.zero, () {
                     context.read<HomeBloc>().add(OnRestartHome());
                     context.read<LoginBloc>().add(OnRestartLogin());
+                    context
+                        .read<SideDrawerBloc>()
+                        .add(const OnSideDrawerLoading());
+
                     BlocProvider.of<NavBloc>(context)
                         .add(const NavigateTo(NavItem.page_home));
-                    //Navigator.pop(context);
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => const HomePage()));
-
-                    //  Navigator.of(context).pop(MaterialPageRoute(
-                    //      builder: (context) => const HomePage()));
                   });
                 } else if (state is LoginError) {
                   return const Center(
@@ -67,16 +73,14 @@ class LoginPage extends StatelessWidget {
                       TextFormField(
                         controller: _emailController,
                         key: const ValueKey("email_id"),
-                        decoration:
-                            const InputDecoration(hintText: "Enter Email Id"),
+                        decoration: const InputDecoration(hintText: "email"),
                         validator: (value) =>
                             Validators.validateEmail(value ?? ""),
                       ),
                       TextFormField(
                         controller: _passwordController,
                         key: const ValueKey("password"),
-                        decoration:
-                            const InputDecoration(hintText: "Enter Password"),
+                        decoration: const InputDecoration(hintText: "password"),
                         validator: (value) =>
                             Validators.validatePassword(value ?? ""),
                       ),

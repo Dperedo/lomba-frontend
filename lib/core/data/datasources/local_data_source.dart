@@ -9,6 +9,7 @@ abstract class LocalDataSource {
   Future<SessionModel> getSavedSession();
   Future<bool> saveSession(SessionModel session);
   Future<bool> hasSession();
+  Future<bool> cleanSession();
 }
 
 const CACHED_SESSION_KEY = "SESSION_KEY";
@@ -26,6 +27,16 @@ class LocalDataSourceImpl implements LocalDataSource {
     } else {
       throw CacheException();
     }
+  }
+
+  @override
+  Future<bool> cleanSession() {
+    sharedPreferences.setString(
+      CACHED_SESSION_KEY,
+      "",
+    );
+
+    return Future.value(true);
   }
 
   @override

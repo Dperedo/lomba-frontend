@@ -107,6 +107,21 @@ class MockLocalRepository extends _i1.Mock implements _i3.LocalRepository {
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, List<String>>>);
   @override
+  _i4.Future<_i2.Either<_i5.Failure, bool>> doLogOff() => (super.noSuchMethod(
+        Invocation.method(
+          #doLogOff,
+          [],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, bool>>.value(
+            _FakeEither_0<_i5.Failure, bool>(
+          this,
+          Invocation.method(
+            #doLogOff,
+            [],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, bool>>);
+  @override
   _i4.Future<_i2.Either<_i5.Failure, String>> getSessionRole() =>
       (super.noSuchMethod(
         Invocation.method(

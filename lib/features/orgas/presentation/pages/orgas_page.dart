@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/features/sidedrawer/presentation/widgets/sidedrawer.dart';
+import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
 
 class OrgasPage extends StatelessWidget {
   const OrgasPage({Key? key}) : super(key: key);

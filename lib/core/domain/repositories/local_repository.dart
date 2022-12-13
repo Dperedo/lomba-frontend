@@ -8,5 +8,6 @@ abstract class LocalRepository {
   Future<Either<Failure, bool>> saveSession(SessionModel session);
   Future<Either<Failure, bool>> hasLogIn();
   Future<Either<Failure, List<String>>> getSideMenuListOptions();
+  Future<Either<Failure, bool>> doLogOff();
   Future<Either<Failure, String>> getSessionRole();
 }

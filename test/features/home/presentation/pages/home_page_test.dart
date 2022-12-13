@@ -7,7 +7,7 @@ import 'package:lomba_frontend/features/home/presentation/bloc/home_bloc.dart';
 import 'package:lomba_frontend/features/home/presentation/bloc/home_event.dart';
 import 'package:lomba_frontend/features/home/presentation/bloc/home_state.dart';
 import 'package:lomba_frontend/features/home/presentation/pages/home_page.dart';
-import 'package:lomba_frontend/features/sidedrawer/presentation/widgets/sidedrawer.dart';
+import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockHomeBloc extends MockBloc<HomeEvent, HomeState> implements HomeBloc {}
@@ -40,18 +40,29 @@ void main() {
     //mockHomeBloc = MockHomeBloc();
   });
 
-  testWidgets('prueba de mensajes en home', (WidgetTester tester) async {});
-
-  testWidgets('home muestra sidedrawer', (WidgetTester tester) async {
+  testWidgets('entrega mensaje bienvenido usuario logueado',
+      (WidgetTester tester) async {
     //arrange
-    when(() => mockHomeBloc.state).thenReturn(HomeStart());
-
-    await tester.pumpWidget(_makeTestableWidget(const HomePage()));
+    when(() => mockHomeBloc.state).thenReturn(const HomeLoaded(true));
 
     //act
-    //final drawer = find.byType(AppBar);
-    final drawer = find.byWidget(const SideDrawer());
+    await tester.pumpWidget(_makeTestableWidget(const HomePage()));
+    final message = find.text("Bienvenido usuario logueado!");
+
     //assert
-    expect(drawer, findsNothing);
+    expect(message, findsOneWidget);
+  });
+
+  testWidgets('entrega mensaje de usuario anónimo sin loguear',
+      (WidgetTester tester) async {
+    //arrange
+    when(() => mockHomeBloc.state).thenReturn(const HomeLoaded(false));
+
+    //act
+    await tester.pumpWidget(_makeTestableWidget(const HomePage()));
+    final message = find.text("Usuario anónimo. Bienvenido.");
+
+    //assert
+    expect(message, findsOneWidget);
   });
 }

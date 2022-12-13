@@ -20,3 +20,5 @@ class OnSideDrawerReady extends SideDrawerEvent {
   @override
   List<Object?> get props => [];
 }
+
+class OnSideDrawerLogOff extends SideDrawerEvent {}

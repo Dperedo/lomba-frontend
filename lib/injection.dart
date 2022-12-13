@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart';
+import 'package:lomba_frontend/features/sidedrawer/domain/usecases/do_logoff.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/data/datasources/local_data_source.dart';
@@ -24,7 +25,7 @@ Future<void> init() async {
   // bloc
   locator.registerFactory(() => LoginBloc(locator()));
   locator.registerFactory(() => HomeBloc(locator()));
-  locator.registerFactory(() => SideDrawerBloc(locator()));
+  locator.registerFactory(() => SideDrawerBloc(locator(), locator()));
   locator.registerFactory(() => NavBloc());
 
   // usecase
@@ -32,6 +33,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetHasLogIn(locator()));
   locator.registerLazySingleton(() => GetSession(locator()));
   locator.registerLazySingleton(() => GetSideOptions(locator()));
+  locator.registerLazySingleton(() => DoLogOff(locator()));
 
   // repository
   locator.registerLazySingleton<LoginRepository>(

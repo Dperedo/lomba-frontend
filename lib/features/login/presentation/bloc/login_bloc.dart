@@ -28,6 +28,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     on<OnRestartLogin>((event, emit) async {
       emit(LoginJumping());
+      emit(LoginEmpty());
     });
   }
 
