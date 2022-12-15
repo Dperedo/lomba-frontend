@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter_guid/flutter_guid.dart';
 import 'package:lomba_frontend/features/orgas/data/datasources/orga_remote_data_source.dart';
 import 'package:lomba_frontend/features/orgas/data/models/orga_model.dart';
 
@@ -74,14 +75,15 @@ class OrgaRepositoryImpl implements OrgaRepository {
   }
 
   @override
-  Future<Either<Failure, Orga>> addOrga(Orga orga) async {
+  Future<Either<Failure, Orga>> addOrga(
+      String name, String code, bool enabled) async {
     try {
       OrgaModel orgaModel = OrgaModel(
-          id: orga.id,
-          name: orga.name,
-          code: orga.code,
-          enabled: orga.enabled,
-          builtIn: orga.builtIn);
+          id: Guid.newGuid.toString(),
+          name: name,
+          code: code,
+          enabled: enabled,
+          builtIn: false);
 
       final result = await remoteDataSource.addOrga(orgaModel);
 
@@ -94,14 +96,15 @@ class OrgaRepositoryImpl implements OrgaRepository {
   }
 
   @override
-  Future<Either<Failure, OrgaUser>> addOrgaUser(OrgaUser orgaUser) async {
+  Future<Either<Failure, OrgaUser>> addOrgaUser(
+      String orgaId, String userId, List<String> roles, bool enabled) async {
     try {
       OrgaUserModel orgaUserModel = OrgaUserModel(
-          orgaId: orgaUser.orgaId,
-          userId: orgaUser.userId,
-          roles: orgaUser.roles,
-          enabled: orgaUser.enabled,
-          builtIn: orgaUser.builtIn);
+          orgaId: orgaId,
+          userId: userId,
+          roles: roles,
+          enabled: enabled,
+          builtIn: false);
 
       final result = await remoteDataSource.addOrgaUser(orgaUserModel);
 

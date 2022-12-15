@@ -41,11 +41,12 @@ void main() {
 
   test('debe agregar un nuevo orgauser (relación entre ellos)', () async {
     //arrange
-    when(mockOrgaRepository.addOrgaUser(any))
+    when(mockOrgaRepository.addOrgaUser(any, any, any, any))
         .thenAnswer((_) async => Right(tOrgaUser));
 
     //act
-    final result = await usecase.execute(tOrgaUser);
+    final result = await usecase.execute(
+        tOrgaUser.orgaId, tOrgaUser.userId, tOrgaUser.roles, tOrgaUser.enabled);
 
     //assert
     expect(result, Right(tOrgaUser));

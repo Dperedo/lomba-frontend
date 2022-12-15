@@ -94,7 +94,7 @@ Future<void> main() async {
       orgaId: newOrgaId,
       roles: const <String>[Roles.Admin],
       enabled: true,
-      builtIn: true);
+      builtIn: false);
 
   test(
     'el estado inicial debe ser Start',
@@ -163,21 +163,23 @@ Future<void> main() async {
     blocTest<OrgaBloc, OrgaState>(
       'debe agregar un orga',
       build: () {
-        when(mockAddOrga.execute(tOrga)).thenAnswer((_) async => Right(tOrga));
+        when(mockAddOrga.execute(tOrga.name, tOrga.code, tOrga.enabled))
+            .thenAnswer((_) async => Right(tOrga));
         return orgaBloc;
       },
       act: (bloc) => bloc.add(OnOrgaAdd(tOrga.name, tOrga.code, tOrga.enabled)),
       wait: const Duration(milliseconds: 500),
       expect: () => [OrgaLoading(), OrgaStart()],
       verify: (bloc) {
-        verify(mockAddOrga.execute(tOrga));
+        verify(mockAddOrga.execute(tOrga.name, tOrga.code, tOrga.enabled));
       },
     );
 
     blocTest<OrgaBloc, OrgaState>(
       'debe agregar un orgauser',
       build: () {
-        when(mockAddOrgaUser.execute(tOrgaUser))
+        when(mockAddOrgaUser.execute(tOrgaUser.orgaId, tOrgaUser.userId,
+                tOrgaUser.roles, tOrgaUser.enabled))
             .thenAnswer((_) async => Right(tOrgaUser));
         return orgaBloc;
       },
@@ -186,7 +188,106 @@ Future<void> main() async {
       wait: const Duration(milliseconds: 500),
       expect: () => [OrgaLoading(), OrgaStart()],
       verify: (bloc) {
-        verify(mockAddOrgaUser.execute(tOrgaUser));
+        verify(mockAddOrgaUser.execute(tOrgaUser.orgaId, tOrgaUser.userId,
+            tOrgaUser.roles, tOrgaUser.enabled));
+      },
+    );
+  });
+
+  group('eliminar orgas y orgausers', () {
+    blocTest<OrgaBloc, OrgaState>(
+      'debe eliminar un orga',
+      build: () {
+        when(mockDeleteOrga.execute(newOrgaId))
+            .thenAnswer((_) async => const Right(true));
+        return orgaBloc;
+      },
+      act: (bloc) => bloc.add(OnOrgaDelete(newOrgaId)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [OrgaLoading(), OrgaStart()],
+      verify: (bloc) {
+        verify(mockDeleteOrga.execute(newOrgaId));
+      },
+    );
+
+    blocTest<OrgaBloc, OrgaState>(
+      'debe eliminar un orgauser',
+      build: () {
+        when(mockDeleteOrgaUser.execute(newOrgaId, newUserId))
+            .thenAnswer((_) async => const Right(true));
+        return orgaBloc;
+      },
+      act: (bloc) => bloc.add(OnOrgaUserDelete(newOrgaId, newUserId)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [OrgaLoading(), OrgaStart()],
+      verify: (bloc) {
+        verify(mockDeleteOrgaUser.execute(newOrgaId, newUserId));
+      },
+    );
+  });
+  group('deshabilitar orgas y orgausers', () {
+    blocTest<OrgaBloc, OrgaState>(
+      'debe deshabilitar un orga',
+      build: () {
+        when(mockEnableOrga.execute(newOrgaId, false))
+            .thenAnswer((_) async => const Right(true));
+        return orgaBloc;
+      },
+      act: (bloc) => bloc.add(OnOrgaEnable(newOrgaId, false)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [OrgaLoading(), OrgaStart()],
+      verify: (bloc) {
+        verify(mockEnableOrga.execute(newOrgaId, false));
+      },
+    );
+
+    blocTest<OrgaBloc, OrgaState>(
+      'debe deshabilitar un orgauser',
+      build: () {
+        when(mockEnableOrgaUser.execute(newOrgaId, newUserId, false))
+            .thenAnswer((_) async => const Right(true));
+        return orgaBloc;
+      },
+      act: (bloc) => bloc.add(OnOrgaUserEnable(newOrgaId, newUserId, false)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [OrgaLoading(), OrgaStart()],
+      verify: (bloc) {
+        verify(mockEnableOrgaUser.execute(newOrgaId, newUserId, false));
+      },
+    );
+  });
+  group('actualizar orgas y orgausers', () {
+    blocTest<OrgaBloc, OrgaState>(
+      'debe actualizar un orga',
+      build: () {
+        when(mockUpdateOrga.execute(newOrgaId, tOrga))
+            .thenAnswer((_) async => Right(tOrga));
+        return orgaBloc;
+      },
+      act: (bloc) => bloc
+          .add(OnOrgaEdit(newOrgaId, tOrga.name, tOrga.code, tOrga.enabled)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [OrgaLoading(), OrgaStart()],
+      verify: (bloc) {
+        verify(mockUpdateOrga.execute(newOrgaId, tOrga));
+      },
+    );
+
+    blocTest<OrgaBloc, OrgaState>(
+      'debe actualizar un orgauser',
+      build: () {
+        when(mockUpdateOrgaUser.execute(
+                tOrgaUser.orgaId, tOrgaUser.userId, tOrgaUser))
+            .thenAnswer((_) async => Right(tOrgaUser));
+        return orgaBloc;
+      },
+      act: (bloc) => bloc.add(OnOrgaUserEdit(tOrgaUser.orgaId, tOrgaUser.userId,
+          tOrgaUser.roles, tOrgaUser.enabled)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [OrgaLoading(), OrgaStart()],
+      verify: (bloc) {
+        verify(mockUpdateOrgaUser.execute(
+            tOrgaUser.orgaId, tOrgaUser.userId, tOrgaUser));
       },
     );
   });

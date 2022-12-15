@@ -38,10 +38,11 @@ void main() {
 
   test('debe agregar un nuevo orga', () async {
     //arrange
-    when(mockOrgaRepository.addOrga(any)).thenAnswer((_) async => Right(tOrga));
+    when(mockOrgaRepository.addOrga(any, any, any))
+        .thenAnswer((_) async => Right(tOrga));
 
     //act
-    final result = await usecase.execute(tOrga);
+    final result = await usecase.execute(tOrga.name, tOrga.code, tOrga.enabled);
 
     //assert
     expect(result, Right(tOrga));

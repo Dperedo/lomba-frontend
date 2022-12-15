@@ -85,18 +85,30 @@ class MockAddOrga extends _i1.Mock implements _i4.AddOrga {
         ),
       ) as _i2.OrgaRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i7.Orga>> execute(_i7.Orga? orga) =>
+  _i5.Future<_i3.Either<_i6.Failure, _i7.Orga>> execute(
+    String? name,
+    String? code,
+    bool? enabled,
+  ) =>
       (super.noSuchMethod(
         Invocation.method(
           #execute,
-          [orga],
+          [
+            name,
+            code,
+            enabled,
+          ],
         ),
         returnValue: _i5.Future<_i3.Either<_i6.Failure, _i7.Orga>>.value(
             _FakeEither_1<_i6.Failure, _i7.Orga>(
           this,
           Invocation.method(
             #execute,
-            [orga],
+            [
+              name,
+              code,
+              enabled,
+            ],
           ),
         )),
         returnValueForMissingStub:
@@ -105,7 +117,11 @@ class MockAddOrga extends _i1.Mock implements _i4.AddOrga {
           this,
           Invocation.method(
             #execute,
-            [orga],
+            [
+              name,
+              code,
+              enabled,
+            ],
           ),
         )),
       ) as _i5.Future<_i3.Either<_i6.Failure, _i7.Orga>>);
@@ -129,18 +145,32 @@ class MockAddOrgaUser extends _i1.Mock implements _i8.AddOrgaUser {
       ) as _i2.OrgaRepository);
   @override
   _i5.Future<_i3.Either<_i6.Failure, _i9.OrgaUser>> execute(
-          _i9.OrgaUser? orgaUser) =>
+    String? orgaId,
+    String? userId,
+    List<String>? roles,
+    bool? enabled,
+  ) =>
       (super.noSuchMethod(
         Invocation.method(
           #execute,
-          [orgaUser],
+          [
+            orgaId,
+            userId,
+            roles,
+            enabled,
+          ],
         ),
         returnValue: _i5.Future<_i3.Either<_i6.Failure, _i9.OrgaUser>>.value(
             _FakeEither_1<_i6.Failure, _i9.OrgaUser>(
           this,
           Invocation.method(
             #execute,
-            [orgaUser],
+            [
+              orgaId,
+              userId,
+              roles,
+              enabled,
+            ],
           ),
         )),
         returnValueForMissingStub:
@@ -149,7 +179,12 @@ class MockAddOrgaUser extends _i1.Mock implements _i8.AddOrgaUser {
           this,
           Invocation.method(
             #execute,
-            [orgaUser],
+            [
+              orgaId,
+              userId,
+              roles,
+              enabled,
+            ],
           ),
         )),
       ) as _i5.Future<_i3.Either<_i6.Failure, _i9.OrgaUser>>);

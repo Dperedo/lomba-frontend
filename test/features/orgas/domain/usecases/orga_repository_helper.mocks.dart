@@ -109,35 +109,61 @@ class MockOrgaRepository extends _i1.Mock implements _i3.OrgaRepository {
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, List<_i7.OrgaUser>>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, _i6.Orga>> addOrga(_i6.Orga? orga) =>
+  _i4.Future<_i2.Either<_i5.Failure, _i6.Orga>> addOrga(
+    String? name,
+    String? code,
+    bool? enabled,
+  ) =>
       (super.noSuchMethod(
         Invocation.method(
           #addOrga,
-          [orga],
+          [
+            name,
+            code,
+            enabled,
+          ],
         ),
         returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.Orga>>.value(
             _FakeEither_0<_i5.Failure, _i6.Orga>(
           this,
           Invocation.method(
             #addOrga,
-            [orga],
+            [
+              name,
+              code,
+              enabled,
+            ],
           ),
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, _i6.Orga>>);
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i7.OrgaUser>> addOrgaUser(
-          _i7.OrgaUser? orgaUser) =>
+    String? orgaId,
+    String? userId,
+    List<String>? roles,
+    bool? enabled,
+  ) =>
       (super.noSuchMethod(
         Invocation.method(
           #addOrgaUser,
-          [orgaUser],
+          [
+            orgaId,
+            userId,
+            roles,
+            enabled,
+          ],
         ),
         returnValue: _i4.Future<_i2.Either<_i5.Failure, _i7.OrgaUser>>.value(
             _FakeEither_0<_i5.Failure, _i7.OrgaUser>(
           this,
           Invocation.method(
             #addOrgaUser,
-            [orgaUser],
+            [
+              orgaId,
+              userId,
+              roles,
+              enabled,
+            ],
           ),
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, _i7.OrgaUser>>);

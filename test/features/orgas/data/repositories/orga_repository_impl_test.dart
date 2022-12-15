@@ -168,7 +168,8 @@ void main() {
             .thenAnswer((realInvocation) async => tOrgaModel);
 
         // act
-        final result = await repository.addOrga(tOrgaModel);
+        final result = await repository.addOrga(
+            tOrgaModel.name, tOrgaModel.code, tOrgaModel.enabled);
 
         // assert
         verify(mockRemoteDataSource.addOrga(any));
@@ -184,7 +185,11 @@ void main() {
             .thenAnswer((realInvocation) async => tOrgaUserModel);
 
         // act
-        final result = await repository.addOrgaUser(tOrgaUserModel);
+        final result = await repository.addOrgaUser(
+            tOrgaUserModel.orgaId,
+            tOrgaUserModel.userId,
+            tOrgaUserModel.roles,
+            tOrgaUserModel.enabled);
 
         // assert
         verify(mockRemoteDataSource.addOrgaUser(any));
@@ -199,7 +204,8 @@ void main() {
         when(mockRemoteDataSource.addOrga(any)).thenThrow(ServerException());
 
         // act
-        final result = await repository.addOrga(tOrgaModel);
+        final result = await repository.addOrga(
+            tOrgaModel.name, tOrgaModel.code, tOrgaModel.enabled);
 
         // assert
         verify(mockRemoteDataSource.addOrga(any)).called(1);
@@ -215,7 +221,8 @@ void main() {
             const SocketException('Failed to connect to the network'));
 
         // act
-        final result = await repository.addOrga(tOrgaModel);
+        final result = await repository.addOrga(
+            tOrgaModel.name, tOrgaModel.code, tOrgaModel.enabled);
 
         // assert
         verify(mockRemoteDataSource.addOrga(any));

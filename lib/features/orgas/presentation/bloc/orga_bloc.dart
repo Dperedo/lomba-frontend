@@ -69,19 +69,11 @@ class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
 
     on<OnOrgaAdd>((event, emit) async {
       emit(OrgaLoading());
+      final result =
+          await _addOrga.execute(event.name, event.code, event.enabled);
 
-      final orga = Orga(
-          id: Guid.newGuid.toString(),
-          name: event.name,
-          code: event.code,
-          enabled: event.enabled,
-          builtIn: false);
-
-//TODO: el llamado debe ser con los parámetros uno por uno.
-//debido al id autogenerado del ejemplo
-      final result = await _addOrga.execute(orga);
-
-      result.fold((l) => emit(OrgaError(l.message)), (r) => {OrgaStart()});
+      result.fold(
+          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart())});
     });
     on<OnOrgaEdit>((event, emit) async {
       emit(OrgaLoading());
@@ -94,19 +86,22 @@ class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
           builtIn: false);
 
       final result = await _updateOrga.execute(event.id, orga);
-      result.fold((l) => emit(OrgaError(l.message)), (r) => {OrgaStart()});
+      result.fold(
+          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart())});
     });
     on<OnOrgaEnable>((event, emit) async {
       emit(OrgaLoading());
 
       final result = await _enableOrga.execute(event.id, event.enabled);
-      result.fold((l) => emit(OrgaError(l.message)), (r) => {OrgaStart()});
+      result.fold(
+          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart())});
     });
     on<OnOrgaDelete>((event, emit) async {
       emit(OrgaLoading());
 
       final result = await _deleteOrga.execute(event.id);
-      result.fold((l) => emit(OrgaError(l.message)), (r) => {OrgaStart()});
+      result.fold(
+          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart())});
     });
     on<OnOrgaUserListLoad>((event, emit) async {
       emit(OrgaLoading());
@@ -118,16 +113,11 @@ class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
     on<OnOrgaUserAdd>((event, emit) async {
       emit(OrgaLoading());
 
-      final orgaUser = OrgaUser(
-          orgaId: event.orgaId,
-          userId: event.userId,
-          roles: event.roles,
-          enabled: event.enabled,
-          builtIn: false);
+      final result = await _addOrgaUser.execute(
+          event.orgaId, event.userId, event.roles, event.enabled);
 
-      final result = await _addOrgaUser.execute(orgaUser);
-
-      result.fold((l) => emit(OrgaError(l.message)), (r) => {OrgaStart()});
+      result.fold(
+          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart())});
     });
     on<OnOrgaUserEdit>((event, emit) async {
       emit(OrgaLoading());
@@ -141,20 +131,23 @@ class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
 
       final result =
           await _updateOrgaUser.execute(event.orgaId, event.userId, orgaUser);
-      result.fold((l) => emit(OrgaError(l.message)), (r) => {OrgaStart()});
+      result.fold(
+          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart())});
     });
     on<OnOrgaUserEnable>((event, emit) async {
       emit(OrgaLoading());
 
       final result = await _enableOrgaUser.execute(
           event.orgaId, event.userId, event.enabled);
-      result.fold((l) => emit(OrgaError(l.message)), (r) => {OrgaStart()});
+      result.fold(
+          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart())});
     });
     on<OnOrgaUserDelete>((event, emit) async {
       emit(OrgaLoading());
 
       final result = await _deleteOrgaUser.execute(event.orgaId, event.userId);
-      result.fold((l) => emit(OrgaError(l.message)), (r) => {OrgaStart()});
+      result.fold(
+          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart())});
     });
   }
 
