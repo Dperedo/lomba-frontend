@@ -10,6 +10,7 @@ import 'package:lomba_frontend/features/orgas/presentation/bloc/orga_event.dart'
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orga_state.dart';
 import 'package:lomba_frontend/features/orgas/presentation/pages/orgas_page.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:lomba_frontend/injection.dart' as di;
 
 class MockOrgaBloc extends MockBloc<OrgaEvent, OrgaState> implements OrgaBloc {}
 
@@ -24,9 +25,12 @@ void main() {
     HttpOverrides.global = null;
     registerFallbackValue(FakeOrgaState());
     registerFallbackValue(FakeOrgaEvent());
-    final di = GetIt.instance;
+
     mockOrgaBloc = MockOrgaBloc();
-    di.registerFactory(() => mockOrgaBloc);
+
+    await di.init();
+
+    di.locator.registerFactory(() => mockOrgaBloc);
   });
 
   setUp(() {});
@@ -50,10 +54,11 @@ void main() {
         // act
         await tester.pumpWidget(_makeTestableWidget(const OrgasPage()));
         Finder titulo = find.text("Organizaciones");
+        await tester.pumpAndSettle(const Duration(seconds: 1));
 
         // assert
-        //verify(() => mockOrgaBloc.add(const OnOrgaListLoad("", "", 1)))
-        //    .called(1);
+        // verify(() => mockOrgaBloc.add(const OnOrgaListLoad("", "", 1)))
+        //     .called(1);
 
         expect(titulo, equals(findsOneWidget));
       },
