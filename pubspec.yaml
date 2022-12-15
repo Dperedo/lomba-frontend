@@ -40,6 +40,7 @@ dependencies:
   rxdart: ^0.27.7
   shared_preferences: ^2.0.0-nullsafety
   jwt_decode: ^0.3.1
+  flutter_guid: ^0.3.1
 
 dev_dependencies:
   flutter_test:
