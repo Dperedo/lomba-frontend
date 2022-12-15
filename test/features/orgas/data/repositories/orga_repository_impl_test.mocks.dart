@@ -149,7 +149,7 @@ class MockOrgaRemoteDataSource extends _i1.Mock
         returnValue: _i5.Future<bool>.value(false),
       ) as _i5.Future<bool>);
   @override
-  _i5.Future<bool> enableOrga(
+  _i5.Future<_i2.OrgaModel> enableOrga(
     String? orgaId,
     bool? enableOrDisable,
   ) =>
@@ -161,10 +161,19 @@ class MockOrgaRemoteDataSource extends _i1.Mock
             enableOrDisable,
           ],
         ),
-        returnValue: _i5.Future<bool>.value(false),
-      ) as _i5.Future<bool>);
+        returnValue: _i5.Future<_i2.OrgaModel>.value(_FakeOrgaModel_0(
+          this,
+          Invocation.method(
+            #enableOrga,
+            [
+              orgaId,
+              enableOrDisable,
+            ],
+          ),
+        )),
+      ) as _i5.Future<_i2.OrgaModel>);
   @override
-  _i5.Future<bool> enableOrgaUser(
+  _i5.Future<_i3.OrgaUserModel> enableOrgaUser(
     String? orgaId,
     String? userId,
     bool? enableOrDisable,
@@ -178,8 +187,18 @@ class MockOrgaRemoteDataSource extends _i1.Mock
             enableOrDisable,
           ],
         ),
-        returnValue: _i5.Future<bool>.value(false),
-      ) as _i5.Future<bool>);
+        returnValue: _i5.Future<_i3.OrgaUserModel>.value(_FakeOrgaUserModel_1(
+          this,
+          Invocation.method(
+            #enableOrgaUser,
+            [
+              orgaId,
+              userId,
+              enableOrDisable,
+            ],
+          ),
+        )),
+      ) as _i5.Future<_i3.OrgaUserModel>);
   @override
   _i5.Future<_i2.OrgaModel> updateOrga(
     String? orgaId,

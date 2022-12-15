@@ -38,12 +38,12 @@ void main() {
   test('debe deshabilitar un orgauser (relación entre ellos)', () async {
     //arrange
     when(mockOrgaRepository.enableOrgaUser(any, any, any))
-        .thenAnswer((_) async => const Right(true));
+        .thenAnswer((_) async => Right(tOrgaUser));
 
     //act
     final result = await usecase.execute(newOrgaId, newUserId, false);
 
     //assert
-    expect(result, const Right(true));
+    expect(result, Right(tOrgaUser));
   });
 }

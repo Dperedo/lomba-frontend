@@ -14,8 +14,8 @@ abstract class OrgaRepository {
       String orgaId, String userId, List<String> roles, bool enabled);
   Future<Either<Failure, bool>> deleteOrga(String orgaId);
   Future<Either<Failure, bool>> deleteOrgaUser(String orgaId, String userId);
-  Future<Either<Failure, bool>> enableOrga(String orgaId, bool enableOrDisable);
-  Future<Either<Failure, bool>> enableOrgaUser(
+  Future<Either<Failure, Orga>> enableOrga(String orgaId, bool enableOrDisable);
+  Future<Either<Failure, OrgaUser>> enableOrgaUser(
       String orgaId, String userId, bool enableOrDisable);
   Future<Either<Failure, Orga>> updateOrga(String orgaId, Orga orga);
   Future<Either<Failure, OrgaUser>> updateOrgaUser(

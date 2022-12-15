@@ -41,12 +41,12 @@ void main() {
   test('debe deshabilitar un orga', () async {
     //arrange
     when(mockOrgaRepository.enableOrga(any, any))
-        .thenAnswer((_) async => const Right(true));
+        .thenAnswer((_) async => Right(tOrga));
 
     //act
     final result = await usecase.execute(newOrgaId, false);
 
     //assert
-    expect(result, const Right(true));
+    expect(result, Right(tOrga));
   });
 }

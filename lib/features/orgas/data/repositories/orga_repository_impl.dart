@@ -144,12 +144,12 @@ class OrgaRepositoryImpl implements OrgaRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> enableOrga(
+  Future<Either<Failure, Orga>> enableOrga(
       String orgaId, bool enableOrDisable) async {
     try {
       final result = await remoteDataSource.enableOrga(orgaId, enableOrDisable);
 
-      return Right(result);
+      return Right(result.toEntity());
     } on ServerException {
       return const Left(ServerFailure(''));
     } on SocketException {
@@ -158,13 +158,13 @@ class OrgaRepositoryImpl implements OrgaRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> enableOrgaUser(
+  Future<Either<Failure, OrgaUser>> enableOrgaUser(
       String orgaId, String userId, bool enableOrDisable) async {
     try {
       final result = await remoteDataSource.enableOrgaUser(
           orgaId, userId, enableOrDisable);
 
-      return Right(result);
+      return Right(result.toEntity());
     } on ServerException {
       return const Left(ServerFailure(''));
     } on SocketException {

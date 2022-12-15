@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:lomba_frontend/features/orgas/domain/entities/orga.dart';
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orga_bloc.dart';
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orga_event.dart';
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orga_state.dart';
@@ -44,6 +46,16 @@ void main() {
     );
   }
 
+  final newOrgaId = Guid.newGuid.toString();
+  final newUserId = Guid.newGuid.toString();
+
+  final tOrga = Orga(
+      id: newOrgaId,
+      name: 'Test Orga',
+      code: 'test',
+      enabled: true,
+      builtIn: false);
+
   group('lista de organizaciones al entrar a la página', () {
     testWidgets(
       'en el primer estado de la página debe al menos mostrar el título',
@@ -54,7 +66,28 @@ void main() {
         // act
         await tester.pumpWidget(_makeTestableWidget(const OrgasPage()));
         Finder titulo = find.text("Organizaciones");
-        await tester.pumpAndSettle(const Duration(seconds: 1));
+        //await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // assert
+        // verify(() => mockOrgaBloc.add(const OnOrgaListLoad("", "", 1)))
+        //     .called(1);
+
+        expect(titulo, equals(findsOneWidget));
+      },
+    );
+  });
+
+  group('mostrar la información de una organización', () {
+    testWidgets(
+      'al darle tap a una organización mostrar su información',
+      (WidgetTester tester) async {
+        // arrange
+        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga));
+
+        // act
+        await tester.pumpWidget(_makeTestableWidget(const OrgasPage()));
+        Finder titulo = find.text("Organizaciones");
+        //await tester.pumpAndSettle(const Duration(seconds: 1));
 
         // assert
         // verify(() => mockOrgaBloc.add(const OnOrgaListLoad("", "", 1)))

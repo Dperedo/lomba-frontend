@@ -379,14 +379,14 @@ void main() {
       () async {
         // arrange
         when(mockRemoteDataSource.enableOrga(any, any))
-            .thenAnswer((realInvocation) async => true);
+            .thenAnswer((realInvocation) async => tOrgaModel);
 
         // act
         final result = await repository.enableOrga(tOrgaModel.id, false);
 
         // assert
         verify(mockRemoteDataSource.enableOrga(any, any));
-        expect(result, equals(const Right(true)));
+        expect(result, equals(Right(tOrga)));
       },
     );
 
@@ -395,7 +395,7 @@ void main() {
       () async {
         // arrange
         when(mockRemoteDataSource.enableOrgaUser(any, any, any))
-            .thenAnswer((realInvocation) async => true);
+            .thenAnswer((realInvocation) async => tOrgaUserModel);
 
         // act
         final result = await repository.enableOrgaUser(
@@ -403,7 +403,7 @@ void main() {
 
         // assert
         verify(mockRemoteDataSource.enableOrgaUser(any, any, any));
-        expect(result, equals(const Right(true)));
+        expect(result, equals(Right(tOrgaUser)));
       },
     );
 

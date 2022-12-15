@@ -230,12 +230,12 @@ Future<void> main() async {
       'debe deshabilitar un orga',
       build: () {
         when(mockEnableOrga.execute(newOrgaId, false))
-            .thenAnswer((_) async => const Right(true));
+            .thenAnswer((_) async => Right(tOrga));
         return orgaBloc;
       },
       act: (bloc) => bloc.add(OnOrgaEnable(newOrgaId, false)),
       wait: const Duration(milliseconds: 500),
-      expect: () => [OrgaLoading(), OrgaStart()],
+      expect: () => [OrgaLoading(), OrgaLoaded(tOrga)],
       verify: (bloc) {
         verify(mockEnableOrga.execute(newOrgaId, false));
       },
@@ -245,7 +245,7 @@ Future<void> main() async {
       'debe deshabilitar un orgauser',
       build: () {
         when(mockEnableOrgaUser.execute(newOrgaId, newUserId, false))
-            .thenAnswer((_) async => const Right(true));
+            .thenAnswer((_) async => Right(tOrgaUser));
         return orgaBloc;
       },
       act: (bloc) => bloc.add(OnOrgaUserEnable(newOrgaId, newUserId, false)),

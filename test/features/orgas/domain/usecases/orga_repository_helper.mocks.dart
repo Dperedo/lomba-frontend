@@ -209,7 +209,7 @@ class MockOrgaRepository extends _i1.Mock implements _i3.OrgaRepository {
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, bool>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, bool>> enableOrga(
+  _i4.Future<_i2.Either<_i5.Failure, _i6.Orga>> enableOrga(
     String? orgaId,
     bool? enableOrDisable,
   ) =>
@@ -221,8 +221,8 @@ class MockOrgaRepository extends _i1.Mock implements _i3.OrgaRepository {
             enableOrDisable,
           ],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, bool>>.value(
-            _FakeEither_0<_i5.Failure, bool>(
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.Orga>>.value(
+            _FakeEither_0<_i5.Failure, _i6.Orga>(
           this,
           Invocation.method(
             #enableOrga,
@@ -232,9 +232,9 @@ class MockOrgaRepository extends _i1.Mock implements _i3.OrgaRepository {
             ],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, bool>>);
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.Orga>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, bool>> enableOrgaUser(
+  _i4.Future<_i2.Either<_i5.Failure, _i7.OrgaUser>> enableOrgaUser(
     String? orgaId,
     String? userId,
     bool? enableOrDisable,
@@ -248,8 +248,8 @@ class MockOrgaRepository extends _i1.Mock implements _i3.OrgaRepository {
             enableOrDisable,
           ],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, bool>>.value(
-            _FakeEither_0<_i5.Failure, bool>(
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i7.OrgaUser>>.value(
+            _FakeEither_0<_i5.Failure, _i7.OrgaUser>(
           this,
           Invocation.method(
             #enableOrgaUser,
@@ -260,7 +260,7 @@ class MockOrgaRepository extends _i1.Mock implements _i3.OrgaRepository {
             ],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, bool>>);
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i7.OrgaUser>>);
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i6.Orga>> updateOrga(
     String? orgaId,

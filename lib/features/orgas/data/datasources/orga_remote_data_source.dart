@@ -17,8 +17,8 @@ abstract class OrgaRemoteDataSource {
   Future<OrgaUserModel> addOrgaUser(OrgaUserModel orgaUser);
   Future<bool> deleteOrga(String orgaId);
   Future<bool> deleteOrgaUser(String orgaId, String userId);
-  Future<bool> enableOrga(String orgaId, bool enableOrDisable);
-  Future<bool> enableOrgaUser(
+  Future<OrgaModel> enableOrga(String orgaId, bool enableOrDisable);
+  Future<OrgaUserModel> enableOrgaUser(
       String orgaId, String userId, bool enableOrDisable);
   Future<OrgaModel> updateOrga(String orgaId, OrgaModel orga);
   Future<OrgaUserModel> updateOrgaUser(
@@ -132,7 +132,7 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
   }
 
   @override
-  Future<bool> enableOrga(String orgaId, bool enableOrDisable) async {
+  Future<OrgaModel> enableOrga(String orgaId, bool enableOrDisable) async {
     final response =
         await client.get(Uri.parse(Urls.currentWeatherByName("London")));
 
@@ -150,14 +150,14 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
       int index = fakeListOrgas.indexWhere((element) => element.id == orgaId);
       fakeListOrgas[index] = newOrgaModel;
 
-      return true;
+      return newOrgaModel;
     } else {
       throw ServerException();
     }
   }
 
   @override
-  Future<bool> enableOrgaUser(
+  Future<OrgaUserModel> enableOrgaUser(
       String orgaId, String userId, bool enableOrDisable) async {
     final response =
         await client.get(Uri.parse(Urls.currentWeatherByName("London")));
@@ -177,7 +177,7 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
           (element) => element.orgaId == orgaId && element.userId == userId);
       fakeListOrgaUsers[index] = newOrgaUserModel;
 
-      return true;
+      return newOrgaUserModel;
     } else {
       throw ServerException();
     }

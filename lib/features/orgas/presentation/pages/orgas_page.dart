@@ -37,7 +37,11 @@ class OrgasPage extends StatelessWidget {
     if (state is OrgaStart) {
       context.read<OrgaBloc>().add(const OnOrgaListLoad("", "", 1));
     }
-
+    if (state is OrgaLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     if (state is OrgaListLoaded) {
       return ListView.builder(
         shrinkWrap: true,
@@ -164,7 +168,11 @@ class OrgasPage extends StatelessWidget {
               const VerticalDivider(),
               ElevatedButton(
                   onPressed: () {}, child: const Text("Ver usuarios")),
-              const VerticalDivider(),
+            ],
+          ),
+          const Divider(),
+          Row(
+            children: [
               ElevatedButton(
                   onPressed: () {
                     context

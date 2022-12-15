@@ -305,7 +305,7 @@ class MockEnableOrga extends _i1.Mock implements _i12.EnableOrga {
         ),
       ) as _i2.OrgaRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, bool>> execute(
+  _i5.Future<_i3.Either<_i6.Failure, _i7.Orga>> execute(
     String? orgaId,
     bool? enableOrDisable,
   ) =>
@@ -317,8 +317,8 @@ class MockEnableOrga extends _i1.Mock implements _i12.EnableOrga {
             enableOrDisable,
           ],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
-            _FakeEither_1<_i6.Failure, bool>(
+        returnValue: _i5.Future<_i3.Either<_i6.Failure, _i7.Orga>>.value(
+            _FakeEither_1<_i6.Failure, _i7.Orga>(
           this,
           Invocation.method(
             #execute,
@@ -329,8 +329,8 @@ class MockEnableOrga extends _i1.Mock implements _i12.EnableOrga {
           ),
         )),
         returnValueForMissingStub:
-            _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
-                _FakeEither_1<_i6.Failure, bool>(
+            _i5.Future<_i3.Either<_i6.Failure, _i7.Orga>>.value(
+                _FakeEither_1<_i6.Failure, _i7.Orga>(
           this,
           Invocation.method(
             #execute,
@@ -340,7 +340,7 @@ class MockEnableOrga extends _i1.Mock implements _i12.EnableOrga {
             ],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, bool>>);
+      ) as _i5.Future<_i3.Either<_i6.Failure, _i7.Orga>>);
 }
 
 /// A class which mocks [EnableOrgaUser].
@@ -360,7 +360,7 @@ class MockEnableOrgaUser extends _i1.Mock implements _i13.EnableOrgaUser {
         ),
       ) as _i2.OrgaRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, bool>> execute(
+  _i5.Future<_i3.Either<_i6.Failure, _i9.OrgaUser>> execute(
     String? orgaId,
     String? userId,
     bool? enableOrDisable,
@@ -374,8 +374,8 @@ class MockEnableOrgaUser extends _i1.Mock implements _i13.EnableOrgaUser {
             enableOrDisable,
           ],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
-            _FakeEither_1<_i6.Failure, bool>(
+        returnValue: _i5.Future<_i3.Either<_i6.Failure, _i9.OrgaUser>>.value(
+            _FakeEither_1<_i6.Failure, _i9.OrgaUser>(
           this,
           Invocation.method(
             #execute,
@@ -387,8 +387,8 @@ class MockEnableOrgaUser extends _i1.Mock implements _i13.EnableOrgaUser {
           ),
         )),
         returnValueForMissingStub:
-            _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
-                _FakeEither_1<_i6.Failure, bool>(
+            _i5.Future<_i3.Either<_i6.Failure, _i9.OrgaUser>>.value(
+                _FakeEither_1<_i6.Failure, _i9.OrgaUser>(
           this,
           Invocation.method(
             #execute,
@@ -399,7 +399,7 @@ class MockEnableOrgaUser extends _i1.Mock implements _i13.EnableOrgaUser {
             ],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, bool>>);
+      ) as _i5.Future<_i3.Either<_i6.Failure, _i9.OrgaUser>>);
 }
 
 /// A class which mocks [GetOrga].

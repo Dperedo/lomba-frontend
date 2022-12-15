@@ -95,7 +95,7 @@ class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
 
       final result = await _enableOrga.execute(event.id, event.enabled);
       result.fold(
-          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart())});
+          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaLoaded(r))});
     });
     on<OnOrgaDelete>((event, emit) async {
       emit(OrgaLoading());

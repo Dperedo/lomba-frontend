@@ -220,10 +220,10 @@ void main() {
           .thenAnswer((realInvocation) async => http.Response("", 200));
 
       //act
-      final result = await dataSource.enableOrga(fakeOrgaIdRoot, false);
+      final result = await dataSource.enableOrga(fakeListOrgas[1].id, false);
 
       //assert
-      expect(result, equals(true));
+      expect(result, equals(fakeListOrgas[1]));
     });
     test('habilitar una orgauser', () async {
       //arrange
@@ -232,10 +232,10 @@ void main() {
 
       //act
       final result = await dataSource.enableOrgaUser(
-          fakeOrgaIdRoot, fakeUserIdAdmin, false);
+          fakeListOrgas[1].id, fakeListOrgaUsers[1].userId, false);
 
       //assert
-      expect(result, equals(true));
+      expect(result.enabled, equals(false));
     });
   });
 }
