@@ -40,7 +40,7 @@ class SideDrawer extends StatelessWidget {
 
             childrenOptionsList.add(const DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Colors.deepOrange,
               ),
               child: Text('Opciones'),
             ));

@@ -41,9 +41,9 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<OrgaUserBloc>())
       ],
       child: MaterialApp(
-          title: 'Flutter Demo',
+          title: 'App Demo',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            primarySwatch: Colors.deepOrange,
           ),
           home: BlocBuilder<NavBloc, NavState>(builder: (context, state) {
             return AnimatedSwitcher(

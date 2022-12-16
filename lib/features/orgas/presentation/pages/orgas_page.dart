@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orga_event.dart';
+import 'package:lomba_frontend/features/orgas/presentation/bloc/orgauser_event.dart';
 import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
 
 import '../bloc/orga_bloc.dart';
 import '../bloc/orga_state.dart';
+import '../bloc/orgauser_bloc.dart';
+import '../bloc/orgauser_state.dart';
 
 class OrgasPage extends StatelessWidget {
   const OrgasPage({Key? key}) : super(key: key);
@@ -83,83 +86,98 @@ class OrgasPage extends StatelessWidget {
           Row(
             children: [
               ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => GestureDetector(
-                              onTap: () => Navigator.pop(context),
-                              child: AlertDialog(
-                                title: const Text(
-                                    '¿Desea eliminar la organización'),
-                                content:
-                                    const Text('La eliminación es permanente'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: const Text('Eliminar'),
-                                    onPressed: () {
-                                      Navigator.pop(context, true);
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: const Text('Cancelar'),
-                                    onPressed: () {
-                                      Navigator.pop(context, false);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            )).then((value) => {
-                          if (value)
-                            {
-                              context
-                                  .read<OrgaBloc>()
-                                  .add(OnOrgaDelete(state.orga.id))
-                            }
-                        });
-                  },
-                  child: const Text("Eliminar")),
+                key: const ValueKey("btnDeleteOption"),
+                child: const Text("Eliminar"),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) => GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: AlertDialog(
+                              title:
+                                  const Text('¿Desea eliminar la organización'),
+                              content:
+                                  const Text('La eliminación es permanente'),
+                              actions: <Widget>[
+                                TextButton(
+                                  key: const ValueKey("btnConfirmDelete"),
+                                  child: const Text('Eliminar'),
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                  },
+                                ),
+                                TextButton(
+                                  key: const ValueKey("btnCancelDelete"),
+                                  child: const Text('Cancelar'),
+                                  onPressed: () {
+                                    Navigator.pop(context, false);
+                                  },
+                                ),
+                              ],
+                            ),
+                          )).then((value) => {
+                        if (value)
+                          {
+                            context
+                                .read<OrgaBloc>()
+                                .add(OnOrgaDelete(state.orga.id))
+                          }
+                      });
+                },
+              ),
               const VerticalDivider(),
               ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => GestureDetector(
-                              onTap: () => Navigator.pop(context),
-                              child: AlertDialog(
-                                title: Text(
-                                    '¿Desea ${(state.orga.enabled ? "deshabilitar" : "habilitar")} la organización'),
-                                content: const Text(
-                                    'Puede cambiar después su elección'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text((state.orga.enabled
-                                        ? "Deshabilitar"
-                                        : "Habilitar")),
-                                    onPressed: () {
-                                      Navigator.pop(context, true);
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: const Text('Cancelar'),
-                                    onPressed: () {
-                                      Navigator.pop(context, false);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            )).then((value) => {
-                          if (value)
-                            {
-                              context.read<OrgaBloc>().add(OnOrgaEnable(
-                                  state.orga.id, !state.orga.enabled))
-                            }
-                        });
-                  },
-                  child: Text(
-                      (state.orga.enabled ? "Deshabilitar" : "Habilitar"))),
+                key: const ValueKey("btnEnableOption"),
+                child:
+                    Text((state.orga.enabled ? "Deshabilitar" : "Habilitar")),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) => GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: AlertDialog(
+                              title: Text(
+                                  '¿Desea ${(state.orga.enabled ? "deshabilitar" : "habilitar")} la organización'),
+                              content: const Text(
+                                  'Puede cambiar después su elección'),
+                              actions: <Widget>[
+                                TextButton(
+                                  key: const ValueKey("btnConfirmEnable"),
+                                  child: Text((state.orga.enabled
+                                      ? "Deshabilitar"
+                                      : "Habilitar")),
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                  },
+                                ),
+                                TextButton(
+                                  key: const ValueKey("btnCancelEnable"),
+                                  child: const Text('Cancelar'),
+                                  onPressed: () {
+                                    Navigator.pop(context, false);
+                                  },
+                                ),
+                              ],
+                            ),
+                          )).then((value) => {
+                        if (value)
+                          {
+                            context.read<OrgaBloc>().add(OnOrgaEnable(
+                                state.orga.id, !state.orga.enabled))
+                          }
+                      });
+                },
+              ),
               const VerticalDivider(),
               ElevatedButton(
-                  onPressed: () {}, child: const Text("Ver usuarios")),
+                key: const ValueKey("btnViewUsersOption"),
+                child: const Text("Ver usuarios"),
+                onPressed: () {
+                  context
+                      .read<OrgaUserBloc>()
+                      .add(OnOrgaUserListLoad(state.orga.id));
+                },
+              ),
             ],
           ),
           const Divider(),
@@ -175,6 +193,7 @@ class OrgasPage extends StatelessWidget {
             ],
           ),
           const Divider(),
+          _orgaUserList(context)
         ],
       );
     }
@@ -195,5 +214,55 @@ class OrgasPage extends StatelessWidget {
     }
 
     return AppBar(title: const Text("Organizaciones"));
+  }
+
+  Widget _orgaUserList(BuildContext context) {
+    return BlocBuilder<OrgaUserBloc, OrgaUserState>(
+      builder: (context, state) {
+        if (state is OrgaUserLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (state is OrgaUserListLoaded) {
+          return Column(
+            children: [
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: state.orgaUsers.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  child: Center(
+                                child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: TextButton(
+                                      child: Center(
+                                        child: Text(
+                                          state.orgaUsers[index].userId,
+                                        ),
+                                      ),
+                                      onPressed: () {},
+                                    )),
+                              ))
+                            ],
+                          )),
+                      const Divider()
+                    ],
+                  );
+                },
+              )
+            ],
+          );
+        }
+        return const SizedBox();
+      },
+    );
   }
 }
