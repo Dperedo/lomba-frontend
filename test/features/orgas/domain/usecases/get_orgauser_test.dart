@@ -2,11 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
-import 'package:lomba_frontend/features/orgas/data/models/orga_model.dart';
-import 'package:lomba_frontend/features/orgas/domain/entities/orga.dart';
 import 'package:lomba_frontend/features/orgas/domain/entities/orgauser.dart';
-import 'package:lomba_frontend/features/orgas/domain/usecases/add_orga.dart';
-import 'package:lomba_frontend/features/orgas/domain/usecases/get_orga.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/get_orgausers.dart';
 import 'package:mockito/mockito.dart';
 
@@ -24,24 +20,10 @@ void main() {
   final newOrgaId = Guid.newGuid.toString();
   final newUserId = Guid.newGuid.toString();
 
-  final tOrgaModel = OrgaModel(
-      id: newOrgaId,
-      name: 'Test Orga',
-      code: 'test',
-      enabled: true,
-      builtIn: false);
-
-  final tOrga = Orga(
-      id: newOrgaId,
-      name: 'Test Orga',
-      code: 'test',
-      enabled: true,
-      builtIn: false);
-
   final tOrgaUser = OrgaUser(
       userId: newUserId,
       orgaId: newOrgaId,
-      roles: const <String>[Roles.Admin],
+      roles: const <String>[Roles.roleAdmin],
       enabled: true,
       builtIn: true);
 

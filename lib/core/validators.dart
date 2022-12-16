@@ -14,6 +14,8 @@ class Validators {
     if (!regExp.hasMatch(email)) {
       return "Por favor ingresa un email válido";
     }
+
+    return null;
   }
 
   static String? validatePassword(String password) {
@@ -24,6 +26,8 @@ class Validators {
     if (password.length < 4) {
       return "Por favor ingresa una contraseña de al menos 4 caracteres";
     }
+
+    return null;
   }
 
   static bool validateToken(String token) {

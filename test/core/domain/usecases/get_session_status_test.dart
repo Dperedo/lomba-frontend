@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/data/models/session_model.dart';
 import 'package:lomba_frontend/core/domain/repositories/local_repository.dart';
-import 'package:lomba_frontend/core/domain/usecases/get_has_login.dart';
 import 'package:lomba_frontend/core/domain/usecases/get_session_status.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -21,10 +20,6 @@ void main() {
       name: 'Miguel');
 
   const tEmptySessionModel = SessionModel(token: "", username: "", name: "");
-  const tInvalidTokenSessionModel = SessionModel(
-      token: SystemKeys.tokenExpiredSuperAdmin,
-      username: 'mp@mp.com',
-      name: 'Miguel');
 
   setUp(() {
     mockLocalRepository = MockLocalRepository();

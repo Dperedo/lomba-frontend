@@ -43,14 +43,14 @@ void main() {
   final tOrgaUserModel = OrgaUserModel(
       userId: newUserId,
       orgaId: newOrgaId,
-      roles: const <String>[Roles.Admin],
+      roles: const <String>[Roles.roleAdmin],
       enabled: true,
       builtIn: true);
 
   final tOrgaUser = OrgaUser(
       userId: newUserId,
       orgaId: newOrgaId,
-      roles: const <String>[Roles.Admin],
+      roles: const <String>[Roles.roleAdmin],
       enabled: true,
       builtIn: true);
 

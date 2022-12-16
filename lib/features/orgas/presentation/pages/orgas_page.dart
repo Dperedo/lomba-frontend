@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/features/home/presentation/bloc/home_event.dart';
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orga_event.dart';
 import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
 
-import '../../../../core/presentation/bloc/nav_bloc.dart';
-import '../../../../core/presentation/bloc/nav_event.dart';
-import '../../../../core/presentation/bloc/nav_state.dart';
 import '../bloc/orga_bloc.dart';
-import '../../../../injection.dart' as di;
 import '../bloc/orga_state.dart';
 
 class OrgasPage extends StatelessWidget {
@@ -16,20 +11,17 @@ class OrgasPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => di.locator<OrgaBloc>(),
-      child: BlocBuilder<OrgaBloc, OrgaState>(
-        builder: (context, state) {
-          return Scaffold(
-            appBar: _variableAppBar(context, state),
-            body: SingleChildScrollView(
-                child: Column(
-              children: [_bodyOrgas(context, state)],
-            )),
-            drawer: const SideDrawer(),
-          );
-        },
-      ),
+    return BlocBuilder<OrgaBloc, OrgaState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: _variableAppBar(context, state),
+          body: SingleChildScrollView(
+              child: Column(
+            children: [_bodyOrgas(context, state)],
+          )),
+          drawer: const SideDrawer(),
+        );
+      },
     );
   }
 

@@ -1,50 +1,32 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_guid/flutter_guid.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/add_orga.dart';
-import 'package:lomba_frontend/features/orgas/domain/usecases/add_orgauser.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/delete_orga.dart';
-import 'package:lomba_frontend/features/orgas/domain/usecases/delete_orgauser.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/enable_orga.dart';
-import 'package:lomba_frontend/features/orgas/domain/usecases/enable_orgauser.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/get_orga.dart';
-import 'package:lomba_frontend/features/orgas/domain/usecases/get_orgausers.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/update_orga.dart';
-import 'package:lomba_frontend/features/orgas/domain/usecases/update_orgauser.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../domain/entities/orga.dart';
-import '../../domain/entities/orgauser.dart';
 import '../../domain/usecases/get_orgas.dart';
 import 'orga_event.dart';
 import 'orga_state.dart';
 
 class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
   final AddOrga _addOrga;
-  final AddOrgaUser _addOrgaUser;
   final DeleteOrga _deleteOrga;
-  final DeleteOrgaUser _deleteOrgaUser;
   final EnableOrga _enableOrga;
-  final EnableOrgaUser _enableOrgaUser;
   final GetOrga _getOrga;
   final GetOrgas _getOrgas;
-  final GetOrgaUsers _getOrgaUsers;
   final UpdateOrga _updateOrga;
-  final UpdateOrgaUser _updateOrgaUser;
 
   OrgaBloc(
-      this._addOrga,
-      this._addOrgaUser,
-      this._deleteOrga,
-      this._deleteOrgaUser,
-      this._enableOrga,
-      this._enableOrgaUser,
-      this._getOrga,
-      this._getOrgas,
-      this._getOrgaUsers,
-      this._updateOrga,
-      this._updateOrgaUser)
-      : super(OrgaStart()) {
+    this._addOrga,
+    this._deleteOrga,
+    this._enableOrga,
+    this._getOrga,
+    this._getOrgas,
+    this._updateOrga,
+  ) : super(OrgaStart()) {
     on<OnOrgaLoad>(
       (event, emit) async {
         emit(OrgaLoading());
@@ -101,52 +83,6 @@ class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
       emit(OrgaLoading());
 
       final result = await _deleteOrga.execute(event.id);
-      result.fold(
-          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart())});
-    });
-    on<OnOrgaUserListLoad>((event, emit) async {
-      emit(OrgaLoading());
-      final result = await _getOrgaUsers.execute(event.id);
-
-      result.fold((l) => emit(OrgaError(l.message)),
-          (r) => {emit(OrgaUserListLoaded(r))});
-    });
-    on<OnOrgaUserAdd>((event, emit) async {
-      emit(OrgaLoading());
-
-      final result = await _addOrgaUser.execute(
-          event.orgaId, event.userId, event.roles, event.enabled);
-
-      result.fold(
-          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart())});
-    });
-    on<OnOrgaUserEdit>((event, emit) async {
-      emit(OrgaLoading());
-
-      final orgaUser = OrgaUser(
-          orgaId: event.orgaId,
-          userId: event.userId,
-          roles: event.roles,
-          enabled: event.enabled,
-          builtIn: false);
-
-      final result =
-          await _updateOrgaUser.execute(event.orgaId, event.userId, orgaUser);
-      result.fold(
-          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart())});
-    });
-    on<OnOrgaUserEnable>((event, emit) async {
-      emit(OrgaLoading());
-
-      final result = await _enableOrgaUser.execute(
-          event.orgaId, event.userId, event.enabled);
-      result.fold(
-          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart())});
-    });
-    on<OnOrgaUserDelete>((event, emit) async {
-      emit(OrgaLoading());
-
-      final result = await _deleteOrgaUser.execute(event.orgaId, event.userId);
       result.fold(
           (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart())});
     });

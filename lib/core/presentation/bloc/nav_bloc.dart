@@ -5,7 +5,7 @@ import 'nav_event.dart';
 import 'nav_state.dart';
 
 class NavBloc extends Bloc<NavEvent, NavState> {
-  NavBloc() : super(NavState(NavItem.page_home)) {
+  NavBloc() : super(const NavState(NavItem.pageHome)) {
     on<NavigateTo>(
       (event, emit) async {
         if (event.destination != state.selectedItem) {

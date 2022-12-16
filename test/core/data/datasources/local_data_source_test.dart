@@ -44,7 +44,7 @@ void main() {
 
         final result = await dataSource.getSavedSession();
         // assert
-        verify(mockSharedPreferences.getString(CACHED_SESSION_KEY));
+        verify(mockSharedPreferences.getString(cachedSessionKey));
         expect(result, equals(sessionModel));
       },
     );
@@ -85,7 +85,7 @@ void main() {
         final expectedJsonString = json.encode(tsessionModel.toJson());
 
         verify(mockSharedPreferences.setString(
-          CACHED_SESSION_KEY,
+          cachedSessionKey,
           expectedJsonString,
         )).called(1);
       },
@@ -93,10 +93,6 @@ void main() {
   });
 
   group('consulta si session existe en el local', () {
-    const tsessionModel = SessionModel(
-        token: SystemKeys.tokenSuperAdmin2023,
-        username: "mp@mp.com",
-        name: "Miguel");
     // arrange
     mockSharedPreferences = MockSharedPreferences();
     dataSource = LocalDataSourceImpl(
@@ -110,7 +106,7 @@ void main() {
         // act
         final hasToken = await dataSource.hasSession();
         // assert
-        verify(mockSharedPreferences.containsKey(CACHED_SESSION_KEY)).called(1);
+        verify(mockSharedPreferences.containsKey(cachedSessionKey)).called(1);
         expect(true, equals(hasToken));
       },
     );
@@ -123,7 +119,7 @@ void main() {
         // act
         final hasToken = await dataSource.hasSession();
         // assert
-        verify(mockSharedPreferences.containsKey(CACHED_SESSION_KEY)).called(1);
+        verify(mockSharedPreferences.containsKey(cachedSessionKey)).called(1);
         expect(false, equals(hasToken));
       },
     );
@@ -132,13 +128,12 @@ void main() {
       'limpiar sessión para el logoff',
       () async {
         //arrange
-        when(mockSharedPreferences.setString(CACHED_SESSION_KEY, any))
+        when(mockSharedPreferences.setString(cachedSessionKey, any))
             .thenAnswer((_) async => true);
         // act
         final cleaned = await dataSource.cleanSession();
         // assert
-        verify(mockSharedPreferences.setString(CACHED_SESSION_KEY, ""))
-            .called(1);
+        verify(mockSharedPreferences.setString(cachedSessionKey, "")).called(1);
         expect(true, equals(cleaned));
       },
     );

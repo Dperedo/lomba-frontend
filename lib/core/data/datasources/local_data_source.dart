@@ -12,7 +12,7 @@ abstract class LocalDataSource {
   Future<bool> cleanSession();
 }
 
-const CACHED_SESSION_KEY = "SESSION_KEY";
+const cachedSessionKey = "SESSION_KEY";
 
 class LocalDataSourceImpl implements LocalDataSource {
   final SharedPreferences sharedPreferences;
@@ -21,7 +21,7 @@ class LocalDataSourceImpl implements LocalDataSource {
 
   @override
   Future<SessionModel> getSavedSession() {
-    final jsonString = sharedPreferences.getString(CACHED_SESSION_KEY);
+    final jsonString = sharedPreferences.getString(cachedSessionKey);
     if (jsonString != null && jsonString != "") {
       return Future.value(SessionModel.fromJson(json.decode(jsonString)));
     } else {
@@ -32,7 +32,7 @@ class LocalDataSourceImpl implements LocalDataSource {
   @override
   Future<bool> cleanSession() {
     sharedPreferences.setString(
-      CACHED_SESSION_KEY,
+      cachedSessionKey,
       "",
     );
 
@@ -42,7 +42,7 @@ class LocalDataSourceImpl implements LocalDataSource {
   @override
   Future<bool> saveSession(SessionModel session) {
     sharedPreferences.setString(
-      CACHED_SESSION_KEY,
+      cachedSessionKey,
       json.encode(session.toJson()),
     );
 
@@ -51,6 +51,6 @@ class LocalDataSourceImpl implements LocalDataSource {
 
   @override
   Future<bool> hasSession() {
-    return Future.value(sharedPreferences.containsKey(CACHED_SESSION_KEY));
+    return Future.value(sharedPreferences.containsKey(cachedSessionKey));
   }
 }

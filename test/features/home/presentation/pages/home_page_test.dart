@@ -7,7 +7,6 @@ import 'package:lomba_frontend/features/home/presentation/bloc/home_bloc.dart';
 import 'package:lomba_frontend/features/home/presentation/bloc/home_event.dart';
 import 'package:lomba_frontend/features/home/presentation/bloc/home_state.dart';
 import 'package:lomba_frontend/features/home/presentation/pages/home_page.dart';
-import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockHomeBloc extends MockBloc<HomeEvent, HomeState> implements HomeBloc {}
@@ -26,7 +25,7 @@ void main() {
     di.registerFactory(() => mockHomeBloc);
   });
 
-  Widget _makeTestableWidget(Widget body) {
+  Widget makeTestableWidget(Widget body) {
     return BlocProvider<HomeBloc>.value(
       value: mockHomeBloc,
       child: MaterialApp(
@@ -46,7 +45,7 @@ void main() {
     when(() => mockHomeBloc.state).thenReturn(const HomeLoaded(true));
 
     //act
-    await tester.pumpWidget(_makeTestableWidget(const HomePage()));
+    await tester.pumpWidget(makeTestableWidget(const HomePage()));
     final message = find.text("Bienvenido usuario logueado!");
 
     //assert
@@ -59,7 +58,7 @@ void main() {
     when(() => mockHomeBloc.state).thenReturn(const HomeLoaded(false));
 
     //act
-    await tester.pumpWidget(_makeTestableWidget(const HomePage()));
+    await tester.pumpWidget(makeTestableWidget(const HomePage()));
     final message = find.text("Usuario anónimo. Bienvenido.");
 
     //assert

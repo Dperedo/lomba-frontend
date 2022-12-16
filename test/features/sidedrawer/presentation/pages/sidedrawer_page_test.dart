@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:lomba_frontend/features/home/presentation/pages/home_page.dart';
 import 'package:lomba_frontend/features/sidedrawer/presentation/bloc/sidedrawer_bloc.dart';
 import 'package:lomba_frontend/features/sidedrawer/presentation/bloc/sidedrawer_event.dart';
 import 'package:lomba_frontend/features/sidedrawer/presentation/bloc/sidedrawer_state.dart';
 import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
-
 import 'package:mocktail/mocktail.dart';
 
 class MockSideDrawerBloc extends MockBloc<SideDrawerEvent, SideDrawerState>
@@ -28,7 +26,7 @@ void main() {
     di.registerFactory(() => mockSideDrawerBloc);
   });
 
-  Widget _makeTestableWidget(Widget body) {
+  Widget makeTestableWidget(Widget body) {
     return BlocProvider<SideDrawerBloc>.value(
       value: mockSideDrawerBloc,
       child: MaterialApp(
@@ -60,7 +58,7 @@ void main() {
       when(() => mockSideDrawerBloc.state).thenReturn(SideDrawerEmpty());
 
       //act
-      await tester.pumpWidget(_makeTestableWidget(const SideDrawer()));
+      await tester.pumpWidget(makeTestableWidget(const SideDrawer()));
       final snipper = find.byType(CircularProgressIndicator);
 
       //assert
@@ -74,7 +72,7 @@ void main() {
           .thenReturn(const SideDrawerReady(listAnonymous));
 
       //act
-      await tester.pumpWidget(_makeTestableWidget(const SideDrawer()));
+      await tester.pumpWidget(makeTestableWidget(const SideDrawer()));
 
       //assert
       expect(find.text("Home"), findsOneWidget);
@@ -88,7 +86,7 @@ void main() {
           .thenReturn(const SideDrawerReady(listUser));
 
       //act
-      await tester.pumpWidget(_makeTestableWidget(const SideDrawer()));
+      await tester.pumpWidget(makeTestableWidget(const SideDrawer()));
 
       //assert
       expect(find.text("Home"), findsOneWidget);
@@ -103,7 +101,7 @@ void main() {
           .thenReturn(const SideDrawerReady(listAdmin));
 
       //act
-      await tester.pumpWidget(_makeTestableWidget(const SideDrawer()));
+      await tester.pumpWidget(makeTestableWidget(const SideDrawer()));
 
       //assert
       expect(find.text("Home"), findsOneWidget);
@@ -119,7 +117,7 @@ void main() {
           .thenReturn(const SideDrawerReady(listSuperAdmin));
 
       //act
-      await tester.pumpWidget(_makeTestableWidget(const SideDrawer()));
+      await tester.pumpWidget(makeTestableWidget(const SideDrawer()));
 
       //assert
       expect(find.text("Home"), findsOneWidget);

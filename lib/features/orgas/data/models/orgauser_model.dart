@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'package:lomba_frontend/features/login/domain/entities/login_access.dart';
-
 import '../../domain/entities/orgauser.dart';
 
 class OrgaUserModel extends OrgaUser {

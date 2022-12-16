@@ -2,8 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/domain/repositories/local_repository.dart';
-import 'package:lomba_frontend/core/domain/usecases/get_session_status.dart';
-import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
 import 'package:lomba_frontend/features/sidedrawer/domain/usecases/get_side_options.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -40,7 +38,7 @@ void main() {
           .thenAnswer((_) async => const Right(listAnonymous));
 
       when(mockLocalRepository.getSessionRole())
-          .thenAnswer((_) async => const Right(Roles.Anonymous));
+          .thenAnswer((_) async => const Right(Roles.roleAnonymous));
 
       //act
       final result = await usecase.execute();
@@ -55,7 +53,7 @@ void main() {
           .thenAnswer((_) async => const Right(listUser));
 
       when(mockLocalRepository.getSessionRole())
-          .thenAnswer((_) async => const Right(Roles.User));
+          .thenAnswer((_) async => const Right(Roles.roleUser));
 
       //act
       final result = await usecase.execute();
@@ -70,7 +68,7 @@ void main() {
           .thenAnswer((_) async => const Right(listAdmin));
 
       when(mockLocalRepository.getSessionRole())
-          .thenAnswer((_) async => const Right(Roles.Admin));
+          .thenAnswer((_) async => const Right(Roles.roleAdmin));
 
       //act
       final result = await usecase.execute();
@@ -85,7 +83,7 @@ void main() {
           .thenAnswer((_) async => const Right(listSuperAdmin));
 
       when(mockLocalRepository.getSessionRole())
-          .thenAnswer((_) async => const Right(Roles.SuperAdmin));
+          .thenAnswer((_) async => const Right(Roles.roleSuperAdmin));
 
       //act
       final result = await usecase.execute();

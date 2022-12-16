@@ -3,19 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/presentation/bloc/nav_state.dart';
 import 'package:lomba_frontend/features/home/presentation/bloc/home_bloc.dart';
 import 'package:lomba_frontend/features/home/presentation/bloc/home_event.dart';
-import 'package:lomba_frontend/features/home/presentation/bloc/home_state.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_event.dart';
 import 'package:lomba_frontend/features/sidedrawer/presentation/bloc/sidedrawer_event.dart';
-import 'package:lomba_frontend/features/sidedrawer/presentation/bloc/sidedrawer_state.dart';
-import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
 
 import '../../../../core/presentation/bloc/nav_bloc.dart';
 import '../../../../core/presentation/bloc/nav_event.dart';
 import '../../../../core/validators.dart';
 import '../../../sidedrawer/presentation/bloc/sidedrawer_bloc.dart';
 import '../bloc/login_state.dart';
-import '../../../home/presentation/pages/home_page.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -31,7 +27,7 @@ class LoginPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () {
-            context.read<NavBloc>().add(const NavigateTo(NavItem.page_home));
+            context.read<NavBloc>().add(const NavigateTo(NavItem.pageHome));
           },
         ),
         title: const Text(
@@ -61,7 +57,7 @@ class LoginPage extends StatelessWidget {
                         .add(const OnSideDrawerLoading());
 
                     BlocProvider.of<NavBloc>(context)
-                        .add(const NavigateTo(NavItem.page_home));
+                        .add(const NavigateTo(NavItem.pageHome));
                   });
                 } else if (state is LoginError) {
                   return const Center(

@@ -1,11 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/domain/repositories/local_repository.dart';
-import 'package:lomba_frontend/core/domain/usecases/get_session_status.dart';
-import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
 import 'package:lomba_frontend/features/sidedrawer/domain/usecases/do_logoff.dart';
-import 'package:lomba_frontend/features/sidedrawer/domain/usecases/get_side_options.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 

@@ -77,7 +77,7 @@ class LocalRepositoryImpl implements LocalRepository {
 
   @override
   Future<Either<Failure, String>> getSessionRole() async {
-    String role = Roles.Anonymous;
+    String role = Roles.roleAnonymous;
     SessionModel session = _getNewSessionModel();
 
     final result = await getSession();
@@ -97,25 +97,25 @@ class LocalRepositoryImpl implements LocalRepository {
 
   @override
   Future<Either<Failure, List<String>>> getSideMenuListOptions() async {
-    List<String> opts = [SideDrawerUserOptions.Home];
-    String role = Roles.Anonymous;
+    List<String> opts = [SideDrawerUserOptions.optHome];
+    String role = Roles.roleAnonymous;
 
     final result = await getSessionRole();
 
     result.fold((l) => {}, (r) => {role = r});
 
-    if (role == Roles.Anonymous) {
-      opts.add(SideDrawerUserOptions.LogIn);
+    if (role == Roles.roleAnonymous) {
+      opts.add(SideDrawerUserOptions.optLogIn);
     } else {
-      opts.add(SideDrawerUserOptions.LogOff);
-      opts.add(SideDrawerUserOptions.Profile);
+      opts.add(SideDrawerUserOptions.optLogOff);
+      opts.add(SideDrawerUserOptions.optProfile);
 
-      if (role == Roles.SuperAdmin) {
-        opts.add(SideDrawerUserOptions.Orgas);
-        opts.add(SideDrawerUserOptions.Users);
-        opts.add(SideDrawerUserOptions.Roles);
-      } else if (role == Roles.Admin) {
-        opts.add(SideDrawerUserOptions.Users);
+      if (role == Roles.roleSuperAdmin) {
+        opts.add(SideDrawerUserOptions.optOrgas);
+        opts.add(SideDrawerUserOptions.optUsers);
+        opts.add(SideDrawerUserOptions.optRoles);
+      } else if (role == Roles.roleAdmin) {
+        opts.add(SideDrawerUserOptions.optUsers);
       }
     }
     return Right(opts);

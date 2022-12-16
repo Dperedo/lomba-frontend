@@ -150,7 +150,6 @@ void main() {
       when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
           .thenAnswer((realInvocation) async => http.Response("", 200));
 
-      final count = fakeListOrgas.length;
       //act
       OrgaModel toAdd = OrgaModel(
           id: Guid.newGuid.toString(),
@@ -169,7 +168,6 @@ void main() {
       when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
           .thenAnswer((realInvocation) async => http.Response("", 200));
 
-      final count = fakeListOrgaUsers.length;
       //act
       OrgaUserModel toAdd = OrgaUserModel(
           orgaId: Guid.newGuid.toString(),
@@ -190,7 +188,6 @@ void main() {
       when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
           .thenAnswer((realInvocation) async => http.Response("", 200));
 
-      final count = fakeListOrgas.length;
       //act
       final result = await dataSource.deleteOrga(fakeOrgaIdSample03);
 
@@ -203,7 +200,6 @@ void main() {
       when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
           .thenAnswer((realInvocation) async => http.Response("", 200));
 
-      final count = fakeListOrgaUsers.length;
       //act
       final result =
           await dataSource.deleteOrgaUser(fakeOrgaIdSample03, fakeUserIdUser02);

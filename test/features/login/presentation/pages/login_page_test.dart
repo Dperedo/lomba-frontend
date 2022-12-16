@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:lomba_frontend/features/home/presentation/pages/home_page.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_event.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_state.dart';
@@ -47,7 +46,7 @@ void main() {
 
   //const tT = Token(id: SystemKeys.token2030, username: 'mp@mp.com');
 
-  Widget _makeTestableWidget(Widget body) {
+  Widget makeTestableWidget(Widget body) {
     return BlocProvider<LoginBloc>.value(
       value: mockLoginBloc,
       child: MaterialApp(
@@ -57,7 +56,7 @@ void main() {
   }
 
 /*
-  Widget _makeTestableWidgetHome(Widget body) {
+  Widget makeTestableWidgetHome(Widget body) {
     return BlocProvider<HomeBloc>.value(
       value: mockHomeBloc,
       child: MaterialApp(
@@ -73,7 +72,7 @@ void main() {
       when(() => mockLoginBloc.state).thenReturn(LoginEmpty());
 
       // act
-      await tester.pumpWidget(_makeTestableWidget(LoginPage()));
+      await tester.pumpWidget(makeTestableWidget(LoginPage()));
       Finder userNameTextField = find.byKey(const ValueKey("email_id"));
       Finder passwordTextField = find.byKey(const ValueKey("password"));
 
@@ -99,7 +98,7 @@ void main() {
       when(() => mockLoginBloc.state).thenReturn(LoginGetting());
 
       // act
-      await tester.pumpWidget(_makeTestableWidget(LoginPage()));
+      await tester.pumpWidget(makeTestableWidget(LoginPage()));
 
       // assert
       expect(find.byType(CircularProgressIndicator), equals(findsOneWidget));
@@ -116,11 +115,11 @@ void main() {
       //when(() => mockHomeBloc.state).thenReturn(HomeStart());
       // act
       await tester
-          .pumpWidget(MaterialApp(home: _makeTestableWidget(LoginPage())));
+          .pumpWidget(MaterialApp(home: makeTestableWidget(LoginPage())));
 
       //verify(mockObserver.didPush(route, previousRoute));
       //await tester.pumpAndSettle();
-      //await tester.pumpWidget(_makeTestableWidgetHome(const HomePage()));
+      //await tester.pumpWidget(makeTestableWidgetHome(const HomePage()));
       //await tester.pumpAndSettle();
 
       // assert

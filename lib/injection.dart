@@ -1,5 +1,5 @@
-import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
+import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart';
 import 'package:lomba_frontend/features/orgas/data/datasources/orga_remote_data_source.dart';
@@ -8,13 +8,15 @@ import 'package:lomba_frontend/features/sidedrawer/domain/usecases/do_logoff.dar
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/data/datasources/local_data_source.dart';
-
 import 'core/data/repositories/local_repository_impl.dart';
 import 'core/domain/repositories/local_repository.dart';
 import 'core/domain/usecases/get_has_login.dart';
 import 'core/domain/usecases/get_session_status.dart';
 import 'core/presentation/bloc/nav_bloc.dart';
 import 'features/home/presentation/bloc/home_bloc.dart';
+import 'features/login/data/datasources/remote_data_source.dart';
+import 'features/login/data/repositories/login_repository_impl.dart';
+import 'features/login/domain/repositories/login_repository.dart';
 import 'features/orgas/data/repositories/orga_repository_impl.dart';
 import 'features/orgas/domain/repositories/orga_repository.dart';
 import 'features/orgas/domain/usecases/add_orgauser.dart';
@@ -28,10 +30,8 @@ import 'features/orgas/domain/usecases/get_orgausers.dart';
 import 'features/orgas/domain/usecases/update_orga.dart';
 import 'features/orgas/domain/usecases/update_orgauser.dart';
 import 'features/orgas/presentation/bloc/orga_bloc.dart';
+import 'features/orgas/presentation/bloc/orgauser_bloc.dart';
 import 'features/sidedrawer/domain/usecases/get_side_options.dart';
-import 'features/login/data/datasources/remote_data_source.dart';
-import 'features/login/data/repositories/login_repository_impl.dart';
-import 'features/login/domain/repositories/login_repository.dart';
 import 'features/sidedrawer/presentation/bloc/sidedrawer_bloc.dart';
 
 final locator = GetIt.instance;
@@ -43,17 +43,16 @@ Future<void> init() async {
   locator.registerFactory(() => SideDrawerBloc(locator(), locator()));
   locator.registerFactory(() => NavBloc());
   locator.registerFactory(() => OrgaBloc(
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator()));
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+      ));
+
+  locator.registerFactory(() =>
+      OrgaUserBloc(locator(), locator(), locator(), locator(), locator()));
 
   // usecase
   locator.registerLazySingleton(() => GetAuthenticate(locator()));

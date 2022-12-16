@@ -27,21 +27,25 @@ class SystemKeys {
 }
 
 class SideDrawerUserOptions {
-  static const String Home = "home";
-  static const String Orgas = "orgas";
-  static const String Users = "users";
-  static const String Roles = "roles";
-  static const String LogIn = "login";
-  static const String LogOff = "logoff";
-  static const String Profile = "profile";
+  static const String optHome = "home";
+  static const String optOrgas = "orgas";
+  static const String optUsers = "users";
+  static const String optRoles = "roles";
+  static const String optLogIn = "login";
+  static const String optLogOff = "logoff";
+  static const String optProfile = "profile";
 }
 
 class Roles {
-  static const String Anonymous = "anonymous";
-  static const String SuperAdmin = "superadmin";
-  static const String Admin = "admin";
-  static const String User = "user";
+  static const String roleAnonymous = "anonymous";
+  static const String roleSuperAdmin = "superadmin";
+  static const String roleAdmin = "admin";
+  static const String roleUser = "user";
 
-  static List<String> toList() =>
-      [Roles.Anonymous, Roles.User, Roles.Admin, Roles.SuperAdmin];
+  static List<String> toList() => [
+        Roles.roleAnonymous,
+        Roles.roleUser,
+        Roles.roleAdmin,
+        Roles.roleSuperAdmin
+      ];
 }

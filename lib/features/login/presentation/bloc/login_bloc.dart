@@ -1,10 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/core/domain/usecases/get_has_login.dart';
-import 'package:lomba_frontend/features/home/presentation/bloc/home_bloc.dart';
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
 import 'package:rxdart/rxdart.dart';
-import '../../../home/presentation/bloc/home_event.dart';
-import '../../../home/presentation/bloc/home_state.dart';
 import 'login_event.dart';
 import 'login_state.dart';
 

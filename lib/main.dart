@@ -8,6 +8,8 @@ import 'core/presentation/bloc/nav_state.dart';
 import 'features/home/presentation/bloc/home_bloc.dart';
 import 'features/login/presentation/bloc/login_bloc.dart';
 import 'features/home/presentation/pages/home_page.dart';
+import 'features/orgas/presentation/bloc/orga_bloc.dart';
+import 'features/orgas/presentation/bloc/orgauser_bloc.dart';
 import 'features/sidedrawer/presentation/bloc/sidedrawer_bloc.dart';
 import 'injection.dart' as di;
 
@@ -27,15 +29,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyApp extends State<MyApp> {
-  late Widget _content;
-
-  @override
-  void initState() {
-    super.initState();
-    var _bloc = NavBloc();
-    _content = _bodyForState(_bloc.state);
-  }
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -44,6 +37,8 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<SideDrawerBloc>()),
         BlocProvider(create: (_) => di.locator<HomeBloc>()),
         BlocProvider(create: (_) => di.locator<LoginBloc>()),
+        BlocProvider(create: (_) => di.locator<OrgaBloc>()),
+        BlocProvider(create: (_) => di.locator<OrgaUserBloc>())
       ],
       child: MaterialApp(
           title: 'Flutter Demo',
@@ -62,13 +57,13 @@ class _MyApp extends State<MyApp> {
   }
 
   _bodyForState(NavState state) {
-    if (state.selectedItem == NavItem.page_home) {
+    if (state.selectedItem == NavItem.pageHome) {
       return const HomePage();
     }
-    if (state.selectedItem == NavItem.page_login) {
+    if (state.selectedItem == NavItem.pageLogin) {
       return LoginPage();
     }
-    if (state.selectedItem == NavItem.page_orgas) {
+    if (state.selectedItem == NavItem.pageOrgas) {
       return const OrgasPage();
     }
   }

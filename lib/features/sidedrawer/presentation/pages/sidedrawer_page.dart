@@ -45,67 +45,67 @@ class SideDrawer extends StatelessWidget {
               child: Text('Opciones'),
             ));
 
-            if (state.opts.contains(SideDrawerUserOptions.Home)) {
+            if (state.opts.contains(SideDrawerUserOptions.optHome)) {
               childrenOptionsList.add(ListTile(
                 leading: const Icon(Icons.home),
                 title: const Text('Home'),
                 onTap: () {
-                  _handleItemClick(context, NavItem.page_home);
+                  _handleItemClick(context, NavItem.pageHome);
                 },
               ));
             }
 
-            if (state.opts.contains(SideDrawerUserOptions.LogIn)) {
+            if (state.opts.contains(SideDrawerUserOptions.optLogIn)) {
               childrenOptionsList.add(ListTile(
                 leading: const Icon(Icons.login_outlined),
                 title: const Text('Iniciar sesión'),
                 onTap: () {
-                  _handleItemClick(context, NavItem.page_login);
+                  _handleItemClick(context, NavItem.pageLogin);
                 },
               ));
             }
 
-            if (state.opts.contains(SideDrawerUserOptions.Profile)) {
+            if (state.opts.contains(SideDrawerUserOptions.optProfile)) {
               childrenOptionsList.add(ListTile(
                 leading: const Icon(Icons.account_box),
                 title: const Text('Perfil'),
                 onTap: () {
-                  _handleItemClick(context, NavItem.page_home);
+                  _handleItemClick(context, NavItem.pageHome);
                 },
               ));
             }
 
-            if (state.opts.contains(SideDrawerUserOptions.Orgas)) {
+            if (state.opts.contains(SideDrawerUserOptions.optOrgas)) {
               childrenOptionsList.add(ListTile(
                 leading: const Icon(Icons.business_center),
                 title: const Text('Organizaciones'),
                 onTap: () {
-                  _handleItemClick(context, NavItem.page_orgas);
+                  _handleItemClick(context, NavItem.pageOrgas);
                 },
               ));
             }
 
-            if (state.opts.contains(SideDrawerUserOptions.Users)) {
+            if (state.opts.contains(SideDrawerUserOptions.optUsers)) {
               childrenOptionsList.add(ListTile(
                 leading: const Icon(Icons.people_outline),
                 title: const Text('Usuarios'),
                 onTap: () {
-                  _handleItemClick(context, NavItem.page_home);
+                  _handleItemClick(context, NavItem.pageHome);
                 },
               ));
             }
 
-            if (state.opts.contains(SideDrawerUserOptions.Roles)) {
+            if (state.opts.contains(SideDrawerUserOptions.optRoles)) {
               childrenOptionsList.add(ListTile(
                 leading: const Icon(Icons.key_outlined),
                 title: const Text('Roles'),
                 onTap: () {
-                  _handleItemClick(context, NavItem.page_home);
+                  _handleItemClick(context, NavItem.pageHome);
                 },
               ));
             }
 
-            if (state.opts.contains(SideDrawerUserOptions.LogOff)) {
+            if (state.opts.contains(SideDrawerUserOptions.optLogOff)) {
               childrenOptionsList.add(ListTile(
                 leading: const Icon(Icons.logout),
                 title: const Text('Cerrar sesión'),
@@ -114,7 +114,7 @@ class SideDrawer extends StatelessWidget {
                   context.read<HomeBloc>().add(OnRestartHome());
                   context.read<LoginBloc>().add(OnRestartLogin());
 
-                  _handleItemClick(context, NavItem.page_home);
+                  _handleItemClick(context, NavItem.pageHome);
                 },
               ));
             }

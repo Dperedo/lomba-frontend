@@ -1,9 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/failures.dart';
-import 'package:lomba_frontend/features/login/data/models/login_access_model.dart';
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_event.dart';
@@ -22,11 +20,6 @@ void main() {
     mockGetAuthenticate = MockGetAuthenticate();
     loginBloc = LoginBloc(mockGetAuthenticate);
   });
-
-  const tLoginAccessModel = LoginAccessModel(
-      token: SystemKeys.tokenSuperAdmin2023,
-      username: "mp@mp.com",
-      name: "Miguel");
 
   const tusername = "mp@mp.com";
   const tpassword = "12345678";

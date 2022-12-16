@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 import '../../domain/entities/orga.dart';
-import '../../domain/entities/orgauser.dart';
 
 abstract class OrgaState extends Equatable {
   const OrgaState();
@@ -40,26 +39,6 @@ class OrgaEditing extends OrgaState {
 class OrgaEnabling extends OrgaState {}
 
 class OrgaDeleting extends OrgaState {}
-
-class OrgaUserListLoaded extends OrgaState {
-  final List<OrgaUser> orgaUsers;
-  const OrgaUserListLoaded(this.orgaUsers);
-  @override
-  List<Object> get props => [orgaUsers];
-}
-
-class OrgaUserAdding extends OrgaState {}
-
-class OrgaUserEditing extends OrgaState {
-  final OrgaUser orgaUser;
-  const OrgaUserEditing(this.orgaUser);
-  @override
-  List<Object> get props => [orgaUser];
-}
-
-class OrgaUserEnabling extends OrgaState {}
-
-class OrgaUserDeleting extends OrgaState {}
 
 class OrgaError extends OrgaState {
   final String message;

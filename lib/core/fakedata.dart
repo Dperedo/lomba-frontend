@@ -45,25 +45,25 @@ List<OrgaUserModel> fakeListOrgaUsers = <OrgaUserModel>[
   OrgaUserModel(
       userId: fakeUserIdSuperAdmin,
       orgaId: fakeOrgaIdSystem,
-      roles: const <String>[Roles.SuperAdmin],
+      roles: const <String>[Roles.roleSuperAdmin],
       enabled: true,
       builtIn: true),
   OrgaUserModel(
       userId: fakeUserIdAdmin,
       orgaId: fakeOrgaIdRoot,
-      roles: const <String>[Roles.Admin],
+      roles: const <String>[Roles.roleAdmin],
       enabled: true,
       builtIn: false),
   OrgaUserModel(
       userId: fakeUserIdUser01,
       orgaId: fakeOrgaIdSample02,
-      roles: const <String>[Roles.User],
+      roles: const <String>[Roles.roleUser],
       enabled: true,
       builtIn: false),
   OrgaUserModel(
       userId: fakeUserIdUser02,
       orgaId: fakeOrgaIdSample03,
-      roles: const <String>[Roles.User],
+      roles: const <String>[Roles.roleUser],
       enabled: true,
       builtIn: false)
 ];

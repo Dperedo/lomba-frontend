@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/data/datasources/local_data_source.dart';
 import 'package:lomba_frontend/core/exceptions.dart';
@@ -8,10 +9,8 @@ import 'package:lomba_frontend/core/failures.dart';
 import 'package:lomba_frontend/features/login/data/datasources/remote_data_source.dart';
 import 'package:lomba_frontend/features/login/data/models/login_access_model.dart';
 import 'package:lomba_frontend/features/login/data/repositories/login_repository_impl.dart';
-import 'package:lomba_frontend/features/login/domain/entities/login_access.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:flutter_test/flutter_test.dart';
 
 import 'login_repository_impl_test.mocks.dart';
 
@@ -34,14 +33,10 @@ void main() {
       token: SystemKeys.tokenSuperAdmin2023,
       username: "mp@mp.com",
       name: "Miguel");
-  const tLoginAccess = LoginAccess(
-      token: SystemKeys.tokenSuperAdmin2023,
-      username: "mp@mp.com",
-      name: "Miguel");
 
   group('conseguir la autorización con el login repository impl', () {
-    final tusername = "mp@mp.com";
-    final tpassword = "12345";
+    const tusername = "mp@mp.com";
+    const tpassword = "12345";
 
     test(
       'debe retornar el token cuando se obtiene correctamente desde el origen',
