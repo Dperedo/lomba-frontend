@@ -90,7 +90,7 @@ class SideDrawer extends StatelessWidget {
                 leading: const Icon(Icons.people_outline),
                 title: const Text('Usuarios'),
                 onTap: () {
-                  _handleItemClick(context, NavItem.pageHome);
+                  _handleItemClick(context, NavItem.pageUsers);
                 },
               ));
             }

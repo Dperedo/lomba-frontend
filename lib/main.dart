@@ -11,6 +11,8 @@ import 'features/home/presentation/pages/home_page.dart';
 import 'features/orgas/presentation/bloc/orga_bloc.dart';
 import 'features/orgas/presentation/bloc/orgauser_bloc.dart';
 import 'features/sidedrawer/presentation/bloc/sidedrawer_bloc.dart';
+import 'features/users/presentation/bloc/user_bloc.dart';
+import 'features/users/presentation/pages/users_page.dart';
 import 'injection.dart' as di;
 
 Future<void> main() async {
@@ -38,7 +40,8 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<HomeBloc>()),
         BlocProvider(create: (_) => di.locator<LoginBloc>()),
         BlocProvider(create: (_) => di.locator<OrgaBloc>()),
-        BlocProvider(create: (_) => di.locator<OrgaUserBloc>())
+        BlocProvider(create: (_) => di.locator<OrgaUserBloc>()),
+        BlocProvider(create: (_) => di.locator<UserBloc>())
       ],
       child: MaterialApp(
           title: 'App Demo',
@@ -65,6 +68,9 @@ class _MyApp extends State<MyApp> {
     }
     if (state.selectedItem == NavItem.pageOrgas) {
       return const OrgasPage();
+    }
+    if (state.selectedItem == NavItem.pageUsers) {
+      return const UsersPage();
     }
   }
 }
