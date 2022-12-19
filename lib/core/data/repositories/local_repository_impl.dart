@@ -76,8 +76,8 @@ class LocalRepositoryImpl implements LocalRepository {
   }
 
   @override
-  Future<Either<Failure, String>> getSessionRole() async {
-    String role = Roles.roleAnonymous;
+  Future<Either<Failure, List<String>>> getSessionRoles() async {
+    List<String> roles = [Roles.roleAnonymous];
     SessionModel session = _getNewSessionModel();
 
     final result = await getSession();
@@ -86,36 +86,50 @@ class LocalRepositoryImpl implements LocalRepository {
 
     if (session.token != "") {
       final payload = Jwt.parseJwt(session.token);
-      if (payload.containsKey("roleId") &&
-          Roles.toList().contains(payload["roleId"])) {
-        role = payload["roleId"];
+
+      if (payload.containsKey("roleId") && payload["roleId"].toString() != "") {
+        roles = payload["roleId"].toString().split(",");
       }
     }
 
-    return Right(role);
+    return Right(roles);
   }
 
   @override
   Future<Either<Failure, List<String>>> getSideMenuListOptions() async {
     List<String> opts = [SideDrawerUserOptions.optHome];
-    String role = Roles.roleAnonymous;
+    List<String> roles = [Roles.roleAnonymous];
 
-    final result = await getSessionRole();
+    final result = await getSessionRoles();
 
-    result.fold((l) => {}, (r) => {role = r});
+    result.fold((l) => {}, (r) => {roles = r});
 
-    if (role == Roles.roleAnonymous) {
+    if (roles.contains(Roles.roleAnonymous)) {
       opts.add(SideDrawerUserOptions.optLogIn);
     } else {
       opts.add(SideDrawerUserOptions.optLogOff);
       opts.add(SideDrawerUserOptions.optProfile);
 
-      if (role == Roles.roleSuperAdmin) {
+      if (roles.contains(Roles.roleSuperAdmin)) {
         opts.add(SideDrawerUserOptions.optOrgas);
         opts.add(SideDrawerUserOptions.optUsers);
         opts.add(SideDrawerUserOptions.optRoles);
-      } else if (role == Roles.roleAdmin) {
+      }
+
+      if (roles.contains(Roles.roleAdmin)) {
         opts.add(SideDrawerUserOptions.optUsers);
+      }
+
+      if (roles.contains(Roles.roleUser)) {
+        opts.add(SideDrawerUserOptions.optAddContent);
+        opts.add(SideDrawerUserOptions.optViewed);
+        opts.add(SideDrawerUserOptions.optPopular);
+        opts.add(SideDrawerUserOptions.optUploaded);
+      }
+      if (roles.contains(Roles.roleReviewer)) {
+        opts.add(SideDrawerUserOptions.optToBeApproved);
+        opts.add(SideDrawerUserOptions.optApproved);
+        opts.add(SideDrawerUserOptions.optRejected);
       }
     }
     return Right(opts);

@@ -15,6 +15,7 @@ String fakeUserIdSuperAdmin = Guid.newGuid.toString();
 String fakeUserIdAdmin = Guid.newGuid.toString();
 String fakeUserIdUser01 = Guid.newGuid.toString();
 String fakeUserIdUser02 = Guid.newGuid.toString();
+String fakeUserIdReviewer01 = Guid.newGuid.toString();
 
 List<OrgaModel> fakeListOrgas = <OrgaModel>[
   OrgaModel(
@@ -67,6 +68,12 @@ List<OrgaUserModel> fakeListOrgaUsers = <OrgaUserModel>[
       orgaId: fakeOrgaIdSample03,
       roles: const <String>[Roles.roleUser],
       enabled: true,
+      builtIn: false),
+  OrgaUserModel(
+      userId: fakeUserIdReviewer01,
+      orgaId: fakeOrgaIdRoot,
+      roles: const <String>[Roles.roleReviewer],
+      enabled: true,
       builtIn: false)
 ];
 
@@ -99,11 +106,19 @@ List<UserModel> fakeListUsers = <UserModel>[
       email: 'user2@mp.com',
       enabled: true,
       builtIn: false),
+  UserModel(
+      id: fakeUserIdReviewer01,
+      name: 'Reviewer 01',
+      username: 'rev1',
+      email: 'rev1@mp.com',
+      enabled: true,
+      builtIn: false),
 ];
 
 List<RoleModel> fakeRoles = [
   const RoleModel(name: Roles.roleSuperAdmin, enabled: true),
   const RoleModel(name: Roles.roleAdmin, enabled: true),
+  const RoleModel(name: Roles.roleReviewer, enabled: true),
   const RoleModel(name: Roles.roleUser, enabled: true),
   const RoleModel(name: Roles.roleAnonymous, enabled: true)
 ];

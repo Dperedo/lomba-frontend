@@ -21,6 +21,9 @@ void main() {
       username: 'mp@mp.com',
       name: 'Miguel');
 
+  const tSessionUserAndReviewerModel = SessionModel(
+      token: SystemKeys.tokenReviewed, username: 'rev@mp.com', name: 'Revisor');
+
   const tEmptySessionModel = SessionModel(token: "", username: "", name: "");
   const tInvalidTokenSessionModel = SessionModel(
       token: SystemKeys.tokenExpiredSuperAdmin,
@@ -144,12 +147,15 @@ void main() {
             .thenAnswer((realInvocation) async => tSessionModel);
 
         // act
-        final result = await repository.getSessionRole();
+        final result = await repository.getSessionRoles();
+        List<String> list = [];
+        result.fold((l) => {}, ((r) => {list = r}));
 
         // assert
         verify(mockLocalDataSource.getSavedSession()).called(1);
 
-        expect(result, equals(const Right("superadmin")));
+        expect(result.isRight(), true);
+        expect(list, (<String>["superadmin"]));
       },
     );
 
@@ -163,12 +169,15 @@ void main() {
             .thenAnswer((realInvocation) async => tInvalidTokenSessionModel);
 
         // act
-        final result = await repository.getSessionRole();
+        final result = await repository.getSessionRoles();
+        List<String> list = [];
+        result.fold((l) => {}, ((r) => {list = r}));
 
         // assert
         verify(mockLocalDataSource.getSavedSession()).called(1);
 
-        expect(result, equals(const Right("anonymous")));
+        expect(result.isRight(), true);
+        expect(list, (<String>["anonymous"]));
       },
     );
 
@@ -188,6 +197,38 @@ void main() {
           "orgas",
           "users",
           "roles"
+        ];
+
+        // act
+        final result = await repository.getSideMenuListOptions();
+
+        // assert
+        verify(mockLocalDataSource.getSavedSession()).called(1);
+
+        expect(result.length(), equals(const Right(listExpected).length()));
+      },
+    );
+
+    test(
+      'debe entregar la lista de opciones de menu para revisor y usuario',
+      () async {
+        //arrange
+        when(mockLocalDataSource.hasSession())
+            .thenAnswer((realInvocation) async => true);
+        when(mockLocalDataSource.getSavedSession())
+            .thenAnswer((realInvocation) async => tSessionUserAndReviewerModel);
+
+        const listExpected = <String>[
+          "home",
+          "logoff",
+          "profile",
+          "addcontent",
+          "viewed",
+          "popular",
+          "uploaded",
+          "tobeapproved",
+          "approved",
+          "rejected"
         ];
 
         // act

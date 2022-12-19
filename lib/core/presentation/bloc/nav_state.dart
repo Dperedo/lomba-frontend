@@ -13,4 +13,12 @@ enum NavItem {
   pageOrgas,
   pageRoles,
   pageUsers,
+  pageAddContent,
+  pageApproved,
+  pagePopular,
+  pageRejected,
+  pageToBeApproved,
+  pageUploaded,
+  pageViewed,
+  pageProfile
 }

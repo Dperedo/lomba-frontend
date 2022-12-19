@@ -24,6 +24,8 @@ class SystemKeys {
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwiZXhwIjoxNzA0MDY3MTk5fQ.SVIdYpY8MhRK86q-AslB0Ntvw8XraHrZ2l0TpLQRTRQ";
   static const String tokenExpiredSuperAdmin =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwicm9sZUlkIjoic3VwZXJhZG1pbiIsImV4cCI6MTY0MDk5NTE5OX0.wvhDsCJGUwF0wicvn5sFh_t48nB6OWx92uhxC_tsfG0";
+  static const String tokenReviewed =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIiLCJyb2xlSWQiOiJ1c2VyLCByZXZpZXdlZCIsImV4cCI6MTcwMzAxNTU0M30.PtfzFAmi_-Y_eRjAUHjUNzEFfDdHBj4EiivZ6-naCeI";
 }
 
 class SideDrawerUserOptions {
@@ -34,17 +36,26 @@ class SideDrawerUserOptions {
   static const String optLogIn = "login";
   static const String optLogOff = "logoff";
   static const String optProfile = "profile";
+  static const String optToBeApproved = "tobeapproved";
+  static const String optApproved = "approved";
+  static const String optRejected = "rejected";
+  static const String optAddContent = "addcontent";
+  static const String optViewed = "viewed";
+  static const String optPopular = "popular";
+  static const String optUploaded = "uploaded";
 }
 
 class Roles {
   static const String roleAnonymous = "anonymous";
   static const String roleSuperAdmin = "superadmin";
   static const String roleAdmin = "admin";
+  static const String roleReviewer = "reviewer";
   static const String roleUser = "user";
 
   static List<String> toList() => [
         Roles.roleAnonymous,
         Roles.roleUser,
+        Roles.roleReviewer,
         Roles.roleAdmin,
         Roles.roleSuperAdmin
       ];

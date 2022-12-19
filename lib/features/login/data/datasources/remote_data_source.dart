@@ -20,10 +20,17 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         await client.get(Uri.parse(Urls.currentWeatherByName("London")));
 
     if (response.statusCode == 200) {
-      return LoginAccessModel(
-          token: SystemKeys.tokenSuperAdmin2023,
-          username: username,
-          name: 'Miguel');
+      if (username.contains('rev')) {
+        return LoginAccessModel(
+            token: SystemKeys.tokenReviewed,
+            username: username,
+            name: 'Revisor');
+      } else {
+        return LoginAccessModel(
+            token: SystemKeys.tokenSuperAdmin2023,
+            username: username,
+            name: 'Miguel');
+      }
     } else {
       throw ServerException();
     }
