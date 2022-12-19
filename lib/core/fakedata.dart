@@ -3,6 +3,7 @@ import 'package:lomba_frontend/core/constants.dart';
 
 import '../features/orgas/data/models/orga_model.dart';
 import '../features/orgas/data/models/orgauser_model.dart';
+import '../features/roles/data/models/role_model.dart';
 import '../features/users/data/models/user_model.dart';
 
 String fakeOrgaIdSystem = Guid.newGuid.toString();
@@ -98,4 +99,11 @@ List<UserModel> fakeListUsers = <UserModel>[
       email: 'user2@mp.com',
       enabled: true,
       builtIn: false),
+];
+
+List<RoleModel> fakeRoles = [
+  const RoleModel(name: Roles.roleSuperAdmin, enabled: true),
+  const RoleModel(name: Roles.roleAdmin, enabled: true),
+  const RoleModel(name: Roles.roleUser, enabled: true),
+  const RoleModel(name: Roles.roleAnonymous, enabled: true)
 ];
