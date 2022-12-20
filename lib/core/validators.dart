@@ -1,6 +1,10 @@
 import 'package:jwt_decode/jwt_decode.dart';
 
+///Clase con validaciones que utiliza el sistema.
 class Validators {
+  ///Validación de email.
+  ///
+  ///Debe no ser vacío y cumplir con el patrón de correo electrónico.
   static String? validateEmail(String email) {
     if (email.isEmpty) {
       return "Campo Requerido";
@@ -18,6 +22,9 @@ class Validators {
     return null;
   }
 
+  ///Validación de password
+  ///
+  ///Debe no ser vacío y cumplir con un largo mínimo.
   static String? validatePassword(String password) {
     if (password.isEmpty) {
       return "Campo Requerido";
@@ -30,6 +37,9 @@ class Validators {
     return null;
   }
 
+  ///Validación de token de usuario.
+  ///
+  ///Debe no ser vacío, estar vigente (no expirado) y contener la clave "userId"
   static bool validateToken(String token) {
     if (token == "") return false;
     if (Jwt.isExpired(token)) return false;

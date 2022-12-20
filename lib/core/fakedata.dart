@@ -6,17 +6,24 @@ import '../features/orgas/data/models/orgauser_model.dart';
 import '../features/roles/data/models/role_model.dart';
 import '../features/users/data/models/user_model.dart';
 
+///Archivo con datos falsos para hacer funcionar el prototipo.
+
+///Lista de ID volátiles de organizaciones (Orgas)
 String fakeOrgaIdSystem = Guid.newGuid.toString();
 String fakeOrgaIdRoot = Guid.newGuid.toString();
 String fakeOrgaIdSample02 = Guid.newGuid.toString();
 String fakeOrgaIdSample03 = Guid.newGuid.toString();
 
+///Lista de ID volátiles de usuarios (Users)
 String fakeUserIdSuperAdmin = Guid.newGuid.toString();
 String fakeUserIdAdmin = Guid.newGuid.toString();
 String fakeUserIdUser01 = Guid.newGuid.toString();
 String fakeUserIdUser02 = Guid.newGuid.toString();
 String fakeUserIdReviewer01 = Guid.newGuid.toString();
 
+///Lista de [OrgaModel] con las organizaciones del sistema.
+///
+///Utiliza los ID creados anteriormente (más arriba)
 List<OrgaModel> fakeListOrgas = <OrgaModel>[
   OrgaModel(
       id: fakeOrgaIdSystem,
@@ -44,6 +51,8 @@ List<OrgaModel> fakeListOrgas = <OrgaModel>[
       builtIn: false),
 ];
 
+///Lista de relaciones de Orgas con Users y Roles, utiliza también
+///los ID especificados arriba, junto con los Roles definidos del sistema.
 List<OrgaUserModel> fakeListOrgaUsers = <OrgaUserModel>[
   OrgaUserModel(
       userId: fakeUserIdSuperAdmin,
@@ -77,6 +86,8 @@ List<OrgaUserModel> fakeListOrgaUsers = <OrgaUserModel>[
       builtIn: false)
 ];
 
+///Lista de [UserModel] con usuarios fake para el prototipo. Utiliza también
+///los ID especificados arriba para los usuarios de mentira.
 List<UserModel> fakeListUsers = <UserModel>[
   UserModel(
       id: fakeUserIdSuperAdmin,
@@ -115,6 +126,7 @@ List<UserModel> fakeListUsers = <UserModel>[
       builtIn: false),
 ];
 
+///Lista de Roles fake para utilizar con el listado de roles en el prototipo.
 List<RoleModel> fakeRoles = [
   const RoleModel(name: Roles.roleSuperAdmin, enabled: true),
   const RoleModel(name: Roles.roleAdmin, enabled: true),

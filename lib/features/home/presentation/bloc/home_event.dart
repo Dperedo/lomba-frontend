@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+///Interfaz del evento de controla la página principal.
 abstract class HomeEvent extends Equatable {
   const HomeEvent();
 
@@ -7,6 +8,7 @@ abstract class HomeEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+///Evento que ocurre cuando se comienza a cargar la página de Home.
 class OnHomeLoading extends HomeEvent {
   const OnHomeLoading();
 
@@ -14,6 +16,7 @@ class OnHomeLoading extends HomeEvent {
   List<Object?> get props => [];
 }
 
+///Evento ocurre cuando la página de Home ya fue cargada
 class OnHomeLoaded extends HomeEvent {
   const OnHomeLoaded();
 
@@ -21,4 +24,5 @@ class OnHomeLoaded extends HomeEvent {
   List<Object?> get props => [];
 }
 
+///Evento ocurre cuando se va a reiniciar el Home provocando la recarga
 class OnRestartHome extends HomeEvent {}
