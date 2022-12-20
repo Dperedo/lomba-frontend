@@ -3,6 +3,8 @@ import 'package:lomba_frontend/core/constants.dart';
 
 import '../features/orgas/data/models/orga_model.dart';
 import '../features/orgas/data/models/orgauser_model.dart';
+import '../features/roles/data/models/role_model.dart';
+import '../features/users/data/models/user_model.dart';
 
 String fakeOrgaIdSystem = Guid.newGuid.toString();
 String fakeOrgaIdRoot = Guid.newGuid.toString();
@@ -13,6 +15,7 @@ String fakeUserIdSuperAdmin = Guid.newGuid.toString();
 String fakeUserIdAdmin = Guid.newGuid.toString();
 String fakeUserIdUser01 = Guid.newGuid.toString();
 String fakeUserIdUser02 = Guid.newGuid.toString();
+String fakeUserIdReviewer01 = Guid.newGuid.toString();
 
 List<OrgaModel> fakeListOrgas = <OrgaModel>[
   OrgaModel(
@@ -65,5 +68,57 @@ List<OrgaUserModel> fakeListOrgaUsers = <OrgaUserModel>[
       orgaId: fakeOrgaIdSample03,
       roles: const <String>[Roles.roleUser],
       enabled: true,
+      builtIn: false),
+  OrgaUserModel(
+      userId: fakeUserIdReviewer01,
+      orgaId: fakeOrgaIdRoot,
+      roles: const <String>[Roles.roleReviewer],
+      enabled: true,
       builtIn: false)
+];
+
+List<UserModel> fakeListUsers = <UserModel>[
+  UserModel(
+      id: fakeUserIdSuperAdmin,
+      name: 'Súper Administrador',
+      username: 'sa',
+      email: 'sa@mp.com',
+      enabled: true,
+      builtIn: true),
+  UserModel(
+      id: fakeUserIdAdmin,
+      name: 'Administrador',
+      username: 'admin',
+      email: 'admin@mp.com',
+      enabled: true,
+      builtIn: false),
+  UserModel(
+      id: fakeUserIdUser01,
+      name: 'Usuario 01',
+      username: 'user1',
+      email: 'user1@mp.com',
+      enabled: true,
+      builtIn: false),
+  UserModel(
+      id: fakeUserIdUser02,
+      name: 'Usuario 02',
+      username: 'user2',
+      email: 'user2@mp.com',
+      enabled: true,
+      builtIn: false),
+  UserModel(
+      id: fakeUserIdReviewer01,
+      name: 'Reviewer 01',
+      username: 'rev1',
+      email: 'rev1@mp.com',
+      enabled: true,
+      builtIn: false),
+];
+
+List<RoleModel> fakeRoles = [
+  const RoleModel(name: Roles.roleSuperAdmin, enabled: true),
+  const RoleModel(name: Roles.roleAdmin, enabled: true),
+  const RoleModel(name: Roles.roleReviewer, enabled: true),
+  const RoleModel(name: Roles.roleUser, enabled: true),
+  const RoleModel(name: Roles.roleAnonymous, enabled: true)
 ];

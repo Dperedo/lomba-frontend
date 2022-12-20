@@ -70,7 +70,7 @@ class SideDrawer extends StatelessWidget {
                 leading: const Icon(Icons.account_box),
                 title: const Text('Perfil'),
                 onTap: () {
-                  _handleItemClick(context, NavItem.pageHome);
+                  _handleItemClick(context, NavItem.pageProfile);
                 },
               ));
             }
@@ -90,7 +90,7 @@ class SideDrawer extends StatelessWidget {
                 leading: const Icon(Icons.people_outline),
                 title: const Text('Usuarios'),
                 onTap: () {
-                  _handleItemClick(context, NavItem.pageHome);
+                  _handleItemClick(context, NavItem.pageUsers);
                 },
               ));
             }
@@ -100,7 +100,77 @@ class SideDrawer extends StatelessWidget {
                 leading: const Icon(Icons.key_outlined),
                 title: const Text('Roles'),
                 onTap: () {
-                  _handleItemClick(context, NavItem.pageHome);
+                  _handleItemClick(context, NavItem.pageRoles);
+                },
+              ));
+            }
+
+            if (state.opts.contains(SideDrawerUserOptions.optAddContent)) {
+              childrenOptionsList.add(ListTile(
+                leading: const Icon(Icons.add),
+                title: const Text('Subir contenido'),
+                onTap: () {
+                  _handleItemClick(context, NavItem.pageAddContent);
+                },
+              ));
+            }
+
+            if (state.opts.contains(SideDrawerUserOptions.optUploaded)) {
+              childrenOptionsList.add(ListTile(
+                leading: const Icon(Icons.upload),
+                title: const Text('Subidos'),
+                onTap: () {
+                  _handleItemClick(context, NavItem.pageUploaded);
+                },
+              ));
+            }
+
+            if (state.opts.contains(SideDrawerUserOptions.optViewed)) {
+              childrenOptionsList.add(ListTile(
+                leading: const Icon(Icons.view_sidebar),
+                title: const Text('Vistos'),
+                onTap: () {
+                  _handleItemClick(context, NavItem.pageViewed);
+                },
+              ));
+            }
+
+            if (state.opts.contains(SideDrawerUserOptions.optPopular)) {
+              childrenOptionsList.add(ListTile(
+                leading: const Icon(Icons.star),
+                title: const Text('Populares'),
+                onTap: () {
+                  _handleItemClick(context, NavItem.pagePopular);
+                },
+              ));
+            }
+
+            if (state.opts.contains(SideDrawerUserOptions.optToBeApproved)) {
+              childrenOptionsList.add(ListTile(
+                leading: const Icon(Icons.pending),
+                title: const Text('Por Aprobar'),
+                onTap: () {
+                  _handleItemClick(context, NavItem.pageToBeApproved);
+                },
+              ));
+            }
+
+            if (state.opts.contains(SideDrawerUserOptions.optApproved)) {
+              childrenOptionsList.add(ListTile(
+                leading: const Icon(Icons.approval),
+                title: const Text('Aprobados'),
+                onTap: () {
+                  _handleItemClick(context, NavItem.pageApproved);
+                },
+              ));
+            }
+
+            if (state.opts.contains(SideDrawerUserOptions.optRejected)) {
+              childrenOptionsList.add(ListTile(
+                leading: const Icon(Icons.stop),
+                title: const Text('Rechazados'),
+                onTap: () {
+                  _handleItemClick(context, NavItem.pageRejected);
                 },
               ));
             }

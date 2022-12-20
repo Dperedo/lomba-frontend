@@ -5,6 +5,7 @@ import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart'
 import 'package:lomba_frontend/features/orgas/data/datasources/orga_remote_data_source.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/add_orga.dart';
 import 'package:lomba_frontend/features/sidedrawer/domain/usecases/do_logoff.dart';
+import 'package:lomba_frontend/features/users/presentation/bloc/user_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/data/datasources/local_data_source.dart';
@@ -33,6 +34,15 @@ import 'features/orgas/presentation/bloc/orga_bloc.dart';
 import 'features/orgas/presentation/bloc/orgauser_bloc.dart';
 import 'features/sidedrawer/domain/usecases/get_side_options.dart';
 import 'features/sidedrawer/presentation/bloc/sidedrawer_bloc.dart';
+import 'features/users/data/datasources/user_remote_data_source.dart';
+import 'features/users/data/repositories/user_repository_impl.dart';
+import 'features/users/domain/repositories/user_repository.dart';
+import 'features/users/domain/usecases/add_user.dart';
+import 'features/users/domain/usecases/delete_user.dart';
+import 'features/users/domain/usecases/enable_user.dart';
+import 'features/users/domain/usecases/get_user.dart';
+import 'features/users/domain/usecases/get_users.dart';
+import 'features/users/domain/usecases/update_user.dart';
 
 final locator = GetIt.instance;
 
@@ -54,6 +64,9 @@ Future<void> init() async {
   locator.registerFactory(() =>
       OrgaUserBloc(locator(), locator(), locator(), locator(), locator()));
 
+  locator.registerFactory(() => UserBloc(
+      locator(), locator(), locator(), locator(), locator(), locator()));
+
   // usecase
   locator.registerLazySingleton(() => GetAuthenticate(locator()));
   locator.registerLazySingleton(() => GetHasLogIn(locator()));
@@ -73,6 +86,13 @@ Future<void> init() async {
   locator.registerLazySingleton(() => UpdateOrga(locator()));
   locator.registerLazySingleton(() => UpdateOrgaUser(locator()));
 
+  locator.registerLazySingleton(() => AddUser(locator()));
+  locator.registerLazySingleton(() => DeleteUser(locator()));
+  locator.registerLazySingleton(() => EnableUser(locator()));
+  locator.registerLazySingleton(() => GetUser(locator()));
+  locator.registerLazySingleton(() => GetUsers(locator()));
+  locator.registerLazySingleton(() => UpdateUser(locator()));
+
   // repository
   locator.registerLazySingleton<LoginRepository>(
     () => LoginRepositoryImpl(
@@ -83,6 +103,9 @@ Future<void> init() async {
   );
   locator.registerLazySingleton<OrgaRepository>(
     () => OrgaRepositoryImpl(remoteDataSource: locator()),
+  );
+  locator.registerLazySingleton<UserRepository>(
+    () => UserRepositoryImpl(remoteDataSource: locator()),
   );
 
   // data source
@@ -98,6 +121,11 @@ Future<void> init() async {
   );
   locator.registerLazySingleton<OrgaRemoteDataSource>(
     () => OrgaRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+  locator.registerLazySingleton<UserRemoteDataSource>(
+    () => UserRemoteDataSourceImpl(
       client: locator(),
     ),
   );

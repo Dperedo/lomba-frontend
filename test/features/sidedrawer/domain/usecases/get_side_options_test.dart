@@ -37,8 +37,8 @@ void main() {
       when(mockLocalRepository.getSideMenuListOptions())
           .thenAnswer((_) async => const Right(listAnonymous));
 
-      when(mockLocalRepository.getSessionRole())
-          .thenAnswer((_) async => const Right(Roles.roleAnonymous));
+      when(mockLocalRepository.getSessionRoles())
+          .thenAnswer((_) async => const Right(<String>[Roles.roleAnonymous]));
 
       //act
       final result = await usecase.execute();
@@ -52,8 +52,8 @@ void main() {
       when(mockLocalRepository.getSideMenuListOptions())
           .thenAnswer((_) async => const Right(listUser));
 
-      when(mockLocalRepository.getSessionRole())
-          .thenAnswer((_) async => const Right(Roles.roleUser));
+      when(mockLocalRepository.getSessionRoles())
+          .thenAnswer((_) async => const Right(<String>[Roles.roleUser]));
 
       //act
       final result = await usecase.execute();
@@ -67,8 +67,8 @@ void main() {
       when(mockLocalRepository.getSideMenuListOptions())
           .thenAnswer((_) async => const Right(listAdmin));
 
-      when(mockLocalRepository.getSessionRole())
-          .thenAnswer((_) async => const Right(Roles.roleAdmin));
+      when(mockLocalRepository.getSessionRoles())
+          .thenAnswer((_) async => const Right(<String>[Roles.roleAdmin]));
 
       //act
       final result = await usecase.execute();
@@ -82,8 +82,8 @@ void main() {
       when(mockLocalRepository.getSideMenuListOptions())
           .thenAnswer((_) async => const Right(listSuperAdmin));
 
-      when(mockLocalRepository.getSessionRole())
-          .thenAnswer((_) async => const Right(Roles.roleSuperAdmin));
+      when(mockLocalRepository.getSessionRoles())
+          .thenAnswer((_) async => const Right(<String>[Roles.roleSuperAdmin]));
 
       //act
       final result = await usecase.execute();
