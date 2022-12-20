@@ -1,8 +1,13 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orga_event.dart';
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orgauser_event.dart';
 import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
+
+//import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:animate_do/animate_do.dart';
+import 'package:lomba_frontend/features/orgas/presentation/pages/tap_to_expand.dart';
 
 import '../bloc/orga_bloc.dart';
 import '../bloc/orga_state.dart';
@@ -38,39 +43,115 @@ class OrgasPage extends StatelessWidget {
       );
     }
     if (state is OrgaListLoaded) {
-      return ListView.builder(
-        shrinkWrap: true,
-        itemCount: state.orgas.length,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Row(
+      return SizedBox(
+        width: double.infinity,
+        height: 714,
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 30,
+                horizontal: 15,
+              ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text( "Lista de Organizaciónes",
+                style: TextStyle(fontSize: 20)),
+              )
+            ),
+            ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: state.orgas.length,
+              itemBuilder: (context, index) {
+                return Column(
                     children: [
-                      Expanded(
-                          child: Center(
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: TextButton(
-                              child: Center(
-                                child: Text(
-                                  state.orgas[index].name,
-                                ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 20,
+                        ),
+                        child: Center(
+                          child: TapToExpand(
+                          content: Column(
+                            children: <Widget>[
+                              //for (var i = 0; i < 20; i++)
+                              Text(state.orgas[index].name
+                              /*Text(state.orga.name),
+                                const Divider(),
+                                Text("Código: ${state.orga.code}"),
+                                const Divider(),
+                                Text("Estado: ${state.orga.enabled}"),*/
+                                //style: const TextStyle(color: Colors.white, fontSize: 20),
                               ),
-                              onPressed: () {
-                                context
-                                    .read<OrgaBloc>()
-                                    .add(OnOrgaLoad(state.orgas[index].id));
-                              },
-                            )),
-                      ))
+                              const Divider(),
+                              Text("Código: ${state.orgas[index].code}"),
+                              const Divider(),
+                              Text("Estado: ${state.orgas[index].enabled}"),
+                              const Divider(),
+
+                            ],
+                          ),
+                          title: TextButton(
+                            child: Text(
+                              state.orgas[index].name,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                            onPressed: () {
+                              context
+                              .read<OrgaBloc>()
+                              .add(OnOrgaLoad(state.orgas[index].id));
+                            },
+                          ),
+                          onTapPadding: 10,
+                          closedHeight: 70,
+                          scrollable: true,
+                          borderRadius: 10,
+                          openedHeight: 200,
+                          ),
+                        ),
+                          /*child: Card(
+                            elevation: 3,
+                            color: Theme.of(context).colorScheme.surfaceVariant,
+                            child: Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Center(
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: TextButton(
+                                            child: Text(
+                                              state.orgas[index].name,
+                                            ),
+                                            onPressed: () {
+                                              context
+                                                  .read<OrgaBloc>()
+                                                  .add(OnOrgaLoad(state.orgas[index].id));
+                                            },
+                                          )
+                                        ),
+                                      )
+                                    ),
+                                    const Icon(Icons.keyboard_arrow_right),
+                                  ],
+                                )
+                              ),
+                          ),*/
+                        
+                      ),
+                      //const Divider()
                     ],
-                  )),
-              const Divider()
-            ],
-          );
-        },
+                  
+                );
+              },
+            ),
+          ],
+        ),
       );
     }
 
