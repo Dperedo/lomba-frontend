@@ -11,6 +11,9 @@ import '../../domain/entities/orgauser.dart';
 import 'orgauser_event.dart';
 import 'orgauser_state.dart';
 
+///BLOC de la relación entre organizaciones y usuarios.
+///
+///Considera todos los casos de uso de la relación orga-user
 class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
   final AddOrgaUser _addOrgaUser;
   final DeleteOrgaUser _deleteOrgaUser;

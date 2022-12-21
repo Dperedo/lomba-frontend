@@ -4,6 +4,7 @@ import 'package:lomba_frontend/features/orgas/domain/entities/orga.dart';
 
 import '../repositories/orga_repository.dart';
 
+///Caso de uso para actualizar una organización
 class UpdateOrga {
   final OrgaRepository repository;
   UpdateOrga(this.repository);

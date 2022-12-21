@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+///Interfaz de los eventos de Login con herencia de Equatable
 abstract class LoginEvent extends Equatable {
   const LoginEvent();
 
@@ -7,6 +8,7 @@ abstract class LoginEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+///Evento que intenta hacer login con username y password
 class OnLoginTriest extends LoginEvent {
   final String username;
   final String password;
@@ -17,4 +19,5 @@ class OnLoginTriest extends LoginEvent {
   List<Object?> get props => [username, password];
 }
 
+///Evento para el reinicio de la pantalla
 class OnRestartLogin extends LoginEvent {}

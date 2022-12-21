@@ -4,6 +4,9 @@ import '../../../../core/failures.dart';
 import '../entities/orga.dart';
 import '../entities/orgauser.dart';
 
+///Interfaz del repositorio de [Orga]
+///
+///Incluye los métodos para la relación [OrgaUser]
 abstract class OrgaRepository {
   Future<Either<Failure, List<Orga>>> getOrgas(
       String filter, String fieldOrder, double pageNumber, int pageSize);

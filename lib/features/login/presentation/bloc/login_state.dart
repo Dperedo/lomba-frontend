@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+///Interfaz de estados para Login
 abstract class LoginState extends Equatable {
   const LoginState();
 
@@ -7,12 +8,13 @@ abstract class LoginState extends Equatable {
   List<Object> get props => [];
 }
 
+///Estado de login vacío, es el inicial (Start)
 class LoginEmpty extends LoginState {}
 
-class LoginJumping extends LoginState {}
-
+///Estado que muestra el spinner en pantalla mientras intenta loguear.
 class LoginGetting extends LoginState {}
 
+///Estado en caso de error, considera un mensaje para el usuario.
 class LoginError extends LoginState {
   final String message;
 
@@ -22,6 +24,8 @@ class LoginError extends LoginState {
   List<Object> get props => [message];
 }
 
+///Estado cuando ya está logueado. Considera la respuesta que permitirá saltar
+///a otra pantalla.
 class LoginGoted extends LoginState {
   final bool result;
 

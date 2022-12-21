@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../sidedrawer/presentation/pages/sidedrawer_page.dart';
 
+///Página con los contenidos rechazados por el usuario revisor
+///
+///La página muestra sólo el contenido rechazado por el usuario conectado
+///revisor.
 class RejectedPage extends StatelessWidget {
   const RejectedPage({Key? key}) : super(key: key);
 

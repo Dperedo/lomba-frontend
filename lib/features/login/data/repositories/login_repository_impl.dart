@@ -10,6 +10,12 @@ import '../../domain/repositories/login_repository.dart';
 import '../datasources/remote_data_source.dart';
 
 ///Implementación de métodos del repositorio [LoginRepository]
+///
+///Esta implementación controla las excepciones que pueden generarse en
+///el DataSource (origen de los datos) cuando existen problemas de (por ejemplo)
+///comunicación con el origen.
+///Es en esta implementación que los errores se capturan y se convierten en
+///retornos Left() con mensaje de falla (Failure)
 class LoginRepositoryImpl implements LoginRepository {
   final RemoteDataSource remoteDataSource;
   final LocalDataSource localDataSource;

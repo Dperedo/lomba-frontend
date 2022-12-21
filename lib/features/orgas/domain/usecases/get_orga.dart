@@ -4,6 +4,7 @@ import 'package:lomba_frontend/core/failures.dart';
 import '../entities/orga.dart';
 import '../repositories/orga_repository.dart';
 
+///Caso de uso para obtener una organización
 class GetOrga {
   final OrgaRepository repository;
   GetOrga(this.repository);

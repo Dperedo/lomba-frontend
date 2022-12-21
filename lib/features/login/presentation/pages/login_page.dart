@@ -13,6 +13,10 @@ import '../../../../core/validators.dart';
 import '../../../sidedrawer/presentation/bloc/sidedrawer_bloc.dart';
 import '../bloc/login_state.dart';
 
+///Página de login con los campos de inicio de sesión
+///
+///Es necesario darle una revisión de diseño.
+///Ya aplica validaciones de correo y password según los validators.
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
 

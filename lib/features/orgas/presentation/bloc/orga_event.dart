@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+///Interfaz del evento de organizaciones
 abstract class OrgaEvent extends Equatable {
   const OrgaEvent();
 
@@ -7,6 +8,7 @@ abstract class OrgaEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+///Evento que se dispara para conseguir una organización
 class OnOrgaLoad extends OrgaEvent {
   final String id;
 
@@ -16,6 +18,7 @@ class OnOrgaLoad extends OrgaEvent {
   List<Object> get props => [id];
 }
 
+///Evento se dispara para obtener la lista de organizaciones filtrada y paginada
 class OnOrgaListLoad extends OrgaEvent {
   final String filter;
   final String fieldOrder;
@@ -27,6 +30,7 @@ class OnOrgaListLoad extends OrgaEvent {
   List<Object> get props => [filter, fieldOrder, pageNumber];
 }
 
+///Evento se dispara para agregar una nueva organización
 class OnOrgaAdd extends OrgaEvent {
   final String name;
   final String code;
@@ -38,6 +42,7 @@ class OnOrgaAdd extends OrgaEvent {
   List<Object> get props => [name, code, enabled];
 }
 
+///Evento se dispara para actualizar (persistir) cambios en la organización
 class OnOrgaEdit extends OrgaEvent {
   final String id;
   final String name;
@@ -50,6 +55,7 @@ class OnOrgaEdit extends OrgaEvent {
   List<Object> get props => [id, name, code, enabled];
 }
 
+///Evento se dispara para habilitar o deshabilitar una organización
 class OnOrgaEnable extends OrgaEvent {
   final String id;
 
@@ -61,6 +67,7 @@ class OnOrgaEnable extends OrgaEvent {
   List<Object> get props => [id, enabled];
 }
 
+///Evento se dispara para eliminar una organización
 class OnOrgaDelete extends OrgaEvent {
   final String id;
 

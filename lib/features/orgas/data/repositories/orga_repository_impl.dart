@@ -12,11 +12,28 @@ import '../../domain/entities/orgauser.dart';
 import '../../domain/repositories/orga_repository.dart';
 import '../models/orgauser_model.dart';
 
+///Implementación del [OrgaRepository] del dominio.
+///
+///Esta implementación controla las excepciones que pueden generarse en
+///el DataSource (origen de los datos) cuando existen problemas de (por ejemplo)
+///comunicación con el origen.
+///Es en esta implementación que los errores se capturan y se convierten en
+///retornos Left() con mensaje de falla (Failure)
 class OrgaRepositoryImpl implements OrgaRepository {
   final OrgaRemoteDataSource remoteDataSource;
 
+  ///El constructor de esta implementación recibe datasource remoto y local.
+  ///
+  ///Recibe dos dataSources porque debe conectar con el backend y depositar
+  ///además la sesión en el localStorage.
   OrgaRepositoryImpl({required this.remoteDataSource});
 
+  ///Entrega una lista de organizaciones [Orga] según los filtros
+  ///
+  ///[filter] es de tipo texto y si no hay filtro debe venir vacío.
+  ///[fieldOrder] es el nombre del campo por el cual filtrar ascendentemente
+  ///[pageNumber] es el número de página de la lista de organizaciones
+  ///[pageSize] es el tamaño de cada página. Sólo se traerá una página.
   @override
   Future<Either<Failure, List<Orga>>> getOrgas(
       String filter, String fieldOrder, double pageNumber, int pageSize) async {
@@ -40,6 +57,7 @@ class OrgaRepositoryImpl implements OrgaRepository {
     }
   }
 
+  ///Entrega un [Orga] según el Id de organización
   @override
   Future<Either<Failure, Orga>> getOrga(String orgaId) async {
     try {
@@ -53,6 +71,7 @@ class OrgaRepositoryImpl implements OrgaRepository {
     }
   }
 
+  ///Entrega una lista de [OrgaUser] según el Id organización especificado
   @override
   Future<Either<Failure, List<OrgaUser>>> getOrgaUsers(String orgaId) async {
     try {
@@ -74,6 +93,11 @@ class OrgaRepositoryImpl implements OrgaRepository {
     }
   }
 
+  ///Agrega un nuevo Orga y se deben especificar los valores
+  ///
+  ///[name] es el nombre de la organización.
+  ///[code] es el código de la organización.
+  ///[enabled] indica si la organización está habilitada.
   @override
   Future<Either<Failure, Orga>> addOrga(
       String name, String code, bool enabled) async {
@@ -95,6 +119,12 @@ class OrgaRepositoryImpl implements OrgaRepository {
     }
   }
 
+  ///Agrega una relación [OrgaUser]
+  ///
+  ///[orgaId] Id de la organización
+  ///[userId] Id del usuario
+  ///[roles] lista de roles en [String]
+  ///[enabled] especifica si la relación de OrgaUser está habilitada.
   @override
   Future<Either<Failure, OrgaUser>> addOrgaUser(
       String orgaId, String userId, List<String> roles, bool enabled) async {
@@ -116,6 +146,7 @@ class OrgaRepositoryImpl implements OrgaRepository {
     }
   }
 
+  ///Elimina una organización según su [orgaId] invocando al DataSource
   @override
   Future<Either<Failure, bool>> deleteOrga(String orgaId) async {
     try {
@@ -129,6 +160,7 @@ class OrgaRepositoryImpl implements OrgaRepository {
     }
   }
 
+  ///Elimina una [OrgaUser] según su [orgaId] y [userId] invocando al DataSource
   @override
   Future<Either<Failure, bool>> deleteOrgaUser(
       String orgaId, String userId) async {
@@ -143,6 +175,7 @@ class OrgaRepositoryImpl implements OrgaRepository {
     }
   }
 
+  ///Habilita o deshabilita una [Orga] según Id y el parámetro [enableOrDisable]
   @override
   Future<Either<Failure, Orga>> enableOrga(
       String orgaId, bool enableOrDisable) async {
@@ -157,6 +190,7 @@ class OrgaRepositoryImpl implements OrgaRepository {
     }
   }
 
+  ///Habilita una [OrgaUser] según Id de orga, user y el parám [enableOrDisable]
   @override
   Future<Either<Failure, OrgaUser>> enableOrgaUser(
       String orgaId, String userId, bool enableOrDisable) async {
@@ -172,6 +206,7 @@ class OrgaRepositoryImpl implements OrgaRepository {
     }
   }
 
+  ///Actualiza un [Orga] especificando un Id y el [Orga] en [orga]
   @override
   Future<Either<Failure, Orga>> updateOrga(String orgaId, Orga orga) async {
     try {
@@ -192,6 +227,7 @@ class OrgaRepositoryImpl implements OrgaRepository {
     }
   }
 
+  ///Actualiza un [OrgaUser] especificando un Id y el [OrgaUser] en [orgaUser]
   @override
   Future<Either<Failure, OrgaUser>> updateOrgaUser(
       String orgaId, String userId, OrgaUser orgaUser) async {
