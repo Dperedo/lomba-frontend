@@ -4,6 +4,7 @@ import '../../data/models/session_model.dart';
 import '../../failures.dart';
 import '../repositories/local_repository.dart';
 
+///Obtiene la sesión del usuario conectado.
 class GetSession {
   final LocalRepository repository;
   GetSession(this.repository);

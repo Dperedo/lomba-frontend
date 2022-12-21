@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../sidedrawer/presentation/pages/sidedrawer_page.dart';
 
+///Página con el contenido que el usuario revisor ha aprobado anteriormente.
+///
+///Se mostrará un listado con todo aquel contenido que el usuario haya
+///aprobado anteriormente desde la página de "Por Aprobar"
 class ApprovedPage extends StatelessWidget {
   const ApprovedPage({Key? key}) : super(key: key);
 

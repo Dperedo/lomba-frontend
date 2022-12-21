@@ -3,6 +3,7 @@ import 'package:lomba_frontend/core/failures.dart';
 
 import '../repositories/orga_repository.dart';
 
+///Caso de uso para eliminar una relación orga-user
 class DeleteOrgaUser {
   final OrgaRepository repository;
   DeleteOrgaUser(this.repository);

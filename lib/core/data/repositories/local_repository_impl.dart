@@ -11,15 +11,24 @@ import '../../failures.dart';
 import '../../validators.dart';
 import '../datasources/local_data_source.dart';
 
+///Implementación del repositorio local del dispositivo.
+///
+///El localStorage aplica a Android, iOS y Web.
+///Esta implementación consume el [LocalDataSource]
+
 class LocalRepositoryImpl implements LocalRepository {
   final LocalDataSource localDataSource;
 
+  ///Recibe el [LocalDataSource] en el constructor para así poder invocarlo
+  ///desde las pruebas utilizando un Mock del dataSource
   LocalRepositoryImpl({required this.localDataSource});
 
+  ///Método privado para construir una sesión vacía
   SessionModel _getNewSessionModel() {
     return const SessionModel(token: "", username: "", name: "");
   }
 
+  ///Tiene o no LogIn informado en el localStorage del dispositivo.
   @override
   Future<Either<Failure, bool>> hasLogIn() async {
     final result = await getSession();
@@ -30,6 +39,7 @@ class LocalRepositoryImpl implements LocalRepository {
     return Right(hasLogIn);
   }
 
+  ///Limpia la sesión del localStorage provocando que se desloguee el usuario
   @override
   Future<Either<Failure, bool>> doLogOff() async {
     await localDataSource.cleanSession();
@@ -37,6 +47,7 @@ class LocalRepositoryImpl implements LocalRepository {
     return const Right(true);
   }
 
+  ///Consigue la sesión del usuario en el dispositivo (localStorage)
   @override
   Future<Either<Failure, SessionModel>> getSession() async {
     try {
@@ -56,6 +67,7 @@ class LocalRepositoryImpl implements LocalRepository {
     }
   }
 
+  ///Persiste la sesión en el dispositivo para mantener al usuario logueado
   @override
   Future<Either<Failure, bool>> saveSession(SessionModel session) async {
     try {
@@ -75,6 +87,7 @@ class LocalRepositoryImpl implements LocalRepository {
     }
   }
 
+  ///Obtiene los roles especificados en el token de la sesión
   @override
   Future<Either<Failure, List<String>>> getSessionRoles() async {
     List<String> roles = [Roles.roleAnonymous];
@@ -95,6 +108,7 @@ class LocalRepositoryImpl implements LocalRepository {
     return Right(roles);
   }
 
+  ///Entrega una lista con las opciones de menú para el usuario según roles
   @override
   Future<Either<Failure, List<String>>> getSideMenuListOptions() async {
     List<String> opts = [SideDrawerUserOptions.optHome];

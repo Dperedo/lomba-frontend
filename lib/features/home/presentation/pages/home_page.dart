@@ -6,6 +6,10 @@ import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
 
+///HomePage del sistema, en el futuro debe cambiar a página principal
+///
+///Por ahora sólo muestra un mensaje distinto cuando el usuario está o no
+///logueado.
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 

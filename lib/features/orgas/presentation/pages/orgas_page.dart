@@ -10,6 +10,10 @@ import '../bloc/orga_state.dart';
 import '../bloc/orgauser_bloc.dart';
 import '../bloc/orgauser_state.dart';
 
+///Página de organizaciones que inicia con la lista de organizaciones
+///
+///Incluye el detalle de cada organización donde es posible ver la lista
+///de usuarios relacionados con la organización.
 class OrgasPage extends StatelessWidget {
   const OrgasPage({Key? key}) : super(key: key);
 

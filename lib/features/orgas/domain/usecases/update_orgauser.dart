@@ -4,6 +4,7 @@ import 'package:lomba_frontend/core/failures.dart';
 import '../entities/orgauser.dart';
 import '../repositories/orga_repository.dart';
 
+///Caso de uso para actualizar una relación orga-user
 class UpdateOrgaUser {
   final OrgaRepository repository;
   UpdateOrgaUser(this.repository);

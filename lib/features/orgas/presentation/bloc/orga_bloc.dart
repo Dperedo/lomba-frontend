@@ -11,6 +11,9 @@ import '../../domain/usecases/get_orgas.dart';
 import 'orga_event.dart';
 import 'orga_state.dart';
 
+///BLOC de organizaciones.
+///
+///Considera todos los casos de uso de la organización
 class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
   final AddOrga _addOrga;
   final DeleteOrga _deleteOrga;

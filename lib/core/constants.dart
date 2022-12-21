@@ -1,3 +1,8 @@
+///Conjunto de URLs y otros datos relacionados con el mockup inicial.
+///
+///Se conservan aún en el proyecto hasta cuando hagamos la integración
+///hacia el backend. Por ahora siguen aquí, eliminaremos algunas claves
+///y conservaremos la URL del endpoint del backend.
 class Urls {
   static const String baseUrl = 'https://api.openweathermap.org/data/2.5';
   static const String apiKey = 'cc95d932d5a45d33a9527d5019475f2c';
@@ -7,6 +12,10 @@ class Urls {
       'http://openweathermap.org/img/wn/$iconCode@2x.png';
 }
 
+///Claves de sistema, como tokends creados en el sitio JWT.io.
+///
+///La intención es utilizar estos tokens en pruebas y el prototipo del sitio.
+///Deberán ser eliminados una vez se tenga la integración co el backend.
 class SystemKeys {
   static const String jwtsecretkey = "lomba";
 
@@ -25,9 +34,12 @@ class SystemKeys {
   static const String tokenExpiredSuperAdmin =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwicm9sZUlkIjoic3VwZXJhZG1pbiIsImV4cCI6MTY0MDk5NTE5OX0.wvhDsCJGUwF0wicvn5sFh_t48nB6OWx92uhxC_tsfG0";
   static const String tokenReviewed =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIiLCJyb2xlSWQiOiJ1c2VyLCByZXZpZXdlZCIsImV4cCI6MTcwMzAxNTU0M30.PtfzFAmi_-Y_eRjAUHjUNzEFfDdHBj4EiivZ6-naCeI";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicm9sZUlkIjoidXNlcixyZXZpZXdlZCIsImV4cCI6MTcwMzAxNTU0M30._r3SQKeYQf9KiZDsUTZOyljnFySHbamTeX4Lq3jPiHw";
 }
 
+///Listado de las opciones posibles del menú lateral.
+///
+///Todas las nuevas opciones de menú deben se agregadas en este listado.
 class SideDrawerUserOptions {
   static const String optHome = "home";
   static const String optOrgas = "orgas";
@@ -45,6 +57,7 @@ class SideDrawerUserOptions {
   static const String optUploaded = "uploaded";
 }
 
+///Listado de los roles del sistema. Por ahora pueden seguir en esta opción.
 class Roles {
   static const String roleAnonymous = "anonymous";
   static const String roleSuperAdmin = "superadmin";
