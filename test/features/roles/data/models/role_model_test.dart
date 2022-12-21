@@ -5,6 +5,8 @@ import 'package:lomba_frontend/features/roles/data/models/role_model.dart';
 import 'package:lomba_frontend/features/roles/domain/entities/role.dart';
 
 void main() {
+
+
   const tRoleModel = RoleModel(
     name: 'admin',
     enabled: true,
@@ -14,8 +16,12 @@ void main() {
 
   group('role model methods', () {
     test('role model to entity', () {
-      // assert
+      // 
+
+      //act
       final result = tRoleModel.toEntity();
+
+    //assert
       expect(result, equals(tRole));
     });
     test(
@@ -36,14 +42,16 @@ void main() {
     test(
       'debe retornar un json válido desde el role model',
       () async {
-        // act
-        final result = tRoleModel.toJson();
-
-        // assert
+        //arrange (preparación) 
         final expectedJsonMap = {
           'name': 'admin',
           'enabled': true,
         };
+        
+        // act (el acto o el suceso)
+        final result = tRoleModel.toJson();
+
+        //assert (comprobaciones)
         expect(result, equals(expectedJsonMap));
       },
     );

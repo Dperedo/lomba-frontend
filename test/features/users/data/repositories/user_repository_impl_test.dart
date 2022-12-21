@@ -62,7 +62,7 @@ void main() {
         final result = await repository.getUser(newUserId);
 
         // assert
-        verify(mockRemoteDataSource.getUser(any));
+        verify(mockRemoteDataSource.getUser(any)).called(1);
         expect(result, equals(Right(tUser)));
       },
     );
@@ -87,7 +87,7 @@ void main() {
     );
 
     test(
-      'debe retornar una server failure el backend de users falla',
+      'debe retornar una server failure cuando el backend de users falla',
       () async {
         // arrange
         when(mockRemoteDataSource.getUser(any)).thenThrow(ServerException());

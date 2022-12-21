@@ -66,6 +66,7 @@ Future<void> main() async {
   test(
     'el estado inicial debe ser Start',
     () {
+      //assert
       expect(userBloc.state, UserStart());
     },
   );

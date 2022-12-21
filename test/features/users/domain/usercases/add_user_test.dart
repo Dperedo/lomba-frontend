@@ -36,6 +36,6 @@ void main() {
         tUser.name, tUser.username, tUser.email, tUser.enabled);
 
     //assert
-    expect(result, Right(tUser));
+    expect(result, equals(Right(tUser)));
   });
 }

@@ -32,6 +32,13 @@ import 'features/orgas/domain/usecases/update_orga.dart';
 import 'features/orgas/domain/usecases/update_orgauser.dart';
 import 'features/orgas/presentation/bloc/orga_bloc.dart';
 import 'features/orgas/presentation/bloc/orgauser_bloc.dart';
+import 'features/roles/data/datasources/role_remote_data_source.dart';
+import 'features/roles/data/repositories/role_repository_impl.dart';
+import 'features/roles/domain/repositories/role_repository.dart';
+import 'features/roles/domain/usecases/enable_role.dart';
+import 'features/roles/domain/usecases/get_role.dart';
+import 'features/roles/domain/usecases/get_roles.dart';
+import 'features/roles/presentation/bloc/role_bloc.dart';
 import 'features/sidedrawer/domain/usecases/get_side_options.dart';
 import 'features/sidedrawer/presentation/bloc/sidedrawer_bloc.dart';
 import 'features/users/data/datasources/user_remote_data_source.dart';
@@ -60,6 +67,7 @@ Future<void> init() async {
         locator(),
         locator(),
       ));
+  locator.registerFactory(() => RoleBloc(locator(), locator(), locator()));
 
   locator.registerFactory(() =>
       OrgaUserBloc(locator(), locator(), locator(), locator(), locator()));
@@ -93,6 +101,11 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetUsers(locator()));
   locator.registerLazySingleton(() => UpdateUser(locator()));
 
+  locator.registerLazySingleton(() => EnableRole(locator()));
+  locator.registerLazySingleton(() => GetRole(locator()));
+  locator.registerLazySingleton(() => GetRoles(locator()));
+
+
   // repository
   locator.registerLazySingleton<LoginRepository>(
     () => LoginRepositoryImpl(
@@ -106,6 +119,9 @@ Future<void> init() async {
   );
   locator.registerLazySingleton<UserRepository>(
     () => UserRepositoryImpl(remoteDataSource: locator()),
+  );
+  locator.registerLazySingleton<RoleRepository>(
+    () => RoleRepositoryImpl(remoteDataSource: locator()),
   );
 
   // data source
@@ -126,6 +142,11 @@ Future<void> init() async {
   );
   locator.registerLazySingleton<UserRemoteDataSource>(
     () => UserRemoteDataSourceImpl(
+      client: locator(),
+    ),
+  );
+  locator.registerLazySingleton<RoleRemoteDataSource>(
+    () => RoleRemoteDataSourceImpl(
       client: locator(),
     ),
   );
