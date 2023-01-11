@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:lomba_frontend/core/data/models/response_model.dart';
+
 import '../../../../../core/constants.dart';
 import '../../../../../core/exceptions.dart';
 
@@ -20,21 +24,28 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<LoginAccessModel> getAuthenticate(
       String username, String password) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    final Map<String, dynamic> authData = {
+      'username': username,
+      'password': password
+    };
 
-    if (response.statusCode == 200) {
-      if (username.contains('rev')) {
-        return LoginAccessModel(
-            token: SystemKeys.tokenReviewed,
-            username: username,
-            name: 'Revisor');
-      } else {
-        return LoginAccessModel(
-            token: SystemKeys.tokenSuperAdmin2023,
-            username: username,
-            name: 'Miguel');
-      }
+    //parsea URL
+    final url = Uri.parse('${UrlBackend.base}/api/v1/auth');
+
+    //busca respuesta desde el servidor para la autenticación
+    http.Response resp =
+        await http.post(url, body: json.encode(authData), headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    }).timeout(const Duration(seconds: 10));
+
+    final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+    if (resp.statusCode == 200) {
+      return LoginAccessModel(
+          token: resObj['data']['items'][0]['value'].toString(),
+          username: username,
+          name: username);
     } else {
       throw ServerException();
     }

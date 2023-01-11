@@ -12,6 +12,10 @@ class Urls {
       'http://openweathermap.org/img/wn/$iconCode@2x.png';
 }
 
+class UrlBackend {
+  static const String base = 'http://localhost:4001';
+}
+
 ///Claves de sistema, como tokends creados en el sitio JWT.io.
 ///
 ///La intención es utilizar estos tokens en pruebas y el prototipo del sitio.
@@ -60,7 +64,7 @@ class SideDrawerUserOptions {
 ///Listado de los roles del sistema. Por ahora pueden seguir en esta opción.
 class Roles {
   static const String roleAnonymous = "anonymous";
-  static const String roleSuperAdmin = "superadmin";
+  static const String roleSuperAdmin = "super";
   static const String roleAdmin = "admin";
   static const String roleReviewer = "reviewer";
   static const String roleUser = "user";

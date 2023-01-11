@@ -105,7 +105,6 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetRole(locator()));
   locator.registerLazySingleton(() => GetRoles(locator()));
 
-
   // repository
   locator.registerLazySingleton<LoginRepository>(
     () => LoginRepositoryImpl(
@@ -141,9 +140,8 @@ Future<void> init() async {
     ),
   );
   locator.registerLazySingleton<UserRemoteDataSource>(
-    () => UserRemoteDataSourceImpl(
-      client: locator(),
-    ),
+    () =>
+        UserRemoteDataSourceImpl(client: locator(), localDataSource: locator()),
   );
   locator.registerLazySingleton<RoleRemoteDataSource>(
     () => RoleRemoteDataSourceImpl(

@@ -100,8 +100,8 @@ class LocalRepositoryImpl implements LocalRepository {
     if (session.token != "") {
       final payload = Jwt.parseJwt(session.token);
 
-      if (payload.containsKey("roleId") && payload["roleId"].toString() != "") {
-        roles = payload["roleId"].toString().split(",");
+      if (payload.containsKey("roles") && payload["roles"].toString() != "") {
+        roles = payload["roles"].toString().split(",");
       }
     }
 
