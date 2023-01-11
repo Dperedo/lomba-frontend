@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:dartz/dartz_unsafe.dart';
+import 'package:lomba_frontend/core/data/datasources/local_data_source.dart';
 import 'package:lomba_frontend/core/fakedata.dart';
 
 import '../../../../../core/constants.dart';
@@ -16,32 +20,47 @@ abstract class UserRemoteDataSource {
 
   Future<bool> deleteUser(String userId);
 
-  Future<UserModel> enableUser(String userId, bool enableOrDisable);
+  Future<bool> enableUser(String userId, bool enableOrDisable);
 
   Future<UserModel> updateUser(String userId, UserModel user);
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   final http.Client client;
-  UserRemoteDataSourceImpl({required this.client});
+  final LocalDataSource localDataSource;
+  UserRemoteDataSourceImpl(
+      {required this.client, required this.localDataSource});
 
   @override
   Future<List<UserModel>> getUsers(String orgaId, String filter,
       String fieldOrder, double pageNumber, int pageSize) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    //parsea URL
+    orgaId = '00000200-0200-0200-0200-000000000200'; //DEFAULT
+    final url = Uri.parse('${UrlBackend.base}/api/v1/user/byorga/$orgaId');
+    final session = await localDataSource.getSavedSession();
 
-    if (response.statusCode == 200) {
-      final List<UserModel> searchUsers = fakeListUsers
-          .where((o) => (o.id.contains(filter) ||
-              o.name.contains(filter) ||
-              o.username.contains(filter) ||
-              o.email.contains(filter)))
-          .skip(((pageNumber.toInt() - 1) * pageSize))
-          .take(pageSize)
-          .toList();
+    http.Response resp = await http.get(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
 
-      return Future.value(searchUsers);
+    final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+    if (resp.statusCode == 200) {
+      List<UserModel> users = [];
+
+      for (var item in resObj['data']['items']) {
+        users.add(UserModel(
+            id: item["id"].toString(),
+            name: item["name"].toString(),
+            username: item["username"].toString(),
+            email: item["email"].toString(),
+            enabled: item["enabled"].toString().toLowerCase() == 'true',
+            builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
+      }
+
+      return Future.value(users);
     } else {
       throw ServerException();
     }
@@ -49,12 +68,26 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<UserModel> getUser(String userId) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    final url = Uri.parse('${UrlBackend.base}/api/v1/user/$userId');
+    final session = await localDataSource.getSavedSession();
 
-    if (response.statusCode == 200) {
-      final user = fakeListUsers.singleWhere((o) => (o.id == userId));
-      return Future.value(user);
+    http.Response resp = await http.get(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+    if (resp.statusCode == 200) {
+      final item = resObj['data']['items'][0];
+      return Future.value(UserModel(
+          id: item["id"].toString(),
+          name: item["name"].toString(),
+          username: item["username"].toString(),
+          email: item["email"].toString(),
+          enabled: item["enabled"].toString().toLowerCase() == 'true',
+          builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
     } else {
       throw ServerException();
     }
@@ -75,38 +108,43 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<bool> deleteUser(String userId) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    final url = Uri.parse('${UrlBackend.base}/api/v1/user/$userId');
+    final session = await localDataSource.getSavedSession();
 
-    if (response.statusCode == 200) {
-      fakeListUsers.removeWhere((element) => element.id == userId);
-      return true;
+    http.Response resp = await http.delete(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+    if (resp.statusCode == 200) {
+      return Future.value(
+          resObj['data']['items'][0].toString().toLowerCase() == 'true');
     } else {
       throw ServerException();
     }
   }
 
   @override
-  Future<UserModel> enableUser(String userId, bool enableOrDisable) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+  Future<bool> enableUser(String userId, bool enableOrDisable) async {
+    final url = Uri.parse(
+        '${UrlBackend.base}/api/v1/user/enable/$userId?enable=${enableOrDisable.toString()}');
+    final session = await localDataSource.getSavedSession();
 
-    if (response.statusCode == 200) {
-      UserModel userModel =
-          fakeListUsers.singleWhere((element) => element.id == userId);
+    http.Response resp = await http.put(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
 
-      UserModel newUserModel = UserModel(
-          id: userModel.id,
-          name: userModel.name,
-          username: userModel.username,
-          email: userModel.email,
-          enabled: enableOrDisable,
-          builtIn: userModel.builtIn);
+    final Map<dynamic, dynamic> resObj = json.decode(resp.body);
 
-      int index = fakeListUsers.indexWhere((element) => element.id == userId);
-      fakeListUsers[index] = newUserModel;
-
-      return newUserModel;
+    if (resp.statusCode == 200) {
+      return Future.value(
+          resObj['data']['items'][0]['value'].toString().toLowerCase() ==
+              'true');
     } else {
       throw ServerException();
     }

@@ -76,7 +76,7 @@ void main() {
       expect(result, const Right(listAdmin));
     });
 
-    test('debe conseguir lista de opciones de un superadmin', () async {
+    test('debe conseguir lista de opciones de un super', () async {
       //arrange
 
       when(mockLocalRepository.getSideMenuListOptions())

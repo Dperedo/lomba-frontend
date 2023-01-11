@@ -155,7 +155,7 @@ void main() {
         verify(mockLocalDataSource.getSavedSession()).called(1);
 
         expect(result.isRight(), true);
-        expect(list, (<String>["superadmin"]));
+        expect(list, (<String>["super"]));
       },
     );
 
@@ -182,7 +182,7 @@ void main() {
     );
 
     test(
-      'debe entregar la lista de opciones de menu para superadmin',
+      'debe entregar la lista de opciones de menu para super',
       () async {
         //arrange
         when(mockLocalDataSource.hasSession())
