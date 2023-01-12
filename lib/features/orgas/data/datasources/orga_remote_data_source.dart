@@ -111,14 +111,31 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
   ///Entrega una lista de OrgaUsers a partir del Id de la organización
   @override
   Future<List<OrgaUserModel>> getOrgaUsers(String orgaId) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    //parsea URL
+    final url = Uri.parse('${UrlBackend.base}/api/v1/orgauser/byorga/$orgaId');
+    final session = await localDataSource.getSavedSession();
 
-    if (response.statusCode == 200) {
-      final List<OrgaUserModel> searchOrgaUsers =
-          fakeListOrgaUsers.where((o) => (o.orgaId == orgaId)).toList();
+    http.Response resp = await client.get(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
 
-      return Future.value(searchOrgaUsers);
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      List<OrgaUserModel> orgaUsers = [];
+
+      for (var item in resObj['data']['items']) {
+        orgaUsers.add(OrgaUserModel(
+            userId: item["userId"].toString(),
+            orgaId: item["orgaId"].toString(),
+            roles: item["roles"].toString(),
+            enabled: item["enabled"].toString().toLowerCase() == 'true',
+            builtIn: item["builtin"].toString().toLowerCase() == 'true'));
+      }
+
+      return Future.value(orgaUsers);
     } else {
       throw ServerException();
     }
@@ -177,13 +194,20 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
   ///Elimina una relación OrgaUser a partir de los Id [orgaId] y [userId]
   @override
   Future<bool> deleteOrgaUser(String orgaId, String userId) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    final url = Uri.parse('${UrlBackend.base}/api/v1/orgauser/$orgaId/$userId');
+    final session = await localDataSource.getSavedSession();
 
-    if (response.statusCode == 200) {
-      fakeListOrgaUsers.removeWhere(
-          (element) => element.orgaId == orgaId && element.userId == userId);
-      return true;
+    http.Response resp = await client.delete(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      return Future.value(
+          resObj['data']['items'][0].toString().toLowerCase() == 'true');
     } else {
       throw ServerException();
     }
