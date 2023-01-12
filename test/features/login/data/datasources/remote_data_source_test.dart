@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/exceptions.dart';
@@ -13,7 +15,7 @@ import 'remote_data_source_test.mocks.dart';
     customMocks: [MockSpec<http.Client>(as: #MockHttpClient)])
 void main() {
   late MockHttpClient mockHttpClient;
-  late RemoteDataSourceImpl dataSource;
+  late RemoteDataSource dataSource;
 
   setUp(() {
     mockHttpClient = MockHttpClient();
@@ -23,19 +25,32 @@ void main() {
   group('obtener login', () {
     const tLoginAccess = LoginAccessModel(
         token: SystemKeys.tokenSuperAdmin2023,
-        username: 'mp@mp.com',
-        name: 'Miguel');
+        username: 'admin@mp.com',
+        name: 'admin@mp.com');
 
-    const tusername = 'mp@mp.com';
-    const tpassword = '12345';
+    const tusername = 'admin@mp.com';
+    const tpassword = '1234';
+
+    final Map<String, dynamic> testAuthData = {
+      'username': tusername,
+      'password': tpassword
+    };
 
     test('debe retornar el login access cuando la respuesta es 200', () async {
       //arrange
-      when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
-          .thenAnswer((realInvocation) async => http.Response(
-              "{'token':'${SystemKeys.tokenSuperAdmin2023}', 'username':'mp@mp.com', 'name': 'Miguel'}",
-              200));
 
+      when(
+        mockHttpClient.post(Uri.parse('${UrlBackend.base}/api/v1/auth'),
+            body: json.encode(testAuthData),
+            headers: {
+              "Accept": "application/json",
+              "Content-Type": "application/json",
+            }),
+      ).thenAnswer(
+        (_) async => http.Response(
+            '{"apiVersion":"1.0","method":"post","context":"access ok","id":"8e4d664c-cb0b-4fa3-8304-f344f0160dac","_id":"8e4d664c-cb0b-4fa3-8304-f344f0160dac","data":{"items":[{"value":"${SystemKeys.tokenSuperAdmin2023}","orgas":[{"_id":"00000100-0100-0100-0100-000000000100","id":"00000100-0100-0100-0100-000000000100","name":"System","code":"sys","builtin":true,"enabled":true}],"orgaId":"00000100-0100-0100-0100-000000000100"}],"kind":"string","currentItemCount":1,"updated":"2023-01-11T19:50:55.020Z"}}',
+            200),
+      );
       //act
       final result = await dataSource.getAuthenticate(tusername, tpassword);
 
@@ -48,9 +63,16 @@ void main() {
       () async {
         // arrange
         when(
-          mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))),
+          mockHttpClient.post(Uri.parse('${UrlBackend.base}/api/v1/auth'),
+              body: json.encode(testAuthData),
+              headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+              }),
         ).thenAnswer(
-          (_) async => http.Response('Not found', 404),
+          (_) async => http.Response(
+              '{"apiVersion":"1.0","method":"post","context":"no access","id":"23d3c089-38bb-4e50-a73b-4a91c09bec2c","_id":"23d3c089-38bb-4e50-a73b-4a91c09bec2c","error":{"code":-1,"message":"Not found"}}',
+              404),
         );
 
         // act

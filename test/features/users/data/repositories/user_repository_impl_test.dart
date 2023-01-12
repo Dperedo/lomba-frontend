@@ -42,9 +42,7 @@ void main() {
 
   setUp(() {
     mockRemoteDataSource = MockUserRemoteDataSource();
-    repository = UserRepositoryImpl(
-      remoteDataSource: mockRemoteDataSource,
-    );
+    repository = UserRepositoryImpl(remoteDataSource: mockRemoteDataSource);
 
     for (var element in fakeListUsers) {
       tlistUsers.add(element.toEntity());
@@ -287,6 +285,8 @@ void main() {
       () async {
         // arrange
         when(mockRemoteDataSource.enableUser(any, any))
+            .thenAnswer((realInvocation) async => true);
+        when(mockRemoteDataSource.getUser(any))
             .thenAnswer((realInvocation) async => tUserModel);
 
         // act
@@ -294,7 +294,7 @@ void main() {
 
         // assert
         verify(mockRemoteDataSource.enableUser(any, any));
-        expect(result, equals(Right(tUser)));
+        expect(result, equals(Right<Failure, User>(tUserModel.toEntity())));
       },
     );
 

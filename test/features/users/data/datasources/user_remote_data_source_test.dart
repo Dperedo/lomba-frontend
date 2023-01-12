@@ -1,70 +1,101 @@
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/core/constants.dart';
+import 'package:lomba_frontend/core/data/datasources/local_data_source.dart';
+import 'package:lomba_frontend/core/data/models/session_model.dart';
 import 'package:lomba_frontend/core/exceptions.dart';
 import 'package:lomba_frontend/core/fakedata.dart';
 import 'package:lomba_frontend/features/users/data/datasources/user_remote_data_source.dart';
 import 'package:lomba_frontend/features/users/data/models/user_model.dart';
-import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:http/http.dart' as http;
+import 'package:mockito/mockito.dart';
 
 import 'user_remote_data_source_test.mocks.dart';
 
-@GenerateMocks([UserRemoteDataSourceImpl],
+@GenerateMocks([UserRemoteDataSourceImpl, LocalDataSourceImpl],
     customMocks: [MockSpec<http.Client>(as: #MockHttpClient)])
 void main() {
   late MockHttpClient mockHttpClient;
   late UserRemoteDataSourceImpl dataSource;
+  late MockLocalDataSourceImpl mockLocalDataSource;
 
   late String userId; //Sistema
-  late UserModel filteredSystemUser;
   late String userIdSampleUpdate;
 
   setUp(() {
     mockHttpClient = MockHttpClient();
-    dataSource = UserRemoteDataSourceImpl(client: mockHttpClient);
+    mockLocalDataSource = MockLocalDataSourceImpl();
+    dataSource = UserRemoteDataSourceImpl(
+        client: mockHttpClient, localDataSource: mockLocalDataSource);
 
     userId = fakeListUsers[0].id; //Sistema
-    filteredSystemUser =
-        fakeListUsers.singleWhere((element) => element.name.contains("Súper"));
 
     userIdSampleUpdate = fakeListUsers[2].id;
   });
 
+  const testUserId = '00000001-0001-0001-0001-000000000001';
+  const testUserModel = UserModel(
+      id: '00000001-0001-0001-0001-000000000001',
+      name: 'Súper',
+      username: 'super',
+      email: 'super@mp.com',
+      enabled: true,
+      builtIn: true);
+
+  const testGetResponse =
+      '{"apiVersion":"1.0","method":"get","params":{"id":"00000001-0001-0001-0001-000000000001"},"context":"geted by id","id":"37f93961-a189-4182-96b0-28491a8b78df","_id":"37f93961-a189-4182-96b0-28491a8b78df","data":{"items":[{"_id":"00000001-0001-0001-0001-000000000001","id":"00000001-0001-0001-0001-000000000001","name":"Súper","username":"super","email":"super@mp.com","enabled":true,"builtin":true,"created":"2023-01-11T15:50:26.921Z","orgas":[{"id":"00000100-0100-0100-0100-000000000100","code":"sys"}],"updated":"2023-01-11T15:50:33.444Z"}],"kind":"string","currentItemCount":1,"updated":"2023-01-12T14:23:00.142Z"}}';
+
+  const testBoolResponse =
+      '{"apiVersion":"1.0","method":"get","params":{"id":"00000001-0001-0001-0001-000000000001"},"context":"geted by id","id":"37f93961-a189-4182-96b0-28491a8b78df","_id":"37f93961-a189-4182-96b0-28491a8b78df","data":{"items":[true],"kind":"string","currentItemCount":1,"updated":"2023-01-12T14:23:00.142Z"}}';
+
+  const testSession = SessionModel(
+      token: SystemKeys.tokenSuperAdmin2023, name: 'Súper', username: 'super');
+
+  const testHeaders = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "Authorization": "Bearer ${SystemKeys.tokenSuperAdmin2023}",
+  };
+
   group('obtener datos user, users', () {
     test('obtener una usuarios', () async {
       //arrange
-      when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
-          .thenAnswer((realInvocation) async => http.Response("", 200));
+      when(mockHttpClient.get(any, headers: testHeaders)).thenAnswer(
+          (realInvocation) async => http.Response(testGetResponse, 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
 
       //act
-      final result = await dataSource.getUser(userId);
+      final result = await dataSource.getUser(testUserId);
 
       //assert
-      expect(result, equals(fakeListUsers[0]));
+      expect(result, equals(testUserModel));
     });
     test('obtener lista de usuarios sin filtrar', () async {
       //arrange
-      when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
-          .thenAnswer((realInvocation) async => http.Response("", 200));
-
+      when(mockHttpClient.get(any, headers: testHeaders)).thenAnswer(
+          (realInvocation) async => http.Response(testGetResponse, 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
       //act
       final result = await dataSource.getUsers("", "", "", 1, 10);
 
       //assert
-      expect(result, equals(fakeListUsers));
+      expect(result, equals(<UserModel>[testUserModel]));
     });
     test('obtener lista de usuarios filtrada', () async {
       //arrange
-      when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
-          .thenAnswer((realInvocation) async => http.Response("", 200));
+      when(mockHttpClient.get(any, headers: testHeaders)).thenAnswer(
+          (realInvocation) async => http.Response(testGetResponse, 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
 
       //act
       final result = await dataSource.getUsers("", "Súper", "", 1, 10);
 
       //assert
-      expect(result, equals(<UserModel>[filteredSystemUser]));
+      expect(result, equals(<UserModel>[testUserModel]));
     });
 
     test(
@@ -73,10 +104,12 @@ void main() {
       () async {
         // arrange
         when(
-          mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))),
+          mockHttpClient.get(any, headers: testHeaders),
         ).thenAnswer(
           (_) async => http.Response('', 404),
         );
+        when(mockLocalDataSource.getSavedSession())
+            .thenAnswer((realInvocation) async => testSession);
 
         // act
         final call1 = dataSource.getUser(userId);
@@ -133,9 +166,10 @@ void main() {
   group('eliminar datos user y useruser', () {
     test('eliminar un usuario', () async {
       //arrange
-      when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
-          .thenAnswer((realInvocation) async => http.Response("", 200));
-
+      when(mockHttpClient.delete(any, headers: testHeaders)).thenAnswer(
+          (realInvocation) async => http.Response(testBoolResponse, 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
       //act
       final result = await dataSource.deleteUser(fakeUserIdUser01);
 
@@ -147,14 +181,15 @@ void main() {
   group('habilitar datos user', () {
     test('habilitar un usuario', () async {
       //arrange
-      when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
-          .thenAnswer((realInvocation) async => http.Response("", 200));
-
+      when(mockHttpClient.put(any, headers: testHeaders)).thenAnswer(
+          (realInvocation) async => http.Response(testBoolResponse, 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
       //act
       final result = await dataSource.enableUser(fakeListUsers[1].id, false);
 
       //assert
-      expect(result, equals(fakeListUsers[1]));
+      expect(result, equals(true));
     });
   });
 }

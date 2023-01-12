@@ -24,7 +24,7 @@ class SystemKeys {
   static const String jwtsecretkey = "lomba";
 
   static const String tokenSuperAdmin2023 =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwicm9sZUlkIjoic3VwZXJhZG1pbiIsImV4cCI6MTcwNDA2NzE5OX0.WBUPl-1vK01LkCewn0a6K-6EKDt7mrahcUfjr4W5Yi0";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMDAwMDAwMS0wMDAxLTAwMDEtMDAwMS0wMDAwMDAwMDAwMDEiLCJvcmdhSWQiOiIwMDAwMDEwMC0wMTAwLTAxMDAtMDEwMC0wMDAwMDAwMDAxMDAiLCJyb2xlcyI6InN1cGVyIiwiaWF0IjoxNjczNDY2NjU1LCJleHAiOjI2NzM0NzAyNTV9.Vu5Rh6Y_lXOZ_Eu6AkZmu-kzo-2V7vaLkcm5t2CCTZE";
   static const String tokenAdmin2023 =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwicm9sZUlkIjoiYWRtaW4iLCJleHAiOjE3MDQwNjcxOTl9.f_XM5CmPiNEKSpdZFowXnETfX5c1wc5N1X47vI4h6C0";
   static const String tokenUser2023 =

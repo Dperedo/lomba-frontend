@@ -4,6 +4,7 @@ import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/data/datasources/local_data_source.dart';
 import 'package:lomba_frontend/core/data/models/session_model.dart';
 import 'package:lomba_frontend/core/data/repositories/local_repository_impl.dart';
+import 'package:lomba_frontend/core/domain/repositories/local_repository.dart';
 import 'package:lomba_frontend/core/exceptions.dart';
 import 'package:lomba_frontend/core/failures.dart';
 import 'package:mockito/annotations.dart';
@@ -14,7 +15,7 @@ import 'local_repository_impl_test.mocks.dart';
 @GenerateMocks([LocalDataSource])
 void main() {
   late MockLocalDataSource mockLocalDataSource;
-  late LocalRepositoryImpl repository;
+  late LocalRepository repository;
 
   const tSessionModel = SessionModel(
       token: SystemKeys.tokenSuperAdmin2023,

@@ -1,12 +1,9 @@
 import 'dart:convert';
 
-import 'package:lomba_frontend/core/data/models/response_model.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../../../core/constants.dart';
 import '../../../../../core/exceptions.dart';
-
-import 'package:http/http.dart' as http;
-
 import '../models/login_access_model.dart';
 
 ///Interfaz para el DataSource remoto del Login
@@ -34,7 +31,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
     //busca respuesta desde el servidor para la autenticación
     http.Response resp =
-        await http.post(url, body: json.encode(authData), headers: {
+        await client.post(url, body: json.encode(authData), headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
     }).timeout(const Duration(seconds: 10));

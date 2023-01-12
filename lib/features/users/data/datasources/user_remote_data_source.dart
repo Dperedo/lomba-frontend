@@ -54,7 +54,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
             username: item["username"].toString(),
             email: item["email"].toString(),
             enabled: item["enabled"].toString().toLowerCase() == 'true',
-            builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
+            builtIn: item["builtin"].toString().toLowerCase() == 'true'));
       }
 
       return Future.value(users);
@@ -68,7 +68,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     final url = Uri.parse('${UrlBackend.base}/api/v1/user/$userId');
     final session = await localDataSource.getSavedSession();
 
-    http.Response resp = await http.get(url, headers: {
+    http.Response resp = await client.get(url, headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",
@@ -84,7 +84,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
           username: item["username"].toString(),
           email: item["email"].toString(),
           enabled: item["enabled"].toString().toLowerCase() == 'true',
-          builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
+          builtIn: item["builtin"].toString().toLowerCase() == 'true'));
     } else {
       throw ServerException();
     }
@@ -108,7 +108,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     final url = Uri.parse('${UrlBackend.base}/api/v1/user/$userId');
     final session = await localDataSource.getSavedSession();
 
-    http.Response resp = await http.delete(url, headers: {
+    http.Response resp = await client.delete(url, headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",
@@ -130,7 +130,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         '${UrlBackend.base}/api/v1/user/enable/$userId?enable=${enableOrDisable.toString()}');
     final session = await localDataSource.getSavedSession();
 
-    http.Response resp = await http.put(url, headers: {
+    http.Response resp = await client.put(url, headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",
@@ -140,8 +140,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       final Map<dynamic, dynamic> resObj = json.decode(resp.body);
 
       return Future.value(
-          resObj['data']['items'][0]['value'].toString().toLowerCase() ==
-              'true');
+          resObj['data']['items'][0].toString().toLowerCase() == 'true');
     } else {
       throw ServerException();
     }
