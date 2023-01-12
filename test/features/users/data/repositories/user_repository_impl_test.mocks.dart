@@ -99,7 +99,7 @@ class MockUserRemoteDataSource extends _i1.Mock
         returnValue: _i4.Future<bool>.value(false),
       ) as _i4.Future<bool>);
   @override
-  _i4.Future<_i2.UserModel> enableUser(
+  _i4.Future<bool> enableUser(
     String? userId,
     bool? enableOrDisable,
   ) =>
@@ -111,17 +111,8 @@ class MockUserRemoteDataSource extends _i1.Mock
             enableOrDisable,
           ],
         ),
-        returnValue: _i4.Future<_i2.UserModel>.value(_FakeUserModel_0(
-          this,
-          Invocation.method(
-            #enableUser,
-            [
-              userId,
-              enableOrDisable,
-            ],
-          ),
-        )),
-      ) as _i4.Future<_i2.UserModel>);
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
   @override
   _i4.Future<_i2.UserModel> updateUser(
     String? userId,

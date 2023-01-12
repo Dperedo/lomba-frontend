@@ -1,14 +1,11 @@
 import 'dart:convert';
 
-import 'package:dartz/dartz_unsafe.dart';
+import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/core/data/datasources/local_data_source.dart';
 import 'package:lomba_frontend/core/fakedata.dart';
 
 import '../../../../../core/constants.dart';
 import '../../../../../core/exceptions.dart';
-
-import 'package:http/http.dart' as http;
-
 import '../models/user_model.dart';
 
 abstract class UserRemoteDataSource {
@@ -39,15 +36,15 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     final url = Uri.parse('${UrlBackend.base}/api/v1/user/byorga/$orgaId');
     final session = await localDataSource.getSavedSession();
 
-    http.Response resp = await http.get(url, headers: {
+    http.Response resp = await client.get(url, headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",
     }).timeout(const Duration(seconds: 10));
 
-    final Map<dynamic, dynamic> resObj = json.decode(resp.body);
-
     if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
       List<UserModel> users = [];
 
       for (var item in resObj['data']['items']) {
@@ -57,7 +54,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
             username: item["username"].toString(),
             email: item["email"].toString(),
             enabled: item["enabled"].toString().toLowerCase() == 'true',
-            builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
+            builtIn: item["builtin"].toString().toLowerCase() == 'true'));
       }
 
       return Future.value(users);
@@ -71,15 +68,15 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     final url = Uri.parse('${UrlBackend.base}/api/v1/user/$userId');
     final session = await localDataSource.getSavedSession();
 
-    http.Response resp = await http.get(url, headers: {
+    http.Response resp = await client.get(url, headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",
     }).timeout(const Duration(seconds: 10));
 
-    final Map<dynamic, dynamic> resObj = json.decode(resp.body);
-
     if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
       final item = resObj['data']['items'][0];
       return Future.value(UserModel(
           id: item["id"].toString(),
@@ -87,7 +84,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
           username: item["username"].toString(),
           email: item["email"].toString(),
           enabled: item["enabled"].toString().toLowerCase() == 'true',
-          builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
+          builtIn: item["builtin"].toString().toLowerCase() == 'true'));
     } else {
       throw ServerException();
     }
@@ -111,15 +108,15 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     final url = Uri.parse('${UrlBackend.base}/api/v1/user/$userId');
     final session = await localDataSource.getSavedSession();
 
-    http.Response resp = await http.delete(url, headers: {
+    http.Response resp = await client.delete(url, headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",
     }).timeout(const Duration(seconds: 10));
 
-    final Map<dynamic, dynamic> resObj = json.decode(resp.body);
-
     if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
       return Future.value(
           resObj['data']['items'][0].toString().toLowerCase() == 'true');
     } else {
@@ -133,18 +130,17 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         '${UrlBackend.base}/api/v1/user/enable/$userId?enable=${enableOrDisable.toString()}');
     final session = await localDataSource.getSavedSession();
 
-    http.Response resp = await http.put(url, headers: {
+    http.Response resp = await client.put(url, headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",
     }).timeout(const Duration(seconds: 10));
 
-    final Map<dynamic, dynamic> resObj = json.decode(resp.body);
-
     if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
       return Future.value(
-          resObj['data']['items'][0]['value'].toString().toLowerCase() ==
-              'true');
+          resObj['data']['items'][0].toString().toLowerCase() == 'true');
     } else {
       throw ServerException();
     }
