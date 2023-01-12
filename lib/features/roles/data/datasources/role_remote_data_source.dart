@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:lomba_frontend/core/fakedata.dart';
 
 import '../../../../../core/constants.dart';
@@ -5,6 +7,7 @@ import '../../../../../core/exceptions.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../../../../core/data/datasources/local_data_source.dart';
 import '../models/role_model.dart';
 
 abstract class RoleRemoteDataSource {
@@ -12,29 +15,38 @@ abstract class RoleRemoteDataSource {
 
   Future<RoleModel> getRole(String name);
 
-  Future<RoleModel> enableRole(String name, bool enableOrDisable);
+  Future<bool> enableRole(String name, bool enableOrDisable);
 }
 
 class RoleRemoteDataSourceImpl implements RoleRemoteDataSource {
   final http.Client client;
-  RoleRemoteDataSourceImpl({required this.client});
+  final LocalDataSource localDataSource;
+  RoleRemoteDataSourceImpl({required this.client, required this.localDataSource});
 
   @override
   Future<List<RoleModel>> getRoles() async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    //parsea URL
+    final url = Uri.parse('${UrlBackend.base}/api/v1/orga/');
+    final session = await localDataSource.getSavedSession();
 
-    if (response.statusCode == 200) {
-      final List<RoleModel> searchUsers = fakeRoles
-          /*.where((o) => (o.name.contains(filter) ||
-              o.name.contains(filter) ||
-              o.username.contains(filter) ||
-              o.email.contains(filter)))
-          .skip(((pageNumber.toInt() - 1) * pageSize))
-          .take(pageSize)*/
-          .toList();
+    http.Response resp = await client.get(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
 
-      return Future.value(searchUsers);
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      List<RoleModel> roles = [];
+
+      for (var item in resObj['data']['items']) {
+        roles.add(RoleModel(
+            name: item["name"].toString(),
+            enabled: item["enabled"].toString().toLowerCase() == 'true'));
+      }
+
+      return Future.value(roles);
     } else {
       throw ServerException();
     }
@@ -42,34 +54,44 @@ class RoleRemoteDataSourceImpl implements RoleRemoteDataSource {
 
   @override
   Future<RoleModel> getRole(String name) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    final url = Uri.parse('${UrlBackend.base}/api/v1/role/$name');
+    final session = await localDataSource.getSavedSession();
 
-    if (response.statusCode == 200) {
-      final role = fakeRoles.singleWhere((o) => (o.name == name));
-      return Future.value(role);
+    http.Response resp = await http.get(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      final item = resObj['data']['items'][0];
+      return Future.value(RoleModel(
+          name: item["name"].toString(),
+          enabled: item["enabled"].toString().toLowerCase() == 'true'));
     } else {
       throw ServerException();
     }
   }
 
   @override
-  Future<RoleModel> enableRole(String name, bool enableOrDisable) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+  Future<bool> enableRole(String name, bool enableOrDisable) async {
+    final url = Uri.parse(
+        '${UrlBackend.base}/api/v1/role/enable/$name?enable=${enableOrDisable.toString()}');
+    final session = await localDataSource.getSavedSession();
 
-    if (response.statusCode == 200) {
-      RoleModel roleModel =
-          fakeRoles.singleWhere((element) => element.name == name);
+    http.Response resp = await http.put(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
 
-      RoleModel newRoleModel = RoleModel(
-          name: roleModel.name,
-          enabled: enableOrDisable);
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
 
-      int index = fakeRoles.indexWhere((element) => element.name == name);
-      fakeRoles[index] = newRoleModel;
-
-      return newRoleModel;
+      return Future.value(
+          resObj['data']['items'][0]['value'].toString().toLowerCase()== 'true');
     } else {
       throw ServerException();
     }

@@ -52,8 +52,11 @@ class RoleRepositoryImpl implements RoleRepository {
       String name, bool enableOrDisable) async {
     try {
       final result = await remoteDataSource.enableRole(name, enableOrDisable);
-
-      return Right(result.toEntity());
+      if (result) {
+        final resultItem = await remoteDataSource.getRole(name);
+        return Right(resultItem.toEntity());
+      }
+      return const Left(ServerFailure(''));
     } on ServerException {
       return const Left(ServerFailure(''));
     } on SocketException {

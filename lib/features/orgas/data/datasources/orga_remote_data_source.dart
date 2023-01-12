@@ -1,10 +1,11 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+import 'package:lomba_frontend/core/data/datasources/local_data_source.dart';
 import 'package:lomba_frontend/core/fakedata.dart';
 
 import '../../../../../core/constants.dart';
 import '../../../../../core/exceptions.dart';
-
-import 'package:http/http.dart' as http;
-
 import '../models/orga_model.dart';
 import '../models/orgauser_model.dart';
 
@@ -13,15 +14,24 @@ abstract class OrgaRemoteDataSource {
   Future<List<OrgaModel>> getOrgas(
       String filter, String fieldOrder, double pageNumber, int pageSize);
   Future<OrgaModel> getOrga(String orgaId);
+
   Future<List<OrgaUserModel>> getOrgaUsers(String orgaId);
+
   Future<OrgaModel> addOrga(OrgaModel orga);
+
   Future<OrgaUserModel> addOrgaUser(OrgaUserModel orgaUser);
+
   Future<bool> deleteOrga(String orgaId);
+
   Future<bool> deleteOrgaUser(String orgaId, String userId);
-  Future<OrgaModel> enableOrga(String orgaId, bool enableOrDisable);
+
+  Future<bool> enableOrga(String orgaId, bool enableOrDisable);
+
   Future<OrgaUserModel> enableOrgaUser(
       String orgaId, String userId, bool enableOrDisable);
+
   Future<OrgaModel> updateOrga(String orgaId, OrgaModel orga);
+  
   Future<OrgaUserModel> updateOrgaUser(
       String orgaId, String userId, OrgaUserModel orgaUser);
 }
@@ -29,7 +39,8 @@ abstract class OrgaRemoteDataSource {
 ///Implementación de [OrgaRemoteDataSource] con todos sus métodos.
 class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
   final http.Client client;
-  OrgaRemoteDataSourceImpl({required this.client});
+  final LocalDataSource localDataSource;
+  OrgaRemoteDataSourceImpl({required this.client, required this.localDataSource});
 
   ///Entrega una lista de organizaciones según los filtros
   ///
@@ -40,19 +51,31 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
   @override
   Future<List<OrgaModel>> getOrgas(
       String filter, String fieldOrder, double pageNumber, int pageSize) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    //parsea URL
+    final url = Uri.parse('${UrlBackend.base}/api/v1/orga/');
+    final session = await localDataSource.getSavedSession();
 
-    if (response.statusCode == 200) {
-      final List<OrgaModel> searchOrgas = fakeListOrgas
-          .where((o) => (o.id.contains(filter) ||
-              o.name.contains(filter) ||
-              o.code.contains(filter)))
-          .skip(((pageNumber.toInt() - 1) * pageSize))
-          .take(pageSize)
-          .toList();
+    http.Response resp = await client.get(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
 
-      return Future.value(searchOrgas);
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      List<OrgaModel> orgas = [];
+
+      for (var item in resObj['data']['items']) {
+        orgas.add(OrgaModel(
+            id: item["id"].toString(),
+            name: item["name"].toString(),
+            code: item["code"].toString(),
+            enabled: item["enabled"].toString().toLowerCase() == 'true',
+            builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
+      }
+
+      return Future.value(orgas);
     } else {
       throw ServerException();
     }
@@ -61,12 +84,25 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
   ///Entrega una organización a partir del Id de la organización
   @override
   Future<OrgaModel> getOrga(String orgaId) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    final url = Uri.parse('${UrlBackend.base}/api/v1/orga/$orgaId');
+    final session = await localDataSource.getSavedSession();
 
-    if (response.statusCode == 200) {
-      final orga = fakeListOrgas.singleWhere((o) => (o.id == orgaId));
-      return Future.value(orga);
+    http.Response resp = await http.get(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      final item = resObj['data']['items'][0];
+      return Future.value(OrgaModel(
+          id: item["id"].toString(),
+          name: item["name"].toString(),
+          code: item["code"].toString(),
+          enabled: item["enabled"].toString().toLowerCase() == 'true',
+          builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
     } else {
       throw ServerException();
     }
@@ -119,12 +155,20 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
   ///Elimina una organización a partir del Id de organización
   @override
   Future<bool> deleteOrga(String orgaId) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    final url = Uri.parse('${UrlBackend.base}/api/v1/orga/$orgaId');
+    final session = await localDataSource.getSavedSession();
 
-    if (response.statusCode == 200) {
-      fakeListOrgas.removeWhere((element) => element.id == orgaId);
-      return true;
+    http.Response resp = await http.delete(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      return Future.value(
+          resObj['data']['items'][0].toString().toLowerCase() == 'true');
     } else {
       throw ServerException();
     }
@@ -150,25 +194,22 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
   ///En el parámetro [enableOrDisable] se especifica el nuevo valor de
   ///habilitación
   @override
-  Future<OrgaModel> enableOrga(String orgaId, bool enableOrDisable) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+  Future<bool> enableOrga(String orgaId, bool enableOrDisable) async {
+    final url = Uri.parse(
+        '${UrlBackend.base}/api/v1/orga/enable/$orgaId?enable=${enableOrDisable.toString()}');
+    final session = await localDataSource.getSavedSession();
 
-    if (response.statusCode == 200) {
-      OrgaModel orgaModel =
-          fakeListOrgas.singleWhere((element) => element.id == orgaId);
+    http.Response resp = await http.put(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
 
-      OrgaModel newOrgaModel = OrgaModel(
-          id: orgaModel.id,
-          name: orgaModel.name,
-          code: orgaModel.code,
-          enabled: enableOrDisable,
-          builtIn: orgaModel.builtIn);
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
 
-      int index = fakeListOrgas.indexWhere((element) => element.id == orgaId);
-      fakeListOrgas[index] = newOrgaModel;
-
-      return newOrgaModel;
+      return Future.value(
+          resObj['data']['items'][0]['value'].toString().toLowerCase()== 'true');
     } else {
       throw ServerException();
     }
