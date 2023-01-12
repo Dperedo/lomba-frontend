@@ -136,7 +136,7 @@ Future<void> init() async {
   );
   locator.registerLazySingleton<OrgaRemoteDataSource>(
     () => OrgaRemoteDataSourceImpl(
-      client: locator(),
+      client: locator(), localDataSource: locator(),
     ),
   );
   locator.registerLazySingleton<UserRemoteDataSource>(
@@ -145,7 +145,7 @@ Future<void> init() async {
   );
   locator.registerLazySingleton<RoleRemoteDataSource>(
     () => RoleRemoteDataSourceImpl(
-      client: locator(),
+      client: locator(), localDataSource: locator()
     ),
   );
 

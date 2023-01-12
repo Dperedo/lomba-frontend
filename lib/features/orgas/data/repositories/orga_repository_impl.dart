@@ -181,8 +181,11 @@ class OrgaRepositoryImpl implements OrgaRepository {
       String orgaId, bool enableOrDisable) async {
     try {
       final result = await remoteDataSource.enableOrga(orgaId, enableOrDisable);
-
-      return Right(result.toEntity());
+      if (result) {
+        final resultItem = await remoteDataSource.getOrga(orgaId);
+        return Right(resultItem.toEntity());
+      }
+      return const Left(ServerFailure(''));
     } on ServerException {
       return const Left(ServerFailure(''));
     } on SocketException {

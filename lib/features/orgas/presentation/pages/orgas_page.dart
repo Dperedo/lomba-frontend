@@ -43,115 +43,39 @@ class OrgasPage extends StatelessWidget {
       );
     }
     if (state is OrgaListLoaded) {
-      return SizedBox(
-        width: double.infinity,
-        height: 714,
-        child: Column(
+      return ListView.builder(
+        shrinkWrap: true,
+        itemCount: state.orgas.length,
+        itemBuilder: (context, index) {
+          return Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 30,
-                horizontal: 15,
-              ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text( "Lista de Organizaciónes",
-                style: TextStyle(fontSize: 20)),
-              )
-            ),
-            ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: state.orgas.length,
-              itemBuilder: (context, index) {
-                return Column(
+              Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 20,
-                        ),
-                        child: Center(
-                          child: TapToExpand(
-                          content: Column(
-                            children: <Widget>[
-                              //for (var i = 0; i < 20; i++)
-                              Text(state.orgas[index].name
-                              /*Text(state.orga.name),
-                                const Divider(),
-                                Text("Código: ${state.orga.code}"),
-                                const Divider(),
-                                Text("Estado: ${state.orga.enabled}"),*/
-                                //style: const TextStyle(color: Colors.white, fontSize: 20),
+                      Expanded(
+                          child: Center(
+                        child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: TextButton(
+                              child: Center(
+                                child: Text(
+                                  state.orgas[index].name,
+                                ),
                               ),
-                              const Divider(),
-                              Text("Código: ${state.orgas[index].code}"),
-                              const Divider(),
-                              Text("Estado: ${state.orgas[index].enabled}"),
-                              const Divider(),
-
-                            ],
-                          ),
-                          title: TextButton(
-                            child: Text(
-                              state.orgas[index].name,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
-                            ),
-                            onPressed: () {
-                              context
-                              .read<OrgaBloc>()
-                              .add(OnOrgaLoad(state.orgas[index].id));
-                            },
-                          ),
-                          onTapPadding: 10,
-                          closedHeight: 70,
-                          scrollable: true,
-                          borderRadius: 10,
-                          openedHeight: 200,
-                          ),
-                        ),
-                          /*child: Card(
-                            elevation: 3,
-                            color: Theme.of(context).colorScheme.surfaceVariant,
-                            child: Padding(
-                                padding: const EdgeInsets.all(15),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Center(
-                                        child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: TextButton(
-                                            child: Text(
-                                              state.orgas[index].name,
-                                            ),
-                                            onPressed: () {
-                                              context
-                                                  .read<OrgaBloc>()
-                                                  .add(OnOrgaLoad(state.orgas[index].id));
-                                            },
-                                          )
-                                        ),
-                                      )
-                                    ),
-                                    const Icon(Icons.keyboard_arrow_right),
-                                  ],
-                                )
-                              ),
-                          ),*/
-                        
-                      ),
-                      //const Divider()
+                              onPressed: () {
+                                context
+                                    .read<OrgaBloc>()
+                                    .add(OnOrgaLoad(state.orgas[index].id));
+                              },
+                            )),
+                      ))
                     ],
-                  
-                );
-              },
-            ),
+                  )),
+              const Divider()
           ],
-        ),
+        );
+        }
       );
     }
 
