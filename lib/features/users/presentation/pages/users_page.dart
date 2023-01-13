@@ -45,28 +45,22 @@ class UsersPage extends StatelessWidget {
                 children: [
                   Expanded(
                       child: TextButton(
-                          child: Column(
-                            children: [
-                              Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Column(
-                                    children: [
-                                      ListTile(
-                                        leading:
-                                            const Icon(Icons.switch_account),
-                                        title: Text(
-                                          state.users[index].name,
-                                          style: const TextStyle(fontSize: 18),
-                                        ),
-                                        subtitle: Text(
-                                            '${state.users[index].username} / ${state.users[index].email}',
-                                            style:
-                                                const TextStyle(fontSize: 12)),
-                                      ),
-                                    ],
-                                  ))
-                            ],
-                          ),
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    leading: const Icon(Icons.switch_account),
+                                    title: Text(
+                                      state.users[index].name,
+                                      style: const TextStyle(fontSize: 18),
+                                    ),
+                                    subtitle: Text(
+                                        '${state.users[index].username} / ${state.users[index].email}',
+                                        style: const TextStyle(fontSize: 12)),
+                                  ),
+                                ],
+                              )),
                           onPressed: () {
                             context
                                 .read<UserBloc>()
@@ -97,30 +91,42 @@ class UsersPage extends StatelessWidget {
                   Text(state.user.name, style: const TextStyle(fontSize: 22)),
             ),
             const Divider(),
-            Align(
-                alignment: Alignment.centerLeft,
-                child: Text("Username: ${state.user.username}",
-                    style: const TextStyle(fontSize: 14))),
-            Align(
-                alignment: Alignment.centerLeft,
-                child: Text("Email: ${state.user.email}",
-                    style: const TextStyle(fontSize: 14))),
-            Text("Email: ${state.user.email}"),
-            const Divider(),
-            Text("Estado: ${state.user.enabled}"),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Username: ${state.user.username}",
+                      style: const TextStyle(fontSize: 14))),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Email: ${state.user.email}",
+                      style: const TextStyle(fontSize: 14))),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                      "Estado: ${(state.user.enabled ? 'Habilitado' : 'Deshabilitado')}")),
+            ),
             const Divider(),
             Row(
               children: [
-                ElevatedButton(
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.delete),
                   key: const ValueKey("btnDeleteOption"),
-                  child: const Text("Eliminar"),
+                  label: const Text("Eliminar"),
                   onPressed: () {
                     showDialog(
                         context: context,
                         builder: (context) => GestureDetector(
                               onTap: () => Navigator.pop(context),
                               child: AlertDialog(
-                                title: const Text('¿Desea eliminar el usuario'),
+                                title:
+                                    const Text('¿Desea eliminar el usuario?'),
                                 content:
                                     const Text('La eliminación es permanente'),
                                 actions: <Widget>[
@@ -152,7 +158,9 @@ class UsersPage extends StatelessWidget {
                 ),
                 const VerticalDivider(),
                 ElevatedButton.icon(
-                  icon: const Icon(Icons.toggle_off),
+                  icon: Icon(!state.user.enabled
+                      ? Icons.toggle_on
+                      : Icons.toggle_off_outlined),
                   key: const ValueKey("btnEnableOption"),
                   label:
                       Text((state.user.enabled ? "Deshabilitar" : "Habilitar")),
@@ -163,9 +171,9 @@ class UsersPage extends StatelessWidget {
                               onTap: () => Navigator.pop(context),
                               child: AlertDialog(
                                 title: Text(
-                                    '¿Desea ${(state.user.enabled ? "deshabilitar" : "habilitar")} el usuario'),
+                                    '¿Desea ${(state.user.enabled ? "deshabilitar" : "habilitar")} el usuario?'),
                                 content: const Text(
-                                    'Puede cambiar después su elección'),
+                                    'Esta acción afecta el acceso del usuario al sistema'),
                                 actions: <Widget>[
                                   TextButton(
                                     key: const ValueKey("btnConfirmEnable"),
@@ -199,13 +207,14 @@ class UsersPage extends StatelessWidget {
             const Divider(),
             Row(
               children: [
-                ElevatedButton(
+                ElevatedButton.icon(
+                    icon: const Icon(Icons.arrow_back),
                     onPressed: () {
                       context
                           .read<UserBloc>()
                           .add(const OnUserListLoad("", "", "", 1));
                     },
-                    child: const Text("Volver"))
+                    label: const Text("Volver"))
               ],
             ),
             const Divider(),
