@@ -64,7 +64,7 @@ class MockRoleRemoteDataSource extends _i1.Mock
         )),
       ) as _i4.Future<_i2.RoleModel>);
   @override
-  _i4.Future<_i2.RoleModel> enableRole(
+  _i4.Future<bool> enableRole(
     String? name,
     bool? enableOrDisable,
   ) =>
@@ -76,15 +76,6 @@ class MockRoleRemoteDataSource extends _i1.Mock
             enableOrDisable,
           ],
         ),
-        returnValue: _i4.Future<_i2.RoleModel>.value(_FakeRoleModel_0(
-          this,
-          Invocation.method(
-            #enableRole,
-            [
-              name,
-              enableOrDisable,
-            ],
-          ),
-        )),
-      ) as _i4.Future<_i2.RoleModel>);
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 }

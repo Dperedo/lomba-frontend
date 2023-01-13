@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/core/data/datasources/local_data_source.dart';
 import 'package:lomba_frontend/core/fakedata.dart';
+import 'package:lomba_frontend/features/roles/data/models/role_model.dart';
 
 import '../../../../../core/constants.dart';
 import '../../../../../core/exceptions.dart';
@@ -87,7 +88,7 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
     final url = Uri.parse('${UrlBackend.base}/api/v1/orga/$orgaId');
     final session = await localDataSource.getSavedSession();
 
-    http.Response resp = await http.get(url, headers: {
+    http.Response resp = await client.get(url, headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",
@@ -127,10 +128,14 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
       List<OrgaUserModel> orgaUsers = [];
 
       for (var item in resObj['data']['items']) {
+        List<String> roleslist = [];
+        for(var r in item['roles']){
+            roleslist.add(r['name']);
+        }
         orgaUsers.add(OrgaUserModel(
             userId: item["userId"].toString(),
             orgaId: item["orgaId"].toString(),
-            roles: item["roles"].toString(),
+            roles: roleslist,
             enabled: item["enabled"].toString().toLowerCase() == 'true',
             builtIn: item["builtin"].toString().toLowerCase() == 'true'));
       }

@@ -12,9 +12,9 @@ import 'package:mockito/mockito.dart';
 
 import 'local_repository_impl_test.mocks.dart';
 
-@GenerateMocks([LocalDataSource])
+@GenerateMocks([LocalDataSourceImpl])
 void main() {
-  late MockLocalDataSource mockLocalDataSource;
+  late MockLocalDataSourceImpl mockLocalDataSource;
   late LocalRepository repository;
 
   const tSessionModel = SessionModel(
@@ -32,7 +32,7 @@ void main() {
       name: 'Miguel');
 
   setUp(() {
-    mockLocalDataSource = MockLocalDataSource();
+    mockLocalDataSource = MockLocalDataSourceImpl();
     repository = LocalRepositoryImpl(localDataSource: mockLocalDataSource);
   });
 

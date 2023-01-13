@@ -379,8 +379,9 @@ void main() {
       () async {
         // arrange
         when(mockRemoteDataSource.enableOrga(any, any))
+            .thenAnswer((realInvocation) async => true);
+        when(mockRemoteDataSource.getOrga(any))
             .thenAnswer((realInvocation) async => tOrgaModel);
-
         // act
         final result = await repository.enableOrga(tOrgaModel.id, false);
 

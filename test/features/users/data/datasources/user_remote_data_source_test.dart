@@ -11,9 +11,10 @@ import 'package:lomba_frontend/features/users/data/models/user_model.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../../../core/data/repositories/local_repository_impl_test.mocks.dart';
 import 'user_remote_data_source_test.mocks.dart';
 
-@GenerateMocks([UserRemoteDataSourceImpl, LocalDataSourceImpl],
+@GenerateMocks([UserRemoteDataSourceImpl],
     customMocks: [MockSpec<http.Client>(as: #MockHttpClient)])
 void main() {
   late MockHttpClient mockHttpClient;
@@ -65,7 +66,6 @@ void main() {
           (realInvocation) async => http.Response(testGetResponse, 200));
       when(mockLocalDataSource.getSavedSession())
           .thenAnswer((realInvocation) async => testSession);
-
       //act
       final result = await dataSource.getUser(testUserId);
 
