@@ -36,9 +36,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       "Content-Type": "application/json",
     }).timeout(const Duration(seconds: 10));
 
-    final Map<dynamic, dynamic> resObj = json.decode(resp.body);
-
     if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
       return LoginAccessModel(
           token: resObj['data']['items'][0]['value'].toString(),
           username: username,

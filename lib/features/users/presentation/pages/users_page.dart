@@ -41,29 +41,38 @@ class UsersPage extends StatelessWidget {
         itemBuilder: (context, index) {
           return Column(
             children: [
-              Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: Center(
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: TextButton(
-                              child: Center(
-                                child: Text(
-                                  state.users[index].name,
-                                ),
-                              ),
-                              onPressed: () {
-                                context
-                                    .read<UserBloc>()
-                                    .add(OnUserLoad(state.users[index].id));
-                              },
-                            )),
-                      ))
-                    ],
-                  )),
+              Row(
+                children: [
+                  Expanded(
+                      child: TextButton(
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    leading: const Icon(Icons.switch_account),
+                                    title: Text(
+                                      state.users[index].name,
+                                      style: const TextStyle(fontSize: 18),
+                                    ),
+                                    subtitle: Text(
+                                        '${state.users[index].username} / ${state.users[index].email}',
+                                        style: const TextStyle(fontSize: 12)),
+                                  ),
+                                ],
+                              )),
+                          onPressed: () {
+                            context
+                                .read<UserBloc>()
+                                .add(OnUserLoad(state.users[index].id));
+                          })),
+                  Icon(
+                      state.users[index].enabled
+                          ? Icons.toggle_on
+                          : Icons.toggle_off_outlined,
+                      size: 40)
+                ],
+              ),
               const Divider()
             ],
           );
@@ -72,116 +81,145 @@ class UsersPage extends StatelessWidget {
     }
 
     if (state is UserLoaded) {
-      return Column(
-        children: [
-          Text(state.user.name),
-          const Divider(),
-          Text("Username: ${state.user.username}"),
-          const Divider(),
-          Text("Email: ${state.user.email}"),
-          const Divider(),
-          Text("Estado: ${state.user.enabled}"),
-          const Divider(),
-          Row(
-            children: [
-              ElevatedButton(
-                key: const ValueKey("btnDeleteOption"),
-                child: const Text("Eliminar"),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => GestureDetector(
-                            onTap: () => Navigator.pop(context),
-                            child: AlertDialog(
-                              title: const Text('¿Desea eliminar el usuario'),
-                              content:
-                                  const Text('La eliminación es permanente'),
-                              actions: <Widget>[
-                                TextButton(
-                                  key: const ValueKey("btnConfirmDelete"),
-                                  child: const Text('Eliminar'),
-                                  onPressed: () {
-                                    Navigator.pop(context, true);
-                                  },
-                                ),
-                                TextButton(
-                                  key: const ValueKey("btnCancelDelete"),
-                                  child: const Text('Cancelar'),
-                                  onPressed: () {
-                                    Navigator.pop(context, false);
-                                  },
-                                ),
-                              ],
-                            ),
-                          )).then((value) => {
-                        if (value)
-                          {
-                            context
-                                .read<UserBloc>()
-                                .add(OnUserDelete(state.user.id))
-                          }
-                      });
-                },
-              ),
-              const VerticalDivider(),
-              ElevatedButton(
-                key: const ValueKey("btnEnableOption"),
-                child:
-                    Text((state.user.enabled ? "Deshabilitar" : "Habilitar")),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => GestureDetector(
-                            onTap: () => Navigator.pop(context),
-                            child: AlertDialog(
-                              title: Text(
-                                  '¿Desea ${(state.user.enabled ? "deshabilitar" : "habilitar")} el usuario'),
-                              content: const Text(
-                                  'Puede cambiar después su elección'),
-                              actions: <Widget>[
-                                TextButton(
-                                  key: const ValueKey("btnConfirmEnable"),
-                                  child: Text((state.user.enabled
-                                      ? "Deshabilitar"
-                                      : "Habilitar")),
-                                  onPressed: () {
-                                    Navigator.pop(context, true);
-                                  },
-                                ),
-                                TextButton(
-                                  key: const ValueKey("btnCancelEnable"),
-                                  child: const Text('Cancelar'),
-                                  onPressed: () {
-                                    Navigator.pop(context, false);
-                                  },
-                                ),
-                              ],
-                            ),
-                          )).then((value) => {
-                        if (value)
-                          {
-                            context.read<UserBloc>().add(OnUserEnable(
-                                state.user.id, !state.user.enabled))
-                          }
-                      });
-                },
-              ),
-            ],
-          ),
-          const Divider(),
-          Row(
-            children: [
-              ElevatedButton(
+      return Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.switch_account_rounded),
+              title:
+                  Text(state.user.name, style: const TextStyle(fontSize: 22)),
+            ),
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Username: ${state.user.username}",
+                      style: const TextStyle(fontSize: 14))),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Email: ${state.user.email}",
+                      style: const TextStyle(fontSize: 14))),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                      "Estado: ${(state.user.enabled ? 'Habilitado' : 'Deshabilitado')}")),
+            ),
+            const Divider(),
+            Row(
+              children: [
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.delete),
+                  key: const ValueKey("btnDeleteOption"),
+                  label: const Text("Eliminar"),
                   onPressed: () {
-                    context
-                        .read<UserBloc>()
-                        .add(const OnUserListLoad("", "", "", 1));
+                    showDialog(
+                        context: context,
+                        builder: (context) => GestureDetector(
+                              onTap: () => Navigator.pop(context),
+                              child: AlertDialog(
+                                title:
+                                    const Text('¿Desea eliminar el usuario?'),
+                                content:
+                                    const Text('La eliminación es permanente'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    key: const ValueKey("btnConfirmDelete"),
+                                    child: const Text('Eliminar'),
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                    },
+                                  ),
+                                  TextButton(
+                                    key: const ValueKey("btnCancelDelete"),
+                                    child: const Text('Cancelar'),
+                                    onPressed: () {
+                                      Navigator.pop(context, false);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            )).then((value) => {
+                          if (value)
+                            {
+                              context
+                                  .read<UserBloc>()
+                                  .add(OnUserDelete(state.user.id))
+                            }
+                        });
                   },
-                  child: const Text("Volver"))
-            ],
-          ),
-          const Divider(),
-        ],
+                ),
+                const VerticalDivider(),
+                ElevatedButton.icon(
+                  icon: Icon(!state.user.enabled
+                      ? Icons.toggle_on
+                      : Icons.toggle_off_outlined),
+                  key: const ValueKey("btnEnableOption"),
+                  label:
+                      Text((state.user.enabled ? "Deshabilitar" : "Habilitar")),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => GestureDetector(
+                              onTap: () => Navigator.pop(context),
+                              child: AlertDialog(
+                                title: Text(
+                                    '¿Desea ${(state.user.enabled ? "deshabilitar" : "habilitar")} el usuario?'),
+                                content: const Text(
+                                    'Esta acción afecta el acceso del usuario al sistema'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    key: const ValueKey("btnConfirmEnable"),
+                                    child: Text((state.user.enabled
+                                        ? "Deshabilitar"
+                                        : "Habilitar")),
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                    },
+                                  ),
+                                  TextButton(
+                                    key: const ValueKey("btnCancelEnable"),
+                                    child: const Text('Cancelar'),
+                                    onPressed: () {
+                                      Navigator.pop(context, false);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            )).then((value) => {
+                          if (value)
+                            {
+                              context.read<UserBloc>().add(OnUserEnable(
+                                  state.user.id, !state.user.enabled))
+                            }
+                        });
+                  },
+                ),
+              ],
+            ),
+            const Divider(),
+            Row(
+              children: [
+                ElevatedButton.icon(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () {
+                      context
+                          .read<UserBloc>()
+                          .add(const OnUserListLoad("", "", "", 1));
+                    },
+                    label: const Text("Volver"))
+              ],
+            ),
+            const Divider(),
+          ],
+        ),
       );
     }
 
