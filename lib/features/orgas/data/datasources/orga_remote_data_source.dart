@@ -17,6 +17,8 @@ abstract class OrgaRemoteDataSource {
 
   Future<List<OrgaUserModel>> getOrgaUsers(String orgaId);
 
+  Future<List<OrgaUserModel>> getOrgaUser(String orgaId, String userId);
+
   Future<OrgaModel> addOrga(OrgaModel orga);
 
   Future<OrgaUserModel> addOrgaUser(OrgaUserModel orgaUser);
@@ -27,7 +29,7 @@ abstract class OrgaRemoteDataSource {
 
   Future<bool> enableOrga(String orgaId, bool enableOrDisable);
 
-  Future<OrgaUserModel> enableOrgaUser(
+  Future<bool> enableOrgaUser(
       String orgaId, String userId, bool enableOrDisable);
 
   Future<OrgaModel> updateOrga(String orgaId, OrgaModel orga);
@@ -145,6 +147,44 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
     }
   }
 
+  ///Entrega una organización a partir del Id de la organización
+  @override
+  Future<List<OrgaUserModel>> getOrgaUser(String orgaId, String userId) async {
+    final url = Uri.parse('${UrlBackend.base}/api/v1/orgauser/$orgaId/$userId');
+    final session = await localDataSource.getSavedSession();
+
+    http.Response resp = await client.get(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      final item = resObj['data']['items'][0];
+
+      List<OrgaUserModel> orgaUsers = [];
+
+      for (var item in resObj['data']['items']) {
+        List<String> roleslist = [];
+        for(var r in item['roles']){
+            roleslist.add(r['name']);
+        }
+        orgaUsers.add(OrgaUserModel(
+            userId: item["userId"].toString(),
+            orgaId: item["orgaId"].toString(),
+            roles: roleslist,
+            enabled: item["enabled"].toString().toLowerCase() == 'true',
+            builtIn: item["builtin"].toString().toLowerCase() == 'true'));
+      }
+
+      return Future.value(orgaUsers);
+    } else {
+      throw ServerException();
+    }
+  }
+
   ///Agrega un Orga recibiendo un OrgaModel
   @override
   Future<OrgaModel> addOrga(OrgaModel orga) async {
@@ -179,7 +219,7 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
     final url = Uri.parse('${UrlBackend.base}/api/v1/orga/$orgaId');
     final session = await localDataSource.getSavedSession();
 
-    http.Response resp = await http.delete(url, headers: {
+    http.Response resp = await client.delete(url, headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",
@@ -227,7 +267,7 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
         '${UrlBackend.base}/api/v1/orga/enable/$orgaId?enable=${enableOrDisable.toString()}');
     final session = await localDataSource.getSavedSession();
 
-    http.Response resp = await http.put(url, headers: {
+    http.Response resp = await client.put(url, headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",
@@ -248,13 +288,25 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
   ///En el parámetro [enableOrDisable] se especifica el nuevo valor de
   ///habilitación
   @override
-  Future<OrgaUserModel> enableOrgaUser(
+  Future<bool> enableOrgaUser(
       String orgaId, String userId, bool enableOrDisable) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    final url = Uri.parse(
+        '${UrlBackend.base}/api/v1/orgauser/enable/$orgaId/$userId?enable=${enableOrDisable.toString()}');
+    final session = await localDataSource.getSavedSession();
 
-    if (response.statusCode == 200) {
-      OrgaUserModel orgaUserModel = fakeListOrgaUsers.singleWhere(
+    http.Response resp = await client.put(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      return Future.value(
+          resObj['data']['items'][0].toString().toLowerCase() == 'true');
+
+      /*OrgaUserModel orgaUserModel = fakeListOrgaUsers.singleWhere(
           (element) => element.orgaId == orgaId && element.userId == userId);
 
       OrgaUserModel newOrgaUserModel = OrgaUserModel(
@@ -268,7 +320,7 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
           (element) => element.orgaId == orgaId && element.userId == userId);
       fakeListOrgaUsers[index] = newOrgaUserModel;
 
-      return newOrgaUserModel;
+      return newOrgaUserModel;*/
     } else {
       throw ServerException();
     }

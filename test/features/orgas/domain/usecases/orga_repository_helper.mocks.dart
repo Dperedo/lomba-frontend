@@ -109,6 +109,32 @@ class MockOrgaRepository extends _i1.Mock implements _i3.OrgaRepository {
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, List<_i7.OrgaUser>>>);
   @override
+  _i4.Future<_i2.Either<_i5.Failure, List<_i7.OrgaUser>>> getOrgaUser(
+    String? orgaId,
+    String? userId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getOrgaUser,
+          [
+            orgaId,
+            userId,
+          ],
+        ),
+        returnValue:
+            _i4.Future<_i2.Either<_i5.Failure, List<_i7.OrgaUser>>>.value(
+                _FakeEither_0<_i5.Failure, List<_i7.OrgaUser>>(
+          this,
+          Invocation.method(
+            #getOrgaUser,
+            [
+              orgaId,
+              userId,
+            ],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i7.OrgaUser>>>);
+  @override
   _i4.Future<_i2.Either<_i5.Failure, _i6.Orga>> addOrga(
     String? name,
     String? code,

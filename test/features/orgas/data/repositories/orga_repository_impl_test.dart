@@ -47,6 +47,13 @@ void main() {
       enabled: true,
       builtIn: true);
 
+  final tOrgaUserModelList = OrgaUserModel(
+      userId: newUserId,
+      orgaId: newOrgaId,
+      roles: const <String>[Roles.roleAdmin],
+      enabled: true,
+      builtIn: true);
+
   final tOrgaUser = OrgaUser(
       userId: newUserId,
       orgaId: newOrgaId,
@@ -396,7 +403,9 @@ void main() {
       () async {
         // arrange
         when(mockRemoteDataSource.enableOrgaUser(any, any, any))
-            .thenAnswer((realInvocation) async => tOrgaUserModel);
+            .thenAnswer((realInvocation) async => true);
+        when(mockRemoteDataSource.getOrgaUser(any, any))
+            .thenAnswer((realInvocation) async => <OrgaUserModel>[tOrgaUserModel]);//tOrgaUserModel);
 
         // act
         final result = await repository.enableOrgaUser(

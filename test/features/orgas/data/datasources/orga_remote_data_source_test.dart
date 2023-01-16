@@ -57,6 +57,16 @@ void main() {
     enabled: true,
     builtIn: true );
 
+  const testOrgaUserModelOne = OrgaUserModel(
+    userId: '00000001-0001-0001-0001-000000000001',
+    orgaId: '00000100-0100-0100-0100-000000000100',
+    roles: [''],
+    enabled: true,
+    builtIn: true );
+
+  const testGetOrgaUserResponseOne = 
+      '{"apiVersion":"1.0","method":"get","params":{"orgaId":"00000100-0100-0100-0100-000000000100","userId":"00000001-0001-0001-0001-000000000001"},"context":"geted by orga id","id":"54eb6d7b-ddcd-4406-8442-d1d4c6f653f0","_id":"54eb6d7b-ddcd-4406-8442-d1d4c6f653f0","data":{"items":[{"_id":"A0000001-0000-0000-1000-000000000000","id":"A0000001-0000-0000-1000-000000000000","orgaId":"00000100-0100-0100-0100-000000000100","userId":"00000001-0001-0001-0001-000000000001","roles":[{"name":"super"}],"enabled":true,"builtin":true,"created":"2023-01-11T15:50:27.211Z"}],"kind":"string","currentItemCount":1,"updated":"2023-01-16T19:27:45.948Z"}}';
+
   const testGetOrgaUserResponse = 
       '{"apiVersion":"1.0","method":"get","params":{"orgaId":"00000100-0100-0100-0100-000000000100"},"context":"geted by orga id","id":"581905aa-d46d-4cad-b960-12380acd9c3e","_id":"581905aa-d46d-4cad-b960-12380acd9c3e","data":{"items":[{"_id":"A0000001-0000-0000-1000-000000000000","id":"A0000001-0000-0000-1000-000000000000","orgaId":"00000100-0100-0100-0100-000000000100","userId":"00000001-0001-0001-0001-000000000001","roles":[{"name":"super"}],"enabled":true,"builtin":true,"created":"2023-01-11T15:50:27.211Z"}],"kind":"string","currentItemCount":1,"updated":"2023-01-13T19:23:11.241Z"}}';
 
@@ -76,7 +86,7 @@ void main() {
   };
 
 
-  group('obtener datos orga, orgas y orgausers', () {
+  group('obtener datos orga, orgas, orgauser y orgausers', () {
     test('obtener una organización', () async {
       //arrange
       when(mockHttpClient.get(any, headers: testHeaders)).thenAnswer(
@@ -121,6 +131,18 @@ void main() {
           .thenAnswer((realInvocation) async => testSession);
       //act
       final result = await dataSource.getOrgaUsers(orgaId);
+
+      //assert
+      expect(result, equals(<OrgaUserModel>[testOrgaUserModel]));
+    });
+    test('obtener una orgauser', () async {
+      //arrange
+      when(mockHttpClient.get(any, headers: testHeaders)).thenAnswer(
+          (realInvocation) async => http.Response(testGetOrgaUserResponseOne, 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+      //act
+      final result = await dataSource.getOrgaUser(testOrgaUserModel.orgaId, testOrgaUserModel.userId);
 
       //assert
       expect(result, equals(<OrgaUserModel>[testOrgaUserModel]));
@@ -262,7 +284,7 @@ void main() {
   group('habilitar datos orga y orgauser', () {
     test('habilitar una organización', () async {
       //arrange
-      when(mockHttpClient.delete(any, headers: testHeaders)).thenAnswer(
+      when(mockHttpClient.put(any, headers: testHeaders)).thenAnswer(
           (realInvocation) async => http.Response(testBoolResponse, 200));
       when(mockLocalDataSource.getSavedSession())
           .thenAnswer((realInvocation) async => testSession);
@@ -275,17 +297,17 @@ void main() {
     });
     test('habilitar una orgauser', () async {
       //arrange
-      when(mockHttpClient.delete(any, headers: testHeaders)).thenAnswer(
+      when(mockHttpClient.put(any, headers: testHeaders)).thenAnswer(
           (realInvocation) async => http.Response(testBoolResponse, 200));
       when(mockLocalDataSource.getSavedSession())
           .thenAnswer((realInvocation) async => testSession);
 
       //act
       final result = await dataSource.enableOrgaUser(
-          fakeListOrgas[1].id, fakeListOrgaUsers[1].userId, false);
+          testOrgaUserModel.orgaId, testOrgaUserModel.userId, false);
 
       //assert
-      expect(result.enabled, equals(false));
+      expect(result, equals(false));
     });
   });
 }

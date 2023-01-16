@@ -54,7 +54,7 @@ class RoleRemoteDataSourceImpl implements RoleRemoteDataSource {
     final url = Uri.parse('${UrlBackend.base}/api/v1/role/$name');
     final session = await localDataSource.getSavedSession();
 
-    http.Response resp = await http.get(url, headers: {
+    http.Response resp = await client.get(url, headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",
@@ -78,7 +78,7 @@ class RoleRemoteDataSourceImpl implements RoleRemoteDataSource {
         '${UrlBackend.base}/api/v1/role/enable/$name?enable=${enableOrDisable.toString()}');
     final session = await localDataSource.getSavedSession();
 
-    http.Response resp = await http.put(url, headers: {
+    http.Response resp = await client.put(url, headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",

@@ -160,6 +160,22 @@ class MockOrgaRemoteDataSourceImpl extends _i1.Mock
             _i7.Future<List<_i5.OrgaUserModel>>.value(<_i5.OrgaUserModel>[]),
       ) as _i7.Future<List<_i5.OrgaUserModel>>);
   @override
+  _i7.Future<List<_i5.OrgaUserModel>> getOrgaUser(
+    String? orgaId,
+    String? userId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getOrgaUser,
+          [
+            orgaId,
+            userId,
+          ],
+        ),
+        returnValue:
+            _i7.Future<List<_i5.OrgaUserModel>>.value(<_i5.OrgaUserModel>[]),
+      ) as _i7.Future<List<_i5.OrgaUserModel>>);
+  @override
   _i7.Future<_i4.OrgaModel> addOrga(_i4.OrgaModel? orga) => (super.noSuchMethod(
         Invocation.method(
           #addOrga,
@@ -227,7 +243,7 @@ class MockOrgaRemoteDataSourceImpl extends _i1.Mock
         returnValue: _i7.Future<bool>.value(false),
       ) as _i7.Future<bool>);
   @override
-  _i7.Future<_i5.OrgaUserModel> enableOrgaUser(
+  _i7.Future<bool> enableOrgaUser(
     String? orgaId,
     String? userId,
     bool? enableOrDisable,
@@ -241,18 +257,8 @@ class MockOrgaRemoteDataSourceImpl extends _i1.Mock
             enableOrDisable,
           ],
         ),
-        returnValue: _i7.Future<_i5.OrgaUserModel>.value(_FakeOrgaUserModel_3(
-          this,
-          Invocation.method(
-            #enableOrgaUser,
-            [
-              orgaId,
-              userId,
-              enableOrDisable,
-            ],
-          ),
-        )),
-      ) as _i7.Future<_i5.OrgaUserModel>);
+        returnValue: _i7.Future<bool>.value(false),
+      ) as _i7.Future<bool>);
   @override
   _i7.Future<_i4.OrgaModel> updateOrga(
     String? orgaId,

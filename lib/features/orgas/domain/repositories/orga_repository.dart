@@ -12,6 +12,7 @@ abstract class OrgaRepository {
       String filter, String fieldOrder, double pageNumber, int pageSize);
   Future<Either<Failure, Orga>> getOrga(String orgaId);
   Future<Either<Failure, List<OrgaUser>>> getOrgaUsers(String orgaId);
+  Future<Either<Failure, List<OrgaUser>>> getOrgaUser(String orgaId, String userId);
   Future<Either<Failure, Orga>> addOrga(String name, String code, bool enabled);
   Future<Either<Failure, OrgaUser>> addOrgaUser(
       String orgaId, String userId, List<String> roles, bool enabled);

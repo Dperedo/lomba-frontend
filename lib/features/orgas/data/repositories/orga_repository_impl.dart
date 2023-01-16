@@ -93,6 +93,28 @@ class OrgaRepositoryImpl implements OrgaRepository {
     }
   }
 
+  ///Entrega un [OrgaUser] según el Id de organización
+  @override
+  Future<Either<Failure, List<OrgaUser>>> getOrgaUser(String orgaId, String userId) async {
+    try {
+      final result = await remoteDataSource.getOrgaUser(orgaId, userId);
+
+      List<OrgaUser> list = [];
+
+      if (result.isNotEmpty) {
+        for (var element in result) {
+          list.add(element.toEntity());
+        }
+      }
+
+      return Right(list);
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(ConnectionFailure('Failed to connect to the network'));
+    }
+  }
+
   ///Agrega un nuevo Orga y se deben especificar los valores
   ///
   ///[name] es el nombre de la organización.
@@ -201,7 +223,19 @@ class OrgaRepositoryImpl implements OrgaRepository {
       final result = await remoteDataSource.enableOrgaUser(
           orgaId, userId, enableOrDisable);
 
-      return Right(result.toEntity());
+      if (result) {
+        final resultItem = await remoteDataSource.getOrgaUser(orgaId, userId);
+        List<OrgaUser> list = [];
+
+        if (resultItem.isNotEmpty) {
+          for (var element in resultItem) {
+            list.add(element.toEntity());
+          }
+        }
+
+      return Right(list[0]);
+      }
+      return const Left(ServerFailure(''));
     } on ServerException {
       return const Left(ServerFailure(''));
     } on SocketException {

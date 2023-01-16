@@ -108,7 +108,7 @@ void main() {
   group('habilitar rol', () {
     test('habilitar un rol', () async {
       //arrange
-      when(mockHttpClient.delete(any, headers: testHeaders)).thenAnswer(
+      when(mockHttpClient.put(any, headers: testHeaders)).thenAnswer(
           (realInvocation) async => http.Response(testBoolResponse, 200));
       when(mockLocalDataSource.getSavedSession())
           .thenAnswer((realInvocation) async => testSession);
