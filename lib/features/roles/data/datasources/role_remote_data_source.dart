@@ -1,13 +1,10 @@
 import 'dart:convert';
 
-import 'package:lomba_frontend/core/fakedata.dart';
+import 'package:http/http.dart' as http;
+import '../../../../core/data/datasources/local_data_source.dart';
 
 import '../../../../../core/constants.dart';
 import '../../../../../core/exceptions.dart';
-
-import 'package:http/http.dart' as http;
-
-import '../../../../core/data/datasources/local_data_source.dart';
 import '../models/role_model.dart';
 
 abstract class RoleRemoteDataSource {
@@ -26,7 +23,7 @@ class RoleRemoteDataSourceImpl implements RoleRemoteDataSource {
   @override
   Future<List<RoleModel>> getRoles() async {
     //parsea URL
-    final url = Uri.parse('${UrlBackend.base}/api/v1/orga/');
+    final url = Uri.parse('${UrlBackend.base}/api/v1/role/');
     final session = await localDataSource.getSavedSession();
 
     http.Response resp = await client.get(url, headers: {

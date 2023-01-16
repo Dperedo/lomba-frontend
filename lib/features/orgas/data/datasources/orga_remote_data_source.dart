@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/core/data/datasources/local_data_source.dart';
 import 'package:lomba_frontend/core/fakedata.dart';
-import 'package:lomba_frontend/features/roles/data/models/role_model.dart';
 
 import '../../../../../core/constants.dart';
 import '../../../../../core/exceptions.dart';

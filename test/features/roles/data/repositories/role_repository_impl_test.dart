@@ -120,6 +120,8 @@ void main() {
       () async {
         // arrange
         when(mockRemoteDataSource.enableRole(any, any))
+            .thenAnswer((realInvocation) async => true);
+        when(mockRemoteDataSource.getRole(any))
             .thenAnswer((realInvocation) async => tRolModel);
 
         // act

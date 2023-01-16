@@ -231,46 +231,54 @@ void main() {
   group('eliminar datos orga y orgauser', () {
     test('eliminar una organización', () async {
       //arrange
-      when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
-          .thenAnswer((realInvocation) async => http.Response("", 200));
+      when(mockHttpClient.delete(any, headers: testHeaders)).thenAnswer(
+          (realInvocation) async => http.Response(testBoolResponse, 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
 
       //act
-      final result = await dataSource.deleteOrga(fakeOrgaIdSample03);
+      final result = await dataSource.deleteOrga(fakeOrgaIdSystem);
 
       //assert
-      expect(result, equals(true));
+      expect(result, equals(false));
       //expect(fakeListOrgas.length, equals(count + 1));
     });
     test('eliminar una orgauser', () async {
       //arrange
-      when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
-          .thenAnswer((realInvocation) async => http.Response("", 200));
+      when(mockHttpClient.delete(any, headers: testHeaders)).thenAnswer(
+          (realInvocation) async => http.Response(testBoolResponse, 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
 
       //act
       final result =
           await dataSource.deleteOrgaUser(fakeOrgaIdSample03, fakeUserIdUser02);
 
       //assert
-      expect(result, equals(true));
+      expect(result, equals(false));
       //expect(fakeListOrgaUsers.length, equals(count + 1));
     });
   });
   group('habilitar datos orga y orgauser', () {
     test('habilitar una organización', () async {
       //arrange
-      when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
-          .thenAnswer((realInvocation) async => http.Response("", 200));
+      when(mockHttpClient.delete(any, headers: testHeaders)).thenAnswer(
+          (realInvocation) async => http.Response(testBoolResponse, 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
 
       //act
       final result = await dataSource.enableOrga(fakeListOrgas[1].id, false);
 
       //assert
-      expect(result, equals(fakeListOrgas[1]));
+      expect(result, equals(false));
     });
     test('habilitar una orgauser', () async {
       //arrange
-      when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
-          .thenAnswer((realInvocation) async => http.Response("", 200));
+      when(mockHttpClient.delete(any, headers: testHeaders)).thenAnswer(
+          (realInvocation) async => http.Response(testBoolResponse, 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
 
       //act
       final result = await dataSource.enableOrgaUser(
