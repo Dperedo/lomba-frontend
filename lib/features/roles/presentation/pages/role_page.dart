@@ -35,6 +35,11 @@ class RolesPage extends StatelessWidget {
         child: CircularProgressIndicator(),
       );
     }
+    if (state is RoleError) {
+      return Center(
+        child: Text(state.message)
+      );
+    }
     if (state is RoleListLoaded) {
       return ListView.builder(
         shrinkWrap: true,

@@ -74,7 +74,7 @@ void main() {
       '{"apiVersion":"1.0","method":"get","params":{"orgaId":"00000200-0200-0200-0200-000000000200"},"context":"geted by orga id","id":"480893fa-0b81-4ce6-9e2f-e4439ce0ba9a","_id":"480893fa-0b81-4ce6-9e2f-e4439ce0ba9a","data":{"items":[{"_id":"00000200-0200-0200-0200-000000000200","id":"00000200-0200-0200-0200-000000000200","name":"Default","code":"def","builtin":true,"enabled":true}],"kind":"string","currentItemCount":1,"updated":"2023-01-13T15:25:05.437Z"}}';
 
   const testBoolResponse =
-      '{"apiVersion":"1.0","method":"put","params":{"id":"00000200-0200-0200-0200-000000000200","enable":"false"},"context":"orga disabled","id":"38c8cb4d-a460-4056-b5ea-d1bcc323de39","_id":"38c8cb4d-a460-4056-b5ea-d1bcc323de39","data":{"items":[{"value":false}],"kind":"object","currentItemCount":1,"updated":"2023-01-13T15:01:56.006Z"}}';
+      '{"apiVersion":"1.0","method":"put","params":{"id":"00000200-0200-0200-0200-000000000200","enable":"true"},"context":"orga enabled","id":"cc0794b7-7bea-49a7-92e6-3b0dfad86058","_id":"cc0794b7-7bea-49a7-92e6-3b0dfad86058","data":{"items":[true],"kind":"boolean","currentItemCount":1,"updated":"2023-01-16T22:49:38.210Z"}}';
 
   const testSession = SessionModel(
       token: SystemKeys.tokenSuperAdmin2023, name: 'Súper', username: 'super');
@@ -262,7 +262,7 @@ void main() {
       final result = await dataSource.deleteOrga(fakeOrgaIdSystem);
 
       //assert
-      expect(result, equals(false));
+      expect(result, equals(true));
       //expect(fakeListOrgas.length, equals(count + 1));
     });
     test('eliminar una orgauser', () async {
@@ -277,7 +277,7 @@ void main() {
           await dataSource.deleteOrgaUser(fakeOrgaIdSample03, fakeUserIdUser02);
 
       //assert
-      expect(result, equals(false));
+      expect(result, equals(true));
       //expect(fakeListOrgaUsers.length, equals(count + 1));
     });
   });
@@ -293,7 +293,7 @@ void main() {
       final result = await dataSource.enableOrga(fakeListOrgas[1].id, false);
 
       //assert
-      expect(result, equals(false));
+      expect(result, equals(true));
     });
     test('habilitar una orgauser', () async {
       //arrange
@@ -307,7 +307,7 @@ void main() {
           testOrgaUserModel.orgaId, testOrgaUserModel.userId, false);
 
       //assert
-      expect(result, equals(false));
+      expect(result, equals(true));
     });
   });
 }
