@@ -306,21 +306,6 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
       return Future.value(
           resObj['data']['items'][0].toString().toLowerCase() == 'true');
 
-      /*OrgaUserModel orgaUserModel = fakeListOrgaUsers.singleWhere(
-          (element) => element.orgaId == orgaId && element.userId == userId);
-
-      OrgaUserModel newOrgaUserModel = OrgaUserModel(
-          orgaId: orgaUserModel.orgaId,
-          userId: orgaUserModel.userId,
-          roles: orgaUserModel.roles,
-          enabled: enableOrDisable,
-          builtIn: orgaUserModel.builtIn);
-
-      int index = fakeListOrgaUsers.indexWhere(
-          (element) => element.orgaId == orgaId && element.userId == userId);
-      fakeListOrgaUsers[index] = newOrgaUserModel;
-
-      return newOrgaUserModel;*/
     } else {
       throw ServerException();
     }
