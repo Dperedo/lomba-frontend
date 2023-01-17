@@ -34,6 +34,11 @@ class UsersPage extends StatelessWidget {
         child: CircularProgressIndicator(),
       );
     }
+    if (state is UserError) {
+      return Center(
+        child: Text(state.message)
+      );
+    }
     if (state is UserListLoaded) {
       return ListView.builder(
         shrinkWrap: true,

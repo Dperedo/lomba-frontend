@@ -53,34 +53,43 @@ class OrgasPage extends StatelessWidget {
         itemCount: state.orgas.length,
         itemBuilder: (context, index) {
           return Column(
-          children: [
-              Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: Center(
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: TextButton(
-                              child: Center(
-                                child: Text(
-                                  state.orgas[index].name,
-                                ),
-                              ),
-                              onPressed: () {
-                                context
-                                    .read<OrgaBloc>()
-                                    .add(OnOrgaLoad(state.orgas[index].id));
-                              },
-                            )),
-                      ))
-                    ],
-                  )),
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                      child: TextButton(
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    leading: const Icon(Icons.switch_account),
+                                    title: Text(
+                                      state.orgas[index].name,
+                                      style: const TextStyle(fontSize: 18),
+                                    ),
+                                    subtitle: Text(
+                                        '${state.orgas[index].name} / ${state.orgas[index].code}',
+                                        style: const TextStyle(fontSize: 12)),
+                                  ),
+                                ],
+                              )),
+                          onPressed: () {
+                            context
+                                .read<OrgaBloc>()
+                                .add(OnOrgaLoad(state.orgas[index].id));
+                          })),
+                  Icon(
+                      state.orgas[index].enabled
+                          ? Icons.toggle_on
+                          : Icons.toggle_off_outlined,
+                      size: 40)
+                ],
+              ),
               const Divider()
-          ],
-        );
-        }
+            ],
+          );
+        },
       );
     }
 

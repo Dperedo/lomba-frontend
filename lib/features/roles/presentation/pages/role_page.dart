@@ -47,29 +47,35 @@ class RolesPage extends StatelessWidget {
         itemBuilder: (context, index) {
           return Column(
             children: [
-              Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: Center(
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: TextButton(
-                              child: Center(
-                                child: Text(
-                                  state.roles[index].name,
-                                ),
-                              ),
-                              onPressed: () {
-                                context
-                                    .read<RoleBloc>()
-                                    .add(OnRoleLoad(state.roles[index].name));
-                              },
-                            )),
-                      ))
-                    ],
-                  )),
+              Row(
+                children: [
+                  Expanded(
+                      child: TextButton(
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    leading: const Icon(Icons.switch_account),
+                                    title: Text(
+                                      state.roles[index].name,
+                                      style: const TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                ],
+                              )),
+                          onPressed: () {
+                            context
+                                .read<RoleBloc>()
+                                .add(OnRoleLoad(state.roles[index].name));
+                          })),
+                  Icon(
+                      state.roles[index].enabled
+                          ? Icons.toggle_on
+                          : Icons.toggle_off_outlined,
+                      size: 40)
+                ],
+              ),
               const Divider()
             ],
           );
