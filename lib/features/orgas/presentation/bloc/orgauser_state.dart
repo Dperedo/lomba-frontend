@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../users/domain/entities/user.dart';
 import '../../domain/entities/orgauser.dart';
 
 ///Interfaz de estado Bloc de usuarios
@@ -18,10 +19,12 @@ class OrgaUserLoading extends OrgaUserState {}
 
 ///Estado con la lista de orga-users cargada
 class OrgaUserListLoaded extends OrgaUserState {
+  final List<User> users;
   final List<OrgaUser> orgaUsers;
-  const OrgaUserListLoaded(this.orgaUsers);
+  final String orgaId;
+  const OrgaUserListLoaded(this.orgaId, this.users, this.orgaUsers);
   @override
-  List<Object> get props => [orgaUsers];
+  List<Object> get props => [users, orgaId, orgaUsers];
 }
 
 ///Estado para mostrar las opciones que permiten agregar una nueva relación
