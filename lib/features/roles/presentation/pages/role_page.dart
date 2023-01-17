@@ -56,7 +56,7 @@ class RolesPage extends StatelessWidget {
                               child: Column(
                                 children: [
                                   ListTile(
-                                    leading: const Icon(Icons.switch_account),
+                                    leading: const Icon(Icons.key_outlined),
                                     title: Text(
                                       state.roles[index].name,
                                       style: const TextStyle(fontSize: 18),
