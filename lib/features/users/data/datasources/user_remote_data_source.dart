@@ -32,7 +32,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   Future<List<UserModel>> getUsers(String orgaId, String filter,
       String fieldOrder, double pageNumber, int pageSize) async {
     //parsea URL
-    orgaId = '00000200-0200-0200-0200-000000000200'; //DEFAULT
+
     final url = Uri.parse('${UrlBackend.base}/api/v1/user/byorga/$orgaId');
     final session = await localDataSource.getSavedSession();
 

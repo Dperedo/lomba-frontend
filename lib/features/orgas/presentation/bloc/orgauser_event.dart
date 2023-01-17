@@ -44,6 +44,17 @@ class OnOrgaUserEdit extends OrgaUserEvent {
   List<Object> get props => [orgaId, userId, roles, enabled];
 }
 
+///Evento para mostrar ventana de edición de asociación orga-user /role
+class OnOrgaUserPrepareForEdit extends OrgaUserEvent {
+  final String orgaId;
+  final String userId;
+
+  const OnOrgaUserPrepareForEdit(this.orgaId, this.userId);
+
+  @override
+  List<Object> get props => [orgaId, userId];
+}
+
 ///Evento que procede a habilitar o deshabilitar una relación orga-user
 class OnOrgaUserEnable extends OrgaUserEvent {
   final String orgaId;

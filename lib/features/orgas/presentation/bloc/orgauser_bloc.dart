@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/add_orgauser.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/delete_orgauser.dart';
@@ -6,8 +8,9 @@ import 'package:lomba_frontend/features/orgas/domain/usecases/get_orgausers.dart
 import 'package:lomba_frontend/features/orgas/domain/usecases/update_orgauser.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../users/domain/entities/user.dart';
+import '../../../users/domain/usecases/get_users.dart';
 import '../../domain/entities/orgauser.dart';
-
 import 'orgauser_event.dart';
 import 'orgauser_state.dart';
 
@@ -20,16 +23,26 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
   final EnableOrgaUser _enableOrgaUser;
   final GetOrgaUsers _getOrgaUsers;
   final UpdateOrgaUser _updateOrgaUser;
+  final GetUsers _getUsers;
 
   OrgaUserBloc(this._addOrgaUser, this._deleteOrgaUser, this._enableOrgaUser,
-      this._getOrgaUsers, this._updateOrgaUser)
+      this._getOrgaUsers, this._updateOrgaUser, this._getUsers)
       : super(OrgaUserStart()) {
     on<OnOrgaUserListLoad>((event, emit) async {
       emit(OrgaUserLoading());
-      final result = await _getOrgaUsers.execute(event.id);
+      final result = await _getUsers.execute(event.id, '', '', 1, 10);
 
-      result.fold((l) => emit(OrgaUserError(l.message)),
-          (r) => {emit(OrgaUserListLoaded(r))});
+      final resultOU = await _getOrgaUsers.execute(event.id);
+
+      List<User> listUsers = [];
+      result.fold(
+          (l) => emit(OrgaUserError(l.message)), (r) => {listUsers = r});
+
+      List<OrgaUser> listOrgaUsers = [];
+      resultOU.fold(
+          (l) => emit(OrgaUserError(l.message)), (r) => {listOrgaUsers = r});
+
+      emit(OrgaUserListLoaded(event.id, listUsers, listOrgaUsers));
     });
     on<OnOrgaUserAdd>((event, emit) async {
       emit(OrgaUserLoading());
@@ -69,6 +82,22 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
       final result = await _deleteOrgaUser.execute(event.orgaId, event.userId);
       result.fold((l) => emit(OrgaUserError(l.message)),
           (r) => {emit(OrgaUserStart())});
+    });
+    on<OnOrgaUserPrepareForEdit>((event, emit) async {
+      emit(OrgaUserLoading());
+
+      final orgaUserResult = await _getOrgaUsers.execute(event.orgaId);
+
+      List<OrgaUser> listOrgaUsers = [];
+
+      orgaUserResult.fold(
+          (l) => {emit(OrgaUserError(l.message))},
+          (r) => listOrgaUsers =
+              r.where((element) => element.userId == event.userId).toList());
+
+      if (listOrgaUsers.isNotEmpty) {
+        emit(OrgaUserEditing(listOrgaUsers[0]));
+      }
     });
   }
 

@@ -19,6 +19,10 @@ class UserRepositoryImpl implements UserRepository {
   Future<Either<Failure, List<User>>> getUsers(String orgaId, String filter,
       String fieldOrder, double pageNumber, int pageSize) async {
     try {
+      if (orgaId == "") {
+        orgaId = '00000200-0200-0200-0200-000000000200';
+      } // DEFAULT
+
       final result = await remoteDataSource.getUsers(
           orgaId, filter, fieldOrder, pageNumber, pageSize);
 
