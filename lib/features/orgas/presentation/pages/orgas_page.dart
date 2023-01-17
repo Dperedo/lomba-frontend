@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/core/presentation/bloc/checkbox_cubit.dart';
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orga_event.dart';
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orgauser_event.dart';
 import 'package:lomba_frontend/features/orgas/presentation/widgets/tap_to_expand.dart';
 import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
 
 import '../../../../core/fakedata.dart';
+import '../../../users/domain/entities/user.dart';
 import '../../domain/entities/orgauser.dart';
 import '../bloc/orga_bloc.dart';
 import '../bloc/orga_state.dart';
 import '../bloc/orgauser_bloc.dart';
+import '../bloc/orgauser_checkboxes_cubit.dart';
 import '../bloc/orgauser_state.dart';
 
 ///Página de organizaciones que inicia con la lista de organizaciones
@@ -251,63 +254,89 @@ class OrgasPage extends StatelessWidget {
     return AppBar(title: const Text("Organizaciones"));
   }
 
-  Widget _showEditingOrgaUserDialog(BuildContext context, OrgaUser orgaUser) {
-    return Dialog(
-      child: Card(
-        semanticContainer: true,
-        elevation: 5,
-        margin: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const Text("Asociación habilitada: "),
-                Checkbox(
-                    value: orgaUser.enabled,
-                    onChanged: ((value) => {value = value})),
-                ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.delete),
-                    label: const Text("Eliminar asociación"))
-              ],
-            ),
-            ListView.builder(
-                shrinkWrap: true,
-                itemCount: fakeRoles.length,
-                itemBuilder: (context, index) {
-                  return CheckboxListTile(
-                      title: Text(
-                        fakeRoles[index].name,
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                      value: orgaUser.roles
-                          .contains(fakeRoles[index].name.toString()),
-                      onChanged: ((value) => {}));
-                }),
-            Center(
-              child: Row(
+  Widget _showEditingOrgaUserDialog(
+      BuildContext context, OrgaUser orgaUser, User user) {
+    return BlocProvider<OrgaUserCheckBoxesCubit>(
+      create: (context) => OrgaUserCheckBoxesCubit(),
+      child: Dialog(
+        child: Container(
+          height: 400,
+          width: 500,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child:
+                BlocBuilder<OrgaUserCheckBoxesCubit, OrgaUserCheckBoxesState>(
+                    builder: (context, state) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: Center(
-                      child: Row(
-                        children: [
-                          ElevatedButton.icon(
-                              icon: const Icon(Icons.save),
-                              onPressed: () {},
-                              label: const Text("Guardar")),
-                          const VerticalDivider(),
-                          ElevatedButton.icon(
-                              icon: const Icon(Icons.cancel),
-                              onPressed: () {},
-                              label: const Text("Cancelar"))
-                        ],
-                      ),
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(user.name,
+                          style: const TextStyle(fontSize: 18))),
+                  const VerticalDivider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Asociación habilitada: "),
+                      Checkbox(
+                          value: state.checks["enabled"],
+                          onChanged: ((value) => {
+                                context
+                                    .read<OrgaUserCheckBoxesCubit>()
+                                    .changeValue("enabled", value!)
+                              })),
+                      ElevatedButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(Icons.delete),
+                          label: const Text("Eliminar asociación"))
+                    ],
+                  ),
+                  const VerticalDivider(),
+                  SizedBox(
+                    width: 300,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: fakeRoles.length,
+                          itemBuilder: (context, index) {
+                            return CheckboxListTile(
+                                title: Text(
+                                  fakeRoles[index].name,
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                value: state
+                                    .checks[fakeRoles[index].name.toString()],
+                                onChanged: ((value) => {
+                                      context
+                                          .read<OrgaUserCheckBoxesCubit>()
+                                          .changeValue(
+                                              fakeRoles[index].name.toString(),
+                                              value!)
+                                    }));
+                          }),
                     ),
+                  ),
+                  const VerticalDivider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton.icon(
+                          icon: const Icon(Icons.save),
+                          onPressed: () {},
+                          label: const Text("Guardar")),
+                      const VerticalDivider(),
+                      ElevatedButton.icon(
+                          icon: const Icon(Icons.cancel),
+                          onPressed: () {},
+                          label: const Text("Cancelar"))
+                    ],
                   )
                 ],
-              ),
-            )
-          ],
+              );
+            }),
+          ),
         ),
       ),
     );
@@ -365,7 +394,8 @@ class OrgasPage extends StatelessWidget {
                                                     .where((element) =>
                                                         element.userId ==
                                                         state.users[index].id)
-                                                    .first)));
+                                                    .first,
+                                                state.users[index])));
                                     /*
                                     context
                                         .read<OrgaUserBloc>()

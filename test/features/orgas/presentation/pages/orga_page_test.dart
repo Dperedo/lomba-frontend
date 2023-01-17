@@ -13,6 +13,7 @@ import 'package:lomba_frontend/features/orgas/presentation/bloc/orgauser_bloc.da
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orgauser_event.dart';
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orgauser_state.dart';
 import 'package:lomba_frontend/features/orgas/presentation/pages/orgas_page.dart';
+import 'package:lomba_frontend/features/users/domain/entities/user.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockOrgaBloc extends MockBloc<OrgaEvent, OrgaState> implements OrgaBloc {}
@@ -77,6 +78,7 @@ void main() {
     );
   }
 */
+  final tUser2 = fakeListUsers[1].toEntity();
   final tOrga2 = fakeListOrgas[1].toEntity();
   final tListOrgaUser = fakeListOrgaUsers
       .where(
@@ -205,14 +207,14 @@ void main() {
     testWidgets('mostrar lista de usuarios al clic del botón',
         (WidgetTester tester) async {
       when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2));
-      when(() => mockOrgaUserBloc.state)
-          .thenReturn(OrgaUserListLoaded(tListOrgaUser));
+      when(() => mockOrgaUserBloc.state).thenReturn(
+          OrgaUserListLoaded(tOrga2.id, <User>[tUser2], tListOrgaUser));
 
       // act
       await tester.pumpWidget(makeTestableWidget(const OrgasPage()));
 
       Finder listItemFirstUser =
-          find.text(tListOrgaUser[0].userId); //por ahora sólo tenemos el ID
+          find.text(tUser2.name); //por ahora sólo tenemos el ID
 
       //assert
       expect(listItemFirstUser, findsOneWidget);
