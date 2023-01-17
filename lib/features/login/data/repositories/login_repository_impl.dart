@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:lomba_frontend/core/data/models/session_model.dart';
 
 import '../../../../core/data/datasources/local_data_source.dart';

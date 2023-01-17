@@ -1,4 +1,7 @@
+import 'package:jwt_decode/jwt_decode.dart';
+
 import '../../domain/entities/session.dart';
+import '../../validators.dart';
 
 ///Modelo de la Sesión de usuario.
 ///
@@ -26,4 +29,26 @@ class SessionModel extends Session {
   ///Atributo con las propiedades que utilizará el Equalable para comparar
   @override
   List<Object> get props => [token, username, name];
+
+  String? getOrgaId() {
+    if (Validators.validateToken(token)) {
+      final payload = Jwt.parseJwt(token);
+
+      if (payload.containsKey("orgaId") && payload["orgaId"].toString() != "") {
+        return payload["orgaId"].toString();
+      }
+    }
+    return null;
+  }
+
+  String? getUserId() {
+    if (Validators.validateToken(token)) {
+      final payload = Jwt.parseJwt(token);
+
+      if (payload.containsKey("userId") && payload["userId"].toString() != "") {
+        return payload["userId"].toString();
+      }
+    }
+    return null;
+  }
 }

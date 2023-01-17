@@ -13,7 +13,6 @@ class Session extends Equatable {
   final String token;
   final String username;
   final String name;
-
   @override
   List<Object> get props => [token, username, name];
 }
