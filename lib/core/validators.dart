@@ -37,6 +37,37 @@ class Validators {
     return null;
   }
 
+  ///Validación de name
+  ///
+  ///Debe no ser vacío y cumplir con un largo mínimo.
+  static String? validateName(String name) {
+    if (name.isEmpty) {
+      return "Campo Requerido";
+    }
+
+    if (name.length < 4) {
+      return "Por favor ingrese minimo 4 caracteres";
+    }
+
+    return null;
+  }
+
+  static String? validatePasswordEqual(String repeatpassword, String password) {
+    if (repeatpassword.isEmpty) {
+      return "Campo Requerido";
+    }
+
+    if (repeatpassword.length < 4) {
+      return "Por favor ingresa una contraseña de al menos 4 caracteres";
+    }
+
+    if (repeatpassword != password) {
+      return "Por favor ingresa una contraseña igual a la password anterior";
+    }
+
+    return null;
+  }
+
   ///Validación de token de usuario.
   ///
   ///Debe no ser vacío, estar vigente (no expirado) y contener la clave "userId"

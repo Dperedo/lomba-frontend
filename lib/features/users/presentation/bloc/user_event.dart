@@ -33,12 +33,20 @@ class OnUserAdd extends UserEvent {
   final String name;
   final String username;
   final String email;
-  final bool enabled;
+  final String orgaId;
+  final String password;
+  final String role;
 
-  const OnUserAdd(this.name, this.username, this.email, this.enabled);
+  const OnUserAdd(this.name, this.username, this.email, this.orgaId, this.password, this.role);
 
   @override
-  List<Object> get props => [name, username, email, enabled];
+  List<Object> get props => [name, username, email, orgaId, password, role];
+}
+
+class OnUserPrepareForAdd extends UserEvent {
+
+  @override
+  List<Object> get props => [];
 }
 
 class OnUserEdit extends UserEvent {
