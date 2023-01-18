@@ -1,8 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/constants.dart';
 
+import '../../domain/entities/orgauser.dart';
+
 class OrgaUserCheckBoxesCubit extends Cubit<OrgaUserCheckBoxesState> {
-  OrgaUserCheckBoxesCubit() : super(OrgaUserCheckBoxesState("enabled", false));
+  OrgaUserCheckBoxesCubit(OrgaUser orgaUser)
+      : super(OrgaUserCheckBoxesState("enabled", false)) {
+    state.checks["enabled"] = orgaUser.enabled;
+    for (var element in orgaUser.roles) {
+      state.checks[element] = true;
+    }
+  }
 
   void changeValue(String name, bool value) {
     emit(state.copyWith(name: name, changeState: value));
@@ -20,8 +28,11 @@ class OrgaUserCheckBoxesCubit extends Cubit<OrgaUserCheckBoxesState> {
 }
 
 class OrgaUserCheckBoxesState {
-  Map<String, bool> checks = [] as Map<String, bool>;
+  Map<String, bool> checks = <String, bool>{};
+  late bool deleted;
   OrgaUserCheckBoxesState(String name, bool changeState) {
+    checks.clear();
+    deleted = false;
     checks.addEntries(<String, bool>{"enabled": false}.entries);
     Roles.toList().forEach((element) {
       checks.addEntries(<String, bool>{element: false}.entries);
@@ -31,8 +42,11 @@ class OrgaUserCheckBoxesState {
 
   OrgaUserCheckBoxesState copyWith(
       {required String name, required bool changeState}) {
-    checks[name] = changeState;
+    final ous = OrgaUserCheckBoxesState(name, changeState);
+    ous.checks = checks;
 
-    return this;
+    ous.checks[name] = changeState;
+
+    return ous;
   }
 }

@@ -63,10 +63,28 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
           enabled: event.enabled,
           builtIn: false);
 
+      bool isUpdated = false;
+
       final result =
           await _updateOrgaUser.execute(event.orgaId, event.userId, orgaUser);
-      result.fold((l) => emit(OrgaUserError(l.message)),
-          (r) => {emit(OrgaUserStart())});
+      result.fold(
+          (l) => emit(OrgaUserError(l.message)), (r) => {isUpdated = true});
+
+      if (isUpdated) {
+        final resUsers = await _getUsers.execute(event.orgaId, '', '', 1, 10);
+
+        final resultOU = await _getOrgaUsers.execute(event.orgaId);
+
+        List<User> listUsers = [];
+        resUsers.fold(
+            (l) => emit(OrgaUserError(l.message)), (r) => {listUsers = r});
+
+        List<OrgaUser> listOrgaUsers = [];
+        resultOU.fold(
+            (l) => emit(OrgaUserError(l.message)), (r) => {listOrgaUsers = r});
+
+        emit(OrgaUserListLoaded(event.orgaId, listUsers, listOrgaUsers));
+      }
     });
     on<OnOrgaUserEnable>((event, emit) async {
       emit(OrgaUserLoading());
@@ -79,9 +97,15 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
     on<OnOrgaUserDelete>((event, emit) async {
       emit(OrgaUserLoading());
 
+      bool isDeleted = false;
+
       final result = await _deleteOrgaUser.execute(event.orgaId, event.userId);
-      result.fold((l) => emit(OrgaUserError(l.message)),
-          (r) => {emit(OrgaUserStart())});
+      result.fold(
+          (l) => emit(OrgaUserError(l.message)), (r) => {isDeleted = r});
+
+      if (isDeleted) {
+        emit(OrgaUserStart());
+      }
     });
     on<OnOrgaUserPrepareForEdit>((event, emit) async {
       emit(OrgaUserLoading());

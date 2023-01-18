@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/core/presentation/bloc/checkbox_cubit.dart';
+import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orga_event.dart';
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orgauser_event.dart';
-import 'package:lomba_frontend/features/orgas/presentation/widgets/tap_to_expand.dart';
 import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
 
 import '../../../../core/fakedata.dart';
@@ -257,7 +256,7 @@ class OrgasPage extends StatelessWidget {
   Widget _showEditingOrgaUserDialog(
       BuildContext context, OrgaUser orgaUser, User user) {
     return BlocProvider<OrgaUserCheckBoxesCubit>(
-      create: (context) => OrgaUserCheckBoxesCubit(),
+      create: (context) => OrgaUserCheckBoxesCubit(orgaUser),
       child: Dialog(
         child: Container(
           height: 400,
@@ -287,7 +286,42 @@ class OrgasPage extends StatelessWidget {
                                     .changeValue("enabled", value!)
                               })),
                       ElevatedButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => GestureDetector(
+                                      onTap: () => Navigator.pop(context),
+                                      child: AlertDialog(
+                                        title: const Text(
+                                            '¿Desea eliminar la asociación?'),
+                                        content: const Text(
+                                            'Esta acción afecta el acceso de los usuarios al sistema'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            key: const ValueKey(
+                                                "btnConfirmDeleteOrgaUser"),
+                                            child: const Text("Eliminar"),
+                                            onPressed: () {
+                                              Navigator.pop(context, true);
+                                            },
+                                          ),
+                                          TextButton(
+                                            key: const ValueKey(
+                                                "btnCancelDeleteOrgaUser"),
+                                            child: const Text('Cancelar'),
+                                            onPressed: () {
+                                              Navigator.pop(context, false);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    )).then((value) {
+                              if (value) {
+                                state.deleted = true;
+                                Navigator.pop(context, state);
+                              }
+                            });
+                          },
                           icon: const Icon(Icons.delete),
                           label: const Text("Eliminar asociación"))
                     ],
@@ -324,12 +358,16 @@ class OrgasPage extends StatelessWidget {
                     children: [
                       ElevatedButton.icon(
                           icon: const Icon(Icons.save),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pop(context, state);
+                          },
                           label: const Text("Guardar")),
                       const VerticalDivider(),
                       ElevatedButton.icon(
                           icon: const Icon(Icons.cancel),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pop(context, null);
+                          },
                           label: const Text("Cancelar"))
                     ],
                   )
@@ -395,15 +433,48 @@ class OrgasPage extends StatelessWidget {
                                                         element.userId ==
                                                         state.users[index].id)
                                                     .first,
-                                                state.users[index])));
+                                                state.users[index]))).then(
+                                      (value) {
+                                        if (value != null) {
+                                          if ((value!
+                                                  as OrgaUserCheckBoxesState)
+                                              .deleted) {
+                                            //eliminar
+
+                                            context.read<OrgaUserBloc>().add(
+                                                OnOrgaUserDelete(state.orgaId,
+                                                    state.users[index].id));
+                                          } else {
+                                            //actualizar
+                                            List<String> roles = [];
+                                            bool enabled = (value!
+                                                    as OrgaUserCheckBoxesState)
+                                                .checks["enabled"]!;
+                                            Roles.toList().forEach((element) {
+                                              if ((value!
+                                                      as OrgaUserCheckBoxesState)
+                                                  .checks[element]!) {
+                                                roles.add(element);
+                                              }
+                                            });
+                                            context.read<OrgaUserBloc>().add(
+                                                OnOrgaUserEdit(
+                                                    state.orgaId,
+                                                    state.users[index].id,
+                                                    roles,
+                                                    enabled));
+                                          }
+                                        }
+                                      },
+                                    );
                                     /*
-                                    context
-                                        .read<OrgaUserBloc>()
-                                        .add(OnOrgaUserPrepareForEdit(
-                                          state.orgaId,
-                                          state.users[index].id,
-                                        ));
-                                        */
+                                      context
+                                          .read<OrgaUserBloc>()
+                                          .add(OnOrgaUserPrepareForEdit(
+                                            state.orgaId,
+                                            state.users[index].id,
+                                          ));
+                                          */
                                   })),
                           Icon(
                               (state.orgaUsers
