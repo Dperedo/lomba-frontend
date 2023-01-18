@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
+import 'package:lomba_frontend/features/orgas/data/models/orgauser_model.dart';
 import 'package:lomba_frontend/features/orgas/domain/entities/orgauser.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/add_orgauser.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/delete_orgauser.dart';
@@ -158,12 +159,17 @@ Future<void> main() async {
             .thenAnswer((_) async => Right(tOrgaUser));
         when(mockGetUsers.execute(newOrgaId, "", "", 1, 10))
             .thenAnswer((realInvocation) async => Right(<User>[tUser]));
+        when(mockGetOrgaUsers.execute(newOrgaId))
+            .thenAnswer((realInvocation) async => Right(<OrgaUser>[tOrgaUser]));
         return orgaUserBloc;
       },
       act: (bloc) => bloc.add(OnOrgaUserEdit(tOrgaUser.orgaId, tOrgaUser.userId,
           tOrgaUser.roles, tOrgaUser.enabled)),
       wait: const Duration(milliseconds: 500),
-      expect: () => [OrgaUserLoading, OrgaUserListLoaded],
+      expect: () => [
+        OrgaUserLoading(),
+        OrgaUserListLoaded(newOrgaId, <User>[tUser], <OrgaUser>[tOrgaUser])
+      ],
       verify: (bloc) {
         verify(mockUpdateOrgaUser.execute(
             tOrgaUser.orgaId, tOrgaUser.userId, tOrgaUser));
