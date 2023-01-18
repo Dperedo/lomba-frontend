@@ -156,12 +156,14 @@ Future<void> main() async {
         when(mockUpdateOrgaUser.execute(
                 tOrgaUser.orgaId, tOrgaUser.userId, tOrgaUser))
             .thenAnswer((_) async => Right(tOrgaUser));
+        when(mockGetUsers.execute(newOrgaId, "", "", 1, 10))
+            .thenAnswer((realInvocation) async => Right(<User>[tUser]));
         return orgaUserBloc;
       },
       act: (bloc) => bloc.add(OnOrgaUserEdit(tOrgaUser.orgaId, tOrgaUser.userId,
           tOrgaUser.roles, tOrgaUser.enabled)),
       wait: const Duration(milliseconds: 500),
-      expect: () => [OrgaUserLoading(), OrgaUserStart()],
+      expect: () => [OrgaUserLoading, OrgaUserListLoaded],
       verify: (bloc) {
         verify(mockUpdateOrgaUser.execute(
             tOrgaUser.orgaId, tOrgaUser.userId, tOrgaUser));

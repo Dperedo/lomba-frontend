@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -30,7 +32,8 @@ void main() {
   setUp(() {
     mockHttpClient = MockHttpClient();
     mockLocalDataSource = MockLocalDataSourceImpl();
-    dataSource = OrgaRemoteDataSourceImpl(client: mockHttpClient, localDataSource: mockLocalDataSource);
+    dataSource = OrgaRemoteDataSourceImpl(
+        client: mockHttpClient, localDataSource: mockLocalDataSource);
 
     orgaId = fakeListOrgas[0].id; //Sistema
     filteredSystemOrga = fakeListOrgas
@@ -51,26 +54,26 @@ void main() {
 
   const testOrgaUserId = '00000200-0200-0200-0200-000000000200';
   const testOrgaUserModel = OrgaUserModel(
-    userId: '00000001-0001-0001-0001-000000000001',
-    orgaId: '00000100-0100-0100-0100-000000000100',
-    roles: ['super'],
-    enabled: true,
-    builtIn: true );
+      userId: '00000001-0001-0001-0001-000000000001',
+      orgaId: '00000100-0100-0100-0100-000000000100',
+      roles: ['super'],
+      enabled: true,
+      builtIn: true);
 
   const testOrgaUserModelOne = OrgaUserModel(
-    userId: '00000001-0001-0001-0001-000000000001',
-    orgaId: '00000100-0100-0100-0100-000000000100',
-    roles: [''],
-    enabled: true,
-    builtIn: true );
+      userId: '00000001-0001-0001-0001-000000000001',
+      orgaId: '00000100-0100-0100-0100-000000000100',
+      roles: [''],
+      enabled: true,
+      builtIn: true);
 
-  const testGetOrgaUserResponseOne = 
+  const testGetOrgaUserResponseOne =
       '{"apiVersion":"1.0","method":"get","params":{"orgaId":"00000100-0100-0100-0100-000000000100","userId":"00000001-0001-0001-0001-000000000001"},"context":"geted by orga id","id":"54eb6d7b-ddcd-4406-8442-d1d4c6f653f0","_id":"54eb6d7b-ddcd-4406-8442-d1d4c6f653f0","data":{"items":[{"_id":"A0000001-0000-0000-1000-000000000000","id":"A0000001-0000-0000-1000-000000000000","orgaId":"00000100-0100-0100-0100-000000000100","userId":"00000001-0001-0001-0001-000000000001","roles":[{"name":"super"}],"enabled":true,"builtin":true,"created":"2023-01-11T15:50:27.211Z"}],"kind":"string","currentItemCount":1,"updated":"2023-01-16T19:27:45.948Z"}}';
 
-  const testGetOrgaUserResponse = 
+  const testGetOrgaUserResponse =
       '{"apiVersion":"1.0","method":"get","params":{"orgaId":"00000100-0100-0100-0100-000000000100"},"context":"geted by orga id","id":"581905aa-d46d-4cad-b960-12380acd9c3e","_id":"581905aa-d46d-4cad-b960-12380acd9c3e","data":{"items":[{"_id":"A0000001-0000-0000-1000-000000000000","id":"A0000001-0000-0000-1000-000000000000","orgaId":"00000100-0100-0100-0100-000000000100","userId":"00000001-0001-0001-0001-000000000001","roles":[{"name":"super"}],"enabled":true,"builtin":true,"created":"2023-01-11T15:50:27.211Z"}],"kind":"string","currentItemCount":1,"updated":"2023-01-13T19:23:11.241Z"}}';
 
-  const testGetResponse = 
+  const testGetResponse =
       '{"apiVersion":"1.0","method":"get","params":{"orgaId":"00000200-0200-0200-0200-000000000200"},"context":"geted by orga id","id":"480893fa-0b81-4ce6-9e2f-e4439ce0ba9a","_id":"480893fa-0b81-4ce6-9e2f-e4439ce0ba9a","data":{"items":[{"_id":"00000200-0200-0200-0200-000000000200","id":"00000200-0200-0200-0200-000000000200","name":"Default","code":"def","builtin":true,"enabled":true}],"kind":"string","currentItemCount":1,"updated":"2023-01-13T15:25:05.437Z"}}';
 
   const testBoolResponse =
@@ -84,7 +87,6 @@ void main() {
     "Content-Type": "application/json",
     "Authorization": "Bearer ${SystemKeys.tokenSuperAdmin2023}",
   };
-
 
   group('obtener datos orga, orgas, orgauser y orgausers', () {
     test('obtener una organización', () async {
@@ -126,7 +128,8 @@ void main() {
     test('obtener orgausers por orgaId', () async {
       //arrange
       when(mockHttpClient.get(any, headers: testHeaders)).thenAnswer(
-          (realInvocation) async => http.Response(testGetOrgaUserResponse, 200));
+          (realInvocation) async =>
+              http.Response(testGetOrgaUserResponse, 200));
       when(mockLocalDataSource.getSavedSession())
           .thenAnswer((realInvocation) async => testSession);
       //act
@@ -138,11 +141,13 @@ void main() {
     test('obtener una orgauser', () async {
       //arrange
       when(mockHttpClient.get(any, headers: testHeaders)).thenAnswer(
-          (realInvocation) async => http.Response(testGetOrgaUserResponseOne, 200));
+          (realInvocation) async =>
+              http.Response(testGetOrgaUserResponseOne, 200));
       when(mockLocalDataSource.getSavedSession())
           .thenAnswer((realInvocation) async => testSession);
       //act
-      final result = await dataSource.getOrgaUser(testOrgaUserModel.orgaId, testOrgaUserModel.userId);
+      final result = await dataSource.getOrgaUser(
+          testOrgaUserModel.orgaId, testOrgaUserModel.userId);
 
       //assert
       expect(result, equals(<OrgaUserModel>[testOrgaUserModel]));
@@ -194,16 +199,23 @@ void main() {
     });
     test('actualizar una orgauser', () async {
       //arrange
-      when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
-          .thenAnswer((realInvocation) async => http.Response("", 200));
-
-      //act
       OrgaUserModel toEdit = OrgaUserModel(
           orgaId: orgaIdSampleUpdate,
           userId: fakeUserIdUser01,
           roles: const <String>["admin"],
           enabled: true,
           builtIn: false);
+
+      final url = Uri.parse(
+          '${UrlBackend.base}/api/v1/orgauser/$orgaIdSampleUpdate/$fakeUserIdUser01');
+
+      when(mockHttpClient.put(url,
+              body: json.encode(toEdit), headers: testHeaders))
+          .thenAnswer((realInvocation) async => http.Response("", 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+      //act
+
       final result = await dataSource.updateOrgaUser(
           orgaIdSampleUpdate, fakeUserIdUser01, toEdit);
 
