@@ -11,6 +11,7 @@ import 'package:lomba_frontend/features/orgas/data/datasources/orga_remote_data_
 import 'package:lomba_frontend/core/data/models/session_model.dart';
 import 'package:lomba_frontend/features/orgas/data/models/orga_model.dart';
 import 'package:lomba_frontend/features/orgas/data/models/orgauser_model.dart';
+import 'package:lomba_frontend/features/roles/data/models/role_model.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -66,6 +67,9 @@ void main() {
       roles: [''],
       enabled: true,
       builtIn: true);
+
+  const testOrgaId01 = "00000100-0100-0100-0100-000000000100";
+  const testUserId01 = "00000001-0001-0001-0001-000000000001";
 
   const testGetOrgaUserResponseOne =
       '{"apiVersion":"1.0","method":"get","params":{"orgaId":"00000100-0100-0100-0100-000000000100","userId":"00000001-0001-0001-0001-000000000001"},"context":"geted by orga id","id":"54eb6d7b-ddcd-4406-8442-d1d4c6f653f0","_id":"54eb6d7b-ddcd-4406-8442-d1d4c6f653f0","data":{"items":[{"_id":"A0000001-0000-0000-1000-000000000000","id":"A0000001-0000-0000-1000-000000000000","orgaId":"00000100-0100-0100-0100-000000000100","userId":"00000001-0001-0001-0001-000000000001","roles":[{"name":"super"}],"enabled":true,"builtin":true,"created":"2023-01-11T15:50:27.211Z"}],"kind":"string","currentItemCount":1,"updated":"2023-01-16T19:27:45.948Z"}}';
@@ -199,29 +203,42 @@ void main() {
     });
     test('actualizar una orgauser', () async {
       //arrange
-      OrgaUserModel toEdit = OrgaUserModel(
-          orgaId: orgaIdSampleUpdate,
-          userId: fakeUserIdUser01,
-          roles: const <String>["admin"],
+      const toEdit = OrgaUserModel(
+          orgaId: testOrgaId01,
+          userId: testUserId01,
+          roles: <String>["super"],
           enabled: true,
-          builtIn: false);
+          builtIn: true);
+
+      List<RoleModel> listInRoles = [];
+      for (var element in toEdit.roles) {
+        listInRoles.add(RoleModel(name: element, enabled: true));
+      }
+
+      final Map<String, dynamic> orgaUserBackend = {
+        'orgaId': toEdit.orgaId,
+        'userId': toEdit.userId,
+        'roles': listInRoles,
+        'enabled': toEdit.enabled,
+      };
 
       final url = Uri.parse(
-          '${UrlBackend.base}/api/v1/orgauser/$orgaIdSampleUpdate/$fakeUserIdUser01');
+          '${UrlBackend.base}/api/v1/orgauser/${toEdit.orgaId}/${toEdit.userId}');
 
       when(mockHttpClient.put(url,
-              body: json.encode(toEdit), headers: testHeaders))
-          .thenAnswer((realInvocation) async => http.Response("", 200));
+              body: json.encode(orgaUserBackend), headers: testHeaders))
+          .thenAnswer((realInvocation) async =>
+              http.Response(testGetOrgaUserResponseOne, 200));
+
       when(mockLocalDataSource.getSavedSession())
           .thenAnswer((realInvocation) async => testSession);
       //act
 
-      final result = await dataSource.updateOrgaUser(
-          orgaIdSampleUpdate, fakeUserIdUser01, toEdit);
+      final result =
+          await dataSource.updateOrgaUser(toEdit.orgaId, toEdit.userId, toEdit);
 
       //assert
       expect(result, equals(toEdit));
-      expect(toEdit, equals(fakeListOrgaUsers[2]));
     });
   });
   group('agregar datos orga y orgauser', () {
