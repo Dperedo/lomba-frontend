@@ -3,9 +3,9 @@ import 'package:lomba_frontend/core/constants.dart';
 
 import '../../domain/entities/orgauser.dart';
 
-class OrgaUserCheckBoxesCubit extends Cubit<OrgaUserCheckBoxesState> {
-  OrgaUserCheckBoxesCubit(OrgaUser orgaUser)
-      : super(OrgaUserCheckBoxesState("enabled", false)) {
+class OrgaUserDialogEditCubit extends Cubit<OrgaUserDialogEditState> {
+  OrgaUserDialogEditCubit(OrgaUser orgaUser)
+      : super(OrgaUserDialogEditState("enabled", false)) {
     state.checks["enabled"] = orgaUser.enabled;
     for (var element in orgaUser.roles) {
       state.checks[element] = true;
@@ -27,10 +27,10 @@ class OrgaUserCheckBoxesCubit extends Cubit<OrgaUserCheckBoxesState> {
   }
 }
 
-class OrgaUserCheckBoxesState {
+class OrgaUserDialogEditState {
   Map<String, bool> checks = <String, bool>{};
   late bool deleted;
-  OrgaUserCheckBoxesState(String name, bool changeState) {
+  OrgaUserDialogEditState(String name, bool changeState) {
     checks.clear();
     deleted = false;
     checks.addEntries(<String, bool>{"enabled": false}.entries);
@@ -40,9 +40,9 @@ class OrgaUserCheckBoxesState {
     checks[name] = changeState;
   }
 
-  OrgaUserCheckBoxesState copyWith(
+  OrgaUserDialogEditState copyWith(
       {required String name, required bool changeState}) {
-    final ous = OrgaUserCheckBoxesState(name, changeState);
+    final ous = OrgaUserDialogEditState(name, changeState);
     ous.checks = checks;
 
     ous.checks[name] = changeState;

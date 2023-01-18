@@ -20,6 +20,9 @@ abstract class UserRemoteDataSource {
   Future<bool> enableUser(String userId, bool enableOrDisable);
 
   Future<UserModel> updateUser(String userId, UserModel user);
+
+  Future<List<UserModel>> getUsersNotInOrga(
+      String orgaId, List<dynamic> order, int pageNumber, int pageSize);
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
@@ -157,6 +160,43 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       fakeListUsers[index] = user;
 
       return user;
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<UserModel>> getUsersNotInOrga(
+      String orgaId, List<dynamic> order, int pageNumber, int pageSize) async {
+    //parsea URL
+
+    final url = Uri.parse(
+        '${UrlBackend.base}/api/v1/user/notinorga/$orgaId?sort=${json.encode(order)}&pageIndex=$pageNumber&itemsPerPage=$pageSize');
+
+    final session = await localDataSource.getSavedSession();
+
+    http.Response resp = await client.get(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      List<UserModel> users = [];
+
+      for (var item in resObj['data']['items']) {
+        users.add(UserModel(
+            id: item["id"].toString(),
+            name: item["name"].toString(),
+            username: item["username"].toString(),
+            email: item["email"].toString(),
+            enabled: item["enabled"].toString().toLowerCase() == 'true',
+            builtIn: item["builtin"].toString().toLowerCase() == 'true'));
+      }
+
+      return Future.value(users);
     } else {
       throw ServerException();
     }

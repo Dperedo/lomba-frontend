@@ -5,6 +5,7 @@ import 'package:flutter_guid/flutter_guid.dart';
 import 'package:lomba_frontend/features/users/data/datasources/user_remote_data_source.dart';
 import 'package:lomba_frontend/features/users/data/models/user_model.dart';
 
+import '../../../../core/data/models/sort_model.dart';
 import '../../../../core/exceptions.dart';
 import '../../../../core/failures.dart';
 import '../../domain/entities/user.dart';
@@ -25,6 +26,40 @@ class UserRepositoryImpl implements UserRepository {
 
       final result = await remoteDataSource.getUsers(
           orgaId, filter, fieldOrder, pageNumber, pageSize);
+
+      List<User> list = [];
+
+      if (result.isNotEmpty) {
+        for (var element in result) {
+          list.add(element.toEntity());
+        }
+      }
+
+      return Right(list);
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(ConnectionFailure('Failed to connect to the network'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<User>>> getUsersNotInOrga(
+      String orgaId, SortModel sortFields, int pageNumber, int pageSize) async {
+    try {
+      if (orgaId == "") {
+        orgaId = '00000200-0200-0200-0200-000000000200';
+      } // DEFAULT
+
+      List<dynamic> order = [];
+      if (sortFields.fieldsOrder != null) {
+        sortFields.fieldsOrder?.forEach((key, value) {
+          order.add([key, value == 1 ? value : -1]);
+        });
+      }
+
+      final result = await remoteDataSource.getUsersNotInOrga(
+          orgaId, order, pageNumber, pageSize);
 
       List<User> list = [];
 

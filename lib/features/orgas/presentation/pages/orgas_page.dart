@@ -11,7 +11,7 @@ import '../../domain/entities/orgauser.dart';
 import '../bloc/orga_bloc.dart';
 import '../bloc/orga_state.dart';
 import '../bloc/orgauser_bloc.dart';
-import '../bloc/orgauser_checkboxes_cubit.dart';
+import '../bloc/orgauser_dialog_edit_cubit.dart';
 import '../bloc/orgauser_state.dart';
 
 ///Página de organizaciones que inicia con la lista de organizaciones
@@ -255,8 +255,8 @@ class OrgasPage extends StatelessWidget {
 
   Widget _showEditingOrgaUserDialog(
       BuildContext context, OrgaUser orgaUser, User user) {
-    return BlocProvider<OrgaUserCheckBoxesCubit>(
-      create: (context) => OrgaUserCheckBoxesCubit(orgaUser),
+    return BlocProvider<OrgaUserDialogEditCubit>(
+      create: (context) => OrgaUserDialogEditCubit(orgaUser),
       child: Dialog(
         child: Container(
           height: 400,
@@ -264,7 +264,7 @@ class OrgasPage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(10),
             child:
-                BlocBuilder<OrgaUserCheckBoxesCubit, OrgaUserCheckBoxesState>(
+                BlocBuilder<OrgaUserDialogEditCubit, OrgaUserDialogEditState>(
                     builder: (context, state) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -282,7 +282,7 @@ class OrgasPage extends StatelessWidget {
                           value: state.checks["enabled"],
                           onChanged: ((value) => {
                                 context
-                                    .read<OrgaUserCheckBoxesCubit>()
+                                    .read<OrgaUserDialogEditCubit>()
                                     .changeValue("enabled", value!)
                               })),
                       ElevatedButton.icon(
@@ -344,7 +344,7 @@ class OrgasPage extends StatelessWidget {
                                     .checks[fakeRoles[index].name.toString()],
                                 onChanged: ((value) => {
                                       context
-                                          .read<OrgaUserCheckBoxesCubit>()
+                                          .read<OrgaUserDialogEditCubit>()
                                           .changeValue(
                                               fakeRoles[index].name.toString(),
                                               value!)
@@ -437,7 +437,7 @@ class OrgasPage extends StatelessWidget {
                                       (value) {
                                         if (value != null) {
                                           if ((value!
-                                                  as OrgaUserCheckBoxesState)
+                                                  as OrgaUserDialogEditState)
                                               .deleted) {
                                             //eliminar
 
@@ -448,11 +448,11 @@ class OrgasPage extends StatelessWidget {
                                             //actualizar
                                             List<String> roles = [];
                                             bool enabled = (value!
-                                                    as OrgaUserCheckBoxesState)
+                                                    as OrgaUserDialogEditState)
                                                 .checks["enabled"]!;
                                             Roles.toList().forEach((element) {
                                               if ((value!
-                                                      as OrgaUserCheckBoxesState)
+                                                      as OrgaUserDialogEditState)
                                                   .checks[element]!) {
                                                 roles.add(element);
                                               }
