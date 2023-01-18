@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/constants.dart';
+import 'package:lomba_frontend/core/data/models/sort_model.dart';
+import 'package:lomba_frontend/features/orgas/data/models/orgauser_model.dart';
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orga_event.dart';
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orgauser_event.dart';
 import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
@@ -39,6 +41,7 @@ class OrgasPage extends StatelessWidget {
 
   Widget _bodyOrgas(BuildContext context, OrgaState state) {
     if (state is OrgaStart) {
+      context.read<OrgaUserBloc>().add(const OnOrgaUserStarter());
       context.read<OrgaBloc>().add(const OnOrgaListLoad("", "", 1));
     }
     if (state is OrgaLoading) {
@@ -219,6 +222,21 @@ class OrgasPage extends StatelessWidget {
             Row(
               children: [
                 ElevatedButton.icon(
+                  icon: const Icon(Icons.add_moderator),
+                  key: const ValueKey("btnAddOrgaUserOption"),
+                  label: const Text("Asociar usuario"),
+                  onPressed: () {
+                    context.read<OrgaUserBloc>().add(
+                        const OnOrgaUserListUserNotInOrgaForAdd(
+                            "", SortModel(null), 1, 10));
+                  },
+                )
+              ],
+            ),
+            const Divider(),
+            Row(
+              children: [
+                ElevatedButton.icon(
                     icon: const Icon(Icons.arrow_back),
                     onPressed: () {
                       context
@@ -255,6 +273,140 @@ class OrgasPage extends StatelessWidget {
 
   Widget _showEditingOrgaUserDialog(
       BuildContext context, OrgaUser orgaUser, User user) {
+    return BlocProvider<OrgaUserDialogEditCubit>(
+      create: (context) => OrgaUserDialogEditCubit(orgaUser),
+      child: Dialog(
+        child: Container(
+          height: 400,
+          width: 500,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child:
+                BlocBuilder<OrgaUserDialogEditCubit, OrgaUserDialogEditState>(
+                    builder: (context, state) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(user.name,
+                          style: const TextStyle(fontSize: 18))),
+                  const VerticalDivider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Asociación habilitada: "),
+                      Checkbox(
+                          value: state.checks["enabled"],
+                          onChanged: ((value) => {
+                                context
+                                    .read<OrgaUserDialogEditCubit>()
+                                    .changeValue("enabled", value!)
+                              })),
+                      ElevatedButton.icon(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => GestureDetector(
+                                      onTap: () => Navigator.pop(context),
+                                      child: AlertDialog(
+                                        title: const Text(
+                                            '¿Desea eliminar la asociación?'),
+                                        content: const Text(
+                                            'Esta acción afecta el acceso de los usuarios al sistema'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            key: const ValueKey(
+                                                "btnConfirmDeleteOrgaUser"),
+                                            child: const Text("Eliminar"),
+                                            onPressed: () {
+                                              Navigator.pop(context, true);
+                                            },
+                                          ),
+                                          TextButton(
+                                            key: const ValueKey(
+                                                "btnCancelDeleteOrgaUser"),
+                                            child: const Text('Cancelar'),
+                                            onPressed: () {
+                                              Navigator.pop(context, false);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    )).then((value) {
+                              if (value) {
+                                state.deleted = true;
+                                Navigator.pop(context, state);
+                              }
+                            });
+                          },
+                          icon: const Icon(Icons.delete),
+                          label: const Text("Eliminar asociación"))
+                    ],
+                  ),
+                  const VerticalDivider(),
+                  SizedBox(
+                    width: 300,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: fakeRoles.length,
+                          itemBuilder: (context, index) {
+                            return CheckboxListTile(
+                                title: Text(
+                                  fakeRoles[index].name,
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                value: state
+                                    .checks[fakeRoles[index].name.toString()],
+                                onChanged: ((value) => {
+                                      context
+                                          .read<OrgaUserDialogEditCubit>()
+                                          .changeValue(
+                                              fakeRoles[index].name.toString(),
+                                              value!)
+                                    }));
+                          }),
+                    ),
+                  ),
+                  const VerticalDivider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton.icon(
+                          icon: const Icon(Icons.save),
+                          onPressed: () {
+                            Navigator.pop(context, state);
+                          },
+                          label: const Text("Guardar")),
+                      const VerticalDivider(),
+                      ElevatedButton.icon(
+                          icon: const Icon(Icons.cancel),
+                          onPressed: () {
+                            Navigator.pop(context, null);
+                          },
+                          label: const Text("Cancelar"))
+                    ],
+                  )
+                ],
+              );
+            }),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _showAddingOrgaUserDialog(
+      BuildContext context, User user, String orgaId) {
+    final orgaUser = OrgaUserModel(
+        orgaId: orgaId,
+        userId: user.id,
+        roles: const [],
+        builtIn: false,
+        enabled: true);
+
     return BlocProvider<OrgaUserDialogEditCubit>(
       create: (context) => OrgaUserDialogEditCubit(orgaUser),
       child: Dialog(
@@ -467,14 +619,6 @@ class OrgasPage extends StatelessWidget {
                                         }
                                       },
                                     );
-                                    /*
-                                      context
-                                          .read<OrgaUserBloc>()
-                                          .add(OnOrgaUserPrepareForEdit(
-                                            state.orgaId,
-                                            state.users[index].id,
-                                          ));
-                                          */
                                   })),
                           Icon(
                               (state.orgaUsers
@@ -491,6 +635,65 @@ class OrgasPage extends StatelessWidget {
                                   ? Icons.toggle_on
                                   : Icons.toggle_off_outlined,
                               size: 40)
+                        ],
+                      ),
+                      const Divider()
+                    ],
+                  );
+                },
+              )
+            ],
+          );
+        }
+
+        if (state is OrgaUserListUserNotInOrgaLoaded) {
+          return Column(
+            children: [
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: state.users.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      const Text("Usuarios disponibles"),
+                      const Divider(),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: TextButton(
+                                  child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Column(
+                                        children: [
+                                          ListTile(
+                                            leading: const Icon(
+                                                Icons.switch_account),
+                                            title: Text(
+                                              state.users[index].name,
+                                              style:
+                                                  const TextStyle(fontSize: 18),
+                                            ),
+                                            subtitle: Text(
+                                                '${state.users[index].username} / ${state.users[index].email}',
+                                                style: const TextStyle(
+                                                    fontSize: 12)),
+                                          ),
+                                        ],
+                                      )),
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => GestureDetector(
+                                            onTap: () => Navigator.pop(context),
+                                            child: _showAddingOrgaUserDialog(
+                                                context,
+                                                state.users[index],
+                                                state.orgaId))).then(
+                                      (value) {
+                                        if (value != null) {}
+                                      },
+                                    );
+                                  })),
                         ],
                       ),
                       const Divider()

@@ -1,11 +1,21 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../../core/data/models/sort_model.dart';
+
 ///Interfaz del evento de relación orga-user
 abstract class OrgaUserEvent extends Equatable {
   const OrgaUserEvent();
 
   @override
   List<Object?> get props => [];
+}
+
+///Evento inicial
+class OnOrgaUserStarter extends OrgaUserEvent {
+  const OnOrgaUserStarter();
+
+  @override
+  List<Object> get props => [];
 }
 
 ///Evento para obtener la lista de relaciones de orga-user
@@ -44,15 +54,18 @@ class OnOrgaUserEdit extends OrgaUserEvent {
   List<Object> get props => [orgaId, userId, roles, enabled];
 }
 
-///Evento para mostrar ventana de edición de asociación orga-user /role
-class OnOrgaUserPrepareForEdit extends OrgaUserEvent {
+///Evento para mostrar lista de usuarios que no están en la organización
+class OnOrgaUserListUserNotInOrgaForAdd extends OrgaUserEvent {
   final String orgaId;
-  final String userId;
+  final SortModel sortFields;
+  final int pageNumber;
+  final int pageSize;
 
-  const OnOrgaUserPrepareForEdit(this.orgaId, this.userId);
+  const OnOrgaUserListUserNotInOrgaForAdd(
+      this.orgaId, this.sortFields, this.pageNumber, this.pageSize);
 
   @override
-  List<Object> get props => [orgaId, userId];
+  List<Object> get props => [orgaId, sortFields, pageNumber, pageSize];
 }
 
 ///Evento que procede a habilitar o deshabilitar una relación orga-user

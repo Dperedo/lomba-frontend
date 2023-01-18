@@ -28,7 +28,7 @@ void main() {
   );
 
   blocTest<HomeBloc, HomeState>(
-    'debe responder con estado de login TRUE después de cargar',
+    'debe responder con estado con home cargado',
     build: () {
       when(mockGetHasLogIn.execute())
           .thenAnswer((_) async => const Right(true));
