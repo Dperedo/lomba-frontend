@@ -3,24 +3,30 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
+import 'dart:async' as _i6;
 
 import 'package:dartz/dartz.dart' as _i3;
-import 'package:lomba_frontend/core/failures.dart' as _i6;
+import 'package:lomba_frontend/core/failures.dart' as _i7;
 import 'package:lomba_frontend/features/orgas/domain/entities/orgauser.dart'
-    as _i7;
+    as _i8;
 import 'package:lomba_frontend/features/orgas/domain/repositories/orga_repository.dart'
     as _i2;
 import 'package:lomba_frontend/features/orgas/domain/usecases/add_orgauser.dart'
-    as _i4;
+    as _i5;
 import 'package:lomba_frontend/features/orgas/domain/usecases/delete_orgauser.dart'
-    as _i8;
-import 'package:lomba_frontend/features/orgas/domain/usecases/enable_orgauser.dart'
     as _i9;
-import 'package:lomba_frontend/features/orgas/domain/usecases/get_orgausers.dart'
+import 'package:lomba_frontend/features/orgas/domain/usecases/enable_orgauser.dart'
     as _i10;
-import 'package:lomba_frontend/features/orgas/domain/usecases/update_orgauser.dart'
+import 'package:lomba_frontend/features/orgas/domain/usecases/get_orgausers.dart'
     as _i11;
+import 'package:lomba_frontend/features/orgas/domain/usecases/update_orgauser.dart'
+    as _i12;
+import 'package:lomba_frontend/features/users/domain/entities/user.dart'
+    as _i14;
+import 'package:lomba_frontend/features/users/domain/repositories/user_repository.dart'
+    as _i4;
+import 'package:lomba_frontend/features/users/domain/usecases/get_users.dart'
+    as _i13;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -55,10 +61,21 @@ class _FakeEither_1<L, R> extends _i1.SmartFake implements _i3.Either<L, R> {
         );
 }
 
+class _FakeUserRepository_2 extends _i1.SmartFake
+    implements _i4.UserRepository {
+  _FakeUserRepository_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [AddOrgaUser].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAddOrgaUser extends _i1.Mock implements _i4.AddOrgaUser {
+class MockAddOrgaUser extends _i1.Mock implements _i5.AddOrgaUser {
   @override
   _i2.OrgaRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
@@ -72,7 +89,7 @@ class MockAddOrgaUser extends _i1.Mock implements _i4.AddOrgaUser {
         ),
       ) as _i2.OrgaRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i7.OrgaUser>> execute(
+  _i6.Future<_i3.Either<_i7.Failure, _i8.OrgaUser>> execute(
     String? orgaId,
     String? userId,
     List<String>? roles,
@@ -88,8 +105,8 @@ class MockAddOrgaUser extends _i1.Mock implements _i4.AddOrgaUser {
             enabled,
           ],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, _i7.OrgaUser>>.value(
-            _FakeEither_1<_i6.Failure, _i7.OrgaUser>(
+        returnValue: _i6.Future<_i3.Either<_i7.Failure, _i8.OrgaUser>>.value(
+            _FakeEither_1<_i7.Failure, _i8.OrgaUser>(
           this,
           Invocation.method(
             #execute,
@@ -102,8 +119,8 @@ class MockAddOrgaUser extends _i1.Mock implements _i4.AddOrgaUser {
           ),
         )),
         returnValueForMissingStub:
-            _i5.Future<_i3.Either<_i6.Failure, _i7.OrgaUser>>.value(
-                _FakeEither_1<_i6.Failure, _i7.OrgaUser>(
+            _i6.Future<_i3.Either<_i7.Failure, _i8.OrgaUser>>.value(
+                _FakeEither_1<_i7.Failure, _i8.OrgaUser>(
           this,
           Invocation.method(
             #execute,
@@ -115,13 +132,13 @@ class MockAddOrgaUser extends _i1.Mock implements _i4.AddOrgaUser {
             ],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, _i7.OrgaUser>>);
+      ) as _i6.Future<_i3.Either<_i7.Failure, _i8.OrgaUser>>);
 }
 
 /// A class which mocks [DeleteOrgaUser].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDeleteOrgaUser extends _i1.Mock implements _i8.DeleteOrgaUser {
+class MockDeleteOrgaUser extends _i1.Mock implements _i9.DeleteOrgaUser {
   @override
   _i2.OrgaRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
@@ -135,7 +152,7 @@ class MockDeleteOrgaUser extends _i1.Mock implements _i8.DeleteOrgaUser {
         ),
       ) as _i2.OrgaRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, bool>> execute(
+  _i6.Future<_i3.Either<_i7.Failure, bool>> execute(
     String? orgaId,
     String? userId,
   ) =>
@@ -147,8 +164,8 @@ class MockDeleteOrgaUser extends _i1.Mock implements _i8.DeleteOrgaUser {
             userId,
           ],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
-            _FakeEither_1<_i6.Failure, bool>(
+        returnValue: _i6.Future<_i3.Either<_i7.Failure, bool>>.value(
+            _FakeEither_1<_i7.Failure, bool>(
           this,
           Invocation.method(
             #execute,
@@ -159,8 +176,8 @@ class MockDeleteOrgaUser extends _i1.Mock implements _i8.DeleteOrgaUser {
           ),
         )),
         returnValueForMissingStub:
-            _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
-                _FakeEither_1<_i6.Failure, bool>(
+            _i6.Future<_i3.Either<_i7.Failure, bool>>.value(
+                _FakeEither_1<_i7.Failure, bool>(
           this,
           Invocation.method(
             #execute,
@@ -170,13 +187,13 @@ class MockDeleteOrgaUser extends _i1.Mock implements _i8.DeleteOrgaUser {
             ],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, bool>>);
+      ) as _i6.Future<_i3.Either<_i7.Failure, bool>>);
 }
 
 /// A class which mocks [EnableOrgaUser].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockEnableOrgaUser extends _i1.Mock implements _i9.EnableOrgaUser {
+class MockEnableOrgaUser extends _i1.Mock implements _i10.EnableOrgaUser {
   @override
   _i2.OrgaRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
@@ -190,7 +207,7 @@ class MockEnableOrgaUser extends _i1.Mock implements _i9.EnableOrgaUser {
         ),
       ) as _i2.OrgaRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i7.OrgaUser>> execute(
+  _i6.Future<_i3.Either<_i7.Failure, _i8.OrgaUser>> execute(
     String? orgaId,
     String? userId,
     bool? enableOrDisable,
@@ -204,8 +221,8 @@ class MockEnableOrgaUser extends _i1.Mock implements _i9.EnableOrgaUser {
             enableOrDisable,
           ],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, _i7.OrgaUser>>.value(
-            _FakeEither_1<_i6.Failure, _i7.OrgaUser>(
+        returnValue: _i6.Future<_i3.Either<_i7.Failure, _i8.OrgaUser>>.value(
+            _FakeEither_1<_i7.Failure, _i8.OrgaUser>(
           this,
           Invocation.method(
             #execute,
@@ -217,8 +234,8 @@ class MockEnableOrgaUser extends _i1.Mock implements _i9.EnableOrgaUser {
           ),
         )),
         returnValueForMissingStub:
-            _i5.Future<_i3.Either<_i6.Failure, _i7.OrgaUser>>.value(
-                _FakeEither_1<_i6.Failure, _i7.OrgaUser>(
+            _i6.Future<_i3.Either<_i7.Failure, _i8.OrgaUser>>.value(
+                _FakeEither_1<_i7.Failure, _i8.OrgaUser>(
           this,
           Invocation.method(
             #execute,
@@ -229,13 +246,13 @@ class MockEnableOrgaUser extends _i1.Mock implements _i9.EnableOrgaUser {
             ],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, _i7.OrgaUser>>);
+      ) as _i6.Future<_i3.Either<_i7.Failure, _i8.OrgaUser>>);
 }
 
 /// A class which mocks [GetOrgaUsers].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetOrgaUsers extends _i1.Mock implements _i10.GetOrgaUsers {
+class MockGetOrgaUsers extends _i1.Mock implements _i11.GetOrgaUsers {
   @override
   _i2.OrgaRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
@@ -249,7 +266,7 @@ class MockGetOrgaUsers extends _i1.Mock implements _i10.GetOrgaUsers {
         ),
       ) as _i2.OrgaRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, List<_i7.OrgaUser>>> execute(
+  _i6.Future<_i3.Either<_i7.Failure, List<_i8.OrgaUser>>> execute(
           String? orgaId) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -257,8 +274,8 @@ class MockGetOrgaUsers extends _i1.Mock implements _i10.GetOrgaUsers {
           [orgaId],
         ),
         returnValue:
-            _i5.Future<_i3.Either<_i6.Failure, List<_i7.OrgaUser>>>.value(
-                _FakeEither_1<_i6.Failure, List<_i7.OrgaUser>>(
+            _i6.Future<_i3.Either<_i7.Failure, List<_i8.OrgaUser>>>.value(
+                _FakeEither_1<_i7.Failure, List<_i8.OrgaUser>>(
           this,
           Invocation.method(
             #execute,
@@ -266,21 +283,21 @@ class MockGetOrgaUsers extends _i1.Mock implements _i10.GetOrgaUsers {
           ),
         )),
         returnValueForMissingStub:
-            _i5.Future<_i3.Either<_i6.Failure, List<_i7.OrgaUser>>>.value(
-                _FakeEither_1<_i6.Failure, List<_i7.OrgaUser>>(
+            _i6.Future<_i3.Either<_i7.Failure, List<_i8.OrgaUser>>>.value(
+                _FakeEither_1<_i7.Failure, List<_i8.OrgaUser>>(
           this,
           Invocation.method(
             #execute,
             [orgaId],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, List<_i7.OrgaUser>>>);
+      ) as _i6.Future<_i3.Either<_i7.Failure, List<_i8.OrgaUser>>>);
 }
 
 /// A class which mocks [UpdateOrgaUser].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUpdateOrgaUser extends _i1.Mock implements _i11.UpdateOrgaUser {
+class MockUpdateOrgaUser extends _i1.Mock implements _i12.UpdateOrgaUser {
   @override
   _i2.OrgaRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
@@ -294,10 +311,10 @@ class MockUpdateOrgaUser extends _i1.Mock implements _i11.UpdateOrgaUser {
         ),
       ) as _i2.OrgaRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i7.OrgaUser>> execute(
+  _i6.Future<_i3.Either<_i7.Failure, _i8.OrgaUser>> execute(
     String? orgaId,
     String? userId,
-    _i7.OrgaUser? orgaUser,
+    _i8.OrgaUser? orgaUser,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -308,8 +325,8 @@ class MockUpdateOrgaUser extends _i1.Mock implements _i11.UpdateOrgaUser {
             orgaUser,
           ],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, _i7.OrgaUser>>.value(
-            _FakeEither_1<_i6.Failure, _i7.OrgaUser>(
+        returnValue: _i6.Future<_i3.Either<_i7.Failure, _i8.OrgaUser>>.value(
+            _FakeEither_1<_i7.Failure, _i8.OrgaUser>(
           this,
           Invocation.method(
             #execute,
@@ -321,8 +338,8 @@ class MockUpdateOrgaUser extends _i1.Mock implements _i11.UpdateOrgaUser {
           ),
         )),
         returnValueForMissingStub:
-            _i5.Future<_i3.Either<_i6.Failure, _i7.OrgaUser>>.value(
-                _FakeEither_1<_i6.Failure, _i7.OrgaUser>(
+            _i6.Future<_i3.Either<_i7.Failure, _i8.OrgaUser>>.value(
+                _FakeEither_1<_i7.Failure, _i8.OrgaUser>(
           this,
           Invocation.method(
             #execute,
@@ -333,5 +350,72 @@ class MockUpdateOrgaUser extends _i1.Mock implements _i11.UpdateOrgaUser {
             ],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, _i7.OrgaUser>>);
+      ) as _i6.Future<_i3.Either<_i7.Failure, _i8.OrgaUser>>);
+}
+
+/// A class which mocks [GetUsers].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetUsers extends _i1.Mock implements _i13.GetUsers {
+  @override
+  _i4.UserRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeUserRepository_2(
+          this,
+          Invocation.getter(#repository),
+        ),
+        returnValueForMissingStub: _FakeUserRepository_2(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i4.UserRepository);
+  @override
+  _i6.Future<_i3.Either<_i7.Failure, List<_i14.User>>> execute(
+    String? orgaId,
+    String? filter,
+    String? fieldOrder,
+    double? pageNumber,
+    int? pageSize,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [
+            orgaId,
+            filter,
+            fieldOrder,
+            pageNumber,
+            pageSize,
+          ],
+        ),
+        returnValue: _i6.Future<_i3.Either<_i7.Failure, List<_i14.User>>>.value(
+            _FakeEither_1<_i7.Failure, List<_i14.User>>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              orgaId,
+              filter,
+              fieldOrder,
+              pageNumber,
+              pageSize,
+            ],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i6.Future<_i3.Either<_i7.Failure, List<_i14.User>>>.value(
+                _FakeEither_1<_i7.Failure, List<_i14.User>>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              orgaId,
+              filter,
+              fieldOrder,
+              pageNumber,
+              pageSize,
+            ],
+          ),
+        )),
+      ) as _i6.Future<_i3.Either<_i7.Failure, List<_i14.User>>>);
 }

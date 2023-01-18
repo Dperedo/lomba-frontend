@@ -69,8 +69,8 @@ Future<void> init() async {
       ));
   locator.registerFactory(() => RoleBloc(locator(), locator(), locator()));
 
-  locator.registerFactory(() =>
-      OrgaUserBloc(locator(), locator(), locator(), locator(), locator()));
+  locator.registerFactory(() => OrgaUserBloc(
+      locator(), locator(), locator(), locator(), locator(), locator()));
 
   locator.registerFactory(() => UserBloc(
       locator(), locator(), locator(), locator(), locator(), locator()));
@@ -136,7 +136,8 @@ Future<void> init() async {
   );
   locator.registerLazySingleton<OrgaRemoteDataSource>(
     () => OrgaRemoteDataSourceImpl(
-      client: locator(), localDataSource: locator(),
+      client: locator(),
+      localDataSource: locator(),
     ),
   );
   locator.registerLazySingleton<UserRemoteDataSource>(
@@ -144,9 +145,8 @@ Future<void> init() async {
         UserRemoteDataSourceImpl(client: locator(), localDataSource: locator()),
   );
   locator.registerLazySingleton<RoleRemoteDataSource>(
-    () => RoleRemoteDataSourceImpl(
-      client: locator(), localDataSource: locator()
-    ),
+    () =>
+        RoleRemoteDataSourceImpl(client: locator(), localDataSource: locator()),
   );
 
   // external

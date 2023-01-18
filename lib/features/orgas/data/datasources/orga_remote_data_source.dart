@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/core/data/datasources/local_data_source.dart';
 import 'package:lomba_frontend/core/fakedata.dart';
+import 'package:lomba_frontend/features/roles/data/models/role_model.dart';
 
 import '../../../../../core/constants.dart';
 import '../../../../../core/exceptions.dart';
@@ -33,7 +34,7 @@ abstract class OrgaRemoteDataSource {
       String orgaId, String userId, bool enableOrDisable);
 
   Future<OrgaModel> updateOrga(String orgaId, OrgaModel orga);
-  
+
   Future<OrgaUserModel> updateOrgaUser(
       String orgaId, String userId, OrgaUserModel orgaUser);
 }
@@ -42,7 +43,8 @@ abstract class OrgaRemoteDataSource {
 class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
   final http.Client client;
   final LocalDataSource localDataSource;
-  OrgaRemoteDataSourceImpl({required this.client, required this.localDataSource});
+  OrgaRemoteDataSourceImpl(
+      {required this.client, required this.localDataSource});
 
   ///Entrega una lista de organizaciones según los filtros
   ///
@@ -130,8 +132,8 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
 
       for (var item in resObj['data']['items']) {
         List<String> roleslist = [];
-        for(var r in item['roles']){
-            roleslist.add(r['name']);
+        for (var r in item['roles']) {
+          roleslist.add(r['name']);
         }
         orgaUsers.add(OrgaUserModel(
             userId: item["userId"].toString(),
@@ -168,8 +170,8 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
 
       for (var item in resObj['data']['items']) {
         List<String> roleslist = [];
-        for(var r in item['roles']){
-            roleslist.add(r['name']);
+        for (var r in item['roles']) {
+          roleslist.add(r['name']);
         }
         orgaUsers.add(OrgaUserModel(
             userId: item["userId"].toString(),
@@ -277,7 +279,8 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
       final Map<dynamic, dynamic> resObj = json.decode(resp.body);
 
       return Future.value(
-          resObj['data']['items'][0].toString().toLowerCase()== 'true');
+          resObj['data']['items'][0]['value'].toString().toLowerCase() ==
+              'true');
     } else {
       throw ServerException();
     }
@@ -306,6 +309,21 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
       return Future.value(
           resObj['data']['items'][0].toString().toLowerCase() == 'true');
 
+      /*OrgaUserModel orgaUserModel = fakeListOrgaUsers.singleWhere(
+          (element) => element.orgaId == orgaId && element.userId == userId);
+
+      OrgaUserModel newOrgaUserModel = OrgaUserModel(
+          orgaId: orgaUserModel.orgaId,
+          userId: orgaUserModel.userId,
+          roles: orgaUserModel.roles,
+          enabled: enableOrDisable,
+          builtIn: orgaUserModel.builtIn);
+
+      int index = fakeListOrgaUsers.indexWhere(
+          (element) => element.orgaId == orgaId && element.userId == userId);
+      fakeListOrgaUsers[index] = newOrgaUserModel;
+
+      return newOrgaUserModel;*/
     } else {
       throw ServerException();
     }
@@ -331,15 +349,45 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
   @override
   Future<OrgaUserModel> updateOrgaUser(
       String orgaId, String userId, OrgaUserModel orgaUser) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    final url = Uri.parse('${UrlBackend.base}/api/v1/orgauser/$orgaId/$userId');
 
-    if (response.statusCode == 200) {
-      int index = fakeListOrgaUsers.indexWhere(
-          (element) => element.orgaId == orgaId && element.userId == userId);
-      fakeListOrgaUsers[index] = orgaUser;
+    final session = await localDataSource.getSavedSession();
 
-      return orgaUser;
+    List<RoleModel> listInRoles = [];
+    for (var element in orgaUser.roles) {
+      listInRoles.add(RoleModel(name: element, enabled: true));
+    }
+
+    final Map<String, dynamic> orgaUserBackend = {
+      'orgaId': orgaId,
+      'userId': userId,
+      'roles': listInRoles,
+      'enabled': orgaUser.enabled,
+    };
+
+    http.Response resp =
+        await client.put(url, body: json.encode(orgaUserBackend), headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      final item = resObj['data']['items'][0];
+
+      List<String> roleslist = [];
+      for (var r in item['roles']) {
+        roleslist.add(r['name']);
+      }
+
+      return Future.value(OrgaUserModel(
+          userId: item["userId"].toString(),
+          orgaId: item["orgaId"].toString(),
+          roles: roleslist,
+          enabled: item["enabled"].toString().toLowerCase() == 'true',
+          builtIn: item["builtin"].toString().toLowerCase() == 'true'));
     } else {
       throw ServerException();
     }
