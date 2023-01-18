@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/core/domain/usecases/get_session_status.dart';
 import 'package:lomba_frontend/features/profile/presentation/bloc/profile_event.dart';
 import 'package:lomba_frontend/features/profile/presentation/bloc/profile_state.dart';
 import 'package:rxdart/rxdart.dart';
@@ -6,13 +7,19 @@ import '../../../users/domain/usecases/get_user.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState>{
   final GetUser _getUser;
+  final GetSession _getSession;
 
-  ProfileBloc(this._getUser):super(ProfileStart()){
+  ProfileBloc(this._getUser, this._getSession):super(ProfileStart()){
     on<OnProfileLoad>(
       (event, emit) async {
         emit(ProfileLoading());
-        final result = await _getUser.execute(event.id);
-
+        String userId = '';
+        if (event.id == null){
+          final result = await _getSession.execute();
+          result.fold((l) => emit(ProfileError(l.message)), (r) => userId = r.getUserId()!);
+        }
+        final result = await _getUser.execute(userId);
+        
         result.fold(
             (l) => emit(ProfileError(l.message)), (r) => {emit(ProfileLoaded(r))});
       },

@@ -4,6 +4,9 @@ import '../../../sidedrawer/presentation/pages/sidedrawer_page.dart';
 import '../../../users/presentation/bloc/user_bloc.dart';
 import '../../../users/presentation/bloc/user_event.dart';
 import '../../../users/presentation/bloc/user_state.dart';
+import '../bloc/profile_bloc.dart';
+import '../bloc/profile_event.dart';
+import '../bloc/profile_state.dart';
 
 ///Página con el perfil del usuario
 ///
@@ -15,11 +18,15 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserBloc, UserState>(
+    return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state){
         return Scaffold(
           appBar: _variableAppBar(context, state),
-          body: _bodyProfile(context, state),
+          body: SingleChildScrollView(
+            child: Center(
+              child: _bodyProfile(context, state)
+            )
+          ),
           //body: const Center(child: Text("Página de perfil del usuario")),
           drawer: const SideDrawer(),
         );
@@ -27,7 +34,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  AppBar _variableAppBar(BuildContext context, UserState state) {
+  AppBar _variableAppBar(BuildContext context, ProfileState state) {
     if (state is UserLoaded) {
       return AppBar(
           title: const Text("Perfil"),
@@ -42,15 +49,69 @@ class ProfilePage extends StatelessWidget {
     return AppBar(title: const Text("Perfil"));
   }
 
-  Widget _bodyProfile(BuildContext conext, state){
-    SingleChildScrollView(
-        child: Center(
-          child: SizedBox(
+  Widget _bodyProfile(BuildContext context, ProfileState state){
+          if (state is ProfileStart) {
+             context.read<ProfileBloc>().add(const OnProfileLoad(null));
+          }
+          if (state is ProfileLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          // if (state is UserListLoaded) {
+          //   return ListView.builder(
+          //     shrinkWrap: true,
+          //     itemCount: state.users.length,
+          //     itemBuilder: (context, index) {
+          //       return Column(
+          //         children: [
+          //           Row(
+          //             children: [
+          //               Expanded(
+          //                   child: TextButton(
+          //                       child: Align(
+          //                           alignment: Alignment.centerLeft,
+          //                           child: Column(
+          //                             children: [
+          //                               ListTile(
+          //                                 leading: const Icon(Icons.switch_account),
+          //                                 title: Text(
+          //                                   state.users[index].name,
+          //                                   style: const TextStyle(fontSize: 18),
+          //                                 ),
+          //                                 subtitle: Text(
+          //                                     '${state.users[index].username} / ${state.users[index].email}',
+          //                                     style: const TextStyle(fontSize: 12)),
+          //                               ),
+          //                             ],
+          //                           )),
+          //                       onPressed: () {
+          //                         context
+          //                             .read<UserBloc>()
+          //                             .add(OnUserLoad(state.users[index].id));
+          //                       })),
+          //               Icon(
+          //                   state.users[index].enabled
+          //                       ? Icons.toggle_on
+          //                       : Icons.toggle_off_outlined,
+          //                   size: 40)
+          //             ],
+          //           ),
+          //           const Divider()
+          //         ],
+          //       );
+          //     },
+          //   );
+          // }
+
+          if (state is ProfileLoaded) {
+          return
+          SizedBox(
             height: 600,
             width: 400,
+            
             child: Column(
-              
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 40),
                 Center(
@@ -63,19 +124,19 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20,),
-                const ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text('Nombre')
+                ListTile(
+                  leading: const Icon(Icons.person),
+                  title: Text(state.user.name)
                 ),
                 const SizedBox(height: 10,),
-                const ListTile(
-                  leading: Icon(Icons.person_outline),
-                  title: Text('Username')
+                ListTile(
+                  leading: const Icon(Icons.person_outline),
+                  title: Text(state.user.username)
                   ),
                 const SizedBox(height: 10,),
-                const ListTile(
-                  leading: Icon(Icons.mail),
-                  title: Text('Email')
+                ListTile(
+                  leading: const Icon(Icons.mail),
+                  title: Text(state.user.email)
                   ),
                 const SizedBox(height: 20,),
                 SizedBox(
@@ -97,9 +158,8 @@ class ProfilePage extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        )
-      );
+          );
+          }
     return const SizedBox();
   }
 }

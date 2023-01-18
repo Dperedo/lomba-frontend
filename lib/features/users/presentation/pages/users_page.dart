@@ -16,9 +16,10 @@ class UsersPage extends StatelessWidget {
         return Scaffold(
           appBar: _variableAppBar(context, state),
           body: SingleChildScrollView(
-              child: Column(
+            child: Column(
             children: [_bodyUsers(context, state)],
-          )),
+            )
+          ),
           drawer: const SideDrawer(),
         );
       },

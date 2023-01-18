@@ -32,6 +32,7 @@ import 'features/orgas/domain/usecases/update_orga.dart';
 import 'features/orgas/domain/usecases/update_orgauser.dart';
 import 'features/orgas/presentation/bloc/orga_bloc.dart';
 import 'features/orgas/presentation/bloc/orgauser_bloc.dart';
+import 'features/profile/presentation/bloc/profile_bloc.dart';
 import 'features/roles/data/datasources/role_remote_data_source.dart';
 import 'features/roles/data/repositories/role_repository_impl.dart';
 import 'features/roles/domain/repositories/role_repository.dart';
@@ -74,6 +75,8 @@ Future<void> init() async {
 
   locator.registerFactory(() => UserBloc(
       locator(), locator(), locator(), locator(), locator(), locator()));
+
+  locator.registerFactory(() => ProfileBloc(locator(), locator()));
 
   // usecase
   locator.registerLazySingleton(() => GetAuthenticate(locator()));

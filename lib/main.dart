@@ -17,6 +17,7 @@ import 'features/login/presentation/bloc/login_bloc.dart';
 import 'features/home/presentation/pages/home_page.dart';
 import 'features/orgas/presentation/bloc/orga_bloc.dart';
 import 'features/orgas/presentation/bloc/orgauser_bloc.dart';
+import 'features/profile/presentation/bloc/profile_bloc.dart';
 import 'features/profile/presentation/pages/profile_page.dart';
 import 'features/rejected/presentation/pages/rejected_page.dart';
 import 'features/roles/presentation/bloc/role_bloc.dart';
@@ -53,7 +54,8 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<OrgaBloc>()),
         BlocProvider(create: (_) => di.locator<OrgaUserBloc>()),
         BlocProvider(create: (_) => di.locator<UserBloc>()),
-        BlocProvider(create: (_) => di.locator<RoleBloc>())
+        BlocProvider(create: (_) => di.locator<RoleBloc>()),
+        BlocProvider(create: (_) => di.locator<ProfileBloc>())
       ],
       child: MaterialApp(
           title: 'App Demo',

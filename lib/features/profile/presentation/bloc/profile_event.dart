@@ -7,10 +7,10 @@ abstract class ProfileEvent extends Equatable {
   List<Object?> get props => [];
 }
 class OnProfileLoad extends ProfileEvent {
-  final String id;
+  final String? id;
 
   const OnProfileLoad(this.id);
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [id!];
 }
