@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
+import 'package:lomba_frontend/features/login/domain/usecases/register_user.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart';
 import 'package:lomba_frontend/features/orgas/data/datasources/orga_remote_data_source.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/add_orga.dart';
@@ -73,7 +74,7 @@ Future<void> init() async {
       locator(), locator(), locator(), locator(), locator(), locator()));
 
   locator.registerFactory(() => UserBloc(
-      locator(), locator(), locator(), locator(), locator(), locator()));
+      locator(), locator(), locator(), locator(), locator(), locator(), locator(), locator()));
 
   // usecase
   locator.registerLazySingleton(() => GetAuthenticate(locator()));
@@ -81,6 +82,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetSession(locator()));
   locator.registerLazySingleton(() => GetSideOptions(locator()));
   locator.registerLazySingleton(() => DoLogOff(locator()));
+  locator.registerLazySingleton(() => RegisterUser(locator()));
 
   locator.registerLazySingleton(() => AddOrga(locator()));
   locator.registerLazySingleton(() => AddOrgaUser(locator()));
@@ -108,7 +110,7 @@ Future<void> init() async {
   // repository
   locator.registerLazySingleton<LoginRepository>(
     () => LoginRepositoryImpl(
-        remoteDataSource: locator(), localDataSource: locator()),
+        remoteDataSource: locator(), localDataSource: locator(), userDataSource: locator()),
   );
   locator.registerLazySingleton<LocalRepository>(
     () => LocalRepositoryImpl(localDataSource: locator()),

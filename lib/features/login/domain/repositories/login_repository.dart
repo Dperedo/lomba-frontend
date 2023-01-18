@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:lomba_frontend/features/users/data/models/user_model.dart';
 
 import '../../../../core/failures.dart';
 

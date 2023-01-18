@@ -12,4 +12,5 @@ abstract class UserRepository {
   Future<Either<Failure, bool>> deleteUser(String userId);
   Future<Either<Failure, User>> enableUser(String userId, bool enableOrDisable);
   Future<Either<Failure, User>> updateUser(String userId, User user);
+  Future<Either<Failure, User>> existsUser(String userId,String username,String email);
 }

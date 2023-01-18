@@ -127,4 +127,17 @@ class UserRepositoryImpl implements UserRepository {
       return const Left(ConnectionFailure('Failed to connect to the network'));
     }
   }
+
+  @override
+  Future<Either<Failure, User>> existsUser(String userId,String username,String email) async {
+    try {
+      final result = await remoteDataSource.existsUser(userId, username, email);
+
+      return Right(result!.toEntity());
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(ConnectionFailure('Failed to connect to the network'));
+    }
+  }
 }

@@ -250,7 +250,6 @@ class UsersPage extends StatelessWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     final TextEditingController repeatPasswordController = TextEditingController();
-    final TextEditingController roleController = TextEditingController();
     final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
     if(state is UserAdding) {
@@ -283,14 +282,6 @@ class UsersPage extends StatelessWidget {
                 decoration: const InputDecoration(
                   labelText: 'Email',
                   icon: Icon(Icons.email),
-                ),
-              ),
-              TextFormField(
-                controller: roleController,
-                validator: (value) => Validators.validateName(value ?? ""),
-                decoration: const InputDecoration(
-                  labelText: 'Role',
-                  icon: Icon(Icons.work),
                 ),
               ),
               TextFormField(
@@ -332,9 +323,7 @@ class UsersPage extends StatelessWidget {
                                   nameController.text,
                                   usernameController.text,
                                   emailController.text,
-                                  "",
-                                  passwordController.text,
-                                  roleController.text,));
+                                  passwordController.text));
                             }
                       },
                       icon: const Icon(Icons.save),

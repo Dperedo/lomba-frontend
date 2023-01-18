@@ -1,4 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/core/data/models/session_model.dart';
+import 'package:lomba_frontend/core/domain/usecases/get_session_status.dart';
 import 'package:lomba_frontend/features/login/domain/usecases/register_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/add_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/delete_user.dart';
@@ -20,6 +22,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final GetUsers _getUsers;
   final UpdateUser _updateUser;
   final RegisterUser _registerUser;
+  final GetSession _getSession;
 
   UserBloc(
     this._addUser,
@@ -29,6 +32,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     this._getUsers,
     this._updateUser,
     this._registerUser,
+    this._getSession
   ) : super(UserStart()) {
     on<OnUserLoad>(
       (event, emit) async {
@@ -55,8 +59,19 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     on<OnUserAdd>((event, emit) async {
       emit(UserLoading());
+      var auth = const SessionModel(
+        token: "", 
+        username: "", 
+        name: "");
+
+      final session = await _getSession.execute();
+
+      session.fold((l) => emit(UserError(l.message)), (r) => {auth = r});
+
+      var role = "user";
+
       final result = await _registerUser.execute(
-          event.name, event.username, event.email, event.orgaId, event.password, event.role);
+          event.name, event.username, event.email, auth.getOrgaId()!, event.password, role);
 
       result.fold(
           (l) => emit(UserError(l.message)), (r) => {emit(UserStart())});
