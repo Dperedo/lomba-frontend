@@ -235,7 +235,49 @@ class UsersPage extends StatelessWidget {
           ],
         ),
       );
+      
     }
+    if (state is ModifyUserPassword){
+     return Padding(
+       padding: const EdgeInsets.all(10),
+       child: Column(
+         children: [
+           ListTile(
+             leading: const Icon(Icons.switch_account_rounded),
+             title:
+                 Text(state.user.name, style: const TextStyle(fontSize: 22)),
+           ),
+           const Divider(),
+           TextFormField(),
+           Row(
+            children: [
+              ElevatedButton.icon(
+                      icon: const Icon(Icons.cancel),
+                      key: const ValueKey("btnViewCancelarCambios"),
+                      label: const Text("Cancelar"),
+                      onPressed: () {
+                        context
+                            .read<UserBloc>()
+                            .add(OnUserShowPasswordModifyForm((state.user)));//cambiar add.
+                      },
+              ),
+              const VerticalDivider(),
+              ElevatedButton.icon(
+                      icon: const Icon(Icons.save),
+                      key: const ValueKey("btnViewSaveNewPassword"),
+                      label: const Text("Guardar cambios"),
+                      onPressed: () {
+                        context
+                            .read<UserBloc>()
+                            .add(OnUserShowPasswordModifyForm((state.user)));
+                      },
+              ),
+            ],
+           ),
+         ]
+       ),
+     );
+   }
 
     return const SizedBox();
   }

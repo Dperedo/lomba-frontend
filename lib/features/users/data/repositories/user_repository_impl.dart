@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:lomba_frontend/features/users/data/datasources/user_remote_data_source.dart';
 import 'package:lomba_frontend/features/users/data/models/user_model.dart';
+import 'package:lomba_frontend/features/users/domain/usecases/update_user_password.dart';
 
 import '../../../../core/data/models/sort_model.dart';
 import '../../../../core/exceptions.dart';
@@ -168,7 +169,20 @@ class UserRepositoryImpl implements UserRepository {
     try {
       final result = await remoteDataSource.existsUser(userId, username, email);
 
-      return Right(result!.toEntity());
+      return Right(result.toEntity());
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(ConnectionFailure('Failed to connect to the network'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateUserPassword(String userId, String password) async {
+    try {
+      final result = await remoteDataSource.updateUserPassword(userId, password);
+
+      return Right(result);
     } on ServerException {
       return const Left(ServerFailure(''));
     } on SocketException {

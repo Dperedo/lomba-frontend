@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../domain/entities/user.dart';
+
 abstract class UserEvent extends Equatable {
   const UserEvent();
 
@@ -34,11 +36,12 @@ class OnUserAdd extends UserEvent {
   final String username;
   final String email;
   final String password;
+  final bool enabled;
 
-  const OnUserAdd(this.name, this.username, this.email, this.password);
+  const OnUserAdd(this.name, this.username, this.email, this.password, this.enabled);
 
   @override
-  List<Object> get props => [name, username, email, password];
+  List<Object> get props => [name, username, email, password, enabled];
 }
 
 class OnUserPrepareForAdd extends UserEvent {
@@ -81,7 +84,7 @@ class OnUserDelete extends UserEvent {
 }
 
 class OnUserShowPasswordModifyForm extends UserEvent {
-  final String user;
+  final User user;
 
   const OnUserShowPasswordModifyForm(this.user);
 
