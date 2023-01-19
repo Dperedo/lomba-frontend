@@ -204,12 +204,45 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
   ///Agrega una relación OrgaUser a partir de un OrgaUserModel
   @override
   Future<OrgaUserModel> addOrgaUser(OrgaUserModel orgaUser) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    final url = Uri.parse('${UrlBackend.base}/api/v1/orgauser');
 
-    if (response.statusCode == 200) {
-      fakeListOrgaUsers.add(orgaUser);
-      return orgaUser;
+    final session = await localDataSource.getSavedSession();
+
+    List<RoleModel> listInRoles = [];
+    for (var element in orgaUser.roles) {
+      listInRoles.add(RoleModel(name: element, enabled: true));
+    }
+    final Map<String, dynamic> orgaUserBackend = {
+      'orgaId': orgaUser.orgaId,
+      'userId': orgaUser.userId,
+      'roles': listInRoles,
+      'enabled': orgaUser.enabled,
+      'builtin': orgaUser.builtIn,
+    };
+
+    http.Response resp =
+        await client.post(url, body: json.encode(orgaUserBackend), headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}"
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      final item = resObj['data']['items'][0];
+
+      List<String> roleslist = [];
+      for (var r in item['roles']) {
+        roleslist.add(r['name']);
+      }
+
+      return Future.value(OrgaUserModel(
+          userId: item["userId"].toString(),
+          orgaId: item["orgaId"].toString(),
+          roles: roleslist,
+          enabled: item["enabled"].toString().toLowerCase() == 'true',
+          builtIn: item["builtin"].toString().toLowerCase() == 'true'));
     } else {
       throw ServerException();
     }

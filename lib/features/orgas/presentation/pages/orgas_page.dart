@@ -227,8 +227,8 @@ class OrgasPage extends StatelessWidget {
                   label: const Text("Asociar usuario"),
                   onPressed: () {
                     context.read<OrgaUserBloc>().add(
-                        const OnOrgaUserListUserNotInOrgaForAdd(
-                            "", SortModel(null), 1, 10));
+                        OnOrgaUserListUserNotInOrgaForAdd(
+                            state.orga.id, const SortModel(null), 1, 10));
                   },
                 )
               ],
@@ -403,7 +403,7 @@ class OrgasPage extends StatelessWidget {
     final orgaUser = OrgaUserModel(
         orgaId: orgaId,
         userId: user.id,
-        roles: const [],
+        roles: const <String>[],
         builtIn: false,
         enabled: true);
 
@@ -436,46 +436,7 @@ class OrgasPage extends StatelessWidget {
                                 context
                                     .read<OrgaUserDialogEditCubit>()
                                     .changeValue("enabled", value!)
-                              })),
-                      ElevatedButton.icon(
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) => GestureDetector(
-                                      onTap: () => Navigator.pop(context),
-                                      child: AlertDialog(
-                                        title: const Text(
-                                            '¿Desea eliminar la asociación?'),
-                                        content: const Text(
-                                            'Esta acción afecta el acceso de los usuarios al sistema'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            key: const ValueKey(
-                                                "btnConfirmDeleteOrgaUser"),
-                                            child: const Text("Eliminar"),
-                                            onPressed: () {
-                                              Navigator.pop(context, true);
-                                            },
-                                          ),
-                                          TextButton(
-                                            key: const ValueKey(
-                                                "btnCancelDeleteOrgaUser"),
-                                            child: const Text('Cancelar'),
-                                            onPressed: () {
-                                              Navigator.pop(context, false);
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    )).then((value) {
-                              if (value) {
-                                state.deleted = true;
-                                Navigator.pop(context, state);
-                              }
-                            });
-                          },
-                          icon: const Icon(Icons.delete),
-                          label: const Text("Eliminar asociación"))
+                              }))
                     ],
                   ),
                   const VerticalDivider(),
@@ -533,6 +494,8 @@ class OrgasPage extends StatelessWidget {
   }
 
   Widget _orgaUserList(BuildContext context) {
+    context.read<OrgaUserBloc>().add(const OnOrgaUserStarter());
+
     return BlocBuilder<OrgaUserBloc, OrgaUserState>(
       builder: (context, state) {
         if (state is OrgaUserLoading) {
@@ -649,14 +612,14 @@ class OrgasPage extends StatelessWidget {
         if (state is OrgaUserListUserNotInOrgaLoaded) {
           return Column(
             children: [
+              const Text("Usuarios disponibles"),
+              const Divider(),
               ListView.builder(
                 shrinkWrap: true,
                 itemCount: state.users.length,
                 itemBuilder: (context, index) {
                   return Column(
                     children: [
-                      const Text("Usuarios disponibles"),
-                      const Divider(),
                       Row(
                         children: [
                           Expanded(
@@ -690,7 +653,26 @@ class OrgasPage extends StatelessWidget {
                                                 state.users[index],
                                                 state.orgaId))).then(
                                       (value) {
-                                        if (value != null) {}
+                                        if (value != null) {
+                                          //actualizar
+                                          List<String> roles = [];
+                                          bool enabled = (value!
+                                                  as OrgaUserDialogEditState)
+                                              .checks["enabled"]!;
+                                          Roles.toList().forEach((element) {
+                                            if ((value!
+                                                    as OrgaUserDialogEditState)
+                                                .checks[element]!) {
+                                              roles.add(element);
+                                            }
+                                          });
+                                          context.read<OrgaUserBloc>().add(
+                                              OnOrgaUserAdd(
+                                                  state.orgaId,
+                                                  state.users[index].id,
+                                                  roles,
+                                                  enabled));
+                                        }
                                       },
                                     );
                                   })),
