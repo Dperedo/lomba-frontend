@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/core/data/models/session_model.dart';
 import 'package:lomba_frontend/core/domain/usecases/get_session_status.dart';
 import 'package:lomba_frontend/features/profile/presentation/bloc/profile_event.dart';
 import 'package:lomba_frontend/features/profile/presentation/bloc/profile_state.dart';
@@ -13,14 +14,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState>{
     on<OnProfileLoad>(
       (event, emit) async {
         emit(ProfileLoading());
-        String userId = '';
+
+        String userId = event.id ?? '';
+        SessionModel? sessionModel;
         if (event.id == null){
           final result = await _getSession.execute();
           result.fold((l) => emit(ProfileError(l.message)), (r) => userId = r.getUserId()!);
         }
-        final result = await _getUser.execute(userId);
+
+        final resultUser = await _getUser.execute(userId);
         
-        result.fold(
+        resultUser.fold(
             (l) => emit(ProfileError(l.message)), (r) => {emit(ProfileLoaded(r))});
       },
       transformer: debounce(const Duration(milliseconds: 0)),

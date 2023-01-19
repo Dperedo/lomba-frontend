@@ -73,3 +73,20 @@ class OnUserDelete extends UserEvent {
   @override
   List<Object> get props => [id];
 }
+
+class OnUserShowPasswordModifyForm extends UserEvent {
+  final String user;
+
+  const OnUserShowPasswordModifyForm(this.user);
+
+  @override
+  List<Object> get props => [user];
+}
+class OnUserSaveNewPassword extends UserEvent {
+  final String password;
+
+  const OnUserSaveNewPassword(this.password);
+
+  @override
+  List<Object> get props => [password];
+}

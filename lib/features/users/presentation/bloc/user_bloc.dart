@@ -18,6 +18,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final GetUser _getUser;
   final GetUsers _getUsers;
   final UpdateUser _updateUser;
+  final ModifyUserPassword _modifyUserPassword;
 
   UserBloc(
     this._addUser,
@@ -25,7 +26,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     this._enableUser,
     this._getUser,
     this._getUsers,
-    this._updateUser,
+    this._updateUser, 
+    this._modifyUserPassword,
   ) : super(UserStart()) {
     on<OnUserLoad>(
       (event, emit) async {
@@ -84,6 +86,20 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(UserLoading());
 
       final result = await _deleteUser.execute(event.id);
+      result.fold(
+          (l) => emit(UserError(l.message)), (r) => {emit(UserStart())});
+    });
+    on<OnUserShowPasswordModifyForm>((event, emit) async {
+      emit(UserLoading());
+      final result = await _getUser.execute(event.user);
+
+      result.fold(
+          (l) => emit(UserError(l.message)), (r) => {emit(UserStart())});
+    });
+    on<OnUserSaveNewPassword>((event, emit) async {
+      emit(UserLoading());
+      final result = await _getUser.execute(event.password);
+
       result.fold(
           (l) => emit(UserError(l.message)), (r) => {emit(UserStart())});
     });

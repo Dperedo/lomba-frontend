@@ -203,6 +203,17 @@ class UsersPage extends StatelessWidget {
                         });
                   },
                 ),
+                const VerticalDivider(),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.key),
+                  key: const ValueKey("btnViewModifyPasswordFormOption"),
+                  label: const Text("Cambiar password"),
+                  onPressed: () {
+                    context
+                        .read<UserBloc>()
+                        .add(OnUserShowPasswordModifyForm((state.user)));
+                  },
+                ),
               ],
             ),
             const Divider(),
@@ -215,7 +226,9 @@ class UsersPage extends StatelessWidget {
                           .read<UserBloc>()
                           .add(const OnUserListLoad("", "", "", 1));
                     },
-                    label: const Text("Volver"))
+                    label: const Text("Volver")
+                ),
+                
               ],
             ),
             const Divider(),

@@ -48,3 +48,10 @@ class UserError extends UserState {
   @override
   List<Object> get props => [message];
 }
+
+class ModifyUserPassword extends UserState {
+  final User user;
+  const ModifyUserPassword(this.user);
+  @override
+  List<Object> get props => [user];
+}

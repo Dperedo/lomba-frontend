@@ -58,53 +58,6 @@ class ProfilePage extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-
-          // if (state is UserListLoaded) {
-          //   return ListView.builder(
-          //     shrinkWrap: true,
-          //     itemCount: state.users.length,
-          //     itemBuilder: (context, index) {
-          //       return Column(
-          //         children: [
-          //           Row(
-          //             children: [
-          //               Expanded(
-          //                   child: TextButton(
-          //                       child: Align(
-          //                           alignment: Alignment.centerLeft,
-          //                           child: Column(
-          //                             children: [
-          //                               ListTile(
-          //                                 leading: const Icon(Icons.switch_account),
-          //                                 title: Text(
-          //                                   state.users[index].name,
-          //                                   style: const TextStyle(fontSize: 18),
-          //                                 ),
-          //                                 subtitle: Text(
-          //                                     '${state.users[index].username} / ${state.users[index].email}',
-          //                                     style: const TextStyle(fontSize: 12)),
-          //                               ),
-          //                             ],
-          //                           )),
-          //                       onPressed: () {
-          //                         context
-          //                             .read<UserBloc>()
-          //                             .add(OnUserLoad(state.users[index].id));
-          //                       })),
-          //               Icon(
-          //                   state.users[index].enabled
-          //                       ? Icons.toggle_on
-          //                       : Icons.toggle_off_outlined,
-          //                   size: 40)
-          //             ],
-          //           ),
-          //           const Divider()
-          //         ],
-          //       );
-          //     },
-          //   );
-          // }
-
           if (state is ProfileLoaded) {
           return
           SizedBox(
@@ -119,26 +72,26 @@ class ProfilePage extends StatelessWidget {
                     width: 120, height: 120,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: Image.network('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png')
+                      child: const Icon(Icons.person, size: 70,)//Image.network('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png')
                     ),
                   ),
                 ),
-                const SizedBox(height: 20,),
+                //const SizedBox(height: 15,),
                 ListTile(
                   leading: const Icon(Icons.person),
                   title: Text(state.user.name)
                 ),
-                const SizedBox(height: 10,),
+                //const SizedBox(height: 10,),
                 ListTile(
                   leading: const Icon(Icons.person_outline),
                   title: Text(state.user.username)
                   ),
-                const SizedBox(height: 10,),
+                //const SizedBox(height: 10,),
                 ListTile(
                   leading: const Icon(Icons.mail),
                   title: Text(state.user.email)
                   ),
-                const SizedBox(height: 20,),
+                const SizedBox(height: 25,),
                 SizedBox(
                   width: 200,
                   height: 30,
@@ -152,7 +105,9 @@ class ProfilePage extends StatelessWidget {
                   width: 200,
                   height: 30,
                   child: ElevatedButton(
-                    onPressed: (() {}),
+                    onPressed: (() {
+                      //context.read<NavBloc>().add(const NavigateTo(NavItem.page));
+                    }),
                     child: const Text('Cambiar contraseña')
                   ),
                 ),

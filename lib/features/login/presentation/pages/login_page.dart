@@ -90,6 +90,7 @@ class LoginPage extends StatelessWidget {
                             TextFormField(
                               controller: _passwordController,
                               key: const ValueKey("password"),
+                              obscureText: true,
                               decoration: const InputDecoration(labelText: ' Contraseña',hintText: " Ingrese contraseña",suffixIcon: Icon(Icons.key_sharp),),
                               validator: (value) =>
                                   Validators.validatePassword(value ?? ""),
