@@ -46,11 +46,6 @@ class OrgasPage extends StatelessWidget {
         child: CircularProgressIndicator(),
       );
     }
-    if (state is OrgaError) {
-      return Center(
-        child: Text(state.message)
-      );
-    }
     if (state is OrgaListLoaded) {
       return ListView.builder(
           shrinkWrap: true,
