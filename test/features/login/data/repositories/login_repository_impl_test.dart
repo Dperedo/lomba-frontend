@@ -22,6 +22,7 @@ void main() {
   late MockLocalDataSource mockLocalDataSource;
   late MockUserRemoteDataSource mockUserRemoteDataSource;
   late LoginRepositoryImpl repository;
+  late MockUserRemoteDataSource mockUserRemoteDataSource;
 
   setUp(() {
     mockRemoteDataSource = MockRemoteDataSource();
@@ -31,6 +32,9 @@ void main() {
       localDataSource: mockLocalDataSource,
       remoteDataSource: mockRemoteDataSource, userDataSource: mockUserRemoteDataSource,
     );
+        localDataSource: mockLocalDataSource,
+        remoteDataSource: mockRemoteDataSource,
+        userDataSource: mockUserRemoteDataSource);
   });
 
   const tLoginAccessModel = LoginAccessModel(

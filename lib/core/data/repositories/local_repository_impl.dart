@@ -123,6 +123,7 @@ class LocalRepositoryImpl implements LocalRepository {
     } else {
       opts.add(SideDrawerUserOptions.optLogOff);
       opts.add(SideDrawerUserOptions.optProfile);
+      opts.add(SideDrawerUserOptions.optDemoList);
 
       if (roles.contains(Roles.roleSuperAdmin)) {
         opts.add(SideDrawerUserOptions.optOrgas);

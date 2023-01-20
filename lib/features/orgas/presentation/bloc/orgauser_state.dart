@@ -27,6 +27,15 @@ class OrgaUserListLoaded extends OrgaUserState {
   List<Object> get props => [users, orgaId, orgaUsers];
 }
 
+///Estado con la lista de orga-users cargada
+class OrgaUserListUserNotInOrgaLoaded extends OrgaUserState {
+  final List<User> users;
+  final String orgaId;
+  const OrgaUserListUserNotInOrgaLoaded(this.orgaId, this.users);
+  @override
+  List<Object> get props => [users, orgaId];
+}
+
 ///Estado para mostrar las opciones que permiten agregar una nueva relación
 class OrgaUserAdding extends OrgaUserState {}
 

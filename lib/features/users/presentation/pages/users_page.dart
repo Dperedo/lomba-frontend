@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
 import 'package:lomba_frontend/features/users/presentation/bloc/user_event.dart';
+import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
 
 import '../../../../core/validators.dart';
 import '../bloc/user_bloc.dart';
@@ -221,6 +221,17 @@ class UsersPage extends StatelessWidget {
                         });
                   },
                 ),
+                const VerticalDivider(),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.key),
+                  key: const ValueKey("btnViewModifyPasswordFormOption"),
+                  label: const Text("Cambiar password"),
+                  onPressed: () {
+                    context
+                        .read<UserBloc>()
+                        .add(OnUserShowPasswordModifyForm((state.user)));
+                  },
+                ),
               ],
             ),
             const Divider(),
@@ -233,7 +244,7 @@ class UsersPage extends StatelessWidget {
                           .read<UserBloc>()
                           .add(const OnUserListLoad("", "", "", 1));
                     },
-                    label: const Text("Volver"))
+                    label: const Text("Volver")),
               ],
             ),
             const Divider(),
@@ -328,7 +339,6 @@ class UsersPage extends StatelessWidget {
                       padding: const EdgeInsets.all(15.0),
                       child: ElevatedButton.icon(
                           onPressed: () {
-                            
                             if (_key.currentState?.validate() == true) {
                               context.read<UserBloc>().add(OnUserAdd(
                                   nameController.text,
@@ -354,17 +364,6 @@ class UsersPage extends StatelessWidget {
     if (state is UserLoaded) {
       return AppBar(
           title: const Text("Usuario"),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              context.read<UserBloc>().add(const OnUserListLoad("", "", "", 1));
-            },
-          ));
-    }
-
-    if (state is UserAdding) {
-      return AppBar(
-          title: const Text("Agregar Usuario"),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {

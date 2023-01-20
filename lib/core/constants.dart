@@ -59,6 +59,7 @@ class SideDrawerUserOptions {
   static const String optViewed = "viewed";
   static const String optPopular = "popular";
   static const String optUploaded = "uploaded";
+  static const String optDemoList = "demolist";
 }
 
 ///Listado de los roles del sistema. Por ahora pueden seguir en esta opción.

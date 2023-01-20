@@ -175,6 +175,16 @@ class SideDrawer extends StatelessWidget {
               ));
             }
 
+            if (state.opts.contains(SideDrawerUserOptions.optDemoList)) {
+              childrenOptionsList.add(ListTile(
+                leading: const Icon(Icons.star),
+                title: const Text('Lista demo'),
+                onTap: () {
+                  _handleItemClick(context, NavItem.pageDemoList);
+                },
+              ));
+            }
+
             if (state.opts.contains(SideDrawerUserOptions.optLogOff)) {
               childrenOptionsList.add(ListTile(
                 leading: const Icon(Icons.logout),

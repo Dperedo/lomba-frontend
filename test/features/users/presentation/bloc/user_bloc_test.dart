@@ -13,6 +13,7 @@ import 'package:lomba_frontend/features/users/domain/usecases/get_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/get_users.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/update_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/exists_user.dart';
+import 'package:lomba_frontend/features/users/domain/usecases/update_user_password.dart';
 import 'package:lomba_frontend/features/users/presentation/bloc/user_bloc.dart';
 import 'package:lomba_frontend/features/users/presentation/bloc/user_event.dart';
 import 'package:lomba_frontend/features/users/presentation/bloc/user_state.dart';
@@ -31,6 +32,7 @@ import 'user_bloc_test.mocks.dart';
   MockSpec<RegisterUser>(),
   MockSpec<GetSession>(),
   MockSpec<ExistsUser>(),
+  MockSpec<UpdateUserPassword>(),
 ])
 Future<void> main() async {
   late AddUser mockAddUser;
@@ -42,6 +44,7 @@ Future<void> main() async {
   late RegisterUser mockRegisterUser;
   late GetSession mockGetSession;
   late ExistsUser mockExistsUser;
+  late UpdateUserPassword mockUpdateUserPassword;
 
   late UserBloc userBloc;
 
@@ -67,6 +70,10 @@ Future<void> main() async {
       mockGetSession,
       mockExistsUser,
     );
+    mockUpdateUserPassword = MockUpdateUserPassword();
+
+    userBloc = UserBloc(mockAddUser, mockDeleteUser, mockEnableUser,
+        mockGetUser, mockGetUsers, mockUpdateUser, mockUpdateUserPassword);
   });
 
   final newUserId = Guid.newGuid.toString();
@@ -135,7 +142,7 @@ Future<void> main() async {
         return userBloc;
       },
       act: (bloc) => bloc.add(
-          OnUserAdd(tUser.name, tUser.username, tUser.email, '1234')),
+          OnUserAdd(tUser.name, tUser.username, tUser.email, '1234', false)),
       wait: const Duration(milliseconds: 500),
       expect: () => [UserLoading(), UserStart()],
       verify: (bloc) {
