@@ -137,4 +137,21 @@ class MockUserRemoteDataSource extends _i1.Mock
           ),
         )),
       ) as _i4.Future<_i2.UserModel>);
+  @override
+  _i4.Future<_i2.UserModel?> existsUser(
+    String? userId,
+    String? username,
+    String? email,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #existsUser,
+          [
+            userId,
+            username,
+            email,
+          ],
+        ),
+        returnValue: _i4.Future<_i2.UserModel?>.value(),
+      ) as _i4.Future<_i2.UserModel?>);
 }

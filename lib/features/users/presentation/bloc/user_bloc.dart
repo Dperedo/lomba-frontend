@@ -98,10 +98,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             event.state.existUserName = false;
           }
 
-          /*else {
-            emit(event.state.copyWith(false, false));
-          }
-          */
         });
       }
     });

@@ -2,13 +2,17 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lomba_frontend/core/domain/usecases/get_session_status.dart';
+import 'package:lomba_frontend/features/login/domain/usecases/register_user.dart';
 import 'package:lomba_frontend/features/users/domain/entities/user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/add_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/delete_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/enable_user.dart';
+import 'package:lomba_frontend/features/users/domain/usecases/exists_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/get_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/get_users.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/update_user.dart';
+import 'package:lomba_frontend/features/users/domain/usecases/exists_user.dart';
 import 'package:lomba_frontend/features/users/presentation/bloc/user_bloc.dart';
 import 'package:lomba_frontend/features/users/presentation/bloc/user_event.dart';
 import 'package:lomba_frontend/features/users/presentation/bloc/user_state.dart';
@@ -24,6 +28,9 @@ import 'user_bloc_test.mocks.dart';
   MockSpec<GetUser>(),
   MockSpec<GetUsers>(),
   MockSpec<UpdateUser>(),
+  MockSpec<RegisterUser>(),
+  MockSpec<GetSession>(),
+  MockSpec<ExistsUser>(),
 ])
 Future<void> main() async {
   late AddUser mockAddUser;
@@ -32,6 +39,9 @@ Future<void> main() async {
   late GetUser mockGetUser;
   late GetUsers mockGetUsers;
   late UpdateUser mockUpdateUser;
+  late RegisterUser mockRegisterUser;
+  late GetSession mockGetSession;
+  late ExistsUser mockExistsUser;
 
   late UserBloc userBloc;
 
@@ -42,6 +52,9 @@ Future<void> main() async {
     mockGetUser = MockGetUser();
     mockGetUsers = MockGetUsers();
     mockUpdateUser = MockUpdateUser();
+    mockRegisterUser = MockRegisterUser();
+    mockGetSession = MockGetSession();
+    mockExistsUser = MockExistsUser();
 
     userBloc = UserBloc(
       mockAddUser,
@@ -50,6 +63,9 @@ Future<void> main() async {
       mockGetUser,
       mockGetUsers,
       mockUpdateUser,
+      mockRegisterUser,
+      mockGetSession,
+      mockExistsUser,
     );
   });
 
@@ -119,7 +135,7 @@ Future<void> main() async {
         return userBloc;
       },
       act: (bloc) => bloc.add(
-          OnUserAdd(tUser.name, tUser.username, tUser.email, tUser.enabled)),
+          OnUserAdd(tUser.name, tUser.username, tUser.email, '1234')),
       wait: const Duration(milliseconds: 500),
       expect: () => [UserLoading(), UserStart()],
       verify: (bloc) {
