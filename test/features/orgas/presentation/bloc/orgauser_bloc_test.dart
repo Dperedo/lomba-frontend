@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
-import 'package:lomba_frontend/features/orgas/data/models/orgauser_model.dart';
 import 'package:lomba_frontend/features/orgas/domain/entities/orgauser.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/add_orgauser.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/delete_orgauser.dart';
@@ -15,6 +14,7 @@ import 'package:lomba_frontend/features/orgas/presentation/bloc/orgauser_event.d
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orgauser_state.dart';
 import 'package:lomba_frontend/features/users/domain/entities/user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/get_users.dart';
+import 'package:lomba_frontend/features/users/domain/usecases/get_users_notin_orga.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -26,7 +26,8 @@ import 'orgauser_bloc_test.mocks.dart';
   MockSpec<EnableOrgaUser>(),
   MockSpec<GetOrgaUsers>(),
   MockSpec<UpdateOrgaUser>(),
-  MockSpec<GetUsers>()
+  MockSpec<GetUsers>(),
+  MockSpec<GetUsersNotInOrga>()
 ])
 Future<void> main() async {
   late AddOrgaUser mockAddOrgaUser;
@@ -35,6 +36,7 @@ Future<void> main() async {
   late GetOrgaUsers mockGetOrgaUsers;
   late UpdateOrgaUser mockUpdateOrgaUser;
   late GetUsers mockGetUsers;
+  late GetUsersNotInOrga mockOrgaUsersNotInOrga;
 
   late OrgaUserBloc orgaUserBloc;
 
@@ -45,9 +47,16 @@ Future<void> main() async {
     mockGetOrgaUsers = MockGetOrgaUsers();
     mockUpdateOrgaUser = MockUpdateOrgaUser();
     mockGetUsers = MockGetUsers();
+    mockOrgaUsersNotInOrga = MockGetUsersNotInOrga();
 
-    orgaUserBloc = OrgaUserBloc(mockAddOrgaUser, mockDeleteOrgaUser,
-        mockEnableOrgaUser, mockGetOrgaUsers, mockUpdateOrgaUser, mockGetUsers);
+    orgaUserBloc = OrgaUserBloc(
+        mockAddOrgaUser,
+        mockDeleteOrgaUser,
+        mockEnableOrgaUser,
+        mockGetOrgaUsers,
+        mockUpdateOrgaUser,
+        mockGetUsers,
+        mockOrgaUsersNotInOrga);
   });
 
   final newOrgaId = Guid.newGuid.toString();

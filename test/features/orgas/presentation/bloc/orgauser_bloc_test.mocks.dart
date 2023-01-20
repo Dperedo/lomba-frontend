@@ -6,6 +6,7 @@
 import 'dart:async' as _i6;
 
 import 'package:dartz/dartz.dart' as _i3;
+import 'package:lomba_frontend/core/data/models/sort_model.dart' as _i16;
 import 'package:lomba_frontend/core/failures.dart' as _i7;
 import 'package:lomba_frontend/features/orgas/domain/entities/orgauser.dart'
     as _i8;
@@ -27,6 +28,8 @@ import 'package:lomba_frontend/features/users/domain/repositories/user_repositor
     as _i4;
 import 'package:lomba_frontend/features/users/domain/usecases/get_users.dart'
     as _i13;
+import 'package:lomba_frontend/features/users/domain/usecases/get_users_notin_orga.dart'
+    as _i15;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -412,6 +415,69 @@ class MockGetUsers extends _i1.Mock implements _i13.GetUsers {
               orgaId,
               filter,
               fieldOrder,
+              pageNumber,
+              pageSize,
+            ],
+          ),
+        )),
+      ) as _i6.Future<_i3.Either<_i7.Failure, List<_i14.User>>>);
+}
+
+/// A class which mocks [GetUsersNotInOrga].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetUsersNotInOrga extends _i1.Mock implements _i15.GetUsersNotInOrga {
+  @override
+  _i4.UserRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeUserRepository_2(
+          this,
+          Invocation.getter(#repository),
+        ),
+        returnValueForMissingStub: _FakeUserRepository_2(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i4.UserRepository);
+  @override
+  _i6.Future<_i3.Either<_i7.Failure, List<_i14.User>>> execute(
+    String? orgaId,
+    _i16.SortModel? sortFields,
+    int? pageNumber,
+    int? pageSize,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [
+            orgaId,
+            sortFields,
+            pageNumber,
+            pageSize,
+          ],
+        ),
+        returnValue: _i6.Future<_i3.Either<_i7.Failure, List<_i14.User>>>.value(
+            _FakeEither_1<_i7.Failure, List<_i14.User>>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              orgaId,
+              sortFields,
+              pageNumber,
+              pageSize,
+            ],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i6.Future<_i3.Either<_i7.Failure, List<_i14.User>>>.value(
+                _FakeEither_1<_i7.Failure, List<_i14.User>>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              orgaId,
+              sortFields,
               pageNumber,
               pageSize,
             ],

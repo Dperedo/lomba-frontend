@@ -219,7 +219,7 @@ void main() {
         'orgaId': toEdit.orgaId,
         'userId': toEdit.userId,
         'roles': listInRoles,
-        'enabled': toEdit.enabled,
+        'enabled': toEdit.enabled
       };
 
       final url = Uri.parse(
@@ -262,21 +262,42 @@ void main() {
     });
     test('agregar una orgauser', () async {
       //arrange
-      when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
-          .thenAnswer((realInvocation) async => http.Response("", 200));
+
+      const toAdd = OrgaUserModel(
+          orgaId: testOrgaId01,
+          userId: testUserId01,
+          roles: <String>["super"],
+          enabled: true,
+          builtIn: true);
+
+      List<RoleModel> listInRoles = [];
+      for (var element in toAdd.roles) {
+        listInRoles.add(RoleModel(name: element, enabled: true));
+      }
+
+      final Map<String, dynamic> orgaUserBackend = {
+        'orgaId': toAdd.orgaId,
+        'userId': toAdd.userId,
+        'roles': listInRoles,
+        'enabled': toAdd.enabled,
+        'builtin': true
+      };
+
+      final url = Uri.parse('${UrlBackend.base}/api/v1/orgauser');
+
+      when(mockHttpClient.post(url,
+              body: json.encode(orgaUserBackend), headers: testHeaders))
+          .thenAnswer((realInvocation) async =>
+              http.Response(testGetOrgaUserResponseOne, 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
 
       //act
-      OrgaUserModel toAdd = OrgaUserModel(
-          orgaId: Guid.newGuid.toString(),
-          userId: Guid.newGuid.toString(),
-          roles: const <String>["user"],
-          enabled: true,
-          builtIn: false);
+
       final result = await dataSource.addOrgaUser(toAdd);
 
       //assert
       expect(result, equals(toAdd));
-      //expect(fakeListOrgaUsers.length, equals(count - 1));
     });
   });
   group('eliminar datos orga y orgauser', () {
