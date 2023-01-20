@@ -181,4 +181,19 @@ class UserRepositoryImpl implements UserRepository {
       return const Left(ConnectionFailure('Failed to connect to the network'));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> updateUserPassword(
+      String userId, String password) async {
+    try {
+      final result =
+          await remoteDataSource.updateUserPassword(userId, password);
+
+      return Right(result);
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(ConnectionFailure('Failed to connect to the network'));
+    }
+  }
 }

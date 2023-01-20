@@ -13,7 +13,6 @@ import 'package:lomba_frontend/features/users/data/datasources/user_remote_data_
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import '../../../users/data/repositories/user_repository_impl_test.mocks.dart';
 import 'login_repository_impl_test.mocks.dart';
 
 @GenerateMocks([RemoteDataSource, LocalDataSource, UserRemoteDataSource])
@@ -22,7 +21,6 @@ void main() {
   late MockLocalDataSource mockLocalDataSource;
   late MockUserRemoteDataSource mockUserRemoteDataSource;
   late LoginRepositoryImpl repository;
-  late MockUserRemoteDataSource mockUserRemoteDataSource;
 
   setUp(() {
     mockRemoteDataSource = MockRemoteDataSource();
@@ -30,11 +28,9 @@ void main() {
     mockUserRemoteDataSource = MockUserRemoteDataSource();
     repository = LoginRepositoryImpl(
       localDataSource: mockLocalDataSource,
-      remoteDataSource: mockRemoteDataSource, userDataSource: mockUserRemoteDataSource,
+      remoteDataSource: mockRemoteDataSource,
+      userDataSource: mockUserRemoteDataSource,
     );
-        localDataSource: mockLocalDataSource,
-        remoteDataSource: mockRemoteDataSource,
-        userDataSource: mockUserRemoteDataSource);
   });
 
   const tLoginAccessModel = LoginAccessModel(

@@ -154,4 +154,38 @@ class MockUserRemoteDataSource extends _i1.Mock
         ),
         returnValue: _i4.Future<_i2.UserModel?>.value(),
       ) as _i4.Future<_i2.UserModel?>);
+  @override
+  _i4.Future<List<_i2.UserModel>> getUsersNotInOrga(
+    String? orgaId,
+    List<dynamic>? order,
+    int? pageNumber,
+    int? pageSize,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getUsersNotInOrga,
+          [
+            orgaId,
+            order,
+            pageNumber,
+            pageSize,
+          ],
+        ),
+        returnValue: _i4.Future<List<_i2.UserModel>>.value(<_i2.UserModel>[]),
+      ) as _i4.Future<List<_i2.UserModel>>);
+  @override
+  _i4.Future<bool> updateUserPassword(
+    String? userId,
+    String? password,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateUserPassword,
+          [
+            userId,
+            password,
+          ],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 }

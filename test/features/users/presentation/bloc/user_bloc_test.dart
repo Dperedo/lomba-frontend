@@ -58,22 +58,31 @@ Future<void> main() async {
     mockRegisterUser = MockRegisterUser();
     mockGetSession = MockGetSession();
     mockExistsUser = MockExistsUser();
-
-    userBloc = UserBloc(
-      mockAddUser,
-      mockDeleteUser,
-      mockEnableUser,
-      mockGetUser,
-      mockGetUsers,
-      mockUpdateUser,
-      mockRegisterUser,
-      mockGetSession,
-      mockExistsUser,
-    );
     mockUpdateUserPassword = MockUpdateUserPassword();
 
-    userBloc = UserBloc(mockAddUser, mockDeleteUser, mockEnableUser,
-        mockGetUser, mockGetUsers, mockUpdateUser, mockUpdateUserPassword);
+    userBloc = UserBloc(
+        mockAddUser,
+        mockDeleteUser,
+        mockEnableUser,
+        mockGetUser,
+        mockGetUsers,
+        mockUpdateUser,
+        mockRegisterUser,
+        mockGetSession,
+        mockExistsUser,
+        mockUpdateUserPassword);
+
+    userBloc = UserBloc(
+        mockAddUser,
+        mockDeleteUser,
+        mockEnableUser,
+        mockGetUser,
+        mockGetUsers,
+        mockUpdateUser,
+        mockRegisterUser,
+        mockGetSession,
+        mockExistsUser,
+        mockUpdateUserPassword);
   });
 
   final newUserId = Guid.newGuid.toString();
@@ -141,8 +150,8 @@ Future<void> main() async {
             .thenAnswer((_) async => Right(tUser));
         return userBloc;
       },
-      act: (bloc) => bloc.add(
-          OnUserAdd(tUser.name, tUser.username, tUser.email, '1234', false)),
+      act: (bloc) =>
+          bloc.add(OnUserAdd(tUser.name, tUser.username, tUser.email, '1234')),
       wait: const Duration(milliseconds: 500),
       expect: () => [UserLoading(), UserStart()],
       verify: (bloc) {
