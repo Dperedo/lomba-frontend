@@ -22,6 +22,18 @@ class Validators {
     return null;
   }
 
+  static String? validateUsername(String username) {
+    if (username.isEmpty) {
+      return "Campo Requerido";
+    }
+
+    if (username.length > 30) {
+      return "Por favor ingresa un usuario con menos de 30 caracteres";
+    }
+
+    return null;
+  }
+
   ///Validación de password
   ///
   ///Debe no ser vacío y cumplir con un largo mínimo.
@@ -32,6 +44,37 @@ class Validators {
 
     if (password.length < 4) {
       return "Por favor ingresa una contraseña de al menos 4 caracteres";
+    }
+
+    return null;
+  }
+
+  ///Validación de name
+  ///
+  ///Debe no ser vacío y cumplir con un largo mínimo.
+  static String? validateName(String name) {
+    if (name.isEmpty) {
+      return "Campo Requerido";
+    }
+
+    if (name.length < 4) {
+      return "Por favor ingrese minimo 4 caracteres";
+    }
+
+    return null;
+  }
+
+  static String? validatePasswordEqual(String repeatpassword, String password) {
+    if (repeatpassword.isEmpty) {
+      return "Campo Requerido";
+    }
+
+    if (repeatpassword.length < 4) {
+      return "Por favor ingresa una contraseña de al menos 4 caracteres";
+    }
+
+    if (repeatpassword != password) {
+      return "Por favor ingresa una contraseña igual a la password anterior";
     }
 
     return null;

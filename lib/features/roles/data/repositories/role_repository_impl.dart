@@ -56,7 +56,7 @@ class RoleRepositoryImpl implements RoleRepository {
         final resultItem = await remoteDataSource.getRole(name);
         return Right(resultItem.toEntity());
       }
-      return const Left(ServerFailure(''));
+      return const Left(ServerFailure('No fue posible realizar la acción'));
     } on ServerException {
       return const Left(ServerFailure(''));
     } on SocketException {

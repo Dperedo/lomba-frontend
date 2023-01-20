@@ -8,6 +8,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../domain/entities/user.dart';
 import '../../domain/usecases/get_users.dart';
+import '../../domain/usecases/update_user_password.dart';
 import 'user_event.dart';
 import 'user_state.dart';
 
@@ -18,6 +19,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final GetUser _getUser;
   final GetUsers _getUsers;
   final UpdateUser _updateUser;
+  final UpdateUserPassword _updateUserPassword;
 
   UserBloc(
     this._addUser,
@@ -25,7 +27,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     this._enableUser,
     this._getUser,
     this._getUsers,
-    this._updateUser,
+    this._updateUser, 
+    this._updateUserPassword,
   ) : super(UserStart()) {
     on<OnUserLoad>(
       (event, emit) async {
@@ -84,6 +87,19 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(UserLoading());
 
       final result = await _deleteUser.execute(event.id);
+      result.fold(
+          (l) => emit(UserError(l.message)), (r) => {emit(UserStart())});
+    });
+    on<OnUserShowPasswordModifyForm>((event, emit) async {
+      emit(UserLoading());
+      
+      emit(ModifyUserPassword(event.user));
+      
+    });
+    on<OnUserSaveNewPassword>((event, emit) async {
+      emit(UserLoading());
+      final result = await _getUser.execute(event.password);
+
       result.fold(
           (l) => emit(UserError(l.message)), (r) => {emit(UserStart())});
     });

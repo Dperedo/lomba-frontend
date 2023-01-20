@@ -1,3 +1,4 @@
+
 import 'package:equatable/equatable.dart';
 
 import '../../domain/entities/user.dart';
@@ -47,4 +48,11 @@ class UserError extends UserState {
 
   @override
   List<Object> get props => [message];
+}
+
+class ModifyUserPassword extends UserState {
+  final User user;
+  const ModifyUserPassword(this.user);
+  @override
+  List<Object> get props => [user];
 }

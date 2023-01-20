@@ -207,7 +207,7 @@ class OrgaRepositoryImpl implements OrgaRepository {
         final resultItem = await remoteDataSource.getOrga(orgaId);
         return Right(resultItem.toEntity());
       }
-      return const Left(ServerFailure(''));
+      return const Left(ServerFailure('No fue posible realizar la acción'));
     } on ServerException {
       return const Left(ServerFailure(''));
     } on SocketException {

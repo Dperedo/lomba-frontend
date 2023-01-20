@@ -42,7 +42,7 @@ void main() {
       '{"apiVersion":"1.0","method":"get","params":{"id":"super"},"context":"geted by orga id","id":"53052260-b794-4215-a633-7f16b9a78d15","_id":"53052260-b794-4215-a633-7f16b9a78d15","data":{"items":[{"_id":"super","id":"super","name":"super","enabled":true}],"kind":"string","currentItemCount":1,"updated":"2023-01-16T15:07:02.673Z"}}';
 
   const testBoolResponse =
-      '{"apiVersion":"1.0","method":"get","params":{"id":"super"},"context":"geted by orga id","id":"2db8980a-1d3f-47fc-a5bb-757b8d1b59a5","_id":"2db8980a-1d3f-47fc-a5bb-757b8d1b59a5","data":{"items":[{"_id":"super","id":"super","name":"super","enabled":true}],"kind":"string","currentItemCount":1,"updated":"2023-01-16T15:12:22.330Z"}}';
+      '{"apiVersion":"1.0","method":"put","params":{"id":"anonymous","enable":"false"},"context":"role disabled","id":"675a7573-49b7-440d-9765-3da2df1b4115","_id":"675a7573-49b7-440d-9765-3da2df1b4115","data":{"items":[true],"kind":"boolean","currentItemCount":1,"updated":"2023-01-16T22:55:20.752Z"}}';
 
   const testSession = SessionModel(
       token: SystemKeys.tokenSuperAdmin2023, name: 'Súper', username: 'super');
@@ -117,7 +117,7 @@ void main() {
       final result = await dataSource.enableRole(fakeRoles[1].name, false);
 
       //assert
-      expect(result, equals(false));
+      expect(result, equals(true));
     });
   });
 }

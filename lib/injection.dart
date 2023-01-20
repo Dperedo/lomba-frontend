@@ -1,11 +1,13 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
+import 'package:lomba_frontend/features/login/domain/usecases/register_user.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart';
 import 'package:lomba_frontend/features/orgas/data/datasources/orga_remote_data_source.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/add_orga.dart';
 import 'package:lomba_frontend/features/sidedrawer/domain/usecases/do_logoff.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/get_users_notin_orga.dart';
+import 'package:lomba_frontend/features/users/domain/usecases/update_user_password.dart';
 import 'package:lomba_frontend/features/users/presentation/bloc/user_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,6 +35,7 @@ import 'features/orgas/domain/usecases/update_orga.dart';
 import 'features/orgas/domain/usecases/update_orgauser.dart';
 import 'features/orgas/presentation/bloc/orga_bloc.dart';
 import 'features/orgas/presentation/bloc/orgauser_bloc.dart';
+import 'features/profile/presentation/bloc/profile_bloc.dart';
 import 'features/roles/data/datasources/role_remote_data_source.dart';
 import 'features/roles/data/repositories/role_repository_impl.dart';
 import 'features/roles/domain/repositories/role_repository.dart';
@@ -73,15 +76,19 @@ Future<void> init() async {
   locator.registerFactory(() => OrgaUserBloc(locator(), locator(), locator(),
       locator(), locator(), locator(), locator()));
 
-  locator.registerFactory(() => UserBloc(
-      locator(), locator(), locator(), locator(), locator(), locator()));
+  locator.registerFactory(() => UserBloc(locator(), locator(), locator(),
+      locator(), locator(), locator(), locator()));
+
+  locator.registerFactory(() => ProfileBloc(locator(), locator()));
 
   // usecase
+  locator.registerLazySingleton(() => UpdateUserPassword(locator()));
   locator.registerLazySingleton(() => GetAuthenticate(locator()));
   locator.registerLazySingleton(() => GetHasLogIn(locator()));
   locator.registerLazySingleton(() => GetSession(locator()));
   locator.registerLazySingleton(() => GetSideOptions(locator()));
   locator.registerLazySingleton(() => DoLogOff(locator()));
+  locator.registerLazySingleton(() => RegisterUser(locator()));
 
   locator.registerLazySingleton(() => AddOrga(locator()));
   locator.registerLazySingleton(() => AddOrgaUser(locator()));
@@ -110,7 +117,9 @@ Future<void> init() async {
   // repository
   locator.registerLazySingleton<LoginRepository>(
     () => LoginRepositoryImpl(
-        remoteDataSource: locator(), localDataSource: locator()),
+        remoteDataSource: locator(),
+        localDataSource: locator(),
+        userDataSource: locator()),
   );
   locator.registerLazySingleton<LocalRepository>(
     () => LocalRepositoryImpl(localDataSource: locator()),

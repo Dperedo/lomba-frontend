@@ -16,9 +16,10 @@ class UsersPage extends StatelessWidget {
         return Scaffold(
           appBar: _variableAppBar(context, state),
           body: SingleChildScrollView(
-              child: Column(
+            child: Column(
             children: [_bodyUsers(context, state)],
-          )),
+            )
+          ),
           drawer: const SideDrawer(),
         );
       },
@@ -202,6 +203,17 @@ class UsersPage extends StatelessWidget {
                         });
                   },
                 ),
+                const VerticalDivider(),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.key),
+                  key: const ValueKey("btnViewModifyPasswordFormOption"),
+                  label: const Text("Cambiar password"),
+                  onPressed: () {
+                    context
+                        .read<UserBloc>()
+                        .add(OnUserShowPasswordModifyForm((state.user)));
+                  },
+                ),
               ],
             ),
             const Divider(),
@@ -214,14 +226,58 @@ class UsersPage extends StatelessWidget {
                           .read<UserBloc>()
                           .add(const OnUserListLoad("", "", "", 1));
                     },
-                    label: const Text("Volver"))
+                    label: const Text("Volver")
+                ),
+                
               ],
             ),
             const Divider(),
           ],
         ),
       );
+      
     }
+    if (state is ModifyUserPassword){
+     return Padding(
+       padding: const EdgeInsets.all(10),
+       child: Column(
+         children: [
+           ListTile(
+             leading: const Icon(Icons.switch_account_rounded),
+             title:
+                 Text(state.user.name, style: const TextStyle(fontSize: 22)),
+           ),
+           const Divider(),
+           TextFormField(),
+           Row(
+            children: [
+              ElevatedButton.icon(
+                      icon: const Icon(Icons.cancel),
+                      key: const ValueKey("btnViewCancelarCambios"),
+                      label: const Text("Cancelar"),
+                      onPressed: () {
+                        context
+                            .read<UserBloc>()
+                            .add(OnUserShowPasswordModifyForm((state.user)));//cambiar add.
+                      },
+              ),
+              const VerticalDivider(),
+              ElevatedButton.icon(
+                      icon: const Icon(Icons.save),
+                      key: const ValueKey("btnViewSaveNewPassword"),
+                      label: const Text("Guardar cambios"),
+                      onPressed: () {
+                        context
+                            .read<UserBloc>()
+                            .add(OnUserShowPasswordModifyForm((state.user)));
+                      },
+              ),
+            ],
+           ),
+         ]
+       ),
+     );
+   }
 
     return const SizedBox();
   }

@@ -22,6 +22,8 @@ import 'package:lomba_frontend/features/users/domain/usecases/get_users.dart'
     as _i11;
 import 'package:lomba_frontend/features/users/domain/usecases/update_user.dart'
     as _i12;
+import 'package:lomba_frontend/features/users/domain/usecases/update_user_password.dart'
+    as _i13;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -380,4 +382,60 @@ class MockUpdateUser extends _i1.Mock implements _i12.UpdateUser {
           ),
         )),
       ) as _i5.Future<_i3.Either<_i6.Failure, _i7.User>>);
+}
+
+/// A class which mocks [UpdateUserPassword].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUpdateUserPassword extends _i1.Mock
+    implements _i13.UpdateUserPassword {
+  @override
+  _i2.UserRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeUserRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+        returnValueForMissingStub: _FakeUserRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.UserRepository);
+  @override
+  _i5.Future<_i3.Either<_i6.Failure, bool>> execute(
+    String? userId,
+    String? password,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [
+            userId,
+            password,
+          ],
+        ),
+        returnValue: _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
+            _FakeEither_1<_i6.Failure, bool>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              userId,
+              password,
+            ],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
+                _FakeEither_1<_i6.Failure, bool>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              userId,
+              password,
+            ],
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i6.Failure, bool>>);
 }
