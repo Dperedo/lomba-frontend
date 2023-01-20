@@ -200,6 +200,25 @@ class MockUserRemoteDataSourceImpl extends _i1.Mock
           ),
         )),
       ) as _i6.Future<_i4.UserModel>);
+  @override
+  _i6.Future<List<_i4.UserModel>> getUsersNotInOrga(
+    String? orgaId,
+    List<dynamic>? order,
+    int? pageNumber,
+    int? pageSize,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getUsersNotInOrga,
+          [
+            orgaId,
+            order,
+            pageNumber,
+            pageSize,
+          ],
+        ),
+        returnValue: _i6.Future<List<_i4.UserModel>>.value(<_i4.UserModel>[]),
+      ) as _i6.Future<List<_i4.UserModel>>);
 }
 
 /// A class which mocks [Client].

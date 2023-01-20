@@ -64,4 +64,17 @@ void main() {
     //assert
     expect(message, findsOneWidget);
   });
+
+  testWidgets('mostrar circulo de progreso cuando carga información',
+      (WidgetTester tester) async {
+    //arrange
+    when(() => mockHomeBloc.state).thenReturn(HomeLoading());
+
+    //act
+    await tester.pumpWidget(makeTestableWidget(const HomePage()));
+    final indicator = find.byType(CircularProgressIndicator);
+
+    //assert
+    expect(indicator, findsOneWidget);
+  });
 }

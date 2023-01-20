@@ -14,6 +14,7 @@ import 'package:lomba_frontend/features/orgas/presentation/bloc/orgauser_event.d
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orgauser_state.dart';
 import 'package:lomba_frontend/features/users/domain/entities/user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/get_users.dart';
+import 'package:lomba_frontend/features/users/domain/usecases/get_users_notin_orga.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -25,7 +26,8 @@ import 'orgauser_bloc_test.mocks.dart';
   MockSpec<EnableOrgaUser>(),
   MockSpec<GetOrgaUsers>(),
   MockSpec<UpdateOrgaUser>(),
-  MockSpec<GetUsers>()
+  MockSpec<GetUsers>(),
+  MockSpec<GetUsersNotInOrga>()
 ])
 Future<void> main() async {
   late AddOrgaUser mockAddOrgaUser;
@@ -34,6 +36,7 @@ Future<void> main() async {
   late GetOrgaUsers mockGetOrgaUsers;
   late UpdateOrgaUser mockUpdateOrgaUser;
   late GetUsers mockGetUsers;
+  late GetUsersNotInOrga mockOrgaUsersNotInOrga;
 
   late OrgaUserBloc orgaUserBloc;
 
@@ -44,9 +47,16 @@ Future<void> main() async {
     mockGetOrgaUsers = MockGetOrgaUsers();
     mockUpdateOrgaUser = MockUpdateOrgaUser();
     mockGetUsers = MockGetUsers();
+    mockOrgaUsersNotInOrga = MockGetUsersNotInOrga();
 
-    orgaUserBloc = OrgaUserBloc(mockAddOrgaUser, mockDeleteOrgaUser,
-        mockEnableOrgaUser, mockGetOrgaUsers, mockUpdateOrgaUser, mockGetUsers);
+    orgaUserBloc = OrgaUserBloc(
+        mockAddOrgaUser,
+        mockDeleteOrgaUser,
+        mockEnableOrgaUser,
+        mockGetOrgaUsers,
+        mockUpdateOrgaUser,
+        mockGetUsers,
+        mockOrgaUsersNotInOrga);
   });
 
   final newOrgaId = Guid.newGuid.toString();
@@ -156,12 +166,19 @@ Future<void> main() async {
         when(mockUpdateOrgaUser.execute(
                 tOrgaUser.orgaId, tOrgaUser.userId, tOrgaUser))
             .thenAnswer((_) async => Right(tOrgaUser));
+        when(mockGetUsers.execute(newOrgaId, "", "", 1, 10))
+            .thenAnswer((realInvocation) async => Right(<User>[tUser]));
+        when(mockGetOrgaUsers.execute(newOrgaId))
+            .thenAnswer((realInvocation) async => Right(<OrgaUser>[tOrgaUser]));
         return orgaUserBloc;
       },
       act: (bloc) => bloc.add(OnOrgaUserEdit(tOrgaUser.orgaId, tOrgaUser.userId,
           tOrgaUser.roles, tOrgaUser.enabled)),
       wait: const Duration(milliseconds: 500),
-      expect: () => [OrgaUserLoading(), OrgaUserStart()],
+      expect: () => [
+        OrgaUserLoading(),
+        OrgaUserListLoaded(newOrgaId, <User>[tUser], <OrgaUser>[tOrgaUser])
+      ],
       verify: (bloc) {
         verify(mockUpdateOrgaUser.execute(
             tOrgaUser.orgaId, tOrgaUser.userId, tOrgaUser));

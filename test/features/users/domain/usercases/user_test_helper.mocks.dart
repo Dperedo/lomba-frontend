@@ -6,6 +6,7 @@
 import 'dart:async' as _i4;
 
 import 'package:dartz/dartz.dart' as _i2;
+import 'package:lomba_frontend/core/data/models/sort_model.dart' as _i7;
 import 'package:lomba_frontend/core/failures.dart' as _i5;
 import 'package:lomba_frontend/features/users/domain/entities/user.dart' as _i6;
 import 'package:lomba_frontend/features/users/domain/repositories/user_repository.dart'
@@ -69,6 +70,37 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
               orgaId,
               filter,
               fieldOrder,
+              pageNumber,
+              pageSize,
+            ],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.User>>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.User>>> getUsersNotInOrga(
+    String? orgaId,
+    _i7.SortModel? sortFields,
+    int? pageNumber,
+    int? pageSize,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getUsersNotInOrga,
+          [
+            orgaId,
+            sortFields,
+            pageNumber,
+            pageSize,
+          ],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, List<_i6.User>>>.value(
+            _FakeEither_0<_i5.Failure, List<_i6.User>>(
+          this,
+          Invocation.method(
+            #getUsersNotInOrga,
+            [
+              orgaId,
+              sortFields,
               pageNumber,
               pageSize,
             ],

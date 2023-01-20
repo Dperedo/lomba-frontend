@@ -12,6 +12,7 @@ import 'package:lomba_frontend/features/viewed/presentation/pages/viewed_page.da
 
 import 'core/presentation/bloc/nav_state.dart';
 import 'features/addcontent/presentation/pages/addcontent_page.dart';
+import 'features/demolist/presentation/pages/demolist_page.dart';
 import 'features/home/presentation/bloc/home_bloc.dart';
 import 'features/login/presentation/bloc/login_bloc.dart';
 import 'features/home/presentation/pages/home_page.dart';
@@ -116,6 +117,9 @@ class _MyApp extends State<MyApp> {
     }
     if (state.selectedItem == NavItem.pageProfile) {
       return const ProfilePage();
+    }
+    if (state.selectedItem == NavItem.pageDemoList) {
+      return const DemoListPage();
     }
   }
 }

@@ -6,6 +6,7 @@ import 'package:lomba_frontend/features/orgas/domain/usecases/delete_orgauser.da
 import 'package:lomba_frontend/features/orgas/domain/usecases/enable_orgauser.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/get_orgausers.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/update_orgauser.dart';
+import 'package:lomba_frontend/features/users/domain/usecases/get_users_notin_orga.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../users/domain/entities/user.dart';
@@ -24,9 +25,16 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
   final GetOrgaUsers _getOrgaUsers;
   final UpdateOrgaUser _updateOrgaUser;
   final GetUsers _getUsers;
+  final GetUsersNotInOrga _getUsersNotInOrga;
 
-  OrgaUserBloc(this._addOrgaUser, this._deleteOrgaUser, this._enableOrgaUser,
-      this._getOrgaUsers, this._updateOrgaUser, this._getUsers)
+  OrgaUserBloc(
+      this._addOrgaUser,
+      this._deleteOrgaUser,
+      this._enableOrgaUser,
+      this._getOrgaUsers,
+      this._updateOrgaUser,
+      this._getUsers,
+      this._getUsersNotInOrga)
       : super(OrgaUserStart()) {
     on<OnOrgaUserListLoad>((event, emit) async {
       emit(OrgaUserLoading());
@@ -63,10 +71,28 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
           enabled: event.enabled,
           builtIn: false);
 
+      bool isUpdated = false;
+
       final result =
           await _updateOrgaUser.execute(event.orgaId, event.userId, orgaUser);
-      result.fold((l) => emit(OrgaUserError(l.message)),
-          (r) => {emit(OrgaUserStart())});
+      result.fold(
+          (l) => emit(OrgaUserError(l.message)), (r) => {isUpdated = true});
+
+      if (isUpdated) {
+        final resUsers = await _getUsers.execute(event.orgaId, '', '', 1, 10);
+
+        final resultOU = await _getOrgaUsers.execute(event.orgaId);
+
+        List<User> listUsers = [];
+        resUsers.fold(
+            (l) => emit(OrgaUserError(l.message)), (r) => {listUsers = r});
+
+        List<OrgaUser> listOrgaUsers = [];
+        resultOU.fold(
+            (l) => emit(OrgaUserError(l.message)), (r) => {listOrgaUsers = r});
+
+        emit(OrgaUserListLoaded(event.orgaId, listUsers, listOrgaUsers));
+      }
     });
     on<OnOrgaUserEnable>((event, emit) async {
       emit(OrgaUserLoading());
@@ -79,26 +105,29 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
     on<OnOrgaUserDelete>((event, emit) async {
       emit(OrgaUserLoading());
 
+      bool isDeleted = false;
+
       final result = await _deleteOrgaUser.execute(event.orgaId, event.userId);
-      result.fold((l) => emit(OrgaUserError(l.message)),
-          (r) => {emit(OrgaUserStart())});
-    });
-    on<OnOrgaUserPrepareForEdit>((event, emit) async {
-      emit(OrgaUserLoading());
+      result.fold(
+          (l) => emit(OrgaUserError(l.message)), (r) => {isDeleted = r});
 
-      final orgaUserResult = await _getOrgaUsers.execute(event.orgaId);
-
-      List<OrgaUser> listOrgaUsers = [];
-
-      orgaUserResult.fold(
-          (l) => {emit(OrgaUserError(l.message))},
-          (r) => listOrgaUsers =
-              r.where((element) => element.userId == event.userId).toList());
-
-      if (listOrgaUsers.isNotEmpty) {
-        emit(OrgaUserEditing(listOrgaUsers[0]));
+      if (isDeleted) {
+        emit(OrgaUserStart());
       }
     });
+    on<OnOrgaUserListUserNotInOrgaForAdd>((event, emit) async {
+      emit(OrgaUserLoading());
+
+      final result = await _getUsersNotInOrga.execute(
+          event.orgaId, event.sortFields, event.pageNumber, event.pageSize);
+
+      List<User> listUsers = [];
+      result.fold(
+          (l) => emit(OrgaUserError(l.message)), (r) => {listUsers = r});
+
+      emit(OrgaUserListUserNotInOrgaLoaded(event.orgaId, listUsers));
+    });
+    on<OnOrgaUserStarter>(((event, emit) async => emit(OrgaUserStart())));
   }
 
   EventTransformer<T> debounce<T>(Duration duration) {

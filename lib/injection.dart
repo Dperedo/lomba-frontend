@@ -5,6 +5,7 @@ import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart'
 import 'package:lomba_frontend/features/orgas/data/datasources/orga_remote_data_source.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/add_orga.dart';
 import 'package:lomba_frontend/features/sidedrawer/domain/usecases/do_logoff.dart';
+import 'package:lomba_frontend/features/users/domain/usecases/get_users_notin_orga.dart';
 import 'package:lomba_frontend/features/users/presentation/bloc/user_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -69,8 +70,8 @@ Future<void> init() async {
       ));
   locator.registerFactory(() => RoleBloc(locator(), locator(), locator()));
 
-  locator.registerFactory(() => OrgaUserBloc(
-      locator(), locator(), locator(), locator(), locator(), locator()));
+  locator.registerFactory(() => OrgaUserBloc(locator(), locator(), locator(),
+      locator(), locator(), locator(), locator()));
 
   locator.registerFactory(() => UserBloc(
       locator(), locator(), locator(), locator(), locator(), locator()));
@@ -100,6 +101,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetUser(locator()));
   locator.registerLazySingleton(() => GetUsers(locator()));
   locator.registerLazySingleton(() => UpdateUser(locator()));
+  locator.registerLazySingleton(() => GetUsersNotInOrga(locator()));
 
   locator.registerLazySingleton(() => EnableRole(locator()));
   locator.registerLazySingleton(() => GetRole(locator()));
