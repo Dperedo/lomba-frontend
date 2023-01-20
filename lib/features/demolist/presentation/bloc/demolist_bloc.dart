@@ -1,14 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/features/demolist/presentation/bloc/demolist_event.dart';
 import 'package:lomba_frontend/features/demolist/presentation/bloc/demolist_state.dart';
-
+import 'package:flutter/foundation.dart';
 import '../../../../core/fakedata.dart';
 
 class DemoListBloc extends Bloc<DemoListEvent, DemoListState> {
   DemoListBloc() : super(DemoListStartState()) {
     on<OnDemoListSearch>(
       (event, emit) async {
+        //lanza estado para mostrar el círculo de progreso
         emit(DemoListLoadingState());
+
+//las siguientes líneas solo existen con el propósito de cargar información de pruebas.
+//para implementar lo siguiente se deben invocar nuevos casos de uso.
 
         List<TestRandomItem> filtered = testRandomItemList
             .where((element) =>
@@ -48,8 +52,19 @@ class DemoListBloc extends Bloc<DemoListEvent, DemoListState> {
             .take(event.pageSize)
             .toList();
 
-        emit(DemoListLoadedState(event.searchText, event.fieldsOrder,
-            event.pageIndex, event.pageSize, listPaged));
+        int totalPages = (filtered.length / event.pageSize).round();
+        if (totalPages == 0) totalPages = 1;
+
+//emite estado con la información de la pantalla.
+        emit(DemoListLoadedState(
+            event.searchText,
+            event.fieldsOrder,
+            event.pageIndex,
+            event.pageSize,
+            listPaged,
+            listPaged.length,
+            filtered.length,
+            totalPages));
       },
     );
   }

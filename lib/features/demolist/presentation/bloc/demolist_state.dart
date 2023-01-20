@@ -23,6 +23,16 @@ class DemoListLoadedState extends DemoListState {
   final int pageIndex;
   final int pageSize;
   final List<TestRandomItem> listRandomItems;
-  const DemoListLoadedState(this.searchText, this.fieldsOrder, this.pageIndex,
-      this.pageSize, this.listRandomItems);
+  final int itemCount;
+  final int totalItems;
+  final int totalPages;
+  const DemoListLoadedState(
+      this.searchText,
+      this.fieldsOrder,
+      this.pageIndex,
+      this.pageSize,
+      this.listRandomItems,
+      this.itemCount,
+      this.totalItems,
+      this.totalPages);
 }

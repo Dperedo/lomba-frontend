@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/features/demolist/presentation/bloc/demolist_bloc.dart';
 import 'package:lomba_frontend/features/demolist/presentation/bloc/demolist_event.dart';
 import 'package:lomba_frontend/features/demolist/presentation/bloc/demolist_state.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 import '../../../sidedrawer/presentation/pages/sidedrawer_page.dart';
 
@@ -15,7 +16,7 @@ class DemoListPage extends StatelessWidget {
 
   final TextEditingController _searchController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
-
+  final int _fixPageSize = 8;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,9 +45,8 @@ class DemoListPage extends StatelessWidget {
       child: BlocBuilder<DemoListBloc, DemoListState>(
         builder: (context, state) {
           if (state is DemoListStartState) {
-            context
-                .read<DemoListBloc>()
-                .add(const OnDemoListSearch("", <String, int>{'id': 1}, 1, 10));
+            context.read<DemoListBloc>().add(OnDemoListSearch(
+                "", const <String, int>{'num': 1}, 1, _fixPageSize));
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -91,28 +91,56 @@ class DemoListPage extends StatelessWidget {
                                           state.fieldsOrder.keys.first: 1
                                         },
                                         1,
-                                        10));
+                                        _fixPageSize));
                               },
                               icon: const Icon(Icons.search)),
                         ],
                       ),
-                      DropdownButton(
-                        value: state.fieldsOrder.keys.first,
-                        items: listFields
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (String? value) {
-                          context.read<DemoListBloc>().add(OnDemoListSearch(
-                              state.searchText,
-                              <String, int>{value!: 1},
-                              1,
-                              10));
-                        },
-                      )
+                      Row(
+                        children: [
+                          const Text("Páginas: "),
+                          const VerticalDivider(),
+                          NumberPicker(
+                              itemWidth: 40,
+                              haptics: true,
+                              step: 1,
+                              axis: Axis.horizontal,
+                              value: state.pageIndex,
+                              minValue: 1,
+                              maxValue: state.totalPages,
+                              onChanged: (value) => context
+                                  .read<DemoListBloc>()
+                                  .add(OnDemoListSearch(
+                                      _searchController.text,
+                                      <String, int>{
+                                        state.fieldsOrder.keys.first: 1
+                                      },
+                                      value,
+                                      _fixPageSize))),
+                          const VerticalDivider(),
+                          const Text("Orden:"),
+                          const VerticalDivider(),
+                          DropdownButton(
+                            value: state.fieldsOrder.keys.first,
+                            items: listFields
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (String? value) {
+                              context.read<DemoListBloc>().add(OnDemoListSearch(
+                                  state.searchText,
+                                  <String, int>{value!: 1},
+                                  state.pageIndex,
+                                  _fixPageSize));
+                            },
+                          )
+                        ],
+                      ),
+                      Text(
+                          "${(state.searchText != "" ? "Buscando por \"${state.searchText}\", mostrando " : "Mostrando ")}${state.itemCount} registros de ${state.totalItems}. Página ${state.pageIndex} de ${state.totalPages}. Ordenado por ${state.fieldsOrder.keys.first}.")
                     ],
                   ),
                 ),
