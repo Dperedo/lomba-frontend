@@ -65,4 +65,41 @@ class MockLoginRepository extends _i1.Mock implements _i3.LoginRepository {
           ),
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, bool>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, bool>> registerUser(
+    String? name,
+    String? username,
+    String? email,
+    String? orgaId,
+    String? password,
+    String? role,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #registerUser,
+          [
+            name,
+            username,
+            email,
+            orgaId,
+            password,
+            role,
+          ],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, bool>>.value(
+            _FakeEither_0<_i5.Failure, bool>(
+          this,
+          Invocation.method(
+            #registerUser,
+            [
+              name,
+              username,
+              email,
+              orgaId,
+              password,
+              role,
+            ],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, bool>>);
 }
