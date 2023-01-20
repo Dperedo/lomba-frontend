@@ -129,11 +129,18 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<Failure, User>> existsUser(String userId,String username,String email) async {
+  Future<Either<Failure, User?>> existsUser(
+      String userId, String username, String email) async {
     try {
       final result = await remoteDataSource.existsUser(userId, username, email);
 
-      return Right(result!.toEntity());
+      if(result == null) {
+        return const Right(null);
+      } else {
+        return Right(result.toEntity());
+      }
+
+
     } on ServerException {
       return const Left(ServerFailure(''));
     } on SocketException {

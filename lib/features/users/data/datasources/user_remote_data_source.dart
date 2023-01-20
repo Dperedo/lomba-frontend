@@ -21,7 +21,7 @@ abstract class UserRemoteDataSource {
 
   Future<UserModel> updateUser(String userId, UserModel user);
 
-  Future<UserModel> existsUser(String userId, String username, String email);
+  Future<UserModel?> existsUser(String userId, String username, String email);
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
@@ -166,7 +166,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<UserModel?> existsUser(String userId, String username, String email) async {
-    final url = Uri.parse('${UrlBackend.base}/api/v1/user/exists?userId=${userId.toString()}&username=${username.toString()}&email=${email.toString()}');
+    final url = Uri.parse('${UrlBackend.base}/api/v1/user/if/exists/?userId=${userId.toString()}&username=${username.toString()}&email=${email.toString()}');
     final session = await localDataSource.getSavedSession();
 
     http.Response resp = await client.get(url, headers: {
