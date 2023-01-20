@@ -136,12 +136,12 @@ List<RoleModel> fakeRoles = [
 ];
 
 class TestRandomItem {
-  final String Id;
+  final String id;
   final String name;
   final int num;
   final String text;
 
-  TestRandomItem(this.Id, this.name, this.num, this.text);
+  TestRandomItem(this.id, this.name, this.num, this.text);
 }
 
 final List<TestRandomItem> testRandomItemList = <TestRandomItem>[

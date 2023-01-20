@@ -12,6 +12,7 @@ import 'package:lomba_frontend/features/viewed/presentation/pages/viewed_page.da
 
 import 'core/presentation/bloc/nav_state.dart';
 import 'features/addcontent/presentation/pages/addcontent_page.dart';
+import 'features/demolist/presentation/bloc/demolist_bloc.dart';
 import 'features/demolist/presentation/pages/demolist_page.dart';
 import 'features/home/presentation/bloc/home_bloc.dart';
 import 'features/login/presentation/bloc/login_bloc.dart';
@@ -56,7 +57,8 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<OrgaUserBloc>()),
         BlocProvider(create: (_) => di.locator<UserBloc>()),
         BlocProvider(create: (_) => di.locator<RoleBloc>()),
-        BlocProvider(create: (_) => di.locator<ProfileBloc>())
+        BlocProvider(create: (_) => di.locator<ProfileBloc>()),
+        BlocProvider(create: (_) => di.locator<DemoListBloc>())
       ],
       child: MaterialApp(
           title: 'App Demo',
@@ -121,7 +123,7 @@ class _MyApp extends State<MyApp> {
       return const ProfilePage();
     }
     if (state.selectedItem == NavItem.pageDemoList) {
-      return const DemoListPage();
+      return DemoListPage();
     }
   }
 }

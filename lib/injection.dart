@@ -17,6 +17,7 @@ import 'core/domain/repositories/local_repository.dart';
 import 'core/domain/usecases/get_has_login.dart';
 import 'core/domain/usecases/get_session_status.dart';
 import 'core/presentation/bloc/nav_bloc.dart';
+import 'features/demolist/presentation/bloc/demolist_bloc.dart';
 import 'features/home/presentation/bloc/home_bloc.dart';
 import 'features/login/data/datasources/remote_data_source.dart';
 import 'features/login/data/repositories/login_repository_impl.dart';
@@ -80,6 +81,7 @@ Future<void> init() async {
       locator(), locator(), locator(), locator()));
 
   locator.registerFactory(() => ProfileBloc(locator(), locator()));
+  locator.registerFactory(() => DemoListBloc());
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));
