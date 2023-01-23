@@ -93,15 +93,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<OnUserShowPasswordModifyForm>((event, emit) async {
       emit(UserLoading());
       
-      emit(ModifyUserPassword(event.user));
+      emit(UserUpdatePassword(event.user));
       
     });
     on<OnUserSaveNewPassword>((event, emit) async {
       emit(UserLoading());
-      final result = await _getUser.execute(event.password);
+      final result = await _updateUserPassword.execute(event.user.id,event.password);
 
       result.fold(
-          (l) => emit(UserError(l.message)), (r) => {emit(UserStart())});
+          (l) => emit(UserError(l.message)), (r) => {emit(UserLoaded(event.user))});
     });
   }
 

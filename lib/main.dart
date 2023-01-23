@@ -87,7 +87,7 @@ class _MyApp extends State<MyApp> {
       return const OrgasPage();
     }
     if (state.selectedItem == NavItem.pageUsers) {
-      return const UsersPage();
+      return UsersPage();
     }
     if (state.selectedItem == NavItem.pageRoles) {
       return const RolesPage();

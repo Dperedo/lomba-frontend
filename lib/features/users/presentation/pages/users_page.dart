@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/core/validators.dart';
 import 'package:lomba_frontend/features/users/presentation/bloc/user_event.dart';
 import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
 
@@ -7,8 +8,14 @@ import '../bloc/user_bloc.dart';
 import '../bloc/user_state.dart';
 
 class UsersPage extends StatelessWidget {
-  const UsersPage({Key? key}) : super(key: key);
+  UsersPage({Key? key}) : super(key: key);
 
+  final TextEditingController _repeatPasswordController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  
+  
+  
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserBloc, UserState>(
@@ -237,47 +244,92 @@ class UsersPage extends StatelessWidget {
       );
       
     }
-    if (state is ModifyUserPassword){
-     return Padding(
+    if (state is UserUpdatePassword){
+      return Padding(
        padding: const EdgeInsets.all(10),
-       child: Column(
-         children: [
-           ListTile(
-             leading: const Icon(Icons.switch_account_rounded),
-             title:
-                 Text(state.user.name, style: const TextStyle(fontSize: 22)),
-           ),
-           const Divider(),
-           TextFormField(),
-           Row(
+       child: Form(
+         key: _key,
+         child: Column(
             children: [
-              ElevatedButton.icon(
-                      icon: const Icon(Icons.cancel),
-                      key: const ValueKey("btnViewCancelarCambios"),
-                      label: const Text("Cancelar"),
-                      onPressed: () {
-                        context
-                            .read<UserBloc>()
-                            .add(OnUserShowPasswordModifyForm((state.user)));//cambiar add.
-                      },
+              ListTile(
+               leading: const Icon(Icons.switch_account_rounded),
+               title:
+                   Text(state.user.name, style: const TextStyle(fontSize: 22)),
               ),
-              const VerticalDivider(),
-              ElevatedButton.icon(
-                      icon: const Icon(Icons.save),
-                      key: const ValueKey("btnViewSaveNewPassword"),
-                      label: const Text("Guardar cambios"),
-                      onPressed: () {
-                        context
-                            .read<UserBloc>()
-                            .add(OnUserShowPasswordModifyForm((state.user)));
-                      },
+              //const Divider(),
+              TextFormField(
+                controller: _passwordController,
+                key: const ValueKey("password"),
+                validator: (value) => Validators.validatePassword(value ?? ""),
+                decoration: const InputDecoration(
+                  labelText: 'Contraseña',
+                  hintText: 'Ingrese nueva contraseña',
+                  suffixIcon: Icon(Icons.password),
+                  ),
               ),
-            ],
-           ),
-         ]
+              TextFormField(
+                controller: _repeatPasswordController,
+                key: const ValueKey("repeatPassword"),
+                validator: (value) => Validators.validatePasswordEqual(value ?? "", _passwordController.text),
+                decoration: const InputDecoration(
+                  labelText: 'Repetir Contraseña',
+                  hintText: 'Repita nueva contraseña',
+                  suffixIcon: Icon(Icons.password),
+                ),
+                
+                
+                
+              ),
+              const SizedBox(height: 20,),
+              Row(
+                children: [
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.cancel),
+                    key: const ValueKey("btnViewCancelarCambios"),
+                    label: const Text("Cancelar"),
+                    onPressed: () {
+                    context.read<UserBloc>().add(OnUserLoad(state.user.id));
+                    _passwordController.clear();
+                    _repeatPasswordController.clear();
+                    },
+                    
+                  ),
+                  const VerticalDivider(),
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.save),
+                    key: const ValueKey("btnViewSaveNewPassword"),
+                    label: const Text("Guardar cambios"),
+                    onPressed: () {
+                      
+                      if (_key.currentState?.validate() == true) {
+                           context.read<UserBloc>().add(OnUserSaveNewPassword(_passwordController.text,state.user));
+                      }
+                      _passwordController.clear();
+                      _repeatPasswordController.clear();
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                        //title: const Text('Result'),
+                          content: const Text('Contraseña modificada'),
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Ok')
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ]
+         ),
        ),
-     );
-   }
+      );
+    }
 
     return const SizedBox();
   }
@@ -293,6 +345,7 @@ class UsersPage extends StatelessWidget {
             },
           ));
     }
+  
 
     return AppBar(title: const Text("Usuarios"));
   }
