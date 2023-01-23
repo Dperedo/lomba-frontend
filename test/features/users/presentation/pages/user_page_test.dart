@@ -58,7 +58,7 @@ void main() {
         when(() => mockUserBloc.state).thenReturn(UserStart());
 
         // act
-        await tester.pumpWidget(makeTestableWidget(const UsersPage()));
+        await tester.pumpWidget(makeTestableWidget(UsersPage()));
         Finder titulo = find.text("Usuarios");
         //await tester.pumpAndSettle(const Duration(seconds: 1));
 
@@ -77,7 +77,7 @@ void main() {
         when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
 
         // act
-        await tester.pumpWidget(makeTestableWidget(const UsersPage()));
+        await tester.pumpWidget(makeTestableWidget(UsersPage()));
         Finder titulo = find.text(tUser2.name);
 
         //assert
@@ -94,7 +94,7 @@ void main() {
       when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
 
       // act
-      await tester.pumpWidget(makeTestableWidget(const UsersPage()));
+      await tester.pumpWidget(makeTestableWidget(UsersPage()));
       Finder disableButton = find.byKey(const ValueKey("btnDeleteOption"));
       await tester.tap(disableButton);
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
@@ -112,7 +112,7 @@ void main() {
       when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
 
       // act
-      await tester.pumpWidget(makeTestableWidget(const UsersPage()));
+      await tester.pumpWidget(makeTestableWidget(UsersPage()));
       Finder disableButton = find.byKey(const ValueKey("btnDeleteOption"));
       await tester.tap(disableButton);
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
@@ -131,7 +131,7 @@ void main() {
       when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
 
       // act
-      await tester.pumpWidget(makeTestableWidget(const UsersPage()));
+      await tester.pumpWidget(makeTestableWidget(UsersPage()));
       Finder disableButton = find.byKey(const ValueKey("btnEnableOption"));
       await tester.tap(disableButton);
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
@@ -149,7 +149,7 @@ void main() {
       when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
 
       // act
-      await tester.pumpWidget(makeTestableWidget(const UsersPage()));
+      await tester.pumpWidget(makeTestableWidget(UsersPage()));
       Finder disableButton = find.byKey(const ValueKey("btnEnableOption"));
       await tester.tap(disableButton);
       await tester.pumpAndSettle(const Duration(milliseconds: 600));

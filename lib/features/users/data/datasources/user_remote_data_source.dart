@@ -155,15 +155,27 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<UserModel> updateUser(String userId, UserModel user) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    final url = Uri.parse(
+        '${UrlBackend.base}/api/v1/user/$userId');
+    final session = await localDataSource.getSavedSession();
 
-    if (response.statusCode == 200) {
-      int index = fakeListUsers.indexWhere((element) => element.id == userId);
+    http.Response resp = await client.put(url, body: json.encode(user), headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
 
-      fakeListUsers[index] = user;
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
 
-      return user;
+      final item = resObj['data']['items'][0];
+      return Future.value(UserModel(
+          id: item["id"].toString(),
+          name: item["name"].toString(),
+          username: item["username"].toString(),
+          email: item["email"].toString(),
+          enabled: item["enabled"].toString().toLowerCase() == 'true',
+          builtIn: item["builtin"].toString().toLowerCase() == 'true'));
     } else {
       throw ServerException();
     }
