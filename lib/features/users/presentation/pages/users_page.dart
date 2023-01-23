@@ -323,24 +323,25 @@ class UsersPage extends StatelessWidget {
                       
                       if (_key.currentState?.validate() == true) {
                            context.read<UserBloc>().add(OnUserSaveNewPassword(_passwordController.text,state.user));
+                           showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              //title: const Text('Result'),
+                              content: const Text('Contraseña modificada'),
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                child: const Text('Ok')
+                                )
+                              ],
+                            ),
+                           );
                       }
                       _passwordController.clear();
                       _repeatPasswordController.clear();
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                        //title: const Text('Result'),
-                          content: const Text('Contraseña modificada'),
-                          actions: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Ok')
-                            )
-                          ],
-                        ),
-                      );
+                      
                     },
                   ),
                 ],
