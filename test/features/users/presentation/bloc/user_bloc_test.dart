@@ -2,6 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lomba_frontend/core/constants.dart';
+import 'package:lomba_frontend/core/data/models/session_model.dart';
 import 'package:lomba_frontend/core/domain/usecases/get_session_status.dart';
 import 'package:lomba_frontend/features/login/domain/usecases/register_user.dart';
 import 'package:lomba_frontend/features/users/domain/entities/user.dart';
@@ -85,6 +87,9 @@ Future<void> main() async {
         mockUpdateUserPassword);
   });
 
+  const testSession = SessionModel(
+      token: SystemKeys.tokenSuperAdmin2023, name: 'Administrador', username: 'admin');
+
   final newUserId = Guid.newGuid.toString();
 
   final tUser = User(
@@ -145,9 +150,11 @@ Future<void> main() async {
     blocTest<UserBloc, UserState>(
       'debe agregar un user',
       build: () {
-        when(mockAddUser.execute(
-                tUser.name, tUser.username, tUser.email, tUser.enabled))
-            .thenAnswer((_) async => Right(tUser));
+        when(mockRegisterUser.execute(
+                tUser.name, tUser.username, tUser.email, '00000100-0100-0100-0100-000000000100', '1234', 'user'))
+            .thenAnswer((_) async => const Right(true));
+        when(mockGetSession.execute())
+          .thenAnswer((_) async => const Right(testSession)); 
         return userBloc;
       },
       act: (bloc) =>
@@ -155,8 +162,8 @@ Future<void> main() async {
       wait: const Duration(milliseconds: 500),
       expect: () => [UserLoading(), UserStart()],
       verify: (bloc) {
-        verify(mockAddUser.execute(
-            tUser.name, tUser.username, tUser.email, tUser.enabled));
+        verify(mockRegisterUser.execute(
+            tUser.name, tUser.username, tUser.email, '00000100-0100-0100-0100-000000000100', '1234', 'user'));
       },
     );
   });
