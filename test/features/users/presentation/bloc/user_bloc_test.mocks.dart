@@ -3,27 +3,38 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
+import 'dart:async' as _i7;
 
 import 'package:dartz/dartz.dart' as _i3;
-import 'package:lomba_frontend/core/failures.dart' as _i6;
-import 'package:lomba_frontend/features/users/domain/entities/user.dart' as _i7;
+import 'package:lomba_frontend/core/data/models/session_model.dart' as _i17;
+import 'package:lomba_frontend/core/domain/repositories/local_repository.dart'
+    as _i5;
+import 'package:lomba_frontend/core/domain/usecases/get_session_status.dart'
+    as _i16;
+import 'package:lomba_frontend/core/failures.dart' as _i8;
+import 'package:lomba_frontend/features/login/domain/repositories/login_repository.dart'
+    as _i4;
+import 'package:lomba_frontend/features/login/domain/usecases/register_user.dart'
+    as _i15;
+import 'package:lomba_frontend/features/users/domain/entities/user.dart' as _i9;
 import 'package:lomba_frontend/features/users/domain/repositories/user_repository.dart'
     as _i2;
 import 'package:lomba_frontend/features/users/domain/usecases/add_user.dart'
-    as _i4;
+    as _i6;
 import 'package:lomba_frontend/features/users/domain/usecases/delete_user.dart'
-    as _i8;
-import 'package:lomba_frontend/features/users/domain/usecases/enable_user.dart'
-    as _i9;
-import 'package:lomba_frontend/features/users/domain/usecases/get_user.dart'
     as _i10;
-import 'package:lomba_frontend/features/users/domain/usecases/get_users.dart'
+import 'package:lomba_frontend/features/users/domain/usecases/enable_user.dart'
     as _i11;
-import 'package:lomba_frontend/features/users/domain/usecases/update_user.dart'
+import 'package:lomba_frontend/features/users/domain/usecases/exists_user.dart'
+    as _i18;
+import 'package:lomba_frontend/features/users/domain/usecases/get_user.dart'
     as _i12;
-import 'package:lomba_frontend/features/users/domain/usecases/update_user_password.dart'
+import 'package:lomba_frontend/features/users/domain/usecases/get_users.dart'
     as _i13;
+import 'package:lomba_frontend/features/users/domain/usecases/update_user.dart'
+    as _i14;
+import 'package:lomba_frontend/features/users/domain/usecases/update_user_password.dart'
+    as _i19;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -58,10 +69,32 @@ class _FakeEither_1<L, R> extends _i1.SmartFake implements _i3.Either<L, R> {
         );
 }
 
+class _FakeLoginRepository_2 extends _i1.SmartFake
+    implements _i4.LoginRepository {
+  _FakeLoginRepository_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeLocalRepository_3 extends _i1.SmartFake
+    implements _i5.LocalRepository {
+  _FakeLocalRepository_3(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [AddUser].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAddUser extends _i1.Mock implements _i4.AddUser {
+class MockAddUser extends _i1.Mock implements _i6.AddUser {
   @override
   _i2.UserRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
@@ -75,7 +108,7 @@ class MockAddUser extends _i1.Mock implements _i4.AddUser {
         ),
       ) as _i2.UserRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i7.User>> execute(
+  _i7.Future<_i3.Either<_i8.Failure, _i9.User>> execute(
     String? name,
     String? username,
     String? email,
@@ -91,8 +124,8 @@ class MockAddUser extends _i1.Mock implements _i4.AddUser {
             enabled,
           ],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, _i7.User>>.value(
-            _FakeEither_1<_i6.Failure, _i7.User>(
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, _i9.User>>.value(
+            _FakeEither_1<_i8.Failure, _i9.User>(
           this,
           Invocation.method(
             #execute,
@@ -105,8 +138,8 @@ class MockAddUser extends _i1.Mock implements _i4.AddUser {
           ),
         )),
         returnValueForMissingStub:
-            _i5.Future<_i3.Either<_i6.Failure, _i7.User>>.value(
-                _FakeEither_1<_i6.Failure, _i7.User>(
+            _i7.Future<_i3.Either<_i8.Failure, _i9.User>>.value(
+                _FakeEither_1<_i8.Failure, _i9.User>(
           this,
           Invocation.method(
             #execute,
@@ -118,13 +151,13 @@ class MockAddUser extends _i1.Mock implements _i4.AddUser {
             ],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, _i7.User>>);
+      ) as _i7.Future<_i3.Either<_i8.Failure, _i9.User>>);
 }
 
 /// A class which mocks [DeleteUser].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDeleteUser extends _i1.Mock implements _i8.DeleteUser {
+class MockDeleteUser extends _i1.Mock implements _i10.DeleteUser {
   @override
   _i2.UserRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
@@ -138,14 +171,14 @@ class MockDeleteUser extends _i1.Mock implements _i8.DeleteUser {
         ),
       ) as _i2.UserRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, bool>> execute(String? userId) =>
+  _i7.Future<_i3.Either<_i8.Failure, bool>> execute(String? userId) =>
       (super.noSuchMethod(
         Invocation.method(
           #execute,
           [userId],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
-            _FakeEither_1<_i6.Failure, bool>(
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, bool>>.value(
+            _FakeEither_1<_i8.Failure, bool>(
           this,
           Invocation.method(
             #execute,
@@ -153,21 +186,21 @@ class MockDeleteUser extends _i1.Mock implements _i8.DeleteUser {
           ),
         )),
         returnValueForMissingStub:
-            _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
-                _FakeEither_1<_i6.Failure, bool>(
+            _i7.Future<_i3.Either<_i8.Failure, bool>>.value(
+                _FakeEither_1<_i8.Failure, bool>(
           this,
           Invocation.method(
             #execute,
             [userId],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, bool>>);
+      ) as _i7.Future<_i3.Either<_i8.Failure, bool>>);
 }
 
 /// A class which mocks [EnableUser].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockEnableUser extends _i1.Mock implements _i9.EnableUser {
+class MockEnableUser extends _i1.Mock implements _i11.EnableUser {
   @override
   _i2.UserRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
@@ -181,7 +214,7 @@ class MockEnableUser extends _i1.Mock implements _i9.EnableUser {
         ),
       ) as _i2.UserRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i7.User>> execute(
+  _i7.Future<_i3.Either<_i8.Failure, _i9.User>> execute(
     String? userId,
     bool? enableOrDisable,
   ) =>
@@ -193,8 +226,8 @@ class MockEnableUser extends _i1.Mock implements _i9.EnableUser {
             enableOrDisable,
           ],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, _i7.User>>.value(
-            _FakeEither_1<_i6.Failure, _i7.User>(
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, _i9.User>>.value(
+            _FakeEither_1<_i8.Failure, _i9.User>(
           this,
           Invocation.method(
             #execute,
@@ -205,8 +238,8 @@ class MockEnableUser extends _i1.Mock implements _i9.EnableUser {
           ),
         )),
         returnValueForMissingStub:
-            _i5.Future<_i3.Either<_i6.Failure, _i7.User>>.value(
-                _FakeEither_1<_i6.Failure, _i7.User>(
+            _i7.Future<_i3.Either<_i8.Failure, _i9.User>>.value(
+                _FakeEither_1<_i8.Failure, _i9.User>(
           this,
           Invocation.method(
             #execute,
@@ -216,13 +249,13 @@ class MockEnableUser extends _i1.Mock implements _i9.EnableUser {
             ],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, _i7.User>>);
+      ) as _i7.Future<_i3.Either<_i8.Failure, _i9.User>>);
 }
 
 /// A class which mocks [GetUser].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetUser extends _i1.Mock implements _i10.GetUser {
+class MockGetUser extends _i1.Mock implements _i12.GetUser {
   @override
   _i2.UserRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
@@ -236,14 +269,14 @@ class MockGetUser extends _i1.Mock implements _i10.GetUser {
         ),
       ) as _i2.UserRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i7.User>> execute(String? userId) =>
+  _i7.Future<_i3.Either<_i8.Failure, _i9.User>> execute(String? userId) =>
       (super.noSuchMethod(
         Invocation.method(
           #execute,
           [userId],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, _i7.User>>.value(
-            _FakeEither_1<_i6.Failure, _i7.User>(
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, _i9.User>>.value(
+            _FakeEither_1<_i8.Failure, _i9.User>(
           this,
           Invocation.method(
             #execute,
@@ -251,21 +284,21 @@ class MockGetUser extends _i1.Mock implements _i10.GetUser {
           ),
         )),
         returnValueForMissingStub:
-            _i5.Future<_i3.Either<_i6.Failure, _i7.User>>.value(
-                _FakeEither_1<_i6.Failure, _i7.User>(
+            _i7.Future<_i3.Either<_i8.Failure, _i9.User>>.value(
+                _FakeEither_1<_i8.Failure, _i9.User>(
           this,
           Invocation.method(
             #execute,
             [userId],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, _i7.User>>);
+      ) as _i7.Future<_i3.Either<_i8.Failure, _i9.User>>);
 }
 
 /// A class which mocks [GetUsers].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetUsers extends _i1.Mock implements _i11.GetUsers {
+class MockGetUsers extends _i1.Mock implements _i13.GetUsers {
   @override
   _i2.UserRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
@@ -279,7 +312,7 @@ class MockGetUsers extends _i1.Mock implements _i11.GetUsers {
         ),
       ) as _i2.UserRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, List<_i7.User>>> execute(
+  _i7.Future<_i3.Either<_i8.Failure, List<_i9.User>>> execute(
     String? orgaId,
     String? filter,
     String? fieldOrder,
@@ -297,8 +330,8 @@ class MockGetUsers extends _i1.Mock implements _i11.GetUsers {
             pageSize,
           ],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, List<_i7.User>>>.value(
-            _FakeEither_1<_i6.Failure, List<_i7.User>>(
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, List<_i9.User>>>.value(
+            _FakeEither_1<_i8.Failure, List<_i9.User>>(
           this,
           Invocation.method(
             #execute,
@@ -312,8 +345,8 @@ class MockGetUsers extends _i1.Mock implements _i11.GetUsers {
           ),
         )),
         returnValueForMissingStub:
-            _i5.Future<_i3.Either<_i6.Failure, List<_i7.User>>>.value(
-                _FakeEither_1<_i6.Failure, List<_i7.User>>(
+            _i7.Future<_i3.Either<_i8.Failure, List<_i9.User>>>.value(
+                _FakeEither_1<_i8.Failure, List<_i9.User>>(
           this,
           Invocation.method(
             #execute,
@@ -326,13 +359,13 @@ class MockGetUsers extends _i1.Mock implements _i11.GetUsers {
             ],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, List<_i7.User>>>);
+      ) as _i7.Future<_i3.Either<_i8.Failure, List<_i9.User>>>);
 }
 
 /// A class which mocks [UpdateUser].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUpdateUser extends _i1.Mock implements _i12.UpdateUser {
+class MockUpdateUser extends _i1.Mock implements _i14.UpdateUser {
   @override
   _i2.UserRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
@@ -346,9 +379,9 @@ class MockUpdateUser extends _i1.Mock implements _i12.UpdateUser {
         ),
       ) as _i2.UserRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i7.User>> execute(
+  _i7.Future<_i3.Either<_i8.Failure, _i9.User>> execute(
     String? userId,
-    _i7.User? user,
+    _i9.User? user,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -358,8 +391,8 @@ class MockUpdateUser extends _i1.Mock implements _i12.UpdateUser {
             user,
           ],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, _i7.User>>.value(
-            _FakeEither_1<_i6.Failure, _i7.User>(
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, _i9.User>>.value(
+            _FakeEither_1<_i8.Failure, _i9.User>(
           this,
           Invocation.method(
             #execute,
@@ -370,8 +403,8 @@ class MockUpdateUser extends _i1.Mock implements _i12.UpdateUser {
           ),
         )),
         returnValueForMissingStub:
-            _i5.Future<_i3.Either<_i6.Failure, _i7.User>>.value(
-                _FakeEither_1<_i6.Failure, _i7.User>(
+            _i7.Future<_i3.Either<_i8.Failure, _i9.User>>.value(
+                _FakeEither_1<_i8.Failure, _i9.User>(
           this,
           Invocation.method(
             #execute,
@@ -381,14 +414,128 @@ class MockUpdateUser extends _i1.Mock implements _i12.UpdateUser {
             ],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, _i7.User>>);
+      ) as _i7.Future<_i3.Either<_i8.Failure, _i9.User>>);
 }
 
-/// A class which mocks [UpdateUserPassword].
+/// A class which mocks [RegisterUser].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUpdateUserPassword extends _i1.Mock
-    implements _i13.UpdateUserPassword {
+class MockRegisterUser extends _i1.Mock implements _i15.RegisterUser {
+  @override
+  _i4.LoginRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeLoginRepository_2(
+          this,
+          Invocation.getter(#repository),
+        ),
+        returnValueForMissingStub: _FakeLoginRepository_2(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i4.LoginRepository);
+  @override
+  _i7.Future<_i3.Either<_i8.Failure, bool>> execute(
+    String? name,
+    String? username,
+    String? email,
+    String? orgaId,
+    String? password,
+    String? role,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [
+            name,
+            username,
+            email,
+            orgaId,
+            password,
+            role,
+          ],
+        ),
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, bool>>.value(
+            _FakeEither_1<_i8.Failure, bool>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              name,
+              username,
+              email,
+              orgaId,
+              password,
+              role,
+            ],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i7.Future<_i3.Either<_i8.Failure, bool>>.value(
+                _FakeEither_1<_i8.Failure, bool>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              name,
+              username,
+              email,
+              orgaId,
+              password,
+              role,
+            ],
+          ),
+        )),
+      ) as _i7.Future<_i3.Either<_i8.Failure, bool>>);
+}
+
+/// A class which mocks [GetSession].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetSession extends _i1.Mock implements _i16.GetSession {
+  @override
+  _i5.LocalRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeLocalRepository_3(
+          this,
+          Invocation.getter(#repository),
+        ),
+        returnValueForMissingStub: _FakeLocalRepository_3(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i5.LocalRepository);
+  @override
+  _i7.Future<_i3.Either<_i8.Failure, _i17.SessionModel>> execute() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [],
+        ),
+        returnValue:
+            _i7.Future<_i3.Either<_i8.Failure, _i17.SessionModel>>.value(
+                _FakeEither_1<_i8.Failure, _i17.SessionModel>(
+          this,
+          Invocation.method(
+            #execute,
+            [],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i7.Future<_i3.Either<_i8.Failure, _i17.SessionModel>>.value(
+                _FakeEither_1<_i8.Failure, _i17.SessionModel>(
+          this,
+          Invocation.method(
+            #execute,
+            [],
+          ),
+        )),
+      ) as _i7.Future<_i3.Either<_i8.Failure, _i17.SessionModel>>);
+}
+
+/// A class which mocks [ExistsUser].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockExistsUser extends _i1.Mock implements _i18.ExistsUser {
   @override
   _i2.UserRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
@@ -402,7 +549,67 @@ class MockUpdateUserPassword extends _i1.Mock
         ),
       ) as _i2.UserRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, bool>> execute(
+  _i7.Future<_i3.Either<_i8.Failure, _i9.User?>> execute(
+    String? userId,
+    String? username,
+    String? email,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [
+            userId,
+            username,
+            email,
+          ],
+        ),
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, _i9.User?>>.value(
+            _FakeEither_1<_i8.Failure, _i9.User?>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              userId,
+              username,
+              email,
+            ],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i7.Future<_i3.Either<_i8.Failure, _i9.User?>>.value(
+                _FakeEither_1<_i8.Failure, _i9.User?>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              userId,
+              username,
+              email,
+            ],
+          ),
+        )),
+      ) as _i7.Future<_i3.Either<_i8.Failure, _i9.User?>>);
+}
+
+/// A class which mocks [UpdateUserPassword].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUpdateUserPassword extends _i1.Mock
+    implements _i19.UpdateUserPassword {
+  @override
+  _i2.UserRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeUserRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+        returnValueForMissingStub: _FakeUserRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.UserRepository);
+  @override
+  _i7.Future<_i3.Either<_i8.Failure, bool>> execute(
     String? userId,
     String? password,
   ) =>
@@ -414,8 +621,8 @@ class MockUpdateUserPassword extends _i1.Mock
             password,
           ],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
-            _FakeEither_1<_i6.Failure, bool>(
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, bool>>.value(
+            _FakeEither_1<_i8.Failure, bool>(
           this,
           Invocation.method(
             #execute,
@@ -426,8 +633,8 @@ class MockUpdateUserPassword extends _i1.Mock
           ),
         )),
         returnValueForMissingStub:
-            _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
-                _FakeEither_1<_i6.Failure, bool>(
+            _i7.Future<_i3.Either<_i8.Failure, bool>>.value(
+                _FakeEither_1<_i8.Failure, bool>(
           this,
           Invocation.method(
             #execute,
@@ -437,5 +644,5 @@ class MockUpdateUserPassword extends _i1.Mock
             ],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, bool>>);
+      ) as _i7.Future<_i3.Either<_i8.Failure, bool>>);
 }

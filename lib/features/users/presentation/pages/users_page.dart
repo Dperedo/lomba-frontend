@@ -1,9 +1,11 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/validators.dart';
 import 'package:lomba_frontend/features/users/presentation/bloc/user_event.dart';
 import 'package:lomba_frontend/features/sidedrawer/presentation/pages/sidedrawer_page.dart';
 
+import '../../../../core/validators.dart';
 import '../bloc/user_bloc.dart';
 import '../bloc/user_state.dart';
 
@@ -13,6 +15,12 @@ class UsersPage extends StatelessWidget {
   final TextEditingController _repeatPasswordController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController repeatPasswordController = TextEditingController();
+  
   
   
   
@@ -23,10 +31,21 @@ class UsersPage extends StatelessWidget {
         return Scaffold(
           appBar: _variableAppBar(context, state),
           body: SingleChildScrollView(
-            child: Column(
-            children: [_bodyUsers(context, state)],
-            )
-          ),
+              child: Column(
+            children: [
+              _bodyUsers(context, state),
+            ],
+          )),
+          floatingActionButton: (state is UserListLoaded || state is UserStart)
+              ? FloatingActionButton(
+                  key: const ValueKey("btnAddOption"),
+                  tooltip: 'Agregar usuario',
+                  onPressed: () {
+                    //var user = const UserModel(id: '', name: '', username: '', email: '', enabled: true, builtIn: false);
+                    context.read<UserBloc>().add(OnUserPrepareForAdd());
+                  },
+                  child: const Icon(Icons.person_add))
+              : null,
           drawer: const SideDrawer(),
         );
       },
@@ -42,50 +61,54 @@ class UsersPage extends StatelessWidget {
         child: CircularProgressIndicator(),
       );
     }
+    if (state is UserError) {
+      return Center(child: Text(state.message));
+    }
     if (state is UserListLoaded) {
-      return ListView.builder(
-        shrinkWrap: true,
-        itemCount: state.users.length,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                      child: TextButton(
-                          child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Column(
-                                children: [
-                                  ListTile(
-                                    leading: const Icon(Icons.switch_account),
-                                    title: Text(
-                                      state.users[index].name,
-                                      style: const TextStyle(fontSize: 18),
+      return Column(children: [
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: state.users.length,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                        child: TextButton(
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Column(
+                                  children: [
+                                    ListTile(
+                                      leading: const Icon(Icons.switch_account),
+                                      title: Text(
+                                        state.users[index].name,
+                                        style: const TextStyle(fontSize: 18),
+                                      ),
+                                      subtitle: Text(
+                                          '${state.users[index].username} / ${state.users[index].email}',
+                                          style: const TextStyle(fontSize: 12)),
                                     ),
-                                    subtitle: Text(
-                                        '${state.users[index].username} / ${state.users[index].email}',
-                                        style: const TextStyle(fontSize: 12)),
-                                  ),
-                                ],
-                              )),
-                          onPressed: () {
-                            context
-                                .read<UserBloc>()
-                                .add(OnUserLoad(state.users[index].id));
-                          })),
-                  Icon(
-                      state.users[index].enabled
-                          ? Icons.toggle_on
-                          : Icons.toggle_off_outlined,
-                      size: 40)
-                ],
-              ),
-              const Divider()
-            ],
-          );
-        },
-      );
+                                  ],
+                                )),
+                            onPressed: () {
+                              context
+                                  .read<UserBloc>()
+                                  .add(OnUserLoad(state.users[index].id));
+                            })),
+                    Icon(
+                        state.users[index].enabled
+                            ? Icons.toggle_on
+                            : Icons.toggle_off_outlined,
+                        size: 40)
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
+      ]);
     }
 
     if (state is UserLoaded) {
@@ -233,16 +256,13 @@ class UsersPage extends StatelessWidget {
                           .read<UserBloc>()
                           .add(const OnUserListLoad("", "", "", 1));
                     },
-                    label: const Text("Volver")
-                ),
-                
+                    label: const Text("Volver")),
               ],
             ),
             const Divider(),
           ],
         ),
       );
-      
     }
     if (state is UserUpdatePassword){
       return Padding(
@@ -329,7 +349,102 @@ class UsersPage extends StatelessWidget {
          ),
        ),
       );
-    }
+    }    
+    if (state is UserAdding) {
+      return Padding(
+        padding: const EdgeInsets.all(10),
+        child: Form(
+            key: _key,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: nameController,
+                  validator: (value) => Validators.validateName(value ?? ""),
+                  decoration: const InputDecoration(
+                    labelText: 'Nombre',
+                    icon: Icon(Icons.account_box),
+                  ),
+                ),
+                TextFormField(
+                  onChanged: (value) {
+                    context.read<UserBloc>().add(OnUserValidate(
+                        usernameController.text, emailController.text, state));
+                  },
+                  controller: usernameController,
+                  validator: (value) => state.validateUsername(value ?? ""),
+                  decoration: const InputDecoration(
+                    labelText: 'Username',
+                    icon: Icon(Icons.account_box_outlined),
+                  ),
+                ),
+                TextFormField(
+                  onChanged: (value) {
+                    context.read<UserBloc>().add(OnUserValidate(
+                        usernameController.text, emailController.text, state));
+                  },
+                  controller: emailController,
+                  validator: (value) => state.validateEmail(value ?? ""),
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    icon: Icon(Icons.email),
+                  ),
+                ),
+                TextFormField(
+                  //obscureText: true,
+
+                  controller: passwordController,
+                  validator: (value) =>
+                      Validators.validatePassword(value ?? ""),
+                  decoration: const InputDecoration(
+                    labelText: 'Contraseña',
+                    icon: Icon(Icons.password),
+                  ),
+                ),
+                TextFormField(
+                  //obscureText: true,
+                  controller: repeatPasswordController,
+                  validator: (value) => Validators.validatePasswordEqual(
+                      value ?? "", passwordController.text),
+                  decoration: const InputDecoration(
+                    labelText: 'Repetir Contraseña',
+                    icon: Icon(Icons.password_rounded),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: ElevatedButton.icon(
+                          onPressed: () {
+                            context
+                                .read<UserBloc>()
+                                .add(const OnUserListLoad("", "", "", 1));
+                          },
+                          icon: const Icon(Icons.cancel),
+                          label: const Text('Cancel')),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: ElevatedButton.icon(
+                          onPressed: () {
+                            if (_key.currentState?.validate() == true) {
+                              context.read<UserBloc>().add(OnUserAdd(
+                                  nameController.text,
+                                  usernameController.text,
+                                  emailController.text,
+                                  passwordController.text));
+                            }
+                          },
+                          icon: const Icon(Icons.save),
+                          label: const Text('Guardar')),
+                    ),
+                  ],
+                )
+              ],
+            )),
+      );
+    }  
 
     return const SizedBox();
   }

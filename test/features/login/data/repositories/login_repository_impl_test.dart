@@ -19,17 +19,18 @@ import 'login_repository_impl_test.mocks.dart';
 void main() {
   late MockRemoteDataSource mockRemoteDataSource;
   late MockLocalDataSource mockLocalDataSource;
-  late LoginRepositoryImpl repository;
   late MockUserRemoteDataSource mockUserRemoteDataSource;
+  late LoginRepositoryImpl repository;
 
   setUp(() {
     mockRemoteDataSource = MockRemoteDataSource();
     mockLocalDataSource = MockLocalDataSource();
     mockUserRemoteDataSource = MockUserRemoteDataSource();
     repository = LoginRepositoryImpl(
-        localDataSource: mockLocalDataSource,
-        remoteDataSource: mockRemoteDataSource,
-        userDataSource: mockUserRemoteDataSource);
+      localDataSource: mockLocalDataSource,
+      remoteDataSource: mockRemoteDataSource,
+      userDataSource: mockUserRemoteDataSource,
+    );
   });
 
   const tLoginAccessModel = LoginAccessModel(

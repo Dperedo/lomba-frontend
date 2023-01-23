@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:lomba_frontend/features/users/presentation/bloc/user_state.dart';
 
 import '../../domain/entities/user.dart';
 
@@ -36,18 +37,27 @@ class OnUserAdd extends UserEvent {
   final String username;
   final String email;
   final String password;
-  final bool enabled;
 
-  const OnUserAdd(this.name, this.username, this.email, this.password, this.enabled);
+  const OnUserAdd(this.name, this.username, this.email, this.password);
 
   @override
-  List<Object> get props => [name, username, email, password, enabled];
+  List<Object> get props => [name, username, email, password];
 }
 
 class OnUserPrepareForAdd extends UserEvent {
-
   @override
   List<Object> get props => [];
+}
+
+class OnUserValidate extends UserEvent {
+  final String username;
+  final String email;
+  final UserAdding state;
+
+  const OnUserValidate(this.username, this.email, this.state);
+
+  @override
+  List<Object> get props => [username, email];
 }
 
 class OnUserEdit extends UserEvent {
@@ -91,6 +101,7 @@ class OnUserShowPasswordModifyForm extends UserEvent {
   @override
   List<Object> get props => [user];
 }
+
 class OnUserSaveNewPassword extends UserEvent {
   final String password;
   final User user;

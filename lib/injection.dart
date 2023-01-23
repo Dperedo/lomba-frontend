@@ -52,6 +52,7 @@ import 'features/users/domain/repositories/user_repository.dart';
 import 'features/users/domain/usecases/add_user.dart';
 import 'features/users/domain/usecases/delete_user.dart';
 import 'features/users/domain/usecases/enable_user.dart';
+import 'features/users/domain/usecases/exists_user.dart';
 import 'features/users/domain/usecases/get_user.dart';
 import 'features/users/domain/usecases/get_users.dart';
 import 'features/users/domain/usecases/update_user.dart';
@@ -77,8 +78,17 @@ Future<void> init() async {
   locator.registerFactory(() => OrgaUserBloc(locator(), locator(), locator(),
       locator(), locator(), locator(), locator()));
 
-  locator.registerFactory(() => UserBloc(locator(), locator(), locator(),
-      locator(), locator(), locator(), locator()));
+  locator.registerFactory(() => UserBloc(
+      locator(),
+      locator(),
+      locator(),
+      locator(),
+      locator(),
+      locator(),
+      locator(),
+      locator(),
+      locator(),
+      locator()));
 
   locator.registerFactory(() => ProfileBloc(locator(), locator()));
   locator.registerFactory(() => DemoListBloc());
@@ -110,6 +120,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetUser(locator()));
   locator.registerLazySingleton(() => GetUsers(locator()));
   locator.registerLazySingleton(() => UpdateUser(locator()));
+  locator.registerLazySingleton(() => ExistsUser(locator()));
   locator.registerLazySingleton(() => GetUsersNotInOrga(locator()));
 
   locator.registerLazySingleton(() => EnableRole(locator()));

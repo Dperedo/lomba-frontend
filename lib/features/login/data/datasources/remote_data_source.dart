@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:lomba_frontend/features/login/domain/usecases/register_user.dart';
 import 'package:lomba_frontend/features/users/data/models/user_model.dart';
 
 import '../../../../../core/constants.dart';

@@ -21,14 +21,12 @@ abstract class UserRemoteDataSource {
 
   Future<UserModel> updateUser(String userId, UserModel user);
 
+  Future<UserModel?> existsUser(String userId, String username, String email);
 
   Future<List<UserModel>> getUsersNotInOrga(
       String orgaId, List<dynamic> order, int pageNumber, int pageSize);
 
-  Future<UserModel> existsUser(String userId, String username, String email);
-
   Future<bool> updateUserPassword(String userId, String password);
-
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
@@ -171,6 +169,35 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     }
   }
 
+  @override
+  Future<UserModel?> existsUser(
+      String userId, String username, String email) async {
+    final url = Uri.parse(
+        '${UrlBackend.base}/api/v1/user/if/exists/?userId=${userId.toString()}&username=${username.toString()}&email=${email.toString()}');
+    final session = await localDataSource.getSavedSession();
+    http.Response resp = await client.get(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+      if (resObj['data']['currentItemCount'] > 0) {
+        final item = resObj['data']['items'][0];
+        return Future.value(UserModel(
+            id: item["id"].toString(),
+            name: item["name"].toString(),
+            username: item["username"].toString(),
+            email: item["email"].toString(),
+            enabled: item["enabled"].toString().toLowerCase() == 'true',
+            builtIn: item["builtin"].toString().toLowerCase() == 'true'));
+      }
+      return Future.value(null);
+    } else {
+      throw ServerException();
+    }
+  }
+
   Future<List<UserModel>> getUsersNotInOrga(
       String orgaId, List<dynamic> order, int pageNumber, int pageSize) async {
     //parsea URL
@@ -200,32 +227,19 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     }
   }
 
-
   @override
-  Future<UserModel> existsUser(String userId, String username, String email) {
-    // TODO: implement existsUser
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<bool>updateUserPassword(String userId, String password) async {
-    final Map<String, dynamic> passData = {
-      'password': password
-    };
+  Future<bool> updateUserPassword(String userId, String password) async {
+    final Map<String, dynamic> passData = {'password': password};
     final url = Uri.parse('${UrlBackend.base}/api/v1/password/$userId');
     final session = await localDataSource.getSavedSession();
 
-    http.Response resp = await client.put(
-      url, 
-      body: json.encode(passData),
-      headers:{
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer ${session.token}",
-      }
-    )
-    .timeout(const Duration(seconds: 10));
-    
+    http.Response resp =
+        await client.put(url, body: json.encode(passData), headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
     if (resp.statusCode == 200) {
       final Map<dynamic, dynamic> resObj = json.decode(resp.body);
 
@@ -234,7 +248,5 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     } else {
       throw ServerException();
     }
-
   }
-
 }

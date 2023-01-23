@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:lomba_frontend/core/data/models/session_model.dart';
-import 'package:lomba_frontend/features/login/domain/usecases/register_user.dart';
 
 import '../../../../core/data/datasources/local_data_source.dart';
 import '../../../../core/exceptions.dart';

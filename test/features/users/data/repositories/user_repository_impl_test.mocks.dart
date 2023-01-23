@@ -138,6 +138,23 @@ class MockUserRemoteDataSource extends _i1.Mock
         )),
       ) as _i4.Future<_i2.UserModel>);
   @override
+  _i4.Future<_i2.UserModel?> existsUser(
+    String? userId,
+    String? username,
+    String? email,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #existsUser,
+          [
+            userId,
+            username,
+            email,
+          ],
+        ),
+        returnValue: _i4.Future<_i2.UserModel?>.value(),
+      ) as _i4.Future<_i2.UserModel?>);
+  @override
   _i4.Future<List<_i2.UserModel>> getUsersNotInOrga(
     String? orgaId,
     List<dynamic>? order,
@@ -156,33 +173,6 @@ class MockUserRemoteDataSource extends _i1.Mock
         ),
         returnValue: _i4.Future<List<_i2.UserModel>>.value(<_i2.UserModel>[]),
       ) as _i4.Future<List<_i2.UserModel>>);
-  @override
-  _i4.Future<_i2.UserModel> existsUser(
-    String? userId,
-    String? username,
-    String? email,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #existsUser,
-          [
-            userId,
-            username,
-            email,
-          ],
-        ),
-        returnValue: _i4.Future<_i2.UserModel>.value(_FakeUserModel_0(
-          this,
-          Invocation.method(
-            #existsUser,
-            [
-              userId,
-              username,
-              email,
-            ],
-          ),
-        )),
-      ) as _i4.Future<_i2.UserModel>);
   @override
   _i4.Future<bool> updateUserPassword(
     String? userId,

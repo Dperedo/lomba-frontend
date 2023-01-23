@@ -7,7 +7,8 @@ import '../repositories/user_repository.dart';
 class ExistsUser {
   final UserRepository repository;
   ExistsUser(this.repository);
-  Future<Either<Failure, User>> execute(String userId,String username,String email) async {
-    return await repository.existsUser(userId,username,email);
+  Future<Either<Failure, User?>> execute(
+      String userId, String username, String email) async {
+    return await repository.existsUser(userId, username, email);
   }
 }

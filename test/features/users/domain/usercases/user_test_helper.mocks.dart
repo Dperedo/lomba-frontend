@@ -221,7 +221,7 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, _i6.User>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, _i6.User>> existsUser(
+  _i4.Future<_i2.Either<_i5.Failure, _i6.User?>> existsUser(
     String? userId,
     String? username,
     String? email,
@@ -235,8 +235,8 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
             email,
           ],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.User>>.value(
-            _FakeEither_0<_i5.Failure, _i6.User>(
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.User?>>.value(
+            _FakeEither_0<_i5.Failure, _i6.User?>(
           this,
           Invocation.method(
             #existsUser,
@@ -247,7 +247,7 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
             ],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.User>>);
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.User?>>);
   @override
   _i4.Future<_i2.Either<_i5.Failure, bool>> updateUserPassword(
     String? userId,
