@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/presentation/bloc/nav_state.dart';
@@ -38,72 +40,75 @@ class LoginPage extends StatelessWidget {
           "Login",
           key: ValueKey("title"),
         ),
-        
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 30),
-          child: Form(
-            key: _key,
-            child: Column(
-              children:[
-              BlocBuilder<LoginBloc, LoginState>(
-                builder: (context, state) {
-                //envolver y entregar el content predeterminado
-      
-                  if (state is LoginGetting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (state is LoginGoted) {
-                    Future.delayed(Duration.zero, () {
-                      context.read<HomeBloc>().add(OnRestartHome());
-                      context.read<LoginBloc>().add(OnRestartLogin());
-                      context
-                          .read<SideDrawerBloc>()
-                          .add(const OnSideDrawerLoading());
-      
-                      BlocProvider.of<NavBloc>(context)
-                          .add(const NavigateTo(NavItem.pageHome));
-                    });
-                  } else if (state is LoginError) {
-                    return const Center(
-                      child: Text('Something went wrong!'),
-                    );
-                  } else if (state is LoginEmpty) {
-                    return Center(
-                      child: SizedBox(
-                        height: 400,
-                        width: 400,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            TextFormField(
-                              controller: _emailController,
-                              key: const ValueKey("email_id"),
-                              decoration: const InputDecoration(
-                                labelText: ' Usuario',
-                                hintText: " Ingrese usuario o email",
-                                suffixIcon: Icon(Icons.person)
+          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 30),
+          child: Column(
+            children: [
+              Form(
+                key: _key,
+                child: BlocBuilder<LoginBloc, LoginState>(
+                  builder: (context, state) {
+                    //envolver y entregar el content predeterminado
+
+                    if (state is LoginGetting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is LoginGoted) {
+                      Future.delayed(Duration.zero, () {
+                        context.read<HomeBloc>().add(OnRestartHome());
+                        context.read<LoginBloc>().add(OnRestartLogin());
+                        context
+                            .read<SideDrawerBloc>()
+                            .add(const OnSideDrawerLoading());
+
+                        BlocProvider.of<NavBloc>(context)
+                            .add(const NavigateTo(NavItem.pageHome));
+                      });
+                    } else if (state is LoginError) {
+                      return const Center(
+                        child: Text('Something went wrong!'),
+                      );
+                    } else if (state is LoginEmpty) {
+                      return Center(
+                        child: SizedBox(
+                          height: 400,
+                          width: 400,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              TextFormField(
+                                controller: _emailController,
+                                key: const ValueKey("email_id"),
+                                decoration: const InputDecoration(
+                                    labelText: ' Usuario',
+                                    hintText: " Ingrese usuario o email",
+                                    suffixIcon: Icon(Icons.person)),
+                                validator: (value) =>
+                                    Validators.validateUsername(value ?? ""),
                               ),
-                              validator: (value) =>
-                                  Validators.validateUsername(value ?? ""),
-                            ),
-                            const SizedBox(height: 20,),
-                            
-                            TextFormField(
-                              controller: _passwordController,
-                              key: const ValueKey("password"),
-                              obscureText: true,
-                              obscuringCharacter: '*',
-                              decoration: const InputDecoration(labelText: ' Contraseña',hintText: " Ingrese contraseña",suffixIcon: Icon(Icons.key_sharp),),
-                              validator: (value) =>
-                                  Validators.validatePassword(value ?? ""),
-                            ),
-                            const SizedBox(height: 35,),
-                            
-                            ElevatedButton.icon(
-                                
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                controller: _passwordController,
+                                key: const ValueKey("password"),
+                                obscureText: true,
+                                obscuringCharacter: '*',
+                                decoration: const InputDecoration(
+                                  labelText: ' Contraseña',
+                                  hintText: " Ingrese contraseña",
+                                  suffixIcon: Icon(Icons.key_sharp),
+                                ),
+                                validator: (value) =>
+                                    Validators.validatePassword(value ?? ""),
+                              ),
+                              const SizedBox(
+                                height: 35,
+                              ),
+                              ElevatedButton.icon(
                                 key: const ValueKey("btn_login"),
                                 onPressed: () {
                                   if (_key.currentState?.validate() == true) {
@@ -112,42 +117,63 @@ class LoginPage extends StatelessWidget {
                                         _passwordController.text));
                                   }
                                 },
-                                
                                 label: const SizedBox(
                                   width: double.infinity,
                                   height: 35,
-                                  child: Center(child: Text('Login', style: TextStyle( fontSize: 18))),
+                                  child: Center(
+                                      child: Text('Login',
+                                          style: TextStyle(fontSize: 18))),
                                 ),
                                 icon: const Icon(Icons.login_outlined),
-                            ),
-                            const SizedBox(height: 30,),
-                            ElevatedButton.icon(
-                              icon: const Icon(Icons.add_circle_outline),
-                              label: const SizedBox(
-                                  
-                                  width: double.infinity,
-                                  height: 35,
-                                  child: Center(child: Text('Ingresar con Google', style: TextStyle( fontSize: 18),)),
-                                  
-                                  ),
-                              onPressed:(){
-                                
-                              }
-                              
-                            )
-                          ],
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  }
-                  return const SizedBox();
-                },
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                ),
               ),
-             ],
-            ),
+              ElevatedButton.icon(
+                  icon: const Icon(Icons.add_circle_outline),
+                  label: const SizedBox(
+                    width: double.infinity,
+                    height: 35,
+                    child: Center(
+                        child: Text(
+                      'Ingresar con Google',
+                      style: TextStyle(fontSize: 18),
+                    )),
+                  ),
+                  onPressed: () async {
+                    final cre = await signInWithGoogle();
+                    if (kDebugMode) {
+                      print(cre);
+                    }
+                  })
+            ],
           ),
         ),
       ),
     );
   }
+}
+
+Future<UserCredential> signInWithGoogle() async {
+  // Create a new provider
+  GoogleAuthProvider googleProvider = GoogleAuthProvider();
+
+  //googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+  googleProvider.addScope('email');
+  googleProvider.setCustomParameters({'login_hint': 'mperedo@gmail.com'});
+
+  // Once signed in, return the UserCredential
+  return await FirebaseAuth.instance.signInWithPopup(googleProvider);
+
+  // Or use signInWithRedirect
+  // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
 }

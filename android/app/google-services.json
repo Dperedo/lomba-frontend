@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "697984302717",
+    "project_id": "lomba-94302",
+    "storage_bucket": "lomba-94302.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:697984302717:android:7a25ab9711f45594327b14",
+        "android_client_info": {
+          "package_name": "com.example.lomba_frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "697984302717-eq33hukrjoqlv6g51n3029d5t28qtcdq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoRSyoxNQW7smoQHMKZSSVstVDzfjGDbQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "697984302717-eq33hukrjoqlv6g51n3029d5t28qtcdq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
