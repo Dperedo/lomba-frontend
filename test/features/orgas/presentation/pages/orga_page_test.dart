@@ -94,7 +94,7 @@ void main() {
         when(() => mockOrgaBloc.state).thenReturn(OrgaStart());
 
         // act
-        await tester.pumpWidget(makeTestableWidget(const OrgasPage()));
+        await tester.pumpWidget(makeTestableWidget( OrgasPage()));
         Finder titulo = find.text("Organizaciones");
         //await tester.pumpAndSettle(const Duration(seconds: 1));
 
@@ -114,7 +114,7 @@ void main() {
         when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
 
         // act
-        await tester.pumpWidget(makeTestableWidget(const OrgasPage()));
+        await tester.pumpWidget(makeTestableWidget( OrgasPage()));
         Finder titulo = find.text(tOrga2.name);
 
         //assert
@@ -132,7 +132,7 @@ void main() {
       when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
 
       // act
-      await tester.pumpWidget(makeTestableWidget(const OrgasPage()));
+      await tester.pumpWidget(makeTestableWidget( OrgasPage()));
       Finder disableButton = find.byKey(const ValueKey("btnDeleteOption"));
       await tester.tap(disableButton);
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
@@ -151,7 +151,7 @@ void main() {
       when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
 
       // act
-      await tester.pumpWidget(makeTestableWidget(const OrgasPage()));
+      await tester.pumpWidget(makeTestableWidget( OrgasPage()));
       Finder disableButton = find.byKey(const ValueKey("btnDeleteOption"));
       await tester.tap(disableButton);
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
@@ -171,7 +171,7 @@ void main() {
       when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
 
       // act
-      await tester.pumpWidget(makeTestableWidget(const OrgasPage()));
+      await tester.pumpWidget(makeTestableWidget( OrgasPage()));
       Finder disableButton = find.byKey(const ValueKey("btnEnableOption"));
       await tester.tap(disableButton);
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
@@ -190,7 +190,7 @@ void main() {
       when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
 
       // act
-      await tester.pumpWidget(makeTestableWidget(const OrgasPage()));
+      await tester.pumpWidget(makeTestableWidget( OrgasPage()));
       Finder disableButton = find.byKey(const ValueKey("btnEnableOption"));
       await tester.tap(disableButton);
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
@@ -211,7 +211,7 @@ void main() {
           OrgaUserListLoaded(tOrga2.id, <User>[tUser2], tListOrgaUser));
 
       // act
-      await tester.pumpWidget(makeTestableWidget(const OrgasPage()));
+      await tester.pumpWidget(makeTestableWidget( OrgasPage()));
 
       Finder listItemFirstUser =
           find.text(tUser2.name); //por ahora sólo tenemos el ID

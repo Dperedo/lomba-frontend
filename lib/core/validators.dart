@@ -63,6 +63,17 @@ class Validators {
 
     return null;
   }
+  static String? validateCode(String code) {
+    if (code.isEmpty) {
+      return "Campo Requerido";
+    }
+
+    if (code.length > 30) {
+      return "Por favor ingresa un codigo con menos de 30 caracteres";
+    }
+
+    return null;
+  }
 
   static String? validatePasswordEqual(String repeatpassword, String password) {
     if (repeatpassword.isEmpty) {

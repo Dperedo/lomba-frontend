@@ -44,8 +44,8 @@ class UsersPage extends StatelessWidget {
                     //var user = const UserModel(id: '', name: '', username: '', email: '', enabled: true, builtIn: false);
                     context.read<UserBloc>().add(OnUserPrepareForAdd());
                   },
-                  child: const Icon(Icons.person_add))
-              : null,
+                  child: const Icon(Icons.person_add)
+              ): null,
           drawer: const SideDrawer(),
         );
       },
@@ -320,10 +320,9 @@ class UsersPage extends StatelessWidget {
                     key: const ValueKey("btnViewSaveNewPassword"),
                     label: const Text("Guardar cambios"),
                     onPressed: () {
-                      
                       if (_key.currentState?.validate() == true) {
-                           context.read<UserBloc>().add(OnUserSaveNewPassword(_passwordController.text,state.user));
-                           showDialog(
+                          context.read<UserBloc>().add(OnUserSaveNewPassword(_passwordController.text,state.user));
+                          showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
                               //title: const Text('Result'),
@@ -337,11 +336,10 @@ class UsersPage extends StatelessWidget {
                                 )
                               ],
                             ),
-                           );
+                          );
                       }
                       _passwordController.clear();
                       _repeatPasswordController.clear();
-                      
                     },
                   ),
                 ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/data/models/sort_model.dart';
+import 'package:lomba_frontend/core/validators.dart';
 import 'package:lomba_frontend/features/orgas/data/models/orgauser_model.dart';
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orga_event.dart';
 import 'package:lomba_frontend/features/orgas/presentation/bloc/orgauser_event.dart';
@@ -21,7 +22,11 @@ import '../bloc/orgauser_state.dart';
 ///Incluye el detalle de cada organización donde es posible ver la lista
 ///de usuarios relacionados con la organización.
 class OrgasPage extends StatelessWidget {
-  const OrgasPage({Key? key}) : super(key: key);
+   OrgasPage({Key? key}) : super(key: key);
+
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final TextEditingController _orgaNameController = TextEditingController();
+  final TextEditingController _codeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +36,19 @@ class OrgasPage extends StatelessWidget {
           appBar: _variableAppBar(context, state),
           body: SingleChildScrollView(
               child: Column(
-            children: [_bodyOrgas(context, state)],
-          )),
+                children: [_bodyOrgas(context, state)],
+              )
+          ),
+          floatingActionButton: (state is OrgaListLoaded || state is OrgaStart)
+              ? FloatingActionButton(
+                  key: const ValueKey("btnAddOption"),
+                  tooltip: 'Agregar Orga',
+                  onPressed: () {
+                    //var user = const UserModel(id: '', name: '', username: '', email: '', enabled: true, builtIn: false);
+                    context.read<OrgaBloc>().add(OnOrgaPrepareForAdd());
+                  },
+                  child: const Icon(Icons.group_add)
+              ): null,
           drawer: const SideDrawer(),
         );
       },
@@ -250,6 +266,74 @@ class OrgasPage extends StatelessWidget {
             _orgaUserList(context)
           ],
         ),
+      );
+    }
+    if (state is OrgaAdding) {
+      return Padding(
+        padding: const EdgeInsets.all(10),
+        child: Form(
+            key: _key,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: _orgaNameController,
+                  validator: (value) => Validators.validateUsername(value ?? ""),
+                  decoration: const InputDecoration(
+                    labelText: 'Orga Name',
+                    icon: Icon(Icons.account_box),
+                  ),
+                ),
+                TextFormField(
+                  onChanged: (value) {
+                    context.read<OrgaBloc>().add(OnOrgaValidate(
+                        _orgaNameController.text, _codeController.text, state));
+                  },
+                  controller: _codeController,
+                  validator: (value) => state.validateCode(value ?? ""),
+                  decoration: const InputDecoration(
+                    labelText: 'Code',
+                    icon: Icon(Icons.account_box_outlined),
+                  ),
+                ),
+                
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: ElevatedButton.icon(
+                          onPressed: () {
+                            context
+                                .read<OrgaBloc>()
+                                .add(const OnOrgaListLoad("", "", 1));
+                                _orgaNameController.clear();
+                                _codeController.clear();
+                          },
+                          icon: const Icon(Icons.cancel),
+                          label: const Text('Cancel')),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: ElevatedButton.icon(
+                          onPressed: () {
+                            if (_key.currentState?.validate() == true) {
+                              context.read<OrgaBloc>().add(OnOrgaAdd(
+                                  _orgaNameController.text,
+                                  _codeController.text,
+                                  true,
+                                  
+                              ));
+                            }
+                            _orgaNameController.clear();
+                            _codeController.clear();
+                          },
+                          icon: const Icon(Icons.save),
+                          label: const Text('Guardar')),
+                    ),
+                  ],
+                )
+              ],
+            )),
       );
     }
 

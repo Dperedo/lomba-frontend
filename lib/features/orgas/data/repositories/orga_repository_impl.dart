@@ -286,4 +286,22 @@ class OrgaRepositoryImpl implements OrgaRepository {
       return const Left(ConnectionFailure('Failed to connect to the network'));
     }
   }
+  
+  @override
+  Future<Either<Failure, Orga?>> existsOrga(String orgaId, String code)async {
+    try {
+      final result = await remoteDataSource.existsOrga(orgaId, code);
+
+      if (result == null) {
+        return const Right(null);
+      } else {
+        return Right(result.toEntity());
+      }
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(ConnectionFailure('Failed to connect to the network'));
+    }
+    
+  }
 }

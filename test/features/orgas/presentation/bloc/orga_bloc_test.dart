@@ -6,6 +6,7 @@ import 'package:lomba_frontend/features/orgas/domain/entities/orga.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/add_orga.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/delete_orga.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/enable_orga.dart';
+import 'package:lomba_frontend/features/orgas/domain/usecases/exists_orga.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/get_orga.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/get_orgas.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/update_orga.dart';
@@ -15,6 +16,7 @@ import 'package:lomba_frontend/features/orgas/presentation/bloc/orga_state.dart'
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../../users/presentation/bloc/user_bloc_test.mocks.dart';
 import 'orga_bloc_test.mocks.dart';
 
 @GenerateNiceMocks([
@@ -32,7 +34,7 @@ Future<void> main() async {
   late GetOrga mockGetOrga;
   late GetOrgas mockGetOrgas;
   late UpdateOrga mockUpdateOrga;
-
+  late ExistsOrga mockExistsOrga;
   late OrgaBloc orgaBloc;
 
   setUp(() {
@@ -42,6 +44,7 @@ Future<void> main() async {
     mockGetOrga = MockGetOrga();
     mockGetOrgas = MockGetOrgas();
     mockUpdateOrga = MockUpdateOrga();
+    mockExistsOrga = MockExistsOrga();
 
     orgaBloc = OrgaBloc(
       mockAddOrga,
@@ -50,6 +53,7 @@ Future<void> main() async {
       mockGetOrga,
       mockGetOrgas,
       mockUpdateOrga,
+      mockExistsOrga,
     );
   });
 
@@ -174,3 +178,4 @@ Future<void> main() async {
     );
   });
 }
+

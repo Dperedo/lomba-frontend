@@ -111,3 +111,4 @@ class OnUserSaveNewPassword extends UserEvent {
   @override
   List<Object> get props => [password];
 }
+

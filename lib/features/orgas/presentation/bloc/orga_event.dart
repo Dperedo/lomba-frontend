@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import 'orga_state.dart';
+
 ///Interfaz del evento de organizaciones
 abstract class OrgaEvent extends Equatable {
   const OrgaEvent();
@@ -41,7 +43,20 @@ class OnOrgaAdd extends OrgaEvent {
   @override
   List<Object> get props => [name, code, enabled];
 }
+class OnOrgaPrepareForAdd extends OrgaEvent {
+  @override
+  List<Object> get props => [];
+}
+class OnOrgaValidate extends OrgaEvent {
+  final String orgaName;
+  final String code;
+  final OrgaAdding state;
 
+  const OnOrgaValidate(this.orgaName, this.code, this.state);
+
+  @override
+  List<Object> get props => [orgaName, code];
+}
 ///Evento se dispara para actualizar (persistir) cambios en la organización
 class OnOrgaEdit extends OrgaEvent {
   final String id;
@@ -75,4 +90,18 @@ class OnOrgaDelete extends OrgaEvent {
 
   @override
   List<Object> get props => [id];
+}
+
+class OnOrgaShowAddOrgaForm extends OrgaEvent {
+  
+}
+
+class OnOrgaSaveNewOrga extends OrgaEvent {
+  final String organame;
+  final String code;
+
+  const OnOrgaSaveNewOrga(this.organame, this.code);
+
+  @override
+  List<Object> get props => [organame,code];
 }
