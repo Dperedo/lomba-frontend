@@ -3,15 +3,19 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
+import 'dart:async' as _i6;
 
 import 'package:lomba_frontend/core/data/datasources/local_data_source.dart'
-    as _i6;
+    as _i7;
 import 'package:lomba_frontend/core/data/models/session_model.dart' as _i3;
 import 'package:lomba_frontend/features/login/data/datasources/remote_data_source.dart'
-    as _i4;
+    as _i5;
 import 'package:lomba_frontend/features/login/data/models/login_access_model.dart'
     as _i2;
+import 'package:lomba_frontend/features/users/data/datasources/user_remote_data_source.dart'
+    as _i8;
+import 'package:lomba_frontend/features/users/data/models/user_model.dart'
+    as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -46,16 +50,26 @@ class _FakeSessionModel_1 extends _i1.SmartFake implements _i3.SessionModel {
         );
 }
 
+class _FakeUserModel_2 extends _i1.SmartFake implements _i4.UserModel {
+  _FakeUserModel_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [RemoteDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockRemoteDataSource extends _i1.Mock implements _i4.RemoteDataSource {
+class MockRemoteDataSource extends _i1.Mock implements _i5.RemoteDataSource {
   MockRemoteDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i5.Future<_i2.LoginAccessModel> getAuthenticate(
+  _i6.Future<_i2.LoginAccessModel> getAuthenticate(
     String? username,
     String? password,
   ) =>
@@ -68,7 +82,7 @@ class MockRemoteDataSource extends _i1.Mock implements _i4.RemoteDataSource {
           ],
         ),
         returnValue:
-            _i5.Future<_i2.LoginAccessModel>.value(_FakeLoginAccessModel_0(
+            _i6.Future<_i2.LoginAccessModel>.value(_FakeLoginAccessModel_0(
           this,
           Invocation.method(
             #getAuthenticate,
@@ -78,54 +92,231 @@ class MockRemoteDataSource extends _i1.Mock implements _i4.RemoteDataSource {
             ],
           ),
         )),
-      ) as _i5.Future<_i2.LoginAccessModel>);
+      ) as _i6.Future<_i2.LoginAccessModel>);
+  @override
+  _i6.Future<bool> registerUser(
+    _i4.UserModel? usermodel,
+    String? orgaId,
+    String? password,
+    String? role,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #registerUser,
+          [
+            usermodel,
+            orgaId,
+            password,
+            role,
+          ],
+        ),
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
 }
 
 /// A class which mocks [LocalDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLocalDataSource extends _i1.Mock implements _i6.LocalDataSource {
+class MockLocalDataSource extends _i1.Mock implements _i7.LocalDataSource {
   MockLocalDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i5.Future<_i3.SessionModel> getSavedSession() => (super.noSuchMethod(
+  _i6.Future<_i3.SessionModel> getSavedSession() => (super.noSuchMethod(
         Invocation.method(
           #getSavedSession,
           [],
         ),
-        returnValue: _i5.Future<_i3.SessionModel>.value(_FakeSessionModel_1(
+        returnValue: _i6.Future<_i3.SessionModel>.value(_FakeSessionModel_1(
           this,
           Invocation.method(
             #getSavedSession,
             [],
           ),
         )),
-      ) as _i5.Future<_i3.SessionModel>);
+      ) as _i6.Future<_i3.SessionModel>);
   @override
-  _i5.Future<bool> saveSession(_i3.SessionModel? session) =>
+  _i6.Future<bool> saveSession(_i3.SessionModel? session) =>
       (super.noSuchMethod(
         Invocation.method(
           #saveSession,
           [session],
         ),
-        returnValue: _i5.Future<bool>.value(false),
-      ) as _i5.Future<bool>);
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
   @override
-  _i5.Future<bool> hasSession() => (super.noSuchMethod(
+  _i6.Future<bool> hasSession() => (super.noSuchMethod(
         Invocation.method(
           #hasSession,
           [],
         ),
-        returnValue: _i5.Future<bool>.value(false),
-      ) as _i5.Future<bool>);
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
   @override
-  _i5.Future<bool> cleanSession() => (super.noSuchMethod(
+  _i6.Future<bool> cleanSession() => (super.noSuchMethod(
         Invocation.method(
           #cleanSession,
           [],
         ),
-        returnValue: _i5.Future<bool>.value(false),
-      ) as _i5.Future<bool>);
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
+}
+
+/// A class which mocks [UserRemoteDataSource].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUserRemoteDataSource extends _i1.Mock
+    implements _i8.UserRemoteDataSource {
+  MockUserRemoteDataSource() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i6.Future<List<_i4.UserModel>> getUsers(
+    String? orgaId,
+    String? filter,
+    String? fieldOrder,
+    double? pageNumber,
+    int? pageSize,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getUsers,
+          [
+            orgaId,
+            filter,
+            fieldOrder,
+            pageNumber,
+            pageSize,
+          ],
+        ),
+        returnValue: _i6.Future<List<_i4.UserModel>>.value(<_i4.UserModel>[]),
+      ) as _i6.Future<List<_i4.UserModel>>);
+  @override
+  _i6.Future<_i4.UserModel> getUser(String? userId) => (super.noSuchMethod(
+        Invocation.method(
+          #getUser,
+          [userId],
+        ),
+        returnValue: _i6.Future<_i4.UserModel>.value(_FakeUserModel_2(
+          this,
+          Invocation.method(
+            #getUser,
+            [userId],
+          ),
+        )),
+      ) as _i6.Future<_i4.UserModel>);
+  @override
+  _i6.Future<_i4.UserModel> addUser(_i4.UserModel? user) => (super.noSuchMethod(
+        Invocation.method(
+          #addUser,
+          [user],
+        ),
+        returnValue: _i6.Future<_i4.UserModel>.value(_FakeUserModel_2(
+          this,
+          Invocation.method(
+            #addUser,
+            [user],
+          ),
+        )),
+      ) as _i6.Future<_i4.UserModel>);
+  @override
+  _i6.Future<bool> deleteUser(String? userId) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteUser,
+          [userId],
+        ),
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
+  @override
+  _i6.Future<bool> enableUser(
+    String? userId,
+    bool? enableOrDisable,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #enableUser,
+          [
+            userId,
+            enableOrDisable,
+          ],
+        ),
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
+  @override
+  _i6.Future<_i4.UserModel> updateUser(
+    String? userId,
+    _i4.UserModel? user,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateUser,
+          [
+            userId,
+            user,
+          ],
+        ),
+        returnValue: _i6.Future<_i4.UserModel>.value(_FakeUserModel_2(
+          this,
+          Invocation.method(
+            #updateUser,
+            [
+              userId,
+              user,
+            ],
+          ),
+        )),
+      ) as _i6.Future<_i4.UserModel>);
+  @override
+  _i6.Future<_i4.UserModel?> existsUser(
+    String? userId,
+    String? username,
+    String? email,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #existsUser,
+          [
+            userId,
+            username,
+            email,
+          ],
+        ),
+        returnValue: _i6.Future<_i4.UserModel?>.value(),
+      ) as _i6.Future<_i4.UserModel?>);
+  @override
+  _i6.Future<List<_i4.UserModel>> getUsersNotInOrga(
+    String? orgaId,
+    List<dynamic>? order,
+    int? pageNumber,
+    int? pageSize,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getUsersNotInOrga,
+          [
+            orgaId,
+            order,
+            pageNumber,
+            pageSize,
+          ],
+        ),
+        returnValue: _i6.Future<List<_i4.UserModel>>.value(<_i4.UserModel>[]),
+      ) as _i6.Future<List<_i4.UserModel>>);
+  @override
+  _i6.Future<bool> updateUserPassword(
+    String? userId,
+    String? password,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateUserPassword,
+          [
+            userId,
+            password,
+          ],
+        ),
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
 }

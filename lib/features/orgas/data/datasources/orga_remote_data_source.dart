@@ -312,8 +312,7 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
       final Map<dynamic, dynamic> resObj = json.decode(resp.body);
 
       return Future.value(
-          resObj['data']['items'][0]['value'].toString().toLowerCase() ==
-              'true');
+          resObj['data']['items'][0].toString().toLowerCase() == 'true');
     } else {
       throw ServerException();
     }

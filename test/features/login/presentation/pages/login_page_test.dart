@@ -79,7 +79,7 @@ void main() {
       await tester.enterText(userNameTextField, 'mp@mp.com');
       await tester.enterText(passwordTextField, '12345');
 
-      Finder loginButton = find.byType(ElevatedButton);
+      Finder loginButton = find.byKey(const ValueKey("btn_login"));
       await tester.tap(loginButton);
       await tester.pumpAndSettle();
 

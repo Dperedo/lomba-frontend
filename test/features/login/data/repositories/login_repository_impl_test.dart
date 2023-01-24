@@ -9,23 +9,27 @@ import 'package:lomba_frontend/core/failures.dart';
 import 'package:lomba_frontend/features/login/data/datasources/remote_data_source.dart';
 import 'package:lomba_frontend/features/login/data/models/login_access_model.dart';
 import 'package:lomba_frontend/features/login/data/repositories/login_repository_impl.dart';
+import 'package:lomba_frontend/features/users/data/datasources/user_remote_data_source.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'login_repository_impl_test.mocks.dart';
 
-@GenerateMocks([RemoteDataSource, LocalDataSource])
+@GenerateMocks([RemoteDataSource, LocalDataSource, UserRemoteDataSource])
 void main() {
   late MockRemoteDataSource mockRemoteDataSource;
   late MockLocalDataSource mockLocalDataSource;
+  late MockUserRemoteDataSource mockUserRemoteDataSource;
   late LoginRepositoryImpl repository;
 
   setUp(() {
     mockRemoteDataSource = MockRemoteDataSource();
     mockLocalDataSource = MockLocalDataSource();
+    mockUserRemoteDataSource = MockUserRemoteDataSource();
     repository = LoginRepositoryImpl(
       localDataSource: mockLocalDataSource,
       remoteDataSource: mockRemoteDataSource,
+      userDataSource: mockUserRemoteDataSource,
     );
   });
 

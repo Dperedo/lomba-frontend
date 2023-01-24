@@ -201,6 +201,23 @@ class MockUserRemoteDataSourceImpl extends _i1.Mock
         )),
       ) as _i6.Future<_i4.UserModel>);
   @override
+  _i6.Future<_i4.UserModel?> existsUser(
+    String? userId,
+    String? username,
+    String? email,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #existsUser,
+          [
+            userId,
+            username,
+            email,
+          ],
+        ),
+        returnValue: _i6.Future<_i4.UserModel?>.value(),
+      ) as _i6.Future<_i4.UserModel?>);
+  @override
   _i6.Future<List<_i4.UserModel>> getUsersNotInOrga(
     String? orgaId,
     List<dynamic>? order,
@@ -219,6 +236,21 @@ class MockUserRemoteDataSourceImpl extends _i1.Mock
         ),
         returnValue: _i6.Future<List<_i4.UserModel>>.value(<_i4.UserModel>[]),
       ) as _i6.Future<List<_i4.UserModel>>);
+  @override
+  _i6.Future<bool> updateUserPassword(
+    String? userId,
+    String? password,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateUserPassword,
+          [
+            userId,
+            password,
+          ],
+        ),
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
 }
 
 /// A class which mocks [Client].

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/features/demolist/presentation/bloc/demolist_bloc.dart';
+import 'package:lomba_frontend/features/demolist/presentation/bloc/demolist_event.dart';
+import 'package:lomba_frontend/features/demolist/presentation/bloc/demolist_state.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 import '../../../sidedrawer/presentation/pages/sidedrawer_page.dart';
 
@@ -7,59 +12,177 @@ import '../../../sidedrawer/presentation/pages/sidedrawer_page.dart';
 ///Esta página tiene la demostración del funcionamiento de búsqueda
 /// ordenamiento y filtrado.
 class DemoListPage extends StatelessWidget {
-  const DemoListPage({Key? key}) : super(key: key);
+  DemoListPage({Key? key}) : super(key: key);
 
+  final TextEditingController _searchController = TextEditingController();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final int _fixPageSize = 8;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Lista demo")),
-      body: Column(
-        children: [
-          const Center(child: Text("Lista de demostración")),
-          _firstDemo(context)
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [_firstDemo(context)],
+        ),
       ),
       drawer: const SideDrawer(),
     );
   }
 
   Widget _firstDemo(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 25, left: 25, right: 25),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Flexible(
-                flex: 1,
-                child: TextField(
-                  cursorColor: Colors.grey,
-                  decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none),
-                      hintText: 'Search',
-                      hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
-                      prefixIcon: Container(
-                        padding: EdgeInsets.all(15),
-                        child: Image.asset('assets/icons/search.png'),
-                        width: 18,
-                      )),
+    Map<String, String> comboFields = <String, String>{
+      "Id": "id",
+      "Nombre": "name",
+      "Número": "num",
+      "Texto": "text"
+    };
+
+    List<String> listFields = <String>["id", "name", "num", "text"];
+
+    return Form(
+      key: _key,
+      child: BlocBuilder<DemoListBloc, DemoListState>(
+        builder: (context, state) {
+          if (state is DemoListStartState) {
+            context.read<DemoListBloc>().add(OnDemoListSearch(
+                "", const <String, int>{'num': 1}, 1, _fixPageSize));
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state is DemoListLoadingState) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state is DemoListLoadedState) {
+            return Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: TextFormField(
+                              controller: _searchController,
+                              cursorColor: Colors.grey,
+                              decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                filled: true,
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide.none),
+                                hintText: 'Buscar',
+                                hintStyle: const TextStyle(
+                                    color: Colors.grey, fontSize: 18),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                context.read<DemoListBloc>().add(
+                                    OnDemoListSearch(
+                                        _searchController.text,
+                                        <String, int>{
+                                          state.fieldsOrder.keys.first: 1
+                                        },
+                                        1,
+                                        _fixPageSize));
+                              },
+                              icon: const Icon(Icons.search)),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Text("Páginas: "),
+                          const VerticalDivider(),
+                          NumberPicker(
+                              itemWidth: 40,
+                              haptics: true,
+                              step: 1,
+                              axis: Axis.horizontal,
+                              value: state.pageIndex,
+                              minValue: 1,
+                              maxValue: state.totalPages,
+                              onChanged: (value) => context
+                                  .read<DemoListBloc>()
+                                  .add(OnDemoListSearch(
+                                      _searchController.text,
+                                      <String, int>{
+                                        state.fieldsOrder.keys.first: 1
+                                      },
+                                      value,
+                                      _fixPageSize))),
+                          const VerticalDivider(),
+                          const Text("Orden:"),
+                          const VerticalDivider(),
+                          DropdownButton(
+                            value: state.fieldsOrder.keys.first,
+                            items: listFields
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (String? value) {
+                              context.read<DemoListBloc>().add(OnDemoListSearch(
+                                  state.searchText,
+                                  <String, int>{value!: 1},
+                                  state.pageIndex,
+                                  _fixPageSize));
+                            },
+                          )
+                        ],
+                      ),
+                      Text(
+                          "${(state.searchText != "" ? "Buscando por \"${state.searchText}\", mostrando " : "Mostrando ")}${state.itemCount} registros de ${state.totalItems}. Página ${state.pageIndex} de ${state.totalPages}. Ordenado por ${state.fieldsOrder.keys.first}.")
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                  margin: EdgeInsets.only(left: 10),
-                  padding: EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Image.asset('assets/icons/filter.png'),
-                  width: 25),
-            ],
-          )
-        ],
+                ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: state.listRandomItems.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                  child: TextButton(
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Column(children: [
+                                          ListTile(
+                                            leading: const Icon(Icons.numbers),
+                                            title: Text(
+                                                state.listRandomItems[index]
+                                                    .name,
+                                                style: const TextStyle(
+                                                    fontSize: 18)),
+                                            subtitle: Text(
+                                                '${state.listRandomItems[index].id} / ${state.listRandomItems[index].num}',
+                                                style: const TextStyle(
+                                                    fontSize: 12)),
+                                          )
+                                        ]),
+                                      ),
+                                      onPressed: () {})),
+                            ],
+                          ),
+                          const Divider()
+                        ],
+                      );
+                    }),
+              ],
+            );
+          }
+          return const SizedBox();
+        },
       ),
     );
   }

@@ -22,6 +22,18 @@ class Validators {
     return null;
   }
 
+  static String? validateUsername(String username) {
+    if (username.isEmpty) {
+      return "Campo Requerido";
+    }
+
+    if (username.length > 30) {
+      return "Por favor ingresa un usuario con menos de 30 caracteres";
+    }
+
+    return null;
+  }
+
   ///Validación de password
   ///
   ///Debe no ser vacío y cumplir con un largo mínimo.
@@ -67,6 +79,7 @@ class Validators {
 
     return null;
   }
+
 
   ///Validación de token de usuario.
   ///

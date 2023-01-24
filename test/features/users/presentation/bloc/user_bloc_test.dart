@@ -2,13 +2,20 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lomba_frontend/core/constants.dart';
+import 'package:lomba_frontend/core/data/models/session_model.dart';
+import 'package:lomba_frontend/core/domain/usecases/get_session_status.dart';
+import 'package:lomba_frontend/features/login/domain/usecases/register_user.dart';
 import 'package:lomba_frontend/features/users/domain/entities/user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/add_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/delete_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/enable_user.dart';
+import 'package:lomba_frontend/features/users/domain/usecases/exists_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/get_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/get_users.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/update_user.dart';
+import 'package:lomba_frontend/features/users/domain/usecases/exists_user.dart';
+import 'package:lomba_frontend/features/users/domain/usecases/update_user_password.dart';
 import 'package:lomba_frontend/features/users/presentation/bloc/user_bloc.dart';
 import 'package:lomba_frontend/features/users/presentation/bloc/user_event.dart';
 import 'package:lomba_frontend/features/users/presentation/bloc/user_state.dart';
@@ -24,6 +31,10 @@ import 'user_bloc_test.mocks.dart';
   MockSpec<GetUser>(),
   MockSpec<GetUsers>(),
   MockSpec<UpdateUser>(),
+  MockSpec<RegisterUser>(),
+  MockSpec<GetSession>(),
+  MockSpec<ExistsUser>(),
+  MockSpec<UpdateUserPassword>(),
 ])
 Future<void> main() async {
   late AddUser mockAddUser;
@@ -32,6 +43,10 @@ Future<void> main() async {
   late GetUser mockGetUser;
   late GetUsers mockGetUsers;
   late UpdateUser mockUpdateUser;
+  late RegisterUser mockRegisterUser;
+  late GetSession mockGetSession;
+  late ExistsUser mockExistsUser;
+  late UpdateUserPassword mockUpdateUserPassword;
 
   late UserBloc userBloc;
 
@@ -42,16 +57,38 @@ Future<void> main() async {
     mockGetUser = MockGetUser();
     mockGetUsers = MockGetUsers();
     mockUpdateUser = MockUpdateUser();
+    mockRegisterUser = MockRegisterUser();
+    mockGetSession = MockGetSession();
+    mockExistsUser = MockExistsUser();
+    mockUpdateUserPassword = MockUpdateUserPassword();
 
     userBloc = UserBloc(
-      mockAddUser,
-      mockDeleteUser,
-      mockEnableUser,
-      mockGetUser,
-      mockGetUsers,
-      mockUpdateUser,
-    );
+        mockAddUser,
+        mockDeleteUser,
+        mockEnableUser,
+        mockGetUser,
+        mockGetUsers,
+        mockUpdateUser,
+        mockRegisterUser,
+        mockGetSession,
+        mockExistsUser,
+        mockUpdateUserPassword);
+
+    userBloc = UserBloc(
+        mockAddUser,
+        mockDeleteUser,
+        mockEnableUser,
+        mockGetUser,
+        mockGetUsers,
+        mockUpdateUser,
+        mockRegisterUser,
+        mockGetSession,
+        mockExistsUser,
+        mockUpdateUserPassword);
   });
+
+  const testSession = SessionModel(
+      token: SystemKeys.tokenSuperAdmin2023, name: 'Administrador', username: 'admin');
 
   final newUserId = Guid.newGuid.toString();
 
@@ -113,18 +150,20 @@ Future<void> main() async {
     blocTest<UserBloc, UserState>(
       'debe agregar un user',
       build: () {
-        when(mockAddUser.execute(
-                tUser.name, tUser.username, tUser.email, tUser.enabled))
-            .thenAnswer((_) async => Right(tUser));
+        when(mockRegisterUser.execute(
+                tUser.name, tUser.username, tUser.email, '00000100-0100-0100-0100-000000000100', '1234', 'user'))
+            .thenAnswer((_) async => const Right(true));
+        when(mockGetSession.execute())
+          .thenAnswer((_) async => const Right(testSession)); 
         return userBloc;
       },
-      act: (bloc) => bloc.add(
-          OnUserAdd(tUser.name, tUser.username, tUser.email, tUser.enabled)),
+      act: (bloc) =>
+          bloc.add(OnUserAdd(tUser.name, tUser.username, tUser.email, '1234')),
       wait: const Duration(milliseconds: 500),
       expect: () => [UserLoading(), UserStart()],
       verify: (bloc) {
-        verify(mockAddUser.execute(
-            tUser.name, tUser.username, tUser.email, tUser.enabled));
+        verify(mockRegisterUser.execute(
+            tUser.name, tUser.username, tUser.email, '00000100-0100-0100-0100-000000000100', '1234', 'user'));
       },
     );
   });
@@ -176,6 +215,36 @@ Future<void> main() async {
       verify: (bloc) {
         verify(mockUpdateUser.execute(newUserId, tUser));
       },
+    );
+  });
+
+  group('Modificar password', () {
+    blocTest<UserBloc, UserState>(
+      'debe actualizar una password',
+      build: () {
+        when(mockUpdateUserPassword.execute(newUserId, '1234'))
+            .thenAnswer((_) async => const Right(true));
+        return userBloc;
+      },
+      act: (bloc) => bloc.add(OnUserSaveNewPassword('1234',tUser)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [UserLoading(), UserLoaded(tUser)],
+      verify: (bloc) {
+        verify(mockUpdateUserPassword.execute(newUserId, '1234'));
+      },
+    );
+  });
+  group('mostrar formulario de cambio de password', () {
+    blocTest<UserBloc, UserState>(
+      'debe mostrar formulario',
+      build: () {
+        when(mockUpdateUserPassword.execute(newUserId, '1234'))
+            .thenAnswer((_) async => const Right(true));
+        return userBloc;
+      },
+      act: (bloc) => bloc.add(OnUserShowPasswordModifyForm(tUser)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [UserLoading(), UserUpdatePassword(tUser)],
     );
   });
 }

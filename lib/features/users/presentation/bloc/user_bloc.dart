@@ -1,14 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/features/login/domain/usecases/register_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/add_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/delete_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/enable_user.dart';
+import 'package:lomba_frontend/features/users/domain/usecases/exists_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/get_user.dart';
 import 'package:lomba_frontend/features/users/domain/usecases/update_user.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../../core/data/models/session_model.dart';
+import '../../../../core/domain/usecases/get_session_status.dart';
+import '../../../login/domain/usecases/register_user.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/usecases/get_users.dart';
+import '../../domain/usecases/update_user_password.dart';
 import 'user_event.dart';
 import 'user_state.dart';
 
@@ -20,16 +24,22 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final GetUsers _getUsers;
   final UpdateUser _updateUser;
   final RegisterUser _registerUser;
+  final GetSession _getSession;
+  final ExistsUser _existsUser;
+  final UpdateUserPassword _updateUserPassword;
 
   UserBloc(
-    this._addUser,
-    this._deleteUser,
-    this._enableUser,
-    this._getUser,
-    this._getUsers,
-    this._updateUser,
-    this._registerUser,
-  ) : super(UserStart()) {
+      this._addUser,
+      this._deleteUser,
+      this._enableUser,
+      this._getUser,
+      this._getUsers,
+      this._updateUser,
+      this._registerUser,
+      this._getSession,
+      this._existsUser,
+      this._updateUserPassword)
+      : super(UserStart()) {
     on<OnUserLoad>(
       (event, emit) async {
         emit(UserLoading());
@@ -55,16 +65,43 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     on<OnUserAdd>((event, emit) async {
       emit(UserLoading());
-      final result = await _registerUser.execute(
-          event.name, event.username, event.email, event.orgaId, event.password, event.role);
+      var auth = const SessionModel(token: "", username: "", name: "");
+
+      final session = await _getSession.execute();
+
+      session.fold((l) => emit(UserError(l.message)), (r) => {auth = r});
+
+      var role = "user";
+
+      //final valid = await _existsUser.execute('', event.username, event.email);
+
+      final result = await _registerUser.execute(event.name, event.username,
+          event.email, auth.getOrgaId()!, event.password, role);
 
       result.fold(
           (l) => emit(UserError(l.message)), (r) => {emit(UserStart())});
     });
 
     on<OnUserPrepareForAdd>((event, emit) async {
-      emit(UserAdding());
+      emit(UserAdding(false, false));
+    });
 
+    on<OnUserValidate>((event, emit) async {
+      String userNoId = '';
+      if (event.username != "" || event.email != "") {
+        final result =
+            await _existsUser.execute(userNoId, event.username, event.email);
+
+        result.fold((l) => emit(UserError(l.message)), (r) {
+          if (r != null) {
+            event.state.existEmail = (r.email == event.email);
+            event.state.existUserName = (r.username == event.username);
+          } else {
+            event.state.existEmail = false;
+            event.state.existUserName = false;
+          }
+        });
+      }
     });
 
     on<OnUserEdit>((event, emit) async {
@@ -95,6 +132,19 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       final result = await _deleteUser.execute(event.id);
       result.fold(
           (l) => emit(UserError(l.message)), (r) => {emit(UserStart())});
+    });
+    on<OnUserShowPasswordModifyForm>((event, emit) async {
+      emit(UserLoading());
+      
+      emit(UserUpdatePassword(event.user));
+      
+    });
+    on<OnUserSaveNewPassword>((event, emit) async {
+      emit(UserLoading());
+      final result = await _updateUserPassword.execute(event.user.id,event.password);
+
+      result.fold(
+          (l) => emit(UserError(l.message)), (r) => {emit(UserLoaded(event.user))});
     });
   }
 
