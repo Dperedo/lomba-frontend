@@ -81,7 +81,11 @@ class LoginPage extends StatelessWidget {
                             TextFormField(
                               controller: _emailController,
                               key: const ValueKey("email_id"),
-                              decoration: const InputDecoration(labelText: ' Usuario',hintText: " Ingrese usuario o email",suffixIcon: Icon(Icons.person),),
+                              decoration: const InputDecoration(
+                                labelText: ' Usuario',
+                                hintText: " Ingrese usuario o email",
+                                suffixIcon: Icon(Icons.person)
+                              ),
                               validator: (value) =>
                                   Validators.validateUsername(value ?? ""),
                             ),
@@ -91,6 +95,7 @@ class LoginPage extends StatelessWidget {
                               controller: _passwordController,
                               key: const ValueKey("password"),
                               obscureText: true,
+                              obscuringCharacter: '*',
                               decoration: const InputDecoration(labelText: ' Contraseña',hintText: " Ingrese contraseña",suffixIcon: Icon(Icons.key_sharp),),
                               validator: (value) =>
                                   Validators.validatePassword(value ?? ""),

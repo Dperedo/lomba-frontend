@@ -217,4 +217,34 @@ Future<void> main() async {
       },
     );
   });
+
+  group('Modificar password', () {
+    blocTest<UserBloc, UserState>(
+      'debe actualizar una password',
+      build: () {
+        when(mockUpdateUserPassword.execute(newUserId, '1234'))
+            .thenAnswer((_) async => const Right(true));
+        return userBloc;
+      },
+      act: (bloc) => bloc.add(OnUserSaveNewPassword('1234',tUser)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [UserLoading(), UserLoaded(tUser)],
+      verify: (bloc) {
+        verify(mockUpdateUserPassword.execute(newUserId, '1234'));
+      },
+    );
+  });
+  group('mostrar formulario de cambio de password', () {
+    blocTest<UserBloc, UserState>(
+      'debe mostrar formulario',
+      build: () {
+        when(mockUpdateUserPassword.execute(newUserId, '1234'))
+            .thenAnswer((_) async => const Right(true));
+        return userBloc;
+      },
+      act: (bloc) => bloc.add(OnUserShowPasswordModifyForm(tUser)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [UserLoading(), UserUpdatePassword(tUser)],
+    );
+  });
 }

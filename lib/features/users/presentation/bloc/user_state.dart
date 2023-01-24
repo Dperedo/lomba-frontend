@@ -135,9 +135,9 @@ class UserError extends UserState {
   List<Object> get props => [message];
 }
 
-class ModifyUserPassword extends UserState {
+class UserUpdatePassword extends UserState {
   final User user;
-  const ModifyUserPassword(this.user);
+  const UserUpdatePassword(this.user);
   @override
   List<Object> get props => [user];
 }

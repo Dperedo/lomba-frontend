@@ -124,8 +124,9 @@ class OnUserShowPasswordModifyForm extends UserEvent {
 
 class OnUserSaveNewPassword extends UserEvent {
   final String password;
+  final User user;
 
-  const OnUserSaveNewPassword(this.password);
+  const OnUserSaveNewPassword(this.password,this.user);
 
   @override
   List<Object> get props => [password];

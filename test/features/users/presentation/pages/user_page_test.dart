@@ -160,5 +160,28 @@ void main() {
       //assert
       expect(showedDialog, findsNothing);
     });
+
+    testWidgets('mostrar fomulario para cambiar password',
+      (WidgetTester tester) async {
+        // arrange
+      when(() => mockUserBloc.state).thenReturn(UserUpdatePassword(tUser2));
+      await tester.pumpWidget(makeTestableWidget( UsersPage()));
+      Finder widgetPass = find.byKey(const ValueKey('password'));
+      Finder widgetRepeatPass= find.byKey(const ValueKey('repeatPassword'));
+      expect(widgetRepeatPass, equals(findsOneWidget));
+      expect(widgetPass, equals(findsOneWidget));
+      },
+    );
+    // testWidgets('mostrar fomulario para cambiar password',
+    //   (WidgetTester tester) async {
+    //     // arrange
+    //   when(() => mockUserBloc.state).thenReturn(UserUpdatePassword(tUser2));
+    //   await tester.pumpWidget(makeTestableWidget( UsersPage()));
+    //   Finder widget= find.byKey(const ValueKey('repeatPassword'));
+    //     //assert
+    //   expect(widget, equals(findsOneWidget));
+    //   },
+    // );
+    
   });
 }
