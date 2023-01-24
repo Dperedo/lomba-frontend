@@ -56,6 +56,7 @@ class OrgasPage extends StatelessWidget {
   }
 
   Widget _bodyOrgas(BuildContext context, OrgaState state) {
+
     if (state is OrgaStart) {
       context.read<OrgaUserBloc>().add(const OnOrgaUserStarter());
       context.read<OrgaBloc>().add(const OnOrgaListLoad("", "", 1));

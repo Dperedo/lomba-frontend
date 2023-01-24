@@ -43,10 +43,7 @@ class OnOrgaAdd extends OrgaEvent {
   @override
   List<Object> get props => [name, code, enabled];
 }
-class OnOrgaPrepareForAdd extends OrgaEvent {
-  @override
-  List<Object> get props => [];
-}
+
 class OnOrgaValidate extends OrgaEvent {
   final String orgaName;
   final String code;
@@ -57,6 +54,11 @@ class OnOrgaValidate extends OrgaEvent {
   @override
   List<Object> get props => [orgaName, code];
 }
+class OnOrgaPrepareForAdd extends OrgaEvent {
+  @override
+  List<Object> get props => [];
+}
+
 ///Evento se dispara para actualizar (persistir) cambios en la organización
 class OnOrgaEdit extends OrgaEvent {
   final String id;

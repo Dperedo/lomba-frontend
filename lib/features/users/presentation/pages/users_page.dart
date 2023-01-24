@@ -14,15 +14,6 @@ class UsersPage extends StatelessWidget {
 
   final TextEditingController _repeatPasswordController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController repeatPasswordController = TextEditingController();
-  
-  
-  
   
   @override
   Widget build(BuildContext context) {
@@ -484,7 +475,7 @@ class UsersPage extends StatelessWidget {
                 TextFormField(
                   onChanged: (value) {
                     context.read<UserBloc>().add(OnUserValidateEdit(
-                        usernameController.text, emailController.text, state));
+                        state.user.id, usernameController.text, emailController.text, state));
                   },
                   controller: usernameController,
                   validator: (value) => state.validateUsername(value ?? ""),
@@ -496,7 +487,7 @@ class UsersPage extends StatelessWidget {
                 TextFormField(
                   onChanged: (value) {
                     context.read<UserBloc>().add(OnUserValidateEdit(
-                        usernameController.text, emailController.text, state));
+                        state.user.id, usernameController.text, emailController.text, state));
                   },
                   controller: emailController,
                   validator: (value) => state.validateEmail(value ?? ""),

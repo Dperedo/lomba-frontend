@@ -107,10 +107,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     });
 
     on<OnUserValidateEdit>((event, emit) async {
-      String userNoId = '';
+      
       if (event.username != "" || event.email != "") {
         final result =
-            await _existsUser.execute(userNoId, event.username, event.email);
+            await _existsUser.execute(event.userId, event.username, event.email);
 
         result.fold((l) => emit(UserError(l.message)), (r) {
           if (r != null) {
@@ -126,11 +126,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     on<OnUserEdit>((event, emit) async {
       emit(UserLoading());
-      var auth = const SessionModel(token: "", username: "", name: "");
-
-      final session = await _getSession.execute();
-
-      session.fold((l) => emit(UserError(l.message)), (r) => {auth = r});
 
       final user = User(
           id: event.id,
