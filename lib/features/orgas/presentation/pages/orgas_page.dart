@@ -33,6 +33,15 @@ class OrgasPage extends StatelessWidget {
               child: Column(
             children: [_bodyOrgas(context, state)],
           )),
+          floatingActionButton: (state is OrgaListLoaded || state is OrgaStart)
+              ? FloatingActionButton(
+                  key: const ValueKey("btnAddOption"),
+                  tooltip: 'Agregar usuario',
+                  onPressed: () {
+                    context.read<OrgaBloc>().add(OnOrgaPrepareForAdd());
+                  },
+                  child: const Icon(Icons.person_add))
+              : null,
           drawer: const SideDrawer(),
         );
       },
@@ -40,6 +49,7 @@ class OrgasPage extends StatelessWidget {
   }
 
   Widget _bodyOrgas(BuildContext context, OrgaState state) {
+
     if (state is OrgaStart) {
       context.read<OrgaUserBloc>().add(const OnOrgaUserStarter());
       context.read<OrgaBloc>().add(const OnOrgaListLoad("", "", 1));

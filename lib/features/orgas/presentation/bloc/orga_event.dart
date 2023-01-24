@@ -42,6 +42,11 @@ class OnOrgaAdd extends OrgaEvent {
   List<Object> get props => [name, code, enabled];
 }
 
+class OnOrgaPrepareForAdd extends OrgaEvent {
+  @override
+  List<Object> get props => [];
+}
+
 ///Evento se dispara para actualizar (persistir) cambios en la organización
 class OnOrgaEdit extends OrgaEvent {
   final String id;

@@ -70,11 +70,12 @@ class OnUserValidate extends UserEvent {
 }
 
 class OnUserValidateEdit extends UserEvent {
+  final String userId;
   final String username;
   final String email;
   final UserEditing state;
 
-  const OnUserValidateEdit(this.username, this.email, this.state);
+  const OnUserValidateEdit(this.userId, this.username, this.email, this.state);
 
   @override
   List<Object> get props => [username, email];
