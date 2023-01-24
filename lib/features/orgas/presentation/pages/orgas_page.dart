@@ -671,12 +671,14 @@ class OrgasPage extends StatelessWidget {
                               (state.orgaUsers
                                           .where((element) =>
                                               element.userId ==
-                                              state.users[index].id)
+                                                  state.users[index].id &&
+                                              element.orgaId == state.orgaId)
                                           .isNotEmpty
                                       ? state.orgaUsers
                                           .singleWhere((element) =>
                                               element.userId ==
-                                              state.users[index].id)
+                                                  state.users[index].id &&
+                                              element.orgaId == state.orgaId)
                                           .enabled
                                       : false)
                                   ? Icons.toggle_on
