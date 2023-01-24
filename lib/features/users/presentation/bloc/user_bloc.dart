@@ -126,6 +126,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     on<OnUserEdit>((event, emit) async {
       emit(UserLoading());
+      var auth = const SessionModel(token: "", username: "", name: "");
+
+      final session = await _getSession.execute();
+
+      session.fold((l) => emit(UserError(l.message)), (r) => {auth = r});
 
       final user = User(
           id: event.id,
