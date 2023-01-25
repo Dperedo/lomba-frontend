@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/core/data/datasources/local_data_source.dart';
 import 'package:lomba_frontend/core/fakedata.dart';
@@ -216,20 +217,19 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
       throw ServerException();
     }
   }
+  //   @override
+  // Future<OrgaModel> addOrga(OrgaModel orga) async {
+  //   final response =
+  //       await client.get(Uri.parse(Urls.currentWeatherByName("London")));
 
+  //   if (response.statusCode == 200) {
+  //     fakeListOrgas.add(orga);
+  //     return orga;
+  //   } else {
+  //     throw ServerException();
+  //   }
+  // }
   ///Agrega un Orga recibiendo un OrgaModel
-  @override
-  Future<OrgaModel> addOrga(OrgaModel orga) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
-
-    if (response.statusCode == 200) {
-      fakeListOrgas.add(orga);
-      return orga;
-    } else {
-      throw ServerException();
-    }
-  }
 
   ///Agrega una relación OrgaUser a partir de un OrgaUserModel
   @override
@@ -394,15 +394,29 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
   ///Actualiza una organización con el Id de organización y un OrgaModel
   @override
   Future<OrgaModel> updateOrga(String orgaId, OrgaModel orga) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    final session = await localDataSource.getSavedSession();
+    final url = Uri.parse('${UrlBackend.base}/api/v1/orga/$orgaId');
 
-    if (response.statusCode == 200) {
-      int index = fakeListOrgas.indexWhere((element) => element.id == orgaId);
-      fakeListOrgas[index] = orga;
+    //busca respuesta desde el servidor para la autenticación
+    http.Response resp = await client.put(url, body: json.encode(orga), headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
 
-      return orga;
-    } else {
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+      final item = resObj['data']['items'][0];
+      return Future.value(OrgaModel(
+          id: item["id"].toString(),
+          name: item["name"].toString(),
+          code: item["code"].toString(),
+          enabled: item["enabled"].toString().toLowerCase() == 'true',
+          builtIn: item["builtIn"].toString().toLowerCase() == 'true'
+      )
+      );
+    } 
+    else {
       throw ServerException();
     }
   }
@@ -454,4 +468,36 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
       throw ServerException();
     }
   }
+  
+  @override
+  Future<OrgaModel> addOrga(OrgaModel orga)async {
+    final session = await localDataSource.getSavedSession();
+    final url = Uri.parse('${UrlBackend.base}/api/v1/orga');
+
+    //busca respuesta desde el servidor para la autenticación
+    http.Response resp =
+        await client.post(url, body: json.encode(orga), headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+      final item = resObj['data']['items'][0];
+      return Future.value(OrgaModel(
+          id: item["id"].toString(),
+          name: item["name"].toString(),
+          code: item["code"].toString(),
+          enabled: item["enabled"].toString().toLowerCase() == 'true',
+          builtIn: item["builtIn"].toString().toLowerCase() == 'true'
+      )
+      );
+    } 
+    else {
+      throw ServerException();
+    }
+  }
+  
+ 
 }

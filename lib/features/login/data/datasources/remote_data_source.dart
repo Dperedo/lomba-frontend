@@ -52,7 +52,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<bool> registerUser(
-      UserModel usermodel, String orgaId, String password, String role) async {
+    UserModel usermodel, String orgaId, String password, String role)async{
     final Map<String, dynamic> authData = {
       'username': usermodel.username,
       'password': password,

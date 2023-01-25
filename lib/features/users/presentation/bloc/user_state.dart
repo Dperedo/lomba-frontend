@@ -89,24 +89,20 @@ class UserEditing extends UserState {
     existEmail = existemail;
     return this;
   }
-
   String? validateUsername(String username) {
     String? res = Validators.validateName(username);
-
     if (res == null) {
       if (existUserName) {
         return "El username ya existe";
       }
-    } else {
+    } 
+    else {
       return res;
     }
-
     return null;
   }
-
   String? validateEmail(String email) {
     String? res = Validators.validateEmail(email);
-
     if (res == null) {
       if (existEmail) {
         return "El email ya existe";
@@ -114,10 +110,8 @@ class UserEditing extends UserState {
     } else {
       return res;
     }
-
     return null;
   }
-
   @override
   List<Object> get props => [existUserName, existEmail, user];
 }

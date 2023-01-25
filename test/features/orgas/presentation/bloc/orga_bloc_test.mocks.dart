@@ -16,6 +16,8 @@ import 'package:lomba_frontend/features/orgas/domain/usecases/delete_orga.dart'
     as _i8;
 import 'package:lomba_frontend/features/orgas/domain/usecases/enable_orga.dart'
     as _i9;
+import 'package:lomba_frontend/features/orgas/domain/usecases/exists_orga.dart'
+    as _i13;
 import 'package:lomba_frontend/features/orgas/domain/usecases/get_orga.dart'
     as _i10;
 import 'package:lomba_frontend/features/orgas/domain/usecases/get_orgas.dart'
@@ -372,4 +374,59 @@ class MockUpdateOrga extends _i1.Mock implements _i12.UpdateOrga {
           ),
         )),
       ) as _i5.Future<_i3.Either<_i6.Failure, _i7.Orga>>);
+}
+
+/// A class which mocks [ExistsOrga].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockExistsOrga extends _i1.Mock implements _i13.ExistsOrga {
+  @override
+  _i2.OrgaRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeOrgaRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+        returnValueForMissingStub: _FakeOrgaRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.OrgaRepository);
+  @override
+  _i5.Future<_i3.Either<_i6.Failure, _i7.Orga?>> execute(
+    String? orgaId,
+    String? code,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [
+            orgaId,
+            code,
+          ],
+        ),
+        returnValue: _i5.Future<_i3.Either<_i6.Failure, _i7.Orga?>>.value(
+            _FakeEither_1<_i6.Failure, _i7.Orga?>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              orgaId,
+              code,
+            ],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i5.Future<_i3.Either<_i6.Failure, _i7.Orga?>>.value(
+                _FakeEither_1<_i6.Failure, _i7.Orga?>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              orgaId,
+              code,
+            ],
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i6.Failure, _i7.Orga?>>);
 }

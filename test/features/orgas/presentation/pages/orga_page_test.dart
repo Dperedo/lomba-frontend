@@ -220,4 +220,40 @@ void main() {
       expect(listItemFirstUser, findsOneWidget);
     });
   });
+  final tOrga = fakeListOrgas[1].toEntity();
+  group('mostrar modificar organizacion',(){
+    testWidgets('mostrar campo para modificar orga',
+      (WidgetTester tester)async{
+        when(() => mockOrgaBloc.state).thenReturn(OrgaEditing(tOrga, true));
+        await tester.pumpWidget(makeTestableWidget(OrgasPage()));
+        Finder widgetOrgaName = find.byKey(const ValueKey('orgaName'));
+        Finder widgetCode = find.byKey(const ValueKey('code'));
+        expect(widgetOrgaName, equals(findsOneWidget));
+        expect(widgetCode, equals(findsOneWidget));
+      }
+    );
+    testWidgets('boton cancelar y guardar',
+      (WidgetTester tester) async {
+        // arrange
+        when(() => mockOrgaBloc.state).thenReturn(OrgaEditing(tOrga, true));
+        // act
+        await tester.pumpWidget(makeTestableWidget( OrgasPage()));
+        Finder cancelButton = find.byKey(const ValueKey('cancelButton'));
+        Finder saveButton = find.byKey(const ValueKey('saveButton'));
+         //assert
+        expect(cancelButton,findsOneWidget);
+        expect(saveButton, findsOneWidget);
+      },
+    );
+    testWidgets('mostrar datos de orga', 
+      (WidgetTester tester)async{
+        when(() => mockOrgaBloc.state).thenReturn(OrgaEditing(tOrga, true));
+        await tester.pumpWidget(makeTestableWidget(OrgasPage()));
+        Finder nombre = find.text(tOrga.name);
+        Finder code = find.text(tOrga2.code);
+        expect(nombre, equals(findsOneWidget));
+        expect(code, equals(findsOneWidget));
+      },
+    );
+  });
 }
