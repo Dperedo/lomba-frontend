@@ -19,5 +19,7 @@ class OnLoginTriest extends LoginEvent {
   List<Object?> get props => [username, password];
 }
 
+class OnLoginWithGoogle extends LoginEvent {}
+
 ///Evento para el reinicio de la pantalla
 class OnRestartLogin extends LoginEvent {}

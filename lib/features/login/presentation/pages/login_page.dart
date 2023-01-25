@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 import 'package:lomba_frontend/core/presentation/bloc/nav_state.dart';
 import 'package:lomba_frontend/features/home/presentation/bloc/home_bloc.dart';
 import 'package:lomba_frontend/features/home/presentation/bloc/home_event.dart';
@@ -68,8 +68,8 @@ class LoginPage extends StatelessWidget {
                             .add(const NavigateTo(NavItem.pageHome));
                       });
                     } else if (state is LoginError) {
-                      return const Center(
-                        child: Text('Something went wrong!'),
+                      return Center(
+                        child: Text('Something went wrong! ${state.message}'),
                       );
                     } else if (state is LoginEmpty) {
                       return Center(
@@ -126,6 +126,16 @@ class LoginPage extends StatelessWidget {
                                 ),
                                 icon: const Icon(Icons.login_outlined),
                               ),
+                              const Divider(),
+                              SignInButton(
+                                Buttons.GoogleDark,
+                                text: "Inicia sesión con Google",
+                                onPressed: () async {
+                                  context
+                                      .read<LoginBloc>()
+                                      .add(OnLoginWithGoogle());
+                                },
+                              ),
                               const SizedBox(
                                 height: 30,
                               )
@@ -138,42 +148,10 @@ class LoginPage extends StatelessWidget {
                   },
                 ),
               ),
-              ElevatedButton.icon(
-                  icon: const Icon(Icons.add_circle_outline),
-                  label: const SizedBox(
-                    width: double.infinity,
-                    height: 35,
-                    child: Center(
-                        child: Text(
-                      'Ingresar con Google',
-                      style: TextStyle(fontSize: 18),
-                    )),
-                  ),
-                  onPressed: () async {
-                    final cre = await signInWithGoogle();
-                    if (kDebugMode) {
-                      print(cre);
-                    }
-                  })
             ],
           ),
         ),
       ),
     );
   }
-}
-
-Future<UserCredential> signInWithGoogle() async {
-  // Create a new provider
-  GoogleAuthProvider googleProvider = GoogleAuthProvider();
-
-  //googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-  googleProvider.addScope('email');
-  googleProvider.setCustomParameters({'login_hint': 'mperedo@gmail.com'});
-
-  // Once signed in, return the UserCredential
-  return await FirebaseAuth.instance.signInWithPopup(googleProvider);
-
-  // Or use signInWithRedirect
-  // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
 }

@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
+import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate_google.dart';
 import 'package:lomba_frontend/features/login/domain/usecases/register_user.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart';
 import 'package:lomba_frontend/features/orgas/data/datasources/orga_remote_data_source.dart';
@@ -61,7 +62,7 @@ final locator = GetIt.instance;
 
 Future<void> init() async {
   // bloc
-  locator.registerFactory(() => LoginBloc(locator()));
+  locator.registerFactory(() => LoginBloc(locator(), locator()));
   locator.registerFactory(() => HomeBloc(locator()));
   locator.registerFactory(() => SideDrawerBloc(locator(), locator()));
   locator.registerFactory(() => NavBloc());
@@ -126,6 +127,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => EnableRole(locator()));
   locator.registerLazySingleton(() => GetRole(locator()));
   locator.registerLazySingleton(() => GetRoles(locator()));
+  locator.registerLazySingleton(() => GetAuthenticateGoogle(locator()));
 
   // repository
   locator.registerLazySingleton<LoginRepository>(

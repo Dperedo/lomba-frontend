@@ -9,6 +9,7 @@ import '../../../../core/exceptions.dart';
 import '../../../../core/failures.dart';
 import '../../../users/data/datasources/user_remote_data_source.dart';
 import '../../../users/data/models/user_model.dart';
+import '../../../users/domain/entities/user.dart';
 import '../../domain/repositories/login_repository.dart';
 import '../datasources/remote_data_source.dart';
 
@@ -29,10 +30,13 @@ class LoginRepositoryImpl implements LoginRepository {
   ///Recibe dos dataSources porque debe conectar con el backend y depositar
   ///además la sesión en el localStorage.
   LoginRepositoryImpl(
-      {required this.remoteDataSource, required this.localDataSource, required this.userDataSource});
+      {required this.remoteDataSource,
+      required this.localDataSource,
+      required this.userDataSource});
 
   @override
-  Future<Either<Failure, bool>> getAuthenticate(String username, String password) async {
+  Future<Either<Failure, bool>> getAuthenticate(
+      String username, String password) async {
     try {
       final result = await remoteDataSource.getAuthenticate(username, password);
 
@@ -54,9 +58,9 @@ class LoginRepositoryImpl implements LoginRepository {
     }
   }
 
-  
   @override
-  Future<Either<Failure, bool>> registerUser(String name, String username, String email, String orgaId, String password, String role) async {
+  Future<Either<Failure, bool>> registerUser(String name, String username,
+      String email, String orgaId, String password, String role) async {
     try {
       UserModel userModel = UserModel(
           id: Guid.newGuid.toString(),
@@ -65,7 +69,8 @@ class LoginRepositoryImpl implements LoginRepository {
           email: email,
           enabled: true,
           builtIn: false);
-      final result = await remoteDataSource.registerUser(userModel, orgaId, password, role);
+      final result = await remoteDataSource.registerUser(
+          userModel, orgaId, password, role);
 
       return const Right(true);
     } on ServerException {
@@ -74,6 +79,39 @@ class LoginRepositoryImpl implements LoginRepository {
       return const Left(ConnectionFailure('Failed to connect to the network'));
     } on CacheException {
       return const Left(ConnectionFailure('Failed to write local cache'));
-    }    
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> getAuthenticateGoogle(
+      User user, String googleToken) async {
+    try {
+      UserModel userModel = UserModel(
+          id: user.id,
+          name: user.name,
+          username: user.username,
+          email: user.email,
+          enabled: user.enabled,
+          builtIn: user.builtIn);
+
+      final result =
+          await remoteDataSource.getAuthenticateGoogle(userModel, googleToken);
+
+      ///Construye un session a partir de los datos del LocalAccessModel
+      SessionModel session = SessionModel(
+          token: result.token, username: result.username, name: result.name);
+
+      ///Persiste el objeto [SessionModel] en el localStorage con los datos
+      ///del usuario conectado.
+      localDataSource.saveSession(session);
+
+      return const Right(true);
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(ConnectionFailure('Failed to connect to the network'));
+    } on CacheException {
+      return const Left(ConnectionFailure('Failed to write local cache'));
+    }
   }
 }

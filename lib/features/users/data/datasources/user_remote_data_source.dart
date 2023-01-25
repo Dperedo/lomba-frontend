@@ -61,7 +61,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
             username: item["username"].toString(),
             email: item["email"].toString(),
             enabled: item["enabled"].toString().toLowerCase() == 'true',
-            builtIn: item["builtin"].toString().toLowerCase() == 'true'));
+            builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
       }
 
       return Future.value(users);
@@ -91,7 +91,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
           username: item["username"].toString(),
           email: item["email"].toString(),
           enabled: item["enabled"].toString().toLowerCase() == 'true',
-          builtIn: item["builtin"].toString().toLowerCase() == 'true'));
+          builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
     } else {
       throw ServerException();
     }
@@ -190,7 +190,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
             username: item["username"].toString(),
             email: item["email"].toString(),
             enabled: item["enabled"].toString().toLowerCase() == 'true',
-            builtIn: item["builtin"].toString().toLowerCase() == 'true'));
+            builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
       }
       return Future.value(null);
     } else {
@@ -219,7 +219,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
             username: item["username"].toString(),
             email: item["email"].toString(),
             enabled: item["enabled"].toString().toLowerCase() == 'true',
-            builtIn: item["builtin"].toString().toLowerCase() == 'true'));
+            builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
       }
       return Future.value(users);
     } else {

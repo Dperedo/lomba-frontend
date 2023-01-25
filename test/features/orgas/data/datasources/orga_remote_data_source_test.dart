@@ -51,7 +51,7 @@ void main() {
       name: 'Default',
       code: 'def',
       enabled: true,
-      builtIn: false);
+      builtIn: true);
 
   const testOrgaUserId = '00000200-0200-0200-0200-000000000200';
   const testOrgaUserModel = OrgaUserModel(
@@ -72,13 +72,13 @@ void main() {
   const testUserId01 = "00000001-0001-0001-0001-000000000001";
 
   const testGetOrgaUserResponseOne =
-      '{"apiVersion":"1.0","method":"get","params":{"orgaId":"00000100-0100-0100-0100-000000000100","userId":"00000001-0001-0001-0001-000000000001"},"context":"geted by orga id","id":"54eb6d7b-ddcd-4406-8442-d1d4c6f653f0","_id":"54eb6d7b-ddcd-4406-8442-d1d4c6f653f0","data":{"items":[{"_id":"A0000001-0000-0000-1000-000000000000","id":"A0000001-0000-0000-1000-000000000000","orgaId":"00000100-0100-0100-0100-000000000100","userId":"00000001-0001-0001-0001-000000000001","roles":[{"name":"super"}],"enabled":true,"builtin":true,"created":"2023-01-11T15:50:27.211Z"}],"kind":"string","currentItemCount":1,"updated":"2023-01-16T19:27:45.948Z"}}';
+      '{"apiVersion":"1.0","method":"get","params":{"orgaId":"00000100-0100-0100-0100-000000000100","userId":"00000001-0001-0001-0001-000000000001"},"context":"geted by orga id","id":"54eb6d7b-ddcd-4406-8442-d1d4c6f653f0","_id":"54eb6d7b-ddcd-4406-8442-d1d4c6f653f0","data":{"items":[{"_id":"A0000001-0000-0000-1000-000000000000","id":"A0000001-0000-0000-1000-000000000000","orgaId":"00000100-0100-0100-0100-000000000100","userId":"00000001-0001-0001-0001-000000000001","roles":[{"name":"super"}],"enabled":true,"builtIn":true,"created":"2023-01-11T15:50:27.211Z"}],"kind":"string","currentItemCount":1,"updated":"2023-01-16T19:27:45.948Z"}}';
 
   const testGetOrgaUserResponse =
-      '{"apiVersion":"1.0","method":"get","params":{"orgaId":"00000100-0100-0100-0100-000000000100"},"context":"geted by orga id","id":"581905aa-d46d-4cad-b960-12380acd9c3e","_id":"581905aa-d46d-4cad-b960-12380acd9c3e","data":{"items":[{"_id":"A0000001-0000-0000-1000-000000000000","id":"A0000001-0000-0000-1000-000000000000","orgaId":"00000100-0100-0100-0100-000000000100","userId":"00000001-0001-0001-0001-000000000001","roles":[{"name":"super"}],"enabled":true,"builtin":true,"created":"2023-01-11T15:50:27.211Z"}],"kind":"string","currentItemCount":1,"updated":"2023-01-13T19:23:11.241Z"}}';
+      '{"apiVersion":"1.0","method":"get","params":{"orgaId":"00000100-0100-0100-0100-000000000100"},"context":"geted by orga id","id":"581905aa-d46d-4cad-b960-12380acd9c3e","_id":"581905aa-d46d-4cad-b960-12380acd9c3e","data":{"items":[{"_id":"A0000001-0000-0000-1000-000000000000","id":"A0000001-0000-0000-1000-000000000000","orgaId":"00000100-0100-0100-0100-000000000100","userId":"00000001-0001-0001-0001-000000000001","roles":[{"name":"super"}],"enabled":true,"builtIn":true,"created":"2023-01-11T15:50:27.211Z"}],"kind":"string","currentItemCount":1,"updated":"2023-01-13T19:23:11.241Z"}}';
 
   const testGetResponse =
-      '{"apiVersion":"1.0","method":"get","params":{"orgaId":"00000200-0200-0200-0200-000000000200"},"context":"geted by orga id","id":"480893fa-0b81-4ce6-9e2f-e4439ce0ba9a","_id":"480893fa-0b81-4ce6-9e2f-e4439ce0ba9a","data":{"items":[{"_id":"00000200-0200-0200-0200-000000000200","id":"00000200-0200-0200-0200-000000000200","name":"Default","code":"def","builtin":true,"enabled":true}],"kind":"string","currentItemCount":1,"updated":"2023-01-13T15:25:05.437Z"}}';
+      '{"apiVersion":"1.0","method":"get","params":{"orgaId":"00000200-0200-0200-0200-000000000200"},"context":"geted by orga id","id":"480893fa-0b81-4ce6-9e2f-e4439ce0ba9a","_id":"480893fa-0b81-4ce6-9e2f-e4439ce0ba9a","data":{"items":[{"_id":"00000200-0200-0200-0200-000000000200","id":"00000200-0200-0200-0200-000000000200","name":"Default","code":"def","builtIn":true,"enabled":true}],"kind":"string","currentItemCount":1,"updated":"2023-01-13T15:25:05.437Z"}}';
 
   const testBoolResponse =
       '{"apiVersion":"1.0","method":"put","params":{"id":"00000200-0200-0200-0200-000000000200","enable":"true"},"context":"orga enabled","id":"cc0794b7-7bea-49a7-92e6-3b0dfad86058","_id":"cc0794b7-7bea-49a7-92e6-3b0dfad86058","data":{"items":[true],"kind":"boolean","currentItemCount":1,"updated":"2023-01-16T22:49:38.210Z"}}';
@@ -280,7 +280,7 @@ void main() {
         'userId': toAdd.userId,
         'roles': listInRoles,
         'enabled': toAdd.enabled,
-        'builtin': true
+        'builtIn': true
       };
 
       final url = Uri.parse('${UrlBackend.base}/api/v1/orgauser');

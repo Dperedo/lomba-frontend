@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/domain/usecases/get_has_login.dart';
 import 'package:rxdart/rxdart.dart';
@@ -18,7 +19,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
         final result = await _hasLogin.execute();
 
-        result.fold((failure) => {}, (valid) => {emit(HomeLoaded(valid))});
+        result.fold((failure) => {}, (valid) {
+          emit(HomeLoaded(valid));
+
+          if (!valid) {
+            try {
+              signInAnonymously();
+            } catch (e) {}
+          }
+        });
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
@@ -32,4 +41,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   EventTransformer<T> debounce<T>(Duration duration) {
     return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
   }
+}
+
+Future<UserCredential> signInAnonymously() async {
+  return await FirebaseAuth.instance.signInAnonymously();
 }

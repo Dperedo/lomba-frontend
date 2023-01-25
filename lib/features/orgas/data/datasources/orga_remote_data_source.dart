@@ -140,7 +140,7 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
             orgaId: item["orgaId"].toString(),
             roles: roleslist,
             enabled: item["enabled"].toString().toLowerCase() == 'true',
-            builtIn: item["builtin"].toString().toLowerCase() == 'true'));
+            builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
       }
 
       return Future.value(orgaUsers);
@@ -178,7 +178,7 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
             orgaId: item["orgaId"].toString(),
             roles: roleslist,
             enabled: item["enabled"].toString().toLowerCase() == 'true',
-            builtIn: item["builtin"].toString().toLowerCase() == 'true'));
+            builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
       }
 
       return Future.value(orgaUsers);
@@ -217,7 +217,7 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
       'userId': orgaUser.userId,
       'roles': listInRoles,
       'enabled': orgaUser.enabled,
-      'builtin': orgaUser.builtIn,
+      'builtIn': orgaUser.builtIn,
     };
 
     http.Response resp =
@@ -242,7 +242,7 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
           orgaId: item["orgaId"].toString(),
           roles: roleslist,
           enabled: item["enabled"].toString().toLowerCase() == 'true',
-          builtIn: item["builtin"].toString().toLowerCase() == 'true'));
+          builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
     } else {
       throw ServerException();
     }
@@ -419,7 +419,7 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
           orgaId: item["orgaId"].toString(),
           roles: roleslist,
           enabled: item["enabled"].toString().toLowerCase() == 'true',
-          builtIn: item["builtin"].toString().toLowerCase() == 'true'));
+          builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
     } else {
       throw ServerException();
     }
