@@ -221,6 +221,21 @@ class MockOrgaRemoteDataSource extends _i1.Mock
         )),
       ) as _i5.Future<_i2.OrgaModel>);
   @override
+  _i5.Future<_i2.OrgaModel?> existsOrga(
+    String? orgaId,
+    String? code,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #existsOrga,
+          [
+            orgaId,
+            code,
+          ],
+        ),
+        returnValue: _i5.Future<_i2.OrgaModel?>.value(),
+      ) as _i5.Future<_i2.OrgaModel?>);
+  @override
   _i5.Future<_i3.OrgaUserModel> updateOrgaUser(
     String? orgaId,
     String? userId,

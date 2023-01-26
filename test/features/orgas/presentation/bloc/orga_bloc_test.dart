@@ -26,6 +26,7 @@ import 'orga_bloc_test.mocks.dart';
   MockSpec<GetOrga>(),
   MockSpec<GetOrgas>(),
   MockSpec<UpdateOrga>(),
+  MockSpec<ExistsOrga>(),
 ])
 Future<void> main() async {
   late AddOrga mockAddOrga;
@@ -35,6 +36,7 @@ Future<void> main() async {
   late GetOrgas mockGetOrgas;
   late UpdateOrga mockUpdateOrga;
   late ExistsOrga mockExistsOrga;
+
   late OrgaBloc orgaBloc;
 
   setUp(() {
@@ -178,4 +180,3 @@ Future<void> main() async {
     );
   });
 }
-
