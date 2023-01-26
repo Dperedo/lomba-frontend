@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
@@ -63,7 +64,7 @@ final locator = GetIt.instance;
 Future<void> init() async {
   // bloc
   locator.registerFactory(() => LoginBloc(locator(), locator()));
-  locator.registerFactory(() => HomeBloc(locator()));
+  locator.registerFactory(() => HomeBloc(locator(), locator()));
   locator.registerFactory(() => SideDrawerBloc(locator(), locator()));
   locator.registerFactory(() => NavBloc());
   locator.registerFactory(() => OrgaBloc(
@@ -179,4 +180,6 @@ Future<void> init() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   locator.registerLazySingleton(() => http.Client());
   locator.registerLazySingleton(() => sharedPreferences);
+  final firebaseAuthInstance = FirebaseAuth.instance;
+  locator.registerLazySingleton(() => firebaseAuthInstance);
 }

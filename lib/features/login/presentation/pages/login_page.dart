@@ -127,9 +127,9 @@ class LoginPage extends StatelessWidget {
                                 icon: const Icon(Icons.login_outlined),
                               ),
                               const Divider(),
-                              SignInButton(
-                                Buttons.GoogleDark,
-                                text: "Inicia sesión con Google",
+                              ElevatedButton.icon(
+                                icon: const Icon(Icons.login),
+                                label: const Text("Inicia sesión con Google"),
                                 onPressed: () async {
                                   context
                                       .read<LoginBloc>()

@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/failures.dart';
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
+import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate_google.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_event.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_state.dart';
@@ -11,14 +12,16 @@ import 'package:mockito/mockito.dart';
 
 import 'login_bloc_test.mocks.dart';
 
-@GenerateMocks([GetAuthenticate])
+@GenerateMocks([GetAuthenticate, GetAuthenticateGoogle])
 void main() {
   late MockGetAuthenticate mockGetAuthenticate;
+  late MockGetAuthenticateGoogle mockGetAuthenticateGoogle;
   late LoginBloc loginBloc;
 
   setUp(() {
     mockGetAuthenticate = MockGetAuthenticate();
-    loginBloc = LoginBloc(mockGetAuthenticate);
+    mockGetAuthenticateGoogle = MockGetAuthenticateGoogle();
+    loginBloc = LoginBloc(mockGetAuthenticate, mockGetAuthenticateGoogle);
   });
 
   const tusername = "mp@mp.com";

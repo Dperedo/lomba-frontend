@@ -130,6 +130,31 @@ class MockRemoteDataSourceImpl extends _i1.Mock
         ),
         returnValue: _i5.Future<bool>.value(false),
       ) as _i5.Future<bool>);
+  @override
+  _i5.Future<_i3.LoginAccessModel> getAuthenticateGoogle(
+    _i6.UserModel? user,
+    String? googleToken,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAuthenticateGoogle,
+          [
+            user,
+            googleToken,
+          ],
+        ),
+        returnValue:
+            _i5.Future<_i3.LoginAccessModel>.value(_FakeLoginAccessModel_1(
+          this,
+          Invocation.method(
+            #getAuthenticateGoogle,
+            [
+              user,
+              googleToken,
+            ],
+          ),
+        )),
+      ) as _i5.Future<_i3.LoginAccessModel>);
 }
 
 /// A class which mocks [Client].

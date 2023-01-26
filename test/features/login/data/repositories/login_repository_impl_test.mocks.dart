@@ -112,6 +112,31 @@ class MockRemoteDataSource extends _i1.Mock implements _i5.RemoteDataSource {
         ),
         returnValue: _i6.Future<bool>.value(false),
       ) as _i6.Future<bool>);
+  @override
+  _i6.Future<_i2.LoginAccessModel> getAuthenticateGoogle(
+    _i4.UserModel? user,
+    String? googleToken,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAuthenticateGoogle,
+          [
+            user,
+            googleToken,
+          ],
+        ),
+        returnValue:
+            _i6.Future<_i2.LoginAccessModel>.value(_FakeLoginAccessModel_0(
+          this,
+          Invocation.method(
+            #getAuthenticateGoogle,
+            [
+              user,
+              googleToken,
+            ],
+          ),
+        )),
+      ) as _i6.Future<_i2.LoginAccessModel>);
 }
 
 /// A class which mocks [LocalDataSource].

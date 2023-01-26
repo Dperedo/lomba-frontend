@@ -11,6 +11,9 @@ import 'package:lomba_frontend/features/login/domain/repositories/login_reposito
     as _i2;
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart'
     as _i4;
+import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate_google.dart'
+    as _i7;
+import 'package:lomba_frontend/features/users/domain/entities/user.dart' as _i8;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -82,6 +85,50 @@ class MockGetAuthenticate extends _i1.Mock implements _i4.GetAuthenticate {
             [
               username,
               password,
+            ],
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i6.Failure, bool>>);
+}
+
+/// A class which mocks [GetAuthenticateGoogle].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetAuthenticateGoogle extends _i1.Mock
+    implements _i7.GetAuthenticateGoogle {
+  MockGetAuthenticateGoogle() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.LoginRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeLoginRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.LoginRepository);
+  @override
+  _i5.Future<_i3.Either<_i6.Failure, bool>> execute(
+    _i8.User? user,
+    String? googleToken,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [
+            user,
+            googleToken,
+          ],
+        ),
+        returnValue: _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
+            _FakeEither_1<_i6.Failure, bool>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              user,
+              googleToken,
             ],
           ),
         )),
