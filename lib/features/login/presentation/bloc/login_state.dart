@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../../core/data/models/session_model.dart';
+import '../../../orgas/domain/entities/orga.dart';
+
 ///Interfaz de estados para Login
 abstract class LoginState extends Equatable {
   const LoginState();
@@ -24,10 +27,17 @@ class LoginError extends LoginState {
   List<Object> get props => [message];
 }
 
+class LoginSelectOrga extends LoginState {
+  final List<Orga> orgas;
+  const LoginSelectOrga(this.orgas);
+  @override
+  List<Object> get props => [orgas];
+}
+
 ///Estado cuando ya está logueado. Considera la respuesta que permitirá saltar
 ///a otra pantalla.
 class LoginGoted extends LoginState {
-  final bool result;
+  final SessionModel result;
 
   const LoginGoted(this.result);
 

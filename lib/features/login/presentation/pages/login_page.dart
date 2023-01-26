@@ -5,6 +5,7 @@ import 'package:lomba_frontend/features/home/presentation/bloc/home_bloc.dart';
 import 'package:lomba_frontend/features/home/presentation/bloc/home_event.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_event.dart';
+import 'package:lomba_frontend/features/orgas/domain/entities/orga.dart';
 import 'package:lomba_frontend/features/sidedrawer/presentation/bloc/sidedrawer_event.dart';
 
 import '../../../../core/presentation/bloc/nav_bloc.dart';
@@ -137,6 +138,37 @@ class LoginPage extends StatelessWidget {
                             )
                           ],
                         ),
+                      ),
+                    );
+                  } else if(state is LoginSelectOrga){
+                    List<String> listOrgas = [];
+                    for( var orga in state.orgas){
+                      listOrgas.add(orga.name);
+                    }
+                    return Center(
+                      child: Column(
+                        children: [
+                          Card(
+                            child: Row(
+                              children: [
+                                const Text("Organización:"),
+                                const VerticalDivider(),
+                                DropdownButton(
+                                  hint: const Text('Seleccionar'),
+                                  value: listOrgas,
+                                  items: listOrgas
+                                    .map<DropdownMenuItem<String>>((String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                  onChanged: (var value) {}
+                                )
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                     );
                   }

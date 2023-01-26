@@ -304,4 +304,27 @@ class OrgaRepositoryImpl implements OrgaRepository {
     }
     
   }
+
+  @override
+  Future<Either<Failure, List<Orga>>> getOrgasByUser(
+      String userId) async {
+    try {
+      final result = await remoteDataSource.getOrgasByUser(
+          userId);
+
+      List<Orga> list = [];
+
+      if (result.isNotEmpty) {
+        for (var element in result) {
+          list.add(element.toEntity());
+        }
+      }
+
+      return Right(list);
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(ConnectionFailure('Failed to connect to the network'));
+    }
+  }
 }

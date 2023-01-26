@@ -11,9 +11,6 @@ import '../bloc/user_state.dart';
 
 class UsersPage extends StatelessWidget {
   UsersPage({Key? key}) : super(key: key);
-
-  final TextEditingController _repeatPasswordController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
   
   @override
   Widget build(BuildContext context) {
@@ -43,6 +40,8 @@ class UsersPage extends StatelessWidget {
   }
 
   Widget _bodyUsers(BuildContext context, UserState state) {
+    final TextEditingController _repeatPasswordController = TextEditingController();
+    final TextEditingController _passwordController = TextEditingController();
     final TextEditingController nameController = TextEditingController();
     final TextEditingController usernameController = TextEditingController();
     final TextEditingController emailController = TextEditingController();

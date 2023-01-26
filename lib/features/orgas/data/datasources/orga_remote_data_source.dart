@@ -7,6 +7,7 @@ import 'package:lomba_frontend/features/roles/data/models/role_model.dart';
 
 import '../../../../../core/constants.dart';
 import '../../../../../core/exceptions.dart';
+import '../../../users/data/models/user_model.dart';
 import '../models/orga_model.dart';
 import '../models/orgauser_model.dart';
 
@@ -39,6 +40,8 @@ abstract class OrgaRemoteDataSource {
 
   Future<OrgaUserModel> updateOrgaUser(
       String orgaId, String userId, OrgaUserModel orgaUser);
+
+  Future<List<OrgaModel>> getOrgasByUser(String orgaId);
 }
 
 ///Implementación de [OrgaRemoteDataSource] con todos sus métodos.
@@ -450,6 +453,39 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
           roles: roleslist,
           enabled: item["enabled"].toString().toLowerCase() == 'true',
           builtIn: item["builtin"].toString().toLowerCase() == 'true'));
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<OrgaModel>> getOrgasByUser(
+      String userId) async {
+    //parsea URL
+    final url = Uri.parse('${UrlBackend.base}/api/v1/orga/byuser/$userId');
+    final session = await localDataSource.getSavedSession();
+
+    http.Response resp = await client.get(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      List<OrgaModel> orgas = [];
+
+      for (var item in resObj['data']['items']) {
+        orgas.add(OrgaModel(
+            id: item["id"].toString(),
+            name: item["name"].toString(),
+            code: item["code"].toString(),
+            enabled: item["enabled"].toString().toLowerCase() == 'true',
+            builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
+      }
+
+      return Future.value(orgas);
     } else {
       throw ServerException();
     }

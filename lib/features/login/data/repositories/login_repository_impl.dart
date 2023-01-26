@@ -2,15 +2,20 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:lomba_frontend/core/data/models/session_model.dart';
+import 'package:lomba_frontend/features/orgas/data/models/orga_model.dart';
 
 import '../../../../core/data/datasources/local_data_source.dart';
+import '../../../../core/domain/entities/session.dart';
 import '../../../../core/exceptions.dart';
 import '../../../../core/failures.dart';
+import '../../../orgas/domain/entities/orga.dart';
 import '../../../users/data/datasources/user_remote_data_source.dart';
 import '../../../users/data/models/user_model.dart';
 import '../../domain/repositories/login_repository.dart';
 import '../datasources/remote_data_source.dart';
+import '../models/login_access_model.dart';
 
 ///Implementación de métodos del repositorio [LoginRepository]
 ///
@@ -29,10 +34,13 @@ class LoginRepositoryImpl implements LoginRepository {
   ///Recibe dos dataSources porque debe conectar con el backend y depositar
   ///además la sesión en el localStorage.
   LoginRepositoryImpl(
-      {required this.remoteDataSource, required this.localDataSource, required this.userDataSource});
+      {required this.remoteDataSource,
+      required this.localDataSource,
+      required this.userDataSource});
 
   @override
-  Future<Either<Failure, bool>> getAuthenticate(String username, String password) async {
+  Future<Either<Failure, Session>> getAuthenticate(
+      String username, String password) async {
     try {
       final result = await remoteDataSource.getAuthenticate(username, password);
 
@@ -40,9 +48,35 @@ class LoginRepositoryImpl implements LoginRepository {
       SessionModel session = SessionModel(
           token: result.token, username: result.username, name: result.name);
 
+      //-------------------------------------------------------------------------Solo cuando sea un Orga
       ///Persiste el objeto [SessionModel] en el localStorage con los datos
       ///del usuario conectado.
       localDataSource.saveSession(session);
+      //--------------------------------------------------------------------------
+
+      return Right(session);
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(ConnectionFailure('Failed to connect to the network'));
+    } on CacheException {
+      return const Left(ConnectionFailure('Failed to write local cache'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> registerUser(String name, String username,
+      String email, String orgaId, String password, String role) async {
+    try {
+      UserModel userModel = UserModel(
+          id: Guid.newGuid.toString(),
+          name: name,
+          username: username,
+          email: email,
+          enabled: true,
+          builtIn: false);
+      final result = await remoteDataSource.registerUser(
+          userModel, orgaId, password, role);
 
       return const Right(true);
     } on ServerException {
@@ -54,26 +88,31 @@ class LoginRepositoryImpl implements LoginRepository {
     }
   }
 
-  
   @override
-  Future<Either<Failure, bool>> registerUser(String name, String username, String email, String orgaId, String password, String role) async {
+  Future<Either<Failure, Orga>> changeOrga(
+      String username, String orgaId) async {
     try {
-      UserModel userModel = UserModel(
-          id: Guid.newGuid.toString(),
-          name: name,
-          username: username,
-          email: email,
-          enabled: true,
-          builtIn: false);
-      final result = await remoteDataSource.registerUser(userModel, orgaId, password, role);
+      final result = await remoteDataSource.changeOrga(username, orgaId);
 
-      return const Right(true);
+      ///Construye un session a partir de los datos del LocalAccessModel
+      //SessionModel session = SessionModel(token: result.token, username: result.username, name: result.name);
+
+      //-------------------------------------------------------------------------Solo cuando sea un Orga
+      ///Persiste el objeto [SessionModel] en el localStorage con los datos
+      ///del usuario conectado.
+      //localDataSource.saveSession(session);
+      //--------------------------------------------------------------------------
+
+      if (result != '') {
+        return Right(result.toEntity());
+      }
+      return const Left(ServerFailure('No fue posible realizar la acción'));
     } on ServerException {
       return const Left(ServerFailure(''));
     } on SocketException {
       return const Left(ConnectionFailure('Failed to connect to the network'));
     } on CacheException {
       return const Left(ConnectionFailure('Failed to write local cache'));
-    }    
+    }
   }
 }
