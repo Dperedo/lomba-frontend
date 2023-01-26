@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/add_orga.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/delete_orga.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/enable_orga.dart';
+import 'package:lomba_frontend/features/orgas/domain/usecases/exists_orga.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/get_orga.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/update_orga.dart';
 import 'package:rxdart/rxdart.dart';
@@ -20,6 +21,7 @@ class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
   final EnableOrga _enableOrga;
   final GetOrga _getOrga;
   final GetOrgas _getOrgas;
+  final ExistsOrga _existsOrga;
   final UpdateOrga _updateOrga;
 
   OrgaBloc(
@@ -28,7 +30,8 @@ class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
     this._enableOrga,
     this._getOrga,
     this._getOrgas,
-    this._updateOrga,
+    this._updateOrga, 
+    this._existsOrga,
   ) : super(OrgaStart()) {
     on<OnOrgaLoad>(
       (event, emit) async {
@@ -61,6 +64,27 @@ class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
       result.fold(
           (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart())});
     });
+    on<OnOrgaPrepareForAdd>((event, emit) async {
+      emit(OrgaAdding(false, false));
+    });
+    on<OnOrgaValidate>((event, emit) async {
+      String orgaNoId = '';
+      if (event.orgaName != "" || event.code != "") {
+        final result =
+            await _existsOrga.execute(orgaNoId, event.code);
+
+        result.fold((l) => emit(OrgaError(l.message)), (r) {
+          if (r != null) {
+
+            event.state.existOrgaName = (r.code == event.code);
+          } else {
+
+            event.state.existCode = false;
+          }
+        });
+      }
+    });
+
     on<OnOrgaEdit>((event, emit) async {
       emit(OrgaLoading());
 
@@ -88,6 +112,17 @@ class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
       final result = await _deleteOrga.execute(event.id);
       result.fold(
           (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart())});
+    });
+    on<OnOrgaShowAddOrgaForm>((event, emit) async {
+      emit(OrgaLoading());
+      
+    });
+    on<OnOrgaSaveNewOrga>((event, emit) async {
+      emit(OrgaLoading());
+      final result = await _addOrga.execute(event.organame,event.code,true);
+
+      result.fold(
+          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaLoaded(r))});
     });
   }
 

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:lomba_frontend/core/validators.dart';
 
 import '../../domain/entities/orga.dart';
 
@@ -33,7 +34,47 @@ class OrgaListLoaded extends OrgaState {
 }
 
 ///Estado para mostrar la pantalla con campos para agregar la organización
-class OrgaAdding extends OrgaState {}
+class OrgaAdding extends OrgaState {
+  bool existOrgaName = false;
+  bool existCode = false;
+  OrgaAdding(bool existorganame, bool existcode){
+    existOrgaName = existorganame;
+    existCode = existcode;
+  }
+  OrgaAdding copyWith(bool existorganame, bool existcode){
+    existOrgaName = existorganame;
+    existCode = existcode;
+    return this;
+  }
+  String? validateOrgaName(String orgaName){
+    String? res = Validators.validateUsername(orgaName);
+    if(res == null){
+      if (existOrgaName) {
+        return "El organame ya existe";
+      }
+    }
+    else {
+      return res;
+    }
+    return null;
+
+  }
+  String? validateCode(String code) {
+    String? res = Validators.validateCode(code);
+
+    if (res == null) {
+      if (existCode) {
+        return "El codigo ya existe";
+      }
+    } else {
+      return res;
+    }
+
+    return null;
+  }
+  @override
+  List<Object> get props => [existOrgaName, existCode];
+}
 
 ///Estado para mostrar la pantalla con campos con datos y editar organización
 class OrgaEditing extends OrgaState {

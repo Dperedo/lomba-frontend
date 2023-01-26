@@ -49,12 +49,33 @@ class OnUserPrepareForAdd extends UserEvent {
   List<Object> get props => [];
 }
 
+class OnUserPrepareForEdit extends UserEvent {
+  final User user;
+
+  const OnUserPrepareForEdit(this.user);
+
+  @override
+  List<Object> get props => [user];
+}
+
 class OnUserValidate extends UserEvent {
   final String username;
   final String email;
   final UserAdding state;
 
   const OnUserValidate(this.username, this.email, this.state);
+
+  @override
+  List<Object> get props => [username, email];
+}
+
+class OnUserValidateEdit extends UserEvent {
+  final String userId;
+  final String username;
+  final String email;
+  final UserEditing state;
+
+  const OnUserValidateEdit(this.userId, this.username, this.email, this.state);
 
   @override
   List<Object> get props => [username, email];
@@ -111,3 +132,4 @@ class OnUserSaveNewPassword extends UserEvent {
   @override
   List<Object> get props => [password];
 }
+

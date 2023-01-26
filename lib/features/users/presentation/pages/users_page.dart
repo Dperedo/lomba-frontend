@@ -14,15 +14,6 @@ class UsersPage extends StatelessWidget {
 
   final TextEditingController _repeatPasswordController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController repeatPasswordController = TextEditingController();
-  
-  
-  
   
   @override
   Widget build(BuildContext context) {
@@ -41,11 +32,10 @@ class UsersPage extends StatelessWidget {
                   key: const ValueKey("btnAddOption"),
                   tooltip: 'Agregar usuario',
                   onPressed: () {
-                    //var user = const UserModel(id: '', name: '', username: '', email: '', enabled: true, builtIn: false);
                     context.read<UserBloc>().add(OnUserPrepareForAdd());
                   },
-                  child: const Icon(Icons.person_add))
-              : null,
+                  child: const Icon(Icons.person_add)
+              ): null,
           drawer: const SideDrawer(),
         );
       },
@@ -53,6 +43,13 @@ class UsersPage extends StatelessWidget {
   }
 
   Widget _bodyUsers(BuildContext context, UserState state) {
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController usernameController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    final TextEditingController repeatPasswordController = TextEditingController();
+    final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
     if (state is UserStart) {
       context.read<UserBloc>().add(const OnUserListLoad("", "", "", 1));
     }
@@ -144,8 +141,18 @@ class UsersPage extends StatelessWidget {
                       "Estado: ${(state.user.enabled ? 'Habilitado' : 'Deshabilitado')}")),
             ),
             const Divider(),
-            Row(
+            Wrap(
+              runSpacing: 12,
               children: [
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.edit),
+                  key: const ValueKey("btnEditOption"),
+                  label: const Text("Modificar"),
+                  onPressed: () {
+                    context.read<UserBloc>().add(OnUserPrepareForEdit(state.user));
+                  },
+                ),
+                const VerticalDivider(),
                 ElevatedButton.icon(
                   icon: const Icon(Icons.delete),
                   key: const ValueKey("btnDeleteOption"),
@@ -264,6 +271,7 @@ class UsersPage extends StatelessWidget {
         ),
       );
     }
+
     if (state is UserUpdatePassword){
       return Padding(
        padding: const EdgeInsets.all(10),
@@ -320,10 +328,9 @@ class UsersPage extends StatelessWidget {
                     key: const ValueKey("btnViewSaveNewPassword"),
                     label: const Text("Guardar cambios"),
                     onPressed: () {
-                      
                       if (_key.currentState?.validate() == true) {
-                           context.read<UserBloc>().add(OnUserSaveNewPassword(_passwordController.text,state.user));
-                           showDialog(
+                          context.read<UserBloc>().add(OnUserSaveNewPassword(_passwordController.text,state.user));
+                          showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
                               //title: const Text('Result'),
@@ -337,11 +344,10 @@ class UsersPage extends StatelessWidget {
                                 )
                               ],
                             ),
-                           );
+                          );
                       }
                       _passwordController.clear();
                       _repeatPasswordController.clear();
-                      
                     },
                   ),
                 ],
@@ -447,11 +453,90 @@ class UsersPage extends StatelessWidget {
       );
     }  
 
+    if (state is UserEditing) {
+      nameController.text = state.user.name;
+      usernameController.text = state.user.username;
+      emailController.text = state.user.email;
+      return Padding(
+        padding: const EdgeInsets.all(10),
+        child: Form(
+            key: _key,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: nameController,
+                  validator: (value) => Validators.validateName(value ?? ""),
+                  decoration: const InputDecoration(
+                    labelText: 'Nombre',
+                    icon: Icon(Icons.account_box),
+                  ),
+                ),
+                TextFormField(
+                  onChanged: (value) {
+                    context.read<UserBloc>().add(OnUserValidateEdit(
+                        state.user.id, usernameController.text, emailController.text, state));
+                  },
+                  controller: usernameController,
+                  validator: (value) => state.validateUsername(value ?? ""),
+                  decoration: const InputDecoration(
+                    labelText: 'Username',
+                    icon: Icon(Icons.account_box_outlined),
+                  ),
+                ),
+                TextFormField(
+                  onChanged: (value) {
+                    context.read<UserBloc>().add(OnUserValidateEdit(
+                        state.user.id, usernameController.text, emailController.text, state));
+                  },
+                  controller: emailController,
+                  validator: (value) => state.validateEmail(value ?? ""),
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    icon: Icon(Icons.email),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: ElevatedButton.icon(
+                          onPressed: () {
+                            context
+                                .read<UserBloc>()
+                                .add(OnUserLoad(state.user.id));
+                          },
+                          icon: const Icon(Icons.cancel),
+                          label: const Text('Cancel')),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: ElevatedButton.icon(
+                          onPressed: () {
+                            if (_key.currentState?.validate() == true) {
+                              context.read<UserBloc>().add(OnUserEdit(
+                                  state.user.id,
+                                  nameController.text,
+                                  usernameController.text,
+                                  emailController.text,
+                                  state.user.enabled));
+                            }
+                          },
+                          icon: const Icon(Icons.save),
+                          label: const Text('Guardar')),
+                    ),
+                  ],
+                )
+              ],
+            )),
+      );
+    }
+
     return const SizedBox();
   }
 
   AppBar _variableAppBar(BuildContext context, UserState state) {
-    if (state is UserLoaded) {
+    if (state is UserLoaded || state is UserAdding) {
       return AppBar(
           title: const Text("Usuario"),
           leading: IconButton(

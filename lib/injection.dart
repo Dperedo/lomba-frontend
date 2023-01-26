@@ -31,6 +31,7 @@ import 'features/orgas/domain/usecases/delete_orga.dart';
 import 'features/orgas/domain/usecases/delete_orgauser.dart';
 import 'features/orgas/domain/usecases/enable_orga.dart';
 import 'features/orgas/domain/usecases/enable_orgauser.dart';
+import 'features/orgas/domain/usecases/exists_orga.dart';
 import 'features/orgas/domain/usecases/get_orga.dart';
 import 'features/orgas/domain/usecases/get_orgas.dart';
 import 'features/orgas/domain/usecases/get_orgausers.dart';
@@ -68,6 +69,7 @@ Future<void> init() async {
   locator.registerFactory(() => SideDrawerBloc(locator(), locator()));
   locator.registerFactory(() => NavBloc());
   locator.registerFactory(() => OrgaBloc(
+        locator(),
         locator(),
         locator(),
         locator(),
@@ -114,6 +116,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetOrgas(locator()));
   locator.registerLazySingleton(() => GetOrgaUsers(locator()));
   locator.registerLazySingleton(() => UpdateOrga(locator()));
+  locator.registerLazySingleton(() => ExistsOrga(locator()));
   locator.registerLazySingleton(() => UpdateOrgaUser(locator()));
 
   locator.registerLazySingleton(() => AddUser(locator()));

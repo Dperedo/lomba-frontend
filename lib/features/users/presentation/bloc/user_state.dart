@@ -77,9 +77,49 @@ class UserAdding extends UserState {
 
 class UserEditing extends UserState {
   final User user;
-  const UserEditing(this.user);
+  bool existUserName = false;
+  bool existEmail = false;
+  UserEditing(bool existusername, bool existemail, this.user){
+    existUserName = existusername;
+    existEmail = existemail;
+  }
+
+  UserEditing copyWith(bool existusername, bool existemail) {
+    existUserName = existusername;
+    existEmail = existemail;
+    return this;
+  }
+
+  String? validateUsername(String username) {
+    String? res = Validators.validateName(username);
+
+    if (res == null) {
+      if (existUserName) {
+        return "El username ya existe";
+      }
+    } else {
+      return res;
+    }
+
+    return null;
+  }
+
+  String? validateEmail(String email) {
+    String? res = Validators.validateEmail(email);
+
+    if (res == null) {
+      if (existEmail) {
+        return "El email ya existe";
+      }
+    } else {
+      return res;
+    }
+
+    return null;
+  }
+
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [existUserName, existEmail, user];
 }
 
 class UserEnabling extends UserState {}

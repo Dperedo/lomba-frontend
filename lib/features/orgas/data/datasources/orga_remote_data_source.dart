@@ -35,6 +35,8 @@ abstract class OrgaRemoteDataSource {
 
   Future<OrgaModel> updateOrga(String orgaId, OrgaModel orga);
 
+  Future<OrgaModel?> existsOrga(String orgaId, String code);
+
   Future<OrgaUserModel> updateOrgaUser(
       String orgaId, String userId, OrgaUserModel orgaUser);
 }
@@ -107,6 +109,34 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
           code: item["code"].toString(),
           enabled: item["enabled"].toString().toLowerCase() == 'true',
           builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<OrgaModel?> existsOrga(
+      String orgaId, String code) async {
+    final url = Uri.parse(
+        '${UrlBackend.base}/api/v1/orga/if/exists/?orgaId=${orgaId.toString()}&code=${code.toString()}');
+    final session = await localDataSource.getSavedSession();
+    http.Response resp = await client.get(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+      if (resObj['data']['currentItemCount'] > 0) {
+        final item = resObj['data']['items'][0];
+        return Future.value(OrgaModel(
+          id: item["id"].toString(),
+          name: item["name"].toString(),
+          code: item["code"].toString(),
+          enabled: item["enabled"].toString().toLowerCase() == 'true',
+          builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
+      }
+      return Future.value(null);
     } else {
       throw ServerException();
     }

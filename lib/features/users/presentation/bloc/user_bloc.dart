@@ -73,8 +73,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       var role = "user";
 
-      //final valid = await _existsUser.execute('', event.username, event.email);
-
       final result = await _registerUser.execute(event.name, event.username,
           event.email, auth.getOrgaId()!, event.password, role);
 
@@ -86,11 +84,33 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(UserAdding(false, false));
     });
 
+    on<OnUserPrepareForEdit>((event, emit) async {
+      emit(UserEditing(false, false, event.user));
+    });
+
     on<OnUserValidate>((event, emit) async {
       String userNoId = '';
       if (event.username != "" || event.email != "") {
         final result =
             await _existsUser.execute(userNoId, event.username, event.email);
+
+        result.fold((l) => emit(UserError(l.message)), (r) {
+          if (r != null) {
+            event.state.existEmail = (r.email == event.email);
+            event.state.existUserName = (r.username == event.username);
+          } else {
+            event.state.existEmail = false;
+            event.state.existUserName = false;
+          }
+        });
+      }
+    });
+
+    on<OnUserValidateEdit>((event, emit) async {
+      
+      if (event.username != "" || event.email != "") {
+        final result =
+            await _existsUser.execute(event.userId, event.username, event.email);
 
         result.fold((l) => emit(UserError(l.message)), (r) {
           if (r != null) {
@@ -119,6 +139,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       result.fold(
           (l) => emit(UserError(l.message)), (r) => {emit(UserStart())});
     });
+
     on<OnUserEnable>((event, emit) async {
       emit(UserLoading());
 
