@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:lomba_frontend/features/login/domain/usecases/change_orga.dart';
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
 import 'package:lomba_frontend/features/login/domain/usecases/register_user.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart';
@@ -63,7 +64,7 @@ final locator = GetIt.instance;
 
 Future<void> init() async {
   // bloc
-  locator.registerFactory(() => LoginBloc(locator(), locator()));
+  locator.registerFactory(() => LoginBloc(locator(), locator(), locator()));
   locator.registerFactory(() => HomeBloc(locator()));
   locator.registerFactory(() => SideDrawerBloc(locator(), locator()));
   locator.registerFactory(() => NavBloc());
@@ -104,6 +105,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetSideOptions(locator()));
   locator.registerLazySingleton(() => DoLogOff(locator()));
   locator.registerLazySingleton(() => RegisterUser(locator()));
+  locator.registerLazySingleton(() => ChangeOrga(locator()));
 
   locator.registerLazySingleton(() => AddOrga(locator()));
   locator.registerLazySingleton(() => AddOrgaUser(locator()));

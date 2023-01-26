@@ -14,7 +14,7 @@ import '../models/login_access_model.dart';
 abstract class RemoteDataSource {
   Future<SessionModel> getAuthenticate(String username, String password);
   Future<bool> registerUser(UserModel usermodel, String orgaId, String password, String role);
-  Future<OrgaModel> changeOrga(String username, String orgaId);
+  Future<SessionModel> changeOrga(String username, String orgaId);
 }
 
 ///Implementación del Data Source Remoto para la autenticación de usuario.
@@ -88,7 +88,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<OrgaModel> changeOrga(
+  Future<SessionModel> changeOrga(
       String username, String orgaId) async {
     final Map<String, dynamic> authData = {
       'username': username,
@@ -108,14 +108,10 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     if (resp.statusCode == 200) {
       final Map<dynamic, dynamic> resObj = json.decode(resp.body);
 
-      final item = resObj['data']['items'][0]['orgas'][0];
-
-      return Future.value(OrgaModel(
-          id: item["id"].toString(),
-          name: item["name"].toString(),
-          code: item["code"].toString(),
-          enabled: item["enabled"].toString().toLowerCase() == 'true',
-          builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
+      return SessionModel(
+          token: resObj['data']['items'][0]['value'].toString(),
+          username: username,
+          name: username);
     } else {
       throw ServerException();
     }

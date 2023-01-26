@@ -8,10 +8,9 @@ import 'dart:convert' as _i7;
 import 'dart:typed_data' as _i8;
 
 import 'package:http/http.dart' as _i2;
+import 'package:lomba_frontend/core/data/models/session_model.dart' as _i3;
 import 'package:lomba_frontend/features/login/data/datasources/remote_data_source.dart'
     as _i4;
-import 'package:lomba_frontend/features/login/data/models/login_access_model.dart'
-    as _i3;
 import 'package:lomba_frontend/features/users/data/models/user_model.dart'
     as _i6;
 import 'package:mockito/mockito.dart' as _i1;
@@ -37,9 +36,8 @@ class _FakeClient_0 extends _i1.SmartFake implements _i2.Client {
         );
 }
 
-class _FakeLoginAccessModel_1 extends _i1.SmartFake
-    implements _i3.LoginAccessModel {
-  _FakeLoginAccessModel_1(
+class _FakeSessionModel_1 extends _i1.SmartFake implements _i3.SessionModel {
+  _FakeSessionModel_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -87,7 +85,7 @@ class MockRemoteDataSourceImpl extends _i1.Mock
         ),
       ) as _i2.Client);
   @override
-  _i5.Future<_i3.LoginAccessModel> getAuthenticate(
+  _i5.Future<_i3.SessionModel> getAuthenticate(
     String? username,
     String? password,
   ) =>
@@ -99,8 +97,7 @@ class MockRemoteDataSourceImpl extends _i1.Mock
             password,
           ],
         ),
-        returnValue:
-            _i5.Future<_i3.LoginAccessModel>.value(_FakeLoginAccessModel_1(
+        returnValue: _i5.Future<_i3.SessionModel>.value(_FakeSessionModel_1(
           this,
           Invocation.method(
             #getAuthenticate,
@@ -110,7 +107,7 @@ class MockRemoteDataSourceImpl extends _i1.Mock
             ],
           ),
         )),
-      ) as _i5.Future<_i3.LoginAccessModel>);
+      ) as _i5.Future<_i3.SessionModel>);
   @override
   _i5.Future<bool> registerUser(
     _i6.UserModel? usermodel,
@@ -130,6 +127,30 @@ class MockRemoteDataSourceImpl extends _i1.Mock
         ),
         returnValue: _i5.Future<bool>.value(false),
       ) as _i5.Future<bool>);
+  @override
+  _i5.Future<_i3.SessionModel> changeOrga(
+    String? username,
+    String? orgaId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #changeOrga,
+          [
+            username,
+            orgaId,
+          ],
+        ),
+        returnValue: _i5.Future<_i3.SessionModel>.value(_FakeSessionModel_1(
+          this,
+          Invocation.method(
+            #changeOrga,
+            [
+              username,
+              orgaId,
+            ],
+          ),
+        )),
+      ) as _i5.Future<_i3.SessionModel>);
 }
 
 /// A class which mocks [Client].

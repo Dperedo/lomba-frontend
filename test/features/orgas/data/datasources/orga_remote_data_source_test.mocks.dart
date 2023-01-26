@@ -150,6 +150,21 @@ class MockOrgaRemoteDataSourceImpl extends _i1.Mock
         )),
       ) as _i7.Future<_i4.OrgaModel>);
   @override
+  _i7.Future<_i4.OrgaModel?> existsOrga(
+    String? orgaId,
+    String? code,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #existsOrga,
+          [
+            orgaId,
+            code,
+          ],
+        ),
+        returnValue: _i7.Future<_i4.OrgaModel?>.value(),
+      ) as _i7.Future<_i4.OrgaModel?>);
+  @override
   _i7.Future<List<_i5.OrgaUserModel>> getOrgaUsers(String? orgaId) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -310,6 +325,15 @@ class MockOrgaRemoteDataSourceImpl extends _i1.Mock
           ),
         )),
       ) as _i7.Future<_i5.OrgaUserModel>);
+  @override
+  _i7.Future<List<_i4.OrgaModel>> getOrgasByUser(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getOrgasByUser,
+          [userId],
+        ),
+        returnValue: _i7.Future<List<_i4.OrgaModel>>.value(<_i4.OrgaModel>[]),
+      ) as _i7.Future<List<_i4.OrgaModel>>);
 }
 
 /// A class which mocks [Client].

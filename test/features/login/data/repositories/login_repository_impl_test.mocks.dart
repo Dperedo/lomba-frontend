@@ -3,19 +3,17 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i6;
+import 'dart:async' as _i5;
 
 import 'package:lomba_frontend/core/data/datasources/local_data_source.dart'
-    as _i7;
-import 'package:lomba_frontend/core/data/models/session_model.dart' as _i3;
+    as _i6;
+import 'package:lomba_frontend/core/data/models/session_model.dart' as _i2;
 import 'package:lomba_frontend/features/login/data/datasources/remote_data_source.dart'
-    as _i5;
-import 'package:lomba_frontend/features/login/data/models/login_access_model.dart'
-    as _i2;
-import 'package:lomba_frontend/features/users/data/datasources/user_remote_data_source.dart'
-    as _i8;
-import 'package:lomba_frontend/features/users/data/models/user_model.dart'
     as _i4;
+import 'package:lomba_frontend/features/users/data/datasources/user_remote_data_source.dart'
+    as _i7;
+import 'package:lomba_frontend/features/users/data/models/user_model.dart'
+    as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -29,9 +27,8 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeLoginAccessModel_0 extends _i1.SmartFake
-    implements _i2.LoginAccessModel {
-  _FakeLoginAccessModel_0(
+class _FakeSessionModel_0 extends _i1.SmartFake implements _i2.SessionModel {
+  _FakeSessionModel_0(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -40,18 +37,8 @@ class _FakeLoginAccessModel_0 extends _i1.SmartFake
         );
 }
 
-class _FakeSessionModel_1 extends _i1.SmartFake implements _i3.SessionModel {
-  _FakeSessionModel_1(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeUserModel_2 extends _i1.SmartFake implements _i4.UserModel {
-  _FakeUserModel_2(
+class _FakeUserModel_1 extends _i1.SmartFake implements _i3.UserModel {
+  _FakeUserModel_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -63,13 +50,13 @@ class _FakeUserModel_2 extends _i1.SmartFake implements _i4.UserModel {
 /// A class which mocks [RemoteDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockRemoteDataSource extends _i1.Mock implements _i5.RemoteDataSource {
+class MockRemoteDataSource extends _i1.Mock implements _i4.RemoteDataSource {
   MockRemoteDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.Future<_i2.LoginAccessModel> getAuthenticate(
+  _i5.Future<_i2.SessionModel> getAuthenticate(
     String? username,
     String? password,
   ) =>
@@ -81,8 +68,7 @@ class MockRemoteDataSource extends _i1.Mock implements _i5.RemoteDataSource {
             password,
           ],
         ),
-        returnValue:
-            _i6.Future<_i2.LoginAccessModel>.value(_FakeLoginAccessModel_0(
+        returnValue: _i5.Future<_i2.SessionModel>.value(_FakeSessionModel_0(
           this,
           Invocation.method(
             #getAuthenticate,
@@ -92,10 +78,10 @@ class MockRemoteDataSource extends _i1.Mock implements _i5.RemoteDataSource {
             ],
           ),
         )),
-      ) as _i6.Future<_i2.LoginAccessModel>);
+      ) as _i5.Future<_i2.SessionModel>);
   @override
-  _i6.Future<bool> registerUser(
-    _i4.UserModel? usermodel,
+  _i5.Future<bool> registerUser(
+    _i3.UserModel? usermodel,
     String? orgaId,
     String? password,
     String? role,
@@ -110,70 +96,94 @@ class MockRemoteDataSource extends _i1.Mock implements _i5.RemoteDataSource {
             role,
           ],
         ),
-        returnValue: _i6.Future<bool>.value(false),
-      ) as _i6.Future<bool>);
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
+  @override
+  _i5.Future<_i2.SessionModel> changeOrga(
+    String? username,
+    String? orgaId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #changeOrga,
+          [
+            username,
+            orgaId,
+          ],
+        ),
+        returnValue: _i5.Future<_i2.SessionModel>.value(_FakeSessionModel_0(
+          this,
+          Invocation.method(
+            #changeOrga,
+            [
+              username,
+              orgaId,
+            ],
+          ),
+        )),
+      ) as _i5.Future<_i2.SessionModel>);
 }
 
 /// A class which mocks [LocalDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLocalDataSource extends _i1.Mock implements _i7.LocalDataSource {
+class MockLocalDataSource extends _i1.Mock implements _i6.LocalDataSource {
   MockLocalDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.Future<_i3.SessionModel> getSavedSession() => (super.noSuchMethod(
+  _i5.Future<_i2.SessionModel> getSavedSession() => (super.noSuchMethod(
         Invocation.method(
           #getSavedSession,
           [],
         ),
-        returnValue: _i6.Future<_i3.SessionModel>.value(_FakeSessionModel_1(
+        returnValue: _i5.Future<_i2.SessionModel>.value(_FakeSessionModel_0(
           this,
           Invocation.method(
             #getSavedSession,
             [],
           ),
         )),
-      ) as _i6.Future<_i3.SessionModel>);
+      ) as _i5.Future<_i2.SessionModel>);
   @override
-  _i6.Future<bool> saveSession(_i3.SessionModel? session) =>
+  _i5.Future<bool> saveSession(_i2.SessionModel? session) =>
       (super.noSuchMethod(
         Invocation.method(
           #saveSession,
           [session],
         ),
-        returnValue: _i6.Future<bool>.value(false),
-      ) as _i6.Future<bool>);
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
   @override
-  _i6.Future<bool> hasSession() => (super.noSuchMethod(
+  _i5.Future<bool> hasSession() => (super.noSuchMethod(
         Invocation.method(
           #hasSession,
           [],
         ),
-        returnValue: _i6.Future<bool>.value(false),
-      ) as _i6.Future<bool>);
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
   @override
-  _i6.Future<bool> cleanSession() => (super.noSuchMethod(
+  _i5.Future<bool> cleanSession() => (super.noSuchMethod(
         Invocation.method(
           #cleanSession,
           [],
         ),
-        returnValue: _i6.Future<bool>.value(false),
-      ) as _i6.Future<bool>);
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
 }
 
 /// A class which mocks [UserRemoteDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUserRemoteDataSource extends _i1.Mock
-    implements _i8.UserRemoteDataSource {
+    implements _i7.UserRemoteDataSource {
   MockUserRemoteDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.Future<List<_i4.UserModel>> getUsers(
+  _i5.Future<List<_i3.UserModel>> getUsers(
     String? orgaId,
     String? filter,
     String? fieldOrder,
@@ -191,46 +201,46 @@ class MockUserRemoteDataSource extends _i1.Mock
             pageSize,
           ],
         ),
-        returnValue: _i6.Future<List<_i4.UserModel>>.value(<_i4.UserModel>[]),
-      ) as _i6.Future<List<_i4.UserModel>>);
+        returnValue: _i5.Future<List<_i3.UserModel>>.value(<_i3.UserModel>[]),
+      ) as _i5.Future<List<_i3.UserModel>>);
   @override
-  _i6.Future<_i4.UserModel> getUser(String? userId) => (super.noSuchMethod(
+  _i5.Future<_i3.UserModel> getUser(String? userId) => (super.noSuchMethod(
         Invocation.method(
           #getUser,
           [userId],
         ),
-        returnValue: _i6.Future<_i4.UserModel>.value(_FakeUserModel_2(
+        returnValue: _i5.Future<_i3.UserModel>.value(_FakeUserModel_1(
           this,
           Invocation.method(
             #getUser,
             [userId],
           ),
         )),
-      ) as _i6.Future<_i4.UserModel>);
+      ) as _i5.Future<_i3.UserModel>);
   @override
-  _i6.Future<_i4.UserModel> addUser(_i4.UserModel? user) => (super.noSuchMethod(
+  _i5.Future<_i3.UserModel> addUser(_i3.UserModel? user) => (super.noSuchMethod(
         Invocation.method(
           #addUser,
           [user],
         ),
-        returnValue: _i6.Future<_i4.UserModel>.value(_FakeUserModel_2(
+        returnValue: _i5.Future<_i3.UserModel>.value(_FakeUserModel_1(
           this,
           Invocation.method(
             #addUser,
             [user],
           ),
         )),
-      ) as _i6.Future<_i4.UserModel>);
+      ) as _i5.Future<_i3.UserModel>);
   @override
-  _i6.Future<bool> deleteUser(String? userId) => (super.noSuchMethod(
+  _i5.Future<bool> deleteUser(String? userId) => (super.noSuchMethod(
         Invocation.method(
           #deleteUser,
           [userId],
         ),
-        returnValue: _i6.Future<bool>.value(false),
-      ) as _i6.Future<bool>);
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
   @override
-  _i6.Future<bool> enableUser(
+  _i5.Future<bool> enableUser(
     String? userId,
     bool? enableOrDisable,
   ) =>
@@ -242,12 +252,12 @@ class MockUserRemoteDataSource extends _i1.Mock
             enableOrDisable,
           ],
         ),
-        returnValue: _i6.Future<bool>.value(false),
-      ) as _i6.Future<bool>);
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
   @override
-  _i6.Future<_i4.UserModel> updateUser(
+  _i5.Future<_i3.UserModel> updateUser(
     String? userId,
-    _i4.UserModel? user,
+    _i3.UserModel? user,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -257,7 +267,7 @@ class MockUserRemoteDataSource extends _i1.Mock
             user,
           ],
         ),
-        returnValue: _i6.Future<_i4.UserModel>.value(_FakeUserModel_2(
+        returnValue: _i5.Future<_i3.UserModel>.value(_FakeUserModel_1(
           this,
           Invocation.method(
             #updateUser,
@@ -267,9 +277,9 @@ class MockUserRemoteDataSource extends _i1.Mock
             ],
           ),
         )),
-      ) as _i6.Future<_i4.UserModel>);
+      ) as _i5.Future<_i3.UserModel>);
   @override
-  _i6.Future<_i4.UserModel?> existsUser(
+  _i5.Future<_i3.UserModel?> existsUser(
     String? userId,
     String? username,
     String? email,
@@ -283,10 +293,10 @@ class MockUserRemoteDataSource extends _i1.Mock
             email,
           ],
         ),
-        returnValue: _i6.Future<_i4.UserModel?>.value(),
-      ) as _i6.Future<_i4.UserModel?>);
+        returnValue: _i5.Future<_i3.UserModel?>.value(),
+      ) as _i5.Future<_i3.UserModel?>);
   @override
-  _i6.Future<List<_i4.UserModel>> getUsersNotInOrga(
+  _i5.Future<List<_i3.UserModel>> getUsersNotInOrga(
     String? orgaId,
     List<dynamic>? order,
     int? pageNumber,
@@ -302,10 +312,10 @@ class MockUserRemoteDataSource extends _i1.Mock
             pageSize,
           ],
         ),
-        returnValue: _i6.Future<List<_i4.UserModel>>.value(<_i4.UserModel>[]),
-      ) as _i6.Future<List<_i4.UserModel>>);
+        returnValue: _i5.Future<List<_i3.UserModel>>.value(<_i3.UserModel>[]),
+      ) as _i5.Future<List<_i3.UserModel>>);
   @override
-  _i6.Future<bool> updateUserPassword(
+  _i5.Future<bool> updateUserPassword(
     String? userId,
     String? password,
   ) =>
@@ -317,6 +327,6 @@ class MockUserRemoteDataSource extends _i1.Mock
             password,
           ],
         ),
-        returnValue: _i6.Future<bool>.value(false),
-      ) as _i6.Future<bool>);
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
 }

@@ -1,9 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/features/login/domain/usecases/change_orga.dart';
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
 import 'package:lomba_frontend/features/orgas/domain/usecases/get_orgasbyuser.dart';
 import 'package:rxdart/rxdart.dart';
 import '../../../../core/data/models/session_model.dart';
 import '../../../../core/domain/entities/session.dart';
+import '../../../orgas/data/models/orga_model.dart';
 import 'login_event.dart';
 import 'login_state.dart';
 
@@ -14,8 +16,9 @@ import 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final GetAuthenticate _getAuthenticate;
   final GetOrgasByUser _getOrgasByUser;
+  final ChangeOrga _changeOrga;
 
-  LoginBloc(this._getAuthenticate, this._getOrgasByUser) : super(LoginEmpty()) {
+  LoginBloc(this._getAuthenticate, this._getOrgasByUser, this._changeOrga) : super(LoginEmpty()) {
     on<OnLoginTriest>(
       (event, emit) async {
         final username = event.username;
@@ -32,7 +35,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             token: session.token,
             username: session.username,
             name: session.name,
-          );// = session;
+          );
           if (s.getOrgaId() == null) {
             //si el orgaId es nulo
             //buscar las organizaciones del usuario
@@ -41,7 +44,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             final orgas = await _getOrgasByUser.execute(userId!);
             //emites un nuevo estado, al que le pasas el List<Orga>
             //emit(NuevoEstado(orgas));
-            orgas.fold((failure) => {emit(LoginError(failure.message))}, (r) => {emit(LoginSelectOrga(r))});
+            orgas.fold((failure) => {emit(LoginError(failure.message))}, (r) => {emit(LoginSelectOrga(r, username))});
             //para que en el page, tengas la UI para que el usuario
             //seleccione una de las organizaciones
           } else {
@@ -52,6 +55,26 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         });
       },
       transformer: debounce(const Duration(milliseconds: 0)),
+    );
+
+    on<OnLoginChangeOrga>(
+      (event, emit) async {
+        final username = event.username;
+        final orgaId = event.orgaId;
+
+        emit(LoginGetting());
+
+        final result = await _changeOrga.execute(username, orgaId);
+
+        result.fold((failure) => {emit(LoginError(failure.message))}, (session) {
+          final s = SessionModel(
+            token: session.token,
+            username: session.username,
+            name: session.name,
+          );
+          emit(LoginGoted(s));
+        });
+      }
     );
 
     ///Evento que sólo busca reiniciar la pantalla de login

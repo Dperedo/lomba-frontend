@@ -28,10 +28,11 @@ class LoginError extends LoginState {
 }
 
 class LoginSelectOrga extends LoginState {
+  final String username;
   final List<Orga> orgas;
-  const LoginSelectOrga(this.orgas);
+  const LoginSelectOrga(this.orgas, this.username);
   @override
-  List<Object> get props => [orgas];
+  List<Object> get props => [orgas, username];
 }
 
 ///Estado cuando ya está logueado. Considera la respuesta que permitirá saltar

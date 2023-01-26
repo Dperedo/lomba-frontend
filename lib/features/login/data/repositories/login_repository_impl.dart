@@ -89,7 +89,7 @@ class LoginRepositoryImpl implements LoginRepository {
   }
 
   @override
-  Future<Either<Failure, Orga>> changeOrga(
+  Future<Either<Failure, Session>> changeOrga(
       String username, String orgaId) async {
     try {
       final result = await remoteDataSource.changeOrga(username, orgaId);
@@ -100,13 +100,11 @@ class LoginRepositoryImpl implements LoginRepository {
       //-------------------------------------------------------------------------Solo cuando sea un Orga
       ///Persiste el objeto [SessionModel] en el localStorage con los datos
       ///del usuario conectado.
-      //localDataSource.saveSession(session);
+      localDataSource.saveSession(result);
       //--------------------------------------------------------------------------
 
-      if (result != '') {
-        return Right(result.toEntity());
-      }
-      return const Left(ServerFailure('No fue posible realizar la acción'));
+      //if (result != '') {
+        return Right(result);
     } on ServerException {
       return const Left(ServerFailure(''));
     } on SocketException {

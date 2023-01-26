@@ -19,5 +19,15 @@ class OnLoginTriest extends LoginEvent {
   List<Object?> get props => [username, password];
 }
 
+class OnLoginChangeOrga extends LoginEvent {
+  final String username;
+  final String orgaId;
+
+  const OnLoginChangeOrga(this.username, this.orgaId);
+
+  @override
+  List<Object?> get props => [username, orgaId];
+}
+
 ///Evento para el reinicio de la pantalla
 class OnRestartLogin extends LoginEvent {}

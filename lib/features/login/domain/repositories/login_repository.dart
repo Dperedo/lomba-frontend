@@ -13,5 +13,5 @@ import '../../data/models/login_access_model.dart';
 abstract class LoginRepository {
   Future<Either<Failure, Session>> getAuthenticate(String username, String password);
   Future<Either<Failure, bool>> registerUser(String name, String username, String email, String orgaId, String password, String role);
-  Future<Either<Failure, Orga>> changeOrga(String username, String orgaId);
+  Future<Either<Failure, Session>> changeOrga(String username, String orgaId);
 }

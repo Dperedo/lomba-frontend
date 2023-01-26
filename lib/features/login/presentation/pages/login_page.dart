@@ -108,6 +108,7 @@ class LoginPage extends StatelessWidget {
                                 key: const ValueKey("btn_login"),
                                 onPressed: () {
                                   if (_key.currentState?.validate() == true) {
+                                    print('boton login');
                                     context.read<LoginBloc>().add(OnLoginTriest(
                                         _emailController.text,
                                         _passwordController.text));
@@ -143,7 +144,7 @@ class LoginPage extends StatelessWidget {
                   } else if(state is LoginSelectOrga){
                     List<String> listOrgas = [];
                     for( var orga in state.orgas){
-                      listOrgas.add(orga.name);
+                      listOrgas.add(orga.id);
                     }
                     return Center(
                       child: Column(
@@ -163,7 +164,9 @@ class LoginPage extends StatelessWidget {
                                         child: Text(value),
                                       );
                                     }).toList(),
-                                  onChanged: (var value) {}
+                                  onChanged: (value) {
+                                    context.read<LoginBloc>().add(OnLoginChangeOrga(state.username, value.toString()));
+                                  }
                                 )
                               ],
                             ),
