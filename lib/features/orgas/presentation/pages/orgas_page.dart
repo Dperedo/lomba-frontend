@@ -77,6 +77,7 @@ class OrgasPage extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
+                        key: const ValueKey("btnText"),
                         child: TextButton(
                             child: Align(
                               alignment: Alignment.centerLeft,
@@ -144,6 +145,7 @@ class OrgasPage extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (context) => GestureDetector(
+                              key: const ValueKey('btnGd'),
                               onTap: () => Navigator.pop(context),
                               child: AlertDialog(
                                 title: const Text(
@@ -266,13 +268,13 @@ class OrgasPage extends StatelessWidget {
             Row(
               children: [
                 ElevatedButton.icon(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      context
-                          .read<OrgaBloc>()
-                          .add(const OnOrgaListLoad("", "", 1));
-                    },
-                    label: const Text("Volver"))
+                  key: const ValueKey("btnVolver"),
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    context.read<OrgaBloc>().add(const OnOrgaListLoad("", "", 1));
+                  },
+                  label: const Text("Volver")
+                )
               ],
             ),
             const Divider(),
@@ -291,6 +293,7 @@ class OrgasPage extends StatelessWidget {
               children: [
                 TextFormField(
                   controller: _orgaNameController,
+                  key: const ValueKey("orgaName1"),
                   validator: (value) => Validators.validateUsername(value ?? ""),
                   decoration: const InputDecoration(
                     labelText: 'Orga Name',
@@ -303,6 +306,7 @@ class OrgasPage extends StatelessWidget {
                         _orgaNameController.text, _codeController.text, state));
                   },
                   controller: _codeController,
+                  key: const ValueKey("code"),
                   validator: (value) => state.validateCode(value ?? ""),
                   decoration: const InputDecoration(
                     labelText: 'Code',
@@ -314,6 +318,7 @@ class OrgasPage extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(15.0),
+                      key: const ValueKey("cancel1"),
                       child: ElevatedButton.icon(
                           onPressed: () {
                             context
@@ -326,6 +331,7 @@ class OrgasPage extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(15.0),
+                      key: const ValueKey("save1"),
                       child: ElevatedButton.icon(
                           onPressed: () {
                             if (_key.currentState?.validate() == true) {
@@ -424,6 +430,7 @@ class OrgasPage extends StatelessWidget {
       return AppBar(
           title: const Text("Organización"),
           leading: IconButton(
+            key: const ValueKey('btnOrganizacion'),
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
               context.read<OrgaBloc>().add(const OnOrgaListLoad("", "", 1));
@@ -680,25 +687,7 @@ class OrgasPage extends StatelessWidget {
                         children: [
                           Expanded(
                               child: TextButton(
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Column(
-                                        children: [
-                                          ListTile(
-                                            leading: const Icon(
-                                                Icons.switch_account),
-                                            title: Text(
-                                              state.users[index].name,
-                                              style:
-                                                  const TextStyle(fontSize: 18),
-                                            ),
-                                            subtitle: Text(
-                                                '${state.users[index].username} / ${state.users[index].email}',
-                                                style: const TextStyle(
-                                                    fontSize: 12)),
-                                          ),
-                                        ],
-                                      )),
+                                  key: const ValueKey("btntxtUser"), 
                                   onPressed: () {
                                     showDialog(
                                         context: context,
@@ -745,7 +734,30 @@ class OrgasPage extends StatelessWidget {
                                         }
                                       },
                                     );
-                                  })),
+                                  },
+                                  
+                                  child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Column(
+                                        children: [
+                                          ListTile(
+                                            leading: const Icon(
+                                                Icons.switch_account),
+                                            title: Text(
+                                              state.users[index].name,
+                                              style:
+                                                  const TextStyle(fontSize: 18),
+                                            ),
+                                            subtitle: Text(
+                                                '${state.users[index].username} / ${state.users[index].email}',
+                                                style: const TextStyle(
+                                                    fontSize: 12)),
+                                          ),
+                                        ],
+                                      )
+                                  )
+                              )
+                          ),
                           Icon(
                               (state.orgaUsers
                                           .where((element) =>
