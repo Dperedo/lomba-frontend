@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 import 'package:lomba_frontend/core/presentation/bloc/nav_state.dart';
 import 'package:lomba_frontend/features/home/presentation/bloc/home_bloc.dart';
 import 'package:lomba_frontend/features/home/presentation/bloc/home_event.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_event.dart';
+import 'package:lomba_frontend/features/orgas/domain/entities/orga.dart';
 import 'package:lomba_frontend/features/sidedrawer/presentation/bloc/sidedrawer_event.dart';
 
 import '../../../../core/presentation/bloc/nav_bloc.dart';
@@ -38,113 +41,157 @@ class LoginPage extends StatelessWidget {
           "Login",
           key: ValueKey("title"),
         ),
-        
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 30),
-          child: Form(
-            key: _key,
-            child: Column(
-              children:[
-              BlocBuilder<LoginBloc, LoginState>(
-                builder: (context, state) {
-                //envolver y entregar el content predeterminado
-      
-                  if (state is LoginGetting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (state is LoginGoted) {
-                    Future.delayed(Duration.zero, () {
-                      context.read<HomeBloc>().add(OnRestartHome());
-                      context.read<LoginBloc>().add(OnRestartLogin());
-                      context
-                          .read<SideDrawerBloc>()
-                          .add(const OnSideDrawerLoading());
-      
-                      BlocProvider.of<NavBloc>(context)
-                          .add(const NavigateTo(NavItem.pageHome));
-                    });
-                  } else if (state is LoginError) {
-                    return const Center(
-                      child: Text('Something went wrong!'),
-                    );
-                  } else if (state is LoginEmpty) {
-                    return Center(
-                      child: SizedBox(
-                        height: 400,
-                        width: 400,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            TextFormField(
-                              controller: _emailController,
-                              key: const ValueKey("email_id"),
-                              decoration: const InputDecoration(
-                                labelText: ' Usuario',
-                                hintText: " Ingrese usuario o email",
-                                suffixIcon: Icon(Icons.person)
-                              ),
-                              validator: (value) =>
-                                  Validators.validateUsername(value ?? ""),
-                            ),
-                            const SizedBox(height: 20,),
-                            
-                            TextFormField(
-                              controller: _passwordController,
-                              key: const ValueKey("password"),
-                              obscureText: true,
-                              obscuringCharacter: '*',
-                              decoration: const InputDecoration(labelText: ' Contraseña',hintText: " Ingrese contraseña",suffixIcon: Icon(Icons.key_sharp),),
-                              validator: (value) =>
-                                  Validators.validatePassword(value ?? ""),
-                            ),
-                            const SizedBox(height: 35,),
-                            
-                            ElevatedButton.icon(
-                                
-                                key: const ValueKey("btn_login"),
-                                onPressed: () {
-                                  if (_key.currentState?.validate() == true) {
-                                    context.read<LoginBloc>().add(OnLoginTriest(
-                                        _emailController.text,
-                                        _passwordController.text));
-                                  }
-                                },
-                                
-                                label: const SizedBox(
-                                  width: double.infinity,
-                                  height: 35,
-                                  child: Center(child: Text('Login', style: TextStyle( fontSize: 18))),
+          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 30),
+          child: Column(
+            children: [
+              Form(
+                  key: _key,
+                  child: BlocBuilder<LoginBloc, LoginState>(
+                    builder: (context, state) {
+                      //envolver y entregar el content predeterminado
+
+                      if (state is LoginGetting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (state is LoginGoted) {
+                        Future.delayed(Duration.zero, () {
+                          context.read<HomeBloc>().add(OnRestartHome());
+                          context.read<LoginBloc>().add(OnRestartLogin());
+                          context
+                              .read<SideDrawerBloc>()
+                              .add(const OnSideDrawerLoading());
+
+                          BlocProvider.of<NavBloc>(context)
+                              .add(const NavigateTo(NavItem.pageHome));
+                        });
+                      } else if (state is LoginError) {
+                        return Center(
+                          child: Text('Something went wrong! ${state.message}'),
+                        );
+                      } else if (state is LoginEmpty) {
+                        return Center(
+                          child: SizedBox(
+                            height: 400,
+                            width: 400,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                TextFormField(
+                                  controller: _emailController,
+                                  key: const ValueKey("email_id"),
+                                  decoration: const InputDecoration(
+                                      labelText: ' Usuario',
+                                      hintText: " Ingrese usuario o email",
+                                      suffixIcon: Icon(Icons.person)),
+                                  validator: (value) =>
+                                      Validators.validateUsername(value ?? ""),
                                 ),
-                                icon: const Icon(Icons.login_outlined),
-                            ),
-                            const SizedBox(height: 30,),
-                            ElevatedButton.icon(
-                              icon: const Icon(Icons.add_circle_outline),
-                              label: const SizedBox(
-                                  
-                                  width: double.infinity,
-                                  height: 35,
-                                  child: Center(child: Text('Ingresar con Google', style: TextStyle( fontSize: 18),)),
-                                  
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                TextFormField(
+                                  controller: _passwordController,
+                                  key: const ValueKey("password"),
+                                  obscureText: true,
+                                  obscuringCharacter: '*',
+                                  decoration: const InputDecoration(
+                                    labelText: ' Contraseña',
+                                    hintText: " Ingrese contraseña",
+                                    suffixIcon: Icon(Icons.key_sharp),
                                   ),
-                              onPressed:(){
-                                
-                              }
-                              
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-                  return const SizedBox();
-                },
-              ),
-             ],
-            ),
+                                  validator: (value) =>
+                                      Validators.validatePassword(value ?? ""),
+                                ),
+                                const SizedBox(
+                                  height: 35,
+                                ),
+                                ElevatedButton.icon(
+                                  key: const ValueKey("btn_login"),
+                                  onPressed: () {
+                                    if (_key.currentState?.validate() == true) {
+                                      print('boton login');
+                                      context.read<LoginBloc>().add(
+                                          OnLoginTriest(_emailController.text,
+                                              _passwordController.text));
+                                    }
+                                  },
+                                  label: const SizedBox(
+                                    width: double.infinity,
+                                    height: 35,
+                                    child: Center(
+                                        child: Text('Login',
+                                            style: TextStyle(fontSize: 18))),
+                                  ),
+                                  icon: const Icon(Icons.login_outlined),
+                                ),
+                                const Divider(),
+                                ElevatedButton.icon(
+                                  icon: const Icon(Icons.login),
+                                  label: const Text("Inicia sesión con Google"),
+                                  onPressed: () async {
+                                    context
+                                        .read<LoginBloc>()
+                                        .add(OnLoginWithGoogle());
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 30,
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      } else if (state is LoginSelectOrga) {
+                        List<String> listOrgas = [];
+                        for (var orga in state.orgas) {
+                          listOrgas.add(orga.id);
+                        }
+                        return Center(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                width: 250,
+                                child: Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Row(
+                                      children: [
+                                        const Text("Organización:"),
+                                        const VerticalDivider(),
+                                        DropdownButton(
+                                            value: state.orgas.first.id,
+                                            hint: const Text('Seleccionar'),
+                                            items: state.orgas
+                                                .map<DropdownMenuItem<String>>(
+                                                    (Orga orga) {
+                                              return DropdownMenuItem<String>(
+                                                value: orga.id,
+                                                child: Text(orga.name),
+                                              );
+                                            }).toList(),
+                                            onChanged: (value) {
+                                              context.read<LoginBloc>().add(
+                                                  OnLoginChangeOrga(
+                                                      state.username,
+                                                      value.toString()));
+                                            })
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      }
+                      return const SizedBox();
+                    },
+                  )),
+            ],
           ),
         ),
       ),

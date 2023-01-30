@@ -312,6 +312,15 @@ class MockOrgaRemoteDataSourceImpl extends _i1.Mock
         )),
       ) as _i7.Future<_i5.OrgaUserModel>);
   @override
+  _i7.Future<List<_i4.OrgaModel>> getOrgasByUser(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getOrgasByUser,
+          [userId],
+        ),
+        returnValue: _i7.Future<List<_i4.OrgaModel>>.value(<_i4.OrgaModel>[]),
+      ) as _i7.Future<List<_i4.OrgaModel>>);
+  @override
   _i7.Future<_i4.OrgaModel> addOrga(_i4.OrgaModel? orga) => (super.noSuchMethod(
         Invocation.method(
           #addOrga,

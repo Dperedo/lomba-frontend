@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../orgas/domain/entities/orga.dart';
+
 abstract class SideDrawerState extends Equatable {
   const SideDrawerState();
 
@@ -13,7 +15,9 @@ class SideDrawerLoading extends SideDrawerState {}
 
 class SideDrawerReady extends SideDrawerState {
   final List<String> opts;
-  const SideDrawerReady(this.opts);
+  final List<Orga> orgas;
+  final String orgaId;
+  const SideDrawerReady(this.opts, this.orgas, this.orgaId);
   @override
-  List<Object> get props => [opts];
+  List<Object> get props => [opts, orgas, orgaId];
 }

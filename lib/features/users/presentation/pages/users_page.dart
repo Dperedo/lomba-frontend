@@ -42,14 +42,14 @@ class UsersPage extends StatelessWidget {
   }
 
   Widget _bodyUsers(BuildContext context, UserState state) {
+    final TextEditingController _repeatPasswordController = TextEditingController();
+    final TextEditingController _passwordController = TextEditingController();
     final TextEditingController nameController = TextEditingController();
     final TextEditingController usernameController = TextEditingController();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     final TextEditingController repeatPasswordController = TextEditingController();
     final GlobalKey<FormState> _key = GlobalKey<FormState>();
-    final TextEditingController _repeatPasswordController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
 
     if (state is UserStart) {
       context.read<UserBloc>().add(const OnUserListLoad("", "", "", 1));

@@ -7,11 +7,11 @@ import 'dart:async' as _i6;
 
 import 'package:lomba_frontend/core/data/datasources/local_data_source.dart'
     as _i7;
-import 'package:lomba_frontend/core/data/models/session_model.dart' as _i3;
+import 'package:lomba_frontend/core/data/models/session_model.dart' as _i2;
 import 'package:lomba_frontend/features/login/data/datasources/remote_data_source.dart'
     as _i5;
 import 'package:lomba_frontend/features/login/data/models/login_access_model.dart'
-    as _i2;
+    as _i3;
 import 'package:lomba_frontend/features/users/data/datasources/user_remote_data_source.dart'
     as _i8;
 import 'package:lomba_frontend/features/users/data/models/user_model.dart'
@@ -29,9 +29,8 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeLoginAccessModel_0 extends _i1.SmartFake
-    implements _i2.LoginAccessModel {
-  _FakeLoginAccessModel_0(
+class _FakeSessionModel_0 extends _i1.SmartFake implements _i2.SessionModel {
+  _FakeSessionModel_0(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -40,8 +39,9 @@ class _FakeLoginAccessModel_0 extends _i1.SmartFake
         );
 }
 
-class _FakeSessionModel_1 extends _i1.SmartFake implements _i3.SessionModel {
-  _FakeSessionModel_1(
+class _FakeLoginAccessModel_1 extends _i1.SmartFake
+    implements _i3.LoginAccessModel {
+  _FakeLoginAccessModel_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -69,7 +69,7 @@ class MockRemoteDataSource extends _i1.Mock implements _i5.RemoteDataSource {
   }
 
   @override
-  _i6.Future<_i2.LoginAccessModel> getAuthenticate(
+  _i6.Future<_i2.SessionModel> getAuthenticate(
     String? username,
     String? password,
   ) =>
@@ -81,8 +81,7 @@ class MockRemoteDataSource extends _i1.Mock implements _i5.RemoteDataSource {
             password,
           ],
         ),
-        returnValue:
-            _i6.Future<_i2.LoginAccessModel>.value(_FakeLoginAccessModel_0(
+        returnValue: _i6.Future<_i2.SessionModel>.value(_FakeSessionModel_0(
           this,
           Invocation.method(
             #getAuthenticate,
@@ -92,7 +91,7 @@ class MockRemoteDataSource extends _i1.Mock implements _i5.RemoteDataSource {
             ],
           ),
         )),
-      ) as _i6.Future<_i2.LoginAccessModel>);
+      ) as _i6.Future<_i2.SessionModel>);
   @override
   _i6.Future<bool> registerUser(
     _i4.UserModel? usermodel,
@@ -112,6 +111,55 @@ class MockRemoteDataSource extends _i1.Mock implements _i5.RemoteDataSource {
         ),
         returnValue: _i6.Future<bool>.value(false),
       ) as _i6.Future<bool>);
+  @override
+  _i6.Future<_i2.SessionModel> changeOrga(
+    String? username,
+    String? orgaId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #changeOrga,
+          [
+            username,
+            orgaId,
+          ],
+        ),
+        returnValue: _i6.Future<_i2.SessionModel>.value(_FakeSessionModel_0(
+          this,
+          Invocation.method(
+            #changeOrga,
+            [
+              username,
+              orgaId,
+            ],
+          ),
+        )),
+      ) as _i6.Future<_i2.SessionModel>);
+  @override
+  _i6.Future<_i3.LoginAccessModel> getAuthenticateGoogle(
+    _i4.UserModel? user,
+    String? googleToken,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAuthenticateGoogle,
+          [
+            user,
+            googleToken,
+          ],
+        ),
+        returnValue:
+            _i6.Future<_i3.LoginAccessModel>.value(_FakeLoginAccessModel_1(
+          this,
+          Invocation.method(
+            #getAuthenticateGoogle,
+            [
+              user,
+              googleToken,
+            ],
+          ),
+        )),
+      ) as _i6.Future<_i3.LoginAccessModel>);
 }
 
 /// A class which mocks [LocalDataSource].
@@ -123,21 +171,21 @@ class MockLocalDataSource extends _i1.Mock implements _i7.LocalDataSource {
   }
 
   @override
-  _i6.Future<_i3.SessionModel> getSavedSession() => (super.noSuchMethod(
+  _i6.Future<_i2.SessionModel> getSavedSession() => (super.noSuchMethod(
         Invocation.method(
           #getSavedSession,
           [],
         ),
-        returnValue: _i6.Future<_i3.SessionModel>.value(_FakeSessionModel_1(
+        returnValue: _i6.Future<_i2.SessionModel>.value(_FakeSessionModel_0(
           this,
           Invocation.method(
             #getSavedSession,
             [],
           ),
         )),
-      ) as _i6.Future<_i3.SessionModel>);
+      ) as _i6.Future<_i2.SessionModel>);
   @override
-  _i6.Future<bool> saveSession(_i3.SessionModel? session) =>
+  _i6.Future<bool> saveSession(_i2.SessionModel? session) =>
       (super.noSuchMethod(
         Invocation.method(
           #saveSession,

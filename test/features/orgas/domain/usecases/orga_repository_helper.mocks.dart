@@ -365,4 +365,21 @@ class MockOrgaRepository extends _i1.Mock implements _i3.OrgaRepository {
           ),
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, _i7.OrgaUser>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Orga>>> getOrgasByUser(
+          String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getOrgasByUser,
+          [userId],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, List<_i6.Orga>>>.value(
+            _FakeEither_0<_i5.Failure, List<_i6.Orga>>(
+          this,
+          Invocation.method(
+            #getOrgasByUser,
+            [userId],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Orga>>>);
 }

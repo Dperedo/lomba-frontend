@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:lomba_frontend/features/login/domain/usecases/change_orga.dart';
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart';
+import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate_google.dart';
 import 'package:lomba_frontend/features/login/domain/usecases/register_user.dart';
 import 'package:lomba_frontend/features/login/presentation/bloc/login_bloc.dart';
 import 'package:lomba_frontend/features/orgas/data/datasources/orga_remote_data_source.dart';
@@ -32,6 +35,7 @@ import 'features/orgas/domain/usecases/enable_orgauser.dart';
 import 'features/orgas/domain/usecases/exists_orga.dart';
 import 'features/orgas/domain/usecases/get_orga.dart';
 import 'features/orgas/domain/usecases/get_orgas.dart';
+import 'features/orgas/domain/usecases/get_orgasbyuser.dart';
 import 'features/orgas/domain/usecases/get_orgausers.dart';
 import 'features/orgas/domain/usecases/update_orga.dart';
 import 'features/orgas/domain/usecases/update_orgauser.dart';
@@ -62,9 +66,11 @@ final locator = GetIt.instance;
 
 Future<void> init() async {
   // bloc
-  locator.registerFactory(() => LoginBloc(locator()));
-  locator.registerFactory(() => HomeBloc(locator()));
-  locator.registerFactory(() => SideDrawerBloc(locator(), locator()));
+  locator.registerFactory(
+      () => LoginBloc(locator(), locator(), locator(), locator()));
+  locator.registerFactory(() => HomeBloc(locator(), locator()));
+  locator.registerFactory(() => SideDrawerBloc(locator(), locator(), locator(),
+      locator(), locator(), locator(), locator()));
   locator.registerFactory(() => NavBloc());
   locator.registerFactory(() => OrgaBloc(
         locator(),
@@ -103,6 +109,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetSideOptions(locator()));
   locator.registerLazySingleton(() => DoLogOff(locator()));
   locator.registerLazySingleton(() => RegisterUser(locator()));
+  locator.registerLazySingleton(() => ChangeOrga(locator()));
 
   locator.registerLazySingleton(() => AddOrga(locator()));
   locator.registerLazySingleton(() => AddOrgaUser(locator()));
@@ -116,6 +123,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => UpdateOrga(locator()));
   locator.registerLazySingleton(() => ExistsOrga(locator()));
   locator.registerLazySingleton(() => UpdateOrgaUser(locator()));
+  locator.registerLazySingleton(() => GetOrgasByUser(locator()));
 
   locator.registerLazySingleton(() => AddUser(locator()));
   locator.registerLazySingleton(() => DeleteUser(locator()));
@@ -129,6 +137,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => EnableRole(locator()));
   locator.registerLazySingleton(() => GetRole(locator()));
   locator.registerLazySingleton(() => GetRoles(locator()));
+  locator.registerLazySingleton(() => GetAuthenticateGoogle(locator()));
 
   // repository
   locator.registerLazySingleton<LoginRepository>(
@@ -154,6 +163,7 @@ Future<void> init() async {
   locator.registerLazySingleton<RemoteDataSource>(
     () => RemoteDataSourceImpl(
       client: locator(),
+      localDataSource: locator(),
     ),
   );
   locator.registerLazySingleton<LocalDataSource>(
@@ -180,4 +190,6 @@ Future<void> init() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   locator.registerLazySingleton(() => http.Client());
   locator.registerLazySingleton(() => sharedPreferences);
+  final firebaseAuthInstance = FirebaseAuth.instance;
+  locator.registerLazySingleton(() => firebaseAuthInstance);
 }

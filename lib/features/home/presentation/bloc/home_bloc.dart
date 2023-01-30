@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/domain/usecases/get_has_login.dart';
 import 'package:rxdart/rxdart.dart';
@@ -9,8 +12,9 @@ import 'home_state.dart';
 ///Consulta si el usuario está logueado o no.
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetHasLogIn _hasLogin;
+  final FirebaseAuth _firebaseAuthInstance;
 
-  HomeBloc(this._hasLogin) : super(HomeStart()) {
+  HomeBloc(this._firebaseAuthInstance, this._hasLogin) : super(HomeStart()) {
     ///Evento que hace la consulta de sesión del usuario en el dispositivo.
     on<OnHomeLoading>(
       (event, emit) async {
@@ -18,7 +22,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
         final result = await _hasLogin.execute();
 
-        result.fold((failure) => {}, (valid) => {emit(HomeLoaded(valid))});
+        result.fold((failure) => {}, (valid) async {
+          emit(HomeLoaded(valid));
+
+          if (!valid) {
+            try {
+              await signInAnonymously();
+            } catch (e) {}
+          }
+        });
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
@@ -31,5 +43,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   EventTransformer<T> debounce<T>(Duration duration) {
     return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
+  }
+
+  Future<UserCredential> signInAnonymously() async {
+    return await _firebaseAuthInstance.signInAnonymously();
   }
 }

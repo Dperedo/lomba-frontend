@@ -26,4 +26,6 @@ abstract class OrgaRepository {
       String orgaName, String code);
   Future<Either<Failure, OrgaUser>> updateOrgaUser(
       String orgaId, String userId, OrgaUser orgaUser);
+  Future<Either<Failure, List<Orga>>> getOrgasByUser(
+      String userId);
 }

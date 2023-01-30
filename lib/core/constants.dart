@@ -14,6 +14,7 @@ class Urls {
 
 class UrlBackend {
   static const String base = 'http://localhost:4001';
+  //static const String base = 'https://lomba-backend-develop.azurewebsites.net';
 }
 
 ///Claves de sistema, como tokends creados en el sitio JWT.io.

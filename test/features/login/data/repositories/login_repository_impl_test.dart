@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/data/datasources/local_data_source.dart';
+import 'package:lomba_frontend/core/data/models/session_model.dart';
 import 'package:lomba_frontend/core/exceptions.dart';
 import 'package:lomba_frontend/core/failures.dart';
 import 'package:lomba_frontend/features/login/data/datasources/remote_data_source.dart';
@@ -33,7 +34,7 @@ void main() {
     );
   });
 
-  const tLoginAccessModel = LoginAccessModel(
+  const tLoginAccessModel = SessionModel(
       token: SystemKeys.tokenSuperAdmin2023,
       username: "mp@mp.com",
       name: "Miguel");
@@ -57,7 +58,7 @@ void main() {
         // assert
         verify(mockRemoteDataSource.getAuthenticate(tusername, tpassword));
         verify(mockLocalDataSource.saveSession(any)).called(1);
-        expect(result, equals(const Right(true)));
+        expect(result, equals(const Right(tLoginAccessModel)));
       },
     );
 

@@ -262,4 +262,13 @@ class MockOrgaRemoteDataSource extends _i1.Mock
           ),
         )),
       ) as _i5.Future<_i3.OrgaUserModel>);
+  @override
+  _i5.Future<List<_i2.OrgaModel>> getOrgasByUser(String? orgaId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getOrgasByUser,
+          [orgaId],
+        ),
+        returnValue: _i5.Future<List<_i2.OrgaModel>>.value(<_i2.OrgaModel>[]),
+      ) as _i5.Future<List<_i2.OrgaModel>>);
 }

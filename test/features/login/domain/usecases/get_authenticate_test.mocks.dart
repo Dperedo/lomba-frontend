@@ -6,9 +6,11 @@
 import 'dart:async' as _i4;
 
 import 'package:dartz/dartz.dart' as _i2;
+import 'package:lomba_frontend/core/domain/entities/session.dart' as _i6;
 import 'package:lomba_frontend/core/failures.dart' as _i5;
 import 'package:lomba_frontend/features/login/domain/repositories/login_repository.dart'
     as _i3;
+import 'package:lomba_frontend/features/users/domain/entities/user.dart' as _i7;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -41,7 +43,7 @@ class MockLoginRepository extends _i1.Mock implements _i3.LoginRepository {
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, bool>> getAuthenticate(
+  _i4.Future<_i2.Either<_i5.Failure, _i6.Session>> getAuthenticate(
     String? username,
     String? password,
   ) =>
@@ -53,8 +55,8 @@ class MockLoginRepository extends _i1.Mock implements _i3.LoginRepository {
             password,
           ],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, bool>>.value(
-            _FakeEither_0<_i5.Failure, bool>(
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.Session>>.value(
+            _FakeEither_0<_i5.Failure, _i6.Session>(
           this,
           Invocation.method(
             #getAuthenticate,
@@ -64,7 +66,7 @@ class MockLoginRepository extends _i1.Mock implements _i3.LoginRepository {
             ],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, bool>>);
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.Session>>);
   @override
   _i4.Future<_i2.Either<_i5.Failure, bool>> registerUser(
     String? name,
@@ -98,6 +100,56 @@ class MockLoginRepository extends _i1.Mock implements _i3.LoginRepository {
               orgaId,
               password,
               role,
+            ],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, bool>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, _i6.Session>> changeOrga(
+    String? username,
+    String? orgaId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #changeOrga,
+          [
+            username,
+            orgaId,
+          ],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.Session>>.value(
+            _FakeEither_0<_i5.Failure, _i6.Session>(
+          this,
+          Invocation.method(
+            #changeOrga,
+            [
+              username,
+              orgaId,
+            ],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.Session>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, bool>> getAuthenticateGoogle(
+    _i7.User? user,
+    String? googleToken,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAuthenticateGoogle,
+          [
+            user,
+            googleToken,
+          ],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, bool>>.value(
+            _FakeEither_0<_i5.Failure, bool>(
+          this,
+          Invocation.method(
+            #getAuthenticateGoogle,
+            [
+              user,
+              googleToken,
             ],
           ),
         )),

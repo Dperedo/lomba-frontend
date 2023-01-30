@@ -3,16 +3,33 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
+import 'dart:async' as _i7;
 
 import 'package:dartz/dartz.dart' as _i3;
+import 'package:lomba_frontend/core/data/models/session_model.dart' as _i11;
+import 'package:lomba_frontend/core/domain/entities/session.dart' as _i17;
 import 'package:lomba_frontend/core/domain/repositories/local_repository.dart'
     as _i2;
-import 'package:lomba_frontend/core/failures.dart' as _i6;
-import 'package:lomba_frontend/features/sidedrawer/domain/usecases/do_logoff.dart'
-    as _i7;
-import 'package:lomba_frontend/features/sidedrawer/domain/usecases/get_side_options.dart'
+import 'package:lomba_frontend/core/domain/usecases/get_has_login.dart' as _i14;
+import 'package:lomba_frontend/core/domain/usecases/get_session_status.dart'
+    as _i10;
+import 'package:lomba_frontend/core/failures.dart' as _i8;
+import 'package:lomba_frontend/features/login/domain/repositories/login_repository.dart'
+    as _i5;
+import 'package:lomba_frontend/features/login/domain/usecases/change_orga.dart'
+    as _i16;
+import 'package:lomba_frontend/features/orgas/domain/entities/orga.dart'
+    as _i13;
+import 'package:lomba_frontend/features/orgas/domain/repositories/orga_repository.dart'
     as _i4;
+import 'package:lomba_frontend/features/orgas/domain/usecases/get_orga.dart'
+    as _i15;
+import 'package:lomba_frontend/features/orgas/domain/usecases/get_orgasbyuser.dart'
+    as _i12;
+import 'package:lomba_frontend/features/sidedrawer/domain/usecases/do_logoff.dart'
+    as _i9;
+import 'package:lomba_frontend/features/sidedrawer/domain/usecases/get_side_options.dart'
+    as _i6;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -47,10 +64,32 @@ class _FakeEither_1<L, R> extends _i1.SmartFake implements _i3.Either<L, R> {
         );
 }
 
+class _FakeOrgaRepository_2 extends _i1.SmartFake
+    implements _i4.OrgaRepository {
+  _FakeOrgaRepository_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeLoginRepository_3 extends _i1.SmartFake
+    implements _i5.LoginRepository {
+  _FakeLoginRepository_3(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [GetSideOptions].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetSideOptions extends _i1.Mock implements _i4.GetSideOptions {
+class MockGetSideOptions extends _i1.Mock implements _i6.GetSideOptions {
   MockGetSideOptions() {
     _i1.throwOnMissingStub(this);
   }
@@ -64,27 +103,27 @@ class MockGetSideOptions extends _i1.Mock implements _i4.GetSideOptions {
         ),
       ) as _i2.LocalRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, List<String>>> execute() =>
+  _i7.Future<_i3.Either<_i8.Failure, List<String>>> execute() =>
       (super.noSuchMethod(
         Invocation.method(
           #execute,
           [],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, List<String>>>.value(
-            _FakeEither_1<_i6.Failure, List<String>>(
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, List<String>>>.value(
+            _FakeEither_1<_i8.Failure, List<String>>(
           this,
           Invocation.method(
             #execute,
             [],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, List<String>>>);
+      ) as _i7.Future<_i3.Either<_i8.Failure, List<String>>>);
 }
 
 /// A class which mocks [DoLogOff].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDoLogOff extends _i1.Mock implements _i7.DoLogOff {
+class MockDoLogOff extends _i1.Mock implements _i9.DoLogOff {
   MockDoLogOff() {
     _i1.throwOnMissingStub(this);
   }
@@ -98,18 +137,198 @@ class MockDoLogOff extends _i1.Mock implements _i7.DoLogOff {
         ),
       ) as _i2.LocalRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, bool>> execute() => (super.noSuchMethod(
+  _i7.Future<_i3.Either<_i8.Failure, bool>> execute() => (super.noSuchMethod(
         Invocation.method(
           #execute,
           [],
         ),
-        returnValue: _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
-            _FakeEither_1<_i6.Failure, bool>(
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, bool>>.value(
+            _FakeEither_1<_i8.Failure, bool>(
           this,
           Invocation.method(
             #execute,
             [],
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i6.Failure, bool>>);
+      ) as _i7.Future<_i3.Either<_i8.Failure, bool>>);
+}
+
+/// A class which mocks [GetSession].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetSession extends _i1.Mock implements _i10.GetSession {
+  MockGetSession() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.LocalRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeLocalRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.LocalRepository);
+  @override
+  _i7.Future<_i3.Either<_i8.Failure, _i11.SessionModel>> execute() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [],
+        ),
+        returnValue:
+            _i7.Future<_i3.Either<_i8.Failure, _i11.SessionModel>>.value(
+                _FakeEither_1<_i8.Failure, _i11.SessionModel>(
+          this,
+          Invocation.method(
+            #execute,
+            [],
+          ),
+        )),
+      ) as _i7.Future<_i3.Either<_i8.Failure, _i11.SessionModel>>);
+}
+
+/// A class which mocks [GetOrgasByUser].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetOrgasByUser extends _i1.Mock implements _i12.GetOrgasByUser {
+  MockGetOrgasByUser() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.OrgaRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeOrgaRepository_2(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i4.OrgaRepository);
+  @override
+  _i7.Future<_i3.Either<_i8.Failure, List<_i13.Orga>>> execute(
+          String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [userId],
+        ),
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, List<_i13.Orga>>>.value(
+            _FakeEither_1<_i8.Failure, List<_i13.Orga>>(
+          this,
+          Invocation.method(
+            #execute,
+            [userId],
+          ),
+        )),
+      ) as _i7.Future<_i3.Either<_i8.Failure, List<_i13.Orga>>>);
+}
+
+/// A class which mocks [GetHasLogIn].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetHasLogIn extends _i1.Mock implements _i14.GetHasLogIn {
+  MockGetHasLogIn() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.LocalRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeLocalRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.LocalRepository);
+  @override
+  _i7.Future<_i3.Either<_i8.Failure, bool>> execute() => (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [],
+        ),
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, bool>>.value(
+            _FakeEither_1<_i8.Failure, bool>(
+          this,
+          Invocation.method(
+            #execute,
+            [],
+          ),
+        )),
+      ) as _i7.Future<_i3.Either<_i8.Failure, bool>>);
+}
+
+/// A class which mocks [GetOrga].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetOrga extends _i1.Mock implements _i15.GetOrga {
+  MockGetOrga() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.OrgaRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeOrgaRepository_2(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i4.OrgaRepository);
+  @override
+  _i7.Future<_i3.Either<_i8.Failure, _i13.Orga>> execute(String? orgaId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [orgaId],
+        ),
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, _i13.Orga>>.value(
+            _FakeEither_1<_i8.Failure, _i13.Orga>(
+          this,
+          Invocation.method(
+            #execute,
+            [orgaId],
+          ),
+        )),
+      ) as _i7.Future<_i3.Either<_i8.Failure, _i13.Orga>>);
+}
+
+/// A class which mocks [ChangeOrga].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockChangeOrga extends _i1.Mock implements _i16.ChangeOrga {
+  MockChangeOrga() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.LoginRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeLoginRepository_3(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i5.LoginRepository);
+  @override
+  _i7.Future<_i3.Either<_i8.Failure, _i17.Session>> execute(
+    String? username,
+    String? orgaId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [
+            username,
+            orgaId,
+          ],
+        ),
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, _i17.Session>>.value(
+            _FakeEither_1<_i8.Failure, _i17.Session>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              username,
+              orgaId,
+            ],
+          ),
+        )),
+      ) as _i7.Future<_i3.Either<_i8.Failure, _i17.Session>>);
 }
