@@ -66,7 +66,7 @@ Future<void> init() async {
   // bloc
   locator.registerFactory(() => LoginBloc(locator(), locator(), locator()));
   locator.registerFactory(() => HomeBloc(locator()));
-  locator.registerFactory(() => SideDrawerBloc(locator(), locator()));
+  locator.registerFactory(() => SideDrawerBloc(locator(), locator(), locator(), locator(), locator(), locator(), locator()));
   locator.registerFactory(() => NavBloc());
   locator.registerFactory(() => OrgaBloc(
         locator(),
@@ -158,6 +158,7 @@ Future<void> init() async {
   locator.registerLazySingleton<RemoteDataSource>(
     () => RemoteDataSourceImpl(
       client: locator(),
+      localDataSource: locator(),
     ),
   );
   locator.registerLazySingleton<LocalDataSource>(

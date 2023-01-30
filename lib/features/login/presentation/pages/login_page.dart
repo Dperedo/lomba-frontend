@@ -149,26 +149,33 @@ class LoginPage extends StatelessWidget {
                     return Center(
                       child: Column(
                         children: [
-                          Card(
-                            child: Row(
-                              children: [
-                                const Text("Organización:"),
-                                const VerticalDivider(),
-                                DropdownButton(
-                                  hint: const Text('Seleccionar'),
-                                  value: listOrgas,
-                                  items: listOrgas
-                                    .map<DropdownMenuItem<String>>((String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                  onChanged: (value) {
-                                    context.read<LoginBloc>().add(OnLoginChangeOrga(state.username, value.toString()));
-                                  }
-                                )
-                              ],
+                          SizedBox(
+                            width: 250,
+                            child: Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Row(
+                                  children: [
+                                    const Text("Organización:"),
+                                    const VerticalDivider(),
+                                    DropdownButton(
+                                      value: state.orgas.first.id,
+                                      hint: const Text('Seleccionar'),
+                                      items: state.orgas
+                                        .map<DropdownMenuItem<String>>((Orga orga) {
+                                          return DropdownMenuItem<String>(
+                                            value: orga.id,
+                                            child: Text(orga.name),
+                                          );
+                                        }).toList(),
+                                      onChanged: (value) {
+                                        context.read<LoginBloc>()
+                                        .add(OnLoginChangeOrga(state.username, value.toString()));
+                                      }
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
                           )
                         ],

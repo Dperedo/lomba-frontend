@@ -5,7 +5,7 @@ import 'package:lomba_frontend/features/orgas/domain/usecases/get_orgasbyuser.da
 import 'package:rxdart/rxdart.dart';
 import '../../../../core/data/models/session_model.dart';
 import '../../../../core/domain/entities/session.dart';
-import '../../../orgas/data/models/orga_model.dart';
+import '../../../orgas/domain/entities/orga.dart';
 import 'login_event.dart';
 import 'login_state.dart';
 
@@ -18,7 +18,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final GetOrgasByUser _getOrgasByUser;
   final ChangeOrga _changeOrga;
 
-  LoginBloc(this._getAuthenticate, this._getOrgasByUser, this._changeOrga) : super(LoginEmpty()) {
+  LoginBloc(this._getAuthenticate, this._getOrgasByUser, this._changeOrga)
+      : super(LoginEmpty()) {
     on<OnLoginTriest>(
       (event, emit) async {
         final username = event.username;
@@ -26,56 +27,49 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
         ///El siguiente emit envía la instrucción de mostrar el spinner
         emit(LoginGetting());
+        List<Orga> listorgas = [];
+        SessionModel? session;
 
         final result = await _getAuthenticate.execute(username, password);
 
-        result.fold((failure) => {emit(LoginError(failure.message))},
-            (session) async {
-          final s = SessionModel(
-            token: session.token,
-            username: session.username,
-            name: session.name,
-          );
-          if (s.getOrgaId() == null) {
-            //si el orgaId es nulo
-            //buscar las organizaciones del usuario
-            // _getOrgasByUser.execute(userId); -> List<Orga>
-            final userId = s.getUserId();
-            final orgas = await _getOrgasByUser.execute(userId!);
-            //emites un nuevo estado, al que le pasas el List<Orga>
-            //emit(NuevoEstado(orgas));
-            orgas.fold((failure) => {emit(LoginError(failure.message))}, (r) => {emit(LoginSelectOrga(r, username))});
-            //para que en el page, tengas la UI para que el usuario
-            //seleccione una de las organizaciones
-          } else {
-            emit(LoginGoted(s));
-          }
-
-          
+        result.fold((failure) => {emit(LoginError(failure.message))}, (r) {
+          session =
+              SessionModel(token: r.token, username: r.username, name: r.name);
         });
+
+        if (session != null && session?.getOrgaId() == null) {
+          final userId = session?.getUserId();
+          final resultOrgas = await _getOrgasByUser.execute(userId!);
+
+          resultOrgas.fold((failure) => {emit(LoginError(failure.message))},
+              (r) {
+            listorgas = r;
+          });
+          emit(LoginSelectOrga(listorgas, username));
+        } else {
+          emit(LoginGoted(session!));
+        }
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
 
-    on<OnLoginChangeOrga>(
-      (event, emit) async {
-        final username = event.username;
-        final orgaId = event.orgaId;
+    on<OnLoginChangeOrga>((event, emit) async {
+      final username = event.username;
+      final orgaId = event.orgaId;
 
-        emit(LoginGetting());
+      emit(LoginGetting());
 
-        final result = await _changeOrga.execute(username, orgaId);
+      final result = await _changeOrga.execute(username, orgaId);
 
-        result.fold((failure) => {emit(LoginError(failure.message))}, (session) {
-          final s = SessionModel(
-            token: session.token,
-            username: session.username,
-            name: session.name,
-          );
-          emit(LoginGoted(s));
-        });
-      }
-    );
+      result.fold((failure) => {emit(LoginError(failure.message))}, (session) {
+        final s = SessionModel(
+          token: session.token,
+          username: session.username,
+          name: session.name,
+        );
+        emit(LoginGoted(s));
+      });
+    });
 
     ///Evento que sólo busca reiniciar la pantalla de login
     on<OnRestartLogin>((event, emit) async {

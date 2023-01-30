@@ -63,7 +63,7 @@ class LocalRepositoryImpl implements LocalRepository {
 
       return Right(sessionModel);
     } on CacheException {
-      return const Left(ConnectionFailure('Failed to read local cache'));
+      return Future.value(Right(_getNewSessionModel()));
     }
   }
 

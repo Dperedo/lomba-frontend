@@ -10,6 +10,7 @@ import '../../../../core/presentation/bloc/nav_bloc.dart';
 import '../../../../core/presentation/bloc/nav_event.dart';
 import '../../../../core/presentation/bloc/nav_state.dart';
 import '../../../home/presentation/bloc/home_bloc.dart';
+import '../../../orgas/domain/entities/orga.dart';
 import '../bloc/sidedrawer_bloc.dart';
 import '../bloc/sidedrawer_state.dart';
 
@@ -44,6 +45,74 @@ class SideDrawer extends StatelessWidget {
               ),
               child: Text('Opciones'),
             ));
+
+            if (state.orgas.isNotEmpty) {
+              if (state.orgas.length > 1) {
+                String firstOrga = state.orgaId;
+                if(firstOrga == ''){
+                  firstOrga = state.orgas.first.id;
+                }
+                childrenOptionsList.add(
+                  Padding(
+                    padding: const EdgeInsets.only(left: 17.0),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.business_center),
+                        DropdownButton(
+                          value: state.orgas.firstWhere((element) => element.id == firstOrga).id,
+                          items: state.orgas
+                            .map<DropdownMenuItem<String>>((Orga orga) {
+                              return DropdownMenuItem<String>(
+                                value: orga.id,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 25.0),
+                                  child: Text(orga.name),
+                                ),
+                              );
+                            }).toList(),
+                              onChanged: (value) {
+                                if(value.toString() != firstOrga)
+                                {showDialog(context: context, builder: (context) => GestureDetector(
+                                  onTap: () => Navigator.pop(context),
+                                  child: AlertDialog(
+                                    title: const Text('¿Desea cambiar de Organización?'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        key: const ValueKey("btnChangeOrga"),
+                                        child: const Text('Cambiar'),
+                                        onPressed: () {
+                                          Navigator.pop(context, true);
+                                        },
+                                      ),
+                                      TextButton(
+                                        key: const ValueKey("btnCancel"),
+                                        child: const Text('Cancelar'),
+                                        onPressed: () {
+                                          Navigator.pop(context, false);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                )).then((resp) => {
+                                  if (resp){
+                                    firstOrga = value.toString(),
+                                    context.read<SideDrawerBloc>().add(OnSideDrawerChangeOrga(value.toString()))
+                                  }
+                                });}
+                              }
+                          ),
+                      ],
+                    ),
+                  ));
+              } else {
+                //mostrar solo el texto nombre de la orga
+                if(state.orgas[0].name != 'System' && state.orgas[0].name != 'Default')
+                {childrenOptionsList.add(ListTile(
+                  leading: const Icon(Icons.business_center),
+                  title: Text(state.orgas[0].name)
+                ));}
+              }
+            }
 
             if (state.opts.contains(SideDrawerUserOptions.optHome)) {
               childrenOptionsList.add(ListTile(
