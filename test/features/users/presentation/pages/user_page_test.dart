@@ -84,9 +84,34 @@ void main() {
         expect(titulo, equals(findsOneWidget));
       },
     );
+    testWidgets('Mostrar boton de agregar',
+    (WidgetTester tester) async{
+    when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
+    when(() => mockUserBloc.state).thenReturn(UserStart());
+    await tester.pumpWidget(makeTestableWidget(UsersPage()));
+    Finder addButton = find.byKey(const ValueKey('btnAddOption'));
+    await tester.tap(addButton);
+    await tester.pumpAndSettle(const Duration(milliseconds: 600));
+    
+    expect(addButton, equals(findsOneWidget));
+    
+    },
+    );
   });
 
   group('eliminar y deshabilitar User', () {
+    testWidgets('Mostrar boton de editar',
+    (WidgetTester tester) async{
+    when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
+    await tester.pumpWidget(makeTestableWidget(UsersPage()));
+    Finder editButton = find.byKey(const ValueKey('btnEditOption'));
+    await tester.tap(editButton);
+    await tester.pumpAndSettle(const Duration(milliseconds: 600));
+    
+    expect(editButton, equals(findsOneWidget));
+    
+    },
+    );
     testWidgets(
         'click en eliminar y luego confirmar eliminar gatilla evento de eliminación',
         (WidgetTester tester) async {
@@ -160,7 +185,8 @@ void main() {
       //assert
       expect(showedDialog, findsNothing);
     });
-
+  });
+  group('Mostrar formulario para password y botones de cancelar y guardar',(){
     testWidgets('mostrar fomulario para cambiar password',
       (WidgetTester tester) async {
         // arrange
@@ -172,16 +198,94 @@ void main() {
       expect(widgetPass, equals(findsOneWidget));
       },
     );
-    // testWidgets('mostrar fomulario para cambiar password',
-    //   (WidgetTester tester) async {
-    //     // arrange
-    //   when(() => mockUserBloc.state).thenReturn(UserUpdatePassword(tUser2));
-    //   await tester.pumpWidget(makeTestableWidget( UsersPage()));
-    //   Finder widget= find.byKey(const ValueKey('repeatPassword'));
-    //     //assert
-    //   expect(widget, equals(findsOneWidget));
-    //   },
-    // );
+    testWidgets('Mostrar boton de cancelar',
+    (WidgetTester tester) async{
+    when(() => mockUserBloc.state).thenReturn(UserUpdatePassword(tUser2));
+    await tester.pumpWidget(makeTestableWidget(UsersPage()));
+    Finder cancelButton = find.byKey(const ValueKey('btnViewCancelarCambios'));
+    await tester.tap(cancelButton);
+    await tester.pumpAndSettle(const Duration(milliseconds: 600));
     
+    expect(cancelButton, equals(findsOneWidget));
+    
+    },
+    );
+    // testWidgets('Mostrar boton de guardar cambios',
+    // (WidgetTester tester) async{
+    // when(() => mockUserBloc.state).thenReturn(UserUpdatePassword(tUser2));
+    // await tester.pumpWidget(makeTestableWidget(UsersPage()));
+    // Finder saveButton = find.byKey(const ValueKey('btnViewSaveNewPassword'));
+    // await tester.tap(saveButton);
+    // await tester.pumpAndSettle(const Duration(milliseconds: 600));
+    // Finder passwordModifiedText = find.text('Contraseña modificada');
+    // expect(passwordModifiedText, equals(findsOneWidget));
+    // expect(saveButton, equals(findsOneWidget));
+    
+    // },
+    // );
+    // testWidgets('Mostrar boton de guardar cambios',
+    // (WidgetTester tester) async{
+    // when(() => mockUserBloc.state).thenReturn(UserUpdatePassword(tUser2));
+    // when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
+    // await tester.pumpWidget(makeTestableWidget(UsersPage()));
+    // Finder passwordModifiedText = find.text('Contraseña modificada');
+    // expect(passwordModifiedText, equals(findsOneWidget));
+    
+    // },
+    // );
   });
+  
+  testWidgets('Mostrar boton de cambiar password',
+    (WidgetTester tester) async{
+    when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
+    await tester.pumpWidget(makeTestableWidget(UsersPage()));
+    Finder editButton = find.byKey(const ValueKey('btnViewModifyPasswordFormOption'));
+    await tester.tap(editButton);
+    await tester.pumpAndSettle(const Duration(milliseconds: 600));
+    
+    expect(editButton, equals(findsOneWidget));
+    
+    },
+  );
+  testWidgets('Mostrar boton de volver',
+    (WidgetTester tester) async{
+    when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
+    await tester.pumpWidget(makeTestableWidget(UsersPage()));
+    Finder backButton = find.byKey(const ValueKey('btnVolver'));
+    await tester.tap(backButton);
+    await tester.pumpAndSettle(const Duration(milliseconds: 600));
+    
+    expect(backButton, equals(findsOneWidget));
+    
+    },
+  );
+  group('mostrar agregar usuario', (){
+    testWidgets('mostrar campo para nombre',
+      (WidgetTester tester) async {
+        // arrange
+      when(() => mockUserBloc.state).thenReturn(UserAdding(true,true));
+      await tester.pumpWidget(makeTestableWidget( UsersPage()));
+      Finder nombreText = find.byKey(const ValueKey('txtNombre'));
+      expect(nombreText, equals(findsOneWidget));
+      },
+    );
+  });
+  testWidgets('mostrar campo para nombre',
+      (WidgetTester tester) async {
+        // arrange
+      when(() => mockUserBloc.state).thenReturn(UserEditing(true,true,tUser2));
+      await tester.pumpWidget(makeTestableWidget( UsersPage()));
+      Finder nombreText = find.text('Nombre');
+      expect(nombreText, equals(findsOneWidget));
+      },
+    );
+  testWidgets('mostrar campo para nombre',
+      (WidgetTester tester) async {
+        // arrange
+      when(() => mockUserBloc.state).thenReturn(UserEditing(true,true,tUser2));
+      await tester.pumpWidget(makeTestableWidget( UsersPage()));
+      Finder nombreText = find.text('Nombre');
+      expect(nombreText, equals(findsOneWidget));
+      },
+    );
 }

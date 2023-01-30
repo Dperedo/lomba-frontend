@@ -86,6 +86,7 @@ void main() {
   final tListOrgas = fakeListOrgas.where(
     (element) => element.id == tOrga2.id,
   ).toList();
+  final tOrgaUser = fakeListOrgaUsers[1].toEntity();
 
   group('lista de organizaciones al entrar a la página', () {
     testWidgets(
@@ -381,32 +382,92 @@ void main() {
     
     },
     );
-  testWidgets('mostrar txtbtn ',
+
+  group('mostrar editar asociacion', (){
+    testWidgets('Mostrar boton de eliminar asociacion',
     (WidgetTester tester) async{
-    when(() => mockOrgaBloc.state).thenReturn(OrgaListLoaded(tListOrgas));
-    when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
+    when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserEditing(tOrgaUser));
+    when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga));
     await tester.pumpWidget(makeTestableWidget(OrgasPage()));
-    Finder textButton = find.byKey(const ValueKey('btnText'));
-    await tester.tap(textButton);
+    Finder deleteButton = find.byKey(const ValueKey('btnEliminarAsociacion'));
+    await tester.tap(deleteButton);
     await tester.pumpAndSettle(const Duration(milliseconds: 600));
-    expect(textButton, equals(findsOneWidget));
+    expect(deleteButton, equals(findsOneWidget));
     
     },
     );
+    testWidgets('Mostrar boton de guardar',
+    (WidgetTester tester) async{
+    when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserEditing(tOrgaUser));
+    when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga));
+    await tester.pumpWidget(makeTestableWidget(OrgasPage()));
+    Finder saveButton = find.byKey(const ValueKey('btnGuardarAsoc'));
+    await tester.tap(saveButton);
+    await tester.pumpAndSettle(const Duration(milliseconds: 600));
+    
+    expect(saveButton, equals(findsOneWidget));
+    
+    },
+    );
+    testWidgets('Mostrar boton de cancelar',
+    (WidgetTester tester) async{
+    when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserEditing(tOrgaUser));
+    when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga));
+    await tester.pumpWidget(makeTestableWidget(OrgasPage()));
+    Finder cancelButton = find.byKey(const ValueKey('btnCancelarAsoc'));
+    await tester.tap(cancelButton);
+    await tester.pumpAndSettle(const Duration(milliseconds: 600));
+    
+    expect(cancelButton, equals(findsOneWidget));
+    
+    },
+    );
+  });
+  
+
+  
+  group('description', (){
+    testWidgets('mostrar usuarios disponibles',
+    (WidgetTester tester) async{
+    when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserListUserNotInOrgaLoaded(tOrga.id, fakeListUsers));
+    when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga));
+    await tester.pumpWidget(makeTestableWidget(OrgasPage()));
+    Finder usuariosDispoText = find.text('Usuarios disponibles');
+    expect(usuariosDispoText, equals(findsOneWidget));
+    
+    },
+    );
+    // testWidgets('Mostrar boton de eliminar asociacion',
+    // (WidgetTester tester) async{
+    // when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserListUserNotInOrgaLoaded(tOrga.id, fakeListUsers));
+    // when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga));
+    // await tester.pumpWidget(makeTestableWidget(OrgasPage()));
+    // Finder txtButton = find.byKey(const ValueKey('txtBtnAccount'));
+    // await tester.tap(txtButton);
+    // await tester.pumpAndSettle(const Duration(milliseconds: 600));
+    // Finder showedDialog = find.byType(AlertDialog);
+    // expect(showedDialog, findsNothing);
+    
+    // },
+    // );
+  }
+  );
+  
 
   
 
-  // testWidgets('...',
-  //   (WidgetTester tester) async{
-  //   when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserListLoaded(tOrga2.id,fakeListUsers,fakeListOrgaUsers ));
-  //   when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
-  //   await tester.pumpWidget(makeTestableWidget(OrgasPage()));
-  //   Finder textButton = find.byKey(const ValueKey('btntxtUser'));
-  //   await tester.tap(textButton);
-  //   await tester.pumpAndSettle(const Duration(milliseconds: 600));
-  //   expect(textButton, equals(findsOneWidget));
-    
-  //   },
-  //   );
+  testWidgets('...',
+    (WidgetTester tester) async{
+    when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserListLoaded(tOrga2.id,fakeListUsers,fakeListOrgaUsers ));
+    when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga));
+    await tester.pumpWidget(makeTestableWidget(OrgasPage()));
+    Finder textButton = find.text('Súper Administrador');
+    expect(textButton, equals(findsOneWidget));
+    // Finder verUsuariosButton = find.byKey(const ValueKey('btnTxtUser'));
+    // await tester.tap(verUsuariosButton);
+    // await tester.pumpAndSettle(const Duration(milliseconds: 600));
+    // expect(verUsuariosButton, equals(findsOneWidget));
+    },
+    );
   
 }

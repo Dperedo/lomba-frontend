@@ -687,7 +687,7 @@ class OrgasPage extends StatelessWidget {
                         children: [
                           Expanded(
                               child: TextButton(
-                                  key: const ValueKey("btntxtUser"), 
+                                  key: const ValueKey("btnTxtUser"), 
                                   onPressed: () {
                                     showDialog(
                                         context: context,
@@ -801,58 +801,67 @@ class OrgasPage extends StatelessWidget {
                         children: [
                           Expanded(
                               child: TextButton(
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Column(
-                                        children: [
-                                          ListTile(
-                                            leading: const Icon(
-                                                Icons.switch_account),
-                                            title: Text(
-                                              state.users[index].name,
-                                              style:
-                                                  const TextStyle(fontSize: 18),
-                                            ),
-                                            subtitle: Text(
-                                                '${state.users[index].username} / ${state.users[index].email}',
-                                                style: const TextStyle(
-                                                    fontSize: 12)),
+                                key: const ValueKey('txtBtnAccount'),
+                                child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Column(
+                                      children: [
+                                        ListTile(
+                                          leading: const Icon(
+                                              Icons.switch_account),
+                                          title: Text(
+                                            state.users[index].name,
+                                            style:
+                                                const TextStyle(fontSize: 18),
                                           ),
-                                        ],
-                                      )),
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) => GestureDetector(
-                                            onTap: () => Navigator.pop(context),
-                                            child: _showAddingOrgaUserDialog(
-                                                context,
-                                                state.users[index],
-                                                state.orgaId))).then(
-                                      (value) {
-                                        if (value != null) {
+                                          subtitle: Text(
+                                              '${state.users[index].username} / ${state.users[index].email}',
+                                              style: const TextStyle(
+                                                  fontSize: 12)
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                ),
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => GestureDetector(
+                                          onTap: () => Navigator.pop(context),
+                                          child: _showAddingOrgaUserDialog(
+                                              context,
+                                              state.users[index],
+                                              state.orgaId
+                                          )
+                                      )
+                                  ).
+                                  then(
+                                    (value) {
+                                      if (value != null) {
                                           //actualizar
-                                          List<String> roles = [];
-                                          bool enabled = (value!
-                                                  as OrgaUserDialogEditState)
-                                              .checks["enabled"]!;
-                                          Roles.toList().forEach((element) {
-                                            if ((value!
-                                                    as OrgaUserDialogEditState)
-                                                .checks[element]!) {
-                                              roles.add(element);
-                                            }
-                                          });
+                                        List<String> roles = [];
+                                        bool enabled = (value!
+                                                as OrgaUserDialogEditState)
+                                            .checks["enabled"]!;
+                                        Roles.toList().forEach((element) {
+                                          if ((value! as OrgaUserDialogEditState)
+                                                   .checks[element]!) {
+                                                roles.add(element);
+                                          }
+                                        });
                                           context.read<OrgaUserBloc>().add(
                                               OnOrgaUserAdd(
                                                   state.orgaId,
                                                   state.users[index].id,
                                                   roles,
-                                                  enabled));
-                                        }
-                                      },
-                                    );
-                                  })),
+                                                  enabled)
+                                          );
+                                      }
+                                    },
+                                  );
+                                }
+                              )
+                          ),
                         ],
                       ),
                       const Divider()
@@ -865,6 +874,7 @@ class OrgasPage extends StatelessWidget {
         }
 
         if (state is OrgaUserEditing) {
+          
           return Column(
             children: [
               Row(
@@ -874,6 +884,7 @@ class OrgasPage extends StatelessWidget {
                       value: state.orgaUser.enabled,
                       onChanged: ((value) => {value = value})),
                   ElevatedButton.icon(
+                      key: const ValueKey("btnEliminarAsociacion"),
                       onPressed: () {},
                       icon: const Icon(Icons.delete),
                       label: const Text("Eliminar asociación"))
@@ -900,14 +911,18 @@ class OrgasPage extends StatelessWidget {
                         child: Row(
                           children: [
                             ElevatedButton.icon(
-                                icon: const Icon(Icons.save),
-                                onPressed: () {},
-                                label: const Text("Guardar")),
+                              key: const ValueKey('btnGuardarAsoc'),
+                              icon: const Icon(Icons.save),
+                              onPressed: () {},
+                              label: const Text("Guardar")
+                            ),
                             const VerticalDivider(),
                             ElevatedButton.icon(
-                                icon: const Icon(Icons.cancel),
-                                onPressed: () {},
-                                label: const Text("Cancelar"))
+                              key: const ValueKey('btnCancelarAsoc'),
+                              icon: const Icon(Icons.cancel),
+                              onPressed: () {},
+                              label: const Text("Cancelar")
+                            )
                           ],
                         ),
                       ),

@@ -259,6 +259,7 @@ class UsersPage extends StatelessWidget {
             Row(
               children: [
                 ElevatedButton.icon(
+                    key: const ValueKey('btnVolver'),
                     icon: const Icon(Icons.arrow_back),
                     onPressed: () {
                       context
@@ -366,6 +367,7 @@ class UsersPage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
+                  key: const ValueKey('txtNombre'),
                   controller: nameController,
                   validator: (value) => Validators.validateName(value ?? ""),
                   decoration: const InputDecoration(
@@ -374,6 +376,7 @@ class UsersPage extends StatelessWidget {
                   ),
                 ),
                 TextFormField(
+                  key: const ValueKey('txtUsername'),
                   onChanged: (value) {
                     context.read<UserBloc>().add(OnUserValidate(
                         usernameController.text, emailController.text, state));
@@ -386,6 +389,7 @@ class UsersPage extends StatelessWidget {
                   ),
                 ),
                 TextFormField(
+                  key: const ValueKey('txtEmail'),
                   onChanged: (value) {
                     context.read<UserBloc>().add(OnUserValidate(
                         usernameController.text, emailController.text, state));
@@ -399,7 +403,7 @@ class UsersPage extends StatelessWidget {
                 ),
                 TextFormField(
                   //obscureText: true,
-
+                  key: const ValueKey('txtPasssword'),
                   controller: passwordController,
                   validator: (value) =>
                       Validators.validatePassword(value ?? ""),
@@ -409,6 +413,7 @@ class UsersPage extends StatelessWidget {
                   ),
                 ),
                 TextFormField(
+                  key: const ValueKey('txtRepeatPassword'),
                   //obscureText: true,
                   controller: repeatPasswordController,
                   validator: (value) => Validators.validatePasswordEqual(
