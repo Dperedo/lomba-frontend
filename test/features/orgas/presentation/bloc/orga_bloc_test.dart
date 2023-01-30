@@ -60,6 +60,7 @@ Future<void> main() async {
   });
 
   final newOrgaId = Guid.newGuid.toString();
+  final newCode = Guid.newGuid.toString();
 
   final tOrga = Orga(
       id: newOrgaId,
@@ -165,6 +166,33 @@ Future<void> main() async {
   group('actualizar orgas y orgausers', () {
     blocTest<OrgaBloc, OrgaState>(
       'debe actualizar un orga',
+      build: () {
+        when(mockUpdateOrga.execute(newOrgaId, tOrga))
+            .thenAnswer((_) async => Right(tOrga));
+        return orgaBloc;
+      },
+      act: (bloc) => bloc
+          .add(OnOrgaEdit(newOrgaId, tOrga.name, tOrga.code, tOrga.enabled)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [OrgaLoading(), OrgaStart()],
+      verify: (bloc) {
+        verify(mockUpdateOrga.execute(newOrgaId, tOrga));
+      },
+    );
+  });
+  group('modificar orgas', () {
+    blocTest<OrgaBloc, OrgaState>(
+      'debe mostrar form para editar orga',
+      build: () {
+        return orgaBloc;
+      },
+      act: (bloc) => bloc.add(OnOrgaPrepareForEdit(tOrga)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [OrgaEditing(tOrga, true)],
+      verify: (bloc) {},
+    );
+    blocTest<OrgaBloc, OrgaState>(
+      'debe guardar cambios',
       build: () {
         when(mockUpdateOrga.execute(newOrgaId, tOrga))
             .thenAnswer((_) async => Right(tOrga));

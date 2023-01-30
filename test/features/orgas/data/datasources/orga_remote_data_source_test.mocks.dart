@@ -191,20 +191,6 @@ class MockOrgaRemoteDataSourceImpl extends _i1.Mock
             _i7.Future<List<_i5.OrgaUserModel>>.value(<_i5.OrgaUserModel>[]),
       ) as _i7.Future<List<_i5.OrgaUserModel>>);
   @override
-  _i7.Future<_i4.OrgaModel> addOrga(_i4.OrgaModel? orga) => (super.noSuchMethod(
-        Invocation.method(
-          #addOrga,
-          [orga],
-        ),
-        returnValue: _i7.Future<_i4.OrgaModel>.value(_FakeOrgaModel_2(
-          this,
-          Invocation.method(
-            #addOrga,
-            [orga],
-          ),
-        )),
-      ) as _i7.Future<_i4.OrgaModel>);
-  @override
   _i7.Future<_i5.OrgaUserModel> addOrgaUser(_i5.OrgaUserModel? orgaUser) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -325,6 +311,20 @@ class MockOrgaRemoteDataSourceImpl extends _i1.Mock
           ),
         )),
       ) as _i7.Future<_i5.OrgaUserModel>);
+  @override
+  _i7.Future<_i4.OrgaModel> addOrga(_i4.OrgaModel? orga) => (super.noSuchMethod(
+        Invocation.method(
+          #addOrga,
+          [orga],
+        ),
+        returnValue: _i7.Future<_i4.OrgaModel>.value(_FakeOrgaModel_2(
+          this,
+          Invocation.method(
+            #addOrga,
+            [orga],
+          ),
+        )),
+      ) as _i7.Future<_i4.OrgaModel>);
 }
 
 /// A class which mocks [Client].

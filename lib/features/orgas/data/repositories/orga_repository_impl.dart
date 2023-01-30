@@ -122,11 +122,11 @@ class OrgaRepositoryImpl implements OrgaRepository {
   ///[enabled] indica si la organización está habilitada.
   @override
   Future<Either<Failure, Orga>> addOrga(
-      String name, String code, bool enabled) async {
+      String orgaId, String code, bool enabled) async {
     try {
       OrgaModel orgaModel = OrgaModel(
           id: Guid.newGuid.toString(),
-          name: name,
+          name: orgaId,
           code: code,
           enabled: enabled,
           builtIn: false);

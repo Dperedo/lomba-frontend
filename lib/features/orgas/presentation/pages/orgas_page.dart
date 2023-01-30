@@ -25,8 +25,7 @@ class OrgasPage extends StatelessWidget {
    OrgasPage({Key? key}) : super(key: key);
 
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  final TextEditingController _orgaNameController = TextEditingController();
-  final TextEditingController _codeController = TextEditingController();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +55,8 @@ class OrgasPage extends StatelessWidget {
   }
 
   Widget _bodyOrgas(BuildContext context, OrgaState state) {
+    final TextEditingController _orgaNameController = TextEditingController();
+    final TextEditingController _codeController = TextEditingController();
 
     if (state is OrgaStart) {
       context.read<OrgaUserBloc>().add(const OnOrgaUserStarter());
@@ -76,6 +77,7 @@ class OrgasPage extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
+                        key: const ValueKey("btnText"),
                         child: TextButton(
                             child: Align(
                               alignment: Alignment.centerLeft,
@@ -143,6 +145,7 @@ class OrgasPage extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (context) => GestureDetector(
+                              key: const ValueKey('btnGd'),
                               onTap: () => Navigator.pop(context),
                               child: AlertDialog(
                                 title: const Text(
@@ -247,20 +250,31 @@ class OrgasPage extends StatelessWidget {
                         OnOrgaUserListUserNotInOrgaForAdd(
                             state.orga.id, const SortModel(null), 1, 10));
                   },
-                )
+                ),
+                const VerticalDivider(),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.edit),
+                  key: const ValueKey("btnModifyOrga"),
+                  label: const Text("Modificar orga"),
+                  onPressed: () {
+                    context.read<OrgaBloc>().add(
+                        OnOrgaPrepareForEdit(state.orga));
+                  },
+                ),
               ],
+              
             ),
             const Divider(),
             Row(
               children: [
                 ElevatedButton.icon(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      context
-                          .read<OrgaBloc>()
-                          .add(const OnOrgaListLoad("", "", 1));
-                    },
-                    label: const Text("Volver"))
+                  key: const ValueKey("btnVolver"),
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    context.read<OrgaBloc>().add(const OnOrgaListLoad("", "", 1));
+                  },
+                  label: const Text("Volver")
+                )
               ],
             ),
             const Divider(),
@@ -279,6 +293,7 @@ class OrgasPage extends StatelessWidget {
               children: [
                 TextFormField(
                   controller: _orgaNameController,
+                  key: const ValueKey("orgaName1"),
                   validator: (value) => Validators.validateUsername(value ?? ""),
                   decoration: const InputDecoration(
                     labelText: 'Orga Name',
@@ -291,6 +306,7 @@ class OrgasPage extends StatelessWidget {
                         _orgaNameController.text, _codeController.text, state));
                   },
                   controller: _codeController,
+                  key: const ValueKey("code"),
                   validator: (value) => state.validateCode(value ?? ""),
                   decoration: const InputDecoration(
                     labelText: 'Code',
@@ -302,19 +318,20 @@ class OrgasPage extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(15.0),
+                      key: const ValueKey("cancel1"),
                       child: ElevatedButton.icon(
                           onPressed: () {
                             context
                                 .read<OrgaBloc>()
                                 .add(const OnOrgaListLoad("", "", 1));
-                                _orgaNameController.clear();
-                                _codeController.clear();
+                                
                           },
                           icon: const Icon(Icons.cancel),
                           label: const Text('Cancel')),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(15.0),
+                      key: const ValueKey("save1"),
                       child: ElevatedButton.icon(
                           onPressed: () {
                             if (_key.currentState?.validate() == true) {
@@ -325,8 +342,75 @@ class OrgasPage extends StatelessWidget {
                                   
                               ));
                             }
-                            _orgaNameController.clear();
-                            _codeController.clear();
+                            
+                          },
+                          icon: const Icon(Icons.save),
+                          label: const Text('Guardar')),
+                    ),
+                  ],
+                )
+              ],
+            )),
+      );
+    }
+    if (state is OrgaEditing) {
+      _orgaNameController.text = state.orga.name;
+      _codeController.text = state.orga.code;
+      return Padding(
+        padding: const EdgeInsets.all(10),
+        child: Form(
+            key: _key,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: _orgaNameController,
+                  key: const ValueKey("orgaName"),
+                  validator: (value) => Validators.validateName(value ?? ""),
+                  decoration: const InputDecoration(
+                    labelText: 'Orga Name',
+                    icon: Icon(Icons.account_box),
+                  ),
+                ),
+                TextFormField(
+                  onChanged: (value) {
+                    context.read<OrgaBloc>().add(OnOrgaValidateEdit(
+                        _codeController.text, state));
+                  },
+                  controller: _codeController,
+                  key: const ValueKey("code"),
+                  validator: (value) => state.validateCode(value ?? ""),
+                  decoration: const InputDecoration(
+                    labelText: 'Codigo',
+                    icon: Icon(Icons.account_box_outlined),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      key: const ValueKey('cancelButton'),
+                      child: ElevatedButton.icon(
+                          onPressed: () {
+                            context
+                                .read<OrgaBloc>()
+                                .add(OnOrgaLoad(state.orga.id));
+                          },
+                          icon: const Icon(Icons.cancel),
+                          label: const Text('Cancel')),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      key: const ValueKey('saveButton'),
+                      child: ElevatedButton.icon(
+                          onPressed: () {
+                            if (_key.currentState?.validate() == true) {
+                              context.read<OrgaBloc>().add(OnOrgaEdit(
+                                  state.orga.id,
+                                  _orgaNameController.text,
+                                  _codeController.text,
+                                  true));
+                            }
                           },
                           icon: const Icon(Icons.save),
                           label: const Text('Guardar')),
@@ -346,6 +430,7 @@ class OrgasPage extends StatelessWidget {
       return AppBar(
           title: const Text("Organización"),
           leading: IconButton(
+            key: const ValueKey('btnOrganizacion'),
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
               context.read<OrgaBloc>().add(const OnOrgaListLoad("", "", 1));
@@ -602,25 +687,7 @@ class OrgasPage extends StatelessWidget {
                         children: [
                           Expanded(
                               child: TextButton(
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Column(
-                                        children: [
-                                          ListTile(
-                                            leading: const Icon(
-                                                Icons.switch_account),
-                                            title: Text(
-                                              state.users[index].name,
-                                              style:
-                                                  const TextStyle(fontSize: 18),
-                                            ),
-                                            subtitle: Text(
-                                                '${state.users[index].username} / ${state.users[index].email}',
-                                                style: const TextStyle(
-                                                    fontSize: 12)),
-                                          ),
-                                        ],
-                                      )),
+                                  key: const ValueKey("btntxtUser"), 
                                   onPressed: () {
                                     showDialog(
                                         context: context,
@@ -667,7 +734,30 @@ class OrgasPage extends StatelessWidget {
                                         }
                                       },
                                     );
-                                  })),
+                                  },
+                                  
+                                  child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Column(
+                                        children: [
+                                          ListTile(
+                                            leading: const Icon(
+                                                Icons.switch_account),
+                                            title: Text(
+                                              state.users[index].name,
+                                              style:
+                                                  const TextStyle(fontSize: 18),
+                                            ),
+                                            subtitle: Text(
+                                                '${state.users[index].username} / ${state.users[index].email}',
+                                                style: const TextStyle(
+                                                    fontSize: 12)),
+                                          ),
+                                        ],
+                                      )
+                                  )
+                              )
+                          ),
                           Icon(
                               (state.orgaUsers
                                           .where((element) =>

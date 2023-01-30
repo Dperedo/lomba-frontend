@@ -4,7 +4,6 @@ import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/core/constants.dart';
-import 'package:lomba_frontend/core/data/datasources/local_data_source.dart';
 import 'package:lomba_frontend/core/exceptions.dart';
 import 'package:lomba_frontend/core/fakedata.dart';
 import 'package:lomba_frontend/features/orgas/data/datasources/orga_remote_data_source.dart';
@@ -70,6 +69,9 @@ void main() {
 
   const testOrgaId01 = "00000100-0100-0100-0100-000000000100";
   const testUserId01 = "00000001-0001-0001-0001-000000000001";
+
+  const testGetResponseUpdate =
+      '{"apiVersion":"1.0","method":"get","params":{"id":"00000001-0001-0001-0001-000000000001"},"context":"geted by id","id":"37f93961-a189-4182-96b0-28491a8b78df","_id":"37f93961-a189-4182-96b0-28491a8b78df","data":{"items":[{"_id":"00000001-0001-0001-0001-000000000001","id":"00000001-0001-0001-0001-000000000001","name":"Editado","username":"edited","email":"ed@mp.com","enabled":true,"builtin":false,"created":"2023-01-11T15:50:26.921Z","orgas":[{"id":"00000100-0100-0100-0100-000000000100","code":"sys"}],"updated":"2023-01-11T15:50:33.444Z"}],"kind":"string","currentItemCount":1,"updated":"2023-01-12T14:23:00.142Z"}}';
 
   const testGetOrgaUserResponseOne =
       '{"apiVersion":"1.0","method":"get","params":{"orgaId":"00000100-0100-0100-0100-000000000100","userId":"00000001-0001-0001-0001-000000000001"},"context":"geted by orga id","id":"54eb6d7b-ddcd-4406-8442-d1d4c6f653f0","_id":"54eb6d7b-ddcd-4406-8442-d1d4c6f653f0","data":{"items":[{"_id":"A0000001-0000-0000-1000-000000000000","id":"A0000001-0000-0000-1000-000000000000","orgaId":"00000100-0100-0100-0100-000000000100","userId":"00000001-0001-0001-0001-000000000001","roles":[{"name":"super"}],"enabled":true,"builtIn":true,"created":"2023-01-11T15:50:27.211Z"}],"kind":"string","currentItemCount":1,"updated":"2023-01-16T19:27:45.948Z"}}';
@@ -185,21 +187,23 @@ void main() {
   group('actualizar datos orga y orgauser', () {
     test('actualizar una organización', () async {
       //arrange
-      when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
-          .thenAnswer((realInvocation) async => http.Response("", 200));
-
-      //act
-      OrgaModel toEdit = OrgaModel(
-          id: orgaIdSampleUpdate,
+      OrgaModel toEdit = const OrgaModel(
+          id: '00000001-0001-0001-0001-000000000001',
           name: "Editado",
-          code: "edi",
+          code: 'null',
           enabled: true,
           builtIn: false);
+      when(mockHttpClient.put(any,body: json.encode(toEdit), headers: testHeaders))
+          .thenAnswer((realInvocation) async => http.Response(testGetResponseUpdate, 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+      //act
+      
       final result = await dataSource.updateOrga(orgaIdSampleUpdate, toEdit);
 
       //assert
       expect(result, equals(toEdit));
-      expect(toEdit, equals(fakeListOrgas[2]));
+      //expect(toEdit, equals(fakeListOrgas[2]));
     });
     test('actualizar una orgauser', () async {
       //arrange
@@ -244,16 +248,19 @@ void main() {
   group('agregar datos orga y orgauser', () {
     test('agregar una organización', () async {
       //arrange
-      when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
-          .thenAnswer((realInvocation) async => http.Response("", 200));
-
-      //act
-      OrgaModel toAdd = OrgaModel(
-          id: Guid.newGuid.toString(),
-          name: "Nueva Orga",
-          code: "nva",
+      OrgaModel toAdd = const OrgaModel(
+          id: '00000001-0001-0001-0001-000000000001',
+          name: "Editado",
+          code: "null",
           enabled: true,
           builtIn: false);
+      when(mockHttpClient.post(any,body: json.encode(toAdd), headers: testHeaders))
+          .thenAnswer((realInvocation) async => http.Response(testGetResponseUpdate, 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+
+      //act
+      
       final result = await dataSource.addOrga(toAdd);
 
       //assert

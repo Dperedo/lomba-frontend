@@ -221,7 +221,8 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",
-    }).timeout(const Duration(seconds: 10));
+    }
+    ).timeout(const Duration(seconds: 10));
     if (resp.statusCode == 200) {
       final Map<dynamic, dynamic> resObj = json.decode(resp.body);
       List<UserModel> users = [];
