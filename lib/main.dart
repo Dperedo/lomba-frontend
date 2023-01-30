@@ -1,6 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/core/presentation/bloc/checkbox_cubit.dart';
 import 'package:lomba_frontend/core/presentation/bloc/nav_bloc.dart';
 import 'package:lomba_frontend/features/approved/presentation/pages/approved_page.dart';
 import 'package:lomba_frontend/features/login/presentation/pages/login_page.dart';
@@ -15,8 +15,8 @@ import 'features/addcontent/presentation/pages/addcontent_page.dart';
 import 'features/demolist/presentation/bloc/demolist_bloc.dart';
 import 'features/demolist/presentation/pages/demolist_page.dart';
 import 'features/home/presentation/bloc/home_bloc.dart';
-import 'features/login/presentation/bloc/login_bloc.dart';
 import 'features/home/presentation/pages/home_page.dart';
+import 'features/login/presentation/bloc/login_bloc.dart';
 import 'features/orgas/presentation/bloc/orga_bloc.dart';
 import 'features/orgas/presentation/bloc/orgauser_bloc.dart';
 import 'features/profile/presentation/bloc/profile_bloc.dart';
@@ -28,9 +28,14 @@ import 'features/sidedrawer/presentation/bloc/sidedrawer_bloc.dart';
 import 'features/users/presentation/bloc/user_bloc.dart';
 import 'features/users/presentation/pages/users_page.dart';
 import 'injection.dart' as di;
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   await di.init();
 

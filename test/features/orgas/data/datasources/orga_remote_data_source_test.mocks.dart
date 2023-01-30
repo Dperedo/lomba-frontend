@@ -320,6 +320,20 @@ class MockOrgaRemoteDataSourceImpl extends _i1.Mock
         ),
         returnValue: _i7.Future<List<_i4.OrgaModel>>.value(<_i4.OrgaModel>[]),
       ) as _i7.Future<List<_i4.OrgaModel>>);
+  @override
+  _i7.Future<_i4.OrgaModel> addOrga(_i4.OrgaModel? orga) => (super.noSuchMethod(
+        Invocation.method(
+          #addOrga,
+          [orga],
+        ),
+        returnValue: _i7.Future<_i4.OrgaModel>.value(_FakeOrgaModel_2(
+          this,
+          Invocation.method(
+            #addOrga,
+            [orga],
+          ),
+        )),
+      ) as _i7.Future<_i4.OrgaModel>);
 }
 
 /// A class which mocks [Client].

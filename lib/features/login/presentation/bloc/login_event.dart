@@ -29,5 +29,7 @@ class OnLoginChangeOrga extends LoginEvent {
   List<Object?> get props => [username, orgaId];
 }
 
+class OnLoginWithGoogle extends LoginEvent {}
+
 ///Evento para el reinicio de la pantalla
 class OnRestartLogin extends LoginEvent {}

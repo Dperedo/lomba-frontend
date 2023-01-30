@@ -13,6 +13,7 @@ import '../../../../core/failures.dart';
 import '../../../orgas/domain/entities/orga.dart';
 import '../../../users/data/datasources/user_remote_data_source.dart';
 import '../../../users/data/models/user_model.dart';
+import '../../../users/domain/entities/user.dart';
 import '../../domain/repositories/login_repository.dart';
 import '../datasources/remote_data_source.dart';
 import '../models/login_access_model.dart';
@@ -104,7 +105,40 @@ class LoginRepositoryImpl implements LoginRepository {
       //--------------------------------------------------------------------------
 
       //if (result != '') {
-        return Right(result);
+      return Right(result);
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(ConnectionFailure('Failed to connect to the network'));
+    } on CacheException {
+      return const Left(ConnectionFailure('Failed to write local cache'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> getAuthenticateGoogle(
+      User user, String googleToken) async {
+    try {
+      UserModel userModel = UserModel(
+          id: user.id,
+          name: user.name,
+          username: user.username,
+          email: user.email,
+          enabled: user.enabled,
+          builtIn: user.builtIn);
+
+      final result =
+          await remoteDataSource.getAuthenticateGoogle(userModel, googleToken);
+
+      ///Construye un session a partir de los datos del LocalAccessModel
+      SessionModel session = SessionModel(
+          token: result.token, username: result.username, name: result.name);
+
+      ///Persiste el objeto [SessionModel] en el localStorage con los datos
+      ///del usuario conectado.
+      localDataSource.saveSession(session);
+
+      return const Right(true);
     } on ServerException {
       return const Left(ServerFailure(''));
     } on SocketException {

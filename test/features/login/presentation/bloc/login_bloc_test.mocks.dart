@@ -14,12 +14,16 @@ import 'package:lomba_frontend/features/login/domain/usecases/change_orga.dart'
     as _i11;
 import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate.dart'
     as _i5;
+import 'package:lomba_frontend/features/login/domain/usecases/get_authenticate_google.dart'
+    as _i12;
 import 'package:lomba_frontend/features/orgas/domain/entities/orga.dart'
     as _i10;
 import 'package:lomba_frontend/features/orgas/domain/repositories/orga_repository.dart'
     as _i4;
 import 'package:lomba_frontend/features/orgas/domain/usecases/get_orgasbyuser.dart'
     as _i9;
+import 'package:lomba_frontend/features/users/domain/entities/user.dart'
+    as _i13;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -184,4 +188,48 @@ class MockChangeOrga extends _i1.Mock implements _i11.ChangeOrga {
           ),
         )),
       ) as _i6.Future<_i3.Either<_i7.Failure, _i8.Session>>);
+}
+
+/// A class which mocks [GetAuthenticateGoogle].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetAuthenticateGoogle extends _i1.Mock
+    implements _i12.GetAuthenticateGoogle {
+  MockGetAuthenticateGoogle() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.LoginRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeLoginRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.LoginRepository);
+  @override
+  _i6.Future<_i3.Either<_i7.Failure, bool>> execute(
+    _i13.User? user,
+    String? googleToken,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [
+            user,
+            googleToken,
+          ],
+        ),
+        returnValue: _i6.Future<_i3.Either<_i7.Failure, bool>>.value(
+            _FakeEither_1<_i7.Failure, bool>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              user,
+              googleToken,
+            ],
+          ),
+        )),
+      ) as _i6.Future<_i3.Either<_i7.Failure, bool>>);
 }

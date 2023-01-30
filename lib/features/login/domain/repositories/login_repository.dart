@@ -6,12 +6,17 @@ import '../../../../core/domain/entities/session.dart';
 import '../../../../core/failures.dart';
 import '../../../orgas/domain/entities/orga.dart';
 import '../../data/models/login_access_model.dart';
+import '../../../users/domain/entities/user.dart';
 
 ///Interfaz del repositorio del Login de usuario.
 ///
 ///Considera sólo [username] y [password]
 abstract class LoginRepository {
-  Future<Either<Failure, Session>> getAuthenticate(String username, String password);
-  Future<Either<Failure, bool>> registerUser(String name, String username, String email, String orgaId, String password, String role);
+  Future<Either<Failure, Session>> getAuthenticate(
+      String username, String password);
+  Future<Either<Failure, bool>> registerUser(String name, String username,
+      String email, String orgaId, String password, String role);
   Future<Either<Failure, Session>> changeOrga(String username, String orgaId);
+  Future<Either<Failure, bool>> getAuthenticateGoogle(
+      User user, String googleToken);
 }

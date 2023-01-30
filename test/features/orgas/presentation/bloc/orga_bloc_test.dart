@@ -36,6 +36,7 @@ Future<void> main() async {
   late GetOrgas mockGetOrgas;
   late UpdateOrga mockUpdateOrga;
   late ExistsOrga mockExistsOrga;
+
   late OrgaBloc orgaBloc;
 
   setUp(() {
@@ -183,23 +184,22 @@ Future<void> main() async {
     blocTest<OrgaBloc, OrgaState>(
       'debe mostrar form para editar orga',
       build: () {
-        
         return orgaBloc;
       },
       act: (bloc) => bloc.add(OnOrgaPrepareForEdit(tOrga)),
       wait: const Duration(milliseconds: 500),
       expect: () => [OrgaEditing(tOrga, true)],
-      verify: (bloc) {
-        
-      },
+      verify: (bloc) {},
     );
     blocTest<OrgaBloc, OrgaState>(
       'debe guardar cambios',
       build: () {
-        when(mockUpdateOrga.execute(newOrgaId, tOrga)).thenAnswer((_) async =>  Right(tOrga));
+        when(mockUpdateOrga.execute(newOrgaId, tOrga))
+            .thenAnswer((_) async => Right(tOrga));
         return orgaBloc;
       },
-      act: (bloc) => bloc.add(OnOrgaEdit(newOrgaId, tOrga.name, tOrga.code, tOrga.enabled)),
+      act: (bloc) => bloc
+          .add(OnOrgaEdit(newOrgaId, tOrga.name, tOrga.code, tOrga.enabled)),
       wait: const Duration(milliseconds: 500),
       expect: () => [OrgaLoading(), OrgaStart()],
       verify: (bloc) {
@@ -208,4 +208,3 @@ Future<void> main() async {
     );
   });
 }
-
