@@ -79,9 +79,31 @@ class OrgaAdding extends OrgaState {
 ///Estado para mostrar la pantalla con campos con datos y editar organización
 class OrgaEditing extends OrgaState {
   final Orga orga;
-  const OrgaEditing(this.orga);
+  bool existCode = false;
+  OrgaEditing(this.orga, bool existcode,){
+    
+    existCode = existcode;
+  }
+  OrgaEditing copyWith( bool existcode){
+    
+    existCode = existcode;
+    return this;
+  }
+  String? validateCode(String code){
+    String? res = Validators.validateCode(code);
+    if(res == null){
+      if(existCode){
+        return 'el codigo ya existe';
+      }
+    }
+    else{
+      return res;
+    }
+    return null;
+  }
+  
   @override
-  List<Object> get props => [orga];
+  List<Object> get props => [ orga];
 }
 
 ///Estado para mostrar opciones de habilitar o deshabilitar organización

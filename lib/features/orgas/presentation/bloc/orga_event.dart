@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../../domain/entities/orga.dart';
 import 'orga_state.dart';
 
 ///Interfaz del evento de organizaciones
@@ -69,7 +70,8 @@ class OnOrgaEdit extends OrgaEvent {
   const OnOrgaEdit(this.id, this.name, this.code, this.enabled);
 
   @override
-  List<Object> get props => [id, name, code, enabled];
+  List<Object> get props => [ id,name, code, enabled];
+
 }
 
 ///Evento se dispara para habilitar o deshabilitar una organización
@@ -106,4 +108,22 @@ class OnOrgaSaveNewOrga extends OrgaEvent {
 
   @override
   List<Object> get props => [organame,code];
+}
+class OnOrgaPrepareForEdit extends OrgaEvent {
+  final Orga orga;
+
+  const OnOrgaPrepareForEdit(this.orga);
+
+  @override
+  List<Object> get props => [orga];
+}
+class OnOrgaValidateEdit extends OrgaEvent {
+  
+  final String code;
+  final OrgaEditing state;
+
+  const OnOrgaValidateEdit( this.code, this.state);
+
+  @override
+  List<Object> get props => [ code, state];
 }

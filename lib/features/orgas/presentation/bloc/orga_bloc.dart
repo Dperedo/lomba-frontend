@@ -67,18 +67,36 @@ class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
     on<OnOrgaPrepareForAdd>((event, emit) async {
       emit(OrgaAdding(false, false));
     });
+    on<OnOrgaPrepareForEdit>((event, emit) async {
+      emit(OrgaEditing(event.orga, false));
+    });
     on<OnOrgaValidate>((event, emit) async {
       String orgaNoId = '';
-      if (event.orgaName != "" || event.code != "") {
-        final result =
-            await _existsOrga.execute(orgaNoId, event.code);
+      if (event.code != "") {
+        final result = await _existsOrga.execute(orgaNoId,event.code);
 
         result.fold((l) => emit(OrgaError(l.message)), (r) {
           if (r != null) {
-
-            event.state.existOrgaName = (r.code == event.code);
+            
+            event.state.existCode = (r.code == event.code);
           } else {
+            
+            event.state.existCode = false;
+          }
+        });
+      }
+    });
+    on<OnOrgaValidateEdit>((event, emit) async {
+      String orgaNoId = '';
+      if (event.code != "") {
+        final result = await _existsOrga.execute(orgaNoId,event.code);
 
+        result.fold((l) => emit(OrgaError(l.message)), (r) {
+          if (r != null) {
+            
+            event.state.existCode = (r.code == event.code);
+          } else {
+            
             event.state.existCode = false;
           }
         });

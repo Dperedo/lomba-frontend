@@ -11,6 +11,8 @@ import '../bloc/user_state.dart';
 
 class UsersPage extends StatelessWidget {
   UsersPage({Key? key}) : super(key: key);
+
+  
   
   @override
   Widget build(BuildContext context) {
@@ -148,7 +150,8 @@ class UsersPage extends StatelessWidget {
                   key: const ValueKey("btnEditOption"),
                   label: const Text("Modificar"),
                   onPressed: () {
-                    context.read<UserBloc>().add(OnUserPrepareForEdit(state.user));
+                    context.read<UserBloc>().add(
+                      OnUserPrepareForEdit(state.user));
                   },
                 ),
                 const VerticalDivider(),
@@ -316,8 +319,7 @@ class UsersPage extends StatelessWidget {
                     label: const Text("Cancelar"),
                     onPressed: () {
                     context.read<UserBloc>().add(OnUserLoad(state.user.id));
-                    _passwordController.clear();
-                    _repeatPasswordController.clear();
+                    
                     },
                     
                   ),
@@ -345,8 +347,7 @@ class UsersPage extends StatelessWidget {
                             ),
                           );
                       }
-                      _passwordController.clear();
-                      _repeatPasswordController.clear();
+                      
                     },
                   ),
                 ],
