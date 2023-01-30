@@ -26,6 +26,7 @@ import 'orga_bloc_test.mocks.dart';
   MockSpec<GetOrga>(),
   MockSpec<GetOrgas>(),
   MockSpec<UpdateOrga>(),
+  MockSpec<ExistsOrga>(),
 ])
 Future<void> main() async {
   late AddOrga mockAddOrga;

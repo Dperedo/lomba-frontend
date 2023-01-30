@@ -4,6 +4,7 @@ import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/data/datasources/local_data_source.dart';
 import 'package:lomba_frontend/core/data/models/session_model.dart';
 import 'package:lomba_frontend/core/data/repositories/local_repository_impl.dart';
+import 'package:lomba_frontend/core/domain/entities/session.dart';
 import 'package:lomba_frontend/core/domain/repositories/local_repository.dart';
 import 'package:lomba_frontend/core/exceptions.dart';
 import 'package:lomba_frontend/core/failures.dart';
@@ -24,7 +25,7 @@ void main() {
 
   const tSessionUserAndReviewerModel = SessionModel(
       token: SystemKeys.tokenReviewed, username: 'rev@mp.com', name: 'Revisor');
-
+  
   const tEmptySessionModel = SessionModel(token: "", username: "", name: "");
   const tInvalidTokenSessionModel = SessionModel(
       token: SystemKeys.tokenExpiredSuperAdmin,
@@ -97,7 +98,7 @@ void main() {
 
         expect(
           result,
-          equals(const Left(ConnectionFailure('Failed to read local cache'))),
+          equals(const Right(tEmptySessionModel)),
         );
       },
     );

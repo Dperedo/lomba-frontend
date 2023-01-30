@@ -32,7 +32,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
         final result = await _getAuthenticate.execute(username, password);
 
-        result.fold((failure) => {emit(LoginError(failure.message))}, (r) {
+        result.fold((failure) {emit(LoginError(failure.message));return;}, (r) {
           session =
               SessionModel(token: r.token, username: r.username, name: r.name);
         });
@@ -47,7 +47,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           });
           emit(LoginSelectOrga(listorgas, username));
         } else {
-          emit(LoginGoted(session!));
+          emit(LoginGoted(session));
         }
       },
       transformer: debounce(const Duration(milliseconds: 0)),

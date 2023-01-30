@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
+import 'package:lomba_frontend/core/data/models/session_model.dart';
 import 'package:lomba_frontend/core/exceptions.dart';
 import 'package:lomba_frontend/features/login/data/datasources/remote_data_source.dart';
 import 'package:lomba_frontend/features/login/data/models/login_access_model.dart';
@@ -9,6 +10,7 @@ import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../../core/data/repositories/local_repository_impl_test.mocks.dart';
 import 'remote_data_source_test.mocks.dart';
 
 @GenerateMocks([RemoteDataSourceImpl],
@@ -16,14 +18,16 @@ import 'remote_data_source_test.mocks.dart';
 void main() {
   late MockHttpClient mockHttpClient;
   late RemoteDataSource dataSource;
+  late MockLocalDataSourceImpl mockLocalDataSource;
 
   setUp(() {
     mockHttpClient = MockHttpClient();
-    dataSource = RemoteDataSourceImpl(client: mockHttpClient);
+    mockLocalDataSource = MockLocalDataSourceImpl();
+    dataSource = RemoteDataSourceImpl(client: mockHttpClient, localDataSource: mockLocalDataSource);
   });
 
   group('obtener login', () {
-    const tLoginAccess = LoginAccessModel(
+    const tSession = SessionModel(
         token: SystemKeys.tokenSuperAdmin2023,
         username: 'admin@mp.com',
         name: 'admin@mp.com');
@@ -55,7 +59,7 @@ void main() {
       final result = await dataSource.getAuthenticate(tusername, tpassword);
 
       //assert
-      expect(result, equals(tLoginAccess));
+      expect(result, equals(tSession));
     });
 
     test(

@@ -69,7 +69,7 @@ void main() {
         (WidgetTester tester) async {
       //arrange
       when(() => mockSideDrawerBloc.state)
-          .thenReturn(const SideDrawerReady(listAnonymous));
+          .thenReturn(const SideDrawerReady(listAnonymous,[],''));
 
       //act
       await tester.pumpWidget(makeTestableWidget(const SideDrawer()));
@@ -83,7 +83,7 @@ void main() {
         (WidgetTester tester) async {
       //arrange
       when(() => mockSideDrawerBloc.state)
-          .thenReturn(const SideDrawerReady(listUser));
+          .thenReturn(const SideDrawerReady(listUser,[],''));
 
       //act
       await tester.pumpWidget(makeTestableWidget(const SideDrawer()));
@@ -98,7 +98,7 @@ void main() {
         (WidgetTester tester) async {
       //arrange
       when(() => mockSideDrawerBloc.state)
-          .thenReturn(const SideDrawerReady(listAdmin));
+          .thenReturn(const SideDrawerReady(listAdmin,[],''));
 
       //act
       await tester.pumpWidget(makeTestableWidget(const SideDrawer()));
@@ -114,7 +114,7 @@ void main() {
         (WidgetTester tester) async {
       //arrange
       when(() => mockSideDrawerBloc.state)
-          .thenReturn(const SideDrawerReady(listSuperAdmin));
+          .thenReturn(const SideDrawerReady(listSuperAdmin,[],''));
 
       //act
       await tester.pumpWidget(makeTestableWidget(const SideDrawer()));

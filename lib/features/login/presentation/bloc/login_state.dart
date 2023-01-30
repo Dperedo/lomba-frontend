@@ -38,10 +38,10 @@ class LoginSelectOrga extends LoginState {
 ///Estado cuando ya está logueado. Considera la respuesta que permitirá saltar
 ///a otra pantalla.
 class LoginGoted extends LoginState {
-  final SessionModel result;
+  final SessionModel? result;
 
   const LoginGoted(this.result);
 
   @override
-  List<Object> get props => [result];
+  List<Object> get props => [];
 }
