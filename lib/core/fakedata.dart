@@ -1,10 +1,10 @@
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:lomba_frontend/core/constants.dart';
 
-import '../features/orgas/data/models/orga_model.dart';
-import '../features/orgas/data/models/orgauser_model.dart';
-import '../features/roles/data/models/role_model.dart';
-import '../features/users/data/models/user_model.dart';
+import '../data/models/orga_model.dart';
+import '../data/models/orgauser_model.dart';
+import '../data/models/role_model.dart';
+import '../data/models/user_model.dart';
 
 ///Archivo con datos falsos para hacer funcionar el prototipo.
 
