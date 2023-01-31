@@ -79,3 +79,24 @@ class Roles {
         Roles.roleSuperAdmin
       ];
 }
+
+///Listado de páginas o boxes de Posts. Estos mismos nombres se manejan en Backend
+class BoxPages {
+  static const uploadedPosts = "uploaded";
+  static const forApprovePosts = "forapprove";
+  static const approvedPosts = "approved";
+  static const rejectedPosts = "rejected";
+  static const latestPosts = "latest";
+  static const popularPosts = "popular";
+  static const votedPosts = "voted";
+
+  static List<String> toList() => [
+        BoxPages.uploadedPosts,
+        BoxPages.forApprovePosts,
+        BoxPages.approvedPosts,
+        BoxPages.rejectedPosts,
+        BoxPages.latestPosts,
+        BoxPages.popularPosts,
+        BoxPages.votedPosts,
+      ];
+}
