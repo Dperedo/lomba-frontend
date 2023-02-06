@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:lomba_frontend/domain/entities/flows/post.dart';
 
 import '../../../core/fakedata.dart';
 
@@ -8,11 +9,12 @@ abstract class UploadedState extends Equatable {
   @override
   List<Object> get props => [];
 }
-class UploadedStart extends UploadedState{}
 
-class UploadedLoading extends UploadedState{}
+class UploadedStart extends UploadedState {}
 
-class UploadedLoaded extends UploadedState{
+class UploadedLoading extends UploadedState {}
+
+class UploadedLoaded extends UploadedState {
   final String orgaId;
   final String userId;
   final String flowId;
@@ -22,11 +24,11 @@ class UploadedLoaded extends UploadedState{
   final Map<String, int> fieldsOrder;
   final int pageIndex;
   final int pageSize;
-  final List<TestRandomItem> listRandomItems;
+  final List<Post> listItems;
   final int itemCount;
   final int totalItems;
   final int totalPages;
-   const UploadedLoaded(
+  const UploadedLoaded(
       this.orgaId,
       this.userId,
       this.flowId,
@@ -36,7 +38,7 @@ class UploadedLoaded extends UploadedState{
       this.fieldsOrder,
       this.pageIndex,
       this.pageSize,
-      this.listRandomItems,
+      this.listItems,
       this.itemCount,
       this.totalItems,
       this.totalPages);
