@@ -33,13 +33,8 @@ abstract class FlowRemoteDataSource {
       Map<String, dynamic> params,
       String boxpage);
 
-  Future<ModelContainer<Vote>> votePublication(
-      String orgaId,
-      String userId,
-      String flowId,
-      String stageId,
-      String postId,
-      int voteValue);
+  Future<ModelContainer<Vote>> votePublication(String orgaId, String userId,
+      String flowId, String stageId, String postId, int voteValue);
 }
 
 class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
@@ -151,7 +146,7 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
 
     if (resp.statusCode == 200) {
       final Map<dynamic, dynamic> resObj = json.decode(resp.body);
-
+      print(resObj);
       List<PostModel> listPostModel = [];
 
       //iteración por cada item
@@ -177,56 +172,52 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
             .toList();
 
         //completar con lógica
-        List<PostItem> listPostItems = (item['postitems']as List)
-          .map((e)=> PostItem(
-            content: e['content'], 
-            type: e['type'],
-            order: int.parse(e['order'].toString()), 
-            format: e['format'].toString(),
-            builtIn: e['builtIn'].toString().toLowerCase() == 'true', 
-            created: DateTime.parse(e['created'].toString()),
-            deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null, 
-            expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null, 
-            updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null
-          ))
-        .toList();
-
-
-        List<Total> listTotals = (item['totals']as List)
-        .map((e) => Total(
-          flowId: e['flowId'].toString(), 
-          stageId: e['stageId'].toString(), 
-          totalcount: int.parse(e['totalcount'].toString()),
-          totalnegative: int.parse(e['totalnegative'].toString()),
-          totalpositive: int.parse(e['totalpositive'].toString()),
-        ))
-        .toList();
-
-
-        List<Track> listTracks = (item['tracks']as List)
-        .map((e)=>Track(
-          userId: e['userId'].toString(), 
-          flowId: e['flowId'].toString(), 
-          stageId: e['stageId'].toString(), 
-          change: e['change'].toString(), 
-          created: DateTime.parse(e['created'].toString()), 
-          deleted: e['deleted'] != null
+        List<PostItem> listPostItems = (item['postitems'] as List)
+            .map((e) => PostItem(
+                content: TextContent(text: e['content'].toString()),
+                type: e['type'].toString(),
+                order: int.parse(e['order'].toString()),
+                format: e['format'].toString(),
+                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
                     ? DateTime.parse(e['deleted'].toString())
                     : null,
-          expires: e['expires'] != null
+                expires: e['expires'] != null
                     ? DateTime.parse(e['expires'].toString())
                     : null,
-          updated: e['updated'] != null
+                updated: e['updated'] != null
                     ? DateTime.parse(e['updated'].toString())
-                    : null
-        ))
-        .toList();
+                    : null))
+            .toList();
+
+        List<Total> listTotals = (item['totals'] as List)
+            .map((e) => Total(
+                  flowId: e['flowId'].toString(),
+                  stageId: e['stageId'].toString(),
+                  totalcount: int.parse(e['totalcount'].toString()),
+                  totalnegative: int.parse(e['totalnegative'].toString()),
+                  totalpositive: int.parse(e['totalpositive'].toString()),
+                ))
+            .toList();
+
+        List<Track> listTracks = (item['tracks'] as List)
+            .map((e) => Track(
+                userId: e['userId'].toString(),
+                flowId: e['flowId'].toString(),
+                stageId: e['stageId'].toString(),
+                change: e['change'].toString(),
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null))
+            .toList();
 
         //se agrega uno a uno cada PostModel nuevo.
         listPostModel.add(PostModel(
@@ -289,7 +280,7 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
       Map<String, int> fieldsOrder,
       int pageIndex,
       int pageSize,
-      int voteState)async {
+      int voteState) async {
     final url = Uri.parse(
         '${UrlBackend.base}/api/v1/post/box?orgaId=$orgaId&userId=$userId&flowId=$flowId&stageId=$stageId&searchText=$searchText&fieldsOrder=$fieldsOrder&pageIndex=$pageIndex&pageSize=$pageSize&voteState=$voteState');
     final session = await localDataSource.getSavedSession();
@@ -328,56 +319,52 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
             .toList();
 
         //completar con lógica
-        List<PostItem> listPostItems = (item['postitems']as List)
-          .map((e)=> PostItem(
-            content: e['content'], 
-            type: e['type'],
-            order: int.parse(e['order'].toString()), 
-            format: e['format'].toString(),
-            builtIn: e['builtIn'].toString().toLowerCase() == 'true', 
-            created: DateTime.parse(e['created'].toString()),
-            deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null, 
-            expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null, 
-            updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null
-          ))
-        .toList();
-
-
-        List<Total> listTotals = (item['totals']as List)
-        .map((e) => Total(
-          flowId: e['flowId'].toString(), 
-          stageId: e['stageId'].toString(), 
-          totalcount: int.parse(e['totalcount'].toString()),
-          totalnegative: int.parse(e['totalnegative'].toString()),
-          totalpositive: int.parse(e['totalpositive'].toString()),
-        ))
-        .toList();
-
-
-        List<Track> listTracks = (item['tracks']as List)
-        .map((e)=>Track(
-          userId: e['userId'].toString(), 
-          flowId: e['flowId'].toString(), 
-          stageId: e['stageId'].toString(), 
-          change: e['change'].toString(), 
-          created: DateTime.parse(e['created'].toString()), 
-          deleted: e['deleted'] != null
+        List<PostItem> listPostItems = (item['postitems'] as List)
+            .map((e) => PostItem(
+                content: e['content'],
+                type: e['type'],
+                order: int.parse(e['order'].toString()),
+                format: e['format'].toString(),
+                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
                     ? DateTime.parse(e['deleted'].toString())
                     : null,
-          expires: e['expires'] != null
+                expires: e['expires'] != null
                     ? DateTime.parse(e['expires'].toString())
                     : null,
-          updated: e['updated'] != null
+                updated: e['updated'] != null
                     ? DateTime.parse(e['updated'].toString())
-                    : null
-        ))
-        .toList();
+                    : null))
+            .toList();
+
+        List<Total> listTotals = (item['totals'] as List)
+            .map((e) => Total(
+                  flowId: e['flowId'].toString(),
+                  stageId: e['stageId'].toString(),
+                  totalcount: int.parse(e['totalcount'].toString()),
+                  totalnegative: int.parse(e['totalnegative'].toString()),
+                  totalpositive: int.parse(e['totalpositive'].toString()),
+                ))
+            .toList();
+
+        List<Track> listTracks = (item['tracks'] as List)
+            .map((e) => Track(
+                userId: e['userId'].toString(),
+                flowId: e['flowId'].toString(),
+                stageId: e['stageId'].toString(),
+                change: e['change'].toString(),
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null))
+            .toList();
 
         //se agrega uno a uno cada PostModel nuevo.
         listPostModel.add(PostModel(
@@ -431,13 +418,8 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
   }
 
   @override
-  Future<ModelContainer<Vote>> votePublication(
-      String orgaId,
-      String userId,
-      String flowId,
-      String stageId,
-      String postId,
-      int voteValue)async {
+  Future<ModelContainer<Vote>> votePublication(String orgaId, String userId,
+      String flowId, String stageId, String postId, int voteValue) async {
     final url = Uri.parse(
         '${UrlBackend.base}/api/v1/post/box?orgaId=$orgaId&userId=$userId&flowId=$flowId&stageId=$stageId&voteValue=$voteValue');
     final session = await localDataSource.getSavedSession();
@@ -476,56 +458,52 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
             .toList();
 
         //completar con lógica
-        List<PostItem> listPostItems = (item['postitems']as List)
-          .map((e)=> PostItem(
-            content: e['content'], 
-            type: e['type'],
-            order: int.parse(e['order'].toString()), 
-            format: e['format'].toString(),
-            builtIn: e['builtIn'].toString().toLowerCase() == 'true', 
-            created: DateTime.parse(e['created'].toString()),
-            deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null, 
-            expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null, 
-            updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null
-          ))
-        .toList();
-
-
-        List<Total> listTotals = (item['totals']as List)
-        .map((e) => Total(
-          flowId: e['flowId'].toString(), 
-          stageId: e['stageId'].toString(), 
-          totalcount: int.parse(e['totalcount'].toString()),
-          totalnegative: int.parse(e['totalnegative'].toString()),
-          totalpositive: int.parse(e['totalpositive'].toString()),
-        ))
-        .toList();
-
-
-        List<Track> listTracks = (item['tracks']as List)
-        .map((e)=>Track(
-          userId: e['userId'].toString(), 
-          flowId: e['flowId'].toString(), 
-          stageId: e['stageId'].toString(), 
-          change: e['change'].toString(), 
-          created: DateTime.parse(e['created'].toString()), 
-          deleted: e['deleted'] != null
+        List<PostItem> listPostItems = (item['postitems'] as List)
+            .map((e) => PostItem(
+                content: e['content'],
+                type: e['type'],
+                order: int.parse(e['order'].toString()),
+                format: e['format'].toString(),
+                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
                     ? DateTime.parse(e['deleted'].toString())
                     : null,
-          expires: e['expires'] != null
+                expires: e['expires'] != null
                     ? DateTime.parse(e['expires'].toString())
                     : null,
-          updated: e['updated'] != null
+                updated: e['updated'] != null
                     ? DateTime.parse(e['updated'].toString())
-                    : null
-        ))
-        .toList();
+                    : null))
+            .toList();
+
+        List<Total> listTotals = (item['totals'] as List)
+            .map((e) => Total(
+                  flowId: e['flowId'].toString(),
+                  stageId: e['stageId'].toString(),
+                  totalcount: int.parse(e['totalcount'].toString()),
+                  totalnegative: int.parse(e['totalnegative'].toString()),
+                  totalpositive: int.parse(e['totalpositive'].toString()),
+                ))
+            .toList();
+
+        List<Track> listTracks = (item['tracks'] as List)
+            .map((e) => Track(
+                userId: e['userId'].toString(),
+                flowId: e['flowId'].toString(),
+                stageId: e['stageId'].toString(),
+                change: e['change'].toString(),
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null))
+            .toList();
 
         //se agrega uno a uno cada PostModel nuevo.
         listVote.add(Vote(
