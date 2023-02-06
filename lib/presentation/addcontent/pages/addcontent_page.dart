@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../sidedrawer/pages/sidedrawer_page.dart';
+import '../../sidedrawer/pages/sidedrawer_page.dart';
 
 ///Página para agregar contenido al sistema.
 ///

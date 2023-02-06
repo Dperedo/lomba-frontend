@@ -11,7 +11,7 @@ import 'package:lomba_frontend/presentation/uploaded/presentation/pages/uploaded
 import 'package:lomba_frontend/presentation/viewed/presentation/pages/viewed_page.dart';
 
 import 'presentation/nav/bloc/nav_state.dart';
-import 'presentation/addcontent/presentation/pages/addcontent_page.dart';
+import 'presentation/addcontent/pages/addcontent_page.dart';
 import 'presentation/demolist/bloc/demolist_bloc.dart';
 import 'presentation/demolist/pages/demolist_page.dart';
 import 'presentation/home/bloc/home_bloc.dart';
