@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-
 class ModelContainer<T> extends Equatable {
   const ModelContainer(
       this.items,
@@ -10,7 +9,6 @@ class ModelContainer<T> extends Equatable {
       this.pageIndex,
       this.totalPages,
       this.kind);
-
   final List<T> items;
   final int currentItemCount;
   final int? itemsPerPage;
@@ -19,7 +17,6 @@ class ModelContainer<T> extends Equatable {
   final int? pageIndex;
   final int? totalPages;
   final String? kind;
-
   @override
   List<Object> get props => [items, currentItemCount];
 }
