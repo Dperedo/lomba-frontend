@@ -11,24 +11,21 @@ class Stage extends Equatable {
     required this.created,
     required this.updated,
     required this.deleted,
-    required this.expires,});
+    required this.expires,
+  });
 
-    final String id;
-    final String name;
-    final String order;
-    final Object queryOut;
-    final bool builtIn;
-    final DateTime created;
-    final DateTime? updated;
-    final DateTime? deleted;
-    final DateTime? expires;
-    final bool enabled;
+  final String id;
+  final String name;
+  final int order;
+  final Object queryOut;
+  final bool builtIn;
+  final DateTime created;
+  final DateTime? updated;
+  final DateTime? deleted;
+  final DateTime? expires;
+  final bool enabled;
 
   @override
-  
-  List<Object?> get props => [
-    id, name, order, queryOut, enabled, builtIn, created
-  ];
+  List<Object?> get props =>
+      [id, name, order, queryOut, enabled, builtIn, created];
 }
-  
-    

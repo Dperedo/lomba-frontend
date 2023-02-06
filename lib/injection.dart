@@ -1,6 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:lomba_frontend/domain/usecases/flow/add_text_post.dart';
+import 'package:lomba_frontend/domain/usecases/flow/get_approved_posts.dart';
+import 'package:lomba_frontend/domain/usecases/flow/get_for_approve_posts.dart';
+import 'package:lomba_frontend/domain/usecases/flow/get_latest_posts.dart';
+import 'package:lomba_frontend/domain/usecases/flow/get_popular_posts.dart';
+import 'package:lomba_frontend/domain/usecases/flow/get_rejected_posts.dart';
+import 'package:lomba_frontend/domain/usecases/flow/get_uploaded_posts.dart';
+import 'package:lomba_frontend/domain/usecases/flow/get_voted_posts.dart';
+import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/login/change_orga.dart';
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate.dart';
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate_google.dart';
@@ -11,11 +20,15 @@ import 'package:lomba_frontend/domain/usecases/orgas/add_orga.dart';
 import 'package:lomba_frontend/domain/usecases/sidedrawer/do_logoff.dart';
 import 'package:lomba_frontend/domain/usecases/users/get_users_notin_orga.dart';
 import 'package:lomba_frontend/domain/usecases/users/update_user_password.dart';
+import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
 import 'package:lomba_frontend/presentation/users/bloc/user_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'data/datasources/flow_data_source.dart';
 import 'data/datasources/local_data_source.dart';
+import 'data/repositories/flow_repository_impl.dart';
 import 'data/repositories/local_repository_impl.dart';
+import 'domain/repositories/flow_repository.dart';
 import 'domain/repositories/local_repository.dart';
 import 'domain/usecases/local/get_has_login.dart';
 import 'domain/usecases/local/get_session_status.dart';
@@ -100,6 +113,18 @@ Future<void> init() async {
 
   locator.registerFactory(() => ProfileBloc(locator(), locator()));
   locator.registerFactory(() => DemoListBloc());
+  
+  locator.registerFactory(() => UploadedBloc(
+      locator(),
+      locator(),
+      locator(),
+      locator(),
+      locator(),
+      locator(),
+      locator(),
+      locator(),
+      locator(),
+      locator()));
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));
@@ -139,6 +164,16 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetRoles(locator()));
   locator.registerLazySingleton(() => GetAuthenticateGoogle(locator()));
 
+  locator.registerLazySingleton(() => AddTextPost(locator()));
+  locator.registerLazySingleton(() => GetApprovedPosts(locator()));
+  locator.registerLazySingleton(() => GetForApprovePosts(locator()));
+  locator.registerLazySingleton(() => GetLatestPosts(locator()));
+  locator.registerLazySingleton(() => GetPopularPosts(locator()));
+  locator.registerLazySingleton(() => GetRejectedPosts(locator()));
+  locator.registerLazySingleton(() => GetUploadedPosts(locator()));
+  locator.registerLazySingleton(() => GetVotedPosts(locator()));
+  locator.registerLazySingleton(() => VotePublication(locator()));
+
   // repository
   locator.registerLazySingleton<LoginRepository>(
     () => LoginRepositoryImpl(
@@ -157,6 +192,9 @@ Future<void> init() async {
   );
   locator.registerLazySingleton<RoleRepository>(
     () => RoleRepositoryImpl(remoteDataSource: locator()),
+  );
+  locator.registerLazySingleton<FlowRepository>(
+    () => FlowRepositoryImpl(remoteDataSource: locator()),
   );
 
   // data source
@@ -184,6 +222,10 @@ Future<void> init() async {
   locator.registerLazySingleton<RoleRemoteDataSource>(
     () =>
         RoleRemoteDataSourceImpl(client: locator(), localDataSource: locator()),
+  );
+  locator.registerLazySingleton<FlowRemoteDataSource>(
+    () =>
+        FlowRemoteDataSourceImpl(client: locator(), localDataSource: locator()),
   );
 
   // external

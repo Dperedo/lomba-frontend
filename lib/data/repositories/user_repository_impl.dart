@@ -4,8 +4,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:lomba_frontend/data/datasources/user_data_source.dart';
 import 'package:lomba_frontend/data/models/user_model.dart';
-import 'package:lomba_frontend/domain/usecases/users/update_user_password.dart';
-
 import '../models/sort_model.dart';
 import '../../core/exceptions.dart';
 import '../../core/failures.dart';

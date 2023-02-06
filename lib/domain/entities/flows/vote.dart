@@ -2,24 +2,20 @@ import 'package:equatable/equatable.dart';
 
 class Vote extends Equatable {
   const Vote({
-    required this.totalpositive,
-    required this.totalnegative,
-    required this.totalcount,
+    
     required this.flowId,
     required this.stageId,
     required this.userId,
-    required this.number,
+    required this.value,
     required this.created,
     required this.updated,
     required this.deleted,
     required this.expires,});
 
-    final int totalpositive;
-    final int totalnegative;
-    final int totalcount;
+    
     final String flowId;
     final String stageId;
-    final int number;
+    final int value;
     final String userId;
     final DateTime created;
     final DateTime? updated;
@@ -29,6 +25,6 @@ class Vote extends Equatable {
   @override
   
   List<Object?> get props => [
-    totalpositive,totalnegative,totalcount,flowId,stageId,number,userId,created
+    flowId,stageId,value,userId,created
   ];
 }
