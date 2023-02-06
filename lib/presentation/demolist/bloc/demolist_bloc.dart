@@ -55,7 +55,7 @@ class DemoListBloc extends Bloc<DemoListEvent, DemoListState> {
         int totalPages = (filtered.length / event.pageSize).round();
         if (totalPages == 0) totalPages = 1;
 
-//emite estado con la información de la pantalla.
+   //emite estado con la información de la pantalla.
         emit(DemoListLoadedState(
             event.searchText,
             event.fieldsOrder,

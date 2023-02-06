@@ -16,7 +16,7 @@ class PostItem extends Equatable {
     
     final int order;
     final Object content;
-    final Text type;
+    final String type;
     final String format;
     final bool builtIn;
     final DateTime created;

@@ -31,15 +31,8 @@ class DemoListPage extends StatelessWidget {
   }
 
   Widget _firstDemo(BuildContext context) {
-    Map<String, String> comboFields = <String, String>{
-      "Id": "id",
-      "Nombre": "name",
-      "Número": "num",
-      "Texto": "text"
-    };
-
+    
     List<String> listFields = <String>["id", "name", "num", "text"];
-
     return Form(
       key: _key,
       child: BlocBuilder<DemoListBloc, DemoListState>(
@@ -177,7 +170,8 @@ class DemoListPage extends StatelessWidget {
                           const Divider()
                         ],
                       );
-                    }),
+                    }
+                ),
               ],
             );
           }
