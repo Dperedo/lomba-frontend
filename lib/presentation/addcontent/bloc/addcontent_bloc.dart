@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/domain/entities/flows/textcontent.dart';
 import 'package:lomba_frontend/domain/usecases/flow/add_text_post.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_has_login.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
@@ -37,7 +38,7 @@ class AddContentBloc extends Bloc<AddContentEvent, AddContentState> {
         final userId = session?.getUserId();
         final orgaId = session?.getOrgaId();
 
-        final result = await _addTextPost.execute(orgaId!, userId!, event.text, event.title, flowId, event.isDraft);
+        final result = await _addTextPost.execute(orgaId!, userId!, event.text as TextContent, event.title, flowId, event.isDraft);
 
         result.fold((l) => null, (r) => null);
       }
