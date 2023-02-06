@@ -13,8 +13,8 @@ class Urls {
 }
 
 class UrlBackend {
-  static const String base = 'http://localhost:4001';
-  //static const String base = 'https://lomba-backend-develop.azurewebsites.net';
+  static const String base = String.fromEnvironment('API_BASE_URL',
+      defaultValue: 'http://localhost:4001');
 }
 
 ///Claves de sistema, como tokends creados en el sitio JWT.io.
