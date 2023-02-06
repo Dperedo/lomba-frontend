@@ -26,7 +26,7 @@ class FlowRepositoryImpl implements FlowRepository {
       TextContent text, String title, String flowId, bool isDraft) async {
     try {
       final result = await remoteDataSource.addTextPost(
-          orgaId, userId, text, title, flowId);
+          orgaId, userId, text, title, flowId, isDraft);
 
       return (Right(result.toEntity()));
     } on ServerException {

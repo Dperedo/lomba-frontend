@@ -20,7 +20,7 @@ import 'local_data_source.dart';
 
 abstract class FlowRemoteDataSource {
   Future<PostModel> addTextPost(String orgaId, String userId, TextContent text,
-      String title, String flowId);
+      String title, String flowId, bool isDraft);
   Future<ModelContainer<PostModel>> getPosts(
       String orgaId,
       String userId,
@@ -50,7 +50,7 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
 
   @override
   Future<PostModel> addTextPost(String orgaId, String userId, TextContent text,
-      String title, String flowId) async {
+      String title, String flowId, bool isDraft) async {
     final Map<String, dynamic> newTextPost = {
       'userId': userId,
       'orgaId': orgaId,
