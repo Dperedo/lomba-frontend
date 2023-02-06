@@ -9,12 +9,12 @@ abstract class AddContentEvent extends Equatable {
 
 class OnAddContentAdd extends AddContentEvent {
   final String flowId;
-  final String titles;
-  final String content;
-  final bool draft;
+  final String title;
+  final String text;
+  final bool isDraft;
 
-  const OnAddContentAdd(this.flowId, this.titles, this.content, this.draft);
+  const OnAddContentAdd(this.flowId, this.title, this.text, this.isDraft);
 
   @override
-  List<Object> get props => [flowId, titles, content, draft];
+  List<Object> get props => [flowId, title, text, isDraft];
 }

@@ -9,8 +9,8 @@ class AddTextPost {
   final FlowRepository repository;
   AddTextPost(this.repository);
   Future<Either<Failure, Flow>> execute(
-    String orgaId, String userId, String text, String title, String flowId)
+    String orgaId, String userId, String text, String title, String flowId, bool isDraft)
     async{
-    return await repository.addTextPost(orgaId, userId, text, title, flowId );
+    return await repository.addTextPost(orgaId, userId, text, title, flowId, isDraft );
     }
 }

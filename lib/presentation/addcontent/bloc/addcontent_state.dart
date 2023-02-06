@@ -7,8 +7,17 @@ abstract class AddContentState extends Equatable {
   List<Object> get props => [];
 }
 
-class AddContentStart extends AddContentState {}
+class AddContentEmpty extends AddContentState {}
 
 class AddContentLoading extends AddContentState {}
 
 class AddContentAdded extends AddContentState {}
+
+class AddContentError extends AddContentState {
+  final String message;
+
+  const AddContentError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
