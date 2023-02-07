@@ -19,7 +19,7 @@ class AddContentBloc extends Bloc<AddContentEvent, AddContentState> {
   ): super(AddContentEmpty()) {
     on<OnAddContentAdd>((event, emit) async {
       emit(AddContentLoading());
-      const flowId = '00000111-0111-0111-0111-000000000111';
+      //const flowId = '00000111-0111-0111-0111-000000000111';
       SessionModel? session;     
       bool login = false;
 
@@ -38,14 +38,18 @@ class AddContentBloc extends Bloc<AddContentEvent, AddContentState> {
         final userId = session?.getUserId();
         final orgaId = session?.getOrgaId();
 
-        final result = await _addTextPost.execute(orgaId!, userId!, event.text as TextContent, event.title, flowId, event.isDraft);
+        final result = await _addTextPost.execute(orgaId!, userId!,TextContent(text: event.text), event.title, event.flowId, event.isDraft);
 
-        result.fold((l) => null, (r) => null);
+        result.fold((l) => emit(AddContentError(l.message)), (r) => emit(AddContentUp()));
       }
 
     },
     transformer: debounce(const Duration(milliseconds: 0)),
     );
+
+    on <OnAddContentUp>((event, emit) {
+      emit(AddContentEmpty());
+    });
   }
 
   //result.fold;

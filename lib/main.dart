@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart';
 import 'package:lomba_frontend/presentation/nav/bloc/nav_bloc.dart';
 import 'package:lomba_frontend/presentation/approved/presentation/pages/approved_page.dart';
 import 'package:lomba_frontend/presentation/login/pages/login_page.dart';
@@ -65,7 +66,8 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<RoleBloc>()),
         BlocProvider(create: (_) => di.locator<ProfileBloc>()),
         BlocProvider(create: (_) => di.locator<DemoListBloc>()),
-        BlocProvider(create: (_) => di.locator<UploadedBloc>())
+        BlocProvider(create: (_) => di.locator<UploadedBloc>()),
+        BlocProvider(create: (_) => di.locator<AddContentBloc>())
       ],
       child: MaterialApp(
           title: 'App Demo',

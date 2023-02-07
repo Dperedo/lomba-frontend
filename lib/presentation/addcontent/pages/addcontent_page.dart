@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/validators.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart';
+import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_event.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_state.dart';
 
 import '../../sidedrawer/pages/sidedrawer_page.dart';
@@ -34,47 +35,104 @@ class AddContentPage extends StatelessWidget {
 }
 
 Widget _bodyAddContent(BuildContext context, AddContentState state) {
-    final TextEditingController titleController = TextEditingController();
-    final TextEditingController contentController = TextEditingController();
-    final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController contentController = TextEditingController();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
   var isChecked = false;
   if(state is AddContentEmpty) {
-    return Center(
+    return Padding(
+      padding: const EdgeInsets.all(25.0),
       child: SizedBox(
-        child: Column(
-          children: [
-            TextFormField(
-              key:  const ValueKey('txtTitle'),
-              controller: titleController,
-              validator: (value) => Validators.validateName(value ?? ""),
-              decoration: const InputDecoration(
-                labelText: 'Titulo',
-                icon:  Icon(Icons.title)
+        child: Form(
+          key: _key,
+          child: Column(
+            children: [
+              TextFormField(
+                key:  const ValueKey('txtTitle'),
+                maxLength: 150,
+                controller: titleController,
+                validator: (value) => Validators.validateName(value ?? ""),
+                decoration: const InputDecoration(
+                  labelText: 'Titulo',
+                  icon:  Icon(Icons.title)
+                ),
               ),
-            ),
-            TextFormField(
-              key: const ValueKey('txtContent'),
-              controller: contentController,
-              validator: (value) => Validators.validateName(value ?? ""),
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Contenido del Post',
+              const SizedBox(
+                height: 20,
               ),
-            ),
-            Checkbox(
-              value: isChecked, 
-              onChanged: (bool? value) {
-                isChecked = value!;
-              },
-              )
-          ],
+              TextFormField(
+                key: const ValueKey('txtContent'),
+                maxLength: 500,
+                maxLines: 8,
+                controller: contentController,
+                validator: (value) => Validators.validateName(value ?? ""),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Contenido del Post',
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  const Text('Dejar como borrador'),
+                  Checkbox(
+                    value: isChecked, 
+                    onChanged: (bool? value) {
+                      /*setState(() {
+                        isChecked = value!;
+                      });*/
+                      isChecked = value!;
+                    },
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              SizedBox(
+                width: 150,
+                height: 50,
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.publish),
+                  key: const ValueKey("btnSavedUp"),
+                  label: const Text("Subir"),
+                  onPressed: () {
+                    if (_key.currentState?.validate() == true)
+                    {context.read<AddContentBloc>().add(OnAddContentAdd(
+                      '00000111-0111-0111-0111-000000000111', titleController.text, contentController.text, isChecked));
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  if(state is AddContentAdded) {
-
+  if(state is AddContentUp) {
+    return Center(
+      child: Column(
+        children: [
+          const Text('Agregado!'),
+          const SizedBox(
+                height: 30,
+              ),
+          SizedBox(
+            child: ElevatedButton.icon( 
+              icon: const Icon(Icons.add), 
+              label: const Text('Subir más contenido'),
+              onPressed: () {
+                context.read()<AddContentBloc>().add(OnAddContentUp());
+              }
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   if(state is AddContentLoading) {
@@ -89,3 +147,4 @@ Widget _bodyAddContent(BuildContext context, AddContentState state) {
 
   return const SizedBox();
 }
+

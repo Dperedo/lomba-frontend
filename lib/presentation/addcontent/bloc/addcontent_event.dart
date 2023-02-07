@@ -18,3 +18,8 @@ class OnAddContentAdd extends AddContentEvent {
   @override
   List<Object> get props => [flowId, title, text, isDraft];
 }
+
+class OnAddContentUp extends AddContentEvent {
+  @override
+  List<Object> get props => [];
+}

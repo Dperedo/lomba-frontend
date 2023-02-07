@@ -11,7 +11,7 @@ class AddContentEmpty extends AddContentState {}
 
 class AddContentLoading extends AddContentState {}
 
-class AddContentAdded extends AddContentState {}
+class AddContentUp extends AddContentState {}
 
 class AddContentError extends AddContentState {
   final String message;
