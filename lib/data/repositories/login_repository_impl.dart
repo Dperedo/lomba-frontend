@@ -116,7 +116,7 @@ class LoginRepositoryImpl implements LoginRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> getAuthenticateGoogle(
+  Future<Either<Failure, Session>> getAuthenticateGoogle(
       User user, String googleToken) async {
     try {
       UserModel userModel = UserModel(
@@ -138,7 +138,7 @@ class LoginRepositoryImpl implements LoginRepository {
       ///del usuario conectado.
       localDataSource.saveSession(session);
 
-      return const Right(true);
+      return Right(session);
     } on ServerException {
       return const Left(ServerFailure(''));
     } on SocketException {

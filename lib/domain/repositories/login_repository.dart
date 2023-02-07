@@ -17,6 +17,6 @@ abstract class LoginRepository {
   Future<Either<Failure, bool>> registerUser(String name, String username,
       String email, String orgaId, String password, String role);
   Future<Either<Failure, Session>> changeOrga(String username, String orgaId);
-  Future<Either<Failure, bool>> getAuthenticateGoogle(
+  Future<Either<Failure, Session>> getAuthenticateGoogle(
       User user, String googleToken);
 }

@@ -39,7 +39,7 @@ Future<void> main() async {
   );
 
   await di.init();
-
+  print("1.0.0.1");
   runApp(const MyApp());
 }
 
