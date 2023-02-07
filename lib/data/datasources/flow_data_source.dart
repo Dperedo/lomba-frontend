@@ -27,7 +27,7 @@ abstract class FlowRemoteDataSource {
       String flowId,
       String stageId,
       String searchText,
-      Map<String, int> fieldsOrder,
+      List<dynamic> order,
       int pageIndex,
       int pageSize,
       Map<String, dynamic> params,
@@ -129,13 +129,13 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
       String flowId,
       String stageId,
       String searchText,
-      Map<String, int> fieldsOrder,
+      List<dynamic> order,
       int pageIndex,
       int pageSize,
       Map<String, dynamic> params,
       String boxpage) async {
     final url = Uri.parse(
-        '${UrlBackend.base}/api/v1/post/box?orgaId=$orgaId&userId=$userId&flowId=$flowId&stageId=$stageId&searchText=$searchText&fieldsOrder=$fieldsOrder&pageIndex=$pageIndex&pageSize=$pageSize&params=$params&boxpage=$boxpage');
+        '${UrlBackend.base}/api/v1/post/box?orgaId=$orgaId&userId=$userId&flowId=$flowId&stageId=$stageId&searchtext=$searchText&order=${json.encode(order)}&pageindex=$pageIndex&pagesize=$pageSize&paramvars=${json.encode(params)}&boxpage=$boxpage');
     final session = await localDataSource.getSavedSession();
 
     http.Response resp = await client.get(url, headers: {
@@ -146,7 +146,7 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
 
     if (resp.statusCode == 200) {
       final Map<dynamic, dynamic> resObj = json.decode(resp.body);
-      print(resObj);
+
       List<PostModel> listPostModel = [];
 
       //iteración por cada item

@@ -1,20 +1,16 @@
 import 'dart:io';
 
-import 'package:flutter_guid/flutter_guid.dart';
-import 'package:lomba_frontend/domain/entities/flows/post.dart';
-import 'package:lomba_frontend/core/model_container.dart';
-import 'package:lomba_frontend/core/failures.dart';
 import 'package:dartz/dartz.dart';
+import 'package:lomba_frontend/core/failures.dart';
+import 'package:lomba_frontend/core/model_container.dart';
+import 'package:lomba_frontend/domain/entities/flows/post.dart';
 import 'package:lomba_frontend/domain/entities/flows/textcontent.dart';
-import 'dart:developer';
-
 import 'package:lomba_frontend/domain/repositories/flow_repository.dart';
 
 import '../../core/constants.dart';
 import '../../core/exceptions.dart';
 import '../../domain/entities/flows/vote.dart';
 import '../datasources/flow_data_source.dart';
-import '../models/flow/post_model.dart';
 
 class FlowRepositoryImpl implements FlowRepository {
   final FlowRemoteDataSource remoteDataSource;
@@ -45,30 +41,33 @@ class FlowRepositoryImpl implements FlowRepository {
       String searchText,
       Map<String, int> fieldsOrder,
       int pageIndex,
-      int pageSize)async {
+      int pageSize) async {
+    try {
+      final Map<String, dynamic> params = {};
+      List<dynamic> order = [];
+      fieldsOrder.forEach((key, value) {
+        order.add([key, value == 1 ? value : -1]);
+      });
+      final resultModelContainer = await remoteDataSource.getPosts(
+          orgaId,
+          userId,
+          flowId,
+          stageId,
+          searchText,
+          order,
+          pageIndex,
+          pageSize,
+          params,
+          BoxPages.approvedPosts);
 
-        try{
-          final Map<String, dynamic> params = {};
-          final resultModelContainer = await remoteDataSource.getPosts(
-            orgaId, 
-            userId, 
-            flowId, 
-            stageId, 
-            searchText, 
-            fieldsOrder, 
-            pageIndex, 
-            pageSize, 
-            params,
-            BoxPages.approvedPosts);
+      List<Post> list = [];
 
-          List<Post> list = [];
-         
-          if (resultModelContainer.currentItemCount > 0) {
-            for (var element in resultModelContainer.items) {
-              list.add(element.toEntity());
-            }
-          }
-          return Right(ModelContainer<Post>(
+      if (resultModelContainer.currentItemCount > 0) {
+        for (var element in resultModelContainer.items) {
+          list.add(element.toEntity());
+        }
+      }
+      return Right(ModelContainer<Post>(
           list,
           resultModelContainer.currentItemCount,
           resultModelContainer.itemsPerPage,
@@ -77,12 +76,12 @@ class FlowRepositoryImpl implements FlowRepository {
           resultModelContainer.pageIndex,
           resultModelContainer.totalPages,
           resultModelContainer.kind));
-        } on ServerException {
-          return const Left(ServerFailure(''));
-        } on SocketException {
-          return const Left(ConnectionFailure('Failed to connect to the network'));
-        }
-      }
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(ConnectionFailure('Failed to connect to the network'));
+    }
+  }
 
   @override
   Future<Either<Failure, ModelContainer<Post>>> getForApprovePosts(
@@ -93,30 +92,33 @@ class FlowRepositoryImpl implements FlowRepository {
       String searchText,
       Map<String, int> fieldsOrder,
       int pageIndex,
-      int pageSize) async{
+      int pageSize) async {
+    try {
+      final Map<String, dynamic> params = {};
+      List<dynamic> order = [];
+      fieldsOrder.forEach((key, value) {
+        order.add([key, value == 1 ? value : -1]);
+      });
+      final resultModelContainer = await remoteDataSource.getPosts(
+          orgaId,
+          userId,
+          flowId,
+          stageId,
+          searchText,
+          order,
+          pageIndex,
+          pageSize,
+          params,
+          BoxPages.forApprovePosts);
 
-        try{
-          final Map<String, dynamic> params = {};
-          final resultModelContainer = await remoteDataSource.getPosts(
-            orgaId, 
-            userId, 
-            flowId, 
-            stageId, 
-            searchText, 
-            fieldsOrder, 
-            pageIndex, 
-            pageSize, 
-            params,
-            BoxPages.forApprovePosts);
+      List<Post> list = [];
 
-          List<Post> list = [];
-         
-          if (resultModelContainer.currentItemCount > 0) {
-            for (var element in resultModelContainer.items) {
-              list.add(element.toEntity());
-            }
-          }
-          return Right(ModelContainer<Post>(
+      if (resultModelContainer.currentItemCount > 0) {
+        for (var element in resultModelContainer.items) {
+          list.add(element.toEntity());
+        }
+      }
+      return Right(ModelContainer<Post>(
           list,
           resultModelContainer.currentItemCount,
           resultModelContainer.itemsPerPage,
@@ -125,12 +127,12 @@ class FlowRepositoryImpl implements FlowRepository {
           resultModelContainer.pageIndex,
           resultModelContainer.totalPages,
           resultModelContainer.kind));
-        } on ServerException {
-          return const Left(ServerFailure(''));
-        } on SocketException {
-          return const Left(ConnectionFailure('Failed to connect to the network'));
-        }
-      }
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(ConnectionFailure('Failed to connect to the network'));
+    }
+  }
 
   @override
   Future<Either<Failure, ModelContainer<Post>>> getLatestPosts(
@@ -140,31 +142,31 @@ class FlowRepositoryImpl implements FlowRepository {
       String stageId,
       String searchText,
       int pageIndex,
-      int pageSize)async {
+      int pageSize) async {
+    try {
+      final Map<String, dynamic> params = {};
+      List<dynamic> order = [];
 
-        try{
-          final Map<String, dynamic> params = {};
-          final Map<String, int> fieldsOrder = {};
-          final resultModelContainer = await remoteDataSource.getPosts(
-            orgaId, 
-            userId, 
-            flowId, 
-            stageId, 
-            searchText, 
-            fieldsOrder, 
-            pageIndex, 
-            pageSize, 
-            params,
-            BoxPages.latestPosts);
+      final resultModelContainer = await remoteDataSource.getPosts(
+          orgaId,
+          userId,
+          flowId,
+          stageId,
+          searchText,
+          order,
+          pageIndex,
+          pageSize,
+          params,
+          BoxPages.latestPosts);
 
-          List<Post> list = [];
-         
-          if (resultModelContainer.currentItemCount > 0) {
-            for (var element in resultModelContainer.items) {
-              list.add(element.toEntity());
-            }
-          }
-          return Right(ModelContainer<Post>(
+      List<Post> list = [];
+
+      if (resultModelContainer.currentItemCount > 0) {
+        for (var element in resultModelContainer.items) {
+          list.add(element.toEntity());
+        }
+      }
+      return Right(ModelContainer<Post>(
           list,
           resultModelContainer.currentItemCount,
           resultModelContainer.itemsPerPage,
@@ -173,12 +175,12 @@ class FlowRepositoryImpl implements FlowRepository {
           resultModelContainer.pageIndex,
           resultModelContainer.totalPages,
           resultModelContainer.kind));
-        } on ServerException {
-          return const Left(ServerFailure(''));
-        } on SocketException {
-          return const Left(ConnectionFailure('Failed to connect to the network'));
-        }
-      }
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(ConnectionFailure('Failed to connect to the network'));
+    }
+  }
 
   @override
   Future<Either<Failure, ModelContainer<Post>>> getPopularPosts(
@@ -188,31 +190,31 @@ class FlowRepositoryImpl implements FlowRepository {
       String stageId,
       String searchText,
       int pageIndex,
-      int pageSize) async{
+      int pageSize) async {
+    try {
+      final Map<String, dynamic> params = {};
+      final List<dynamic> order = [];
 
-        try{
-          final Map<String, dynamic> params = {};
-          final Map<String, int> fieldsOrder = {};
-          final resultModelContainer = await remoteDataSource.getPosts(
-            orgaId, 
-            userId, 
-            flowId, 
-            stageId, 
-            searchText, 
-            fieldsOrder, 
-            pageIndex, 
-            pageSize, 
-            params,
-            BoxPages.popularPosts);
+      final resultModelContainer = await remoteDataSource.getPosts(
+          orgaId,
+          userId,
+          flowId,
+          stageId,
+          searchText,
+          order,
+          pageIndex,
+          pageSize,
+          params,
+          BoxPages.popularPosts);
 
-          List<Post> list = [];
-         
-          if (resultModelContainer.currentItemCount > 0) {
-            for (var element in resultModelContainer.items) {
-              list.add(element.toEntity());
-            }
-          }
-          return Right(ModelContainer<Post>(
+      List<Post> list = [];
+
+      if (resultModelContainer.currentItemCount > 0) {
+        for (var element in resultModelContainer.items) {
+          list.add(element.toEntity());
+        }
+      }
+      return Right(ModelContainer<Post>(
           list,
           resultModelContainer.currentItemCount,
           resultModelContainer.itemsPerPage,
@@ -221,12 +223,12 @@ class FlowRepositoryImpl implements FlowRepository {
           resultModelContainer.pageIndex,
           resultModelContainer.totalPages,
           resultModelContainer.kind));
-        } on ServerException {
-          return const Left(ServerFailure(''));
-        } on SocketException {
-          return const Left(ConnectionFailure('Failed to connect to the network'));
-        }
-      }
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(ConnectionFailure('Failed to connect to the network'));
+    }
+  }
 
   @override
   Future<Either<Failure, ModelContainer<Post>>> getRejectedPosts(
@@ -237,30 +239,33 @@ class FlowRepositoryImpl implements FlowRepository {
       String searchText,
       Map<String, int> fieldsOrder,
       int pageIndex,
-      int pageSize) async{
+      int pageSize) async {
+    try {
+      final Map<String, dynamic> params = {};
+      List<dynamic> order = [];
+      fieldsOrder.forEach((key, value) {
+        order.add([key, value == 1 ? value : -1]);
+      });
+      final resultModelContainer = await remoteDataSource.getPosts(
+          orgaId,
+          userId,
+          flowId,
+          stageId,
+          searchText,
+          order,
+          pageIndex,
+          pageSize,
+          params,
+          BoxPages.rejectedPosts);
 
-        try{
-          final Map<String, dynamic> params = {};
-          final resultModelContainer = await remoteDataSource.getPosts(
-            orgaId, 
-            userId, 
-            flowId, 
-            stageId, 
-            searchText, 
-            fieldsOrder, 
-            pageIndex, 
-            pageSize, 
-            params,
-            BoxPages.rejectedPosts);
+      List<Post> list = [];
 
-          List<Post> list = [];
-         
-          if (resultModelContainer.currentItemCount > 0) {
-            for (var element in resultModelContainer.items) {
-              list.add(element.toEntity());
-            }
-          }
-          return Right(ModelContainer<Post>(
+      if (resultModelContainer.currentItemCount > 0) {
+        for (var element in resultModelContainer.items) {
+          list.add(element.toEntity());
+        }
+      }
+      return Right(ModelContainer<Post>(
           list,
           resultModelContainer.currentItemCount,
           resultModelContainer.itemsPerPage,
@@ -269,12 +274,12 @@ class FlowRepositoryImpl implements FlowRepository {
           resultModelContainer.pageIndex,
           resultModelContainer.totalPages,
           resultModelContainer.kind));
-        } on ServerException {
-          return const Left(ServerFailure(''));
-        } on SocketException {
-          return const Left(ConnectionFailure('Failed to connect to the network'));
-        }
-      }
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(ConnectionFailure('Failed to connect to the network'));
+    }
+  }
 
   @override
   Future<Either<Failure, ModelContainer<Post>>> getUploadedPosts(
@@ -288,8 +293,13 @@ class FlowRepositoryImpl implements FlowRepository {
       int pageIndex,
       int pageSize) async {
     try {
-    //crear boxpage, y params
+      //crear boxpage, y params
       final Map<String, dynamic> params = {'isdraft': onlyDrafts};
+
+      List<dynamic> order = [];
+      fieldsOrder.forEach((key, value) {
+        order.add([key, value == 1 ? value : -1]);
+      });
 
       final resultModelContainer = await remoteDataSource.getPosts(
           orgaId,
@@ -297,7 +307,7 @@ class FlowRepositoryImpl implements FlowRepository {
           flowId,
           stageId,
           searchText,
-          fieldsOrder,
+          order,
           pageIndex,
           pageSize,
           params,
@@ -337,18 +347,20 @@ class FlowRepositoryImpl implements FlowRepository {
       Map<String, int> fieldsOrder,
       int pageIndex,
       int pageSize,
-      int voteState)async {
+      int voteState) async {
     try {
-      
       final Map<String, dynamic> params = {'voteState': voteState};
-
+      List<dynamic> order = [];
+      fieldsOrder.forEach((key, value) {
+        order.add([key, value == 1 ? value : -1]);
+      });
       final resultModelContainer = await remoteDataSource.getPosts(
           orgaId,
           userId,
           flowId,
           stageId,
           searchText,
-          fieldsOrder,
+          order,
           pageIndex,
           pageSize,
           params,
@@ -385,17 +397,16 @@ class FlowRepositoryImpl implements FlowRepository {
       String flowId,
       String stageId,
       String postId,
-      int voteValue) async{
+      int voteValue) async {
     try {
-      
       final resultModelContainer = await remoteDataSource.votePublication(
-          orgaId,
-          userId,
-          flowId,
-          stageId,
-          postId,
-          voteValue,
-          );
+        orgaId,
+        userId,
+        flowId,
+        stageId,
+        postId,
+        voteValue,
+      );
 
       List<Vote> list = [];
 
