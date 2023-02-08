@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../sidedrawer/pages/sidedrawer_page.dart';
+import '../../sidedrawer/pages/sidedrawer_page.dart';
 
 class ToBeApprovedPage extends StatelessWidget {
   const ToBeApprovedPage({Key? key}) : super(key: key);

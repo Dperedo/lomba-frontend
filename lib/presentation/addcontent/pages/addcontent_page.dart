@@ -39,6 +39,7 @@ Widget _bodyAddContent(BuildContext context, AddContentState state) {
   final TextEditingController contentController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   var isChecked = false;
+  
   if(state is AddContentEmpty) {
     return Padding(
       padding: const EdgeInsets.all(25.0),
@@ -117,18 +118,19 @@ Widget _bodyAddContent(BuildContext context, AddContentState state) {
     return Center(
       child: Column(
         children: [
+          const SizedBox(
+                height: 100,
+              ),
           const Text('Agregado!'),
           const SizedBox(
                 height: 30,
               ),
-          SizedBox(
-            child: ElevatedButton.icon( 
-              icon: const Icon(Icons.add), 
-              label: const Text('Subir más contenido'),
-              onPressed: () {
-                context.read()<AddContentBloc>().add(OnAddContentUp());
-              }
-            ),
+          ElevatedButton.icon( 
+            icon: const Icon(Icons.add), 
+            label: const Text('Subir más contenido'),
+            onPressed: () {
+              context.read<AddContentBloc>().add(const OnAddContentUp());
+            }
           )
         ],
       ),

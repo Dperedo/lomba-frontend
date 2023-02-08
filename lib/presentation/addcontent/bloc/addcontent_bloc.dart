@@ -19,7 +19,6 @@ class AddContentBloc extends Bloc<AddContentEvent, AddContentState> {
   ): super(AddContentEmpty()) {
     on<OnAddContentAdd>((event, emit) async {
       emit(AddContentLoading());
-      //const flowId = '00000111-0111-0111-0111-000000000111';
       SessionModel? session;     
       bool login = false;
 
@@ -47,9 +46,11 @@ class AddContentBloc extends Bloc<AddContentEvent, AddContentState> {
     transformer: debounce(const Duration(milliseconds: 0)),
     );
 
-    on <OnAddContentUp>((event, emit) {
+    on<OnAddContentUp>((event, emit) {
       emit(AddContentEmpty());
-    });
+    },
+    transformer: debounce(const Duration(milliseconds: 0)),
+    );
   }
 
   //result.fold;

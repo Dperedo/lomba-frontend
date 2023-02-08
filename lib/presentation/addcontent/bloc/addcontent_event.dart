@@ -20,6 +20,8 @@ class OnAddContentAdd extends AddContentEvent {
 }
 
 class OnAddContentUp extends AddContentEvent {
+
+  const OnAddContentUp();
   @override
   List<Object> get props => [];
 }
