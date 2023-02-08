@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../../../../domain/entities/flows/textcontent.dart';
-import '../../../sidedrawer/pages/sidedrawer_page.dart';
-import '../../bloc/approved_bloc.dart';
-import '../../bloc/approved_event.dart';
-import '../../bloc/approved_state.dart';
+import '../../sidedrawer/pages/sidedrawer_page.dart';
+import '../bloc/approved_bloc.dart';
+import '../bloc/approved_event.dart';
+import '../bloc/approved_state.dart';
 
 ///Página con el contenido que el usuario revisor ha aprobado anteriormente.
 ///
