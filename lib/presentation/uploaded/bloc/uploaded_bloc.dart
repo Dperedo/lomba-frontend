@@ -21,11 +21,7 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
   final GetApprovedPosts _getApprovedPosts;
   final GetForApprovePosts _getForApprovePosts;
   final GetLatestPosts _getLatestPosts;
-  final GetPopularPosts _getPopularPosts;
-  final GetRejectedPosts _getRejectedPosts;
   final GetUploadedPosts _getUploadedPosts;
-  final GetVotedPosts _getVotedPosts;
-  final VotePublication _votePublication;
   final GetSession _getSession;
 
   UploadedBloc(
@@ -33,11 +29,7 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
       this._getApprovedPosts,
       this._getForApprovePosts,
       this._getLatestPosts,
-      this._getPopularPosts,
-      this._getRejectedPosts,
       this._getUploadedPosts,
-      this._getVotedPosts,
-      this._votePublication,
       this._getSession)
       : super(UploadedStart()) {
     on<OnUploadedLoad>((event, emit) async {
@@ -74,8 +66,8 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
               event.pageSize,
               r.items,
               r.currentItemCount,
-              r.totalItems ?? 0,
-              r.totalPages ?? 0)));
+              r.items.length ,
+              r.items.length )));
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {

@@ -55,8 +55,8 @@ class ProfilePage extends StatelessWidget {
     }
     if (state is ProfileLoaded) {
       return SizedBox(
-        height: 600,
-        width: 400,
+        
+        width: 600,
         child: Column(
           children: [
             const SizedBox(height: 40),

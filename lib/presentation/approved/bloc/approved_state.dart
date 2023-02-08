@@ -1,22 +1,50 @@
 import 'package:equatable/equatable.dart';
 
-abstract class AddrovedState extends Equatable {
-  const AddrovedState();
+import '../../../domain/entities/flows/post.dart';
+
+abstract class ApprovedState extends Equatable {
+  const ApprovedState();
 
   @override
   List<Object> get props => [];
 }
+class ApprovedStart extends ApprovedState {}
 
-class AddrovedStart extends AddrovedState {}
+class ApprovedLoading extends ApprovedState {}
 
-class AddrovedLoading extends AddrovedState {}
+class ApprovedLoaded extends ApprovedState{
+  final String orgaId;
+  final String userId;
+  final String flowId;
+  final String stageId;  
+  final String searchText;
+  final Map<String, int> fieldsOrder;
+  final int pageIndex;
+  final int pageSize;
+  final List<Post> listItems;
+  final int itemCount;
+  final int totalItems;
+  final int totalPages;
+  const ApprovedLoaded(
+      this.orgaId,
+      this.userId,
+      this.flowId,
+      this.stageId,      
+      this.searchText,
+      this.fieldsOrder,
+      this.pageIndex,
+      this.pageSize,
+      this.listItems,
+      this.itemCount,
+      this.totalItems,
+      this.totalPages);
+}
 
-class AddrovedError extends AddrovedState {
+class ApprovedError extends ApprovedState {
   final String message;
 
-  const AddrovedError(this.message);
+  const ApprovedError(this.message);
 
   @override
   List<Object> get props => [message];
 }
-
