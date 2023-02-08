@@ -1,24 +1,22 @@
 import 'package:equatable/equatable.dart';
-import 'package:lomba_frontend/domain/entities/flows/post.dart';
 
+import '../../../domain/entities/flows/post.dart';
 
-abstract class UploadedState extends Equatable {
-  const UploadedState();
+abstract class ApprovedState extends Equatable {
+  const ApprovedState();
 
   @override
   List<Object> get props => [];
 }
+class ApprovedStart extends ApprovedState {}
 
-class UploadedStart extends UploadedState {}
+class ApprovedLoading extends ApprovedState {}
 
-class UploadedLoading extends UploadedState {}
-
-class UploadedLoaded extends UploadedState {
+class ApprovedLoaded extends ApprovedState{
   final String orgaId;
   final String userId;
   final String flowId;
-  final String stageId;
-  final bool onlyDrafts;
+  final String stageId;  
   final String searchText;
   final Map<String, int> fieldsOrder;
   final int pageIndex;
@@ -27,12 +25,12 @@ class UploadedLoaded extends UploadedState {
   final int itemCount;
   final int totalItems;
   final int totalPages;
-  const UploadedLoaded(
+  
+  const ApprovedLoaded(
       this.orgaId,
       this.userId,
       this.flowId,
-      this.stageId,
-      this.onlyDrafts,
+      this.stageId,      
       this.searchText,
       this.fieldsOrder,
       this.pageIndex,
@@ -40,13 +38,14 @@ class UploadedLoaded extends UploadedState {
       this.listItems,
       this.itemCount,
       this.totalItems,
-      this.totalPages);
+      this.totalPages,
+      );
 }
 
-class UploadedError extends UploadedState {
+class ApprovedError extends ApprovedState {
   final String message;
 
-  const UploadedError(this.message);
+  const ApprovedError(this.message);
 
   @override
   List<Object> get props => [message];
