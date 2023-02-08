@@ -6,6 +6,7 @@ abstract class ApprovedEvent extends Equatable{
   @override
   List<Object?> get props => [];
 }
+
 class OnApprovedLoad extends ApprovedEvent {
   
   final String searchText;

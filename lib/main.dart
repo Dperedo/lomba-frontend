@@ -8,6 +8,7 @@ import 'package:lomba_frontend/presentation/approved/pages/approved_page.dart';
 import 'package:lomba_frontend/presentation/login/pages/login_page.dart';
 import 'package:lomba_frontend/presentation/orgas/pages/orgas_page.dart';
 import 'package:lomba_frontend/presentation/popular/presentation/pages/popular_page.dart';
+import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_bloc.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/pages/tobeapproved_page.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/presentation/pages/uploaded_page.dart';
@@ -70,6 +71,7 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<UploadedBloc>()),
         BlocProvider(create: (_) => di.locator<AddContentBloc>()),
         BlocProvider(create: (_) => di.locator<ApprovedBloc>()),
+        BlocProvider(create: (_) => di.locator<ToBeApprovedBloc>()),
       ],
       child: MaterialApp(
           title: 'App Demo',
