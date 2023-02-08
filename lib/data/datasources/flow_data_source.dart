@@ -174,7 +174,7 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
         //completar con lógica
         List<PostItem> listPostItems = (item['postitems'] as List)
             .map((e) => PostItem(
-                content: TextContent(text: e['content'].toString()),
+                content: TextContent(text: e['content']['text'].toString()),
                 type: e['type'].toString(),
                 order: int.parse(e['order'].toString()),
                 format: e['format'].toString(),
@@ -224,7 +224,7 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
           id: item['id'].toString(),
           enabled: item['enabled'].toString().toLowerCase() == 'true',
           builtIn: item['builtIn'].toString().toLowerCase() == 'true',
-          title: item['titles'].toString(),
+          title: item['title'].toString(),
           orgaId: item['orgaId'].toString(),
           userId: item['userId'].toString(),
           flowId: item['flowId'].toString(),
