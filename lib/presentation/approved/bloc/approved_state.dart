@@ -25,6 +25,7 @@ class ApprovedLoaded extends ApprovedState{
   final int itemCount;
   final int totalItems;
   final int totalPages;
+  
   const ApprovedLoaded(
       this.orgaId,
       this.userId,
@@ -37,7 +38,8 @@ class ApprovedLoaded extends ApprovedState{
       this.listItems,
       this.itemCount,
       this.totalItems,
-      this.totalPages);
+      this.totalPages,
+      );
 }
 
 class ApprovedError extends ApprovedState {

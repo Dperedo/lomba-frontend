@@ -19,6 +19,7 @@ class ApprovedPage extends StatelessWidget {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final int _fixPageSize = 8;
   
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +37,7 @@ class ApprovedPage extends StatelessWidget {
 
   Widget _bodyApproved(BuildContext context){
 
-    List<String> listFields = <String>["uploaded", "sent", 'approved'];
+    List<String> listFields = <String>["uploaded", "sent",];
     return SizedBox(
       width: 800,
       child:Form(
@@ -181,35 +182,13 @@ class ApprovedPage extends StatelessWidget {
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [   
-                                            ElevatedButton(
-                                              style: ButtonStyle(
-                                                shape: MaterialStateProperty.resolveWith(
-                                                  (states) => RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(20),
-                                                      side: BorderSide(
-                                                        color: Theme.of(context).secondaryHeaderColor,
-                                                        width: 2,
-                                                      ),
-                                                  ),
-                                                ),
-                                              ),
+                                            IconButton(                                         
                                               onPressed:(){},
-                                              child: const Icon(Icons.cancel_outlined)
+                                              icon: const Icon(Icons.cancel_outlined)
                                             ),                                          
-                                            ElevatedButton(
-                                              style: ButtonStyle(
-                                                shape: MaterialStateProperty.resolveWith(
-                                                  (states) => RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(20.0),
-                                                      side: BorderSide(
-                                                        color: Theme.of(context).secondaryHeaderColor,
-                                                        width: 2,
-                                                      ),
-                                                  ),
-                                                ),
-                                              ),
-                                              onPressed:(){},
-                                              child: const Icon(Icons.check_circle_outline)
+                                            const IconButton(
+                                              icon: Icon(Icons.check_circle_outline),                                                                                
+                                              onPressed:null,                                        
                                             ),
                                           ],                                         
                                         ),

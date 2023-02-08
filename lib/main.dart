@@ -7,6 +7,7 @@ import 'package:lomba_frontend/presentation/approved/presentation/pages/approved
 import 'package:lomba_frontend/presentation/login/pages/login_page.dart';
 import 'package:lomba_frontend/presentation/orgas/pages/orgas_page.dart';
 import 'package:lomba_frontend/presentation/popular/presentation/pages/popular_page.dart';
+import 'package:lomba_frontend/presentation/rejected/bloc/rejected_bloc.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/presentation/pages/tobeapproved_page.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/presentation/pages/uploaded_page.dart';
@@ -67,7 +68,8 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<ProfileBloc>()),
         BlocProvider(create: (_) => di.locator<DemoListBloc>()),
         BlocProvider(create: (_) => di.locator<UploadedBloc>()),
-        BlocProvider(create: (_) => di.locator<ApprovedBloc>())
+        BlocProvider(create: (_) => di.locator<ApprovedBloc>()),
+        BlocProvider(create: (_) => di.locator<RejectedBloc>())
       ],
       child: MaterialApp(
           title: 'App Demo',
@@ -115,7 +117,7 @@ class _MyApp extends State<MyApp> {
     }
 
     if (state.selectedItem == NavItem.pageRejected) {
-      return const RejectedPage();
+      return RejectedPage();
     }
 
     if (state.selectedItem == NavItem.pageToBeApproved) {
