@@ -123,7 +123,7 @@ class _MyApp extends State<MyApp> {
     }
 
     if (state.selectedItem == NavItem.pageToBeApproved) {
-      return const ToBeApprovedPage();
+      return ToBeApprovedPage();
     }
     if (state.selectedItem == NavItem.pageUploaded) {
       return UploadedPage();
