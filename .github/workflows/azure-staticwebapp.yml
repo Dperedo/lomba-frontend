@@ -14,7 +14,7 @@ name: Deploy flutter web Lomba app to Azure SWA
 
 on:
   push:
-    branches: [ "miguel" ]
+    branches: [ "master" ]
 
 # Environment variables available to all jobs and steps in this workflow
 env:
