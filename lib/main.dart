@@ -110,7 +110,7 @@ class _MyApp extends State<MyApp> {
     }
 
     if (state.selectedItem == NavItem.pageAddContent) {
-      return const AddContentPage();
+      return AddContentPage();
     }
 
     if (state.selectedItem == NavItem.pageApproved) {

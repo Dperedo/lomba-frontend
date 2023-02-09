@@ -1,13 +1,10 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:html';
+
 import 'package:http/http.dart' as http;
-import 'package:dartz/dartz.dart';
-import 'package:http/http.dart';
 import 'package:lomba_frontend/domain/entities/flows/textcontent.dart';
+
 import '../../core/constants.dart';
 import '../../core/exceptions.dart';
-import '../../core/failures.dart';
 import '../../core/model_container.dart';
 import '../../domain/entities/flows/post.dart';
 import '../../domain/entities/flows/postitem.dart';
@@ -420,11 +417,19 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
   @override
   Future<ModelContainer<Vote>> votePublication(String orgaId, String userId,
       String flowId, String stageId, String postId, int voteValue) async {
-    final url = Uri.parse(
-        '${UrlBackend.base}/api/v1/post/box?orgaId=$orgaId&userId=$userId&flowId=$flowId&stageId=$stageId&voteValue=$voteValue');
+    final Map<String, dynamic> newVote = {
+      'userId': userId,
+      'flowId': flowId,
+      'stageId': stageId,
+      'postId': postId,
+      'voteValue': voteValue
+    };
+
+    final url = Uri.parse('${UrlBackend.base}/api/v1/post/vote');
     final session = await localDataSource.getSavedSession();
 
-    http.Response resp = await client.get(url, headers: {
+    http.Response resp =
+        await client.post(url, body: json.encode(newVote), headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",

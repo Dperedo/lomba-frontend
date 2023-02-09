@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/validators.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart';
+import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_cubit.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_event.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_state.dart';
 
@@ -12,7 +13,11 @@ import '../../sidedrawer/pages/sidedrawer_page.dart';
 ///Esta página será accedida por los usuarios clientes del sistema
 ///que quieran agregar contenido.
 class AddContentPage extends StatelessWidget {
-  const AddContentPage({Key? key}) : super(key: key);
+  AddContentPage({Key? key}) : super(key: key);
+
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +28,11 @@ class AddContentPage extends StatelessWidget {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                _bodyAddContent(context, state),
+                BlocProvider<AddContentLiveCubit>(
+                  create: (context) => AddContentLiveCubit(),
+                  child: _bodyAddContent(context, state, _titleController,
+                      _contentController, _key),
+                ),
               ],
             ),
           ),
@@ -34,29 +43,27 @@ class AddContentPage extends StatelessWidget {
   }
 }
 
-Widget _bodyAddContent(BuildContext context, AddContentState state) {
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController contentController = TextEditingController();
-  final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  var isChecked = false;
-  
-  if(state is AddContentEmpty) {
+Widget _bodyAddContent(
+    BuildContext context,
+    AddContentState state,
+    TextEditingController titleController,
+    TextEditingController contentController,
+    GlobalKey<FormState> key) {
+  if (state is AddContentEmpty) {
     return Padding(
       padding: const EdgeInsets.all(25.0),
       child: SizedBox(
         child: Form(
-          key: _key,
+          key: key,
           child: Column(
             children: [
               TextFormField(
-                key:  const ValueKey('txtTitle'),
+                key: const ValueKey('txtTitle'),
                 maxLength: 150,
                 controller: titleController,
                 validator: (value) => Validators.validateName(value ?? ""),
                 decoration: const InputDecoration(
-                  labelText: 'Titulo',
-                  icon:  Icon(Icons.title)
-                ),
+                    labelText: 'Titulo', icon: Icon(Icons.title)),
               ),
               const SizedBox(
                 height: 20,
@@ -78,13 +85,16 @@ Widget _bodyAddContent(BuildContext context, AddContentState state) {
               Row(
                 children: [
                   const Text('Dejar como borrador'),
-                  Checkbox(
-                    value: isChecked, 
-                    onChanged: (bool? value) {
-                      /*setState(() {
-                        isChecked = value!;
-                      });*/
-                      isChecked = value!;
+                  BlocBuilder<AddContentLiveCubit, AddContentLiveState>(
+                    builder: (context, statecubit) {
+                      return Checkbox(
+                        value: statecubit.checks["keepasdraft"]!,
+                        onChanged: (bool? value) {
+                          context.read<AddContentLiveCubit>().changeValue(
+                              "keepasdraft",
+                              !statecubit.checks["keepasdraft"]!);
+                        },
+                      );
                     },
                   )
                 ],
@@ -100,9 +110,17 @@ Widget _bodyAddContent(BuildContext context, AddContentState state) {
                   key: const ValueKey("btnSavedUp"),
                   label: const Text("Subir"),
                   onPressed: () {
-                    if (_key.currentState?.validate() == true)
-                    {context.read<AddContentBloc>().add(OnAddContentAdd(
-                      '00000111-0111-0111-0111-000000000111', titleController.text, contentController.text, isChecked));
+                    final AddContentLiveState checkos =
+                        context.read<AddContentLiveCubit>().state;
+
+                    if (key.currentState?.validate() == true) {
+                      context.read<AddContentBloc>().add(OnAddContentAdd(
+                          titleController.text,
+                          contentController.text,
+                          context
+                              .read<AddContentLiveCubit>()
+                              .state
+                              .checks["keepasdraft"]!));
                     }
                   },
                 ),
@@ -114,39 +132,39 @@ Widget _bodyAddContent(BuildContext context, AddContentState state) {
     );
   }
 
-  if(state is AddContentUp) {
+  if (state is AddContentUp) {
     return Center(
       child: Column(
         children: [
           const SizedBox(
-                height: 100,
-              ),
+            height: 100,
+          ),
           const Text('Agregado!'),
           const SizedBox(
-                height: 30,
-              ),
-          ElevatedButton.icon( 
-            icon: const Icon(Icons.add), 
-            label: const Text('Subir más contenido'),
-            onPressed: () {
-              context.read<AddContentBloc>().add(const OnAddContentUp());
-            }
-          )
+            height: 30,
+          ),
+          ElevatedButton.icon(
+              icon: const Icon(Icons.add),
+              label: const Text('Subir más contenido'),
+              onPressed: () {
+                context.read<AddContentBloc>().add(const OnAddContentUp());
+              })
         ],
       ),
     );
   }
 
-  if(state is AddContentLoading) {
+  if (state is AddContentLoading) {
     return const Center(
       child: CircularProgressIndicator(),
     );
   }
 
-  if(state is AddContentError) {
-    return Center(child: Text(state.message),);
+  if (state is AddContentError) {
+    return Center(
+      child: Text(state.message),
+    );
   }
 
   return const SizedBox();
 }
-

@@ -14,7 +14,6 @@ class UploadedPage extends StatelessWidget {
   final TextEditingController _searchController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final int _fixPageSize = 8;
-  bool _sliderEnable = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +40,14 @@ class UploadedPage extends StatelessWidget {
                 builder: (context, state) {
               if (state is UploadedStart) {
                 context.read<UploadedBloc>().add(OnUploadedLoad(
-                    '', const <String, int>{'created': 1}, 1, _fixPageSize));
+                    '',
+                    const <String, int>{'created': 1},
+                    1,
+                    _fixPageSize,
+                    context
+                        .read<UploadedLiveCubit>()
+                        .state
+                        .checks["onlydrafts"]!));
               }
               if (state is UploadedLoading) {
                 return const Center(
@@ -84,7 +90,11 @@ class UploadedPage extends StatelessWidget {
                                               state.fieldsOrder.keys.first: 1
                                             },
                                             1,
-                                            _fixPageSize));
+                                            _fixPageSize,
+                                            context
+                                                .read<UploadedLiveCubit>()
+                                                .state
+                                                .checks["onlydrafts"]!));
                                   },
                                   icon: const Icon(Icons.search)),
                             ],
@@ -93,14 +103,24 @@ class UploadedPage extends StatelessWidget {
                             height: 8,
                           ),
                           BlocBuilder<UploadedLiveCubit, UploadedLiveState>(
-                            builder: (context, state) {
+                            builder: (context, statecubit) {
                               return SwitchListTile.adaptive(
                                 title: const Text('Mostrar solo borradores'),
-                                value: state.checks["onlydrafts"]!,
+                                value: statecubit.checks["onlydrafts"]!,
                                 onChanged: (value) {
                                   context.read<UploadedLiveCubit>().changeValue(
                                       "onlydrafts",
-                                      !state.checks["onlydrafts"]!);
+                                      !statecubit.checks["onlydrafts"]!);
+
+                                  context.read<UploadedBloc>().add(
+                                      OnUploadedLoad(
+                                          _searchController.text,
+                                          <String, int>{
+                                            state.fieldsOrder.keys.first: 1
+                                          },
+                                          1,
+                                          _fixPageSize,
+                                          statecubit.checks["onlydrafts"]!));
                                 },
                               );
                             },
@@ -126,7 +146,11 @@ class UploadedPage extends StatelessWidget {
                                             state.fieldsOrder.keys.first: 1
                                           },
                                           value,
-                                          _fixPageSize))),
+                                          _fixPageSize,
+                                          context
+                                              .read<UploadedLiveCubit>()
+                                              .state
+                                              .checks["onlydrafts"]!))),
                               const VerticalDivider(),
                               const Text("Orden:"),
                               const VerticalDivider(),
@@ -145,7 +169,11 @@ class UploadedPage extends StatelessWidget {
                                           state.searchText,
                                           <String, int>{value!: 1},
                                           state.pageIndex,
-                                          _fixPageSize));
+                                          _fixPageSize,
+                                          context
+                                              .read<UploadedLiveCubit>()
+                                              .state
+                                              .checks["onlydrafts"]!));
                                 },
                               )
                             ],
