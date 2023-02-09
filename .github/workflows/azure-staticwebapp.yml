@@ -10,11 +10,11 @@
 #
 # 3. Change the values for the APP_LOCATION, API_LOCATION and APP_ARTIFACT_LOCATION, AZURE_STATIC_WEB_APPS_API_TOKEN environment variables (below).
 #    For instructions on setting up the appropriate configuration values go to https://docs.microsoft.com/azure/static-web-apps/front-end-frameworks
-name: Deploy web app to Azure Static Web Apps
+name: Deploy flutter web Lomba app to Azure SWA
 
 on:
   push:
-    branches: [ "miguel" ]
+    branches: [ "master" ]
 
 # Environment variables available to all jobs and steps in this workflow
 env:
@@ -59,6 +59,22 @@ jobs:
           api_location: ${{ env.API_LOCATION }}
           app_artifact_location: ${{ env.APP_ARTIFACT_LOCATION }}
           ###### End of Repository/Build Configurations ######
+
+  slackNotification:
+    name: Slack Notification
+    runs-on: ubuntu-latest
+    needs: build_and_deploy_job
+    steps:
+    - uses: actions/checkout@v2
+    - name: Slack Notification
+      uses: rtCamp/action-slack-notify@v2.2.0
+      env:
+        SLACK_COLOR: ${{ job.status }}
+        SLACK_ICON: https://github.com/rtCamp.png?size=48
+        SLACK_MESSAGE: '...build and deploy :rocket:'
+        SLACK_TITLE: Publicación de FRONTEND
+        SLACK_USERNAME: github      
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
   close_pull_request_job:
     permissions:

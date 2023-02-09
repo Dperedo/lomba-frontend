@@ -23,6 +23,7 @@ import 'package:lomba_frontend/domain/usecases/sidedrawer/do_logoff.dart';
 import 'package:lomba_frontend/domain/usecases/users/get_users_notin_orga.dart';
 import 'package:lomba_frontend/domain/usecases/users/update_user_password.dart';
 import 'package:lomba_frontend/presentation/popular/bloc/popular_bloc.dart';
+import 'package:lomba_frontend/presentation/rejected/bloc/rejected_bloc.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
 import 'package:lomba_frontend/presentation/users/bloc/user_bloc.dart';
@@ -117,18 +118,13 @@ Future<void> init() async {
 
   locator.registerFactory(() => ProfileBloc(locator(), locator()));
   locator.registerFactory(() => DemoListBloc());
-  
+
   locator.registerFactory(() => UploadedBloc(
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator()));
-  
-  locator.registerFactory(() => ApprovedBloc(
-      locator(),
-      locator(),));
+      locator(), locator(), locator(), locator(), locator(), locator()));
+
+  locator.registerFactory(() => ApprovedBloc(locator(), locator()));
+
+  locator.registerFactory(() => RejectedBloc(locator(), locator()));
   locator.registerFactory(() => ToBeApprovedBloc(
       locator(),
       locator(),));

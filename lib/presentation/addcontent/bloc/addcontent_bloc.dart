@@ -15,41 +15,52 @@ class AddContentBloc extends Bloc<AddContentEvent, AddContentState> {
   final GetSession _getSession;
 
   AddContentBloc(
-    this._addTextPost, this._hasLogIn, this._getSession,
-  ): super(AddContentEmpty()) {
-    on<OnAddContentAdd>((event, emit) async {
-      emit(AddContentLoading());
-      SessionModel? session;     
-      bool login = false;
+    this._addTextPost,
+    this._hasLogIn,
+    this._getSession,
+  ) : super(AddContentEmpty()) {
+    on<OnAddContentAdd>(
+      (event, emit) async {
+        emit(AddContentLoading());
+        SessionModel? session;
+        bool login = false;
+        const String flowId = '00000111-0111-0111-0111-000000000111';
 
-      final resultLogIn = await _hasLogIn.execute();
+        final resultLogIn = await _hasLogIn.execute();
         resultLogIn.fold((failure) => {}, (r) => {login = r});
 
-      if(login) {
-        final resultSession = await _getSession.execute();
-        resultSession.fold(
+        if (login) {
+          final resultSession = await _getSession.execute();
+          resultSession.fold(
               (failure) => {},
               (r) => {
                     session = SessionModel(
                         token: r.token, username: r.username, name: r.name)
                   });
 
-        final userId = session?.getUserId();
-        final orgaId = session?.getOrgaId();
+          final userId = session?.getUserId();
+          final orgaId = session?.getOrgaId();
 
-        final result = await _addTextPost.execute(orgaId!, userId!,TextContent(text: event.text), event.title, event.flowId, event.isDraft);
+          final result = await _addTextPost.execute(
+              orgaId!,
+              userId!,
+              TextContent(text: event.text),
+              event.title,
+              flowId,
+              event.isDraft);
 
-        result.fold((l) => emit(AddContentError(l.message)), (r) => emit(AddContentUp()));
-      }
-
-    },
-    transformer: debounce(const Duration(milliseconds: 0)),
+          result.fold((l) => emit(AddContentError(l.message)),
+              (r) => emit(AddContentUp()));
+        }
+      },
+      transformer: debounce(const Duration(milliseconds: 0)),
     );
 
-    on<OnAddContentUp>((event, emit) {
-      emit(AddContentEmpty());
-    },
-    transformer: debounce(const Duration(milliseconds: 0)),
+    on<OnAddContentUp>(
+      (event, emit) {
+        emit(AddContentEmpty());
+      },
+      transformer: debounce(const Duration(milliseconds: 0)),
     );
   }
 

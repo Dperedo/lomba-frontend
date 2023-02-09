@@ -11,6 +11,7 @@ import 'package:lomba_frontend/presentation/popular/bloc/popular_bloc.dart';
 import 'package:lomba_frontend/presentation/popular/pages/popular_page.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_bloc.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/pages/tobeapproved_page.dart';
+import 'package:lomba_frontend/presentation/rejected/bloc/rejected_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/presentation/pages/uploaded_page.dart';
 import 'package:lomba_frontend/presentation/viewed/presentation/pages/viewed_page.dart';
@@ -43,7 +44,7 @@ Future<void> main() async {
   );
 
   await di.init();
-  print("1.0.0.1");
+  print("1.0.0.2");
   runApp(const MyApp());
 }
 
@@ -70,6 +71,8 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<ProfileBloc>()),
         BlocProvider(create: (_) => di.locator<DemoListBloc>()),
         BlocProvider(create: (_) => di.locator<UploadedBloc>()),
+        BlocProvider(create: (_) => di.locator<ApprovedBloc>()),
+        BlocProvider(create: (_) => di.locator<RejectedBloc>()),
         BlocProvider(create: (_) => di.locator<AddContentBloc>()),
         BlocProvider(create: (_) => di.locator<ApprovedBloc>()),
         BlocProvider(create: (_) => di.locator<ToBeApprovedBloc>()),
@@ -109,7 +112,7 @@ class _MyApp extends State<MyApp> {
     }
 
     if (state.selectedItem == NavItem.pageAddContent) {
-      return const AddContentPage();
+      return AddContentPage();
     }
 
     if (state.selectedItem == NavItem.pageApproved) {
@@ -121,7 +124,7 @@ class _MyApp extends State<MyApp> {
     }
 
     if (state.selectedItem == NavItem.pageRejected) {
-      return const RejectedPage();
+      return RejectedPage();
     }
 
     if (state.selectedItem == NavItem.pageToBeApproved) {
