@@ -22,6 +22,7 @@ import 'package:lomba_frontend/domain/usecases/orgas/add_orga.dart';
 import 'package:lomba_frontend/domain/usecases/sidedrawer/do_logoff.dart';
 import 'package:lomba_frontend/domain/usecases/users/get_users_notin_orga.dart';
 import 'package:lomba_frontend/domain/usecases/users/update_user_password.dart';
+import 'package:lomba_frontend/presentation/popular/bloc/popular_bloc.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
 import 'package:lomba_frontend/presentation/users/bloc/user_bloc.dart';
@@ -132,6 +133,7 @@ Future<void> init() async {
       locator(),
       locator(),));
   locator.registerFactory(() => AddContentBloc(locator(), locator(), locator()));
+  locator.registerFactory(() => PopularBloc(locator(), locator(), locator(), locator()));
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));
