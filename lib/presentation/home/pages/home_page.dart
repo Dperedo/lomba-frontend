@@ -28,14 +28,14 @@ class HomePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Center(
           child: Column(
-            children: [_bodyUploaded(context)],
+            children: [_bodyHome(context)],
           ),
         )
       ),
     );
   }
       
-Widget _bodyUploaded(BuildContext context){
+Widget _bodyHome(BuildContext context){
     
     List<String> listFields = <String>["created", "publicated"];
     return SizedBox(

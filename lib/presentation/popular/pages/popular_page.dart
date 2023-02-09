@@ -28,14 +28,14 @@ class PopularPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Center(
           child: Column(
-            children: [_bodyUploaded(context)],
+            children: [_bodyPopular(context)],
           ),
         )
       ),
     );
   }
       
-Widget _bodyUploaded(BuildContext context){
+Widget _bodyPopular(BuildContext context){
     
     List<String> listFields = <String>["created", "publicated"];
     return SizedBox(

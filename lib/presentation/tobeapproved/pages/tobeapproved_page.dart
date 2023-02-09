@@ -14,7 +14,6 @@ class ToBeApprovedPage extends StatelessWidget {
   final TextEditingController _searchController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final int _fixPageSize = 8;
-  bool _sliderEnable = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +21,7 @@ class ToBeApprovedPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Center(
           child: Column(
-            children: [_bodyUploaded(context)],
+            children: [_bodyToBeApproved(context)],
           ),
         )
       ),
@@ -30,7 +29,7 @@ class ToBeApprovedPage extends StatelessWidget {
     );
   }
 
-  Widget _bodyUploaded(BuildContext context){
+  Widget _bodyToBeApproved(BuildContext context){
     
     List<String> listFields = <String>["created", "publicated"];
     return SizedBox(
