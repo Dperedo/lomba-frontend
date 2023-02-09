@@ -10,10 +10,17 @@ abstract class HomeEvent extends Equatable {
 
 ///Evento que ocurre cuando se comienza a cargar la página de Home.
 class OnHomeLoading extends HomeEvent {
-  const OnHomeLoading();
+  final String searchText;
+  final Map<String, int> fieldsOrder;
+  final int pageIndex;
+  final int pageSize;
+
+  const OnHomeLoading(
+    this.searchText, this.fieldsOrder, this.pageIndex, this.pageSize
+  );
 
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [searchText, fieldsOrder, pageIndex, pageSize];
 }
 
 ///Evento ocurre cuando la página de Home ya fue cargada

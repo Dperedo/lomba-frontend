@@ -91,7 +91,7 @@ class _MyApp extends State<MyApp> {
 
   _bodyForState(NavState state) {
     if (state.selectedItem == NavItem.pageHome) {
-      return const HomePage();
+      return HomePage();
     }
     if (state.selectedItem == NavItem.pageLogin) {
       return LoginPage();

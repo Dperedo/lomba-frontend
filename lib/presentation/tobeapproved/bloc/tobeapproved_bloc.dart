@@ -48,8 +48,9 @@ class ToBeApprovedBloc extends Bloc<ToBeApprovedEvent, ToBeApprovedState>{
               event.pageSize,
               r.items,
               r.currentItemCount,
-              r.items.length ,
-              r.items.length )));
+              r.items.length,
+              r.items.length
+              )));
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {
