@@ -3,17 +3,12 @@ import 'package:lomba_frontend/domain/usecases/flow/add_text_post.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_approved_posts.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_for_approve_posts.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_latest_posts.dart';
-import 'package:lomba_frontend/domain/usecases/flow/get_popular_posts.dart';
-import 'package:lomba_frontend/domain/usecases/flow/get_rejected_posts.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_uploaded_posts.dart';
-import 'package:lomba_frontend/domain/usecases/flow/get_voted_posts.dart';
-import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_event.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/upoaded_state.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../../core/fakedata.dart';
 import '../../../data/models/session_model.dart';
 
 class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
@@ -46,7 +41,7 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
           auth.getUserId()!,
           flowId,
           stageId,
-          false,
+          event.onlydrafts,
           event.searchText,
           event.fieldsOrder,
           event.pageIndex,
@@ -66,8 +61,8 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
               event.pageSize,
               r.items,
               r.currentItemCount,
-              r.items.length ,
-              r.items.length )));
+              r.items.length,
+              r.items.length)));
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {

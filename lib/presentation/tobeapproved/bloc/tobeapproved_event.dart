@@ -1,20 +1,20 @@
 import 'package:equatable/equatable.dart';
 
-abstract class ApprovedEvent extends Equatable{
-  const ApprovedEvent();
+abstract class ToBeApprovedEvent extends Equatable{
+  const ToBeApprovedEvent();
 
   @override
   List<Object?> get props => [];
 }
 
-class OnApprovedLoad extends ApprovedEvent {
+class OnToBeApprovedLoad extends ToBeApprovedEvent {
   
   final String searchText;
   final Map<String, int> fieldsOrder;
   final int pageIndex;
   final int pageSize;
 
-  const OnApprovedLoad(
+  const OnToBeApprovedLoad(
     this.searchText, this.fieldsOrder, this.pageIndex, this.pageSize
   );
 

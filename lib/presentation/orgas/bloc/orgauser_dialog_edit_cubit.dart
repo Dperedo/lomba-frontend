@@ -15,16 +15,6 @@ class OrgaUserDialogEditCubit extends Cubit<OrgaUserDialogEditState> {
   void changeValue(String name, bool value) {
     emit(state.copyWith(name: name, changeState: value));
   }
-
-  void setValues(Map<String, bool> values) {
-    state.checks.addEntries(values.entries);
-  }
-
-  void cleanValues() {
-    state.checks.forEach((key, value) {
-      state.checks[key] = false;
-    });
-  }
 }
 
 class OrgaUserDialogEditState {

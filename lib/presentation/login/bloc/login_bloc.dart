@@ -90,7 +90,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     on<OnLoginWithGoogle>(
       (event, emit) async {
+        emit(LoginGetting());
         UserCredential? credentials;
+
+        List<Orga> listorgas = [];
+        SessionModel? session;
 
         if (kIsWeb) {
           try {
@@ -116,8 +120,26 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           String userToken = await credentials.user!.getIdToken();
 
           final result = await _getAuthenticateGoogle.execute(user, userToken);
-          result.fold((failure) => {emit(LoginError(failure.message))},
-              (token) => {emit(const LoginGoted(null))});
+          result.fold((failure) {
+            emit(LoginError(failure.message));
+            return;
+          }, (r) {
+            session = SessionModel(
+                token: r.token, username: r.username, name: r.name);
+          });
+
+          if (session != null && session?.getOrgaId() == null) {
+            final userId = session?.getUserId();
+            final resultOrgas = await _getOrgasByUser.execute(userId!);
+
+            resultOrgas.fold((failure) => {emit(LoginError(failure.message))},
+                (r) {
+              listorgas = r;
+            });
+            emit(LoginSelectOrga(listorgas, session!.username));
+          } else {
+            emit(LoginGoted(session));
+          }
         }
       },
     );

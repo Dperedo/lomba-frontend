@@ -1,21 +1,23 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart';
 import 'package:lomba_frontend/presentation/approved/bloc/approved_bloc.dart';
 import 'package:lomba_frontend/presentation/nav/bloc/nav_bloc.dart';
-import 'package:lomba_frontend/presentation/approved/presentation/pages/approved_page.dart';
+import 'package:lomba_frontend/presentation/approved/pages/approved_page.dart';
 import 'package:lomba_frontend/presentation/login/pages/login_page.dart';
 import 'package:lomba_frontend/presentation/orgas/pages/orgas_page.dart';
 import 'package:lomba_frontend/presentation/popular/presentation/pages/popular_page.dart';
 import 'package:lomba_frontend/presentation/rejected/bloc/rejected_bloc.dart';
-import 'package:lomba_frontend/presentation/tobeapproved/presentation/pages/tobeapproved_page.dart';
+import 'package:lomba_frontend/presentation/tobeapproved/pages/tobeapproved_page.dart';
+import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/presentation/pages/uploaded_page.dart';
 import 'package:lomba_frontend/presentation/voted/presentation/pages/voted_page.dart';
 import 'package:lomba_frontend/presentation/voted/voted_bloc/voted_bloc.dart';
 
 import 'presentation/nav/bloc/nav_state.dart';
-import 'presentation/addcontent/presentation/pages/addcontent_page.dart';
+import 'presentation/addcontent/pages/addcontent_page.dart';
 import 'presentation/demolist/bloc/demolist_bloc.dart';
 import 'presentation/demolist/pages/demolist_page.dart';
 import 'presentation/home/bloc/home_bloc.dart';
@@ -42,7 +44,7 @@ Future<void> main() async {
   );
 
   await di.init();
-
+  print("1.0.0.2");
   runApp(const MyApp());
 }
 
@@ -71,7 +73,10 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<UploadedBloc>()),
         BlocProvider(create: (_) => di.locator<ApprovedBloc>()),
         BlocProvider(create: (_) => di.locator<RejectedBloc>()),
-        BlocProvider(create: (_) => di.locator<VotedBloc>())
+        BlocProvider(create: (_) => di.locator<VotedBloc>()),
+        BlocProvider(create: (_) => di.locator<AddContentBloc>()),
+        
+        BlocProvider(create: (_) => di.locator<ToBeApprovedBloc>()),
       ],
       child: MaterialApp(
           title: 'App Demo',
@@ -107,7 +112,7 @@ class _MyApp extends State<MyApp> {
     }
 
     if (state.selectedItem == NavItem.pageAddContent) {
-      return const AddContentPage();
+      return AddContentPage();
     }
 
     if (state.selectedItem == NavItem.pageApproved) {
@@ -123,7 +128,7 @@ class _MyApp extends State<MyApp> {
     }
 
     if (state.selectedItem == NavItem.pageToBeApproved) {
-      return const ToBeApprovedPage();
+      return ToBeApprovedPage();
     }
     if (state.selectedItem == NavItem.pageUploaded) {
       return UploadedPage();

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:lomba_frontend/core/failures.dart';
 
+import '../../entities/session.dart';
 import '../../entities/user.dart';
 import '../../repositories/login_repository.dart';
 
@@ -12,7 +13,8 @@ import '../../repositories/login_repository.dart';
 class GetAuthenticateGoogle {
   final LoginRepository repository;
   GetAuthenticateGoogle(this.repository);
-  Future<Either<Failure, bool>> execute(User user, String googleToken) async {
+  Future<Either<Failure, Session>> execute(
+      User user, String googleToken) async {
     return await repository.getAuthenticateGoogle(user, googleToken);
   }
 }
