@@ -49,13 +49,13 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
     final Map<String, dynamic> newTextPost = {
       'userId': userId,
       'orgaId': orgaId,
-      'textContent': text,
-      'title': title,
       'flowId': flowId,
-      'isdraft': false
+      'title': title,
+      'textContent': {'text': text.text},
+      'isdraft': isDraft
     };
-    final url = Uri.parse('${UrlBackend.base}/api/v1/post');
     final session = await localDataSource.getSavedSession();
+    final url = Uri.parse('${UrlBackend.base}/api/v1/post');
 
     http.Response resp =
         await client.post(url, body: json.encode(newTextPost), headers: {
