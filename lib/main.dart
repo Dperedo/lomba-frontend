@@ -11,7 +11,8 @@ import 'package:lomba_frontend/presentation/rejected/bloc/rejected_bloc.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/presentation/pages/tobeapproved_page.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/presentation/pages/uploaded_page.dart';
-import 'package:lomba_frontend/presentation/viewed/presentation/pages/viewed_page.dart';
+import 'package:lomba_frontend/presentation/voted/presentation/pages/voted_page.dart';
+import 'package:lomba_frontend/presentation/voted/voted_bloc/voted_bloc.dart';
 
 import 'presentation/nav/bloc/nav_state.dart';
 import 'presentation/addcontent/presentation/pages/addcontent_page.dart';
@@ -69,7 +70,8 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<DemoListBloc>()),
         BlocProvider(create: (_) => di.locator<UploadedBloc>()),
         BlocProvider(create: (_) => di.locator<ApprovedBloc>()),
-        BlocProvider(create: (_) => di.locator<RejectedBloc>())
+        BlocProvider(create: (_) => di.locator<RejectedBloc>()),
+        BlocProvider(create: (_) => di.locator<VotedBloc>())
       ],
       child: MaterialApp(
           title: 'App Demo',
@@ -127,8 +129,8 @@ class _MyApp extends State<MyApp> {
       return UploadedPage();
     }
 
-    if (state.selectedItem == NavItem.pageViewed) {
-      return const ViewedPage();
+    if (state.selectedItem == NavItem.pageVoted) {
+      return VotedPage();
     }
     if (state.selectedItem == NavItem.pageProfile) {
       return const ProfilePage();
