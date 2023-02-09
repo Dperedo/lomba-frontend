@@ -23,7 +23,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         final result = await _hasLogin.execute();
 
         result.fold((failure) => {}, (valid) async {
-          emit(HomeLoaded(valid));
+          //emit(HomeLoaded(valid));
 
           if (!valid) {
             try {
