@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/core/widget.dart';
 import 'package:lomba_frontend/presentation/sidedrawer/pages/sidedrawer_page.dart';
 import 'package:numberpicker/numberpicker.dart';
 
@@ -20,15 +21,16 @@ class HomePage extends StatelessWidget {
   final int _fixPageSize = 8;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      drawer: const SideDrawer(
-        key: ValueKey("sidedrawer"),
-      ),
-      body: SingleChildScrollView(
+    return ShowMenu(
+      title: '', 
+      child: SingleChildScrollView(
         child: Center(
           child: Column(
-            children: [_bodyHome(context)],
+            children: [
+              ScreenBody(
+                child: _bodyHome(context)
+                )
+              ],
           ),
         )
       ),

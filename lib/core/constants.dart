@@ -17,6 +17,11 @@ class UrlBackend {
       defaultValue: 'http://localhost:4001');
 }
 
+class ScreenSize {
+  static const minScreen = 550;
+  static const maxScreen = 1200;
+}
+
 ///Claves de sistema, como tokends creados en el sitio JWT.io.
 ///
 ///La intención es utilizar estos tokens en pruebas y el prototipo del sitio.
@@ -100,3 +105,4 @@ class BoxPages {
         BoxPages.votedPosts,
       ];
 }
+
