@@ -32,6 +32,8 @@ class VotedPage extends StatelessWidget {
   }
 
   Widget _bodyVoted(BuildContext context){
+    final TextEditingController postIdController = TextEditingController();
+    final TextEditingController voteValueController = TextEditingController();
 
     List<String> listFields = <String>["uploaded", "voted",];
     return SizedBox(
@@ -178,18 +180,27 @@ class VotedPage extends StatelessWidget {
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [   
-                                            IconButton(                                                                                  
-                                              icon: const Icon(Icons.arrow_downward),
+                                            IconButton(
+                                              icon: Icon(
+                                                state.votes.entries.any((element) => element.key == state.listItems[index].id && element.value == -1) ? Icons.access_alarm : Icons.arrow_downward),
                                               onPressed:(){
-                                                // if (_key.currentState?.validate() == true) {
-                                                //   context.read<VotedBloc>().add(OnVotedChangeState(
-                                                //   state.flowId, state.flowId));
-                                                // }
+                                                if (_key.currentState?.validate() == true) {
+                                                  context.read<VotedBloc>().add( OnVotedAddVote(
+                                                    state.listItems[index].id, -1,state
+                                                  ));
+                                                }
                                               }
                                             ),                                          
                                             IconButton(
-                                              icon: const Icon(Icons.arrow_upward),                                                                                
-                                              onPressed:(){},                                        
+                                              icon: Icon(
+                                                state.votes.entries.any((element) => element.key == state.listItems[index].id && element.value == 1) ? Icons.access_alarm : Icons.arrow_upward),                                                                                
+                                              onPressed:(){
+                                                if (_key.currentState?.validate() == true) {
+                                                  context.read<VotedBloc>().add( OnVotedAddVote(
+                                                    state.listItems[index].id, 1,state
+                                                  ));
+                                                }
+                                              },                                        
                                             ),
                                           ],                                         
                                         ),

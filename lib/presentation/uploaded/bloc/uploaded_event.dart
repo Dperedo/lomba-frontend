@@ -21,3 +21,14 @@ class OnUploadedLoad extends UploadedEvent {
   List<Object> get props =>
       [searchText, fieldsOrder, pageIndex, pageSize, onlydrafts];
 }
+
+class OnUploadedPost extends UploadedEvent{
+  final String postId;
+  final int voteValue;
+
+  const OnUploadedPost(this.postId, this.voteValue);
+
+  @override 
+  List<Object> get props =>
+    [postId,voteValue];
+}

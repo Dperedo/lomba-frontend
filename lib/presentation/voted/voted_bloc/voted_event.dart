@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:lomba_frontend/presentation/voted/voted_bloc/voted_state.dart';
 
 abstract class VotedEvent extends Equatable{
   const VotedEvent();
@@ -22,12 +23,13 @@ class OnVotedLoad extends VotedEvent {
   List<Object> get props => [searchText, fieldsOrder, pageIndex, pageSize];
 }
 
-class OnVotedChangeState extends VotedEvent {
+class OnVotedAddVote extends VotedEvent {
+
   final String postId;
   final int voteValue;
-
-  const OnVotedChangeState (this.postId, this.voteValue);
+  final VotedState voteLoaded;
+  const OnVotedAddVote (this.postId, this.voteValue, this.voteLoaded);
 
   @override
-  List<Object> get props => [postId, voteValue];
+  List<Object> get props => [postId, voteValue, voteLoaded];
 }

@@ -86,9 +86,72 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
                   : null))
           .toList();
 
-      List<PostItem> listPostItems = [];
-      List<Total> listTotals = [];
-      List<Track> listTracks = [];
+        //completar con lógica
+        List<PostItem> listPostItems = (item['postitems'] as List)
+            .map((e) => PostItem(
+                content: TextContent(text: e['content']['text'].toString()),
+                type: e['type'].toString(),
+                order: int.parse(e['order'].toString()),
+                format: e['format'].toString(),
+                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null))
+            .toList();
+
+        List<Total> listTotals = (item['totals'] as List)
+            .map((e) => Total(
+                  flowId: e['flowId'].toString(),
+                  stageId: e['stageId'].toString(),
+                  totalcount: int.parse(e['totalcount'].toString()),
+                  totalnegative: int.parse(e['totalnegative'].toString()),
+                  totalpositive: int.parse(e['totalpositive'].toString()),
+                ))
+            .toList();
+
+        List<Track> listTracks = (item['tracks'] as List)
+            .map((e) => Track(
+                userId: e['userId'].toString(),
+                flowId: e['flowId'].toString(),
+                stageId: e['stageId'].toString(),
+                change: e['change'].toString(),
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null))
+            .toList();
+
+List<Vote> listVotes = (item['votes'] as List)
+        .map((e)=> Vote (
+          userId: e['userId'].toString(),
+          flowId: e['flowId'].toString(),
+          stageId: e['stageId'].toString(),
+          created: DateTime.parse(e['created'].toString()),
+          updated: e['updated'] != null
+              ? DateTime.parse(e['updated'].toString())
+              : null,
+          deleted: e['deleted'] != null
+              ? DateTime.parse(e['deleted'].toString())
+              : null,
+          expires: e['expires'] != null
+              ? DateTime.parse(e['expires'].toString())
+              : null,
+          value: int.parse(e['value'].toString()),
+        ))
+        .toList();
 
       return Future.value(PostModel(
         id: item['id'].toString(),
@@ -113,6 +176,7 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
         postitems: listPostItems,
         totals: listTotals,
         tracks: listTracks,
+        votes: listVotes,
       ));
     } else {
       throw ServerException();
@@ -216,6 +280,25 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
                     : null))
             .toList();
 
+List<Vote> listVotes = (item['votes'] as List)
+        .map((e)=> Vote (
+          userId: e['userId'].toString(),
+          flowId: e['flowId'].toString(),
+          stageId: e['stageId'].toString(),
+          created: DateTime.parse(e['created'].toString()),
+          updated: e['updated'] != null
+              ? DateTime.parse(e['updated'].toString())
+              : null,
+          deleted: e['deleted'] != null
+              ? DateTime.parse(e['deleted'].toString())
+              : null,
+          expires: e['expires'] != null
+              ? DateTime.parse(e['expires'].toString())
+              : null,
+          value: int.parse(e['value'].toString()),
+        ))
+        .toList();
+
         //se agrega uno a uno cada PostModel nuevo.
         listPostModel.add(PostModel(
           id: item['id'].toString(),
@@ -240,6 +323,7 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
           postitems: listPostItems,
           totals: listTotals,
           tracks: listTracks,
+          votes: listVotes,
         ));
       }
 
@@ -363,6 +447,25 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
                     : null))
             .toList();
 
+List<Vote> listVotes = (item['votes'] as List)
+        .map((e)=> Vote (
+          userId: e['userId'].toString(),
+          flowId: e['flowId'].toString(),
+          stageId: e['stageId'].toString(),
+          created: DateTime.parse(e['created'].toString()),
+          updated: e['updated'] != null
+              ? DateTime.parse(e['updated'].toString())
+              : null,
+          deleted: e['deleted'] != null
+              ? DateTime.parse(e['deleted'].toString())
+              : null,
+          expires: e['expires'] != null
+              ? DateTime.parse(e['expires'].toString())
+              : null,
+          value: int.parse(e['value'].toString()),
+        ))
+        .toList();
+
         //se agrega uno a uno cada PostModel nuevo.
         listPostModel.add(PostModel(
           id: item['id'].toString(),
@@ -387,6 +490,7 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
           postitems: listPostItems,
           totals: listTotals,
           tracks: listTracks,
+          votes: listVotes,
         ));
       }
 
@@ -511,22 +615,24 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
             .toList();
 
         //se agrega uno a uno cada PostModel nuevo.
-        listVote.add(Vote(
-          userId: item['userId'].toString(),
-          flowId: item['flowId'].toString(),
-          stageId: item['stageId'].toString(),
-          created: DateTime.parse(item['created'].toString()),
-          updated: item['updated'] != null
-              ? DateTime.parse(item['updated'].toString())
+        List<Vote> listVotes = (item['votes'] as List)
+        .map((e)=> Vote (
+          userId: e['userId'].toString(),
+          flowId: e['flowId'].toString(),
+          stageId: e['stageId'].toString(),
+          created: DateTime.parse(e['created'].toString()),
+          updated: e['updated'] != null
+              ? DateTime.parse(e['updated'].toString())
               : null,
-          deleted: item['deleted'] != null
-              ? DateTime.parse(item['deleted'].toString())
+          deleted: e['deleted'] != null
+              ? DateTime.parse(e['deleted'].toString())
               : null,
-          expires: item['expires'] != null
-              ? DateTime.parse(item['expires'].toString())
+          expires: e['expires'] != null
+              ? DateTime.parse(e['expires'].toString())
               : null,
-          value: int.parse(item['totalcount'].toString()),
-        ));
+          value: int.parse(e['value'].toString()),
+        ))
+        .toList();
       }
 
       return Future.value(ModelContainer<Vote>(

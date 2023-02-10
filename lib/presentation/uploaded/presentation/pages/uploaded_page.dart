@@ -13,6 +13,8 @@ class UploadedPage extends StatelessWidget {
 
   final TextEditingController _searchController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final TextEditingController postIdController = TextEditingController();
+  
   final int _fixPageSize = 8;
   @override
   Widget build(BuildContext context) {
@@ -251,7 +253,13 @@ class UploadedPage extends StatelessWidget {
                                                       ),
                                                     ),
                                                   ),
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    if (_key.currentState?.validate() == true) {
+                                                  context.read<UploadedBloc>().add( OnUploadedPost(
+                                                    postIdController.text, 1
+                                                  ));
+                                                }
+                                                  },
                                                   child:
                                                       const Text('Publicar')),
                                               ElevatedButton(

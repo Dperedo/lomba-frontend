@@ -120,7 +120,8 @@ Future<void> init() async {
   locator.registerFactory(() => DemoListBloc());
 
   locator.registerFactory(() => UploadedBloc(
-      locator(), locator(), locator(), locator(), locator(), locator()));
+      locator(), locator(), locator(), locator(), locator(), locator(),
+      locator()));
 
   locator.registerFactory(() => ApprovedBloc(locator(), locator()));
 
@@ -133,6 +134,7 @@ Future<void> init() async {
       .registerFactory(() => AddContentBloc(locator(), locator(), locator()));
 
     locator.registerFactory(() => VotedBloc(
+      locator(),
       locator(),
       locator(),
       locator()));
