@@ -27,6 +27,7 @@ import 'package:lomba_frontend/presentation/rejected/bloc/rejected_bloc.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
 import 'package:lomba_frontend/presentation/users/bloc/user_bloc.dart';
+import 'package:lomba_frontend/presentation/voted/voted_bloc/voted_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'data/datasources/flow_data_source.dart';
@@ -120,7 +121,8 @@ Future<void> init() async {
   locator.registerFactory(() => DemoListBloc());
 
   locator.registerFactory(() => UploadedBloc(
-      locator(), locator(), locator(), locator(), locator(), locator()));
+      locator(), locator(), locator(), locator(), locator(), locator(),
+      locator()));
 
   locator.registerFactory(() => ApprovedBloc(locator(), locator()));
 
@@ -130,6 +132,12 @@ Future<void> init() async {
       locator(),));
   locator.registerFactory(() => AddContentBloc(locator(), locator(), locator()));
   locator.registerFactory(() => PopularBloc(locator(), locator(), locator(), locator()));
+
+    locator.registerFactory(() => VotedBloc(
+      locator(),
+      locator(),
+      locator(),
+      locator()));
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));

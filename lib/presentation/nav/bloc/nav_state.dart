@@ -25,7 +25,7 @@ enum NavItem {
   pageRejected,
   pageToBeApproved,
   pageUploaded,
-  pageViewed,
+  pageVoted,
   pageProfile,
   pageDemoList
 }

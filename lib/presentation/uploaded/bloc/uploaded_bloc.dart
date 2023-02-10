@@ -4,6 +4,7 @@ import 'package:lomba_frontend/domain/usecases/flow/get_approved_posts.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_for_approve_posts.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_latest_posts.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_uploaded_posts.dart';
+import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_event.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/upoaded_state.dart';
@@ -18,6 +19,7 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
   final GetLatestPosts _getLatestPosts;
   final GetUploadedPosts _getUploadedPosts;
   final GetSession _getSession;
+  final VotePublication _votePublication;
 
   UploadedBloc(
       this._addTextPost,
@@ -25,7 +27,8 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
       this._getForApprovePosts,
       this._getLatestPosts,
       this._getUploadedPosts,
-      this._getSession)
+      this._getSession,
+      this._votePublication)
       : super(UploadedStart()) {
     on<OnUploadedLoad>((event, emit) async {
       emit(UploadedLoading());
@@ -64,6 +67,9 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
               r.items.length,
               r.items.length)));
     });
+
+    
+
   }
   EventTransformer<T> debounce<T>(Duration duration) {
     return (events, mapper) => events.debounceTime(duration).flatMap(mapper);

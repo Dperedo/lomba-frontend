@@ -15,6 +15,7 @@ class PostModel extends Post{
     required postitems, 
     required totals, 
     required tracks, 
+    required votes,
     required updated, 
     required deleted, 
     required expires}) 
@@ -32,6 +33,7 @@ class PostModel extends Post{
       postitems: postitems,
       totals: totals,
       tracks: tracks,
+      votes: votes,
       updated: updated,
       deleted: deleted,
       expires: expires
@@ -52,6 +54,7 @@ class PostModel extends Post{
       postitems: json['postitems'],
       totals: json['totals'],
       tracks: json['tracks'],
+      votes: json['votes'],
       updated: json['updated'],
       deleted: json['deleted'],
       expires: json['expires']
@@ -73,6 +76,7 @@ class PostModel extends Post{
       'postitems': postitems,
       'totals': totals,
       'tracks': tracks,
+      'votes' : votes,
       'updated': updated,
       'deleted': deleted,
       'expires': expires
@@ -93,6 +97,7 @@ class PostModel extends Post{
       postitems: postitems,
       totals: totals,
       tracks: tracks,
+      votes: votes,
       updated: updated,
       deleted: deleted,
       expires: expires
@@ -100,5 +105,5 @@ class PostModel extends Post{
 
   @override
   List<Object> get props => [id, enabled, builtIn, created, stages, title,orgaId, userId,
-    flowId, stageId, postitems, totals, tracks];
+    flowId, stageId, postitems, totals, tracks, votes];
 }
