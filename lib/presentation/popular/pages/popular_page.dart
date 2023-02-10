@@ -1,65 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/core/widget.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-import '../../../../domain/entities/flows/textcontent.dart';
+import '../../../domain/entities/flows/textcontent.dart';
 import '../../sidedrawer/pages/sidedrawer_page.dart';
-import '../bloc/approved_bloc.dart';
-import '../bloc/approved_event.dart';
-import '../bloc/approved_state.dart';
+import '../bloc/popular_bloc.dart';
+import '../bloc/popular_event.dart';
+import '../bloc/popular_state.dart';
 
-///Página con el contenido que el usuario revisor ha aprobado anteriormente.
+///Página con el contenido popular.
 ///
-///Se mostrará un listado con todo aquel contenido que el usuario haya
-///aprobado anteriormente desde la página de "Por Aprobar"
-class ApprovedPage extends StatelessWidget {
-  ApprovedPage({Key? key}) : super(key: key);
+///Esta página será accedida por los usuarios estén o no con sesión dentro,
+///es decir, se mostrará a todos los usuarios no administradores.
+class PopularPage extends StatelessWidget {
+  PopularPage({Key? key}) : super(key: key);
 
   final TextEditingController _searchController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final int _fixPageSize = 8;
-  
-  
   @override
   Widget build(BuildContext context) {
-    return ShowMenu(
-      title: "Aprobados", 
-      child: SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(),
+      drawer: const SideDrawer(
+        key: ValueKey("sidedrawer"),
+      ),
+      body: SingleChildScrollView(
         child: Center(
           child: Column(
-            children: [
-              ScreenBody(
-                child: _bodyApproved(context)
-              )
-            ],
+            children: [_bodyPopular(context)],
           ),
         )
       ),
     );
   }
-
-  Widget _bodyApproved(BuildContext context){
-
-    List<String> listFields = <String>["uploaded", "sent",];
+      
+Widget _bodyPopular(BuildContext context){
+    
+    List<String> listFields = <String>["created", "publicated"];
     return SizedBox(
+      
       width: 800,
-      child:Form(
+      child: Form(
         key: _key,
-        child: BlocBuilder<ApprovedBloc, ApprovedState>(
-          builder: (context,state){
-            if(state is ApprovedStart){
-              context.read<ApprovedBloc>().add(OnApprovedLoad(
-                '',const <String, int>{'uploaded':1}, 1, _fixPageSize
-              )
-              );
-            }
-            if (state is ApprovedLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            if(state is ApprovedLoaded){
+        child: BlocBuilder<PopularBloc, PopularState>(
+          builder: (context, state){
+              if (state is PopularStart){
+                context.read<PopularBloc>().add(OnPopularLoad(
+                  '', const <String, int>{'created': 1}, 1, _fixPageSize)
+                );
+              }
+              if (state is PopularLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if(state is PopularLoaded){
               return Column(
                 children: [
                   Container(
@@ -87,8 +83,8 @@ class ApprovedPage extends StatelessWidget {
                             ),
                             IconButton(
                                 onPressed: () {
-                                  context.read<ApprovedBloc>().add(
-                                      OnApprovedLoad(
+                                  context.read<PopularBloc>().add(
+                                      OnPopularLoad(
                                           _searchController.text,
                                           <String, int>{
                                             state.fieldsOrder.keys.first: 1
@@ -110,12 +106,12 @@ class ApprovedPage extends StatelessWidget {
                                 haptics: true,
                                 step: 1,
                                 axis: Axis.horizontal,
-                                value: state.pageIndex,
-                                minValue: 1,
+                                value: state.totalPages == 0 ? 0 : state.pageIndex,
+                                minValue: state.totalPages == 0 ? 0 : 1,
                                 maxValue: state.totalPages,
                                 onChanged: (value) => context
-                                    .read<ApprovedBloc>()
-                                    .add(OnApprovedLoad(
+                                    .read<PopularBloc>()
+                                    .add(OnPopularLoad(
                                         _searchController.text,
                                         <String, int>{
                                           state.fieldsOrder.keys.first: 1
@@ -135,7 +131,7 @@ class ApprovedPage extends StatelessWidget {
                                 );
                               }).toList(),
                               onChanged: (String? value) {
-                                context.read<ApprovedBloc>().add(OnApprovedLoad(
+                                context.read<PopularBloc>().add(OnPopularLoad(
                                     state.searchText,
                                     <String, int>{value!: 1},
                                     state.pageIndex,
@@ -183,18 +179,42 @@ class ApprovedPage extends StatelessWidget {
                                           contentPadding: const EdgeInsets.symmetric(horizontal: 100,vertical: 100),
                                         ),
                                         const SizedBox(height: 10),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [   
-                                            IconButton(                                         
-                                              onPressed:(){},
-                                              icon: const Icon(Icons.cancel_outlined)
-                                            ),                                          
-                                            const IconButton(
-                                              icon: Icon(Icons.check_circle_outline),                                                                                
-                                              onPressed:null,                                        
-                                            ),
-                                          ],                                         
+                                        SizedBox(
+                                          child: (state.validLogin)?Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [   
+                                              ElevatedButton(
+                                                style: ButtonStyle(
+                                                  shape: MaterialStateProperty.resolveWith(
+                                                    (states) => RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(20),
+                                                        side: BorderSide(
+                                                          color: Theme.of(context).secondaryHeaderColor,
+                                                          width: 2,
+                                                        ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                onPressed:(){},
+                                                child: const Icon(Icons.keyboard_arrow_down)
+                                              ),                                          
+                                              ElevatedButton(
+                                                style: ButtonStyle(
+                                                  shape: MaterialStateProperty.resolveWith(
+                                                    (states) => RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(20.0),
+                                                        side: BorderSide(
+                                                          color: Theme.of(context).secondaryHeaderColor,
+                                                          width: 2,
+                                                        ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                onPressed:(){},
+                                                child: const Icon(Icons.keyboard_arrow_up)
+                                              ),
+                                            ],                                         
+                                          ): null,
                                         ),
                                         const SizedBox(height: 15),                                     
                                       ],
@@ -211,11 +231,12 @@ class ApprovedPage extends StatelessWidget {
                   ),
                 ],
               );
-            }
-          return const SizedBox();
-          },
+              }
+              return const SizedBox();
+          }
         )
-      )
+      ),
     );
   }
 }
+

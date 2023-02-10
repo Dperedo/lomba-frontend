@@ -1,39 +1,35 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/domain/usecases/flow/get_latest_posts.dart';
-import 'package:lomba_frontend/domain/usecases/local/get_has_login.dart';
-import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
+import 'package:lomba_frontend/presentation/popular/bloc/popular_event.dart';
+import 'package:lomba_frontend/presentation/popular/bloc/popular_state.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../data/models/session_model.dart';
-import 'home_event.dart';
-import 'home_state.dart';
+import '../../../domain/usecases/flow/get_popular_posts.dart';
+import '../../../domain/usecases/local/get_has_login.dart';
+import '../../../domain/usecases/local/get_session_status.dart';
 
-///BLOC para el control de la página principal o Home
-///
-///Consulta si el usuario está logueado o no.
-class HomeBloc extends Bloc<HomeEvent, HomeState> {
+class PopularBloc extends Bloc<PopularEvent, PopularState>{
+  final GetPopularPosts _getPopularPosts;
+  final GetSession _getSession;
   final GetHasLogIn _hasLogin;
   final FirebaseAuth _firebaseAuthInstance;
-  final GetSession _getSession;
-  final GetLatestPosts _getLatestPosts;
 
-  HomeBloc(
-    this._firebaseAuthInstance, 
-    this._hasLogin,
+  PopularBloc(
+    this._getPopularPosts,
     this._getSession,
-    this._getLatestPosts
-    ) : super(HomeStart()) {
-    ///Evento que hace la consulta de sesión del usuario en el dispositivo.
-    on<OnHomeLoading>(
-      (event, emit) async {
-        emit(HomeLoading());
-        var auth = const SessionModel(token: "", username: "", name: "");
-        const orgaId ="00000200-0200-0200-0200-000000000200";
-        const userId = '00000005-0005-0005-0005-000000000005';
-        const flowId = '00000111-0111-0111-0111-000000000111';
-        const stageId = '00000CCC-0111-0111-0111-000000000111';
-        var validLogin = false;
+    this._firebaseAuthInstance,
+    this._hasLogin
+  ):super(PopularStart()){
+    on<OnPopularLoad>((event, emit)async{
+      emit(PopularLoading());
+      const orgaId ="00000200-0200-0200-0200-000000000200";
+      const userId = '00000005-0005-0005-0005-000000000005';
+      String flowId = '00000111-0111-0111-0111-000000000111';
+      String stageId = '00000AAA-0111-0111-0111-000000000111';
+      var auth = const SessionModel(token: "", username: "", name: "");
+      var validLogin = false;
 
         final result = await _hasLogin.execute();
 
@@ -46,8 +42,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             
           }
         });
-        if (!validLogin){
-        final resultPosts = await _getLatestPosts.execute(
+
+
+      if (!validLogin){
+        final resultPosts = await _getPopularPosts.execute(
                 orgaId,
                 userId,
                 flowId,
@@ -57,8 +55,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 event.pageSize
               );
         resultPosts.fold(
-              (l) => {emit(HomeError(l.message))},
-              (r) => emit(HomeLoaded(
+              (l) => {emit(PopularError(l.message))},
+              (r) => emit(PopularLoaded(
                   validLogin,
                   orgaId,
                   userId,
@@ -75,9 +73,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                   )));
         } else {
           final session = await _getSession.execute();
-            session.fold((l) => emit(HomeError(l.message)), (r) => {auth = r});
+            session.fold((l) => emit(PopularError(l.message)), (r) => {auth = r});
 
-            final resultPosts = await _getLatestPosts.execute(
+            final resultPosts = await _getPopularPosts.execute(
               auth.getOrgaId()!,
               auth.getUserId()!,
               flowId,
@@ -87,8 +85,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
               event.pageSize
             );
           resultPosts.fold(
-              (l) => {emit(HomeError(l.message))},
-              (r) => emit(HomeLoaded(
+              (l) => {emit(PopularError(l.message))},
+              (r) => emit(PopularLoaded(
                   validLogin,
                   auth.getOrgaId()!,
                   auth.getUserId()!,
@@ -107,11 +105,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
-
-    ///Evento es llamado para reiniciar el Home y haga la consulta de sesión.
-    on<OnRestartHome>((event, emit) async {
-      emit(HomeStart());
-    });
   }
 
   EventTransformer<T> debounce<T>(Duration duration) {

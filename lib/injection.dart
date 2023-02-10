@@ -22,6 +22,7 @@ import 'package:lomba_frontend/domain/usecases/orgas/add_orga.dart';
 import 'package:lomba_frontend/domain/usecases/sidedrawer/do_logoff.dart';
 import 'package:lomba_frontend/domain/usecases/users/get_users_notin_orga.dart';
 import 'package:lomba_frontend/domain/usecases/users/update_user_password.dart';
+import 'package:lomba_frontend/presentation/popular/bloc/popular_bloc.dart';
 import 'package:lomba_frontend/presentation/rejected/bloc/rejected_bloc.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
@@ -85,7 +86,7 @@ Future<void> init() async {
   // bloc
   locator.registerFactory(
       () => LoginBloc(locator(), locator(), locator(), locator()));
-  locator.registerFactory(() => HomeBloc(locator(), locator()));
+  locator.registerFactory(() => HomeBloc(locator(), locator(), locator(), locator()));
   locator.registerFactory(() => SideDrawerBloc(locator(), locator(), locator(),
       locator(), locator(), locator(), locator()));
   locator.registerFactory(() => NavBloc());
@@ -125,11 +126,10 @@ Future<void> init() async {
 
   locator.registerFactory(() => RejectedBloc(locator(), locator()));
   locator.registerFactory(() => ToBeApprovedBloc(
-        locator(),
-        locator(),
-      ));
-  locator
-      .registerFactory(() => AddContentBloc(locator(), locator(), locator()));
+      locator(),
+      locator(),));
+  locator.registerFactory(() => AddContentBloc(locator(), locator(), locator()));
+  locator.registerFactory(() => PopularBloc(locator(), locator(), locator(), locator()));
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));

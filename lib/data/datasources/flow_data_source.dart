@@ -133,12 +133,12 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
       String boxpage) async {
     final url = Uri.parse(
         '${UrlBackend.base}/api/v1/post/box?orgaId=$orgaId&userId=$userId&flowId=$flowId&stageId=$stageId&searchtext=$searchText&order=${json.encode(order)}&pageindex=$pageIndex&pagesize=$pageSize&paramvars=${json.encode(params)}&boxpage=$boxpage');
-    final session = await localDataSource.getSavedSession();
+    //final session = await localDataSource.getSavedSession();
 
     http.Response resp = await client.get(url, headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
-      "Authorization": "Bearer ${session.token}",
+      //"Authorization": "Bearer ${session.token}",
     }).timeout(const Duration(seconds: 10));
 
     if (resp.statusCode == 200) {

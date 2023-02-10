@@ -1,4 +1,3 @@
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_event.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_state.dart';
@@ -48,8 +47,9 @@ class ToBeApprovedBloc extends Bloc<ToBeApprovedEvent, ToBeApprovedState>{
               event.pageSize,
               r.items,
               r.currentItemCount,
-              r.items.length ,
-              r.items.length )));
+              r.items.length,
+              r.items.length
+              )));
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {
