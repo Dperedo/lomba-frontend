@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_cubit.dart';
 import 'package:numberpicker/numberpicker.dart';
-import '../../../../domain/entities/flows/textcontent.dart';
-import '../../../sidedrawer/pages/sidedrawer_page.dart';
-import '../../bloc/uploaded_bloc.dart';
-import '../../bloc/uploaded_event.dart';
-import '../../bloc/upoaded_state.dart';
+import '../../../domain/entities/flows/textcontent.dart';
+import '../../sidedrawer/pages/sidedrawer_page.dart';
+import '../bloc/uploaded_bloc.dart';
+import '../bloc/uploaded_event.dart';
+import '../bloc/upoaded_state.dart';
 
 class UploadedPage extends StatelessWidget {
   UploadedPage({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class UploadedPage extends StatelessWidget {
   final TextEditingController _searchController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final TextEditingController postIdController = TextEditingController();
-  
+
   final int _fixPageSize = 8;
   @override
   Widget build(BuildContext context) {
@@ -254,11 +254,16 @@ class UploadedPage extends StatelessWidget {
                                                     ),
                                                   ),
                                                   onPressed: () {
-                                                    if (_key.currentState?.validate() == true) {
-                                                  context.read<UploadedBloc>().add( OnUploadedPost(
-                                                    postIdController.text, 1
-                                                  ));
-                                                }
+                                                    if (_key.currentState
+                                                            ?.validate() ==
+                                                        true) {
+                                                      context
+                                                          .read<UploadedBloc>()
+                                                          .add(OnUploadedPost(
+                                                              postIdController
+                                                                  .text,
+                                                              1));
+                                                    }
                                                   },
                                                   child:
                                                       const Text('Publicar')),

@@ -13,7 +13,7 @@ import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_bloc.
 import 'package:lomba_frontend/presentation/tobeapproved/pages/tobeapproved_page.dart';
 import 'package:lomba_frontend/presentation/rejected/bloc/rejected_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
-import 'package:lomba_frontend/presentation/uploaded/presentation/pages/uploaded_page.dart';
+import 'package:lomba_frontend/presentation/uploaded/pages/uploaded_page.dart';
 import 'package:lomba_frontend/presentation/voted/presentation/pages/voted_page.dart';
 import 'package:lomba_frontend/presentation/voted/voted_bloc/voted_bloc.dart';
 
@@ -76,7 +76,6 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<RejectedBloc>()),
         BlocProvider(create: (_) => di.locator<VotedBloc>()),
         BlocProvider(create: (_) => di.locator<AddContentBloc>()),
-        
         BlocProvider(create: (_) => di.locator<ToBeApprovedBloc>()),
         BlocProvider(create: (_) => di.locator<PopularBloc>()),
       ],

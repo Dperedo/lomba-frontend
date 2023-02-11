@@ -87,7 +87,8 @@ Future<void> init() async {
   // bloc
   locator.registerFactory(
       () => LoginBloc(locator(), locator(), locator(), locator()));
-  locator.registerFactory(() => HomeBloc(locator(), locator(), locator(), locator()));
+  locator.registerFactory(
+      () => HomeBloc(locator(), locator(), locator(), locator()));
   locator.registerFactory(() => SideDrawerBloc(locator(), locator(), locator(),
       locator(), locator(), locator(), locator()));
   locator.registerFactory(() => NavBloc());
@@ -120,24 +121,22 @@ Future<void> init() async {
   locator.registerFactory(() => ProfileBloc(locator(), locator()));
   locator.registerFactory(() => DemoListBloc());
 
-  locator.registerFactory(() => UploadedBloc(
-      locator(), locator(), locator(), locator(), locator(), locator(),
-      locator()));
+  locator.registerFactory(() => UploadedBloc(locator(), locator()));
 
   locator.registerFactory(() => ApprovedBloc(locator(), locator()));
 
   locator.registerFactory(() => RejectedBloc(locator(), locator()));
   locator.registerFactory(() => ToBeApprovedBloc(
-      locator(),
-      locator(),));
-  locator.registerFactory(() => AddContentBloc(locator(), locator(), locator()));
-  locator.registerFactory(() => PopularBloc(locator(), locator(), locator(), locator()));
+        locator(),
+        locator(),
+      ));
+  locator
+      .registerFactory(() => AddContentBloc(locator(), locator(), locator()));
+  locator.registerFactory(
+      () => PopularBloc(locator(), locator(), locator(), locator()));
 
-    locator.registerFactory(() => VotedBloc(
-      locator(),
-      locator(),
-      locator(),
-      locator()));
+  locator.registerFactory(
+      () => VotedBloc(locator(), locator(), locator(), locator()));
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));
