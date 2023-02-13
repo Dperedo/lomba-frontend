@@ -6,7 +6,9 @@ import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_cubit.dar
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_event.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_state.dart';
 
-import '../../../core/widget.dart';
+import '../../../core/widgets/body_formater.dart';
+import '../../../core/widgets/scaffold_manager.dart';
+
 
 ///Página para agregar contenido al sistema.
 ///
@@ -23,13 +25,13 @@ class AddContentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddContentBloc, AddContentState>(
       builder: (context, state) {
-        return ShowMenu(
-          title: "Agregar contenido",
+        return ScaffoldManager(
+          title: AppBar(title: const Text("Agregar contenido"),),
           child: SingleChildScrollView(
             child: Column(
               children: [
                 Center(
-                  child: ScreenBody(
+                  child: BodyFormater(
                     child: _bodyAddContent(
                         context, _titleController, _contentController, _key),
                   ),

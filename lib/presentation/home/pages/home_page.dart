@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/core/widget.dart';
-import 'package:lomba_frontend/presentation/sidedrawer/pages/sidedrawer_page.dart';
 import 'package:numberpicker/numberpicker.dart';
 
+import '../../../core/widgets/body_formater.dart';
+import '../../../core/widgets/scaffold_manager.dart';
 import '../../../domain/entities/flows/textcontent.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
@@ -16,19 +16,19 @@ import '../bloc/home_state.dart';
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
-  GlobalKey<ScaffoldState> homeScreenKey = GlobalKey<ScaffoldState>();
+  static const String route = '/home';
   final TextEditingController _searchController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final int _fixPageSize = 8;
   @override
   Widget build(BuildContext context) {
-    return ShowMenu(
-      title: "", 
+    return ScaffoldManager(
+      title: AppBar(), 
       child: SingleChildScrollView(
         child: Center(
           child: Column(
             children: [
-              ScreenBody(
+              BodyFormater(
                 child: _bodyHome(context)
                 )
               ],

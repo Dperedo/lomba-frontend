@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/core/widgets/body_formater.dart';
+import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_cubit.dart';
 import 'package:numberpicker/numberpicker.dart';
 import '../../../domain/entities/flows/textcontent.dart';
@@ -18,15 +20,19 @@ class UploadedPage extends StatelessWidget {
   final int _fixPageSize = 8;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Subidos")),
-      body: SingleChildScrollView(
-          child: Center(
-        child: Column(
-          children: [_bodyUploaded(context)],
-        ),
-      )),
-      drawer: const SideDrawer(),
+    return ScaffoldManager(
+      title: AppBar(title: const Text("Subidos")),
+      child: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              BodyFormater(
+                child: _bodyUploaded(context)
+                )
+              ],
+          ),
+        )
+      ),
     );
   }
 

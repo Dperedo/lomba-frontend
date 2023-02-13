@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:numberpicker/numberpicker.dart';
 
+import '../../../core/widgets/body_formater.dart';
+import '../../../core/widgets/scaffold_manager.dart';
 import '../../../domain/entities/flows/textcontent.dart';
 import '../../sidedrawer/pages/sidedrawer_page.dart';
 import '../bloc/popular_bloc.dart';
@@ -20,15 +22,16 @@ class PopularPage extends StatelessWidget {
   final int _fixPageSize = 8;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      drawer: const SideDrawer(
-        key: ValueKey("sidedrawer"),
-      ),
-      body: SingleChildScrollView(
+    return ScaffoldManager(
+      title: AppBar(title: const Text("Populares"),),
+      child: SingleChildScrollView(
         child: Center(
           child: Column(
-            children: [_bodyPopular(context)],
+            children: [
+              BodyFormater(
+                child: _bodyPopular(context),
+              ),
+            ],
           ),
         )
       ),

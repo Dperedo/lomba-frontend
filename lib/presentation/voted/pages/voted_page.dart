@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:numberpicker/numberpicker.dart';
 
+import '../../../core/widgets/body_formater.dart';
+import '../../../core/widgets/scaffold_manager.dart';
 import '../../../domain/entities/flows/textcontent.dart';
 import '../../sidedrawer/pages/sidedrawer_page.dart';
 import '../bloc/voted_bloc.dart';
@@ -17,15 +19,19 @@ class VotedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Votados")),
-      body: SingleChildScrollView(
-          child: Center(
-        child: Column(
-          children: [_bodyVoted(context)],
-        ),
-      )),
-      drawer: const SideDrawer(),
+    return ScaffoldManager(
+      title: AppBar(title: const Text("Votados")),
+      child: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              BodyFormater(
+                child: _bodyVoted(context)
+              )
+            ],
+          ),
+        )
+      ),
     );
   }
 

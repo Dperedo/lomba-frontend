@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/core/widgets/body_formater.dart';
+import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import '../../sidedrawer/pages/sidedrawer_page.dart';
 import '../../users/bloc/user_bloc.dart';
 import '../../users/bloc/user_event.dart';
@@ -19,13 +21,16 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
-      return Scaffold(
-        appBar: _variableAppBar(context, state),
-        body: SingleChildScrollView(
-            child: Center(child: _bodyProfile(context, state))),
-        //body: const Center(child: Text("Página de perfil del usuario")),
-        drawer: const SideDrawer(),
-      );
+      return ScaffoldManager(
+        title: _variableAppBar(context, state),
+        child: SingleChildScrollView(
+            child: Center(
+              child: BodyFormater(
+                child: _bodyProfile(context, state)
+              )
+            )
+          ),
+        );
     });
   }
 

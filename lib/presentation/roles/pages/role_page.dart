@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/core/widgets/body_formater.dart';
+import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/roles/bloc/role_event.dart';
 import 'package:lomba_frontend/presentation/sidedrawer/pages/sidedrawer_page.dart';
 
@@ -13,13 +15,19 @@ class RolesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RoleBloc, RoleState>(
       builder: (context, state) {
-        return Scaffold(
-          appBar: _variableAppBar(context, state),
-          body: SingleChildScrollView(
+        return ScaffoldManager(
+          title: _variableAppBar(context, state),
+          child: SingleChildScrollView(
+            child: Center(
               child: Column(
-            children: [_bodyRoles(context, state)],
-          )),
-          drawer: const SideDrawer(),
+                children: [
+                  BodyFormater(
+                    child: _bodyRoles(context, state)
+                  )
+                ],
+              ),
+            )
+          ),
         );
       },
     );

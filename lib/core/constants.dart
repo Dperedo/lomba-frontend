@@ -18,7 +18,10 @@ class UrlBackend {
 }
 
 class ScreenSize {
-  static const minScreen = 550;
+  static const sizeMenuBox = 300.0;
+  static const minBoxBody = 500.0;
+  static const maxBoxBody = 650.0;
+  static const minScreen = 500;
   static const maxScreen = 1200;
 }
 

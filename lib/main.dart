@@ -29,7 +29,7 @@ import 'presentation/orgas/bloc/orga_bloc.dart';
 import 'presentation/orgas/bloc/orgauser_bloc.dart';
 import 'presentation/profile/bloc/profile_bloc.dart';
 import 'presentation/profile/pages/profile_page.dart';
-import 'presentation/rejected/presentation/pages/rejected_page.dart';
+import 'presentation/rejected/pages/rejected_page.dart';
 import 'presentation/roles/bloc/role_bloc.dart';
 import 'presentation/roles/pages/role_page.dart';
 import 'presentation/sidedrawer/bloc/sidedrawer_bloc.dart';
@@ -40,6 +40,7 @@ import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //usePathUrlStrategy();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -82,6 +83,7 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<PopularBloc>()),
       ],
       child: MaterialApp(
+        //initialRoute: HomePage.route,
           title: 'App Demo',
           theme: ThemeData(
             primarySwatch: Colors.deepOrange,
