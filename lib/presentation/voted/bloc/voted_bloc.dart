@@ -22,23 +22,31 @@ class VotedBloc extends Bloc<VotedEvent, VotedState> {
       : super(VotedStart()) {
     on<OnVotedLoad>((event, emit) async {
       emit(VotedLoading());
-      String flowId = '00000111-0111-0111-0111-000000000111';
-      String stageId = '00000AAA-0111-0111-0111-000000000111';
+      String flowId = Flows.votationFlowId;
+      String stageId = StagesVotationFlow.stageId03Voting;
 
       var auth = const SessionModel(token: "", username: "", name: "");
       final session = await _getSession.execute();
       session.fold((l) => emit(VotedError(l.message)), (r) => {auth = r});
-
-      final result = await _getUploadedPosts.execute(
+      int voteValue = 0;
+      if(event.positive)
+      {
+       voteValue = 1;
+      } else if(event.negative)
+      {
+       voteValue = -1;
+      }
+      final result = await _getVotedPosts.execute(
         auth.getOrgaId()!,
         auth.getUserId()!,
         flowId,
         stageId,
-        false,
         event.searchText,
         event.fieldsOrder,
         event.pageIndex,
         event.pageSize,
+        voteValue,
+        
       );
       result.fold((l) => {emit(VotedError(l.message))}, (r) {
         VotedLoaded votedLoaded = VotedLoaded(
@@ -46,6 +54,7 @@ class VotedBloc extends Bloc<VotedEvent, VotedState> {
           auth.getUserId()!,
           flowId,
           stageId,
+          event.positive,
           event.searchText,
           event.fieldsOrder,
           event.pageIndex,
@@ -55,12 +64,6 @@ class VotedBloc extends Bloc<VotedEvent, VotedState> {
           r.items.length,
           r.items.length,
         );
-
-        for (int i = 0; i < r.items.length; i++) {
-          votedLoaded.votes.addEntries(<String, int>{
-            r.items[i].id: r.items[i].votes.first.value
-          }.entries);
-        }
 
         emit(votedLoaded);
       });
