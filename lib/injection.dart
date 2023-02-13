@@ -27,7 +27,7 @@ import 'package:lomba_frontend/presentation/rejected/bloc/rejected_bloc.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
 import 'package:lomba_frontend/presentation/users/bloc/user_bloc.dart';
-import 'package:lomba_frontend/presentation/voted/voted_bloc/voted_bloc.dart';
+import 'package:lomba_frontend/presentation/voted/bloc/voted_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'data/datasources/flow_data_source.dart';
@@ -121,7 +121,7 @@ Future<void> init() async {
   locator.registerFactory(() => ProfileBloc(locator(), locator()));
   locator.registerFactory(() => DemoListBloc());
 
-  locator.registerFactory(() => UploadedBloc(locator(), locator()));
+  locator.registerFactory(() => UploadedBloc(locator(), locator(), locator()));
 
   locator.registerFactory(() => ApprovedBloc(locator(), locator()));
 

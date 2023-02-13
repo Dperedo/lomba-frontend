@@ -1,3 +1,4 @@
+
 import 'package:equatable/equatable.dart';
 
 import '../../../domain/entities/flows/post.dart';

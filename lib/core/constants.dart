@@ -22,6 +22,16 @@ class ScreenSize {
   static const maxScreen = 1200;
 }
 
+class StagesVotationFlow {
+  static const stageId01Load = '00000AAA-0111-0111-0111-000000000111';
+  static const stageId02Approval = '00000BBB-0111-0111-0111-000000000111';
+  static const stageId03Voting = '00000CCC-0111-0111-0111-000000000111';
+}
+
+class Flows {
+  static const votationFlowId = '00000111-0111-0111-0111-000000000111';
+}
+
 ///Claves de sistema, como tokends creados en el sitio JWT.io.
 ///
 ///La intención es utilizar estos tokens en pruebas y el prototipo del sitio.
@@ -105,4 +115,3 @@ class BoxPages {
         BoxPages.votedPosts,
       ];
 }
-

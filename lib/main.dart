@@ -14,8 +14,8 @@ import 'package:lomba_frontend/presentation/tobeapproved/pages/tobeapproved_page
 import 'package:lomba_frontend/presentation/rejected/bloc/rejected_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/pages/uploaded_page.dart';
-import 'package:lomba_frontend/presentation/voted/presentation/pages/voted_page.dart';
-import 'package:lomba_frontend/presentation/voted/voted_bloc/voted_bloc.dart';
+import 'package:lomba_frontend/presentation/voted/pages/voted_page.dart';
+import 'package:lomba_frontend/presentation/voted/bloc/voted_bloc.dart';
 
 import 'presentation/nav/bloc/nav_state.dart';
 import 'presentation/addcontent/pages/addcontent_page.dart';

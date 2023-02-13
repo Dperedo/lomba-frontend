@@ -110,9 +110,10 @@ class UploadedPage extends StatelessWidget {
                                 title: const Text('Mostrar solo borradores'),
                                 value: statecubit.checks["onlydrafts"]!,
                                 onChanged: (value) {
-                                  context.read<UploadedLiveCubit>().changeValue(
-                                      "onlydrafts",
-                                      !statecubit.checks["onlydrafts"]!);
+                                  context
+                                      .read<UploadedLiveCubit>()
+                                      .changeCheckValue("onlydrafts",
+                                          !statecubit.checks["onlydrafts"]!);
 
                                   context.read<UploadedBloc>().add(
                                       OnUploadedLoad(
@@ -191,116 +192,141 @@ class UploadedPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: state.listItems.length,
-                        itemBuilder: (context, index) {
-                          return SingleChildScrollView(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 20),
-                            child: Column(
-                              children: [
-                                Row(
+                    BlocBuilder<UploadedLiveCubit, UploadedLiveState>(
+                      builder: (context, statecubit) {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: state.listItems.length,
+                            itemBuilder: (context, index) {
+                              return SingleChildScrollView(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 20),
+                                child: Column(
                                   children: [
-                                    Expanded(
-                                      child: Column(
-                                        children: [
-                                          ListTile(
-                                            leading: const Icon(Icons.person),
-                                            title: Text(
-                                                state.listItems[index].title),
-                                          ),
-                                          ListTile(
-                                            shape: const RoundedRectangleBorder(
-                                                side: BorderSide(
-                                                    color: Colors.grey,
-                                                    width: 2),
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(2))),
-                                            // tileColor: Colors.grey,
-                                            title: Text(
-                                                (state
-                                                        .listItems[index]
-                                                        .postitems[0]
-                                                        .content as TextContent)
-                                                    .text,
-                                                textAlign: TextAlign.center),
-                                            contentPadding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 100,
-                                                    vertical: 100),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Column(
                                             children: [
-                                              ElevatedButton(
-                                                  style: ButtonStyle(
-                                                    shape: MaterialStateProperty
-                                                        .resolveWith(
-                                                      (states) =>
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
+                                              ListTile(
+                                                leading:
+                                                    const Icon(Icons.person),
+                                                title: Text(state
+                                                    .listItems[index].title),
+                                              ),
+                                              ListTile(
+                                                shape:
+                                                    const RoundedRectangleBorder(
                                                         side: BorderSide(
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .secondaryHeaderColor,
-                                                          width: 2,
+                                                            color: Colors.grey,
+                                                            width: 2),
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    2))),
+                                                // tileColor: Colors.grey,
+                                                title: Text(
+                                                    (state
+                                                                .listItems[index]
+                                                                .postitems[0]
+                                                                .content
+                                                            as TextContent)
+                                                        .text,
+                                                    textAlign:
+                                                        TextAlign.center),
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 100,
+                                                        vertical: 100),
+                                              ),
+                                              const SizedBox(height: 10),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  state.listItems[index].votes
+                                                              .any((element) =>
+                                                                  element
+                                                                      .value ==
+                                                                  1) ||
+                                                          (statecubit.votes
+                                                                  .containsKey(state
+                                                                      .listItems[
+                                                                          index]
+                                                                      .id) &&
+                                                              statecubit.votes[state
+                                                                      .listItems[
+                                                                          index]
+                                                                      .id] ==
+                                                                  1)
+                                                      ? const Text('Publicado')
+                                                      : ElevatedButton(
+                                                          onPressed: () {
+                                                            if (_key.currentState
+                                                                    ?.validate() ==
+                                                                true) {
+                                                              context
+                                                                  .read<
+                                                                      UploadedLiveCubit>()
+                                                                  .makeVote(
+                                                                      state
+                                                                          .listItems[
+                                                                              index]
+                                                                          .id,
+                                                                      1);
+
+                                                              context
+                                                                  .read<
+                                                                      UploadedBloc>()
+                                                                  .add(OnUploadedVote(
+                                                                      state
+                                                                          .listItems[
+                                                                              index]
+                                                                          .id,
+                                                                      1));
+                                                            }
+                                                          },
+                                                          child: const Text(
+                                                              'Publicar')),
+                                                  ElevatedButton(
+                                                      style: ButtonStyle(
+                                                        shape:
+                                                            MaterialStateProperty
+                                                                .resolveWith(
+                                                          (states) =>
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20.0),
+                                                            side: BorderSide(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .secondaryHeaderColor,
+                                                              width: 2,
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ),
-                                                  onPressed: () {
-                                                    if (_key.currentState
-                                                            ?.validate() ==
-                                                        true) {
-                                                      context
-                                                          .read<UploadedBloc>()
-                                                          .add(OnUploadedPost(
-                                                              postIdController
-                                                                  .text,
-                                                              1));
-                                                    }
-                                                  },
-                                                  child:
-                                                      const Text('Publicar')),
-                                              ElevatedButton(
-                                                  style: ButtonStyle(
-                                                    shape: MaterialStateProperty
-                                                        .resolveWith(
-                                                      (states) =>
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20.0),
-                                                        side: BorderSide(
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .secondaryHeaderColor,
-                                                          width: 2,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  onPressed: () {},
-                                                  child:
-                                                      const Icon(Icons.edit)),
+                                                      onPressed: () {},
+                                                      child: const Icon(
+                                                          Icons.edit)),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 15),
                                             ],
                                           ),
-                                          const SizedBox(height: 15),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
+                                    // const Divider()
                                   ],
                                 ),
-                                // const Divider()
-                              ],
-                            ),
-                          );
-                        }),
+                              );
+                            });
+                      },
+                    ),
                   ],
                 );
               }
