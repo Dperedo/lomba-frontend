@@ -16,6 +16,7 @@ import '../bloc/home_state.dart';
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
+  GlobalKey<ScaffoldState> homeScreenKey = GlobalKey<ScaffoldState>();
   final TextEditingController _searchController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final int _fixPageSize = 8;

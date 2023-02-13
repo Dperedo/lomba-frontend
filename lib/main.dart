@@ -58,6 +58,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyApp extends State<MyApp> {
+  final AppRouter _appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -94,7 +95,7 @@ class _MyApp extends State<MyApp> {
             );
           }
         ),
-        onGenerateRoute: AppRouter().onGenerateRoute,
+        onGenerateRoute: _appRouter.onGenerateRoute,
       ),
     );
   }
