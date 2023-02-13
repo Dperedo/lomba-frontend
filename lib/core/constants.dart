@@ -17,6 +17,54 @@ class UrlBackend {
       defaultValue: 'http://localhost:4001');
 }
 
+class FirebaseConfig {
+  static const String webAPIKey = String.fromEnvironment('FIREBASE_WEB_APIKEY',
+      defaultValue: 'AIzaSyBo04vjnwIMshIMpQBHPq97sJtmobaFCT4');
+  static const String androidAPIKey = String.fromEnvironment(
+      'FIREBASE_ANDROID_APIKEY',
+      defaultValue: 'AIzaSyCoRSyoxNQW7smoQHMKZSSVstVDzfjGDbQ');
+  static const String iosAPIKey = String.fromEnvironment('FIREBASE_IOS_APIKEY',
+      defaultValue: 'AIzaSyCfK5iIcTbqKK9GQGxcw7-QJMOxvOYDlKM');
+  static const String appId = String.fromEnvironment('FIREBASE_APP_ID',
+      defaultValue: '1:697984302717:android:7a25ab9711f45594327b14');
+  static const String messagingSenderId = String.fromEnvironment(
+      'FIREBASE_MSG_SENDER_ID',
+      defaultValue: '697984302717');
+  static const String projectId = String.fromEnvironment('FIREBASE_PROJECT_ID',
+      defaultValue: 'lomba-94302');
+  static const String storageBucket = String.fromEnvironment(
+      'FIREBASE_STORAGE_BUCKET',
+      defaultValue: 'lomba-94302.appspot.com');
+  static const String measurementId = String.fromEnvironment(
+      'FIREBASE_MEASUREMENT_ID',
+      defaultValue: 'G-V8LHBP5JL8');
+  static const String authDomain = String.fromEnvironment(
+      'FIREBASE_AUTH_DOMAIN',
+      defaultValue: 'lomba-94302.firebaseapp.com');
+  static const String iosClientId = String.fromEnvironment(
+      'FIREBASE_IOS_CLIENT_ID',
+      defaultValue:
+          '697984302717-qq0u5gmp0ogl4e537en7pghflam21j7b.apps.googleusercontent.com');
+  static const String iosBundleId = String.fromEnvironment(
+      'FIREBASE_IOS_BUNDLE_ID',
+      defaultValue: 'com.example.lombaFrontend');
+}
+/*
+
+FIREBASE_WEB_APIKEY
+FIREBASE_ANDROID_APIKEY
+FIREBASE_IOS_APIKEY
+FIREBASE_APP_ID
+FIREBASE_MSG_SENDER_ID
+FIREBASE_PROJECT_ID
+FIREBASE_STORAGE_BUCKET
+FIREBASE_MEASUREMENT_ID
+FIREBASE_AUTH_DOMAIN
+FIREBASE_IOS_CLIENT_ID
+FIREBASE_IOS_BUNDLE_ID
+
+*/
+
 class ScreenSize {
   static const minScreen = 550;
   static const maxScreen = 1200;

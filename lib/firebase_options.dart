@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:lomba_frontend/core/constants.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -24,8 +25,6 @@ class DefaultFirebaseOptions {
         return android;
       case TargetPlatform.iOS:
         return ios;
-      case TargetPlatform.macOS:
-        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -44,40 +43,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBo04vjnwIMshIMpQBHPq97sJtmobaFCT4',
-    appId: '1:697984302717:web:ae2cb8e8baf17b44327b14',
-    messagingSenderId: '697984302717',
-    projectId: 'lomba-94302',
-    authDomain: 'lomba-94302.firebaseapp.com',
-    storageBucket: 'lomba-94302.appspot.com',
-    measurementId: 'G-V8LHBP5JL8',
+    apiKey: FirebaseConfig.webAPIKey,
+    appId: FirebaseConfig.appId,
+    messagingSenderId: FirebaseConfig.messagingSenderId,
+    projectId: FirebaseConfig.projectId,
+    authDomain: FirebaseConfig.authDomain,
+    storageBucket: FirebaseConfig.storageBucket,
+    measurementId: FirebaseConfig.measurementId,
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCoRSyoxNQW7smoQHMKZSSVstVDzfjGDbQ',
-    appId: '1:697984302717:android:7a25ab9711f45594327b14',
-    messagingSenderId: '697984302717',
-    projectId: 'lomba-94302',
-    storageBucket: 'lomba-94302.appspot.com',
+    apiKey: FirebaseConfig.androidAPIKey,
+    appId: FirebaseConfig.appId,
+    messagingSenderId: FirebaseConfig.messagingSenderId,
+    projectId: FirebaseConfig.projectId,
+    storageBucket: FirebaseConfig.storageBucket,
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCfK5iIcTbqKK9GQGxcw7-QJMOxvOYDlKM',
-    appId: '1:697984302717:ios:8aeeb190ecddb0a1327b14',
-    messagingSenderId: '697984302717',
-    projectId: 'lomba-94302',
-    storageBucket: 'lomba-94302.appspot.com',
-    iosClientId: '697984302717-qq0u5gmp0ogl4e537en7pghflam21j7b.apps.googleusercontent.com',
-    iosBundleId: 'com.example.lombaFrontend',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCfK5iIcTbqKK9GQGxcw7-QJMOxvOYDlKM',
-    appId: '1:697984302717:ios:8aeeb190ecddb0a1327b14',
-    messagingSenderId: '697984302717',
-    projectId: 'lomba-94302',
-    storageBucket: 'lomba-94302.appspot.com',
-    iosClientId: '697984302717-qq0u5gmp0ogl4e537en7pghflam21j7b.apps.googleusercontent.com',
-    iosBundleId: 'com.example.lombaFrontend',
+    apiKey: FirebaseConfig.iosAPIKey,
+    appId: FirebaseConfig.appId,
+    messagingSenderId: FirebaseConfig.messagingSenderId,
+    projectId: FirebaseConfig.projectId,
+    storageBucket: FirebaseConfig.storageBucket,
+    iosClientId: FirebaseConfig.iosClientId,
+    iosBundleId: FirebaseConfig.iosBundleId,
   );
 }
