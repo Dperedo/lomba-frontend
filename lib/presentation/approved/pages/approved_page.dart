@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/core/widget.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../../../../domain/entities/flows/textcontent.dart';
+import '../../../core/widgets/body_formater.dart';
+import '../../../core/widgets/scaffold_manager.dart';
 import '../../sidedrawer/pages/sidedrawer_page.dart';
 import '../bloc/approved_bloc.dart';
 import '../bloc/approved_event.dart';
@@ -23,13 +24,13 @@ class ApprovedPage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return ShowMenu(
-      title: "Aprobados", 
+    return ScaffoldManager(
+      title: AppBar(title: const Text("Aprobados"),), 
       child: SingleChildScrollView(
         child: Center(
           child: Column(
             children: [
-              ScreenBody(
+              BodyFormater(
                 child: _bodyApproved(context)
               )
             ],

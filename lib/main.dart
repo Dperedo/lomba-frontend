@@ -17,6 +17,7 @@ import 'package:lomba_frontend/presentation/uploaded/pages/uploaded_page.dart';
 import 'package:lomba_frontend/presentation/voted/pages/voted_page.dart';
 import 'package:lomba_frontend/presentation/voted/bloc/voted_bloc.dart';
 
+import 'core/router/app_router.dart';
 import 'presentation/nav/bloc/nav_state.dart';
 import 'presentation/addcontent/pages/addcontent_page.dart';
 import 'presentation/demolist/bloc/demolist_bloc.dart';
@@ -28,7 +29,7 @@ import 'presentation/orgas/bloc/orga_bloc.dart';
 import 'presentation/orgas/bloc/orgauser_bloc.dart';
 import 'presentation/profile/bloc/profile_bloc.dart';
 import 'presentation/profile/pages/profile_page.dart';
-import 'presentation/rejected/presentation/pages/rejected_page.dart';
+import 'presentation/rejected/pages/rejected_page.dart';
 import 'presentation/roles/bloc/role_bloc.dart';
 import 'presentation/roles/pages/role_page.dart';
 import 'presentation/sidedrawer/bloc/sidedrawer_bloc.dart';
@@ -39,6 +40,7 @@ import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //usePathUrlStrategy();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -57,6 +59,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyApp extends State<MyApp> {
+  final AppRouter _appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -80,6 +83,7 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<PopularBloc>()),
       ],
       child: MaterialApp(
+        //initialRoute: HomePage.route,
           title: 'App Demo',
           theme: ThemeData(
             primarySwatch: Colors.deepOrange,
@@ -91,7 +95,10 @@ class _MyApp extends State<MyApp> {
               duration: const Duration(milliseconds: 300),
               child: _bodyForState(state),
             );
-          })),
+          }
+        ),
+        onGenerateRoute: _appRouter.onGenerateRoute,
+      ),
     );
   }
 

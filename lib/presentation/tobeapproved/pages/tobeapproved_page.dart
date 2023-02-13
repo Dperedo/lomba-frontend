@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/core/widgets/body_formater.dart';
+import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../../../domain/entities/flows/textcontent.dart';
@@ -16,16 +18,19 @@ class ToBeApprovedPage extends StatelessWidget {
   final int _fixPageSize = 8;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Por aprobar")),
-      body: SingleChildScrollView(
+    return ScaffoldManager(
+      title: AppBar(title: const Text("Por aprobar")),
+      child: SingleChildScrollView(
         child: Center(
           child: Column(
-            children: [_bodyToBeApproved(context)],
+            children: [
+              BodyFormater(
+                child: _bodyToBeApproved(context)
+                )
+              ],
           ),
         )
-      ),
-      drawer: const SideDrawer(),
+      )
     );
   }
 

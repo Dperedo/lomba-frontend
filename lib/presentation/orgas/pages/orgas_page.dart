@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/constants.dart';
-import 'package:lomba_frontend/core/widget.dart';
-import 'package:lomba_frontend/data/models/sort_model.dart';
 import 'package:lomba_frontend/core/validators.dart';
 import 'package:lomba_frontend/data/models/orgauser_model.dart';
+import 'package:lomba_frontend/data/models/sort_model.dart';
 import 'package:lomba_frontend/presentation/orgas/bloc/orga_event.dart';
 import 'package:lomba_frontend/presentation/orgas/bloc/orgauser_event.dart';
-import 'package:lomba_frontend/presentation/sidedrawer/pages/sidedrawer_page.dart';
 
 import '../../../core/fakedata.dart';
-import '../../../domain/entities/user.dart';
+import '../../../core/widgets/body_formater.dart';
+import '../../../core/widgets/scaffold_manager.dart';
 import '../../../domain/entities/orgauser.dart';
+import '../../../domain/entities/user.dart';
 import '../bloc/orga_bloc.dart';
 import '../bloc/orga_state.dart';
 import '../bloc/orgauser_bloc.dart';
@@ -31,16 +31,8 @@ class OrgasPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OrgaBloc, OrgaState>(
       builder: (context, state) {
-        return /*ShowMenu(
-          title: title, 
-          child: child
-          ); */
-        Scaffold(
-          appBar: _variableAppBar(context, state),
-          body: SingleChildScrollView(
-              child: Column(
-            children: [_bodyOrgas(context, state)],
-          )),
+        return ScaffoldManager(
+          title: _variableAppBar(context, state),
           floatingActionButton: (state is OrgaListLoaded || state is OrgaStart)
               ? FloatingActionButton(
                   key: const ValueKey("btnAddOption"),
@@ -51,8 +43,16 @@ class OrgasPage extends StatelessWidget {
                   },
                   child: const Icon(Icons.group_add))
               : null,
-          drawer: const SideDrawer(),
-        );
+          child: SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  children: [
+                    BodyFormater(child: _bodyOrgas(context, state))
+                    ],
+                ),
+              )
+            ),
+          );
       },
     );
   }
@@ -138,7 +138,8 @@ class OrgasPage extends StatelessWidget {
                       "Estado: ${(state.orga.enabled ? 'Habilitado' : 'Deshabilitado')}")),
             ),
             const Divider(),
-            Row(
+            Wrap(
+              runSpacing: 12,
               children: [
                 ElevatedButton.icon(
                   icon: const Icon(Icons.delete),

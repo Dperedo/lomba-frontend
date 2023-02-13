@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/core/widgets/body_formater.dart';
+import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../../../../domain/entities/flows/textcontent.dart';
-import '../../../sidedrawer/pages/sidedrawer_page.dart';
-import '../../bloc/rejected_bloc.dart';
-import '../../bloc/rejected_event.dart';
-import '../../bloc/rejected_state.dart';
+import '../../sidedrawer/pages/sidedrawer_page.dart';
+import '../bloc/rejected_bloc.dart';
+import '../bloc/rejected_event.dart';
+import '../bloc/rejected_state.dart';
 
 ///Página con los contenidos rechazados por el usuario revisor
 ///
@@ -22,20 +24,23 @@ class RejectedPage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Rechazados")),
-      body: SingleChildScrollView(
+    return ScaffoldManager(
+      title: AppBar(title: const Text("Rechazados")),
+      child: SingleChildScrollView(
         child: Center(
           child: Column(
-            children: [_bodyApproved(context)],
+            children: [
+              BodyFormater(
+                child: _bodyRejected(context)
+              )
+            ],
           ),
         )
       ),
-      drawer: const SideDrawer(),
     );
   }
 
-  Widget _bodyApproved(BuildContext context){
+  Widget _bodyRejected(BuildContext context){
 
     List<String> listFields = <String>["uploaded", "sent",];
     return SizedBox(

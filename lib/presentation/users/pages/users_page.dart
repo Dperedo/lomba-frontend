@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/validators.dart';
+import 'package:lomba_frontend/core/widgets/body_formater.dart';
+import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/users/bloc/user_event.dart';
-import 'package:lomba_frontend/presentation/sidedrawer/pages/sidedrawer_page.dart';
 
-import '../../../core/validators.dart';
 import '../bloc/user_bloc.dart';
 import '../bloc/user_state.dart';
 
@@ -15,14 +15,8 @@ class UsersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UserBloc, UserState>(
       builder: (context, state) {
-        return Scaffold(
-          appBar: _variableAppBar(context, state),
-          body: SingleChildScrollView(
-              child: Column(
-            children: [
-              _bodyUsers(context, state),
-            ],
-          )),
+        return ScaffoldManager(
+          title: _variableAppBar(context, state),
           floatingActionButton: (state is UserListLoaded || state is UserStart)
               ? FloatingActionButton(
                   key: const ValueKey("btnAddOption"),
@@ -31,8 +25,18 @@ class UsersPage extends StatelessWidget {
                     context.read<UserBloc>().add(OnUserPrepareForAdd());
                   },
                   child: const Icon(Icons.person_add))
-              : null,
-          drawer: const SideDrawer(),
+              : null, 
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  BodyFormater(
+                    child: _bodyUsers(context, state),
+                  )
+                ],
+              ),
+            )
+          ),
         );
       },
     );
