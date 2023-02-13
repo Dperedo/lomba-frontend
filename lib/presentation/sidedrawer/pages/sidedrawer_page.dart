@@ -206,9 +206,9 @@ class SideDrawer extends StatelessWidget {
             if (state.opts.contains(SideDrawerUserOptions.optViewed)) {
               childrenOptionsList.add(ListTile(
                 leading: const Icon(Icons.view_sidebar),
-                title: const Text('Vistos'),
+                title: const Text('Votados'),
                 onTap: () {
-                  _handleItemClick(context, NavItem.pageViewed);
+                  _handleItemClick(context, NavItem.pageVoted);
                 },
               ));
             }
