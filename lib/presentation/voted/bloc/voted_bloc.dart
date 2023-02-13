@@ -6,6 +6,7 @@ import 'package:lomba_frontend/presentation/voted/bloc/voted_event.dart';
 import 'package:lomba_frontend/presentation/voted/bloc/voted_state.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
 import '../../../domain/usecases/flow/get_voted_posts.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
@@ -66,20 +67,15 @@ class VotedBloc extends Bloc<VotedEvent, VotedState> {
     });
 
     on<OnVotedAddVote>((event, emit) async {
-      String flowId = '00000111-0111-0111-0111-000000000111';
-      String stageId = '00000BBB-0111-0111-0111-000000000111';
+      String flowId = Flows.votationFlowId;
+      String stageId = StagesVotationFlow.stageId03Voting;
       var auth = const SessionModel(token: "", username: "", name: "");
       final session = await _getSession.execute();
       session.fold((l) => emit(VotedError(l.message)), (r) => {auth = r});
 
       final result = await _votePublication.execute(auth.getOrgaId()!,
           auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);
-      result.fold((l) => emit(VotedError(l.message)), (r) {
-        event.voteLoaded.votes
-            .addEntries(<String, int>{event.postId: event.voteValue}.entries);
-
-        emit(event.voteLoaded);
-      });
+      result.fold((l) => emit(VotedError(l.message)), (r) {});
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {
