@@ -19,6 +19,7 @@ class VotedLoaded extends VotedState {
   final String userId;
   final String flowId;
   final String stageId;
+  final bool positive;
   final String searchText;
   final Map<String, int> fieldsOrder;
   final int pageIndex;
@@ -33,6 +34,7 @@ class VotedLoaded extends VotedState {
       this.userId,
       this.flowId,
       this.stageId,
+      this.positive,
       this.searchText,
       this.fieldsOrder,
       this.pageIndex,

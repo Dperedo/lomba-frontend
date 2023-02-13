@@ -7,6 +7,7 @@ import '../../../core/widgets/scaffold_manager.dart';
 import '../../../domain/entities/flows/textcontent.dart';
 import '../../sidedrawer/pages/sidedrawer_page.dart';
 import '../bloc/voted_bloc.dart';
+import '../bloc/voted_cubit.dart';
 import '../bloc/voted_event.dart';
 import '../bloc/voted_state.dart';
 
@@ -36,14 +37,12 @@ class VotedPage extends StatelessWidget {
   }
 
   Widget _bodyVoted(BuildContext context) {
-    final TextEditingController postIdController = TextEditingController();
-    final TextEditingController voteValueController = TextEditingController();
+    
 
-    List<String> listFields = <String>[
-      "uploaded",
-      "voted",
-    ];
-    return SizedBox(
+    List<String> listFields = <String>["uploaded", "voted"];
+    return BlocProvider<VotedLiveCubit>(
+      create: (context)=>VotedLiveCubit(),
+        child: SizedBox(
         width: 800,
         child: Form(
             key: _key,
@@ -51,7 +50,15 @@ class VotedPage extends StatelessWidget {
               builder: (context, state) {
                 if (state is VotedStart) {
                   context.read<VotedBloc>().add(OnVotedLoad(
-                      '', const <String, int>{'uploaded': 1}, 1, _fixPageSize));
+                      '', const <String, int>{'uploaded': 1}, 1, _fixPageSize,
+                      context
+                          .read<VotedLiveCubit>()
+                          .state
+                          .checks["positive"]!,
+                      context
+                          .read<VotedLiveCubit>()
+                          .state
+                          .checks["negative"]!));
                 }
                 if (state is VotedLoading) {
                   return const Center(
@@ -87,6 +94,7 @@ class VotedPage extends StatelessWidget {
                                   ),
                                 ),
                                 IconButton(
+                                  
                                     onPressed: () {
                                       context.read<VotedBloc>().add(OnVotedLoad(
                                           _searchController.text,
@@ -94,13 +102,65 @@ class VotedPage extends StatelessWidget {
                                             state.fieldsOrder.keys.first: 1
                                           },
                                           1,
-                                          _fixPageSize));
+                                          _fixPageSize,
+                                          context
+                                          .read<VotedLiveCubit>()
+                                          .state
+                                          .checks["positive"]!,
+                                          context
+                                            .read<VotedLiveCubit>()
+                                            .state
+                                            .checks["negative"]!));
                                     },
                                     icon: const Icon(Icons.search)),
                               ],
                             ),
                             const SizedBox(
                               height: 8,
+                            ),
+                            BlocBuilder<VotedLiveCubit, VotedLiveState>(
+                              builder: (context, statecubit) {
+                                return Column(
+                                  children: [
+                                    SwitchListTile.adaptive(
+                                      title: const Text('Mostrar positivos'),
+                                      value: statecubit.checks["positive"]!,
+                                      onChanged: (value) {
+                                        context.read<VotedLiveCubit>().changeCheckValue(
+                                            "positive", !statecubit.checks["positive"]!);
+
+                                        context.read<VotedBloc>().add(OnVotedLoad(
+                                            _searchController.text,
+                                            <String, int>{state.fieldsOrder.keys.first: 1},
+                                            1,
+                                            _fixPageSize,
+                                            statecubit.checks["positive"]!,
+                                            statecubit.checks["negative"]!
+
+                                        ));
+                                      },
+                                    ),
+                                    SwitchListTile.adaptive(
+                                      title: const Text('Mostrar negativos'),
+                                      value: statecubit.checks["negative"]!,
+                                      onChanged: (value) {
+                                        context.read<VotedLiveCubit>().changeCheckValue(
+                                            "negative", !statecubit.checks["negative"]!);
+
+                                        context.read<VotedBloc>().add(OnVotedLoad(
+                                            _searchController.text,
+                                            <String, int>{state.fieldsOrder.keys.first: 1},
+                                            1,
+                                            _fixPageSize,
+                                            statecubit.checks["positive"]!,
+                                            statecubit.checks["negative"]!));
+                                      },
+                                    ),
+                                    
+                                  ],
+                                );
+                                
+                              },
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -125,7 +185,15 @@ class VotedPage extends StatelessWidget {
                                               state.fieldsOrder.keys.first: 1
                                             },
                                             value,
-                                            _fixPageSize))),
+                                            _fixPageSize,
+                                            context
+                                              .read<VotedLiveCubit>()
+                                              .state
+                                              .checks["positive"]!,
+                                            context
+                                            .read<VotedLiveCubit>()
+                                            .state
+                                            .checks["negative"]!))),
                                 const VerticalDivider(),
                                 const Text("Orden:"),
                                 const VerticalDivider(),
@@ -144,7 +212,15 @@ class VotedPage extends StatelessWidget {
                                         state.searchText,
                                         <String, int>{value!: 1},
                                         state.pageIndex,
-                                        _fixPageSize));
+                                        _fixPageSize,
+                                        context
+                                          .read<VotedLiveCubit>()
+                                          .state
+                                          .checks["positive"]!,
+                                          context
+                                            .read<VotedLiveCubit>()
+                                            .state
+                                            .checks["negative"]!));
                                   },
                                 )
                               ],
@@ -160,7 +236,9 @@ class VotedPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      ListView.builder(
+                      BlocBuilder<VotedLiveCubit,VotedLiveState>(
+                      builder: (context, statecubit){
+                      return ListView.builder(
                           shrinkWrap: true,
                           itemCount: state.listItems.length,
                           itemBuilder: (context, index) {
@@ -209,62 +287,66 @@ class VotedPage extends StatelessWidget {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                IconButton(
-                                                    icon: Icon(state
-                                                            .votes.entries
-                                                            .any((element) =>
-                                                                element.key ==
-                                                                    state
-                                                                        .listItems[
-                                                                            index]
-                                                                        .id &&
-                                                                element.value ==
-                                                                    -1)
-                                                        ? Icons.access_alarm
-                                                        : Icons.arrow_downward),
+                                                state.listItems[index].votes.any(
+                                                  (element)=>element.value == -1)||
+                                                  (statecubit.votes.containsKey(state.listItems[index].id)&&
+                                                  statecubit.votes[state.listItems[index].id] == -1)
+                                                ? const IconButton(
+                                                    onPressed: null, 
+                                                    icon: Icon(Icons.arrow_downward)
+                                                  )
+                                                :IconButton(
+                                                    icon: const Icon(Icons.arrow_downward),
                                                     onPressed: () {
                                                       if (_key.currentState
-                                                              ?.validate() ==
-                                                          true) {
-                                                        context
-                                                            .read<VotedBloc>()
-                                                            .add(OnVotedAddVote(
-                                                                state
-                                                                    .listItems[
-                                                                        index]
-                                                                    .id,
-                                                                -1,
-                                                                state));
+                                                        ?.validate() ==
+                                                        true
+                                                      ){
+                                                      context
+                                                      .read<VotedLiveCubit>()
+                                                      .makeVote(
+                                                          state.listItems[index]
+                                                              .id,
+                                                          -1);
+
+                                                      context
+                                                      .read<VotedBloc>()
+                                                      .add(OnVotedAddVote(
+                                                          state.listItems[index]
+                                                              .id,
+                                                          -1));
                                                       }
                                                     }),
-                                                IconButton(
-                                                  icon: Icon(state.votes.entries
-                                                          .any((element) =>
-                                                              element.key ==
-                                                                  state
-                                                                      .listItems[
-                                                                          index]
-                                                                      .id &&
-                                                              element.value ==
-                                                                  1)
-                                                      ? Icons.access_alarm
-                                                      : Icons.arrow_upward),
-                                                  onPressed: () {
-                                                    if (_key.currentState
-                                                            ?.validate() ==
-                                                        true) {
+                                                state.listItems[index].votes.any(
+                                                  (element)=>element.value == 1)||
+                                                  (statecubit.votes.containsKey(state.listItems[index].id)&&
+                                                  statecubit.votes[state.listItems[index].id] == 1)
+                                                ? const IconButton(
+                                                    onPressed: null, 
+                                                    icon: Icon(Icons.arrow_upward)
+                                                  )
+                                                :IconButton(
+                                                    icon: const Icon(Icons.arrow_upward),
+                                                    onPressed: () {
+                                                      if (_key.currentState
+                                                        ?.validate() ==
+                                                        true
+                                                      ){
                                                       context
-                                                          .read<VotedBloc>()
-                                                          .add(OnVotedAddVote(
-                                                              state
-                                                                  .listItems[
-                                                                      index]
-                                                                  .id,
-                                                              1,
-                                                              state));
-                                                    }
-                                                  },
-                                                ),
+                                                      .read<VotedLiveCubit>()
+                                                      .makeVote(
+                                                          state.listItems[index]
+                                                              .id,
+                                                          1);
+
+                                                      context
+                                                      .read<VotedBloc>()
+                                                      .add(OnVotedAddVote(
+                                                          state.listItems[index]
+                                                              .id,
+                                                          1));
+                                                      }
+                                                    })
                                               ],
                                             ),
                                             const SizedBox(height: 15),
@@ -277,12 +359,15 @@ class VotedPage extends StatelessWidget {
                                 ],
                               ),
                             );
-                          }),
+                          });
+                      },
+                      )
                     ],
                   );
                 }
                 return const SizedBox();
               },
-            )));
+            )))
+    );
   }
 }
