@@ -16,6 +16,7 @@ import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/presentation/pages/uploaded_page.dart';
 import 'package:lomba_frontend/presentation/viewed/presentation/pages/viewed_page.dart';
 
+import 'core/router/app_router.dart';
 import 'presentation/nav/bloc/nav_state.dart';
 import 'presentation/addcontent/pages/addcontent_page.dart';
 import 'presentation/demolist/bloc/demolist_bloc.dart';
@@ -90,7 +91,10 @@ class _MyApp extends State<MyApp> {
               duration: const Duration(milliseconds: 300),
               child: _bodyForState(state),
             );
-          })),
+          }
+        ),
+        onGenerateRoute: AppRouter().onGenerateRoute,
+      ),
     );
   }
 

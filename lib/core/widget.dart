@@ -45,7 +45,9 @@ class ShowMenu extends StatelessWidget {
             children: [
               const SizedBox(
                 width: 300,
-                child: SideDrawer(),
+                child: SideDrawer(
+                  key: ValueKey("sidedrawer"),
+                ),
               ),
               Expanded(
                 child: Scaffold(
@@ -59,7 +61,9 @@ class ShowMenu extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(title: Text(title),),
             body: child,
-            drawer: const SideDrawer(),
+            drawer: const SideDrawer(
+              key: ValueKey("sidedrawer"),
+            ),
           );
         }
       }
