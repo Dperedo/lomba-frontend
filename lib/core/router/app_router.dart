@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 
 import '../../presentation/addcontent/pages/addcontent_page.dart';
 import '../../presentation/home/pages/home_page.dart';
-import '../../presentation/login/pages/login_page.dart';
+import '../../presentation/nav/bloc/nav_state.dart';
+import '../widgets/router_page.dart';
 
 class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
-    final Object? key = settings.arguments;
-    switch (settings.name) {
-      case '/Home':
+    switch (settings.name?.toLowerCase()) {
+      case '/home':
         return MaterialPageRoute(
           builder: (_) => HomePage(),
         );
-      case '/addContent':
+      case '/addcontent':
         return MaterialPageRoute(
           builder: (_) => AddContentPage(),
         );
       case '/login':
         return MaterialPageRoute(
-          builder: (_) => LoginPage(),
+          builder: (context) => const RouterPage(naveItem: NavItem.pageLogin),
         );
       default:
         return null;
