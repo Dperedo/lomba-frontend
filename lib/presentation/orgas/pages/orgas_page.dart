@@ -450,8 +450,8 @@ class OrgasPage extends StatelessWidget {
       create: (context) => OrgaUserDialogEditCubit(orgaUser),
       child: Dialog(
         child: Container(
-          height: 400,
-          width: 500,
+          height: 450,
+          width: 450,
           child: Padding(
             padding: const EdgeInsets.all(10),
             child:
@@ -465,8 +465,9 @@ class OrgasPage extends StatelessWidget {
                       child: Text(user.name,
                           style: const TextStyle(fontSize: 18))),
                   const VerticalDivider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Wrap(
+                  runSpacing: 12,
+                    //mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text("Asociación habilitada: "),
                       Checkbox(
