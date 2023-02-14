@@ -28,11 +28,12 @@ class ScaffoldManager extends StatelessWidget {
             ),
           ),
           Expanded(
-              child: Scaffold(
-            appBar: title,
-            body: child,
-            floatingActionButton: floatingActionButton,
-          ))
+            child: Scaffold(
+              appBar: title,
+              body: child,
+              floatingActionButton: floatingActionButton,
+            )
+          )
         ],
       );
     } else {

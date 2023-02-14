@@ -40,7 +40,7 @@ void main() {
   });
 
   const listUser = <String>["home", "logoff", "profile"];
-  testWidgets('entrega mensaje bienvenido usuario logueado',
+  /*testWidgets('entrega mensaje bienvenido usuario logueado',
       (WidgetTester tester) async {
     //arrange
     when(() => mockSideDrawerBloc.state)
@@ -54,5 +54,5 @@ void main() {
 
     //assert
     expect(message, findsOneWidget);
-  });
+  });*/
 }

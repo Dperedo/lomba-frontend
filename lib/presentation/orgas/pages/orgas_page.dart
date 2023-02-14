@@ -243,7 +243,8 @@ class OrgasPage extends StatelessWidget {
               ],
             ),
             const Divider(),
-            Row(
+            Wrap(
+              runSpacing: 12,
               children: [
                 ElevatedButton.icon(
                   icon: const Icon(Icons.add_moderator),
@@ -868,7 +869,8 @@ class OrgasPage extends StatelessWidget {
         if (state is OrgaUserEditing) {
           return Column(
             children: [
-              Row(
+              Wrap(
+              runSpacing: 8,
                 children: [
                   const Text("Asociación habilitada: "),
                   Checkbox(
