@@ -45,7 +45,7 @@ jobs:
         with:
           channel: beta
       - name: Build the Flutter Web App
-        run: flutter build web --dart-define=API_BASE_URL=https://lomba-develop-back.azurewebsites.net --dart-define=FIREBASE_WEB_APIKEY=AIzaSyBo04vjnwIMshIMpQBHPq97sJtmobaFCT4 --dart-define=FIREBASE_APP_ID=1:697984302717:android:7a25ab9711f45594327b14 --dart-define=FIREBASE_MSG_SENDER_ID=697984302717 --dart-define=FIREBASE_PROJECT_ID=lomba-94302 --dart-define=FIREBASE_STORAGE_BUCKET=lomba-94302.appspot.com --dart-define=FIREBASE_MEASUREMENT_ID=G-V8LHBP5JL8
+        run: flutter build web --dart-define=API_BASE_URL=https://lomba-feature-diego.azurewebsites.net --dart-define=FIREBASE_WEB_APIKEY=AIzaSyBo04vjnwIMshIMpQBHPq97sJtmobaFCT4 --dart-define=FIREBASE_APP_ID=1:697984302717:android:7a25ab9711f45594327b14 --dart-define=FIREBASE_MSG_SENDER_ID=697984302717 --dart-define=FIREBASE_PROJECT_ID=lomba-94302 --dart-define=FIREBASE_STORAGE_BUCKET=lomba-94302.appspot.com --dart-define=FIREBASE_MEASUREMENT_ID=G-V8LHBP5JL8
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
