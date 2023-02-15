@@ -466,7 +466,7 @@ void main() {
   });
 
   testWidgets(
-    '...',
+    'Muestra la organización y la lista de usuarios',
     (WidgetTester tester) async {
       when(() => mockOrgaUserBloc.state).thenReturn(
           OrgaUserListLoaded(tOrga2.id, fakeListUsers, fakeListOrgaUsers));

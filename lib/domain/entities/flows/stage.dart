@@ -17,7 +17,7 @@ class Stage extends Equatable {
   final String id;
   final String name;
   final int order;
-  final Object queryOut;
+  final Object? queryOut;
   final bool builtIn;
   final DateTime created;
   final DateTime? updated;
