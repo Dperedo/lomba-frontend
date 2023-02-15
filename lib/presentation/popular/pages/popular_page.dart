@@ -40,7 +40,7 @@ class PopularPage extends StatelessWidget {
       
 Widget _bodyPopular(BuildContext context){
     
-    List<String> listFields = <String>["created", "publicated"];
+    List<String> listFields = <String>["popular"];
     return SizedBox(
       
       width: 800,
@@ -50,7 +50,7 @@ Widget _bodyPopular(BuildContext context){
           builder: (context, state){
               if (state is PopularStart){
                 context.read<PopularBloc>().add(OnPopularLoad(
-                  '', const <String, int>{'created': 1}, 1, _fixPageSize)
+                  '', const <String, int>{'popular': 1}, 1, _fixPageSize)
                 );
               }
               if (state is PopularLoading) {

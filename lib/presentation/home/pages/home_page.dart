@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
       
 Widget _bodyHome(BuildContext context){
     
-    List<String> listFields = <String>["created", "publicated"];
+    List<String> listFields = <String>["latest"];
     return SizedBox(
       
       width: 800,
@@ -50,7 +50,7 @@ Widget _bodyHome(BuildContext context){
           builder: (context, state){
               if (state is HomeStart){
                 context.read<HomeBloc>().add(OnHomeLoading(
-                  '', const <String, int>{'created': 1}, 1, _fixPageSize)
+                  '', const <String, int>{'latest': 1}, 1, _fixPageSize)
                 );
               }
               if (state is HomeLoading) {

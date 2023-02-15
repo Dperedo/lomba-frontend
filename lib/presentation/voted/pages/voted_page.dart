@@ -39,7 +39,7 @@ class VotedPage extends StatelessWidget {
   Widget _bodyVoted(BuildContext context) {
     
 
-    List<String> listFields = <String>["uploaded", "voted"];
+    List<String> listFields = <String>["voted", "voted"];
     return BlocProvider<VotedLiveCubit>(
       create: (context)=>VotedLiveCubit(),
         child: SizedBox(
@@ -50,7 +50,7 @@ class VotedPage extends StatelessWidget {
               builder: (context, state) {
                 if (state is VotedStart) {
                   context.read<VotedBloc>().add(OnVotedLoad(
-                      '', const <String, int>{'uploaded': 1}, 1, _fixPageSize,
+                      '', const <String, int>{'voted': 1}, 1, _fixPageSize,
                       context
                           .read<VotedLiveCubit>()
                           .state

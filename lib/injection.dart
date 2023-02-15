@@ -129,6 +129,7 @@ Future<void> init() async {
   locator.registerFactory(() => ToBeApprovedBloc(
         locator(),
         locator(),
+        locator(),
       ));
   locator
       .registerFactory(() => AddContentBloc(locator(), locator(), locator()));

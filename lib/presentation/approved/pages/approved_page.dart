@@ -42,7 +42,7 @@ class ApprovedPage extends StatelessWidget {
 
   Widget _bodyApproved(BuildContext context){
 
-    List<String> listFields = <String>["uploaded", "sent",];
+    List<String> listFields = <String>["approved", "sent",];
     return SizedBox(
       width: 800,
       child:Form(
@@ -51,7 +51,7 @@ class ApprovedPage extends StatelessWidget {
           builder: (context,state){
             if(state is ApprovedStart){
               context.read<ApprovedBloc>().add(OnApprovedLoad(
-                '',const <String, int>{'uploaded':1}, 1, _fixPageSize
+                '',const <String, int>{'approved':1}, 1, _fixPageSize
               )
               );
             }

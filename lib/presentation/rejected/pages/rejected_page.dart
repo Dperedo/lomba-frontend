@@ -42,7 +42,7 @@ class RejectedPage extends StatelessWidget {
 
   Widget _bodyRejected(BuildContext context){
 
-    List<String> listFields = <String>["uploaded", "sent",];
+    List<String> listFields = <String>["rejected", "sent",];
     return SizedBox(
       width: 800,
       child:Form(
@@ -51,7 +51,7 @@ class RejectedPage extends StatelessWidget {
           builder: (context,state){
             if(state is RejectedStart){
               context.read<RejectedBloc>().add(OnRejectedLoad(
-                '',const <String, int>{'uploaded':1}, 1, _fixPageSize
+                '',const <String, int>{'rejected':1}, 1, _fixPageSize
               )
               );
             }
