@@ -99,8 +99,8 @@ Widget _bodyHome(BuildContext context){
                           ],
                         ),
                         const SizedBox(height: 8,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        Wrap(
+                          //mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Text("Páginas: "),
                             const VerticalDivider(),
