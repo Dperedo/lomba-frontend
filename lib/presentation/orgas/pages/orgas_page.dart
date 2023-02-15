@@ -515,6 +515,7 @@ class OrgasPage extends StatelessWidget {
                               }
                             });
                           },
+                          key: const ValueKey("btnEliminarAsociacion"),
                           icon: const Icon(Icons.delete),
                           label: const Text("Eliminar asociación"))
                     ],
@@ -554,6 +555,7 @@ class OrgasPage extends StatelessWidget {
                           onPressed: () {
                             Navigator.pop(context, state);
                           },
+                          key: const ValueKey('btnGuardarAsoc'),
                           label: const Text("Guardar")),
                       const VerticalDivider(),
                       ElevatedButton.icon(
@@ -561,6 +563,7 @@ class OrgasPage extends StatelessWidget {
                           onPressed: () {
                             Navigator.pop(context, null);
                           },
+                          key: const ValueKey('btnCancelarAsoc'),
                           label: const Text("Cancelar"))
                     ],
                   )
@@ -865,66 +868,6 @@ class OrgasPage extends StatelessWidget {
             ],
           );
         }
-
-        if (state is OrgaUserEditing) {
-          return Column(
-            children: [
-              Wrap(
-              runSpacing: 8,
-                children: [
-                  const Text("Asociación habilitada: "),
-                  Checkbox(
-                      value: state.orgaUser.enabled,
-                      onChanged: ((value) => {value = value})),
-                  ElevatedButton.icon(
-                      key: const ValueKey("btnEliminarAsociacion"),
-                      onPressed: () {},
-                      icon: const Icon(Icons.delete),
-                      label: const Text("Eliminar asociación"))
-                ],
-              ),
-              ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: fakeRoles.length,
-                  itemBuilder: (context, index) {
-                    return CheckboxListTile(
-                        title: Text(
-                          fakeRoles[index].name,
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                        value: state.orgaUser.roles
-                            .contains(fakeRoles[index].name.toString()),
-                        onChanged: ((value) => {}));
-                  }),
-              Center(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Center(
-                        child: Row(
-                          children: [
-                            ElevatedButton.icon(
-                                key: const ValueKey('btnGuardarAsoc'),
-                                icon: const Icon(Icons.save),
-                                onPressed: () {},
-                                label: const Text("Guardar")),
-                            const VerticalDivider(),
-                            ElevatedButton.icon(
-                                key: const ValueKey('btnCancelarAsoc'),
-                                icon: const Icon(Icons.cancel),
-                                onPressed: () {},
-                                label: const Text("Cancelar"))
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ],
-          );
-        }
-
         return const SizedBox();
       },
     );
