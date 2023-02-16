@@ -23,42 +23,33 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScaffoldManager(
-      title: AppBar(), 
+      title: AppBar(),
       child: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              BodyFormater(
-                child: _bodyHome(context)
-                )
-              ],
-          ),
-        )
-      ),
+          child: Center(
+        child: Column(
+          children: [BodyFormater(child: _bodyHome(context))],
+        ),
+      )),
     );
   }
-      
-Widget _bodyHome(BuildContext context){
-    
+
+  Widget _bodyHome(BuildContext context) {
     List<String> listFields = <String>["created", "publicated"];
     return SizedBox(
-      
       width: 800,
       child: Form(
-        key: _key,
-        child: BlocBuilder<HomeBloc, HomeState>(
-          builder: (context, state){
-              if (state is HomeStart){
-                context.read<HomeBloc>().add(OnHomeLoading(
-                  '', const <String, int>{'created': 1}, 1, _fixPageSize)
-                );
-              }
-              if (state is HomeLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if(state is HomeLoaded){
+          key: _key,
+          child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+            if (state is HomeStart) {
+              context.read<HomeBloc>().add(OnHomeLoading(
+                  '', const <String, int>{'created': 1}, 1, _fixPageSize));
+            }
+            if (state is HomeLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (state is HomeLoaded) {
               return Column(
                 children: [
                   Container(
@@ -70,6 +61,7 @@ Widget _bodyHome(BuildContext context){
                             Flexible(
                               flex: 1,
                               child: TextFormField(
+                                key: const ValueKey("search_field"),
                                 controller: _searchController,
                                 cursorColor: Colors.grey,
                                 decoration: InputDecoration(
@@ -86,19 +78,20 @@ Widget _bodyHome(BuildContext context){
                             ),
                             IconButton(
                                 onPressed: () {
-                                  context.read<HomeBloc>().add(
-                                      OnHomeLoading(
-                                          _searchController.text,
-                                          <String, int>{
-                                            state.fieldsOrder.keys.first: 1
-                                          },
-                                          1,
-                                          _fixPageSize));
+                                  context.read<HomeBloc>().add(OnHomeLoading(
+                                      _searchController.text,
+                                      <String, int>{
+                                        state.fieldsOrder.keys.first: 1
+                                      },
+                                      1,
+                                      _fixPageSize));
                                 },
                                 icon: const Icon(Icons.search)),
                           ],
                         ),
-                        const SizedBox(height: 8,),
+                        const SizedBox(
+                          height: 8,
+                        ),
                         Wrap(
                           //mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -109,7 +102,8 @@ Widget _bodyHome(BuildContext context){
                                 haptics: true,
                                 step: 1,
                                 axis: Axis.horizontal,
-                                value: state.totalPages == 0 ? 0 : state.pageIndex,
+                                value:
+                                    state.totalPages == 0 ? 0 : state.pageIndex,
                                 minValue: state.totalPages == 0 ? 0 : 1,
                                 maxValue: state.totalPages,
                                 onChanged: (value) => context
@@ -126,8 +120,8 @@ Widget _bodyHome(BuildContext context){
                             const VerticalDivider(),
                             DropdownButton(
                               value: state.fieldsOrder.keys.first,
-                              items: listFields
-                                  .map<DropdownMenuItem<String>>((String value) {
+                              items: listFields.map<DropdownMenuItem<String>>(
+                                  (String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: Text(value),
@@ -143,86 +137,116 @@ Widget _bodyHome(BuildContext context){
                             )
                           ],
                         ),
-                        const SizedBox(height: 8,),
-                        Text(
-                            "${(state.searchText != "" ? "Buscando por \"${state.searchText}\", mostrando " : "Mostrando ")}${state.itemCount} registros de ${state.totalItems}. Página ${state.pageIndex} de ${state.totalPages}. Ordenado por ${state.fieldsOrder.keys.first}."
+                        const SizedBox(
+                          height: 8,
                         ),
-                        const SizedBox(height: 10,),
+                        Text(
+                            "${(state.searchText != "" ? "Buscando por \"${state.searchText}\", mostrando " : "Mostrando ")}${state.itemCount} registros de ${state.totalItems}. Página ${state.pageIndex} de ${state.totalPages}. Ordenado por ${state.fieldsOrder.keys.first}."),
+                        const SizedBox(
+                          height: 10,
+                        ),
                       ],
                     ),
-                  ),                  
+                  ),
                   ListView.builder(
                       shrinkWrap: true,
                       itemCount: state.listItems.length,
                       itemBuilder: (context, index) {
                         return SingleChildScrollView(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 20),
                           child: Column(
                             children: [
                               Row(
                                 children: [
                                   Expanded(
-                                    child:
-                                    Column(
-                                      children: [                                      
-                                        ListTile(               
+                                    child: Column(
+                                      children: [
+                                        ListTile(
                                           leading: const Icon(Icons.person),
-                                          title: Text(state.listItems[index].title),                                       
+                                          title: Text(
+                                              state.listItems[index].title),
                                         ),
                                         ListTile(
-                                          shape:  const RoundedRectangleBorder(
-                                            side: BorderSide(color: Colors.grey, width: 2 ),
-                                            borderRadius: BorderRadius.all(Radius.circular(2))
-                                          ),
+                                          shape: const RoundedRectangleBorder(
+                                              side: BorderSide(
+                                                  color: Colors.grey, width: 2),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(2))),
                                           // tileColor: Colors.grey,
                                           title: Text(
-                                            (state.listItems[index].postitems[0].content as TextContent).text, 
-                                            textAlign: TextAlign.center
-                                          ),
-                                          contentPadding: const EdgeInsets.symmetric(horizontal: 100,vertical: 100),
+                                              (state
+                                                      .listItems[index]
+                                                      .postitems[0]
+                                                      .content as TextContent)
+                                                  .text,
+                                              textAlign: TextAlign.center),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 100,
+                                                  vertical: 100),
                                         ),
                                         const SizedBox(height: 10),
                                         SizedBox(
-                                          child: (state.validLogin)?Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [   
-                                              ElevatedButton(
-                                                style: ButtonStyle(
-                                                  shape: MaterialStateProperty.resolveWith(
-                                                    (states) => RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(20),
-                                                        side: BorderSide(
-                                                          color: Theme.of(context).secondaryHeaderColor,
-                                                          width: 2,
+                                          child: (state.validLogin)
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    ElevatedButton(
+                                                        style: ButtonStyle(
+                                                          shape:
+                                                              MaterialStateProperty
+                                                                  .resolveWith(
+                                                            (states) =>
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20),
+                                                              side: BorderSide(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .secondaryHeaderColor,
+                                                                width: 2,
+                                                              ),
+                                                            ),
+                                                          ),
                                                         ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                onPressed:(){},
-                                                child: const Icon(Icons.keyboard_arrow_down)
-                                              ),                                          
-                                              ElevatedButton(
-                                                style: ButtonStyle(
-                                                  shape: MaterialStateProperty.resolveWith(
-                                                    (states) => RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(20.0),
-                                                        side: BorderSide(
-                                                          color: Theme.of(context).secondaryHeaderColor,
-                                                          width: 2,
+                                                        onPressed: () {},
+                                                        child: const Icon(Icons
+                                                            .keyboard_arrow_down)),
+                                                    ElevatedButton(
+                                                        style: ButtonStyle(
+                                                          shape:
+                                                              MaterialStateProperty
+                                                                  .resolveWith(
+                                                            (states) =>
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20.0),
+                                                              side: BorderSide(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .secondaryHeaderColor,
+                                                                width: 2,
+                                                              ),
+                                                            ),
+                                                          ),
                                                         ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                onPressed:(){},
-                                                child: const Icon(Icons.keyboard_arrow_up)
-                                              ),
-                                            ],                                         
-                                          ): null,
+                                                        onPressed: () {},
+                                                        child: const Icon(Icons
+                                                            .keyboard_arrow_up)),
+                                                  ],
+                                                )
+                                              : null,
                                         ),
-                                        const SizedBox(height: 15),                                     
+                                        const SizedBox(height: 15),
                                       ],
                                     ),
-                                     
                                   ),
                                 ],
                               ),
@@ -230,15 +254,12 @@ Widget _bodyHome(BuildContext context){
                             ],
                           ),
                         );
-                      }
-                  ),
+                      }),
                 ],
               );
-              }
-              return const SizedBox();
-          }
-        )
-      ),
+            }
+            return const SizedBox();
+          })),
     );
   }
 }
