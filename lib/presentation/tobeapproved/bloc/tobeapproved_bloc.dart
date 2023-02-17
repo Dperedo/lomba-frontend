@@ -22,7 +22,7 @@ class ToBeApprovedBloc extends Bloc<ToBeApprovedEvent, ToBeApprovedState>{
     on<OnToBeApprovedLoad>((event, emit)async{
       emit(ToBeApprovedLoading());
       String flowId = Flows.votationFlowId;
-      String stageId = StagesVotationFlow.stageId01Load;
+      String stageId = StagesVotationFlow.stageId02Approval;
 
       var auth = const SessionModel(token: "", username: "", name: "");
       final session = await _getSession.execute();
@@ -65,7 +65,7 @@ class ToBeApprovedBloc extends Bloc<ToBeApprovedEvent, ToBeApprovedState>{
 
       final result = await _votePublication.execute(auth.getOrgaId()!,
           auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);
-      result.fold((l) => emit(ToBeApprovedError(l.message)), (r) {});
+      result.fold((l) => emit(ToBeApprovedError(l.message)), (r) {emit(ToBeApprovedStart());});
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {

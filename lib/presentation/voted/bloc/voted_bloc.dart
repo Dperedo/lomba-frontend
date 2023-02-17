@@ -78,7 +78,7 @@ class VotedBloc extends Bloc<VotedEvent, VotedState> {
 
       final result = await _votePublication.execute(auth.getOrgaId()!,
           auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);
-      result.fold((l) => emit(VotedError(l.message)), (r) {});
+      result.fold((l) => emit(VotedError(l.message)), (r) {emit(VotedStart());});
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {

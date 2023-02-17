@@ -6,6 +6,7 @@ import '../../../core/widgets/body_formater.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../domain/entities/flows/textcontent.dart';
 import '../bloc/home_bloc.dart';
+import '../bloc/home_cubit.dart';
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
 
@@ -41,11 +42,10 @@ class HomePage extends StatelessWidget {
 Widget _bodyHome(BuildContext context){
     
     List<String> listFields = <String>["latest"];
-    return SizedBox(
-      
-      width: 800,
-      child: Form(
-        key: _key,
+    return BlocProvider<HomeLiveCubit>(
+      create: (context) => HomeLiveCubit(),
+      child: SizedBox(
+        width: 800,
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state){
               if (state is HomeStart){
@@ -151,93 +151,111 @@ Widget _bodyHome(BuildContext context){
                       ],
                     ),
                   ),                  
-                  ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: state.listItems.length,
-                      itemBuilder: (context, index) {
-                        return SingleChildScrollView(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                          child: Column(
-                            children: [
-                              Row(
+                  BlocBuilder<HomeLiveCubit, HomeLiveState>(
+                    builder: (context,statecubit) {
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: state.listItems.length,
+                          itemBuilder: (context, index) {
+                            return SingleChildScrollView(
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                              child: Column(
                                 children: [
-                                  Expanded(
-                                    child:
-                                    Column(
-                                      children: [                                      
-                                        ListTile(               
-                                          leading: const Icon(Icons.person),
-                                          title: Text(state.listItems[index].title),                                       
-                                        ),
-                                        ListTile(
-                                          shape:  const RoundedRectangleBorder(
-                                            side: BorderSide(color: Colors.grey, width: 2 ),
-                                            borderRadius: BorderRadius.all(Radius.circular(2))
-                                          ),
-                                          // tileColor: Colors.grey,
-                                          title: Text(
-                                            (state.listItems[index].postitems[0].content as TextContent).text, 
-                                            textAlign: TextAlign.center
-                                          ),
-                                          contentPadding: const EdgeInsets.symmetric(horizontal: 100,vertical: 100),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        SizedBox(
-                                          child: (state.validLogin)?Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [   
-                                              ElevatedButton(
-                                                style: ButtonStyle(
-                                                  shape: MaterialStateProperty.resolveWith(
-                                                    (states) => RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(20),
-                                                        side: BorderSide(
-                                                          color: Theme.of(context).secondaryHeaderColor,
-                                                          width: 2,
-                                                        ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                onPressed:(){},
-                                                child: const Icon(Icons.keyboard_arrow_down)
-                                              ),                                          
-                                              ElevatedButton(
-                                                style: ButtonStyle(
-                                                  shape: MaterialStateProperty.resolveWith(
-                                                    (states) => RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(20.0),
-                                                        side: BorderSide(
-                                                          color: Theme.of(context).secondaryHeaderColor,
-                                                          width: 2,
-                                                        ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                onPressed:(){},
-                                                child: const Icon(Icons.keyboard_arrow_up)
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child:
+                                        Column(
+                                          children: [                                      
+                                            ListTile(               
+                                              leading: const Icon(Icons.person),
+                                              title: Text(state.listItems[index].title),                                       
+                                            ),
+                                            ListTile(
+                                              shape:  const RoundedRectangleBorder(
+                                                side: BorderSide(color: Colors.grey, width: 2 ),
+                                                borderRadius: BorderRadius.all(Radius.circular(2))
                                               ),
-                                            ],                                         
-                                          ): null,
+                                              // tileColor: Colors.grey,
+                                              title: Text(
+                                                (state.listItems[index].postitems[0].content as TextContent).text, 
+                                                textAlign: TextAlign.center
+                                              ),
+                                              contentPadding: const EdgeInsets.symmetric(horizontal: 100,vertical: 100),
+                                            ),
+                                            const SizedBox(height: 10),
+                                            SizedBox(
+                                              child: (state.validLogin)?Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [   
+                                                  ElevatedButton(
+                                                    style: ButtonStyle(
+                                                      shape: MaterialStateProperty.resolveWith(
+                                                        (states) => RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(20),
+                                                            side: BorderSide(
+                                                              color: Theme.of(context).secondaryHeaderColor,
+                                                              width: 2,
+                                                            ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    onPressed: 
+                                                      state.listItems[index].votes.any((element) =>element.value == 1) 
+                                                      || (statecubit.votes.containsKey(state.listItems[index].id) 
+                                                      && statecubit.votes[state.listItems[index].id] == 1)? null:
+                                                    (){
+                                                      context.read<HomeLiveCubit>().makeVote(state.listItems[index].id,-1);
+                                                      context.read<HomeBloc>().add(OnHomeVote(state.listItems[index].id,-1));
+                                                    },
+                                                    child: const Icon(Icons.keyboard_arrow_down)
+                                                  ),                                          
+                                                  ElevatedButton(
+                                                    style: ButtonStyle(
+                                                      shape: MaterialStateProperty.resolveWith(
+                                                        (states) => RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(20.0),
+                                                            side: BorderSide(
+                                                              color: Theme.of(context).secondaryHeaderColor,
+                                                              width: 2,
+                                                            ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    onPressed: 
+                                                      state.listItems[index].votes.any((element) =>element.value == 1) 
+                                                      || (statecubit.votes.containsKey(state.listItems[index].id) 
+                                                      && statecubit.votes[state.listItems[index].id] == 1)? null:
+                                                    (){
+                                                      context.read<HomeLiveCubit>().makeVote(state.listItems[index].id,1);
+                                                      context.read<HomeBloc>().add(OnHomeVote(state.listItems[index].id,1));
+                                                    },
+                                                    child: const Icon(Icons.keyboard_arrow_up)
+                                                  ),
+                                                ],                                         
+                                              ): null,
+                                            ),
+                                            const SizedBox(height: 15),                                     
+                                          ],
                                         ),
-                                        const SizedBox(height: 15),                                     
-                                      ],
-                                    ),
-                                     
+                                         
+                                      ),
+                                    ],
                                   ),
+                                  // const Divider()
                                 ],
                               ),
-                              // const Divider()
-                            ],
-                          ),
-                        );
-                      }
+                            );
+                          }
+                      );
+                    }
                   ),
                 ],
               );
               }
               return const SizedBox();
           }
-        )
+        ),
       ),
     );
   }

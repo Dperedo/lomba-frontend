@@ -17,8 +17,6 @@ import '../../../core/widgets/scaffold_manager.dart';
 class AddContentPage extends StatelessWidget {
   AddContentPage({Key? key}) : super(key: key);
 
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _contentController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   @override
@@ -33,7 +31,7 @@ class AddContentPage extends StatelessWidget {
                 Center(
                   child: BodyFormater(
                     child: _bodyAddContent(
-                        context, _titleController, _contentController, _key),
+                        context, _key),
                   ),
                 ),
               ],
@@ -46,9 +44,11 @@ class AddContentPage extends StatelessWidget {
 
 Widget _bodyAddContent(
     BuildContext context,
-    TextEditingController titleController,
-    TextEditingController contentController,
     GlobalKey<FormState> key) {
+  
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController contentController = TextEditingController();
+
   return BlocProvider<AddContentLiveCubit>(
     create: (context) => AddContentLiveCubit(),
     child: Padding(

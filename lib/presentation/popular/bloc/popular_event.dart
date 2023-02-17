@@ -21,3 +21,13 @@ class OnPopularLoad extends PopularEvent {
   @override
   List<Object> get props => [searchText, fieldsOrder, pageIndex, pageSize];
 }
+
+class OnPopularVote extends PopularEvent {
+  final String postId;
+  final int voteValue;
+
+  const OnPopularVote(this.postId, this.voteValue);
+
+  @override
+  List<Object> get props => [postId, voteValue];
+}

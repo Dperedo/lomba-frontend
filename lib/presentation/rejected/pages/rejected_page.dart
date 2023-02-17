@@ -6,7 +6,9 @@ import 'package:numberpicker/numberpicker.dart';
 
 import '../../../../domain/entities/flows/textcontent.dart';
 import '../../sidedrawer/pages/sidedrawer_page.dart';
+import '../../tobeapproved/bloc/tobeapproved_cubit.dart';
 import '../bloc/rejected_bloc.dart';
+import '../bloc/rejected_cubit.dart';
 import '../bloc/rejected_event.dart';
 import '../bloc/rejected_state.dart';
 
@@ -42,11 +44,11 @@ class RejectedPage extends StatelessWidget {
 
   Widget _bodyRejected(BuildContext context){
 
-    List<String> listFields = <String>["rejected", "sent",];
-    return SizedBox(
-      width: 800,
-      child:Form(
-        key: _key,
+    List<String> listFields = <String>["rejected"];
+    return BlocProvider<RejectedLiveCubit>(
+      create: (context) => RejectedLiveCubit(), 
+      child: SizedBox(
+        width: 800,
         child: BlocBuilder<RejectedBloc, RejectedState>(
           builder: (context,state){
             if(state is RejectedStart){
@@ -153,70 +155,103 @@ class RejectedPage extends StatelessWidget {
                       ],
                     ),
                   ),                  
-                  ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: state.listItems.length,
-                      itemBuilder: (context, index) {
-                        return SingleChildScrollView(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                          child: Column(
-                            children: [
-                              Row(
+                  BlocBuilder<RejectedLiveCubit, RejectedLiveState>(
+                    builder: (context,statecubit) {
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: state.listItems.length,
+                          itemBuilder: (context, index) {
+                            return SingleChildScrollView(
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                              child: Column(
                                 children: [
-                                  Expanded(
-                                    child:
-                                    Column(
-                                      children: [                                      
-                                        ListTile(               
-                                          leading: const Icon(Icons.person),
-                                          title: Text(state.listItems[index].title),                                       
-                                        ),
-                                        ListTile(
-                                          shape:  const RoundedRectangleBorder(
-                                            side: BorderSide(color: Colors.grey, width: 2 ),
-                                            borderRadius: BorderRadius.all(Radius.circular(2))
-                                          ),
-                                          // tileColor: Colors.grey,
-                                          title: Text(
-                                            (state.listItems[index].postitems[0].content as TextContent).text, 
-                                            textAlign: TextAlign.center
-                                          ),
-                                          contentPadding: const EdgeInsets.symmetric(horizontal: 100,vertical: 100),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [   
-                                            const IconButton(                                                                                  
-                                              icon: Icon(Icons.cancel_outlined),
-                                              onPressed:null
-                                            ),                                          
-                                            IconButton(
-                                              icon: const Icon(Icons.check_circle_outline),                                                                                
-                                              onPressed:(){},                                        
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child:
+                                        Column(
+                                          children: [                                      
+                                            ListTile(               
+                                              leading: const Icon(Icons.person),
+                                              title: Text(state.listItems[index].title),                                       
                                             ),
-                                          ],                                         
+                                            ListTile(
+                                              shape:  const RoundedRectangleBorder(
+                                                side: BorderSide(color: Colors.grey, width: 2 ),
+                                                borderRadius: BorderRadius.all(Radius.circular(2))
+                                              ),
+                                              // tileColor: Colors.grey,
+                                              title: Text(
+                                                (state.listItems[index].postitems[0].content as TextContent).text, 
+                                                textAlign: TextAlign.center
+                                              ),
+                                              contentPadding: const EdgeInsets.symmetric(horizontal: 100,vertical: 100),
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [   
+                                                ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    shape: MaterialStateProperty.resolveWith(
+                                                      (states) => RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(20),
+                                                          side: BorderSide(
+                                                            color: Theme.of(context).secondaryHeaderColor,
+                                                            width: 2,
+                                                          ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  onPressed: null,
+                                                  child: const Icon(Icons.close)
+                                                ),                                         
+                                                ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    shape: MaterialStateProperty.resolveWith(
+                                                      (states) => RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(20),
+                                                          side: BorderSide(
+                                                            color: Theme.of(context).secondaryHeaderColor,
+                                                            width: 2,
+                                                          ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  onPressed: 
+                                                    state.listItems[index].votes.any((element) =>element.value == 1) 
+                                                    || (statecubit.votes.containsKey(state.listItems[index].id) 
+                                                    && statecubit.votes[state.listItems[index].id] == 1)? null:
+                                                  (){
+                                                    context.read<RejectedLiveCubit>().makeVote(state.listItems[index].id,1);
+                                                    context.read<RejectedBloc>().add(OnRejectedVote(state.listItems[index].id,1));
+                                                  },
+                                                  child: const Icon(Icons.check)
+                                                ),
+                                              ],                                         
+                                            ),
+                                            const SizedBox(height: 15),                                     
+                                          ],
                                         ),
-                                        const SizedBox(height: 15),                                     
-                                      ],
-                                    ),
-                                     
+                                         
+                                      ),
+                                    ],
                                   ),
+                                  // const Divider()
                                 ],
                               ),
-                              // const Divider()
-                            ],
-                          ),
-                        );
-                      }
+                            );
+                          }
+                      );
+                    }
                   ),
                 ],
               );
             }
           return const SizedBox();
           },
-        )
-      )
+        ),
+      ),
     );
   }
 }

@@ -6,6 +6,7 @@ abstract class RejectedEvent extends Equatable{
   @override
   List<Object?> get props => [];
 }
+
 class OnRejectedLoad extends RejectedEvent {
   
   final String searchText;
@@ -19,4 +20,14 @@ class OnRejectedLoad extends RejectedEvent {
 
   @override
   List<Object> get props => [searchText, fieldsOrder, pageIndex, pageSize];
+}
+
+class OnRejectedVote extends RejectedEvent {
+  final String postId;
+  final int voteValue;
+
+  const OnRejectedVote(this.postId, this.voteValue);
+
+  @override
+  List<Object> get props => [postId, voteValue];
 }

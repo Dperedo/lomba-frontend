@@ -5,8 +5,6 @@ import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../../../domain/entities/flows/textcontent.dart';
-import '../../sidedrawer/pages/sidedrawer_page.dart';
-import '../../uploaded/bloc/uploaded_cubit.dart';
 import '../bloc/tobeapproved_bloc.dart';
 import '../bloc/tobeapproved_cubit.dart';
 import '../bloc/tobeapproved_event.dart';
@@ -39,8 +37,8 @@ class ToBeApprovedPage extends StatelessWidget {
   Widget _bodyToBeApproved(BuildContext context){
     
     List<String> listFields = <String>["forapprove"];
-    return BlocProvider<UploadedLiveCubit>(
-      create: (context) => UploadedLiveCubit(),
+    return BlocProvider<ToBeApprovedLiveCubit>(
+      create: (context) => ToBeApprovedLiveCubit(),
       child: SizedBox(
       width: 800,
       child: Form(
@@ -108,8 +106,8 @@ class ToBeApprovedPage extends StatelessWidget {
                                 haptics: true,
                                 step: 1,
                                 axis: Axis.horizontal,
-                                value: state.pageIndex,
-                                minValue: 1,
+                                value: state.totalPages == 0 ? 0 : state.pageIndex,
+                                minValue: state.totalPages == 0 ? 0 : 1,
                                 maxValue: state.totalPages,
                                 onChanged: (value) => context
                                     .read<ToBeApprovedBloc>()
@@ -199,9 +197,9 @@ class ToBeApprovedPage extends StatelessWidget {
                                                     ),
                                                   ),
                                                   onPressed: 
-                                                    state.listItems[index].votes.any((element) =>element.value == 1) 
+                                                    state.listItems[index].votes.any((element) =>element.value == -1) 
                                                     || (statecubit.votes.containsKey(state.listItems[index].id) 
-                                                    && statecubit.votes[state.listItems[index].id] == 1)? null:
+                                                    && statecubit.votes[state.listItems[index].id] == -1)? null:
                                                   (){
                                                     context.read<ToBeApprovedLiveCubit>().makeVote(state.listItems[index].id,-1);
                                                     context.read<ToBeApprovedBloc>().add(OnToBeApprovedVote(state.listItems[index].id,-1));

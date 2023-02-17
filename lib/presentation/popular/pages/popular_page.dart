@@ -6,7 +6,9 @@ import '../../../core/widgets/body_formater.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../domain/entities/flows/textcontent.dart';
 import '../../sidedrawer/pages/sidedrawer_page.dart';
+import '../../tobeapproved/bloc/tobeapproved_cubit.dart';
 import '../bloc/popular_bloc.dart';
+import '../bloc/popular_cubit.dart';
 import '../bloc/popular_event.dart';
 import '../bloc/popular_state.dart';
 
@@ -41,11 +43,10 @@ class PopularPage extends StatelessWidget {
 Widget _bodyPopular(BuildContext context){
     
     List<String> listFields = <String>["popular"];
-    return SizedBox(
-      
-      width: 800,
-      child: Form(
-        key: _key,
+    return BlocProvider<PopularLiveCubit>(
+      create: (context) => PopularLiveCubit(), 
+      child: SizedBox(
+        width: 800,
         child: BlocBuilder<PopularBloc, PopularState>(
           builder: (context, state){
               if (state is PopularStart){
@@ -151,93 +152,111 @@ Widget _bodyPopular(BuildContext context){
                       ],
                     ),
                   ),                  
-                  ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: state.listItems.length,
-                      itemBuilder: (context, index) {
-                        return SingleChildScrollView(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                          child: Column(
-                            children: [
-                              Row(
+                  BlocBuilder<PopularLiveCubit, PopularLiveState>(
+                    builder: (context,statecubit) {
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: state.listItems.length,
+                          itemBuilder: (context, index) {
+                            return SingleChildScrollView(
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                              child: Column(
                                 children: [
-                                  Expanded(
-                                    child:
-                                    Column(
-                                      children: [                                      
-                                        ListTile(               
-                                          leading: const Icon(Icons.person),
-                                          title: Text(state.listItems[index].title),                                       
-                                        ),
-                                        ListTile(
-                                          shape:  const RoundedRectangleBorder(
-                                            side: BorderSide(color: Colors.grey, width: 2 ),
-                                            borderRadius: BorderRadius.all(Radius.circular(2))
-                                          ),
-                                          // tileColor: Colors.grey,
-                                          title: Text(
-                                            (state.listItems[index].postitems[0].content as TextContent).text, 
-                                            textAlign: TextAlign.center
-                                          ),
-                                          contentPadding: const EdgeInsets.symmetric(horizontal: 100,vertical: 100),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        SizedBox(
-                                          child: (state.validLogin)?Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [   
-                                              ElevatedButton(
-                                                style: ButtonStyle(
-                                                  shape: MaterialStateProperty.resolveWith(
-                                                    (states) => RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(20),
-                                                        side: BorderSide(
-                                                          color: Theme.of(context).secondaryHeaderColor,
-                                                          width: 2,
-                                                        ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                onPressed:(){},
-                                                child: const Icon(Icons.keyboard_arrow_down)
-                                              ),                                          
-                                              ElevatedButton(
-                                                style: ButtonStyle(
-                                                  shape: MaterialStateProperty.resolveWith(
-                                                    (states) => RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(20.0),
-                                                        side: BorderSide(
-                                                          color: Theme.of(context).secondaryHeaderColor,
-                                                          width: 2,
-                                                        ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                onPressed:(){},
-                                                child: const Icon(Icons.keyboard_arrow_up)
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child:
+                                        Column(
+                                          children: [                                      
+                                            ListTile(               
+                                              leading: const Icon(Icons.person),
+                                              title: Text(state.listItems[index].title),                                       
+                                            ),
+                                            ListTile(
+                                              shape:  const RoundedRectangleBorder(
+                                                side: BorderSide(color: Colors.grey, width: 2 ),
+                                                borderRadius: BorderRadius.all(Radius.circular(2))
                                               ),
-                                            ],                                         
-                                          ): null,
+                                              // tileColor: Colors.grey,
+                                              title: Text(
+                                                (state.listItems[index].postitems[0].content as TextContent).text, 
+                                                textAlign: TextAlign.center
+                                              ),
+                                              contentPadding: const EdgeInsets.symmetric(horizontal: 100,vertical: 100),
+                                            ),
+                                            const SizedBox(height: 10),
+                                            SizedBox(
+                                              child: (state.validLogin)?Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [   
+                                                  ElevatedButton(
+                                                    style: ButtonStyle(
+                                                      shape: MaterialStateProperty.resolveWith(
+                                                        (states) => RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(20),
+                                                            side: BorderSide(
+                                                              color: Theme.of(context).secondaryHeaderColor,
+                                                              width: 2,
+                                                            ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    onPressed: 
+                                                      state.listItems[index].votes.any((element) =>element.value == -1) 
+                                                      || (statecubit.votes.containsKey(state.listItems[index].id) 
+                                                      && statecubit.votes[state.listItems[index].id] == -1)? null:
+                                                    (){
+                                                      context.read<PopularLiveCubit>().makeVote(state.listItems[index].id,-1);
+                                                      context.read<PopularBloc>().add(OnPopularVote(state.listItems[index].id,-1));
+                                                    },
+                                                    child: const Icon(Icons.keyboard_arrow_down)
+                                                  ),
+                                                  ElevatedButton(
+                                                    style: ButtonStyle(
+                                                      shape: MaterialStateProperty.resolveWith(
+                                                        (states) => RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(20.0),
+                                                            side: BorderSide(
+                                                              color: Theme.of(context).secondaryHeaderColor,
+                                                              width: 2,
+                                                            ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    onPressed: 
+                                                      state.listItems[index].votes.any((element) =>element.value == 1) 
+                                                      || (statecubit.votes.containsKey(state.listItems[index].id) 
+                                                      && statecubit.votes[state.listItems[index].id] == 1)? null:
+                                                    (){
+                                                      context.read<PopularLiveCubit>().makeVote(state.listItems[index].id,1);
+                                                      context.read<PopularBloc>().add(OnPopularVote(state.listItems[index].id,1));
+                                                    },
+                                                    child: const Icon(Icons.keyboard_arrow_up)
+                                                  ),
+                                                ],                                         
+                                              ): null,
+                                            ),
+                                            const SizedBox(height: 15),                                     
+                                          ],
                                         ),
-                                        const SizedBox(height: 15),                                     
-                                      ],
-                                    ),
-                                     
+                                         
+                                      ),
+                                    ],
                                   ),
+                                  // const Divider()
                                 ],
                               ),
-                              // const Divider()
-                            ],
-                          ),
-                        );
-                      }
+                            );
+                          }
+                      );
+                    }
                   ),
                 ],
               );
               }
               return const SizedBox();
           }
-        )
+        ),
       ),
     );
   }

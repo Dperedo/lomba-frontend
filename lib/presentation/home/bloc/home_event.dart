@@ -33,3 +33,13 @@ class OnHomeLoaded extends HomeEvent {
 
 ///Evento ocurre cuando se va a reiniciar el Home provocando la recarga
 class OnRestartHome extends HomeEvent {}
+
+class OnHomeVote extends HomeEvent {
+  final String postId;
+  final int voteValue;
+
+  const OnHomeVote(this.postId, this.voteValue);
+
+  @override
+  List<Object> get props => [postId, voteValue];
+}

@@ -67,7 +67,7 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
 
       final result = await _votePublication.execute(auth.getOrgaId()!,
           auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);
-      result.fold((l) => emit(UploadedError(l.message)), (r) {});
+      result.fold((l) => emit(UploadedError(l.message)), (r) {emit(UploadedStart());});
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {

@@ -139,8 +139,8 @@ class UploadedPage extends StatelessWidget {
                       haptics: true,
                       step: 1,
                       axis: Axis.horizontal,
-                      value: state.pageIndex,
-                      minValue: 1,
+                      value: state.totalPages == 0 ? 0 : state.pageIndex,
+                      minValue: state.totalPages == 0 ? 0 : 1,
                       maxValue: state.totalPages,
                       onChanged: (value) => context.read<UploadedBloc>().add(
                           OnUploadedLoad(

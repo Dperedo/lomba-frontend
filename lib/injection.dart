@@ -88,7 +88,7 @@ Future<void> init() async {
   locator.registerFactory(
       () => LoginBloc(locator(), locator(), locator(), locator()));
   locator.registerFactory(
-      () => HomeBloc(locator(), locator(), locator(), locator()));
+      () => HomeBloc(locator(), locator(), locator(), locator(), locator()));
   locator.registerFactory(() => SideDrawerBloc(locator(), locator(), locator(),
       locator(), locator(), locator(), locator()));
   locator.registerFactory(() => NavBloc());
@@ -123,9 +123,9 @@ Future<void> init() async {
 
   locator.registerFactory(() => UploadedBloc(locator(), locator(), locator()));
 
-  locator.registerFactory(() => ApprovedBloc(locator(), locator()));
+  locator.registerFactory(() => ApprovedBloc(locator(), locator(), locator()));
 
-  locator.registerFactory(() => RejectedBloc(locator(), locator()));
+  locator.registerFactory(() => RejectedBloc(locator(), locator(), locator()));
   locator.registerFactory(() => ToBeApprovedBloc(
         locator(),
         locator(),
@@ -134,7 +134,7 @@ Future<void> init() async {
   locator
       .registerFactory(() => AddContentBloc(locator(), locator(), locator()));
   locator.registerFactory(
-      () => PopularBloc(locator(), locator(), locator(), locator()));
+      () => PopularBloc(locator(), locator(), locator(), locator(), locator()));
 
   locator.registerFactory(
       () => VotedBloc(locator(), locator(), locator(), locator()));
