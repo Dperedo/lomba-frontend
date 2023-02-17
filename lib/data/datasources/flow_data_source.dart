@@ -530,6 +530,7 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
     final Map<String, dynamic> newVote = {
       'userId': userId,
       'flowId': flowId,
+      'orgaId': orgaId,
       'stageId': stageId,
       'postId': postId,
       'voteValue': voteValue
