@@ -73,6 +73,10 @@ class ScreenSize {
   static const maxScreen = 1200;
 }
 
+class ShowTime{
+  static const snackbarDuration = 3000;
+}
+
 class StagesVotationFlow {
   static const stageId01Load = '00000AAA-0111-0111-0111-000000000111';
   static const stageId02Approval = '00000BBB-0111-0111-0111-000000000111';

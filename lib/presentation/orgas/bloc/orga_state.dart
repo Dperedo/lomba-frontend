@@ -12,7 +12,10 @@ abstract class OrgaState extends Equatable {
 }
 
 ///Estado inicial de la página
-class OrgaStart extends OrgaState {}
+class OrgaStart extends OrgaState {
+  final String message;
+  const OrgaStart(this.message);
+}
 
 ///Estado de trabajo mientras la información o proceso es ejecutado.
 class OrgaLoading extends OrgaState {}
@@ -20,7 +23,8 @@ class OrgaLoading extends OrgaState {}
 ///Estado de organización ya conseguida desde el origen
 class OrgaLoaded extends OrgaState {
   final Orga orga;
-  const OrgaLoaded(this.orga);
+  final String message;
+  const OrgaLoaded(this.orga, this.message);
   @override
   List<Object> get props => [orga];
 }

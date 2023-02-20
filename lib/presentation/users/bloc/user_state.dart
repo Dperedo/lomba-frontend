@@ -8,17 +8,25 @@ abstract class UserState extends Equatable {
 
   @override
   List<Object> get props => [];
+
+  //get message => null;
 }
 
-class UserStart extends UserState {}
+class UserStart extends UserState {
+  final String message;
+  const UserStart(this.message);
+  @override
+  List<Object> get props => [message];
+}
 
 class UserLoading extends UserState {}
 
 class UserLoaded extends UserState {
   final User user;
-  const UserLoaded(this.user);
+  final String message;
+  const UserLoaded(this.user, this.message);
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [user, message];
 }
 
 class UserListLoaded extends UserState {

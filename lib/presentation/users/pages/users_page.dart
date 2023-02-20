@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/validators.dart';
 import 'package:lomba_frontend/core/widgets/body_formater.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/users/bloc/user_event.dart';
 
+import '../../../core/widgets/snackbar_notification.dart';
 import '../bloc/user_bloc.dart';
 import '../bloc/user_state.dart';
 
@@ -13,21 +15,31 @@ class UsersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserBloc, UserState>(
-      builder: (context, state) {
-        return ScaffoldManager(
-          title: _variableAppBar(context, state),
-          floatingActionButton: (state is UserListLoaded || state is UserStart)
-              ? FloatingActionButton(
-                  key: const ValueKey("btnAddOption"),
-                  tooltip: 'Agregar usuario',
-                  onPressed: () {
-                    context.read<UserBloc>().add(OnUserPrepareForAdd());
-                  },
-                  child: const Icon(Icons.person_add))
-              : null, 
-          child: SingleChildScrollView(
-            child: Center(
+    GlobalKey<ScaffoldState> homeScreenKey = GlobalKey<ScaffoldState>();
+    return BlocListener<UserBloc, UserState>(
+      listener: (context, state) {
+        if(state is UserLoaded && state.message != ""){
+          snackBarNotify(context, state.message, Icons.account_circle);
+        } else if (state is UserStart && state.message != ""){
+          snackBarNotify(context, state.message, Icons.account_circle);
+        }
+      },
+      child: BlocBuilder<UserBloc, UserState>(
+        builder: (context, state) {
+          return ScaffoldManager(
+            title: _variableAppBar(context, state),
+            floatingActionButton:
+                (state is UserListLoaded || state is UserStart)
+                    ? FloatingActionButton(
+                        key: const ValueKey("btnAddOption"),
+                        tooltip: 'Agregar usuario',
+                        onPressed: () {
+                          context.read<UserBloc>().add(OnUserPrepareForAdd());
+                        },
+                        child: const Icon(Icons.person_add))
+                    : null,
+            child: SingleChildScrollView(
+                child: Center(
               child: Column(
                 children: [
                   BodyFormater(
@@ -35,12 +47,14 @@ class UsersPage extends StatelessWidget {
                   )
                 ],
               ),
-            )
-          ),
-        );
-      },
+            )),
+          );
+        },
+      ),
     );
   }
+
+  
 
   Widget _bodyUsers(BuildContext context, UserState state) {
     final TextEditingController _repeatPasswordController =
@@ -195,7 +209,7 @@ class UsersPage extends StatelessWidget {
                             {
                               context
                                   .read<UserBloc>()
-                                  .add(OnUserDelete(state.user.id))
+                                  .add(OnUserDelete(state.user.id, state.user.username))
                             }
                         });
                   },
@@ -241,7 +255,7 @@ class UsersPage extends StatelessWidget {
                           if (value)
                             {
                               context.read<UserBloc>().add(OnUserEnable(
-                                  state.user.id, !state.user.enabled))
+                                  state.user.id, !state.user.enabled, state.user.username))
                             }
                         });
                   },
@@ -337,14 +351,14 @@ class UsersPage extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          //title: const Text('Result'),
                           content: const Text('Contraseña modificada'),
                           actions: [
                             ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Ok'))
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Ok')
+                            )
                           ],
                         ),
                       );

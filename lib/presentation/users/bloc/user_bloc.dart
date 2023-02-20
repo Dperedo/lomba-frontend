@@ -39,14 +39,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       this._getSession,
       this._existsUser,
       this._updateUserPassword)
-      : super(UserStart()) {
+      : super(const UserStart("")) {
     on<OnUserLoad>(
       (event, emit) async {
         emit(UserLoading());
         final result = await _getUser.execute(event.id);
 
         result.fold(
-            (l) => emit(UserError(l.message)), (r) => {emit(UserLoaded(r))});
+            (l) => emit(UserError(l.message)), (r) => {emit(UserLoaded(r, ""))});
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
@@ -77,7 +77,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           event.email, auth.getOrgaId()!, event.password, role);
 
       result.fold(
-          (l) => emit(UserError(l.message)), (r) => {emit(UserStart())});
+          (l) => emit(UserError(l.message)), (r) => {emit(UserStart(" El usuario ${event.username} fue creado"))});
     });
 
     on<OnUserPrepareForAdd>((event, emit) async {
@@ -136,7 +136,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       final result = await _updateUser.execute(event.id, user);
       result.fold(
-          (l) => emit(UserError(l.message)), (r) => {emit(UserStart())});
+          (l) => emit(UserError(l.message)), (r) => {emit(UserStart(" El usuario ${event.username} fue actualizado"))});
     });
 
     on<OnUserEnable>((event, emit) async {
@@ -144,14 +144,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       final result = await _enableUser.execute(event.id, event.enabled);
       result.fold(
-          (l) => emit(UserError(l.message)), (r) => {emit(UserLoaded(r))});
+          (l) => emit(UserError(l.message)), (r) => {emit(UserLoaded(r, 
+          (event.enabled?" El usuario ${event.username} fue habilitado":" El usuario ${event.username} fue deshabilitado")))});
     });
     on<OnUserDelete>((event, emit) async {
       emit(UserLoading());
 
       final result = await _deleteUser.execute(event.id);
       result.fold(
-          (l) => emit(UserError(l.message)), (r) => {emit(UserStart())});
+          (l) => emit(UserError(l.message)), (r) => {emit(UserStart(" El usuario ${event.username} fue eliminado"))});
     });
     on<OnUserShowPasswordModifyForm>((event, emit) async {
       emit(UserLoading());
@@ -164,7 +165,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           await _updateUserPassword.execute(event.user.id, event.password);
 
       result.fold((l) => emit(UserError(l.message)),
-          (r) => {emit(UserLoaded(event.user))});
+          (r) => {emit(UserLoaded(event.user, " Contraseña Modificada"))});
     });
   }
 

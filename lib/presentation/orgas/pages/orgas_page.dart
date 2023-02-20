@@ -10,6 +10,7 @@ import 'package:lomba_frontend/presentation/orgas/bloc/orgauser_event.dart';
 import '../../../core/fakedata.dart';
 import '../../../core/widgets/body_formater.dart';
 import '../../../core/widgets/scaffold_manager.dart';
+import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/orgauser.dart';
 import '../../../domain/entities/user.dart';
 import '../bloc/orga_bloc.dart';
@@ -29,31 +30,35 @@ class OrgasPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OrgaBloc, OrgaState>(
-      builder: (context, state) {
-        return ScaffoldManager(
-          title: _variableAppBar(context, state),
-          floatingActionButton: (state is OrgaListLoaded || state is OrgaStart)
-              ? FloatingActionButton(
-                  key: const ValueKey("btnAddOption"),
-                  tooltip: 'Agregar Orga',
-                  onPressed: () {
-                    //var user = const UserModel(id: '', name: '', username: '', email: '', enabled: true, builtIn: false);
-                    context.read<OrgaBloc>().add(OnOrgaPrepareForAdd());
-                  },
-                  child: const Icon(Icons.group_add))
-              : null,
-          child: SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  children: [
-                    BodyFormater(child: _bodyOrgas(context, state))
-                    ],
-                ),
-              )
-            ),
-          );
+    return BlocListener<OrgaBloc, OrgaState>(
+      listener: (context, state) {
+        if(state is OrgaLoaded && state.message != ""){
+          snackBarNotify(context, state.message, Icons.business_center);
+        }
       },
+      child: BlocBuilder<OrgaBloc, OrgaState>(
+        builder: (context, state) {
+          return ScaffoldManager(
+            title: _variableAppBar(context, state),
+            floatingActionButton:
+                (state is OrgaListLoaded || state is OrgaStart)
+                    ? FloatingActionButton(
+                        key: const ValueKey("btnAddOption"),
+                        tooltip: 'Agregar Orga',
+                        onPressed: () {
+                          context.read<OrgaBloc>().add(OnOrgaPrepareForAdd());
+                        },
+                        child: const Icon(Icons.group_add))
+                    : null,
+            child: SingleChildScrollView(
+                child: Center(
+              child: Column(
+                children: [BodyFormater(child: _bodyOrgas(context, state))],
+              ),
+            )),
+          );
+        },
+      ),
     );
   }
 
@@ -178,7 +183,7 @@ class OrgasPage extends StatelessWidget {
                             {
                               context
                                   .read<OrgaBloc>()
-                                  .add(OnOrgaDelete(state.orga.id))
+                                  .add(OnOrgaDelete(state.orga.id, state.orga.name))
                             }
                         });
                   },
@@ -224,7 +229,7 @@ class OrgasPage extends StatelessWidget {
                           if (value)
                             {
                               context.read<OrgaBloc>().add(OnOrgaEnable(
-                                  state.orga.id, !state.orga.enabled))
+                                  state.orga.id, !state.orga.enabled, state.orga.name))
                             }
                         });
                   },
@@ -467,7 +472,7 @@ class OrgasPage extends StatelessWidget {
                           style: const TextStyle(fontSize: 18))),
                   const VerticalDivider(),
                   Wrap(
-                  runSpacing: 12,
+                    runSpacing: 12,
                     //mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text("Asociación habilitada: "),
