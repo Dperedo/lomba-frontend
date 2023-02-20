@@ -67,7 +67,7 @@ class ApprovedBloc extends Bloc<ApprovedEvent, ApprovedState> {
 
       final result = await _votePublication.execute(auth.getOrgaId()!,
           auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);
-      result.fold((l) => emit(ApprovedError(l.message)), (r) {emit(ApprovedStart());});
+      result.fold((l) => emit(ApprovedError(l.message)), (r) {});
     });
 
   }

@@ -69,7 +69,7 @@ class RejectedBloc extends Bloc<RejectedEvent, RejectedState>{
 
       final result = await _votePublication.execute(auth.getOrgaId()!,
           auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);
-      result.fold((l) => emit(RejectedError(l.message)), (r) {emit(RejectedStart());});
+      result.fold((l) => emit(RejectedError(l.message)), (r) {});
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {

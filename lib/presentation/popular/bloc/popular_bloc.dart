@@ -119,7 +119,7 @@ class PopularBloc extends Bloc<PopularEvent, PopularState>{
 
       final result = await _votePublication.execute(auth.getOrgaId()!,
           auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);
-      result.fold((l) => emit(PopularError(l.message)), (r) {emit(PopularStart());});
+      result.fold((l) => emit(PopularError(l.message)), (r) {});
     });
   }
 

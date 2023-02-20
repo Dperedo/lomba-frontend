@@ -65,7 +65,7 @@ class ToBeApprovedBloc extends Bloc<ToBeApprovedEvent, ToBeApprovedState>{
 
       final result = await _votePublication.execute(auth.getOrgaId()!,
           auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);
-      result.fold((l) => emit(ToBeApprovedError(l.message)), (r) {emit(ToBeApprovedStart());});
+      result.fold((l) => emit(ToBeApprovedError(l.message)), (r) {});
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {
