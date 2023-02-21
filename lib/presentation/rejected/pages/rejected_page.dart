@@ -26,20 +26,23 @@ class RejectedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RejectedBloc, RejectedState>(
-      listener: (context, state) {
-        /*if(state is RejectedLoaded && state.message != ""){
-          snackBarNotify(context, state.message, Icons.account_circle);
-        }*/
-      },
-      child: ScaffoldManager(
-        title: AppBar(title: const Text("Rechazados")),
-        child: SingleChildScrollView(
-            child: Center(
-          child: Column(
-            children: [BodyFormater(child: _bodyRejected(context))],
-          ),
-        )),
+    return BlocProvider(
+      create: (context) => RejectedLiveCubit(),
+      child: BlocListener<RejectedLiveCubit, RejectedLiveState>(
+        listener: (context, state) {
+          //if (state is RejectedLiveState) {
+            //snackBarNotify(context, "okok", null);
+          //}
+        },
+        child: ScaffoldManager(
+          title: AppBar(title: const Text("Rechazados")),
+          child: SingleChildScrollView(
+              child: Center(
+            child: Column(
+              children: [BodyFormater(child: _bodyRejected(context))],
+            ),
+          )),
+        ),
       ),
     );
   }
