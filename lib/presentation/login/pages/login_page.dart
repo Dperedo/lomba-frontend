@@ -59,14 +59,11 @@ class LoginPage extends StatelessWidget {
                         );
                       } else if (state is LoginGoted) {
                         Future.delayed(Duration.zero, () {
-                          context.read<HomeBloc>().add(OnRestartHome());
                           context.read<LoginBloc>().add(OnRestartLogin());
-                          context
-                              .read<SideDrawerBloc>()
-                              .add(const OnSideDrawerLoading());
+                          context.read<SideDrawerBloc>().add(const OnSideDrawerLoading());
+                          context.read<HomeBloc>().add(const OnRestartHome("Bienvenido"));
 
-                          BlocProvider.of<NavBloc>(context)
-                              .add(const NavigateTo(NavItem.pageHome));
+                          BlocProvider.of<NavBloc>(context).add(const NavigateTo(NavItem.pageHome));
                         });
                       } else if (state is LoginError) {
                         return Center(

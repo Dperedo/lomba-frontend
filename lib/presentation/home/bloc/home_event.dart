@@ -32,7 +32,10 @@ class OnHomeLoaded extends HomeEvent {
 }
 
 ///Evento ocurre cuando se va a reiniciar el Home provocando la recarga
-class OnRestartHome extends HomeEvent {}
+class OnRestartHome extends HomeEvent {
+  final String message;
+  const OnRestartHome(this.message);
+}
 
 class OnHomeVote extends HomeEvent {
   final String postId;

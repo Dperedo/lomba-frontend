@@ -272,7 +272,7 @@ class SideDrawer extends StatelessWidget {
                 title: const Text('Cerrar sesión'),
                 onTap: () {
                   context.read<SideDrawerBloc>().add(OnSideDrawerLogOff());
-                  context.read<HomeBloc>().add(OnRestartHome());
+                  context.read<HomeBloc>().add(OnRestartHome(" Sesión Cerrada"));
                   context.read<LoginBloc>().add(OnRestartLogin());
 
                   _handleItemClick(context, NavItem.pageHome);

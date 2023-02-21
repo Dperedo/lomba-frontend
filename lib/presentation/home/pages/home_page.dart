@@ -4,6 +4,7 @@ import 'package:numberpicker/numberpicker.dart';
 
 import '../../../core/widgets/body_formater.dart';
 import '../../../core/widgets/scaffold_manager.dart';
+import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/flows/textcontent.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_cubit.dart';
@@ -25,9 +26,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<HomeBloc, HomeState>(
       listener: (context, state) {
-        /*if(state is HomeLoaded && state.message != ""){
-          snackBarNotify(context, state.message, Icons.account_circle);
-        }*/
+        if(state is HomeStart && state.message != ""){
+          snackBarNotify(context, state.message, null);
+        }
       },
       child: ScaffoldManager(
         title: AppBar(),

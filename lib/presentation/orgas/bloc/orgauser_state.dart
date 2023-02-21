@@ -12,7 +12,10 @@ abstract class OrgaUserState extends Equatable {
 }
 
 ///Estado inicial de la lista en orgausers
-class OrgaUserStart extends OrgaUserState {}
+class OrgaUserStart extends OrgaUserState {
+  final String message;
+  const OrgaUserStart(this.message);
+}
 
 ///Estado que indica que el proceso se está ejecutando
 class OrgaUserLoading extends OrgaUserState {}

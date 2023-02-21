@@ -32,7 +32,7 @@ class OrgasPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<OrgaBloc, OrgaState>(
       listener: (context, state) {
-        if(state is OrgaLoaded && state.message != ""){
+        if (state is OrgaLoaded && state.message != "") {
           snackBarNotify(context, state.message, Icons.business_center);
         }
       },
@@ -181,9 +181,8 @@ class OrgasPage extends StatelessWidget {
                             )).then((value) => {
                           if (value)
                             {
-                              context
-                                  .read<OrgaBloc>()
-                                  .add(OnOrgaDelete(state.orga.id, state.orga.name))
+                              context.read<OrgaBloc>().add(
+                                  OnOrgaDelete(state.orga.id, state.orga.name))
                             }
                         });
                   },
@@ -229,7 +228,9 @@ class OrgasPage extends StatelessWidget {
                           if (value)
                             {
                               context.read<OrgaBloc>().add(OnOrgaEnable(
-                                  state.orga.id, !state.orga.enabled, state.orga.name))
+                                  state.orga.id,
+                                  !state.orga.enabled,
+                                  state.orga.name))
                             }
                         });
                   },
@@ -679,52 +680,179 @@ class OrgasPage extends StatelessWidget {
   Widget _orgaUserList(BuildContext context) {
     context.read<OrgaUserBloc>().add(const OnOrgaUserStarter());
 
-    return BlocBuilder<OrgaUserBloc, OrgaUserState>(
-      builder: (context, state) {
-        if (state is OrgaUserLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+    return BlocListener<OrgaUserBloc, OrgaUserState>(
+      listener: (context, state) {
+        if(state is OrgaUserStart && state.message != ""){
+          snackBarNotify(context, state.message, Icons.business_center);
         }
+      },
+      child: BlocBuilder<OrgaUserBloc, OrgaUserState>(
+        builder: (context, state) {
+          if (state is OrgaUserLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-        if (state is OrgaUserListLoaded) {
-          return Column(
-            children: [
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: state.users.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                              child: TextButton(
-                                  key: const ValueKey("btnTxtUser"),
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) => GestureDetector(
-                                            onTap: () => Navigator.pop(context),
-                                            child: _showEditingOrgaUserDialog(
-                                                context,
-                                                state.orgaUsers
-                                                    .where((element) =>
-                                                        element.userId ==
-                                                        state.users[index].id)
-                                                    .first,
-                                                state.users[index]))).then(
-                                      (value) {
-                                        if (value != null) {
-                                          if ((value!
-                                                  as OrgaUserDialogEditState)
-                                              .deleted) {
-                                            //eliminar
+          if (state is OrgaUserListLoaded) {
+            return Column(
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: state.users.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                                child: TextButton(
+                                    key: const ValueKey("btnTxtUser"),
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) => GestureDetector(
+                                              onTap: () =>
+                                                  Navigator.pop(context),
+                                              child: _showEditingOrgaUserDialog(
+                                                  context,
+                                                  state.orgaUsers
+                                                      .where((element) =>
+                                                          element.userId ==
+                                                          state.users[index].id)
+                                                      .first,
+                                                  state.users[index]))).then(
+                                        (value) {
+                                          if (value != null) {
+                                            if ((value!
+                                                    as OrgaUserDialogEditState)
+                                                .deleted) {
+                                              //eliminar
 
-                                            context.read<OrgaUserBloc>().add(
-                                                OnOrgaUserDelete(state.orgaId,
-                                                    state.users[index].id));
-                                          } else {
+                                              context.read<OrgaUserBloc>().add(
+                                                  OnOrgaUserDelete(
+                                                      state.orgaId,
+                                                      state.users[index].id,
+                                                      state.users[index]
+                                                          .username));
+                                            } else {
+                                              //actualizar
+                                              List<String> roles = [];
+                                              bool enabled = (value!
+                                                      as OrgaUserDialogEditState)
+                                                  .checks["enabled"]!;
+                                              Roles.toList().forEach((element) {
+                                                if ((value!
+                                                        as OrgaUserDialogEditState)
+                                                    .checks[element]!) {
+                                                  roles.add(element);
+                                                }
+                                              });
+                                              context.read<OrgaUserBloc>().add(
+                                                  OnOrgaUserEdit(
+                                                      state.orgaId,
+                                                      state.users[index].id,
+                                                      roles,
+                                                      enabled));
+                                            }
+                                          }
+                                        },
+                                      );
+                                    },
+                                    child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Column(
+                                          children: [
+                                            ListTile(
+                                              leading: const Icon(
+                                                  Icons.switch_account),
+                                              title: Text(
+                                                state.users[index].name,
+                                                style: const TextStyle(
+                                                    fontSize: 18),
+                                              ),
+                                              subtitle: Text(
+                                                  '${state.users[index].username} / ${state.users[index].email}',
+                                                  style: const TextStyle(
+                                                      fontSize: 12)),
+                                            ),
+                                          ],
+                                        )))),
+                            Icon(
+                                (state.orgaUsers
+                                            .where((element) =>
+                                                element.userId ==
+                                                    state.users[index].id &&
+                                                element.orgaId == state.orgaId)
+                                            .isNotEmpty
+                                        ? state.orgaUsers
+                                            .singleWhere((element) =>
+                                                element.userId ==
+                                                    state.users[index].id &&
+                                                element.orgaId == state.orgaId)
+                                            .enabled
+                                        : false)
+                                    ? Icons.toggle_on
+                                    : Icons.toggle_off_outlined,
+                                size: 40)
+                          ],
+                        ),
+                        const Divider()
+                      ],
+                    );
+                  },
+                )
+              ],
+            );
+          }
+
+          if (state is OrgaUserListUserNotInOrgaLoaded) {
+            return Column(
+              children: [
+                const Text("Usuarios disponibles"),
+                const Divider(),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: state.users.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                                child: TextButton(
+                                    key: const ValueKey('txtBtnAccount'),
+                                    child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Column(
+                                          children: [
+                                            ListTile(
+                                              leading: const Icon(
+                                                  Icons.switch_account),
+                                              title: Text(
+                                                state.users[index].name,
+                                                style: const TextStyle(
+                                                    fontSize: 18),
+                                              ),
+                                              subtitle: Text(
+                                                  '${state.users[index].username} / ${state.users[index].email}',
+                                                  style: const TextStyle(
+                                                      fontSize: 12)),
+                                            ),
+                                          ],
+                                        )),
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) => GestureDetector(
+                                              onTap: () =>
+                                                  Navigator.pop(context),
+                                              child: _showAddingOrgaUserDialog(
+                                                  context,
+                                                  state.users[index],
+                                                  state.orgaId))).then(
+                                        (value) {
+                                          if (value != null) {
                                             //actualizar
                                             List<String> roles = [];
                                             bool enabled = (value!
@@ -738,143 +866,30 @@ class OrgasPage extends StatelessWidget {
                                               }
                                             });
                                             context.read<OrgaUserBloc>().add(
-                                                OnOrgaUserEdit(
+                                                OnOrgaUserAdd(
                                                     state.orgaId,
                                                     state.users[index].id,
                                                     roles,
-                                                    enabled));
+                                                    enabled,
+                                                    state.users[index]
+                                                        .username));
                                           }
-                                        }
-                                      },
-                                    );
-                                  },
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Column(
-                                        children: [
-                                          ListTile(
-                                            leading: const Icon(
-                                                Icons.switch_account),
-                                            title: Text(
-                                              state.users[index].name,
-                                              style:
-                                                  const TextStyle(fontSize: 18),
-                                            ),
-                                            subtitle: Text(
-                                                '${state.users[index].username} / ${state.users[index].email}',
-                                                style: const TextStyle(
-                                                    fontSize: 12)),
-                                          ),
-                                        ],
-                                      )))),
-                          Icon(
-                              (state.orgaUsers
-                                          .where((element) =>
-                                              element.userId ==
-                                                  state.users[index].id &&
-                                              element.orgaId == state.orgaId)
-                                          .isNotEmpty
-                                      ? state.orgaUsers
-                                          .singleWhere((element) =>
-                                              element.userId ==
-                                                  state.users[index].id &&
-                                              element.orgaId == state.orgaId)
-                                          .enabled
-                                      : false)
-                                  ? Icons.toggle_on
-                                  : Icons.toggle_off_outlined,
-                              size: 40)
-                        ],
-                      ),
-                      const Divider()
-                    ],
-                  );
-                },
-              )
-            ],
-          );
-        }
-
-        if (state is OrgaUserListUserNotInOrgaLoaded) {
-          return Column(
-            children: [
-              const Text("Usuarios disponibles"),
-              const Divider(),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: state.users.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                              child: TextButton(
-                                  key: const ValueKey('txtBtnAccount'),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Column(
-                                        children: [
-                                          ListTile(
-                                            leading: const Icon(
-                                                Icons.switch_account),
-                                            title: Text(
-                                              state.users[index].name,
-                                              style:
-                                                  const TextStyle(fontSize: 18),
-                                            ),
-                                            subtitle: Text(
-                                                '${state.users[index].username} / ${state.users[index].email}',
-                                                style: const TextStyle(
-                                                    fontSize: 12)),
-                                          ),
-                                        ],
-                                      )),
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) => GestureDetector(
-                                            onTap: () => Navigator.pop(context),
-                                            child: _showAddingOrgaUserDialog(
-                                                context,
-                                                state.users[index],
-                                                state.orgaId))).then(
-                                      (value) {
-                                        if (value != null) {
-                                          //actualizar
-                                          List<String> roles = [];
-                                          bool enabled = (value!
-                                                  as OrgaUserDialogEditState)
-                                              .checks["enabled"]!;
-                                          Roles.toList().forEach((element) {
-                                            if ((value!
-                                                    as OrgaUserDialogEditState)
-                                                .checks[element]!) {
-                                              roles.add(element);
-                                            }
-                                          });
-                                          context.read<OrgaUserBloc>().add(
-                                              OnOrgaUserAdd(
-                                                  state.orgaId,
-                                                  state.users[index].id,
-                                                  roles,
-                                                  enabled));
-                                        }
-                                      },
-                                    );
-                                  })),
-                        ],
-                      ),
-                      const Divider()
-                    ],
-                  );
-                },
-              )
-            ],
-          );
-        }
-        return const SizedBox();
-      },
+                                        },
+                                      );
+                                    })),
+                          ],
+                        ),
+                        const Divider()
+                      ],
+                    );
+                  },
+                )
+              ],
+            );
+          }
+          return const SizedBox();
+        },
+      ),
     );
   }
 }

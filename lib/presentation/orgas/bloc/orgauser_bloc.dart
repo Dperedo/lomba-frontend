@@ -35,7 +35,7 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
       this._updateOrgaUser,
       this._getUsers,
       this._getUsersNotInOrga)
-      : super(OrgaUserStart()) {
+      : super(const OrgaUserStart("")) {
     on<OnOrgaUserListLoad>((event, emit) async {
       emit(OrgaUserLoading());
       final result = await _getUsers.execute(event.id, '', '', 1, 10);
@@ -59,7 +59,7 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
           event.orgaId, event.userId, event.roles, event.enabled);
 
       result.fold((l) => emit(OrgaUserError(l.message)),
-          (r) => {emit(OrgaUserStart())});
+          (r) => {emit(OrgaUserStart(" El usuario ${event.user} fue agregado a la organización"))});
     });
     on<OnOrgaUserEdit>((event, emit) async {
       emit(OrgaUserLoading());
@@ -100,7 +100,7 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
       final result = await _enableOrgaUser.execute(
           event.orgaId, event.userId, event.enabled);
       result.fold((l) => emit(OrgaUserError(l.message)),
-          (r) => {emit(OrgaUserStart())});
+          (r) => {emit(const OrgaUserStart(""))});
     });
     on<OnOrgaUserDelete>((event, emit) async {
       emit(OrgaUserLoading());
@@ -112,7 +112,7 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
           (l) => emit(OrgaUserError(l.message)), (r) => {isDeleted = r});
 
       if (isDeleted) {
-        emit(OrgaUserStart());
+        emit(OrgaUserStart(" El Usuario ${event.user} fue desasociado de la organización"));
       }
     });
     on<OnOrgaUserListUserNotInOrgaForAdd>((event, emit) async {
@@ -127,7 +127,7 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
 
       emit(OrgaUserListUserNotInOrgaLoaded(event.orgaId, listUsers));
     });
-    on<OnOrgaUserStarter>(((event, emit) async => emit(OrgaUserStart())));
+    on<OnOrgaUserStarter>(((event, emit) async => emit(const OrgaUserStart(""))));
   }
 
   EventTransformer<T> debounce<T>(Duration duration) {
