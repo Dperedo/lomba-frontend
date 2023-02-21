@@ -77,10 +77,10 @@ class OnOrgaEdit extends OrgaEvent {
 ///Evento se dispara para habilitar o deshabilitar una organización
 class OnOrgaEnable extends OrgaEvent {
   final String id;
-
+  final String name;
   final bool enabled;
 
-  const OnOrgaEnable(this.id, this.enabled);
+  const OnOrgaEnable(this.id, this.enabled, this.name);
 
   @override
   List<Object> get props => [id, enabled];
@@ -89,8 +89,9 @@ class OnOrgaEnable extends OrgaEvent {
 ///Evento se dispara para eliminar una organización
 class OnOrgaDelete extends OrgaEvent {
   final String id;
+  final String name;
 
-  const OnOrgaDelete(this.id);
+  const OnOrgaDelete(this.id, this.name);
 
   @override
   List<Object> get props => [id];

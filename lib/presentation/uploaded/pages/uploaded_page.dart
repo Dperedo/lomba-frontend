@@ -37,7 +37,7 @@ class UploadedPage extends StatelessWidget {
   }
 
   Widget _bodyUploaded(BuildContext context) {
-    List<String> listFields = <String>["created", "publicated"];
+    List<String> listFields = <String>["uploaded"];
     return BlocProvider<UploadedLiveCubit>(
       create: (context) => UploadedLiveCubit(),
       child: SizedBox(
@@ -47,15 +47,9 @@ class UploadedPage extends StatelessWidget {
             child: BlocBuilder<UploadedBloc, UploadedState>(
                 builder: (context, state) {
               if (state is UploadedStart) {
-                context.read<UploadedBloc>().add(OnUploadedLoad(
-                    '',
-                    const <String, int>{'created': 1},
-                    1,
-                    _fixPageSize,
-                    context
-                        .read<UploadedLiveCubit>()
-                        .state
-                        .checks["onlydrafts"]!));
+                context.read<UploadedBloc>().add(
+                  OnUploadedLoad('',const <String, int>{'uploaded': 1},1,_fixPageSize,context
+                        .read<UploadedLiveCubit>().state.checks["onlydrafts"]!));
               }
               if (state is UploadedLoading) {
                 return const Center(
@@ -145,8 +139,8 @@ class UploadedPage extends StatelessWidget {
                       haptics: true,
                       step: 1,
                       axis: Axis.horizontal,
-                      value: state.pageIndex,
-                      minValue: 1,
+                      value: state.totalPages == 0 ? 0 : state.pageIndex,
+                      minValue: state.totalPages == 0 ? 0 : 1,
                       maxValue: state.totalPages,
                       onChanged: (value) => context.read<UploadedBloc>().add(
                           OnUploadedLoad(
@@ -234,58 +228,7 @@ class UploadedPage extends StatelessWidget {
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      state.listItems[index].votes.any(
-                                                  (element) =>
-                                                      element.value == 1) ||
-                                              (statecubit.votes.containsKey(
-                                                      state.listItems[index]
-                                                          .id) &&
-                                                  statecubit.votes[state
-                                                          .listItems[index]
-                                                          .id] ==
-                                                      1)
-                                          ? const Text('Publicado')
-                                          : ElevatedButton(
-                                              onPressed: () {
-                                                if (_key.currentState
-                                                        ?.validate() ==
-                                                    true) {
-                                                  context
-                                                      .read<UploadedLiveCubit>()
-                                                      .makeVote(
-                                                          state.listItems[index]
-                                                              .id,
-                                                          1);
-
-                                                  context
-                                                      .read<UploadedBloc>()
-                                                      .add(OnUploadedVote(
-                                                          state.listItems[index]
-                                                              .id,
-                                                          1));
-                                                }
-                                              },
-                                              child: const Text('Publicar')),
-                                      ElevatedButton(
-                                          style: ButtonStyle(
-                                            shape: MaterialStateProperty
-                                                .resolveWith(
-                                              (states) =>
-                                                  RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20.0),
-                                                side: BorderSide(
-                                                  color: Theme.of(context)
-                                                      .secondaryHeaderColor,
-                                                  width: 2,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          onPressed: () {},
-                                          child: const Icon(Icons.edit)),
-                                    ],
+                                    children: showButtonPublish(state, index, statecubit, context),
                                   ),
                                   const SizedBox(height: 15),
                                 ],
@@ -302,5 +245,37 @@ class UploadedPage extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  List<Widget> showButtonPublish(UploadedLoaded state, int index, UploadedLiveState statecubit, BuildContext context) {
+    return [
+      state.listItems[index].votes.any((element) =>element.value == 1) 
+        || (statecubit.votes.containsKey(state.listItems[index].id) 
+        && statecubit.votes[state.listItems[index].id] == 1)
+          ? const Text('Publicado'): 
+          ElevatedButton(
+            onPressed: () {
+              if (_key.currentState?.validate() == true) {
+                context.read<UploadedLiveCubit>().makeVote(state.listItems[index].id,1);
+                context.read<UploadedBloc>().add(OnUploadedVote(state.listItems[index].id,1));
+              }
+            },
+            child: const Text('Publicar')),
+          ElevatedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.resolveWith((states) => 
+                RoundedRectangleBorder(
+                  borderRadius:BorderRadius.circular(20.0),
+                  side: BorderSide(
+                  color: Theme.of(context).secondaryHeaderColor,
+                  width: 2,
+                  ),
+                ),
+              ),
+            ),
+            onPressed: () {},
+            child: const Icon(Icons.edit)
+          ),
+      ];
   }
 }

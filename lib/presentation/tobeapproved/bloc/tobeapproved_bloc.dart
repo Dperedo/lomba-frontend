@@ -3,22 +3,26 @@ import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_event
 import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_state.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
 import '../../../domain/usecases/flow/get_for_approve_posts.dart';
+import '../../../domain/usecases/flow/vote_publication.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
 
 class ToBeApprovedBloc extends Bloc<ToBeApprovedEvent, ToBeApprovedState>{
   final GetForApprovePosts _getForApprovePosts;
   final GetSession _getSession;
+  final VotePublication _votePublication;
 
   ToBeApprovedBloc(
     this._getForApprovePosts,
-    this._getSession
+    this._getSession,
+    this._votePublication
   ):super(ToBeApprovedStart()){
     on<OnToBeApprovedLoad>((event, emit)async{
       emit(ToBeApprovedLoading());
-      String flowId = '00000111-0111-0111-0111-000000000111';
-      String stageId = '00000AAA-0111-0111-0111-000000000111';
+      String flowId = Flows.votationFlowId;
+      String stageId = StagesVotationFlow.stageId02Approval;
 
       var auth = const SessionModel(token: "", username: "", name: "");
       final session = await _getSession.execute();
@@ -50,6 +54,18 @@ class ToBeApprovedBloc extends Bloc<ToBeApprovedEvent, ToBeApprovedState>{
               r.items.length,
               r.items.length
               )));
+    });
+
+    on<OnToBeApprovedVote>((event, emit) async {
+      String flowId = Flows.votationFlowId;
+      String stageId = StagesVotationFlow.stageId02Approval;
+      var auth = const SessionModel(token: "", username: "", name: "");
+      final session = await _getSession.execute();
+      session.fold((l) => emit(ToBeApprovedError(l.message)), (r) => {auth = r});
+
+      final result = await _votePublication.execute(auth.getOrgaId()!,
+          auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);
+      result.fold((l) => emit(ToBeApprovedError(l.message)), (r) {});
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {

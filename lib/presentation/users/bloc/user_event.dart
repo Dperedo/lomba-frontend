@@ -96,10 +96,10 @@ class OnUserEdit extends UserEvent {
 
 class OnUserEnable extends UserEvent {
   final String id;
-
+  final String username;
   final bool enabled;
 
-  const OnUserEnable(this.id, this.enabled);
+  const OnUserEnable(this.id, this.enabled, this.username);
 
   @override
   List<Object> get props => [id, enabled];
@@ -107,8 +107,9 @@ class OnUserEnable extends UserEvent {
 
 class OnUserDelete extends UserEvent {
   final String id;
+  final String username;
 
-  const OnUserDelete(this.id);
+  const OnUserDelete(this.id, this.username);
 
   @override
   List<Object> get props => [id];

@@ -120,6 +120,7 @@ class LocalRepositoryImpl implements LocalRepository {
 
     if (roles.contains(Roles.roleAnonymous)) {
       opts.add(SideDrawerUserOptions.optLogIn);
+      opts.add(SideDrawerUserOptions.optPopular);
     } else {
       opts.add(SideDrawerUserOptions.optLogOff);
       opts.add(SideDrawerUserOptions.optProfile);

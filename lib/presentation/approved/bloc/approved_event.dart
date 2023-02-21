@@ -21,3 +21,13 @@ class OnApprovedLoad extends ApprovedEvent {
   @override
   List<Object> get props => [searchText, fieldsOrder, pageIndex, pageSize];
 }
+
+class OnApprovedVote extends ApprovedEvent {
+  final String postId;
+  final int voteValue;
+
+  const OnApprovedVote(this.postId, this.voteValue);
+
+  @override
+  List<Object> get props => [postId, voteValue];
+}

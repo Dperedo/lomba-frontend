@@ -6,7 +6,9 @@ import '../../../../domain/entities/flows/textcontent.dart';
 import '../../../core/widgets/body_formater.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../sidedrawer/pages/sidedrawer_page.dart';
+import '../../tobeapproved/bloc/tobeapproved_cubit.dart';
 import '../bloc/approved_bloc.dart';
+import '../bloc/approved_cubit.dart';
 import '../bloc/approved_event.dart';
 import '../bloc/approved_state.dart';
 
@@ -42,17 +44,18 @@ class ApprovedPage extends StatelessWidget {
 
   Widget _bodyApproved(BuildContext context){
 
-    List<String> listFields = <String>["uploaded", "sent",];
-    return SizedBox(
+    List<String> listFields = <String>["approved"];
+    return BlocProvider<ApprovedLiveCubit>(
+      create: (context) => ApprovedLiveCubit(), 
+      child: SizedBox(
       width: 800,
-      child:Form(
+      child: Form(
         key: _key,
         child: BlocBuilder<ApprovedBloc, ApprovedState>(
           builder: (context,state){
             if(state is ApprovedStart){
               context.read<ApprovedBloc>().add(OnApprovedLoad(
-                '',const <String, int>{'uploaded':1}, 1, _fixPageSize
-              )
+                '',const <String, int>{'approved':1}, 1, _fixPageSize)
               );
             }
             if (state is ApprovedLoading) {
@@ -111,8 +114,8 @@ class ApprovedPage extends StatelessWidget {
                                 haptics: true,
                                 step: 1,
                                 axis: Axis.horizontal,
-                                value: state.pageIndex,
-                                minValue: 1,
+                                value: state.totalPages == 0 ? 0 : state.pageIndex,
+                                minValue: state.totalPages == 0 ? 0 : 1,
                                 maxValue: state.totalPages,
                                 onChanged: (value) => context
                                     .read<ApprovedBloc>()
@@ -152,63 +155,96 @@ class ApprovedPage extends StatelessWidget {
                         const SizedBox(height: 10,),
                       ],
                     ),
-                  ),                  
-                  ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: state.listItems.length,
-                      itemBuilder: (context, index) {
-                        return SingleChildScrollView(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                          child: Column(
-                            children: [
-                              Row(
+                  ),
+                  BlocBuilder<ApprovedLiveCubit, ApprovedLiveState>(
+                    builder: (context,statecubit) {
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: state.listItems.length,
+                          itemBuilder: (context, index) {
+                            return SingleChildScrollView(
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                              child: Column(
                                 children: [
-                                  Expanded(
-                                    child:
-                                    Column(
-                                      children: [                                      
-                                        ListTile(               
-                                          leading: const Icon(Icons.person),
-                                          title: Text(state.listItems[index].title),                                       
-                                        ),
-                                        ListTile(
-                                          shape:  const RoundedRectangleBorder(
-                                            side: BorderSide(color: Colors.grey, width: 2 ),
-                                            borderRadius: BorderRadius.all(Radius.circular(2))
-                                          ),
-                                          // tileColor: Colors.grey,
-                                          title: Text(
-                                            (state.listItems[index].postitems[0].content as TextContent).text, 
-                                            textAlign: TextAlign.center
-                                          ),
-                                          contentPadding: const EdgeInsets.symmetric(horizontal: 100,vertical: 100),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [   
-                                            IconButton(                                         
-                                              onPressed:(){},
-                                              icon: const Icon(Icons.cancel_outlined)
-                                            ),                                          
-                                            const IconButton(
-                                              icon: Icon(Icons.check_circle_outline),                                                                                
-                                              onPressed:null,                                        
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child:
+                                        Column(
+                                          children: [                                      
+                                            ListTile(               
+                                              leading: const Icon(Icons.person),
+                                              title: Text(state.listItems[index].title),                                       
                                             ),
-                                          ],                                         
+                                            ListTile(
+                                              shape:  const RoundedRectangleBorder(
+                                                side: BorderSide(color: Colors.grey, width: 2 ),
+                                                borderRadius: BorderRadius.all(Radius.circular(2))
+                                              ),
+                                              // tileColor: Colors.grey,
+                                              title: Text(
+                                                (state.listItems[index].postitems[0].content as TextContent).text, 
+                                                textAlign: TextAlign.center
+                                              ),
+                                              contentPadding: const EdgeInsets.symmetric(horizontal: 100,vertical: 100),
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [   
+                                                ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    shape: MaterialStateProperty.resolveWith(
+                                                      (states) => RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(20),
+                                                          side: BorderSide(
+                                                            color: Theme.of(context).secondaryHeaderColor,
+                                                            width: 2,
+                                                          ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  onPressed: 
+                                                    state.listItems[index].votes.any((element) =>element.value == -1) 
+                                                    || (statecubit.votes.containsKey(state.listItems[index].id) 
+                                                    && statecubit.votes[state.listItems[index].id] == -1)? null:
+                                                  (){
+                                                    context.read<ApprovedLiveCubit>().makeVote(state.listItems[index].id,-1);
+                                                    context.read<ApprovedBloc>().add(OnApprovedVote(state.listItems[index].id,-1));
+                                                  },
+                                                  child: const Icon(Icons.close)
+                                                ),
+                                                ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    shape: MaterialStateProperty.resolveWith(
+                                                      (states) => RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(20),
+                                                          side: BorderSide(
+                                                            color: Theme.of(context).secondaryHeaderColor,
+                                                            width: 2,
+                                                          ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  onPressed: null,
+                                                  child: const Icon(Icons.check)
+                                                ),
+                                              ],                                         
+                                            ),
+                                            const SizedBox(height: 15),                                     
+                                          ],
                                         ),
-                                        const SizedBox(height: 15),                                     
-                                      ],
-                                    ),
-                                     
+                                         
+                                      ),
+                                    ],
                                   ),
+                                  // const Divider()
                                 ],
                               ),
-                              // const Divider()
-                            ],
-                          ),
-                        );
-                      }
+                            );
+                          }
+                      );
+                    }
                   ),
                 ],
               );
@@ -217,6 +253,7 @@ class ApprovedPage extends StatelessWidget {
           },
         )
       )
+    )
     );
   }
 }

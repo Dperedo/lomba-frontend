@@ -39,9 +39,9 @@ class VotedPage extends StatelessWidget {
   Widget _bodyVoted(BuildContext context) {
     
 
-    List<String> listFields = <String>["uploaded", "voted"];
+    List<String> listFields = <String>["voted"];
     return BlocProvider<VotedLiveCubit>(
-      create: (context)=>VotedLiveCubit(),
+      create: (context) => VotedLiveCubit(),
         child: SizedBox(
         width: 800,
         child: Form(
@@ -50,7 +50,7 @@ class VotedPage extends StatelessWidget {
               builder: (context, state) {
                 if (state is VotedStart) {
                   context.read<VotedBloc>().add(OnVotedLoad(
-                      '', const <String, int>{'uploaded': 1}, 1, _fixPageSize,
+                      '', const <String, int>{'voted': 1}, 1, _fixPageSize,
                       context
                           .read<VotedLiveCubit>()
                           .state
@@ -172,9 +172,7 @@ class VotedPage extends StatelessWidget {
                                     haptics: true,
                                     step: 1,
                                     axis: Axis.horizontal,
-                                    value: state.totalPages == 0
-                                        ? 0
-                                        : state.pageIndex,
+                                    value: state.totalPages == 0 ? 0 : state.pageIndex,
                                     minValue: state.totalPages == 0 ? 0 : 1,
                                     maxValue: state.totalPages,
                                     onChanged: (value) => context
@@ -263,90 +261,60 @@ class VotedPage extends StatelessWidget {
                                                       side: BorderSide(
                                                           color: Colors.grey,
                                                           width: 2),
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  2))),
+                                                      borderRadius: BorderRadius.all(Radius.circular(2))),
                                               // tileColor: Colors.grey,
-                                              title: Text(
-                                                  (state
-                                                              .listItems[index]
-                                                              .postitems[0]
-                                                              .content
-                                                          as TextContent)
-                                                      .text,
-                                                  textAlign: TextAlign.center),
-                                              contentPadding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 100,
-                                                      vertical: 100),
+                                              title: Text((state.listItems[index].postitems[0].content as TextContent).text,
+                                              textAlign: TextAlign.center),
+                                              contentPadding: const EdgeInsets.symmetric(horizontal: 100,vertical: 100),
                                             ),
                                             const SizedBox(height: 10),
                                             Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              mainAxisAlignment:MainAxisAlignment.spaceBetween,
                                               children: [
-                                                state.listItems[index].votes.any(
-                                                  (element)=>element.value == -1)||
-                                                  (statecubit.votes.containsKey(state.listItems[index].id)&&
-                                                  statecubit.votes[state.listItems[index].id] == -1)
-                                                ? const IconButton(
-                                                    onPressed: null, 
-                                                    icon: Icon(Icons.arrow_downward)
-                                                  )
-                                                :IconButton(
-                                                    icon: const Icon(Icons.arrow_downward),
-                                                    onPressed: () {
-                                                      if (_key.currentState
-                                                        ?.validate() ==
-                                                        true
-                                                      ){
-                                                      context
-                                                      .read<VotedLiveCubit>()
-                                                      .makeVote(
-                                                          state.listItems[index]
-                                                              .id,
-                                                          -1);
-
-                                                      context
-                                                      .read<VotedBloc>()
-                                                      .add(OnVotedAddVote(
-                                                          state.listItems[index]
-                                                              .id,
-                                                          -1));
-                                                      }
-                                                    }),
-                                                state.listItems[index].votes.any(
-                                                  (element)=>element.value == 1)||
-                                                  (statecubit.votes.containsKey(state.listItems[index].id)&&
-                                                  statecubit.votes[state.listItems[index].id] == 1)
-                                                ? const IconButton(
-                                                    onPressed: null, 
-                                                    icon: Icon(Icons.arrow_upward)
-                                                  )
-                                                :IconButton(
-                                                    icon: const Icon(Icons.arrow_upward),
-                                                    onPressed: () {
-                                                      if (_key.currentState
-                                                        ?.validate() ==
-                                                        true
-                                                      ){
-                                                      context
-                                                      .read<VotedLiveCubit>()
-                                                      .makeVote(
-                                                          state.listItems[index]
-                                                              .id,
-                                                          1);
-
-                                                      context
-                                                      .read<VotedBloc>()
-                                                      .add(OnVotedAddVote(
-                                                          state.listItems[index]
-                                                              .id,
-                                                          1));
-                                                      }
-                                                    })
+                                                ElevatedButton(
+                                                    style: ButtonStyle(
+                                                      shape: MaterialStateProperty.resolveWith(
+                                                        (states) => RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(20),
+                                                            side: BorderSide(
+                                                              color: Theme.of(context).secondaryHeaderColor,
+                                                              width: 2,
+                                                            ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    onPressed: 
+                                                      state.listItems[index].votes.any((element) =>element.value == -1) 
+                                                      || (statecubit.votes.containsKey(state.listItems[index].id) 
+                                                      && statecubit.votes[state.listItems[index].id] == -1)? null:
+                                                    (){
+                                                      context.read<VotedLiveCubit>().makeVote(state.listItems[index].id,-1);
+                                                      context.read<VotedBloc>().add(OnVotedAddVote(state.listItems[index].id,-1));
+                                                    },
+                                                    child: const Icon(Icons.keyboard_arrow_down)
+                                                  ),
+                                                ElevatedButton(
+                                                    style: ButtonStyle(
+                                                      shape: MaterialStateProperty.resolveWith(
+                                                        (states) => RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(20),
+                                                            side: BorderSide(
+                                                              color: Theme.of(context).secondaryHeaderColor,
+                                                              width: 2,
+                                                            ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    onPressed: 
+                                                      state.listItems[index].votes.any((element) =>element.value == 1) 
+                                                      || (statecubit.votes.containsKey(state.listItems[index].id) 
+                                                      && statecubit.votes[state.listItems[index].id] == 1)? null:
+                                                    (){
+                                                      context.read<VotedLiveCubit>().makeVote(state.listItems[index].id,1);
+                                                      context.read<VotedBloc>().add(OnVotedAddVote(state.listItems[index].id,1));
+                                                    },
+                                                    child: const Icon(Icons.keyboard_arrow_up)
+                                                  ),  
                                               ],
                                             ),
                                             const SizedBox(height: 15),

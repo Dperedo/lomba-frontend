@@ -5,8 +5,8 @@ import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../../../domain/entities/flows/textcontent.dart';
-import '../../sidedrawer/pages/sidedrawer_page.dart';
 import '../bloc/tobeapproved_bloc.dart';
+import '../bloc/tobeapproved_cubit.dart';
 import '../bloc/tobeapproved_event.dart';
 import '../bloc/tobeapproved_state.dart';
 
@@ -36,9 +36,10 @@ class ToBeApprovedPage extends StatelessWidget {
 
   Widget _bodyToBeApproved(BuildContext context){
     
-    List<String> listFields = <String>["created", "publicated"];
-    return SizedBox(
-      
+    List<String> listFields = <String>["forapprove"];
+    return BlocProvider<ToBeApprovedLiveCubit>(
+      create: (context) => ToBeApprovedLiveCubit(),
+      child: SizedBox(
       width: 800,
       child: Form(
         key: _key,
@@ -46,7 +47,7 @@ class ToBeApprovedPage extends StatelessWidget {
           builder: (context, state){
               if (state is ToBeApprovedStart){
                 context.read<ToBeApprovedBloc>().add(OnToBeApprovedLoad(
-                  '', const <String, int>{'created': 1}, 1, _fixPageSize)
+                  '', const <String, int>{'forapprove': 1}, 1, _fixPageSize)
                 );
               }
               if (state is ToBeApprovedLoading) {
@@ -105,8 +106,8 @@ class ToBeApprovedPage extends StatelessWidget {
                                 haptics: true,
                                 step: 1,
                                 axis: Axis.horizontal,
-                                value: state.pageIndex,
-                                minValue: 1,
+                                value: state.totalPages == 0 ? 0 : state.pageIndex,
+                                minValue: state.totalPages == 0 ? 0 : 1,
                                 maxValue: state.totalPages,
                                 onChanged: (value) => context
                                     .read<ToBeApprovedBloc>()
@@ -146,86 +147,104 @@ class ToBeApprovedPage extends StatelessWidget {
                         const SizedBox(height: 10,),
                       ],
                     ),
-                  ),                  
-                  ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: state.listItems.length,
-                      itemBuilder: (context, index) {
-                        return SingleChildScrollView(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                          child: Column(
-                            children: [
-                              Row(
+                  ),  
+                  BlocBuilder<ToBeApprovedLiveCubit, ToBeApprovedLiveState>(
+                    builder: (context, statecubit) {
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: state.listItems.length,
+                          itemBuilder: (context, index) {
+                            return SingleChildScrollView(
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                              child: Column(
                                 children: [
-                                  Expanded(
-                                    child:
-                                    Column(
-                                      children: [                                      
-                                        ListTile(               
-                                          leading: const Icon(Icons.person),
-                                          title: Text(state.listItems[index].title),                                       
-                                        ),
-                                        ListTile(
-                                          shape:  const RoundedRectangleBorder(
-                                            side: BorderSide(color: Colors.grey, width: 2 ),
-                                            borderRadius: BorderRadius.all(Radius.circular(2))
-                                          ),
-                                          // tileColor: Colors.grey,
-                                          title: Text(
-                                            (state.listItems[index].postitems[0].content as TextContent).text, 
-                                            textAlign: TextAlign.center
-                                          ),
-                                          contentPadding: const EdgeInsets.symmetric(horizontal: 100,vertical: 100),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [   
-                                            ElevatedButton(
-                                              style: ButtonStyle(
-                                                shape: MaterialStateProperty.resolveWith(
-                                                  (states) => RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(20),
-                                                      side: BorderSide(
-                                                        color: Theme.of(context).secondaryHeaderColor,
-                                                        width: 2,
-                                                      ),
-                                                  ),
-                                                ),
-                                              ),
-                                              onPressed:(){},
-                                              child: const Icon(Icons.close)
-                                            ),                                          
-                                            ElevatedButton(
-                                              style: ButtonStyle(
-                                                shape: MaterialStateProperty.resolveWith(
-                                                  (states) => RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(20.0),
-                                                      side: BorderSide(
-                                                        color: Theme.of(context).secondaryHeaderColor,
-                                                        width: 2,
-                                                      ),
-                                                  ),
-                                                ),
-                                              ),
-                                              onPressed:(){},
-                                              child: const Icon(Icons.check)
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child:
+                                        Column(
+                                          children: [                                      
+                                            ListTile(               
+                                              leading: const Icon(Icons.person),
+                                              title: Text(state.listItems[index].title),                                       
                                             ),
-                                          ],                                         
+                                            ListTile(
+                                              shape:  const RoundedRectangleBorder(
+                                                side: BorderSide(color: Colors.grey, width: 2 ),
+                                                borderRadius: BorderRadius.all(Radius.circular(2))
+                                              ),
+                                              // tileColor: Colors.grey,
+                                              title: Text(
+                                                (state.listItems[index].postitems[0].content as TextContent).text, 
+                                                textAlign: TextAlign.center
+                                              ),
+                                              contentPadding: const EdgeInsets.symmetric(horizontal: 100,vertical: 100),
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [   
+                                                ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    shape: MaterialStateProperty.resolveWith(
+                                                      (states) => RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(20),
+                                                          side: BorderSide(
+                                                            color: Theme.of(context).secondaryHeaderColor,
+                                                            width: 2,
+                                                          ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  onPressed: 
+                                                    state.listItems[index].votes.any((element) =>element.value == -1) 
+                                                    || (statecubit.votes.containsKey(state.listItems[index].id) 
+                                                    && statecubit.votes[state.listItems[index].id] == -1)? null:
+                                                  (){
+                                                    context.read<ToBeApprovedLiveCubit>().makeVote(state.listItems[index].id,-1);
+                                                    context.read<ToBeApprovedBloc>().add(OnToBeApprovedVote(state.listItems[index].id,-1));
+                                                  },
+                                                  child: const Icon(Icons.close)
+                                                ),                                          
+                                                ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    shape: MaterialStateProperty.resolveWith(
+                                                      (states) => RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(20.0),
+                                                          side: BorderSide(
+                                                            color: Theme.of(context).secondaryHeaderColor,
+                                                            width: 2,
+                                                          ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  onPressed:
+                                                    state.listItems[index].votes.any((element) =>element.value == 1) 
+                                                    || (statecubit.votes.containsKey(state.listItems[index].id) 
+                                                    && statecubit.votes[state.listItems[index].id] == 1)? null:
+                                                  (){
+                                                    context.read<ToBeApprovedLiveCubit>().makeVote(state.listItems[index].id,1);
+                                                    context.read<ToBeApprovedBloc>().add(OnToBeApprovedVote(state.listItems[index].id,1));
+                                                  },
+                                                  child: const Icon(Icons.check)
+                                                ),
+                                              ],                                         
+                                            ),
+                                            const SizedBox(height: 15),                                     
+                                          ],
                                         ),
-                                        const SizedBox(height: 15),                                     
-                                      ],
-                                    ),
-                                     
+                                        
+                                      ),
+                                    ],
                                   ),
+                                  // const Divider()
                                 ],
                               ),
-                              // const Divider()
-                            ],
-                          ),
-                        );
-                      }
-                  ),
+                            );
+                          }
+                      );
+                    }
+                  )
                 ],
               );
               }
@@ -233,6 +252,7 @@ class ToBeApprovedPage extends StatelessWidget {
           }
         )
       ),
+    )
     );
   }
 }
