@@ -26,7 +26,7 @@ class RejectedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BlocProvider<RejectedLiveCubit>(
       create: (context) => RejectedLiveCubit(),
       child: BlocListener<RejectedLiveCubit, RejectedLiveState>(
         listener: (context, state) {
