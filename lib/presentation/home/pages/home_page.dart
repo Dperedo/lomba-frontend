@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
     return BlocListener<HomeBloc, HomeState>(
       listener: (context, state) {
         if(state is HomeStart && state.message != ""){
-          snackBarNotify(context, state.message, null);
+          snackBarNotify(context, state.message, Icons.exit_to_app);
         }
       },
       child: ScaffoldManager(

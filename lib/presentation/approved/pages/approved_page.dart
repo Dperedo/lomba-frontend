@@ -6,8 +6,6 @@ import '../../../../domain/entities/flows/textcontent.dart';
 import '../../../core/widgets/body_formater.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
-import '../../sidedrawer/pages/sidedrawer_page.dart';
-import '../../tobeapproved/bloc/tobeapproved_cubit.dart';
 import '../bloc/approved_bloc.dart';
 import '../bloc/approved_cubit.dart';
 import '../bloc/approved_event.dart';
@@ -55,10 +53,7 @@ class ApprovedPage extends StatelessWidget {
                     builder: (context, state) {
                       if (state is ApprovedStart) {
                         context.read<ApprovedBloc>().add(OnApprovedLoad(
-                            '',
-                            const <String, int>{'approved': 1},
-                            1,
-                            _fixPageSize));
+                            '', const <String, int>{'approved': 1}, 1, _fixPageSize));
                       }
                       if (state is ApprovedLoading) {
                         return const Center(

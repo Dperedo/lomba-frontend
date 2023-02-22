@@ -39,8 +39,9 @@ class LoginSelectOrga extends LoginState {
 ///a otra pantalla.
 class LoginGoted extends LoginState {
   final SessionModel? result;
+  final String message;
 
-  const LoginGoted(this.result);
+  const LoginGoted(this.result, this.message);
 
   @override
   List<Object> get props => [];
