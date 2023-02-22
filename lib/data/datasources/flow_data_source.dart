@@ -531,7 +531,6 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
       'orgaId': orgaId,
       'userId': userId,
       'flowId': flowId,
-      'orgaId': orgaId,
       'stageId': stageId,
       'postId': postId,
       'voteValue': voteValue
