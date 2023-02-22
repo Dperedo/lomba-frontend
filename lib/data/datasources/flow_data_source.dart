@@ -528,6 +528,7 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
   Future<ModelContainer<Vote>> votePublication(String orgaId, String userId,
       String flowId, String stageId, String postId, int voteValue) async {
     final Map<String, dynamic> newVote = {
+      'orgaId': orgaId,
       'userId': userId,
       'flowId': flowId,
       'orgaId': orgaId,

@@ -44,7 +44,10 @@ class HomeLoaded extends HomeState {
 }
 
 ///Estado inicial del Home
-class HomeStart extends HomeState {}
+class HomeStart extends HomeState {
+  final String message;
+  const HomeStart(this.message);
+}
 
 ///Estado que indica que la información se está cargando.
 ///

@@ -34,8 +34,9 @@ class OnOrgaUserAdd extends OrgaUserEvent {
   final String userId;
   final List<String> roles;
   final bool enabled;
+  final String user;
 
-  const OnOrgaUserAdd(this.orgaId, this.userId, this.roles, this.enabled);
+  const OnOrgaUserAdd(this.orgaId, this.userId, this.roles, this.enabled, this.user);
 
   @override
   List<Object> get props => [orgaId, userId, roles, enabled];
@@ -85,8 +86,9 @@ class OnOrgaUserEnable extends OrgaUserEvent {
 class OnOrgaUserDelete extends OrgaUserEvent {
   final String orgaId;
   final String userId;
+  final String user;
 
-  const OnOrgaUserDelete(this.orgaId, this.userId);
+  const OnOrgaUserDelete(this.orgaId, this.userId, this.user);
 
   @override
   List<Object> get props => [orgaId, userId];

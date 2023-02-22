@@ -4,6 +4,7 @@ import 'package:lomba_frontend/core/widgets/body_formater.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_cubit.dart';
 import 'package:numberpicker/numberpicker.dart';
+import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/flows/textcontent.dart';
 import '../../sidedrawer/pages/sidedrawer_page.dart';
 import '../bloc/uploaded_bloc.dart';
@@ -20,18 +21,20 @@ class UploadedPage extends StatelessWidget {
   final int _fixPageSize = 8;
   @override
   Widget build(BuildContext context) {
-    return ScaffoldManager(
-      title: AppBar(title: const Text("Subidos")),
-      child: SingleChildScrollView(
-        child: Center(
+    return BlocListener<UploadedBloc, UploadedState>(
+      listener: (context, state) {
+        /*if(state is UploadedLoaded && state.message != ""){
+          snackBarNotify(context, state.message, Icons.account_circle);
+        }*/
+      },
+      child: ScaffoldManager(
+        title: AppBar(title: const Text("Subidos")),
+        child: SingleChildScrollView(
+            child: Center(
           child: Column(
-            children: [
-              BodyFormater(
-                child: _bodyUploaded(context)
-                )
-              ],
+            children: [BodyFormater(child: _bodyUploaded(context))],
           ),
-        )
+        )),
       ),
     );
   }
@@ -47,9 +50,15 @@ class UploadedPage extends StatelessWidget {
             child: BlocBuilder<UploadedBloc, UploadedState>(
                 builder: (context, state) {
               if (state is UploadedStart) {
-                context.read<UploadedBloc>().add(
-                  OnUploadedLoad('',const <String, int>{'uploaded': 1},1,_fixPageSize,context
-                        .read<UploadedLiveCubit>().state.checks["onlydrafts"]!));
+                context.read<UploadedBloc>().add(OnUploadedLoad(
+                    '',
+                    const <String, int>{'uploaded': 1},
+                    1,
+                    _fixPageSize,
+                    context
+                        .read<UploadedLiveCubit>()
+                        .state
+                        .checks["onlydrafts"]!));
               }
               if (state is UploadedLoading) {
                 return const Center(
@@ -228,7 +237,8 @@ class UploadedPage extends StatelessWidget {
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: showButtonPublish(state, index, statecubit, context),
+                                    children: showButtonPublish(
+                                        state, index, statecubit, context),
                                   ),
                                   const SizedBox(height: 15),
                                 ],
@@ -247,35 +257,39 @@ class UploadedPage extends StatelessWidget {
     );
   }
 
-  List<Widget> showButtonPublish(UploadedLoaded state, int index, UploadedLiveState statecubit, BuildContext context) {
+  List<Widget> showButtonPublish(UploadedLoaded state, int index,
+      UploadedLiveState statecubit, BuildContext context) {
     return [
-      state.listItems[index].votes.any((element) =>element.value == 1) 
-        || (statecubit.votes.containsKey(state.listItems[index].id) 
-        && statecubit.votes[state.listItems[index].id] == 1)
-          ? const Text('Publicado'): 
-          ElevatedButton(
-            onPressed: () {
-              if (_key.currentState?.validate() == true) {
-                context.read<UploadedLiveCubit>().makeVote(state.listItems[index].id,1);
-                context.read<UploadedBloc>().add(OnUploadedVote(state.listItems[index].id,1));
-              }
-            },
-            child: const Text('Publicar')),
-          ElevatedButton(
-            style: ButtonStyle(
-              shape: MaterialStateProperty.resolveWith((states) => 
-                RoundedRectangleBorder(
-                  borderRadius:BorderRadius.circular(20.0),
-                  side: BorderSide(
+      state.listItems[index].votes.any((element) => element.value == 1) ||
+              (statecubit.votes.containsKey(state.listItems[index].id) &&
+                  statecubit.votes[state.listItems[index].id] == 1)
+          ? const Text('Publicado')
+          : ElevatedButton(
+              onPressed: () {
+                if (_key.currentState?.validate() == true) {
+                  context
+                      .read<UploadedLiveCubit>()
+                      .makeVote(state.listItems[index].id, 1);
+                  context
+                      .read<UploadedBloc>()
+                      .add(OnUploadedVote(state.listItems[index].id, 1));
+                }
+              },
+              child: const Text('Publicar')),
+      ElevatedButton(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.resolveWith(
+              (states) => RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+                side: BorderSide(
                   color: Theme.of(context).secondaryHeaderColor,
                   width: 2,
-                  ),
                 ),
               ),
             ),
-            onPressed: () {},
-            child: const Icon(Icons.edit)
           ),
-      ];
+          onPressed: () {},
+          child: const Icon(Icons.edit)),
+    ];
   }
 }

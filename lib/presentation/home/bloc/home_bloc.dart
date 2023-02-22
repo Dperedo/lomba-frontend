@@ -27,7 +27,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     this._getSession,
     this._getLatestPosts,
     this._votePublication
-    ) : super(HomeStart()) {
+    ) : super(const HomeStart("")) {
     ///Evento que hace la consulta de sesión del usuario en el dispositivo.
     on<OnHomeLoading>(
       (event, emit) async {
@@ -114,7 +114,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     ///Evento es llamado para reiniciar el Home y haga la consulta de sesión.
     on<OnRestartHome>((event, emit) async {
-      emit(HomeStart());
+      emit(HomeStart(event.message));
     });
 
     on<OnHomeVote>((event, emit) async {
@@ -126,7 +126,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       final result = await _votePublication.execute(auth.getOrgaId()!,
           auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);
-      result.fold((l) => emit(HomeError(l.message)), (r) {emit(HomeStart());});
+      result.fold((l) => emit(HomeError(l.message)), (r) {emit(const HomeStart(""));});
     });
   }
 

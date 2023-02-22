@@ -59,7 +59,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           });
           emit(LoginSelectOrga(listorgas, username));
         } else {
-          emit(LoginGoted(session));
+          emit(LoginGoted(session," Bienvenido usuario $username"));
         }
       },
       transformer: debounce(const Duration(milliseconds: 0)),
@@ -79,7 +79,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           username: session.username,
           name: session.name,
         );
-        emit(LoginGoted(s));
+        emit(LoginGoted(s," Bienvenido usuario $username"));
       });
     });
 
@@ -138,7 +138,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             });
             emit(LoginSelectOrga(listorgas, session!.username));
           } else {
-            emit(LoginGoted(session));
+            emit(LoginGoted(session, " Bienvenido usuario ${session?.username}"));
           }
         }
       },
