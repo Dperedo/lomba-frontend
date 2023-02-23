@@ -24,6 +24,7 @@ import 'package:lomba_frontend/domain/usecases/users/get_users_notin_orga.dart';
 import 'package:lomba_frontend/domain/usecases/users/update_user_password.dart';
 import 'package:lomba_frontend/presentation/popular/bloc/popular_bloc.dart';
 import 'package:lomba_frontend/presentation/rejected/bloc/rejected_bloc.dart';
+import 'package:lomba_frontend/presentation/router/bloc/router_bloc.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
 import 'package:lomba_frontend/presentation/users/bloc/user_bloc.dart';
@@ -92,6 +93,7 @@ Future<void> init() async {
   locator.registerFactory(() => SideDrawerBloc(locator(), locator(), locator(),
       locator(), locator(), locator()));
   locator.registerFactory(() => NavBloc());
+  locator.registerFactory(() => RouterPageBloc(locator()));
   locator.registerFactory(() => OrgaBloc(
         locator(),
         locator(),
