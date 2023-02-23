@@ -34,6 +34,8 @@ class LoginPage extends StatelessWidget {
       listener: (context, state) {
         if(state is LoginGoted && state.message != ""){
           snackBarNotify(context, state.message, Icons.account_circle);
+        }else if(state is LoginError && state.message != ""){
+          snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
       child: Scaffold(

@@ -5,6 +5,7 @@ import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/roles/bloc/role_event.dart';
 import 'package:lomba_frontend/presentation/sidedrawer/pages/sidedrawer_page.dart';
 
+import '../../../core/widgets/snackbar_notification.dart';
 import '../bloc/role_bloc.dart';
 import '../bloc/role_state.dart';
 
@@ -15,18 +16,20 @@ class RolesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RoleBloc, RoleState>(
       builder: (context, state) {
-        return ScaffoldManager(
-          title: _variableAppBar(context, state),
-          child: SingleChildScrollView(
-            child: Center(
+        return BlocListener<RoleBloc, RoleState>(
+          listener: (context, state) {
+            if(state is RoleError && state.message != ""){
+              snackBarNotify(context, state.message, Icons.cancel_outlined);
+            }
+          },
+          child: ScaffoldManager(
+            title: _variableAppBar(context, state),
+            child: SingleChildScrollView(
+                child: Center(
               child: Column(
-                children: [
-                  BodyFormater(
-                    child: _bodyRoles(context, state)
-                  )
-                ],
+                children: [BodyFormater(child: _bodyRoles(context, state))],
               ),
-            )
+            )),
           ),
         );
       },

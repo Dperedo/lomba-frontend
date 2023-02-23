@@ -22,6 +22,8 @@ class UsersPage extends StatelessWidget {
           snackBarNotify(context, state.message, Icons.account_circle);
         } else if (state is UserStart && state.message != ""){
           snackBarNotify(context, state.message, Icons.account_circle);
+        } else if (state is UserError && state.message != ""){
+          snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
       child: BlocBuilder<UserBloc, UserState>(

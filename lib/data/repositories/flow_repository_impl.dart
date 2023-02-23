@@ -26,9 +26,9 @@ class FlowRepositoryImpl implements FlowRepository {
 
       return (Right(result.toEntity()));
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -77,9 +77,9 @@ class FlowRepositoryImpl implements FlowRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -128,9 +128,9 @@ class FlowRepositoryImpl implements FlowRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -176,9 +176,9 @@ class FlowRepositoryImpl implements FlowRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -224,9 +224,9 @@ class FlowRepositoryImpl implements FlowRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -275,9 +275,9 @@ class FlowRepositoryImpl implements FlowRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -331,9 +331,9 @@ class FlowRepositoryImpl implements FlowRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -384,9 +384,9 @@ class FlowRepositoryImpl implements FlowRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -426,9 +426,9 @@ class FlowRepositoryImpl implements FlowRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 }

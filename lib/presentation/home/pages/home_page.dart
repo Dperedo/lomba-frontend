@@ -28,6 +28,8 @@ class HomePage extends StatelessWidget {
       listener: (context, state) {
         if(state is HomeStart && state.message != ""){
           snackBarNotify(context, state.message, Icons.exit_to_app);
+        } else if(state is HomeError && state.message != ""){
+          snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
       child: ScaffoldManager(

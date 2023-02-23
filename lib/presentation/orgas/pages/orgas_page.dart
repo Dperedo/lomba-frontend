@@ -34,6 +34,8 @@ class OrgasPage extends StatelessWidget {
       listener: (context, state) {
         if (state is OrgaLoaded && state.message != "") {
           snackBarNotify(context, state.message, Icons.business_center);
+        } else if(state is OrgaError && state.message != ""){
+          snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
       child: BlocBuilder<OrgaBloc, OrgaState>(
@@ -684,6 +686,8 @@ class OrgasPage extends StatelessWidget {
       listener: (context, state) {
         if(state is OrgaUserStart && state.message != ""){
           snackBarNotify(context, state.message, Icons.business_center);
+        } else if(state is OrgaUserError && state.message != ""){
+          snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
       child: BlocBuilder<OrgaUserBloc, OrgaUserState>(

@@ -79,9 +79,9 @@ class LocalRepositoryImpl implements LocalRepository {
         return const Right(false);
       }
     } on ServerException {
-      return const Left(ServerFailure(''));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     } on CacheException {
       return const Left(ConnectionFailure('Failed to write local cache'));
     }

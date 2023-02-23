@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/widgets/body_formater.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
+import '../../../core/widgets/snackbar_notification.dart';
 import '../../sidedrawer/pages/sidedrawer_page.dart';
 import '../../users/bloc/user_bloc.dart';
 import '../../users/bloc/user_event.dart';
@@ -21,16 +22,19 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
-      return ScaffoldManager(
-        title: _variableAppBar(context, state),
-        child: SingleChildScrollView(
-            child: Center(
-              child: BodyFormater(
-                child: _bodyProfile(context, state)
-              )
-            )
-          ),
-        );
+      return BlocListener<ProfileBloc, ProfileState>(
+        listener: (context, state) {
+          if(state is ProfileError && state.message != ""){
+            snackBarNotify(context, state.message, Icons.cancel_outlined);
+          }
+        },
+        child: ScaffoldManager(
+          title: _variableAppBar(context, state),
+          child: SingleChildScrollView(
+              child: Center(
+                  child: BodyFormater(child: _bodyProfile(context, state)))),
+        ),
+      );
     });
   }
 
@@ -60,7 +64,6 @@ class ProfilePage extends StatelessWidget {
     }
     if (state is ProfileLoaded) {
       return SizedBox(
-        
         width: 600,
         child: Column(
           children: [

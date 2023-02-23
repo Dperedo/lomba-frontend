@@ -10,7 +10,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snackBarNotify(BuildCo
                   Icon(
                     icon,
                     color: Colors.white,),
-                  Text(message)
+                  Text(" $message")
                 ],
               ),
               duration: const Duration(milliseconds: ShowTime.snackbarDuration),

@@ -51,9 +51,9 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(list);
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -65,9 +65,9 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(result.toEntity());
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -87,9 +87,9 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(list);
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -110,9 +110,9 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(list);
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -136,9 +136,9 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(result.toEntity());
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -163,9 +163,9 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(result.toEntity());
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -177,9 +177,9 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(result);
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -192,9 +192,9 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(result);
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -210,9 +210,9 @@ class OrgaRepositoryImpl implements OrgaRepository {
       }
       return const Left(ServerFailure('No fue posible realizar la acción'));
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -236,11 +236,11 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
         return Right(list[0]);
       }
-      return const Left(ServerFailure(''));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -259,9 +259,9 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(result.toEntity());
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -282,9 +282,9 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(result.toEntity());
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -299,9 +299,9 @@ class OrgaRepositoryImpl implements OrgaRepository {
         return Right(result.toEntity());
       }
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -320,9 +320,9 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(list);
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 }

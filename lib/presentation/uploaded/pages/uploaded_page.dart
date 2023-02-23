@@ -23,9 +23,9 @@ class UploadedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<UploadedBloc, UploadedState>(
       listener: (context, state) {
-        /*if(state is UploadedLoaded && state.message != ""){
-          snackBarNotify(context, state.message, Icons.account_circle);
-        }*/
+        if(state is UploadedError && state.message != ""){
+          snackBarNotify(context, state.message, Icons.cancel_outlined);
+        }
       },
       child: ScaffoldManager(
         title: AppBar(title: const Text("Subidos")),

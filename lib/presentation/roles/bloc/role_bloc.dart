@@ -23,7 +23,7 @@ class RoleBloc extends Bloc<RoleEvent, RoleState> {
 
         final result = await _getRole.execute(event.name);
 
-        result.fold((failure) => emit(RoleError(failure.message)),
+        result.fold((l) => emit(RoleError(l.message)),
             (role) => {emit(RoleLoaded(role))});
       },
       transformer: debounce(const Duration(milliseconds: 0)),
@@ -34,7 +34,7 @@ class RoleBloc extends Bloc<RoleEvent, RoleState> {
         emit(RoleLoading());
         final result = await _getRoles.execute();
 
-        result.fold((failure) => emit(RoleError(failure.message)),
+        result.fold((l) => emit(RoleError(l.message)),
             (listRoles) => {emit(RoleListLoaded(listRoles))});
       },
       transformer: debounce(const Duration(milliseconds: 0)),

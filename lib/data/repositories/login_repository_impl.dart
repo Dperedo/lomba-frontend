@@ -57,11 +57,11 @@ class LoginRepositoryImpl implements LoginRepository {
 
       return Right(session);
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on CacheException {
       return const Left(ConnectionFailure('Failed to write local cache'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -81,11 +81,11 @@ class LoginRepositoryImpl implements LoginRepository {
 
       return const Right(true);
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on CacheException {
       return const Left(ConnectionFailure('Failed to write local cache'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -107,11 +107,11 @@ class LoginRepositoryImpl implements LoginRepository {
       //if (result != '') {
       return Right(result);
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on CacheException {
       return const Left(ConnectionFailure('Failed to write local cache'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
@@ -140,11 +140,11 @@ class LoginRepositoryImpl implements LoginRepository {
 
       return Right(session);
     } on ServerException {
-      return const Left(ServerFailure(''));
-    } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
-    } on CacheException {
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    }  on CacheException {
       return const Left(ConnectionFailure('Failed to write local cache'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 }

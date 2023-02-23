@@ -41,8 +41,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
         final result = await _getAuthenticate.execute(username, password);
 
-        result.fold((failure) {
-          emit(LoginError(failure.message));
+        result.fold((l) {
+          emit(LoginError(l.message));
           return;
         }, (r) {
           session =
@@ -53,7 +53,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           final userId = session?.getUserId();
           final resultOrgas = await _getOrgasByUser.execute(userId!);
 
-          resultOrgas.fold((failure) => {emit(LoginError(failure.message))},
+          resultOrgas.fold((l) => {emit(LoginError(l.message))},
               (r) {
             listorgas = r;
           });
@@ -73,7 +73,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       final result = await _changeOrga.execute(username, orgaId);
 
-      result.fold((failure) => {emit(LoginError(failure.message))}, (session) {
+      result.fold((l) => {emit(LoginError(l.message))}, (session) {
         final s = SessionModel(
           token: session.token,
           username: session.username,
@@ -120,8 +120,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           String userToken = await credentials.user!.getIdToken();
 
           final result = await _getAuthenticateGoogle.execute(user, userToken);
-          result.fold((failure) {
-            emit(LoginError(failure.message));
+          result.fold((l) {
+            emit(LoginError(l.message));
             return;
           }, (r) {
             session = SessionModel(
@@ -132,7 +132,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             final userId = session?.getUserId();
             final resultOrgas = await _getOrgasByUser.execute(userId!);
 
-            resultOrgas.fold((failure) => {emit(LoginError(failure.message))},
+            resultOrgas.fold((l) => {emit(LoginError(l.message))},
                 (r) {
               listorgas = r;
             });
