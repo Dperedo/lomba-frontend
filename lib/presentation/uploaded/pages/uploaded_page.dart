@@ -23,7 +23,7 @@ class UploadedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<UploadedBloc, UploadedState>(
       listener: (context, state) {
-        if(state is UploadedError && state.message != ""){
+        if (state is UploadedError && state.message != "") {
           snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
@@ -43,33 +43,38 @@ class UploadedPage extends StatelessWidget {
     List<String> listFields = <String>["uploaded"];
     return BlocProvider<UploadedLiveCubit>(
       create: (context) => UploadedLiveCubit(),
-      child: SizedBox(
-        width: 800,
-        child: Form(
-            key: _key,
-            child: BlocBuilder<UploadedBloc, UploadedState>(
-                builder: (context, state) {
-              if (state is UploadedStart) {
-                context.read<UploadedBloc>().add(OnUploadedLoad(
-                    '',
-                    const <String, int>{'uploaded': 1},
-                    1,
-                    _fixPageSize,
-                    context
-                        .read<UploadedLiveCubit>()
-                        .state
-                        .checks["onlydrafts"]!));
-              }
-              if (state is UploadedLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (state is UploadedLoaded) {
-                return _uploadedLoaded(context, state, listFields);
-              }
-              return const SizedBox();
-            })),
+      child: BlocListener<UploadedLiveCubit, UploadedLiveState>(
+        listener: (context, state) {
+          snackBarNotify(context, "Subido", Icons.upload);
+        },
+        child: SizedBox(
+          width: 800,
+          child: Form(
+              key: _key,
+              child: BlocBuilder<UploadedBloc, UploadedState>(
+                  builder: (context, state) {
+                if (state is UploadedStart) {
+                  context.read<UploadedBloc>().add(OnUploadedLoad(
+                      '',
+                      const <String, int>{'uploaded': 1},
+                      1,
+                      _fixPageSize,
+                      context
+                          .read<UploadedLiveCubit>()
+                          .state
+                          .checks["onlydrafts"]!));
+                }
+                if (state is UploadedLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (state is UploadedLoaded) {
+                  return _uploadedLoaded(context, state, listFields);
+                }
+                return const SizedBox();
+              })),
+        ),
       ),
     );
   }

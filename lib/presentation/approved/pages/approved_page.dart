@@ -24,16 +24,23 @@ class ApprovedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldManager(
-      title: AppBar(
-        title: const Text("Aprobados"),
-      ),
-      child: SingleChildScrollView(
-          child: Center(
-        child: Column(
-          children: [BodyFormater(child: _bodyApproved(context))],
+    return BlocListener<ApprovedBloc, ApprovedState>(
+      listener: (context, state) {
+        if(state is ApprovedError && state.message != ""){
+          snackBarNotify(context, state.message, Icons.cancel_outlined);
+        }
+      },
+      child: ScaffoldManager(
+        title: AppBar(
+          title: const Text("Aprobados"),
         ),
-      )),
+        child: SingleChildScrollView(
+            child: Center(
+          child: Column(
+            children: [BodyFormater(child: _bodyApproved(context))],
+          ),
+        )),
+      ),
     );
   }
 
@@ -53,7 +60,10 @@ class ApprovedPage extends StatelessWidget {
                     builder: (context, state) {
                       if (state is ApprovedStart) {
                         context.read<ApprovedBloc>().add(OnApprovedLoad(
-                            '', const <String, int>{'approved': 1}, 1, _fixPageSize));
+                            '',
+                            const <String, int>{'approved': 1},
+                            1,
+                            _fixPageSize));
                       }
                       if (state is ApprovedLoading) {
                         return const Center(

@@ -21,3 +21,10 @@ class SideDrawerReady extends SideDrawerState {
   @override
   List<Object> get props => [opts, orgas, orgaId];
 }
+
+class SideDrawerError extends SideDrawerState {
+  final String message;
+  const SideDrawerError (this.message);
+  @override
+  List<Object> get props => [message];
+}

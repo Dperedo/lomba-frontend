@@ -19,11 +19,10 @@ class SideDrawerBloc extends Bloc<SideDrawerEvent, SideDrawerState> {
   final GetSession _getSession;
   final GetOrgasByUser _getOrgasByUser;
   final GetHasLogIn _hasLogIn;
-  final GetOrga _getOrga;
   final ChangeOrga _changeOrga;
 
   SideDrawerBloc(this._getOptions, this._doLogOff, this._getSession,
-      this._getOrgasByUser, this._hasLogIn, this._getOrga, this._changeOrga)
+      this._getOrgasByUser, this._hasLogIn, this._changeOrga)
       : super(SideDrawerEmpty()) {
     on<OnSideDrawerLoading>(
       (event, emit) async {
@@ -35,12 +34,12 @@ class SideDrawerBloc extends Bloc<SideDrawerEvent, SideDrawerState> {
         final result = await _getOptions.execute();
 
         final resultLogIn = await _hasLogIn.execute();
-        resultLogIn.fold((failure) => {}, (r) => {login = r});
+        resultLogIn.fold((l) => {emit(SideDrawerError(l.message))}, (r) => {login = r});
 
         if (login) {
           final resultSession = await _getSession.execute();
           resultSession.fold(
-              (failure) => {},
+              (l) => {emit(SideDrawerError(l.message))},
               (r) => {
                     session = SessionModel(
                         token: r.token, username: r.username, name: r.name)
@@ -50,11 +49,11 @@ class SideDrawerBloc extends Bloc<SideDrawerEvent, SideDrawerState> {
           orgaId = session?.getOrgaId();
           final resultOrgas = await _getOrgasByUser.execute(userId!);
 
-          resultOrgas.fold((failure) => {}, (r) {
+          resultOrgas.fold((l) => {emit(SideDrawerError(l.message))}, (r) {
             listOrgas = r;
           });
         }
-        result.fold((failure) => {},
+        result.fold((l) => {emit(SideDrawerError(l.message))},
             (optList) => {emit(SideDrawerReady(optList, listOrgas, orgaId!))});
       },
       transformer: debounce(const Duration(milliseconds: 0)),
@@ -69,13 +68,13 @@ class SideDrawerBloc extends Bloc<SideDrawerEvent, SideDrawerState> {
       final result = await _getOptions.execute();
 
       final resultSession = await _getSession.execute();
-      resultSession.fold((failure) => {}, (r) {
+      resultSession.fold((l) => {emit(SideDrawerError(l.message))}, (r) {
         username = r.username;
       });
 
       final resultChange = await _changeOrga.execute(username, orgaId);
 
-      resultChange.fold((failure) => {}, (r) async {
+      resultChange.fold((l) => {emit(SideDrawerError(l.message))}, (r) async {
         session = SessionModel(
           token: r.token,
           username: r.username,
@@ -85,16 +84,16 @@ class SideDrawerBloc extends Bloc<SideDrawerEvent, SideDrawerState> {
       final userId = session?.getUserId();
       final resultOrgas = await _getOrgasByUser.execute(userId!);
 
-      resultOrgas.fold((failure) => {}, (r) => {listOrgas = r});
+      resultOrgas.fold((l) => {emit(SideDrawerError(l.message))}, (r) => {listOrgas = r});
 
-      result.fold((failure) => {},
+      result.fold((l) => {emit(SideDrawerError(l.message))},
           (optList) => {emit(SideDrawerReady(optList, listOrgas, orgaId))});
     });
 
     on<OnSideDrawerLogOff>((event, emit) async {
       final result = await _doLogOff.execute();
 
-      result.fold((l) => {}, (r) => {emit(SideDrawerEmpty())});
+      result.fold((l) => {emit(SideDrawerError(l.message))}, (r) => {emit(SideDrawerEmpty())});
     });
   }
 

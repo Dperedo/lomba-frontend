@@ -90,7 +90,7 @@ Future<void> init() async {
   locator.registerFactory(
       () => HomeBloc(locator(), locator(), locator(), locator(), locator()));
   locator.registerFactory(() => SideDrawerBloc(locator(), locator(), locator(),
-      locator(), locator(), locator(), locator()));
+      locator(), locator(), locator()));
   locator.registerFactory(() => NavBloc());
   locator.registerFactory(() => OrgaBloc(
         locator(),

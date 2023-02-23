@@ -24,14 +24,21 @@ class RejectedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldManager(
-      title: AppBar(title: const Text("Rechazados")),
-      child: SingleChildScrollView(
-          child: Center(
-        child: Column(
-          children: [BodyFormater(child: _bodyRejected(context))],
-        ),
-      )),
+    return BlocListener<RejectedBloc, RejectedState>(
+      listener: (context, state) {
+        if(state is RejectedError && state.message != ""){
+          snackBarNotify(context, state.message, Icons.cancel_outlined);
+        }
+      },
+      child: ScaffoldManager(
+        title: AppBar(title: const Text("Rechazados")),
+        child: SingleChildScrollView(
+            child: Center(
+          child: Column(
+            children: [BodyFormater(child: _bodyRejected(context))],
+          ),
+        )),
+      ),
     );
   }
 
@@ -270,12 +277,23 @@ class RejectedPage extends StatelessWidget {
                                                         ? null
                                                         : () {
                                                             context
-                                                                .read<RejectedLiveCubit>()
+                                                                .read<
+                                                                    RejectedLiveCubit>()
                                                                 .makeVote(
-                                                                    state.listItems[index].id,1);
-                                                            context.read<RejectedBloc>()
+                                                                    state
+                                                                        .listItems[
+                                                                            index]
+                                                                        .id,
+                                                                    1);
+                                                            context
+                                                                .read<
+                                                                    RejectedBloc>()
                                                                 .add(OnRejectedVote(
-                                                                    state.listItems[index].id,1));
+                                                                    state
+                                                                        .listItems[
+                                                                            index]
+                                                                        .id,
+                                                                    1));
                                                           },
                                                     child: const Icon(Icons.check)),
                                               ],
