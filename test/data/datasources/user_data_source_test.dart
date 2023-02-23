@@ -156,7 +156,7 @@ void main() {
   group('agregar datos user', () {
     test('agregar una usernización', () async {
       //arrange
-      when(mockHttpClient.get(Uri.parse(Urls.currentWeatherByName("London"))))
+      when(mockHttpClient.get(Uri.parse(UrlBackend.base)))
           .thenAnswer((realInvocation) async => http.Response("", 200));
 
       //act

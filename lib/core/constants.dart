@@ -3,15 +3,6 @@
 ///Se conservan aún en el proyecto hasta cuando hagamos la integración
 ///hacia el backend. Por ahora siguen aquí, eliminaremos algunas claves
 ///y conservaremos la URL del endpoint del backend.
-class Urls {
-  static const String baseUrl = 'https://api.openweathermap.org/data/2.5';
-  static const String apiKey = 'cc95d932d5a45d33a9527d5019475f2c';
-  static String currentWeatherByName(String city) =>
-      '$baseUrl/weather?q=$city&appid=$apiKey';
-  static String weatherIcon(String iconCode) =>
-      'http://openweathermap.org/img/wn/$iconCode@2x.png';
-}
-
 class UrlBackend {
   static const String base = String.fromEnvironment('API_BASE_URL',
       defaultValue: 'http://localhost:4001');
@@ -73,7 +64,7 @@ class ScreenSize {
   static const maxScreen = 1200;
 }
 
-class ShowTime{
+class ShowTime {
   static const snackbarDuration = 3000;
 }
 
