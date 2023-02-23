@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/core/widgets/body_formater.dart';
+import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:numberpicker/numberpicker.dart';
 
@@ -29,7 +29,12 @@ class RejectedPage extends StatelessWidget {
       child: SingleChildScrollView(
           child: Center(
         child: Column(
-          children: [BodyFormater(child: _bodyRejected(context))],
+          children: [
+            BodyFormatter(
+              child: _bodyRejected(context),
+              screenWidth: MediaQuery.of(context).size.width,
+            )
+          ],
         ),
       )),
     );
@@ -270,12 +275,23 @@ class RejectedPage extends StatelessWidget {
                                                         ? null
                                                         : () {
                                                             context
-                                                                .read<RejectedLiveCubit>()
+                                                                .read<
+                                                                    RejectedLiveCubit>()
                                                                 .makeVote(
-                                                                    state.listItems[index].id,1);
-                                                            context.read<RejectedBloc>()
+                                                                    state
+                                                                        .listItems[
+                                                                            index]
+                                                                        .id,
+                                                                    1);
+                                                            context
+                                                                .read<
+                                                                    RejectedBloc>()
                                                                 .add(OnRejectedVote(
-                                                                    state.listItems[index].id,1));
+                                                                    state
+                                                                        .listItems[
+                                                                            index]
+                                                                        .id,
+                                                                    1));
                                                           },
                                                     child: const Icon(Icons.check)),
                                               ],

@@ -9,6 +9,7 @@ import 'package:lomba_frontend/data/models/session_model.dart';
 import 'package:lomba_frontend/domain/entities/flows/post.dart';
 import 'package:lomba_frontend/domain/entities/flows/stage.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_latest_posts.dart';
+import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_has_login.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
 import 'package:lomba_frontend/presentation/home/bloc/home_bloc.dart';
@@ -19,21 +20,24 @@ import 'package:mockito/mockito.dart';
 
 import 'home_bloc_test.mocks.dart';
 
-@GenerateMocks([GetHasLogIn, FirebaseAuth, GetLatestPosts, GetSession])
+@GenerateMocks(
+    [GetHasLogIn, FirebaseAuth, GetLatestPosts, GetSession, VotePublication])
 void main() {
   late MockGetHasLogIn mockGetHasLogIn;
   late HomeBloc homeBloc;
   late MockFirebaseAuth mockFirebaseAuthInstance;
   late MockGetLatestPosts mockGetLatestPosts;
   late MockGetSession mockGetSession;
+  late MockVotePublication mockVotePublication;
 
   setUp(() {
     mockGetHasLogIn = MockGetHasLogIn();
     mockFirebaseAuthInstance = MockFirebaseAuth();
     mockGetSession = MockGetSession();
     mockGetLatestPosts = MockGetLatestPosts();
+    mockVotePublication = MockVotePublication();
     homeBloc = HomeBloc(mockFirebaseAuthInstance, mockGetHasLogIn,
-        mockGetSession, mockGetLatestPosts);
+        mockGetSession, mockGetLatestPosts, mockVotePublication);
   });
 
   /*
@@ -116,7 +120,7 @@ void main() {
   test(
     'debe tener un mensaje inicial en el home',
     () {
-      expect(homeBloc.state, HomeStart());
+      expect(homeBloc.state, const HomeStart(""));
     },
   );
 

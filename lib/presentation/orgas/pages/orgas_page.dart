@@ -8,7 +8,7 @@ import 'package:lomba_frontend/presentation/orgas/bloc/orga_event.dart';
 import 'package:lomba_frontend/presentation/orgas/bloc/orgauser_event.dart';
 
 import '../../../core/fakedata.dart';
-import '../../../core/widgets/body_formater.dart';
+import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/orgauser.dart';
@@ -53,7 +53,12 @@ class OrgasPage extends StatelessWidget {
             child: SingleChildScrollView(
                 child: Center(
               child: Column(
-                children: [BodyFormater(child: _bodyOrgas(context, state))],
+                children: [
+                  BodyFormatter(
+                    child: _bodyOrgas(context, state),
+                    screenWidth: MediaQuery.of(context).size.width,
+                  )
+                ],
               ),
             )),
           );
@@ -682,7 +687,7 @@ class OrgasPage extends StatelessWidget {
 
     return BlocListener<OrgaUserBloc, OrgaUserState>(
       listener: (context, state) {
-        if(state is OrgaUserStart && state.message != ""){
+        if (state is OrgaUserStart && state.message != "") {
           snackBarNotify(context, state.message, Icons.business_center);
         }
       },

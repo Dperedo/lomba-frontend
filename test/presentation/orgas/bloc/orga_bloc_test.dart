@@ -72,7 +72,7 @@ Future<void> main() async {
   test(
     'el estado inicial debe ser Start',
     () {
-      expect(orgaBloc.state, OrgaStart());
+      expect(orgaBloc.state, const OrgaStart(""));
     },
   );
 
@@ -106,7 +106,7 @@ Future<void> main() async {
       wait: const Duration(milliseconds: 500),
       expect: () => [
         OrgaLoading(),
-        OrgaLoaded(tOrga),
+        OrgaLoaded(tOrga, ""),
       ],
       verify: (bloc) {
         verify(mockGetOrga.execute(newOrgaId));
@@ -124,7 +124,10 @@ Future<void> main() async {
       },
       act: (bloc) => bloc.add(OnOrgaAdd(tOrga.name, tOrga.code, tOrga.enabled)),
       wait: const Duration(milliseconds: 500),
-      expect: () => [OrgaLoading(), OrgaStart()],
+      expect: () => [
+        OrgaLoading(),
+        OrgaStart(" La organización ${tOrga.name} fue creada")
+      ],
       verify: (bloc) {
         verify(mockAddOrga.execute(tOrga.name, tOrga.code, tOrga.enabled));
       },
@@ -139,9 +142,12 @@ Future<void> main() async {
             .thenAnswer((_) async => const Right(true));
         return orgaBloc;
       },
-      act: (bloc) => bloc.add(OnOrgaDelete(newOrgaId)),
+      act: (bloc) => bloc.add(OnOrgaDelete(newOrgaId, 'orga')),
       wait: const Duration(milliseconds: 500),
-      expect: () => [OrgaLoading(), OrgaStart()],
+      expect: () => [
+        OrgaLoading(),
+        const OrgaStart(" La organización orga fue eliminado")
+      ],
       verify: (bloc) {
         verify(mockDeleteOrga.execute(newOrgaId));
       },
@@ -155,9 +161,12 @@ Future<void> main() async {
             .thenAnswer((_) async => Right(tOrga));
         return orgaBloc;
       },
-      act: (bloc) => bloc.add(OnOrgaEnable(newOrgaId, false)),
+      act: (bloc) => bloc.add(OnOrgaEnable(newOrgaId, false, 'orga')),
       wait: const Duration(milliseconds: 500),
-      expect: () => [OrgaLoading(), OrgaLoaded(tOrga)],
+      expect: () => [
+        OrgaLoading(),
+        OrgaLoaded(tOrga, " La organización orga fue deshabilitado")
+      ],
       verify: (bloc) {
         verify(mockEnableOrga.execute(newOrgaId, false));
       },
@@ -174,7 +183,10 @@ Future<void> main() async {
       act: (bloc) => bloc
           .add(OnOrgaEdit(newOrgaId, tOrga.name, tOrga.code, tOrga.enabled)),
       wait: const Duration(milliseconds: 500),
-      expect: () => [OrgaLoading(), OrgaStart()],
+      expect: () => [
+        OrgaLoading(),
+        OrgaStart(" La organización ${tOrga.name} fue actualizado")
+      ],
       verify: (bloc) {
         verify(mockUpdateOrga.execute(newOrgaId, tOrga));
       },
@@ -201,7 +213,10 @@ Future<void> main() async {
       act: (bloc) => bloc
           .add(OnOrgaEdit(newOrgaId, tOrga.name, tOrga.code, tOrga.enabled)),
       wait: const Duration(milliseconds: 500),
-      expect: () => [OrgaLoading(), OrgaStart()],
+      expect: () => [
+        OrgaLoading(),
+        OrgaStart(" La organización ${tOrga.name} fue actualizado")
+      ],
       verify: (bloc) {
         verify(mockUpdateOrga.execute(newOrgaId, tOrga));
       },

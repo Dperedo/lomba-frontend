@@ -55,7 +55,7 @@ void main() {
       'en el primer estado de la página debe al menos mostrar el título',
       (WidgetTester tester) async {
         // arrange
-        when(() => mockUserBloc.state).thenReturn(UserStart());
+        when(() => mockUserBloc.state).thenReturn(const UserStart(""));
 
         // act
         await tester.pumpWidget(makeTestableWidget(UsersPage()));
@@ -74,7 +74,7 @@ void main() {
       'al darle tap a un usuario mostrar su información',
       (WidgetTester tester) async {
         // arrange
-        when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
+        when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2, ""));
 
         // act
         await tester.pumpWidget(makeTestableWidget(UsersPage()));
@@ -87,8 +87,8 @@ void main() {
     testWidgets(
       'Mostrar boton de agregar',
       (WidgetTester tester) async {
-        when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
-        when(() => mockUserBloc.state).thenReturn(UserStart());
+        when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2, ""));
+        when(() => mockUserBloc.state).thenReturn(const UserStart(""));
         await tester.pumpWidget(makeTestableWidget(UsersPage()));
         Finder addButton = find.byKey(const ValueKey('btnAddOption'));
         await tester.tap(addButton);
@@ -103,7 +103,7 @@ void main() {
     testWidgets(
       'Mostrar boton de editar',
       (WidgetTester tester) async {
-        when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
+        when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2, ""));
         await tester.pumpWidget(makeTestableWidget(UsersPage()));
         Finder editButton = find.byKey(const ValueKey('btnEditOption'));
         await tester.tap(editButton);
@@ -116,7 +116,7 @@ void main() {
         'click en eliminar y luego confirmar eliminar gatilla evento de eliminación',
         (WidgetTester tester) async {
       // arrange
-      when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
+      when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2, ""));
 
       // act
       await tester.pumpWidget(makeTestableWidget(UsersPage()));
@@ -128,13 +128,14 @@ void main() {
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
       //assert
 
-      verify(() => mockUserBloc.add(OnUserDelete(tUser2.id))).called(1);
+      verify(() => mockUserBloc.add(OnUserDelete(tUser2.id, tUser2.name)))
+          .called(1);
     });
 
     testWidgets('click en eliminar y luego cancelar debe cerrar el diálogo',
         (WidgetTester tester) async {
       // arrange
-      when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
+      when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2, ""));
 
       // act
       await tester.pumpWidget(makeTestableWidget(UsersPage()));
@@ -153,7 +154,7 @@ void main() {
         'click en deshabilitar debe mostrar dialogo de confirmación al usuario',
         (WidgetTester tester) async {
       // arrange
-      when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
+      when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2, ""));
 
       // act
       await tester.pumpWidget(makeTestableWidget(UsersPage()));
@@ -165,13 +166,15 @@ void main() {
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
       //assert
 
-      verify(() => mockUserBloc.add(OnUserEnable(tUser2.id, false))).called(1);
+      verify(() =>
+              mockUserBloc.add(OnUserEnable(tUser2.id, false, tUser2.name)))
+          .called(1);
     });
 
     testWidgets('click en deshabilitar y luego cancelar debe cerrar el diálogo',
         (WidgetTester tester) async {
       // arrange
-      when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
+      when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2, ""));
 
       // act
       await tester.pumpWidget(makeTestableWidget(UsersPage()));
@@ -240,7 +243,7 @@ void main() {
   testWidgets(
     'Mostrar boton de cambiar password',
     (WidgetTester tester) async {
-      when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
+      when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2, ""));
       await tester.pumpWidget(makeTestableWidget(UsersPage()));
       Finder editButton =
           find.byKey(const ValueKey('btnViewModifyPasswordFormOption'));
@@ -253,7 +256,7 @@ void main() {
   testWidgets(
     'Mostrar boton de volver',
     (WidgetTester tester) async {
-      when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2));
+      when(() => mockUserBloc.state).thenReturn(UserLoaded(tUser2, ""));
       await tester.pumpWidget(makeTestableWidget(UsersPage()));
       Finder backButton = find.byKey(const ValueKey('btnVolver'));
       await tester.tap(backButton);

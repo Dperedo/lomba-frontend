@@ -43,4 +43,25 @@ void main() {
     // Assert
     expect(result, null);
   });
+
+  test('debe validar el largo de un name o nombre', () {
+    // Arrange & Act
+    var result = Validators.validateName('123');
+    // Assert
+    expect(result, 'Por favor ingrese minimo 4 caracteres');
+  });
+
+  test('debe validar código no mayor a 30 cars', () {
+    // Arrange & Act
+    var result = Validators.validateCode('1234567890123456789012345678901');
+    // Assert
+    expect(result, 'Por favor ingresa un codigo con menos de 30 caracteres');
+  });
+  test('debe validar que passwords son iguales', () {
+    // Arrange & Act
+    var result = Validators.validatePasswordEqual('12345', '1234X');
+    // Assert
+    expect(result,
+        'Por favor ingresa una contraseña igual a la password anterior');
+  });
 }

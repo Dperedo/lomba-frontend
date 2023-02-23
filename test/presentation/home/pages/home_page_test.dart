@@ -93,6 +93,8 @@ void main() {
   final String test_stageId = StagesVotationFlow.stageId03Voting;
   final String test_searchText = '';
   final Map<String, int> test_fieldsOrder = <String, int>{"created": 1};
+  final Map<String, int> test_fieldsOrderLatest = <String, int>{"latest": 1};
+
   final int test_pageIndex = 1;
   final int test_pageSize = 10;
   final List<Post> test_listItems = <Post>[
@@ -145,7 +147,7 @@ void main() {
         test_flowId,
         test_stageId,
         test_searchText,
-        test_fieldsOrder,
+        test_fieldsOrderLatest,
         test_pageIndex,
         test_pageSize,
         test_listItems,

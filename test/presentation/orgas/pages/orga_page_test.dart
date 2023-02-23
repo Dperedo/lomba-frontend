@@ -97,7 +97,7 @@ void main() {
       'en el primer estado de la página debe al menos mostrar el título',
       (WidgetTester tester) async {
         // arrange
-        when(() => mockOrgaBloc.state).thenReturn(OrgaStart());
+        when(() => mockOrgaBloc.state).thenReturn(const OrgaStart(""));
 
         // act
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
@@ -116,8 +116,8 @@ void main() {
       'al darle tap a una organización mostrar su información',
       (WidgetTester tester) async {
         // arrange
-        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2));
-        when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
+        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2, ""));
+        when(() => mockOrgaUserBloc.state).thenReturn(const OrgaUserStart(""));
 
         // act
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
@@ -134,8 +134,8 @@ void main() {
         'click en eliminar y luego confirmar eliminar gatilla evento de eliminación',
         (WidgetTester tester) async {
       // arrange
-      when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2));
-      when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
+      when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2, ""));
+      when(() => mockOrgaUserBloc.state).thenReturn(const OrgaUserStart(""));
 
       // act
       await tester.pumpWidget(makeTestableWidget(OrgasPage()));
@@ -150,14 +150,15 @@ void main() {
       // await tester.pumpAndSettle(const Duration(milliseconds: 600));
       //assert
 
-      verify(() => mockOrgaBloc.add(OnOrgaDelete(tOrga2.id))).called(1);
+      verify(() => mockOrgaBloc.add(OnOrgaDelete(tOrga2.id, tOrga2.name)))
+          .called(1);
     });
 
     testWidgets('click en eliminar y luego cancelar debe cerrar el diálogo',
         (WidgetTester tester) async {
       // arrange
-      when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2));
-      when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
+      when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2, ""));
+      when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart(""));
 
       // act
       await tester.pumpWidget(makeTestableWidget(OrgasPage()));
@@ -176,8 +177,8 @@ void main() {
         'click en deshabilitar debe mostrar dialogo de confirmación al usuario',
         (WidgetTester tester) async {
       // arrange
-      when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2));
-      when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
+      when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2, ""));
+      when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart(""));
 
       // act
       await tester.pumpWidget(makeTestableWidget(OrgasPage()));
@@ -189,14 +190,16 @@ void main() {
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
       //assert
 
-      verify(() => mockOrgaBloc.add(OnOrgaEnable(tOrga2.id, false))).called(1);
+      verify(() =>
+              mockOrgaBloc.add(OnOrgaEnable(tOrga2.id, false, tOrga2.name)))
+          .called(1);
     });
 
     testWidgets('click en deshabilitar y luego cancelar debe cerrar el diálogo',
         (WidgetTester tester) async {
       // arrange
-      when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2));
-      when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
+      when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2, ""));
+      when(() => mockOrgaUserBloc.state).thenReturn(const OrgaUserStart(""));
 
       // act
       await tester.pumpWidget(makeTestableWidget(OrgasPage()));
@@ -215,7 +218,7 @@ void main() {
   group('lista de usuarios de organización', () {
     testWidgets('mostrar lista de usuarios al clic del botón',
         (WidgetTester tester) async {
-      when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2));
+      when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2, ""));
       when(() => mockOrgaUserBloc.state).thenReturn(
           OrgaUserListLoaded(tOrga2.id, <User>[tUser2], tListOrgaUser));
       await tester.pumpWidget(makeTestableWidget(OrgasPage()));
@@ -307,8 +310,8 @@ void main() {
     testWidgets(
       'mostrar boton asociar usuario',
       (WidgetTester tester) async {
-        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2));
-        when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
+        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2, ""));
+        when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart(""));
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
         Finder asociarButton =
             find.byKey(const ValueKey('btnAddOrgaUserOption'));
@@ -320,8 +323,8 @@ void main() {
     testWidgets(
       'mostrar boton modificar orga',
       (WidgetTester tester) async {
-        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2));
-        when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
+        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2, ""));
+        when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart(""));
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
         Finder modifyButton = find.byKey(const ValueKey('btnModifyOrga'));
         await tester.tap(modifyButton);
@@ -332,8 +335,8 @@ void main() {
     testWidgets(
       'mostrar boton volver',
       (WidgetTester tester) async {
-        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2));
-        when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
+        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2, ""));
+        when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart(""));
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
         Finder backButton = find.byKey(const ValueKey('btnVolver'));
         await tester.tap(backButton);
@@ -347,7 +350,7 @@ void main() {
       'mostrar boton volver',
       (WidgetTester tester) async {
         when(() => mockOrgaBloc.state).thenReturn(OrgaEditing(tOrga2, true));
-        when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
+        when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart(""));
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
         Finder cancelButton = find.byKey(const ValueKey('cancelButton'));
         await tester.tap(cancelButton);
@@ -359,7 +362,7 @@ void main() {
       'mostrar boton guardar',
       (WidgetTester tester) async {
         when(() => mockOrgaBloc.state).thenReturn(OrgaEditing(tOrga2, true));
-        when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
+        when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart(""));
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
         Finder saveButton = find.byKey(const ValueKey('saveButton'));
         await tester.tap(saveButton);
@@ -371,8 +374,8 @@ void main() {
   testWidgets(
     'mostrar icono back funcionando en appbar',
     (WidgetTester tester) async {
-      when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2));
-      when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
+      when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2, ""));
+      when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart(""));
       await tester.pumpWidget(makeTestableWidget(OrgasPage()));
       Finder iconBackButton = find.byKey(const ValueKey('btnOrganizacion'));
       await tester.tap(iconBackButton);
@@ -384,7 +387,7 @@ void main() {
     'mostrar agregar orga float button',
     (WidgetTester tester) async {
       when(() => mockOrgaBloc.state).thenReturn(OrgaListLoaded(tListOrgas));
-      when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart());
+      when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserStart(""));
       await tester.pumpWidget(makeTestableWidget(OrgasPage()));
       Finder addButton = find.byKey(const ValueKey('btnAddOption'));
       await tester.tap(addButton);
@@ -399,7 +402,7 @@ void main() {
       (WidgetTester tester) async {
         when(() => mockOrgaUserBloc.state)
             .thenReturn(OrgaUserEditing(tOrgaUser));
-        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga));
+        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga, ""));
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
         Finder deleteButton =
             find.byKey(const ValueKey('btnEliminarAsociacion'));
@@ -413,7 +416,7 @@ void main() {
       (WidgetTester tester) async {
         when(() => mockOrgaUserBloc.state)
             .thenReturn(OrgaUserEditing(tOrgaUser));
-        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga));
+        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga, ""));
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
         Finder saveButton = find.byKey(const ValueKey('btnGuardarAsoc'));
         await tester.tap(saveButton);
@@ -427,7 +430,7 @@ void main() {
       (WidgetTester tester) async {
         when(() => mockOrgaUserBloc.state)
             .thenReturn(OrgaUserEditing(tOrgaUser));
-        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga));
+        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga, ""));
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
         Finder cancelButton = find.byKey(const ValueKey('btnCancelarAsoc'));
         await tester.tap(cancelButton);
@@ -444,7 +447,7 @@ void main() {
       (WidgetTester tester) async {
         when(() => mockOrgaUserBloc.state).thenReturn(
             OrgaUserListUserNotInOrgaLoaded(tOrga.id, fakeListUsers));
-        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga));
+        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga, ""));
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
         Finder usuariosDispoText = find.text('Usuarios disponibles');
         expect(usuariosDispoText, equals(findsOneWidget));
@@ -470,7 +473,7 @@ void main() {
     (WidgetTester tester) async {
       when(() => mockOrgaUserBloc.state).thenReturn(
           OrgaUserListLoaded(tOrga2.id, fakeListUsers, fakeListOrgaUsers));
-      when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga));
+      when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga, ""));
       await tester.pumpWidget(makeTestableWidget(OrgasPage()));
       Finder textButton = find.text('Súper Administrador');
       expect(textButton, equals(findsOneWidget));

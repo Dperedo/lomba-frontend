@@ -60,7 +60,7 @@ void main() {
     wait: const Duration(milliseconds: 500),
     expect: () => [
       LoginGetting(),
-      const LoginGoted(tLoginAccess),
+      const LoginGoted(tLoginAccess, " Bienvenido usuario $tusername"),
     ],
     verify: (bloc) {
       verify(mockGetAuthenticate.execute(tusername, tpassword));
@@ -76,11 +76,7 @@ void main() {
     },
     act: (bloc) => bloc.add(const OnLoginTriest(tusername, tpassword)),
     wait: const Duration(milliseconds: 500),
-    expect: () => [
-      LoginGetting(),
-      const LoginError('Server failure'),
-      const LoginGoted(tLoginAccess)
-    ],
+    expect: () => [LoginGetting(), const LoginError('Server failure')],
     verify: (bloc) {
       verify(mockGetAuthenticate.execute(tusername, tpassword));
     },

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/validators.dart';
-import 'package:lomba_frontend/core/widgets/body_formater.dart';
+import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/users/bloc/user_event.dart';
 
@@ -18,9 +18,9 @@ class UsersPage extends StatelessWidget {
     GlobalKey<ScaffoldState> homeScreenKey = GlobalKey<ScaffoldState>();
     return BlocListener<UserBloc, UserState>(
       listener: (context, state) {
-        if(state is UserLoaded && state.message != ""){
+        if (state is UserLoaded && state.message != "") {
           snackBarNotify(context, state.message, Icons.account_circle);
-        } else if (state is UserStart && state.message != ""){
+        } else if (state is UserStart && state.message != "") {
           snackBarNotify(context, state.message, Icons.account_circle);
         }
       },
@@ -42,8 +42,9 @@ class UsersPage extends StatelessWidget {
                 child: Center(
               child: Column(
                 children: [
-                  BodyFormater(
+                  BodyFormatter(
                     child: _bodyUsers(context, state),
+                    screenWidth: MediaQuery.of(context).size.width,
                   )
                 ],
               ),
@@ -53,8 +54,6 @@ class UsersPage extends StatelessWidget {
       ),
     );
   }
-
-  
 
   Widget _bodyUsers(BuildContext context, UserState state) {
     final TextEditingController _repeatPasswordController =
@@ -207,9 +206,8 @@ class UsersPage extends StatelessWidget {
                             )).then((value) => {
                           if (value)
                             {
-                              context
-                                  .read<UserBloc>()
-                                  .add(OnUserDelete(state.user.id, state.user.username))
+                              context.read<UserBloc>().add(OnUserDelete(
+                                  state.user.id, state.user.username))
                             }
                         });
                   },
@@ -255,7 +253,9 @@ class UsersPage extends StatelessWidget {
                           if (value)
                             {
                               context.read<UserBloc>().add(OnUserEnable(
-                                  state.user.id, !state.user.enabled, state.user.username))
+                                  state.user.id,
+                                  !state.user.enabled,
+                                  state.user.username))
                             }
                         });
                   },
@@ -354,11 +354,10 @@ class UsersPage extends StatelessWidget {
                           content: const Text('Contraseña modificada'),
                           actions: [
                             ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Ok')
-                            )
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Ok'))
                           ],
                         ),
                       );

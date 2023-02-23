@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/core/widgets/body_formater.dart';
+import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import '../../sidedrawer/pages/sidedrawer_page.dart';
 import '../../users/bloc/user_bloc.dart';
@@ -25,12 +25,11 @@ class ProfilePage extends StatelessWidget {
         title: _variableAppBar(context, state),
         child: SingleChildScrollView(
             child: Center(
-              child: BodyFormater(
-                child: _bodyProfile(context, state)
-              )
-            )
-          ),
-        );
+                child: BodyFormatter(
+          child: _bodyProfile(context, state),
+          screenWidth: MediaQuery.of(context).size.width,
+        ))),
+      );
     });
   }
 
@@ -60,7 +59,6 @@ class ProfilePage extends StatelessWidget {
     }
     if (state is ProfileLoaded) {
       return SizedBox(
-        
         width: 600,
         child: Column(
           children: [

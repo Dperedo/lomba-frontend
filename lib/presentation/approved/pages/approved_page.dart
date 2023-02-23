@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../../../../domain/entities/flows/textcontent.dart';
-import '../../../core/widgets/body_formater.dart';
+import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../bloc/approved_bloc.dart';
@@ -31,7 +31,12 @@ class ApprovedPage extends StatelessWidget {
       child: SingleChildScrollView(
           child: Center(
         child: Column(
-          children: [BodyFormater(child: _bodyApproved(context))],
+          children: [
+            BodyFormatter(
+              child: _bodyApproved(context),
+              screenWidth: MediaQuery.of(context).size.width,
+            )
+          ],
         ),
       )),
     );
@@ -53,7 +58,10 @@ class ApprovedPage extends StatelessWidget {
                     builder: (context, state) {
                       if (state is ApprovedStart) {
                         context.read<ApprovedBloc>().add(OnApprovedLoad(
-                            '', const <String, int>{'approved': 1}, 1, _fixPageSize));
+                            '',
+                            const <String, int>{'approved': 1},
+                            1,
+                            _fixPageSize));
                       }
                       if (state is ApprovedLoading) {
                         return const Center(
