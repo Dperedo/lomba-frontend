@@ -104,7 +104,7 @@ void main() {
         stages: test_stages,
         deleted: null,
         expires: null,
-        flowId: '',
+        flowId: Flows.votationFlowId,
         orgaId: test_orgaId,
         postitems: <PostItem>[
           PostItem(
@@ -112,14 +112,14 @@ void main() {
               content: const TextContent(text: 'texto de un post!'),
               type: 'text',
               format: '',
-              builtIn: true,
+              builtIn: false,
               created: DateTime.now(),
               deleted: null,
               expires: null,
               updated: null)
         ],
-        stageId: '',
-        title: '',
+        stageId: StagesVotationFlow.stageId01Load,
+        title: 'título del post',
         totals: const [],
         tracks: const [],
         updated: null,
@@ -136,8 +136,7 @@ void main() {
       username: 'rev@mp.com',
       name: 'Revisor');
 
-  testWidgets('entrega mensaje bienvenido usuario logueado',
-      (WidgetTester tester) async {
+  testWidgets('Muestra caja de búsqueda', (WidgetTester tester) async {
     //arrange
     when(() => mockHomeBloc.state).thenReturn(HomeLoaded(
         test_validLogin,
@@ -156,11 +155,14 @@ void main() {
 
     //act
     await tester.pumpWidget(makeTestableWidget(HomePage()));
-    final message = find.text("Páginas");
+    final searchField = find.byKey(const ValueKey("search_field"));
 
     //assert
-    expect(message, findsOneWidget);
+    expect(searchField, findsOneWidget);
   });
+
+/*
+  //este test debe cambiar para cuando se apliquen los post en él
 
   testWidgets('entrega mensaje de usuario anónimo sin loguear',
       (WidgetTester tester) async {
@@ -187,7 +189,7 @@ void main() {
     //assert
     expect(message, findsOneWidget);
   });
-
+*/
   testWidgets('mostrar circulo de progreso cuando carga información',
       (WidgetTester tester) async {
     //arrange

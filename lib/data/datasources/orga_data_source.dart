@@ -216,18 +216,7 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
       throw ServerException();
     }
   }
-  //   @override
-  // Future<OrgaModel> addOrga(OrgaModel orga) async {
-  //   final response =
-  //       await client.get(Uri.parse(Urls.currentWeatherByName("London")));
 
-  //   if (response.statusCode == 200) {
-  //     fakeListOrgas.add(orga);
-  //     return orga;
-  //   } else {
-  //     throw ServerException();
-  //   }
-  // }
   ///Agrega un Orga recibiendo un OrgaModel
 
   ///Agrega una relación OrgaUser a partir de un OrgaUserModel

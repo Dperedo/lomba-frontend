@@ -99,8 +99,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<UserModel> addUser(UserModel user) async {
-    final response =
-        await client.get(Uri.parse(Urls.currentWeatherByName("London")));
+    final response = await client.get(Uri.parse(UrlBackend.base));
 
     if (response.statusCode == 200) {
       fakeListUsers.add(user);
