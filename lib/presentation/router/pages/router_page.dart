@@ -43,22 +43,3 @@ class RouterPage extends StatelessWidget {
     );
   }
 }
-//ESTO ES AQUI EN EL PAGE
-    //invocas un evento al Bloc
-    //OnLoadingRouterPage
-    //le pasas de parámetro el NavItem
-
-//ESTO ES EN EL BLOC
-    //en el Bloc para el evento recién mencionado
-    //vas a ejecutar el caso de uso de las opciones de menú
-    //y vas a preguntar si dentro de está lista está el NavItem
-    //o mejor dicho, si acaso esta lista contiene el NavItem especificado
-    //si lo contiene, entonces emitimos un estado de => EstadoOso
-
-//ESTO ES AQUI EN EL PAGE
-    //que al aplicarse entonces salta o navega o va a la página mencionada
-    //¿cómo? llamando al _handleItemRoute
-    // _handleItemRoute(context, naveItem);
-
-//¿y si no contiene la lista al NavItem?
-//Lo devolvemos al Home.
