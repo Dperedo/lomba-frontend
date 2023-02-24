@@ -111,7 +111,7 @@ class LocalRepositoryImpl implements LocalRepository {
   ///Entrega una lista con las opciones de menú para el usuario según roles
   @override
   Future<Either<Failure, List<String>>> getSideMenuListOptions() async {
-    List<String> opts = [SideDrawerUserOptions.optHome];
+    List<String> opts = [];
     List<String> roles = [Roles.roleAnonymous];
 
     final result = await getSessionRoles();
@@ -119,6 +119,7 @@ class LocalRepositoryImpl implements LocalRepository {
     result.fold((l) => {}, (r) => {roles = r});
 
     if (roles.contains(Roles.roleAnonymous)) {
+      opts.add(SideDrawerUserOptions.optHome);
       opts.add(SideDrawerUserOptions.optLogIn);
       opts.add(SideDrawerUserOptions.optPopular);
     } else {
@@ -137,6 +138,7 @@ class LocalRepositoryImpl implements LocalRepository {
       }
 
       if (roles.contains(Roles.roleUser)) {
+        opts.add(SideDrawerUserOptions.optHome);
         opts.add(SideDrawerUserOptions.optAddContent);
         opts.add(SideDrawerUserOptions.optViewed);
         opts.add(SideDrawerUserOptions.optPopular);
