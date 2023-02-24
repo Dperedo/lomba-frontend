@@ -11,6 +11,7 @@ import 'package:lomba_frontend/domain/entities/flows/stage.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_latest_posts.dart';
 import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_has_login.dart';
+import 'package:lomba_frontend/domain/usecases/local/get_session_role.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
 import 'package:lomba_frontend/presentation/home/bloc/home_bloc.dart';
 import 'package:lomba_frontend/presentation/home/bloc/home_event.dart';
@@ -20,8 +21,14 @@ import 'package:mockito/mockito.dart';
 
 import 'home_bloc_test.mocks.dart';
 
-@GenerateMocks(
-    [GetHasLogIn, FirebaseAuth, GetLatestPosts, GetSession, VotePublication])
+@GenerateMocks([
+  GetHasLogIn,
+  FirebaseAuth,
+  GetLatestPosts,
+  GetSession,
+  VotePublication,
+  GetSessionRole
+])
 void main() {
   late MockGetHasLogIn mockGetHasLogIn;
   late HomeBloc homeBloc;
@@ -29,6 +36,7 @@ void main() {
   late MockGetLatestPosts mockGetLatestPosts;
   late MockGetSession mockGetSession;
   late MockVotePublication mockVotePublication;
+  late MockGetSessionRole mockGetSessionRole;
 
   setUp(() {
     mockGetHasLogIn = MockGetHasLogIn();
@@ -36,8 +44,14 @@ void main() {
     mockGetSession = MockGetSession();
     mockGetLatestPosts = MockGetLatestPosts();
     mockVotePublication = MockVotePublication();
-    homeBloc = HomeBloc(mockFirebaseAuthInstance, mockGetHasLogIn,
-        mockGetSession, mockGetLatestPosts, mockVotePublication);
+    mockGetSessionRole = MockGetSessionRole();
+    homeBloc = HomeBloc(
+        mockFirebaseAuthInstance,
+        mockGetHasLogIn,
+        mockGetSession,
+        mockGetLatestPosts,
+        mockVotePublication,
+        mockGetSessionRole);
   });
 
   /*
@@ -144,6 +158,8 @@ void main() {
               'kind')));
       when(mockGetSession.execute())
           .thenAnswer((_) async => const Right(test_Session));
+      when(mockGetSessionRole.execute())
+          .thenAnswer((_) async => const Right(<String>['user']));
       return homeBloc;
     },
     act: (bloc) =>
