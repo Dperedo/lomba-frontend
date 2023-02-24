@@ -80,7 +80,7 @@ Future<void> main() async {
   test(
     'el estado inicial debe ser Start',
     () {
-      expect(orgaUserBloc.state, OrgaUserStart());
+      expect(orgaUserBloc.state, const OrgaUserStart(""));
     },
   );
 
@@ -117,9 +117,12 @@ Future<void> main() async {
         return orgaUserBloc;
       },
       act: (bloc) => bloc.add(OnOrgaUserAdd(tOrgaUser.orgaId, tOrgaUser.userId,
-          tOrgaUser.roles, tOrgaUser.enabled)),
+          tOrgaUser.roles, tOrgaUser.enabled, 'user')),
       wait: const Duration(milliseconds: 500),
-      expect: () => [OrgaUserLoading(), OrgaUserStart()],
+      expect: () => [
+        OrgaUserLoading(),
+        const OrgaUserStart(" El usuario user fue agregado a la organización")
+      ],
       verify: (bloc) {
         verify(mockAddOrgaUser.execute(tOrgaUser.orgaId, tOrgaUser.userId,
             tOrgaUser.roles, tOrgaUser.enabled));
@@ -135,9 +138,13 @@ Future<void> main() async {
             .thenAnswer((_) async => const Right(true));
         return orgaUserBloc;
       },
-      act: (bloc) => bloc.add(OnOrgaUserDelete(newOrgaId, newUserId)),
+      act: (bloc) => bloc.add(OnOrgaUserDelete(newOrgaId, newUserId, 'user')),
       wait: const Duration(milliseconds: 500),
-      expect: () => [OrgaUserLoading(), OrgaUserStart()],
+      expect: () => [
+        OrgaUserLoading(),
+        const OrgaUserStart(
+            " El Usuario user fue desasociado de la organización")
+      ],
       verify: (bloc) {
         verify(mockDeleteOrgaUser.execute(newOrgaId, newUserId));
       },
@@ -153,7 +160,7 @@ Future<void> main() async {
       },
       act: (bloc) => bloc.add(OnOrgaUserEnable(newOrgaId, newUserId, false)),
       wait: const Duration(milliseconds: 500),
-      expect: () => [OrgaUserLoading(), OrgaUserStart()],
+      expect: () => [OrgaUserLoading(), const OrgaUserStart("")],
       verify: (bloc) {
         verify(mockEnableOrgaUser.execute(newOrgaId, newUserId, false));
       },

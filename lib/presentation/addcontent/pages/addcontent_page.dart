@@ -6,7 +6,7 @@ import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_cubit.dar
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_event.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_state.dart';
 
-import '../../../core/widgets/body_formater.dart';
+import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 
@@ -37,7 +37,8 @@ class AddContentPage extends StatelessWidget {
               child: Column(
                 children: [
                   Center(
-                    child: BodyFormater(
+                    child: BodyFormatter(
+                      screenWidth: MediaQuery.of(context).size.width,
                       child: _bodyAddContent(context, _key),
                     ),
                   ),

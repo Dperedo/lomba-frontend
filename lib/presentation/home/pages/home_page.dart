@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-import '../../../core/widgets/body_formater.dart';
+import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/flows/textcontent.dart';
@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<HomeBloc, HomeState>(
       listener: (context, state) {
-        if(state is HomeStart && state.message != ""){
+        if (state is HomeStart && state.message != "") {
           snackBarNotify(context, state.message, Icons.exit_to_app);
         } else if(state is HomeError && state.message != ""){
           snackBarNotify(context, state.message, Icons.cancel_outlined);
@@ -37,7 +37,12 @@ class HomePage extends StatelessWidget {
         child: SingleChildScrollView(
             child: Center(
           child: Column(
-            children: [BodyFormater(child: _bodyHome(context))],
+            children: [
+              BodyFormatter(
+                child: _bodyHome(context),
+                screenWidth: MediaQuery.of(context).size.width,
+              )
+            ],
           ),
         )),
       ),
@@ -72,6 +77,7 @@ class HomePage extends StatelessWidget {
                           Flexible(
                             flex: 1,
                             child: TextFormField(
+                              key: const ValueKey('search_field'),
                               controller: _searchController,
                               cursorColor: Colors.grey,
                               decoration: InputDecoration(
@@ -102,8 +108,8 @@ class HomePage extends StatelessWidget {
                       const SizedBox(
                         height: 8,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      Wrap(
+                        //mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text("Páginas: "),
                           const VerticalDivider(),

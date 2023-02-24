@@ -106,7 +106,7 @@ Future<void> main() async {
     'el estado inicial debe ser Start',
     () {
       //assert
-      expect(userBloc.state, UserStart());
+      expect(userBloc.state, const UserStart(""));
     },
   );
 
@@ -140,7 +140,7 @@ Future<void> main() async {
       wait: const Duration(milliseconds: 500),
       expect: () => [
         UserLoading(),
-        UserLoaded(tUser),
+        UserLoaded(tUser, ""),
       ],
       verify: (bloc) {
         verify(mockGetUser.execute(newUserId));
@@ -162,7 +162,10 @@ Future<void> main() async {
       act: (bloc) =>
           bloc.add(OnUserAdd(tUser.name, tUser.username, tUser.email, '1234')),
       wait: const Duration(milliseconds: 500),
-      expect: () => [UserLoading(), UserStart()],
+      expect: () => [
+        UserLoading(),
+        UserStart(" El usuario ${tUser.username} fue creado")
+      ],
       verify: (bloc) {
         verify(mockRegisterUser.execute(tUser.name, tUser.username, tUser.email,
             '00000100-0100-0100-0100-000000000100', '1234', 'user'));
@@ -178,9 +181,10 @@ Future<void> main() async {
             .thenAnswer((_) async => const Right(true));
         return userBloc;
       },
-      act: (bloc) => bloc.add(OnUserDelete(newUserId)),
+      act: (bloc) => bloc.add(OnUserDelete(newUserId, 'user')),
       wait: const Duration(milliseconds: 500),
-      expect: () => [UserLoading(), UserStart()],
+      expect: () =>
+          [UserLoading(), const UserStart(" El usuario user fue eliminado")],
       verify: (bloc) {
         verify(mockDeleteUser.execute(newUserId));
       },
@@ -194,9 +198,12 @@ Future<void> main() async {
             .thenAnswer((_) async => Right(tUser));
         return userBloc;
       },
-      act: (bloc) => bloc.add(OnUserEnable(newUserId, false)),
+      act: (bloc) => bloc.add(OnUserEnable(newUserId, false, 'user')),
       wait: const Duration(milliseconds: 500),
-      expect: () => [UserLoading(), UserLoaded(tUser)],
+      expect: () => [
+        UserLoading(),
+        UserLoaded(tUser, " El usuario user fue deshabilitado")
+      ],
       verify: (bloc) {
         verify(mockEnableUser.execute(newUserId, false));
       },
@@ -213,7 +220,10 @@ Future<void> main() async {
       act: (bloc) => bloc.add(OnUserEdit(
           newUserId, tUser.name, tUser.username, tUser.email, tUser.enabled)),
       wait: const Duration(milliseconds: 500),
-      expect: () => [UserLoading(), UserStart()],
+      expect: () => [
+        UserLoading(),
+        UserStart(" El usuario ${tUser.username} fue actualizado")
+      ],
       verify: (bloc) {
         verify(mockUpdateUser.execute(newUserId, tUser));
       },
@@ -230,7 +240,8 @@ Future<void> main() async {
       },
       act: (bloc) => bloc.add(OnUserSaveNewPassword('1234', tUser)),
       wait: const Duration(milliseconds: 500),
-      expect: () => [UserLoading(), UserLoaded(tUser)],
+      expect: () =>
+          [UserLoading(), UserLoaded(tUser, " Contraseña Modificada")],
       verify: (bloc) {
         verify(mockUpdateUserPassword.execute(newUserId, '1234'));
       },

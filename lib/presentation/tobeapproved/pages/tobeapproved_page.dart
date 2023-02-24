@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/core/widgets/body_formater.dart';
+import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:numberpicker/numberpicker.dart';
 
@@ -30,7 +30,11 @@ class ToBeApprovedPage extends StatelessWidget {
           child: SingleChildScrollView(
               child: Center(
             child: Column(
-              children: [BodyFormater(child: _bodyToBeApproved(context))],
+              children: [
+                BodyFormatter(
+                  screenWidth: MediaQuery.of(context).size.width,
+                  child: _bodyToBeApproved(context)
+                  )],
             ),
           ))),
     );

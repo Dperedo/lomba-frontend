@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-import '../../../core/widgets/body_formater.dart';
+import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/flows/textcontent.dart';
@@ -39,7 +39,8 @@ class PopularPage extends StatelessWidget {
             child: Center(
           child: Column(
             children: [
-              BodyFormater(
+              BodyFormatter(
+                screenWidth: MediaQuery.of(context).size.width,
                 child: _bodyPopular(context),
               ),
             ],

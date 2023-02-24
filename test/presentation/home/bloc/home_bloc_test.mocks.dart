@@ -14,11 +14,14 @@ import 'package:lomba_frontend/core/failures.dart' as _i10;
 import 'package:lomba_frontend/core/model_container.dart' as _i12;
 import 'package:lomba_frontend/data/models/session_model.dart' as _i15;
 import 'package:lomba_frontend/domain/entities/flows/post.dart' as _i13;
+import 'package:lomba_frontend/domain/entities/flows/vote.dart' as _i17;
 import 'package:lomba_frontend/domain/repositories/flow_repository.dart' as _i7;
 import 'package:lomba_frontend/domain/repositories/local_repository.dart'
     as _i2;
 import 'package:lomba_frontend/domain/usecases/flow/get_latest_posts.dart'
     as _i11;
+import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart'
+    as _i16;
 import 'package:lomba_frontend/domain/usecases/local/get_has_login.dart' as _i8;
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart'
     as _i14;
@@ -729,4 +732,61 @@ class MockGetSession extends _i1.Mock implements _i14.GetSession {
           ),
         )),
       ) as _i9.Future<_i3.Either<_i10.Failure, _i15.SessionModel>>);
+}
+
+/// A class which mocks [VotePublication].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockVotePublication extends _i1.Mock implements _i16.VotePublication {
+  MockVotePublication() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i7.FlowRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeFlowRepository_6(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i7.FlowRepository);
+  @override
+  _i9.Future<_i3.Either<_i10.Failure, _i12.ModelContainer<_i17.Vote>>> execute(
+    String? orgaId,
+    String? userId,
+    String? flowId,
+    String? stageId,
+    String? postId,
+    int? voteValue,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [
+            orgaId,
+            userId,
+            flowId,
+            stageId,
+            postId,
+            voteValue,
+          ],
+        ),
+        returnValue: _i9.Future<
+                _i3.Either<_i10.Failure, _i12.ModelContainer<_i17.Vote>>>.value(
+            _FakeEither_1<_i10.Failure, _i12.ModelContainer<_i17.Vote>>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              orgaId,
+              userId,
+              flowId,
+              stageId,
+              postId,
+              voteValue,
+            ],
+          ),
+        )),
+      ) as _i9
+          .Future<_i3.Either<_i10.Failure, _i12.ModelContainer<_i17.Vote>>>);
 }

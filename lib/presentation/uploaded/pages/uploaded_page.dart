@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/core/widgets/body_formater.dart';
+import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_cubit.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -32,7 +32,12 @@ class UploadedPage extends StatelessWidget {
         child: SingleChildScrollView(
             child: Center(
           child: Column(
-            children: [BodyFormater(child: _bodyUploaded(context))],
+            children: [
+              BodyFormatter(
+                child: _bodyUploaded(context),
+                screenWidth: MediaQuery.of(context).size.width,
+              )
+            ],
           ),
         )),
       ),

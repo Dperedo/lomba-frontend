@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/core/widgets/body_formater.dart';
+import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../sidedrawer/pages/sidedrawer_page.dart';
@@ -32,7 +32,10 @@ class ProfilePage extends StatelessWidget {
           title: _variableAppBar(context, state),
           child: SingleChildScrollView(
               child: Center(
-                  child: BodyFormater(child: _bodyProfile(context, state)))),
+                  child: BodyFormatter(
+                    screenWidth: MediaQuery.of(context).size.width,
+                    child: _bodyProfile(context, state),
+                    ))),
         ),
       );
     });

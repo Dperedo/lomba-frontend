@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/core/widgets/body_formater.dart';
+import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/roles/bloc/role_event.dart';
 import 'package:lomba_frontend/presentation/sidedrawer/pages/sidedrawer_page.dart';
@@ -27,7 +27,11 @@ class RolesPage extends StatelessWidget {
             child: SingleChildScrollView(
                 child: Center(
               child: Column(
-                children: [BodyFormater(child: _bodyRoles(context, state))],
+                children: [
+                  BodyFormatter(
+                    screenWidth: MediaQuery.of(context).size.width,
+                    child: _bodyRoles(context, state)
+                    )],
               ),
             )),
           ),
