@@ -23,6 +23,8 @@ import 'package:lomba_frontend/domain/usecases/flow/get_latest_posts.dart'
 import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart'
     as _i16;
 import 'package:lomba_frontend/domain/usecases/local/get_has_login.dart' as _i8;
+import 'package:lomba_frontend/domain/usecases/local/get_session_role.dart'
+    as _i18;
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart'
     as _i14;
 import 'package:mockito/mockito.dart' as _i1;
@@ -789,4 +791,38 @@ class MockVotePublication extends _i1.Mock implements _i16.VotePublication {
         )),
       ) as _i9
           .Future<_i3.Either<_i10.Failure, _i12.ModelContainer<_i17.Vote>>>);
+}
+
+/// A class which mocks [GetSessionRole].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetSessionRole extends _i1.Mock implements _i18.GetSessionRole {
+  MockGetSessionRole() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.LocalRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeLocalRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.LocalRepository);
+  @override
+  _i9.Future<_i3.Either<_i10.Failure, List<String>>> execute() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [],
+        ),
+        returnValue: _i9.Future<_i3.Either<_i10.Failure, List<String>>>.value(
+            _FakeEither_1<_i10.Failure, List<String>>(
+          this,
+          Invocation.method(
+            #execute,
+            [],
+          ),
+        )),
+      ) as _i9.Future<_i3.Either<_i10.Failure, List<String>>>);
 }
