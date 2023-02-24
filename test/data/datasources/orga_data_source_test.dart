@@ -1,16 +1,15 @@
 import 'dart:convert';
 
-import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/exceptions.dart';
 import 'package:lomba_frontend/core/fakedata.dart';
 import 'package:lomba_frontend/data/datasources/orga_data_source.dart';
-import 'package:lomba_frontend/data/models/session_model.dart';
 import 'package:lomba_frontend/data/models/orga_model.dart';
 import 'package:lomba_frontend/data/models/orgauser_model.dart';
 import 'package:lomba_frontend/data/models/role_model.dart';
+import 'package:lomba_frontend/data/models/session_model.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -369,6 +368,36 @@ void main() {
 
       //assert
       expect(result, equals(true));
+    });
+  });
+
+  group('existsOrgas - existe organización por código', () {
+    test('consulta por código si la organización existe', () async {
+      //arrange
+      when(mockHttpClient.get(any, headers: testHeaders)).thenAnswer(
+          (realInvocation) async => http.Response(testGetResponse, 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+      //act
+      final result = await dataSource.existsOrga(testOrgaId, 'cod');
+
+      //assert
+      expect(result, equals(testOrgaModel));
+    });
+  });
+
+  group('getOrgasByUser - trae orgas por usuario', () {
+    test('consulta organizaciones por usuario', () async {
+      //arrange
+      when(mockHttpClient.get(any, headers: testHeaders)).thenAnswer(
+          (realInvocation) async => http.Response(testGetResponse, 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+      //act
+      final result = await dataSource.getOrgasByUser(testUserId01);
+
+      //assert
+      expect(result, equals(<OrgaModel>[testOrgaModel]));
     });
   });
 }
