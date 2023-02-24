@@ -53,13 +53,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           final userId = session?.getUserId();
           final resultOrgas = await _getOrgasByUser.execute(userId!);
 
-          resultOrgas.fold((l) => {emit(LoginError(l.message))},
-              (r) {
+          resultOrgas.fold((l) => {emit(LoginError(l.message))}, (r) {
             listorgas = r;
           });
           emit(LoginSelectOrga(listorgas, username));
-        } else {
-          emit(LoginGoted(session," Bienvenido usuario $username"));
+        } else if (session != null) {
+          emit(LoginGoted(session, " Bienvenido usuario $username"));
         }
       },
       transformer: debounce(const Duration(milliseconds: 0)),
@@ -79,7 +78,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           username: session.username,
           name: session.name,
         );
-        emit(LoginGoted(s," Bienvenido usuario $username"));
+        emit(LoginGoted(s, " Bienvenido usuario $username"));
       });
     });
 
@@ -132,13 +131,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             final userId = session?.getUserId();
             final resultOrgas = await _getOrgasByUser.execute(userId!);
 
-            resultOrgas.fold((l) => {emit(LoginError(l.message))},
-                (r) {
+            resultOrgas.fold((l) => {emit(LoginError(l.message))}, (r) {
               listorgas = r;
             });
             emit(LoginSelectOrga(listorgas, session!.username));
           } else {
-            emit(LoginGoted(session, " Bienvenido usuario ${session?.username}"));
+            emit(LoginGoted(
+                session, " Bienvenido usuario ${session?.username}"));
           }
         }
       },

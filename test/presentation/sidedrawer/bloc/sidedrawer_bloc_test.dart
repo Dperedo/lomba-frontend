@@ -49,14 +49,8 @@ void main() {
     mockGetOrgasByUser = MockGetOrgasByUser();
     mockChangeOrga = MockChangeOrga();
 
-    sideDrawerBloc = SideDrawerBloc(
-        mockGetSideOptions,
-        mockDoLogOff,
-        mockGetSession,
-        mockGetOrgasByUser,
-        mockGetHasLogIn,
-        mockGetOrga,
-        mockChangeOrga);
+    sideDrawerBloc = SideDrawerBloc(mockGetSideOptions, mockDoLogOff,
+        mockGetSession, mockGetOrgasByUser, mockGetHasLogIn, mockChangeOrga);
   });
 
   const userId = '00000002-0002-0002-0002-000000000002';

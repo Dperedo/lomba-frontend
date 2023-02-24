@@ -42,14 +42,6 @@ class OrgaUserListUserNotInOrgaLoaded extends OrgaUserState {
 ///Estado para mostrar las opciones que permiten agregar una nueva relación
 class OrgaUserAdding extends OrgaUserState {}
 
-///Estado para mostrar opciones de edición de una relación
-class OrgaUserEditing extends OrgaUserState {
-  final OrgaUser orgaUser;
-  const OrgaUserEditing(this.orgaUser);
-  @override
-  List<Object> get props => [orgaUser];
-}
-
 ///Estado para mostrar las opciones de habilitación de relación orga-user
 class OrgaUserEnabling extends OrgaUserState {}
 
