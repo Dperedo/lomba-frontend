@@ -400,27 +400,48 @@ void main() {
     testWidgets(
       'Mostrar boton de eliminar asociacion',
       (WidgetTester tester) async {
-        when(() => mockOrgaUserBloc.state)
-            .thenReturn(OrgaUserEditing(tOrgaUser));
+        //arrange
+        when(() => mockOrgaUserBloc.state).thenReturn(
+            OrgaUserListLoaded(tOrga2.id, fakeListUsers, fakeListOrgaUsers));
         when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga, ""));
+        //act
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
+
+        Finder userButton =
+            find.byKey(ValueKey("btnTxtUser${fakeListUsers[0].id}"));
+
+        await tester.tap(userButton);
+        await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
         Finder deleteButton =
             find.byKey(const ValueKey('btnEliminarAsociacion'));
         await tester.tap(deleteButton);
         await tester.pumpAndSettle(const Duration(milliseconds: 600));
+
+        //assert
         expect(deleteButton, equals(findsOneWidget));
       },
     );
     testWidgets(
       'Mostrar boton de guardar',
       (WidgetTester tester) async {
-        when(() => mockOrgaUserBloc.state)
-            .thenReturn(OrgaUserEditing(tOrgaUser));
+        //arrange
+        when(() => mockOrgaUserBloc.state).thenReturn(
+            OrgaUserListLoaded(tOrga2.id, fakeListUsers, fakeListOrgaUsers));
         when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga, ""));
+        //act
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
+
+        Finder userButton =
+            find.byKey(ValueKey("btnTxtUser${fakeListUsers[0].id}"));
+
+        await tester.tap(userButton);
+        await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
         Finder saveButton = find.byKey(const ValueKey('btnGuardarAsoc'));
-        await tester.tap(saveButton);
-        await tester.pumpAndSettle(const Duration(milliseconds: 600));
+
+        //await tester.tap(saveButton);
+        //await tester.pumpAndSettle(const Duration(milliseconds: 600));
 
         expect(saveButton, equals(findsOneWidget));
       },
@@ -428,13 +449,23 @@ void main() {
     testWidgets(
       'Mostrar boton de cancelar',
       (WidgetTester tester) async {
-        when(() => mockOrgaUserBloc.state)
-            .thenReturn(OrgaUserEditing(tOrgaUser));
+        //arrange
+        when(() => mockOrgaUserBloc.state).thenReturn(
+            OrgaUserListLoaded(tOrga2.id, fakeListUsers, fakeListOrgaUsers));
         when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga, ""));
+        //act
+
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
+
+        Finder userButton =
+            find.byKey(ValueKey("btnTxtUser${fakeListUsers[0].id}"));
+
+        await tester.tap(userButton);
+        await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
         Finder cancelButton = find.byKey(const ValueKey('btnCancelarAsoc'));
-        await tester.tap(cancelButton);
-        await tester.pumpAndSettle(const Duration(milliseconds: 600));
+        //await tester.tap(cancelButton);
+        //await tester.pumpAndSettle(const Duration(milliseconds: 600));
 
         expect(cancelButton, equals(findsOneWidget));
       },

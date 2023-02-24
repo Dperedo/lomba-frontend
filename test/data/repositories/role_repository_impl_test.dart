@@ -91,7 +91,10 @@ void main() {
 
         // assert
         verify(mockRemoteDataSource.getRole(any)).called(1);
-        expect(result, equals(const Left(ServerFailure(''))));
+        expect(
+            result,
+            equals(const Left(
+                ServerFailure('Ocurrió un error al procesar la solicitud.'))));
       },
     );
 
@@ -110,7 +113,7 @@ void main() {
         expect(
           result,
           equals(const Left(
-              ConnectionFailure('Failed to connect to the network'))),
+              ConnectionFailure('No existe conexión con internet.'))),
         );
       },
     );
@@ -147,7 +150,10 @@ void main() {
 
         // assert
         verify(mockRemoteDataSource.enableRole(any, any)).called(1);
-        expect(result, equals(const Left(ServerFailure(''))));
+        expect(
+            result,
+            equals(const Left(
+                ServerFailure('Ocurrió un error al procesar la solicitud.'))));
       },
     );
 
@@ -166,7 +172,7 @@ void main() {
         expect(
           result,
           equals(const Left(
-              ConnectionFailure('Failed to connect to the network'))),
+              ConnectionFailure('No existe conexión con internet.'))),
         );
       },
     );

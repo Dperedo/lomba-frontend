@@ -71,10 +71,15 @@ void main() {
 
         // act
         final result = await repository.getAuthenticate(tusername, tpassword);
-
+        Failure? fail;
         // assert
+        result.fold((l) => fail = l, (r) => null);
+
+        expect(
+            fail,
+            equals(const ServerFailure(
+                'Ocurrió un error al procesar la solicitud.')));
         verify(mockRemoteDataSource.getAuthenticate(tusername, tpassword));
-        expect(result, equals(const Left(ServerFailure(''))));
       },
     );
 
@@ -94,7 +99,7 @@ void main() {
         expect(
           result,
           equals(const Left(
-              ConnectionFailure('Failed to connect to the network'))),
+              ConnectionFailure('No existe conexión con internet.'))),
         );
       },
     );

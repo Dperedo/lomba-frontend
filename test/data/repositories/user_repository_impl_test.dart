@@ -95,7 +95,10 @@ void main() {
 
         // assert
         verify(mockRemoteDataSource.getUser(any)).called(1);
-        expect(result, equals(const Left(ServerFailure(''))));
+        expect(
+            result,
+            equals(const Left(
+                ServerFailure('Ocurrió un error al procesar la solicitud.'))));
       },
     );
 
@@ -114,7 +117,7 @@ void main() {
         expect(
           result,
           equals(const Left(
-              ConnectionFailure('Failed to connect to the network'))),
+              ConnectionFailure('No existe conexión con internet.'))),
         );
       },
     );
@@ -149,7 +152,10 @@ void main() {
 
         // assert
         verify(mockRemoteDataSource.addUser(any)).called(1);
-        expect(result, equals(const Left(ServerFailure(''))));
+        expect(
+            result,
+            equals(const Left(
+                ServerFailure('Ocurrió un error al procesar la solicitud.'))));
       },
     );
 
@@ -169,7 +175,7 @@ void main() {
         expect(
           result,
           equals(const Left(
-              ConnectionFailure('Failed to connect to the network'))),
+              ConnectionFailure('No existe conexión con internet.'))),
         );
       },
     );
@@ -203,7 +209,10 @@ void main() {
 
         // assert
         verify(mockRemoteDataSource.updateUser(any, any)).called(1);
-        expect(result, equals(const Left(ServerFailure(''))));
+        expect(
+            result,
+            equals(const Left(
+                ServerFailure('Ocurrió un error al procesar la solicitud.'))));
       },
     );
 
@@ -222,7 +231,7 @@ void main() {
         expect(
           result,
           equals(const Left(
-              ConnectionFailure('Failed to connect to the network'))),
+              ConnectionFailure('No existe conexión con internet.'))),
         );
       },
     );
@@ -255,7 +264,10 @@ void main() {
 
         // assert
         verify(mockRemoteDataSource.deleteUser(any)).called(1);
-        expect(result, equals(const Left(ServerFailure(''))));
+        expect(
+            result,
+            equals(const Left(
+                ServerFailure('Ocurrió un error al procesar la solicitud.'))));
       },
     );
 
@@ -274,7 +286,7 @@ void main() {
         expect(
           result,
           equals(const Left(
-              ConnectionFailure('Failed to connect to the network'))),
+              ConnectionFailure('No existe conexión con internet.'))),
         );
       },
     );
@@ -310,7 +322,10 @@ void main() {
 
         // assert
         verify(mockRemoteDataSource.enableUser(any, any)).called(1);
-        expect(result, equals(const Left(ServerFailure(''))));
+        expect(
+            result,
+            equals(const Left(
+                ServerFailure('Ocurrió un error al procesar la solicitud.'))));
       },
     );
 
@@ -329,7 +344,7 @@ void main() {
         expect(
           result,
           equals(const Left(
-              ConnectionFailure('Failed to connect to the network'))),
+              ConnectionFailure('No existe conexión con internet.'))),
         );
       },
     );
