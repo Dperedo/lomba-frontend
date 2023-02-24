@@ -39,8 +39,8 @@ class HomePage extends StatelessWidget {
           child: Column(
             children: [
               BodyFormatter(
-                child: _bodyHome(context),
                 screenWidth: MediaQuery.of(context).size.width,
+                child: _bodyHome(context),
               )
             ],
           ),
@@ -63,6 +63,11 @@ class HomePage extends StatelessWidget {
           if (state is HomeLoading) {
             return const Center(
               child: CircularProgressIndicator(),
+            );
+          }
+          if (state is HomeOnlyUser) {
+            return const Center(
+              child: Text('Bienvenidos a lomba!!!')
             );
           }
           if (state is HomeLoaded) {

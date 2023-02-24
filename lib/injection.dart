@@ -38,6 +38,7 @@ import 'data/repositories/local_repository_impl.dart';
 import 'domain/repositories/flow_repository.dart';
 import 'domain/repositories/local_repository.dart';
 import 'domain/usecases/local/get_has_login.dart';
+import 'domain/usecases/local/get_session_role.dart';
 import 'domain/usecases/local/get_session_status.dart';
 import 'presentation/nav/bloc/nav_bloc.dart';
 import 'presentation/demolist/bloc/demolist_bloc.dart';
@@ -89,7 +90,7 @@ Future<void> init() async {
   locator.registerFactory(
       () => LoginBloc(locator(), locator(), locator(), locator()));
   locator.registerFactory(
-      () => HomeBloc(locator(), locator(), locator(), locator(), locator()));
+      () => HomeBloc(locator(), locator(), locator(), locator(), locator(), locator()));
   locator.registerFactory(() => SideDrawerBloc(locator(), locator(), locator(),
       locator(), locator(), locator()));
   locator.registerFactory(() => NavBloc());
@@ -146,6 +147,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetAuthenticate(locator()));
   locator.registerLazySingleton(() => GetHasLogIn(locator()));
   locator.registerLazySingleton(() => GetSession(locator()));
+  locator.registerLazySingleton(() => GetSessionRole(locator()));
   locator.registerLazySingleton(() => GetSideOptions(locator()));
   locator.registerLazySingleton(() => DoLogOff(locator()));
   locator.registerLazySingleton(() => RegisterUser(locator()));

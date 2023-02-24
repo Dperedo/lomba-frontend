@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_latest_posts.dart';
 import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_has_login.dart';
+import 'package:lomba_frontend/domain/usecases/local/get_session_role.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -20,13 +21,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetSession _getSession;
   final GetLatestPosts _getLatestPosts;
   final VotePublication _votePublication;
+  final GetSessionRole _getSessionRole;
 
   HomeBloc(
     this._firebaseAuthInstance, 
     this._hasLogin,
     this._getSession,
     this._getLatestPosts,
-    this._votePublication
+    this._votePublication,
+    this._getSessionRole
     ) : super(const HomeStart("")) {
     ///Evento que hace la consulta de sesión del usuario en el dispositivo.
     on<OnHomeLoading>(
@@ -37,6 +40,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         const userId = '00000005-0005-0005-0005-000000000005';
         String flowId = Flows.votationFlowId;
         String stageId = StagesVotationFlow.stageId03Voting;
+        String role = '';
         var validLogin = false;
 
         final result = await _hasLogin.execute();
@@ -78,35 +82,41 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                   r.items.length
                   )));
         } else {
-          final session = await _getSession.execute();
-            session.fold((l) => emit(HomeError(l.message)), (r) => {auth = r});
+          final listroles = await _getSessionRole.execute();
+          listroles.fold((l) => emit(HomeError(l.message)), (r) => {role = r[0]});
+          if (role == 'user'){
+            final session = await _getSession.execute();
+              session.fold((l) => emit(HomeError(l.message)), (r) => {auth = r});
 
-            final resultPosts = await _getLatestPosts.execute(
-              auth.getOrgaId()!,
-              auth.getUserId()!,
-              flowId,
-              stageId,       
-              event.searchText,
-              event.pageIndex,
-              event.pageSize
-            );
-          resultPosts.fold(
-              (l) => {emit(HomeError(l.message))},
-              (r) => emit(HomeLoaded(
-                  validLogin,
-                  auth.getOrgaId()!,
-                  auth.getUserId()!,
-                  flowId,
-                  stageId,
-                  event.searchText,
-                  event.fieldsOrder,
-                  event.pageIndex,
-                  event.pageSize,
-                  r.items,
-                  r.currentItemCount,
-                  r.items.length,
-                  r.items.length
-                  )));
+              final resultPosts = await _getLatestPosts.execute(
+                auth.getOrgaId()!,
+                auth.getUserId()!,
+                flowId,
+                stageId,       
+                event.searchText,
+                event.pageIndex,
+                event.pageSize
+              );
+            resultPosts.fold(
+                (l) => {emit(HomeError(l.message))},
+                (r) => emit(HomeLoaded(
+                    validLogin,
+                    auth.getOrgaId()!,
+                    auth.getUserId()!,
+                    flowId,
+                    stageId,
+                    event.searchText,
+                    event.fieldsOrder,
+                    event.pageIndex,
+                    event.pageSize,
+                    r.items,
+                    r.currentItemCount,
+                    r.items.length,
+                    r.items.length
+                    )));
+          } else {
+            emit(HomeOnlyUser());
+          }
         }
       },
       transformer: debounce(const Duration(milliseconds: 0)),
