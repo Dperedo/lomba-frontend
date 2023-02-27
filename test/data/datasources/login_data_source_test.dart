@@ -258,7 +258,7 @@ void main() {
           testUserModelAdmin, 'googleToken');
 
       //assert
-      expect(result, equals(tLoginAccess));
+      expect(result, equals(tSession));
     });
 
     test(

@@ -1,22 +1,16 @@
-import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:lomba_frontend/data/models/session_model.dart';
-import 'package:lomba_frontend/data/models/orga_model.dart';
 
-import '../datasources/local_data_source.dart';
-import '../../domain/entities/session.dart';
 import '../../core/exceptions.dart';
 import '../../core/failures.dart';
-import '../../domain/entities/orga.dart';
-import '../datasources/user_data_source.dart';
-import '../models/user_model.dart';
+import '../../domain/entities/session.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/login_repository.dart';
+import '../datasources/local_data_source.dart';
 import '../datasources/login_data_source.dart';
-import '../models/login_access_model.dart';
+import '../datasources/user_data_source.dart';
+import '../models/user_model.dart';
 
 ///Implementación de métodos del repositorio [LoginRepository]
 ///
@@ -57,7 +51,8 @@ class LoginRepositoryImpl implements LoginRepository {
 
       return Right(session);
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on CacheException {
       return const Left(ConnectionFailure('Failed to write local cache'));
     } on Exception {
@@ -70,7 +65,7 @@ class LoginRepositoryImpl implements LoginRepository {
       String email, String orgaId, String password, String role) async {
     try {
       UserModel userModel = UserModel(
-          id: Guid.newGuid.toString(),
+          id: '',
           name: name,
           username: username,
           email: email,
@@ -79,9 +74,10 @@ class LoginRepositoryImpl implements LoginRepository {
       final result = await remoteDataSource.registerUser(
           userModel, orgaId, password, role);
 
-      return const Right(true);
+      return Right(result);
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on CacheException {
       return const Left(ConnectionFailure('Failed to write local cache'));
     } on Exception {
@@ -107,7 +103,8 @@ class LoginRepositoryImpl implements LoginRepository {
       //if (result != '') {
       return Right(result);
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on CacheException {
       return const Left(ConnectionFailure('Failed to write local cache'));
     } on Exception {
@@ -140,8 +137,9 @@ class LoginRepositoryImpl implements LoginRepository {
 
       return Right(session);
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
-    }  on CacheException {
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on CacheException {
       return const Left(ConnectionFailure('Failed to write local cache'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));

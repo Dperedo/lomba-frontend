@@ -1,13 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
+import 'package:lomba_frontend/core/exceptions.dart';
+import 'package:lomba_frontend/core/failures.dart';
 import 'package:lomba_frontend/data/datasources/local_data_source.dart';
 import 'package:lomba_frontend/data/models/session_model.dart';
 import 'package:lomba_frontend/data/repositories/local_repository_impl.dart';
-import 'package:lomba_frontend/domain/entities/session.dart';
 import 'package:lomba_frontend/domain/repositories/local_repository.dart';
-import 'package:lomba_frontend/core/exceptions.dart';
-import 'package:lomba_frontend/core/failures.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -31,6 +30,12 @@ void main() {
       token: SystemKeys.tokenExpiredSuperAdmin,
       username: 'mp@mp.com',
       name: 'Miguel');
+
+  const testTokenAdminUserReviewer =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMDAwMDAwMS0wMDAxLTAwMDEtMDAwMS0wMDAwMDAwMDAwMDEiLCJvcmdhSWQiOiIwMDAwMDEwMC0wMTAwLTAxMDAtMDEwMC0wMDAwMDAwMDAxMDAiLCJyb2xlcyI6ImFkbWluLHVzZXIscmV2aWV3ZXIiLCJpYXQiOjE2NzM0NjY2NTUsImV4cCI6MjY3MzQ3MDI1NX0.qdG_HSn-5tiai4ba7NE8bE1rcj3R9LDtZpIYPAU65-c";
+
+  const tSessionAdminUserReviewerModel = SessionModel(
+      token: testTokenAdminUserReviewer, username: 'mp@mp.com', name: 'Miguel');
 
   setUp(() {
     mockLocalDataSource = MockLocalDataSourceImpl();
@@ -199,6 +204,41 @@ void main() {
           "orgas",
           "users",
           "roles"
+        ];
+
+        // act
+        final result = await repository.getSideMenuListOptions();
+
+        // assert
+        verify(mockLocalDataSource.getSavedSession()).called(1);
+
+        expect(result.length(), equals(const Right(listExpected).length()));
+      },
+    );
+
+    test(
+      'debe entregar la lista de opciones de menu para admin, user y reviewer',
+      () async {
+        //arrange
+        when(mockLocalDataSource.hasSession())
+            .thenAnswer((realInvocation) async => true);
+        when(mockLocalDataSource.getSavedSession()).thenAnswer(
+            (realInvocation) async => tSessionAdminUserReviewerModel);
+
+        const listExpected = <String>[
+          "home",
+          "logoff",
+          "profile",
+          "orgas",
+          "users",
+          "roles",
+          "addcontent",
+          "viewed",
+          "popular",
+          "uploaded",
+          "tobeapproved",
+          "approved",
+          "rejected"
         ];
 
         // act

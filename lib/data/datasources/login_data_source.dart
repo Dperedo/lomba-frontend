@@ -18,7 +18,7 @@ abstract class RemoteDataSource {
   Future<bool> registerUser(
       UserModel usermodel, String orgaId, String password, String role);
   Future<SessionModel> changeOrga(String username, String orgaId);
-  Future<LoginAccessModel> getAuthenticateGoogle(
+  Future<SessionModel> getAuthenticateGoogle(
       UserModel user, String googleToken);
 }
 
@@ -126,7 +126,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   ///A partir del user consigue un [LoginAccessModel] con
   ///el token del usuario y demás información.
   @override
-  Future<LoginAccessModel> getAuthenticateGoogle(
+  Future<SessionModel> getAuthenticateGoogle(
       UserModel user, String googleToken) async {
     final Map<String, dynamic> googleAuth = {
       'user': user,
@@ -146,7 +146,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     if (resp.statusCode == 200) {
       final Map<dynamic, dynamic> resObj = json.decode(resp.body);
 
-      return LoginAccessModel(
+      return SessionModel(
           token: resObj['data']['items'][0]['value'].toString(),
           username: user.username,
           name: user.name);

@@ -115,5 +115,19 @@ void main() {
       //assert
       expect(result, equals(true));
     });
+
+    test('habilitar un rol y arroja error', () async {
+      //arrange
+      when(mockHttpClient.put(any, headers: testHeaders))
+          .thenAnswer((realInvocation) async => http.Response('', 500));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+
+      //act
+      final call = dataSource.enableRole(fakeRoles[1].name, false);
+
+      //assert
+      expect(() => call, throwsA(isA<ServerException>()));
+    });
   });
 }

@@ -81,6 +81,9 @@ void main() {
   const testGetResponse =
       '{"apiVersion":"1.0","method":"get","params":{"orgaId":"00000200-0200-0200-0200-000000000200"},"context":"geted by orga id","id":"480893fa-0b81-4ce6-9e2f-e4439ce0ba9a","_id":"480893fa-0b81-4ce6-9e2f-e4439ce0ba9a","data":{"items":[{"_id":"00000200-0200-0200-0200-000000000200","id":"00000200-0200-0200-0200-000000000200","name":"Default","code":"def","builtIn":true,"enabled":true}],"kind":"string","currentItemCount":1,"updated":"2023-01-13T15:25:05.437Z"}}';
 
+  const testGetResponseZero =
+      '{"apiVersion":"1.0","method":"get","params":{"orgaId":"00000200-0200-0200-0200-000000000200"},"context":"geted by orga id","id":"480893fa-0b81-4ce6-9e2f-e4439ce0ba9a","_id":"480893fa-0b81-4ce6-9e2f-e4439ce0ba9a","data":{"items":[],"kind":"string","currentItemCount":0,"updated":"2023-01-13T15:25:05.437Z"}}';
+
   const testBoolResponse =
       '{"apiVersion":"1.0","method":"put","params":{"id":"00000200-0200-0200-0200-000000000200","enable":"true"},"context":"orga enabled","id":"cc0794b7-7bea-49a7-92e6-3b0dfad86058","_id":"cc0794b7-7bea-49a7-92e6-3b0dfad86058","data":{"items":[true],"kind":"boolean","currentItemCount":1,"updated":"2023-01-16T22:49:38.210Z"}}';
 
@@ -175,11 +178,13 @@ void main() {
         final call1 = dataSource.getOrga(orgaId);
         final call2 = dataSource.getOrgas("", "", 1, 10);
         final call3 = dataSource.getOrgaUsers(orgaId);
+        final call4 = dataSource.getOrgaUser(orgaId, testUserId01);
 
         // assert
         expect(() => call1, throwsA(isA<ServerException>()));
         expect(() => call2, throwsA(isA<ServerException>()));
         expect(() => call3, throwsA(isA<ServerException>()));
+        expect(() => call4, throwsA(isA<ServerException>()));
       },
     );
   });
@@ -206,6 +211,28 @@ void main() {
       expect(result, equals(toEdit));
       //expect(toEdit, equals(fakeListOrgas[2]));
     });
+
+    test('actualizar una organización y arroja error', () async {
+      //arrange
+      OrgaModel toEdit = const OrgaModel(
+          id: '00000001-0001-0001-0001-000000000001',
+          name: "Editado",
+          code: 'null',
+          enabled: true,
+          builtIn: false);
+      when(mockHttpClient.put(any,
+              body: json.encode(toEdit), headers: testHeaders))
+          .thenAnswer((realInvocation) async => http.Response('', 500));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+      //act
+
+      final call = dataSource.updateOrga(orgaIdSampleUpdate, toEdit);
+
+      //assert
+      expect(() => call, throwsA(isA<ServerException>()));
+    });
+
     test('actualizar una orgauser', () async {
       //arrange
       const toEdit = OrgaUserModel(
@@ -245,6 +272,45 @@ void main() {
       //assert
       expect(result, equals(toEdit));
     });
+
+    test('actualizar una orgauser y arroja error', () async {
+      //arrange
+      const toEdit = OrgaUserModel(
+          orgaId: testOrgaId01,
+          userId: testUserId01,
+          roles: <String>["super"],
+          enabled: true,
+          builtIn: true);
+
+      List<RoleModel> listInRoles = [];
+      for (var element in toEdit.roles) {
+        listInRoles.add(RoleModel(name: element, enabled: true));
+      }
+
+      final Map<String, dynamic> orgaUserBackend = {
+        'orgaId': toEdit.orgaId,
+        'userId': toEdit.userId,
+        'roles': listInRoles,
+        'enabled': toEdit.enabled
+      };
+
+      final url = Uri.parse(
+          '${UrlBackend.base}/api/v1/orgauser/${toEdit.orgaId}/${toEdit.userId}');
+
+      when(mockHttpClient.put(url,
+              body: json.encode(orgaUserBackend), headers: testHeaders))
+          .thenAnswer((realInvocation) async => http.Response('', 500));
+
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+      //act
+
+      final call =
+          dataSource.updateOrgaUser(toEdit.orgaId, toEdit.userId, toEdit);
+
+      //assert
+      expect(() => call, throwsA(isA<ServerException>()));
+    });
   });
   group('agregar datos orga y orgauser', () {
     test('agregar una organización', () async {
@@ -269,6 +335,28 @@ void main() {
       //assert
       expect(result, equals(toAdd));
       //expect(fakeListOrgas.length, nearEqual(a, b, epsilon));
+    });
+
+    test('agregar una organización y arroja error', () async {
+      //arrange
+      OrgaModel toAdd = const OrgaModel(
+          id: '00000001-0001-0001-0001-000000000001',
+          name: "Editado",
+          code: "null",
+          enabled: true,
+          builtIn: false);
+      when(mockHttpClient.post(any,
+              body: json.encode(toAdd), headers: testHeaders))
+          .thenAnswer((realInvocation) async => http.Response('', 500));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+
+      //act
+
+      final call = dataSource.addOrga(toAdd);
+
+      //assert
+      expect(() => call, throwsA(isA<ServerException>()));
     });
     test('agregar una orgauser', () async {
       //arrange
@@ -309,6 +397,45 @@ void main() {
       //assert
       expect(result, equals(toAdd));
     });
+
+    test('agregar una orgauser con error', () async {
+      //arrange
+
+      const toAdd = OrgaUserModel(
+          orgaId: testOrgaId01,
+          userId: testUserId01,
+          roles: <String>["super"],
+          enabled: true,
+          builtIn: true);
+
+      List<RoleModel> listInRoles = [];
+      for (var element in toAdd.roles) {
+        listInRoles.add(RoleModel(name: element, enabled: true));
+      }
+
+      final Map<String, dynamic> orgaUserBackend = {
+        'orgaId': toAdd.orgaId,
+        'userId': toAdd.userId,
+        'roles': listInRoles,
+        'enabled': toAdd.enabled,
+        'builtIn': true
+      };
+
+      final url = Uri.parse('${UrlBackend.base}/api/v1/orgauser');
+
+      when(mockHttpClient.post(url,
+              body: json.encode(orgaUserBackend), headers: testHeaders))
+          .thenAnswer((realInvocation) async => http.Response('', 500));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+
+      //act
+
+      final call = dataSource.addOrgaUser(toAdd);
+
+      //assert
+      expect(() => call, throwsA(isA<ServerException>()));
+    });
   });
   group('eliminar datos orga y orgauser', () {
     test('eliminar una organización', () async {
@@ -325,6 +452,21 @@ void main() {
       expect(result, equals(true));
       //expect(fakeListOrgas.length, equals(count + 1));
     });
+
+    test('eliminar una organización y arroja error', () async {
+      //arrange
+      when(mockHttpClient.delete(any, headers: testHeaders))
+          .thenAnswer((realInvocation) async => http.Response('', 500));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+
+      //act
+      final call = dataSource.deleteOrga(fakeOrgaIdSystem);
+
+      //assert
+      expect(() => call, throwsA(isA<ServerException>()));
+    });
+
     test('eliminar una orgauser', () async {
       //arrange
       when(mockHttpClient.delete(any, headers: testHeaders)).thenAnswer(
@@ -339,6 +481,22 @@ void main() {
       //assert
       expect(result, equals(true));
       //expect(fakeListOrgaUsers.length, equals(count + 1));
+    });
+
+    test('eliminar una orgauser y da error', () async {
+      //arrange
+      when(mockHttpClient.delete(any, headers: testHeaders))
+          .thenAnswer((realInvocation) async => http.Response('', 500));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+
+      //act
+      final call =
+          dataSource.deleteOrgaUser(fakeOrgaIdSample03, fakeUserIdUser02);
+
+      //assert
+
+      expect(() => call, throwsA(isA<ServerException>()));
     });
   });
   group('habilitar datos orga y orgauser', () {
@@ -355,6 +513,21 @@ void main() {
       //assert
       expect(result, equals(true));
     });
+
+    test('habilitar una organización y arroja error', () async {
+      //arrange
+      when(mockHttpClient.put(any, headers: testHeaders))
+          .thenAnswer((realInvocation) async => http.Response('', 500));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+
+      //act
+      final call = dataSource.enableOrga(fakeListOrgas[1].id, false);
+
+      //assert
+      expect(() => call, throwsA(isA<ServerException>()));
+    });
+
     test('habilitar una orgauser', () async {
       //arrange
       when(mockHttpClient.put(any, headers: testHeaders)).thenAnswer(
@@ -368,6 +541,21 @@ void main() {
 
       //assert
       expect(result, equals(true));
+    });
+
+    test('habilitar una orgauser y arroja error', () async {
+      //arrange
+      when(mockHttpClient.put(any, headers: testHeaders))
+          .thenAnswer((realInvocation) async => http.Response('', 500));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+
+      //act
+      final call = dataSource.enableOrgaUser(
+          testOrgaUserModel.orgaId, testOrgaUserModel.userId, false);
+
+      //assert
+      expect(() => call, throwsA(isA<ServerException>()));
     });
   });
 
@@ -384,6 +572,33 @@ void main() {
       //assert
       expect(result, equals(testOrgaModel));
     });
+
+    test('consulta por código si la orga existe, no existe retorna null',
+        () async {
+      //arrange
+      when(mockHttpClient.get(any, headers: testHeaders)).thenAnswer(
+          (realInvocation) async => http.Response(testGetResponseZero, 200));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+      //act
+      final result = await dataSource.existsOrga(testOrgaId, 'cod');
+
+      //assert
+      expect(result, equals(null));
+    });
+
+    test('consulta por código si la orga existe, server exception', () async {
+      //arrange
+      when(mockHttpClient.get(any, headers: testHeaders))
+          .thenAnswer((realInvocation) async => http.Response('', 500));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+      //act
+      final call1 = dataSource.existsOrga(testOrgaId, 'cod');
+
+      //assert
+      expect(() => call1, throwsA(isA<ServerException>()));
+    });
   });
 
   group('getOrgasByUser - trae orgas por usuario', () {
@@ -398,6 +613,19 @@ void main() {
 
       //assert
       expect(result, equals(<OrgaModel>[testOrgaModel]));
+    });
+
+    test('consulta organizaciones por usuario y arroja error', () async {
+      //arrange
+      when(mockHttpClient.get(any, headers: testHeaders))
+          .thenAnswer((realInvocation) async => http.Response('', 500));
+      when(mockLocalDataSource.getSavedSession())
+          .thenAnswer((realInvocation) async => testSession);
+      //act
+      final call = dataSource.getOrgasByUser(testUserId01);
+
+      //assert
+      expect(() => call, throwsA(isA<ServerException>()));
     });
   });
 }
