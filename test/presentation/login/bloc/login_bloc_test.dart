@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/data/models/session_model.dart';
 import 'package:lomba_frontend/core/failures.dart';
+import 'package:lomba_frontend/domain/entities/orga.dart';
 import 'package:lomba_frontend/domain/usecases/login/change_orga.dart';
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate.dart';
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate_google.dart';
@@ -39,8 +40,16 @@ void main() {
       username: 'admin@mp.com',
       name: 'admin@mp.com');
 
+  const tLoginAccessMultiOrga = SessionModel(
+      token: SystemKeys.tokenDoubleOrga,
+      username: 'admin@mp.com',
+      name: 'admin@mp.com');
+
   const tusername = "mp@mp.com";
   const tpassword = "12345678";
+  const String test_userId = "00000007-0007-0007-0007-000000000007";
+  const String test_orgaId = "00000200-0200-0200-0200-000000000200";
+  const List<Orga> test_listOrga = [];
 
   test(
     'el estado inicial debe ser vacío',
@@ -81,4 +90,57 @@ void main() {
       verify(mockGetAuthenticate.execute(tusername, tpassword));
     },
   );
+
+  blocTest<LoginBloc, LoginState>(
+    'debe emitir -SelectOrga- y -goted- cuando se consigue el token correctamente',
+    build: () {
+      when(mockGetAuthenticate.execute(tusername, tpassword))
+          .thenAnswer((_) async => const Right(tLoginAccessMultiOrga));
+      when(mockGetOrgasByUser.execute(any))
+          .thenAnswer((_) async => const Right(test_listOrga));
+      return loginBloc;
+    },
+    act: (bloc) => bloc.add(const OnLoginTriest(tusername, tpassword)),
+    wait: const Duration(milliseconds: 500),
+    expect: () => [
+      LoginGetting(),
+      const LoginSelectOrga(test_listOrga, tusername)
+    ],
+    verify: (bloc) {
+      verify(mockGetAuthenticate.execute(tusername, tpassword));
+      verify(mockGetOrgasByUser.execute(test_userId));
+    },
+  );
+
+  blocTest<LoginBloc, LoginState>(
+    'debe emitir el evento -LoginEmpty- para reiniciar la pantalla de login',
+    build: () {
+      return loginBloc;
+    },
+    act: (bloc) => bloc.add(OnRestartLogin()),
+    wait: const Duration(milliseconds: 500),
+    expect: () => [
+      LoginEmpty()
+    ],
+    verify: (bloc) {
+    },
+  );
+
+  blocTest<LoginBloc, LoginState>(
+    'debe emitir el evento -Goted- con la nueva sesión con orgaId',
+    build: () {
+      when(mockChangeOrga.execute(tLoginAccess.username,test_orgaId))
+          .thenAnswer((_) async => const Right(tLoginAccess));
+      return loginBloc;
+    },
+    act: (bloc) => bloc.add(OnLoginChangeOrga(tLoginAccess.username,test_orgaId)),
+    wait: const Duration(milliseconds: 500),
+    expect: () => [
+      LoginGetting(),
+      const LoginGoted(tLoginAccess, '')
+    ],
+    verify: (bloc) {
+    },
+  );
+
 }

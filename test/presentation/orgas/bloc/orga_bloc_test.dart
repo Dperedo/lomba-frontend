@@ -2,6 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lomba_frontend/core/failures.dart';
+import 'package:lomba_frontend/core/validators.dart';
 import 'package:lomba_frontend/domain/entities/orga.dart';
 import 'package:lomba_frontend/domain/usecases/orgas/add_orga.dart';
 import 'package:lomba_frontend/domain/usecases/orgas/delete_orga.dart';
@@ -61,6 +63,9 @@ Future<void> main() async {
 
   final newOrgaId = Guid.newGuid.toString();
   final newCode = Guid.newGuid.toString();
+  const test_name = 'Test Orga';
+  const test_code = 'test';
+  
 
   final tOrga = Orga(
       id: newOrgaId,
@@ -131,6 +136,54 @@ Future<void> main() async {
       verify: (bloc) {
         verify(mockAddOrga.execute(tOrga.name, tOrga.code, tOrga.enabled));
       },
+    );
+
+    blocTest<OrgaBloc, OrgaState>(
+      'debe emitir OnOrgaShowAddOrgaForm para el boton agregar orga(+)',
+      build: () {
+        return orgaBloc;
+      },
+      act: (bloc) => bloc.add(OnOrgaShowAddOrgaForm()),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [OrgaLoading()],
+      verify: (bloc) {},
+    );
+
+    blocTest<OrgaBloc, OrgaState>(
+      'debe mostrar form para agregar orga',
+      build: () {
+        return orgaBloc;
+      },
+      act: (bloc) => bloc.add(OnOrgaPrepareForAdd()),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [OrgaAdding(false, false)],
+      verify: (bloc) {},
+    );
+
+    blocTest<OrgaBloc, OrgaState>(
+      'debe guardar la nueva orga',
+      build: () {
+        when(mockAddOrga.execute(test_name, test_code, true))
+        .thenAnswer((_) async => Right(tOrga));
+        return orgaBloc;
+      },
+      act: (bloc) => bloc.add(const OnOrgaSaveNewOrga(test_name, test_code)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [OrgaLoading(), OrgaLoaded(tOrga, '')],
+      verify: (bloc) {},
+    );
+
+    blocTest<OrgaBloc, OrgaState>(
+      'debe guardar la nueva orga',
+      build: () {
+        when(mockAddOrga.execute(test_name, test_code, true))
+        .thenAnswer((_) async => const Left(ConnectionFailure('')));
+        return orgaBloc;
+      },
+      act: (bloc) => bloc.add(const OnOrgaSaveNewOrga(test_name, test_code)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [OrgaLoading(), const OrgaError('')],
+      verify: (bloc) {},
     );
   });
 
@@ -221,5 +274,28 @@ Future<void> main() async {
         verify(mockUpdateOrga.execute(newOrgaId, tOrga));
       },
     );
+    
   });
+
+  group('validar los datos de orgas', () {
+    blocTest<OrgaBloc, OrgaState>(
+      'debe validar nuevo orga',
+      build: () {
+        when(mockExistsOrga.execute('', test_code))
+          .thenAnswer((_) async => Right(tOrga));
+        return orgaBloc;
+      },
+      act: (bloc) => bloc
+          .add(OnOrgaValidate('', test_code, OrgaAdding(false, false))),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [
+      ],
+      verify: (bloc) {
+        verify(mockExistsOrga.execute('','test'));
+      },
+    );
+  });
+
 }
+
+

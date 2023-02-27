@@ -204,4 +204,19 @@ void main() {
     //assert
     expect(indicator, findsOneWidget);
   });
+
+  /*testWidgets('debe emitir el evento OnHomeLoading',
+      (WidgetTester tester) async {
+    //arrange
+    when(() => mockHomeBloc.state).thenReturn(const HomeStart(''));
+
+    //act
+    await tester.pumpWidget(makeTestableWidget(HomePage()));
+    Finder title = find.text("");
+
+    //assert
+    verify(() => mockHomeBloc.add(OnHomeLoading(
+                '', test_fieldsOrderLatest, 1, test_pageSize))).called(1);
+    expect(title, findsOneWidget);
+  });*/
 }

@@ -50,8 +50,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         });
 
         if (session != null && session?.getOrgaId() == null) {
-          final userId = session?.getUserId();
-          final resultOrgas = await _getOrgasByUser.execute(userId!);
+          final userId = session?.getUserId()?? '';
+          final resultOrgas = await _getOrgasByUser.execute(userId);
 
           resultOrgas.fold((l) => {emit(LoginError(l.message))}, (r) {
             listorgas = r;

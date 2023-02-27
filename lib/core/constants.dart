@@ -103,6 +103,8 @@ class SystemKeys {
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwicm9sZUlkIjoic3VwZXJhZG1pbiIsImV4cCI6MTY0MDk5NTE5OX0.wvhDsCJGUwF0wicvn5sFh_t48nB6OWx92uhxC_tsfG0";
   static const String tokenReviewed =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicm9sZUlkIjoidXNlcixyZXZpZXdlZCIsImV4cCI6MTcwMzAxNTU0M30._r3SQKeYQf9KiZDsUTZOyljnFySHbamTeX4Lq3jPiHw";
+  static const String tokenDoubleOrga =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMDAwMDAwNy0wMDA3LTAwMDctMDAwNy0wMDAwMDAwMDAwMDciLCJvcmdhSWQiOiIiLCJpYXQiOjE2Nzc1MTQxNjgsImV4cCI6MjY3NzUxNzc2OH0.rxtjiv4vQ714cRl21Mr9oX4sf2QYR5v_esxSX7pyXeU";
 }
 
 ///Listado de las opciones posibles del menú lateral.
