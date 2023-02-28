@@ -1,11 +1,17 @@
 // this is the state the user is expected to see
 
+import 'package:equatable/equatable.dart';
+
 ///El estado de navegación considera el item seleccionado para navegar.
 ///
 ///El [selectedItem] indica cuál es la página donde deberíamos estar parados.
-class NavState {
+
+class NavState extends Equatable{
   final NavItem selectedItem;
   const NavState(this.selectedItem);
+
+  @override
+  List<Object> get props => [selectedItem];
 }
 
 // helpful navigation pages, you can change

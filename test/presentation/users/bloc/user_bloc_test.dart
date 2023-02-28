@@ -171,6 +171,20 @@ Future<void> main() async {
             '00000100-0100-0100-0100-000000000100', '1234', 'user'));
       },
     );
+
+    blocTest<UserBloc, UserState>(
+      'debe preparar el estado para agregar un user',
+      build: () {
+        return userBloc;
+      },
+      act: (bloc) =>
+          bloc.add(OnUserPrepareForAdd()),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [
+        UserAdding(false, false)
+      ],
+      verify: (bloc) {},
+    );
   });
 
   group('eliminar users y userusers', () {
@@ -228,6 +242,20 @@ Future<void> main() async {
         verify(mockUpdateUser.execute(newUserId, tUser));
       },
     );
+
+    blocTest<UserBloc, UserState>(
+      'debe preparar el estado para editar un user',
+      build: () {
+        return userBloc;
+      },
+      act: (bloc) =>
+          bloc.add(OnUserPrepareForEdit(tUser)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [
+        UserEditing(false, false, tUser)
+      ],
+      verify: (bloc) {},
+    );
   });
 
   group('Modificar password', () {
@@ -258,6 +286,68 @@ Future<void> main() async {
       act: (bloc) => bloc.add(OnUserShowPasswordModifyForm(tUser)),
       wait: const Duration(milliseconds: 500),
       expect: () => [UserLoading(), UserUpdatePassword(tUser)],
+    );
+  });
+
+  group('validar los datos usuario ingresados', () {
+    blocTest<UserBloc, UserState>(
+      'debe validar los datos para nuevo usuario (no devuelve null)',
+      build: () {
+        when(mockExistsUser.execute('', tUser.username, tUser.email))
+            .thenAnswer((_) async => Right(tUser));
+        return userBloc;
+      },
+      act: (bloc) => bloc.add(OnUserValidate(tUser.username, tUser.email, UserAdding(true, true))),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [],
+      verify: (bloc) {
+        verify(mockExistsUser.execute('', tUser.username, tUser.email));
+      },
+    );
+
+    blocTest<UserBloc, UserState>(
+      'debe validar los datos para nuevo usuario (devuelve null)',
+      build: () {
+        when(mockExistsUser.execute('', tUser.username, tUser.email))
+            .thenAnswer((_) async => const Right(null));
+        return userBloc;
+      },
+      act: (bloc) => bloc.add(OnUserValidate(tUser.username, tUser.email, UserAdding(true, true))),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [],
+      verify: (bloc) {
+        verify(mockExistsUser.execute('', tUser.username, tUser.email));
+      },
+    );
+
+    blocTest<UserBloc, UserState>(
+      'debe validar los datos para edit de usuario (no devuelve null)',
+      build: () {
+        when(mockExistsUser.execute(tUser.id, tUser.username, tUser.email))
+            .thenAnswer((_) async => Right(tUser));
+        return userBloc;
+      },
+      act: (bloc) => bloc.add(OnUserValidateEdit(tUser.id, tUser.username, tUser.email, UserEditing(true, true, tUser))),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [],
+      verify: (bloc) {
+        verify(mockExistsUser.execute(tUser.id, tUser.username, tUser.email));
+      },
+    );
+
+    blocTest<UserBloc, UserState>(
+      'debe validar los datos para edit de usuario (devuelve null)',
+      build: () {
+        when(mockExistsUser.execute(tUser.id, tUser.username, tUser.email))
+            .thenAnswer((_) async => const Right(null));
+        return userBloc;
+      },
+      act: (bloc) => bloc.add(OnUserValidateEdit(tUser.id, tUser.username, tUser.email, UserEditing(true, true, tUser))),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [],
+      verify: (bloc) {
+        verify(mockExistsUser.execute(tUser.id, tUser.username, tUser.email));
+      },
     );
   });
 }

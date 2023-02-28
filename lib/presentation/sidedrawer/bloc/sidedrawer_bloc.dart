@@ -38,8 +38,7 @@ class SideDrawerBloc extends Bloc<SideDrawerEvent, SideDrawerState> {
 
         if (login) {
           final resultSession = await _getSession.execute();
-          resultSession.fold(
-              (l) => {emit(SideDrawerError(l.message))},
+          resultSession.fold((l) => {emit(SideDrawerError(l.message))},
               (r) => {
                     session = SessionModel(
                         token: r.token, username: r.username, name: r.name)

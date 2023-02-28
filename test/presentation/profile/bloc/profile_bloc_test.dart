@@ -64,4 +64,24 @@ void main() async {
       verify(mockGetUser.execute(testUserId));
     },
   );
+
+  blocTest<ProfileBloc, ProfileState>(
+    'debe responder con estado de login TRUE después de cargar con userId = null',
+    build: () {
+      when(mockGetUser.execute(testUserId))
+          .thenAnswer((_) async => Right(tUser));
+      when(mockGetSession.execute())
+          .thenAnswer((_) async => const Right(testSession));
+      return profileBloc;
+    },
+    act: (bloc) => bloc.add(const OnProfileLoad(null)),
+    wait: const Duration(milliseconds: 500),
+    expect: () => [
+      ProfileLoading(),
+      ProfileLoaded(tUser),
+    ],
+    verify: (bloc) {
+      verify(mockGetUser.execute(testUserId));
+    },
+  );
 }

@@ -111,4 +111,29 @@ void main() {
       verify(mockDoLogOff.execute());
     },
   );
+
+  blocTest<SideDrawerBloc, SideDrawerState>(
+    'debe emitir ready al cambiar de orga',
+    build: () {
+      when(mockGetSideOptions.execute())
+          .thenAnswer((_) async => const Right(listAnonymous));
+      when(mockChangeOrga.execute(tSession.username, tOrga.id))
+          .thenAnswer((_) async => const Right(tSession));
+      when(mockGetSession.execute())
+          .thenAnswer((_) async => const Right(tSession));
+      when(mockGetOrgasByUser.execute('00000001-0001-0001-0001-000000000001'))
+          .thenAnswer((_) async => const Right(<Orga>[tOrga]));
+      return sideDrawerBloc;
+    },
+    act: (bloc) => bloc.add(OnSideDrawerChangeOrga(tOrga.id)),
+    wait: const Duration(milliseconds: 500),
+    expect: () => [
+      const SideDrawerReady(
+          listAnonymous, <Orga>[tOrga], '00000002-0002-0002-0002-000000000002'),
+    ],
+    verify: (bloc) {
+      verify(mockGetSession.execute());
+      verify(mockGetOrgasByUser.execute('00000001-0001-0001-0001-000000000001'));
+    },
+  );
 }

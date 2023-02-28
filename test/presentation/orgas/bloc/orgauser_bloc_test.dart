@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
+import 'package:lomba_frontend/data/models/sort_model.dart';
 import 'package:lomba_frontend/domain/entities/orgauser.dart';
 import 'package:lomba_frontend/domain/usecases/orgas/add_orgauser.dart';
 import 'package:lomba_frontend/domain/usecases/orgas/delete_orgauser.dart';
@@ -61,6 +62,12 @@ Future<void> main() async {
 
   final newOrgaId = Guid.newGuid.toString();
   final newUserId = Guid.newGuid.toString();
+
+
+  const List<User> test_listUser = [];
+  const String test_orgaId = "00000200-0200-0200-0200-000000000200";
+  const int test_pageIndex = 1;
+  const int test_pageSize = 10;
 
   final tOrgaUser = OrgaUser(
       userId: newUserId,
@@ -189,6 +196,27 @@ Future<void> main() async {
       verify: (bloc) {
         verify(mockUpdateOrgaUser.execute(
             tOrgaUser.orgaId, tOrgaUser.userId, tOrgaUser));
+      },
+    );
+  });
+
+  group('lista orgausers', () {
+    blocTest<OrgaUserBloc, OrgaUserState>(
+      'debe mostrar lista de user que no pertenezcan al orga',
+      build: () {
+        when(mockOrgaUsersNotInOrga.execute(test_orgaId, const SortModel(null), test_pageIndex, test_pageSize))
+            .thenAnswer((realInvocation) async => const Right(test_listUser));
+        return orgaUserBloc;
+      },
+      act: (bloc) => bloc.add(const OnOrgaUserListUserNotInOrgaForAdd(test_orgaId, SortModel(null), test_pageIndex, test_pageSize)),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [
+        OrgaUserLoading(),
+        const OrgaUserListUserNotInOrgaLoaded(test_orgaId, test_listUser)
+      ],
+      verify: (bloc) {
+        verify(mockOrgaUsersNotInOrga.execute(
+            test_orgaId, const SortModel(null), test_pageIndex, test_pageSize));
       },
     );
   });
