@@ -294,6 +294,57 @@ Future<void> main() async {
         verify(mockExistsOrga.execute('','test'));
       },
     );
+
+    blocTest<OrgaBloc, OrgaState>(
+      'no debe validar nuevo orga',
+      build: () {
+        when(mockExistsOrga.execute('', test_code))
+          .thenAnswer((_) async => const Right(null));
+        return orgaBloc;
+      },
+      act: (bloc) => bloc
+          .add(OnOrgaValidate('', test_code, OrgaAdding(false, false))),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [
+      ],
+      verify: (bloc) {
+        verify(mockExistsOrga.execute('','test'));
+      },
+    );
+
+    blocTest<OrgaBloc, OrgaState>(
+      'debe validar orga editado',
+      build: () {
+        when(mockExistsOrga.execute('', test_code))
+          .thenAnswer((_) async => Right(tOrga));
+        return orgaBloc;
+      },
+      act: (bloc) => bloc
+          .add(OnOrgaValidateEdit(test_code, OrgaEditing(tOrga, false))),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [
+      ],
+      verify: (bloc) {
+        verify(mockExistsOrga.execute('','test'));
+      },
+    );
+
+    blocTest<OrgaBloc, OrgaState>(
+      'no debe validar orga editado',
+      build: () {
+        when(mockExistsOrga.execute('', test_code))
+          .thenAnswer((_) async => const Right(null));
+        return orgaBloc;
+      },
+      act: (bloc) => bloc
+          .add(OnOrgaValidateEdit(test_code, OrgaEditing(tOrga, false))),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [
+      ],
+      verify: (bloc) {
+        verify(mockExistsOrga.execute('','test'));
+      },
+    );
   });
 
 }
