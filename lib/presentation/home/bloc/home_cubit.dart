@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeLiveCubit extends Cubit<HomeLiveState> {
@@ -12,9 +13,12 @@ class HomeLiveCubit extends Cubit<HomeLiveState> {
   }
 }
 
-class HomeLiveState {
+class HomeLiveState extends Equatable {
   Map<String, bool> checks = <String, bool>{};
   Map<String, int> votes = <String, int>{};
+
+  @override
+  List<Object?> get props => [checks, votes];
 
   HomeLiveState() {
     checks.clear();
