@@ -57,6 +57,7 @@ class OnOrgaValidate extends OrgaEvent {
 }
 
 class OnOrgaPrepareForAdd extends OrgaEvent {
+  const OnOrgaPrepareForAdd();
   @override
   List<Object> get props => [];
 }
