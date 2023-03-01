@@ -13,9 +13,6 @@ abstract class OrgaUserEvent extends Equatable {
 ///Evento inicial
 class OnOrgaUserStarter extends OrgaUserEvent {
   const OnOrgaUserStarter();
-
-  @override
-  List<Object> get props => [];
 }
 
 ///Evento para obtener la lista de relaciones de orga-user
@@ -36,7 +33,8 @@ class OnOrgaUserAdd extends OrgaUserEvent {
   final bool enabled;
   final String user;
 
-  const OnOrgaUserAdd(this.orgaId, this.userId, this.roles, this.enabled, this.user);
+  const OnOrgaUserAdd(
+      this.orgaId, this.userId, this.roles, this.enabled, this.user);
 
   @override
   List<Object> get props => [orgaId, userId, roles, enabled];

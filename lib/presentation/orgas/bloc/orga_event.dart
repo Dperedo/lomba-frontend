@@ -6,9 +6,8 @@ import 'orga_state.dart';
 ///Interfaz del evento de organizaciones
 abstract class OrgaEvent extends Equatable {
   const OrgaEvent();
-
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [];
 }
 
 ///Evento que se dispara para conseguir una organización

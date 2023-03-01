@@ -58,8 +58,12 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
       final result = await _addOrgaUser.execute(
           event.orgaId, event.userId, event.roles, event.enabled);
 
-      result.fold((l) => emit(OrgaUserError(l.message)),
-          (r) => {emit(OrgaUserStart(" El usuario ${event.user} fue agregado a la organización"))});
+      result.fold(
+          (l) => emit(OrgaUserError(l.message)),
+          (r) => {
+                emit(OrgaUserStart(
+                    " El usuario ${event.user} fue agregado a la organización"))
+              });
     });
     on<OnOrgaUserEdit>((event, emit) async {
       emit(OrgaUserLoading());
@@ -112,7 +116,8 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
           (l) => emit(OrgaUserError(l.message)), (r) => {isDeleted = r});
 
       if (isDeleted) {
-        emit(OrgaUserStart(" El Usuario ${event.user} fue desasociado de la organización"));
+        emit(OrgaUserStart(
+            " El Usuario ${event.user} fue desasociado de la organización"));
       }
     });
     on<OnOrgaUserListUserNotInOrgaForAdd>((event, emit) async {
@@ -127,10 +132,7 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
 
       emit(OrgaUserListUserNotInOrgaLoaded(event.orgaId, listUsers));
     });
-    on<OnOrgaUserStarter>(((event, emit) async => emit(const OrgaUserStart(""))));
-  }
-
-  EventTransformer<T> debounce<T>(Duration duration) {
-    return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
+    on<OnOrgaUserStarter>(
+        ((event, emit) async => emit(const OrgaUserStart(""))));
   }
 }
