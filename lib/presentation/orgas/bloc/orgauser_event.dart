@@ -5,9 +5,6 @@ import '../../../data/models/sort_model.dart';
 ///Interfaz del evento de relación orga-user
 abstract class OrgaUserEvent extends Equatable {
   const OrgaUserEvent();
-
-  @override
-  List<Object?> get props => [];
 }
 
 ///Evento inicial

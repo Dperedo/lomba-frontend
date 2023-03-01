@@ -130,7 +130,4 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
     on<OnOrgaUserStarter>(((event, emit) async => emit(const OrgaUserStart(""))));
   }
 
-  EventTransformer<T> debounce<T>(Duration duration) {
-    return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
-  }
 }
