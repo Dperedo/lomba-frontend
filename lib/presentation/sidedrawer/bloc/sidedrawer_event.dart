@@ -29,4 +29,6 @@ class OnSideDrawerReady extends SideDrawerEvent {
   List<Object?> get props => [];
 }
 
-class OnSideDrawerLogOff extends SideDrawerEvent {}
+class OnSideDrawerLogOff extends SideDrawerEvent {
+  const OnSideDrawerLogOff();
+}

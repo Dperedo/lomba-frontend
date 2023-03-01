@@ -3,9 +3,6 @@ import 'package:equatable/equatable.dart';
 ///Interfaz de todos los eventos del Role
 abstract class RoleEvent extends Equatable {
   const RoleEvent();
-
-  @override
-  List<Object?> get props => [];
 }
 
 ///Evento para llamar y traer el role asignado al [name]

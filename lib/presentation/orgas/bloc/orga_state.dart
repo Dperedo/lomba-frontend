@@ -50,7 +50,6 @@ class OrgaAdding extends OrgaState {
     existCode = existcode;
     return this;
   }
-
   String? validateOrgaName(String orgaName) {
     String? res = Validators.validateUsername(orgaName);
     if (res == null) {
@@ -62,7 +61,6 @@ class OrgaAdding extends OrgaState {
     }
     return null;
   }
-
   String? validateCode(String code) {
     String? res = Validators.validateCode(code);
 
@@ -76,7 +74,6 @@ class OrgaAdding extends OrgaState {
 
     return null;
   }
-
   @override
   List<Object> get props => [existOrgaName, existCode];
 }

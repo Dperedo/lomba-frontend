@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
+import 'package:lomba_frontend/core/failures.dart';
 import 'package:lomba_frontend/data/models/sort_model.dart';
 import 'package:lomba_frontend/domain/entities/orgauser.dart';
 import 'package:lomba_frontend/domain/usecases/orgas/add_orgauser.dart';
@@ -129,6 +130,27 @@ Future<void> main() async {
       expect: () => [
         OrgaUserLoading(),
         const OrgaUserStart(" El usuario user fue agregado a la organización")
+      ],
+      verify: (bloc) {
+        verify(mockAddOrgaUser.execute(tOrgaUser.orgaId, tOrgaUser.userId,
+            tOrgaUser.roles, tOrgaUser.enabled));
+      },
+    );
+
+    blocTest<OrgaUserBloc, OrgaUserState>(
+      'debe agregar un orgauser y emitir error al agregar',
+      build: () {
+        when(mockAddOrgaUser.execute(tOrgaUser.orgaId, tOrgaUser.userId,
+                tOrgaUser.roles, tOrgaUser.enabled))
+            .thenAnswer((_) async => const Left(ConnectionFailure('error')));
+        return orgaUserBloc;
+      },
+      act: (bloc) => bloc.add(OnOrgaUserAdd(tOrgaUser.orgaId, tOrgaUser.userId,
+          tOrgaUser.roles, tOrgaUser.enabled, 'user')),
+      wait: const Duration(milliseconds: 500),
+      expect: () => [
+        OrgaUserLoading(),
+        const OrgaUserError('error')
       ],
       verify: (bloc) {
         verify(mockAddOrgaUser.execute(tOrgaUser.orgaId, tOrgaUser.userId,

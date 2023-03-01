@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/constants.dart';
 
@@ -17,9 +18,13 @@ class OrgaUserDialogEditCubit extends Cubit<OrgaUserDialogEditState> {
   }
 }
 
-class OrgaUserDialogEditState {
+class OrgaUserDialogEditState extends Equatable {
   Map<String, bool> checks = <String, bool>{};
   late bool deleted;
+
+  @override
+  List<Object?> get props => [deleted];
+
   OrgaUserDialogEditState(String name, bool changeState) {
     checks.clear();
     deleted = false;

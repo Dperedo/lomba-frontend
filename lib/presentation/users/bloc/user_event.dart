@@ -45,8 +45,7 @@ class OnUserAdd extends UserEvent {
 }
 
 class OnUserPrepareForAdd extends UserEvent {
-  @override
-  List<Object> get props => [];
+  const OnUserPrepareForAdd();
 }
 
 class OnUserPrepareForEdit extends UserEvent {
