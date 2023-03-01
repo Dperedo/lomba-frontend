@@ -12,7 +12,7 @@ main() {
   });
 
   blocTest<HomeLiveCubit, HomeLiveState>(
-    'Home Cubit change check value',
+    'HomeLiveCubit change check value',
     build: () => HomeLiveCubit(),
     act: (cubit) => cubit.changeCheckValue('clave', true),
     wait: const Duration(milliseconds: 500),
@@ -20,7 +20,7 @@ main() {
   );
 
   blocTest<HomeLiveCubit, HomeLiveState>(
-    'Home Cubit make vote check value',
+    'HomeLiveCubit make vote check value',
     build: () => HomeLiveCubit(),
     act: (cubit) => cubit.makeVote('postId', 1),
     wait: const Duration(milliseconds: 500),

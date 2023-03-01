@@ -22,7 +22,6 @@ class HomeLiveState extends Equatable {
 
   HomeLiveState() {
     checks.clear();
-    checks.addEntries(<String, bool>{"onlydrafts": false}.entries);
   }
 
   HomeLiveState copyWithChangeCheck(
