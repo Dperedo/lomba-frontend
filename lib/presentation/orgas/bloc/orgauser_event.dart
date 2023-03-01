@@ -10,6 +10,8 @@ abstract class OrgaUserEvent extends Equatable {
 ///Evento inicial
 class OnOrgaUserStarter extends OrgaUserEvent {
   const OnOrgaUserStarter();
+  @override
+  List<Object> get props => [];
 }
 
 ///Evento para obtener la lista de relaciones de orga-user
