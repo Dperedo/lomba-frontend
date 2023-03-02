@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/constants.dart';
+import 'package:lomba_frontend/domain/entities/flows/textcontent.dart';
+import 'package:lomba_frontend/domain/entities/session.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_uploaded_posts.dart';
 import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
@@ -8,13 +10,19 @@ import 'package:lomba_frontend/presentation/uploaded/bloc/upoaded_state.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../data/models/session_model.dart';
+import '../../../domain/usecases/flow/update_edit.dart';
 
 class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
   final GetUploadedPosts _getUploadedPosts;
   final GetSession _getSession;
   final VotePublication _votePublication;
+  final UpdateEdit _updatePost;
 
-  UploadedBloc(this._getUploadedPosts, this._getSession, this._votePublication)
+  UploadedBloc(
+    this._getUploadedPosts,
+    this._getSession,
+    this._votePublication,
+    this._updatePost)
       : super(UploadedStart()) {
     on<OnUploadedLoad>((event, emit) async {
       emit(UploadedLoading());
@@ -68,6 +76,26 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
       final result = await _votePublication.execute(auth.getOrgaId()!,
           auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);
       result.fold((l) => emit(UploadedError(l.message)), (r) {});
+    });
+
+    on<OnUploadedEdit>((event, emit) async {
+      emit(UploadedLoading());
+      SessionModel? session;
+      bool login = false;
+      const String flowId = Flows.votationFlowId;
+
+      final resultSession = await _getSession.execute();
+      resultSession.fold((l) => (emit(UploadedError(l.message))), (r) => {
+        session = SessionModel(token: r.token, username: r.username, name: r.name)
+      });
+      final userId = session?.getUserId();
+      final result = await _updatePost.execute(event.postId, userId!, event.content as TextContent, event.title, event.stageId);
+      //
+      emit(UploadedEdit(event.postId, event.title, event.content, event.stageId));
+    });
+
+    on<OnUploadedPrepareForEdit>((event, emit) async {
+      emit(UploadedPrepareForEdit(event.postId ,event.title, event.content, event.stageId));
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {

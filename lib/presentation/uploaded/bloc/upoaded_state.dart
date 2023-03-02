@@ -13,6 +13,30 @@ class UploadedStart extends UploadedState {}
 
 class UploadedLoading extends UploadedState {}
 
+class UploadedEdit extends UploadedState {
+  final String postId;
+  final String title;
+  final String content;
+  final String stageId;
+
+  const UploadedEdit(this.postId, this.title, this.content, this.stageId);
+
+  @override
+  List<Object> get props => [title, content, stageId];
+}
+
+class UploadedPrepareForEdit extends UploadedState {
+  final String postId;
+  final String title;
+  final String content;
+  final String stageId;
+
+  const UploadedPrepareForEdit(this.postId, this.title, this.content, this.stageId);
+
+  @override
+  List<Object> get props => [postId, title, content, stageId];
+}
+
 class UploadedLoaded extends UploadedState {
   final String orgaId;
   final String userId;
