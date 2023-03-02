@@ -5,12 +5,12 @@ import 'package:lomba_frontend/domain/entities/flows/textcontent.dart';
 import '../../../core/failures.dart';
 import '../../repositories/flow_repository.dart';
 
-class AddTextPost {
+class UpdateEdit {
   final FlowRepository repository;
-  AddTextPost(this.repository);
+  UpdateEdit(this.repository);
   Future<Either<Failure, Post>> execute(
-    String orgaId, String userId, TextContent text, String title, String flowId, bool isDraft)
+    String postId, String userId, TextContent text, String title, String stageId)
     async{
-    return await repository.addTextPost(orgaId, userId, text, title, flowId, isDraft );
+    return await repository.updatePost(postId, userId, text, title, stageId);
     }
 }

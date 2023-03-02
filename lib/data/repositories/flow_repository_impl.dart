@@ -33,6 +33,21 @@ class FlowRepositoryImpl implements FlowRepository {
   }
 
   @override
+  Future<Either<Failure, Post>> updatePost(String postId, String userId,
+      TextContent text, String title, String stageId) async {
+    try {
+      final result = await remoteDataSource.updatePost(
+          postId, userId, text, title, stageId);
+
+      return (Right(result.toEntity()));
+    } on ServerException {
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
+    }
+  }
+
+  @override
   Future<Either<Failure, ModelContainer<Post>>> getApprovedPosts(
       String orgaId,
       String userId,

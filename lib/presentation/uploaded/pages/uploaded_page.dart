@@ -4,6 +4,7 @@ import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_cubit.dart';
 import 'package:numberpicker/numberpicker.dart';
+import '../../../core/validators.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/flows/textcontent.dart';
 import '../../sidedrawer/pages/sidedrawer_page.dart';
@@ -34,8 +35,8 @@ class UploadedPage extends StatelessWidget {
           child: Column(
             children: [
               BodyFormatter(
-                child: _bodyUploaded(context),
                 screenWidth: MediaQuery.of(context).size.width,
+                child: _bodyUploaded(context),
               )
             ],
           ),
@@ -55,19 +56,14 @@ class UploadedPage extends StatelessWidget {
         child: SizedBox(
           width: 800,
           child: Form(
-              key: _key,
-              child: BlocBuilder<UploadedBloc, UploadedState>(
-                  builder: (context, state) {
+            key: _key,
+            child: BlocBuilder<UploadedBloc, UploadedState>(
+              builder: (context, state) {
                 if (state is UploadedStart) {
                   context.read<UploadedBloc>().add(OnUploadedLoad(
-                      '',
-                      const <String, int>{'uploaded': 1},
-                      1,
-                      _fixPageSize,
-                      context
-                          .read<UploadedLiveCubit>()
-                          .state
-                          .checks["onlydrafts"]!));
+                      '',const <String, int>{'uploaded': 1},1,
+                      _fixPageSize,context.read<UploadedLiveCubit>()
+                          .state.checks["onlydrafts"]!));
                 }
                 if (state is UploadedLoading) {
                   return const Center(
@@ -77,10 +73,79 @@ class UploadedPage extends StatelessWidget {
                 if (state is UploadedLoaded) {
                   return _uploadedLoaded(context, state, listFields);
                 }
+                if (state is UploadedPrepareForEdit) {
+                  return _uploadedEdit(context, state, _key);
+                }
                 return const SizedBox();
-              })),
+              }
+            )
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _uploadedEdit(BuildContext context, UploadedPrepareForEdit state, GlobalKey<FormState> key) {
+    final TextEditingController titleController = TextEditingController();
+    final TextEditingController contentController = TextEditingController();
+    
+    return Column(
+      children: [
+        TextFormField(
+          key: const ValueKey('txtTitle'),
+          maxLength: 150,
+          controller: titleController,
+          validator: (value) =>
+              Validators.validateName(value ?? ""),
+          decoration: const InputDecoration(
+              labelText: 'Titulo', icon: Icon(Icons.title)),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        TextFormField(
+          key: const ValueKey('txtContent'),
+          maxLength: 500,
+          maxLines: 8,
+          controller: contentController,
+          validator: (value) =>
+              Validators.validateName(value ?? ""),
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Contenido del Post',
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        ////
+        const SizedBox(
+          height: 30,
+        ),
+        SizedBox(
+          width: 150,
+          height: 50,
+          child: ElevatedButton.icon(
+            icon: const Icon(Icons.publish),
+            key: const ValueKey("btnSavedUp"),
+            label: const Text("Subir"),
+            onPressed: () {
+              final UploadedLiveState checkos =
+                  context.read<UploadedLiveCubit>().state;
+              if (key.currentState?.validate() == true) {
+                context.read<UploadedBloc>().add(
+                    OnUploadedEdit(
+                        state.postId,
+                        titleController.text,
+                        contentController.text,
+                        state.stageId,
+                        //context.read<UploadedLiveCubit>().state.checks["keepasdraft"]!
+                    ));
+              }
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -298,7 +363,14 @@ class UploadedPage extends StatelessWidget {
               ),
             ),
           ),
-          onPressed: () {},
+          onPressed: () {
+            context.read<UploadedBloc>()
+                .add(OnUploadedPrepareForEdit(
+                  state.listItems[index].id,
+                  state.listItems[index].title,
+                  state.listItems[index].postitems[0].content.toString(),
+                  state.listItems[index].stageId));
+          },
           child: const Icon(Icons.edit)),
     ];
   }

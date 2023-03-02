@@ -9,6 +9,7 @@ import 'package:lomba_frontend/domain/usecases/flow/get_popular_posts.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_rejected_posts.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_uploaded_posts.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_voted_posts.dart';
+import 'package:lomba_frontend/domain/usecases/flow/update_edit.dart';
 import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/login/change_orga.dart';
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate.dart';
@@ -124,7 +125,7 @@ Future<void> init() async {
   locator.registerFactory(() => ProfileBloc(locator(), locator()));
   locator.registerFactory(() => DemoListBloc());
 
-  locator.registerFactory(() => UploadedBloc(locator(), locator(), locator()));
+  locator.registerFactory(() => UploadedBloc(locator(), locator(), locator(), locator()));
 
   locator.registerFactory(() => ApprovedBloc(locator(), locator(), locator()));
 
@@ -190,6 +191,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetUploadedPosts(locator()));
   locator.registerLazySingleton(() => GetVotedPosts(locator()));
   locator.registerLazySingleton(() => VotePublication(locator()));
+  locator.registerLazySingleton(() => UpdateEdit(locator()));
 
   // repository
   locator.registerLazySingleton<LoginRepository>(
