@@ -4,6 +4,7 @@ import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_cubit.dart';
 import 'package:numberpicker/numberpicker.dart';
+import '../../../core/constants.dart';
 import '../../../core/validators.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/flows/textcontent.dart';
@@ -117,10 +118,6 @@ class UploadedPage extends StatelessWidget {
             hintText: 'Contenido del Post',
           ),
         ),
-        const SizedBox(
-          height: 20,
-        ),
-        ////
         const SizedBox(
           height: 30,
         ),
@@ -351,28 +348,53 @@ class UploadedPage extends StatelessWidget {
                       .add(OnUploadedVote(state.listItems[index].id, 1));
                 }
               },
-              child: const Text('Publicar')),
-      ElevatedButton(
-          style: ButtonStyle(
-            shape: MaterialStateProperty.resolveWith(
-              (states) => RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                side: BorderSide(
-                  color: Theme.of(context).secondaryHeaderColor,
-                  width: 2,
+              child: const Text('Publicar')), 
+      Row(
+        children: [
+          ElevatedButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.resolveWith(
+                  (states) => RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    side: BorderSide(
+                      color: Theme.of(context).secondaryHeaderColor,
+                      width: 2,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          onPressed: () {
-            context.read<UploadedBloc>()
-                .add(OnUploadedPrepareForEdit(
-                  state.listItems[index].id,
-                  state.listItems[index].title,
-                  (state.listItems[index].postitems[0].content as TextContent).text,
-                  state.listItems[index].stageId));
-          },
-          child: const Icon(Icons.edit)),
+              onPressed: state.listItems[index].stageId == StagesVotationFlow.stageId01Load ? () {
+                context.read<UploadedBloc>()
+                    .add(OnUploadedPrepareForEdit(
+                      state.listItems[index].id,
+                      state.listItems[index].title,
+                      (state.listItems[index].postitems[0].content as TextContent).text,
+                      state.listItems[index].stageId));
+              } : null,
+              child: const Icon(Icons.delete)),
+          ElevatedButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.resolveWith(
+                  (states) => RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    side: BorderSide(
+                      color: Theme.of(context).secondaryHeaderColor,
+                      width: 2,
+                    ),
+                  ),
+                ),
+              ),
+              onPressed: state.listItems[index].stageId == StagesVotationFlow.stageId01Load ? () {
+                context.read<UploadedBloc>()
+                    .add(OnUploadedPrepareForEdit(
+                      state.listItems[index].id,
+                      state.listItems[index].title,
+                      (state.listItems[index].postitems[0].content as TextContent).text,
+                      state.listItems[index].stageId));
+              } : null,
+              child: const Icon(Icons.edit)),
+        ],
+      ),
     ];
   }
 }

@@ -48,6 +48,20 @@ class FlowRepositoryImpl implements FlowRepository {
   }
 
   @override
+  Future<Either<Failure, Post>> deletePost(String postId, String userId, String stageId) async {
+    try {
+      final result = await remoteDataSource.deletePost(
+          postId, userId, stageId);
+
+      return (Right(result.toEntity()));
+    } on ServerException {
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
+    }
+  }
+
+  @override
   Future<Either<Failure, ModelContainer<Post>>> getApprovedPosts(
       String orgaId,
       String userId,

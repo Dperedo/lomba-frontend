@@ -6,8 +6,6 @@ import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/flows/textcontent.dart';
-import '../../sidedrawer/pages/sidedrawer_page.dart';
-import '../../tobeapproved/bloc/tobeapproved_cubit.dart';
 import '../bloc/popular_bloc.dart';
 import '../bloc/popular_cubit.dart';
 import '../bloc/popular_event.dart';

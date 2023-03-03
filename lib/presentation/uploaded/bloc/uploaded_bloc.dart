@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/domain/entities/flows/textcontent.dart';
-import 'package:lomba_frontend/domain/entities/session.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_uploaded_posts.dart';
 import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
@@ -10,6 +9,7 @@ import 'package:lomba_frontend/presentation/uploaded/bloc/upoaded_state.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../data/models/session_model.dart';
+import '../../../domain/usecases/flow/delete_post.dart';
 import '../../../domain/usecases/flow/update_edit.dart';
 
 class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
@@ -17,12 +17,14 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
   final GetSession _getSession;
   final VotePublication _votePublication;
   final UpdateEdit _updatePost;
+  final DeletePost _deletePost;
 
   UploadedBloc(
     this._getUploadedPosts,
     this._getSession,
     this._votePublication,
-    this._updatePost)
+    this._updatePost,
+    this._deletePost)
       : super(UploadedStart()) {
     on<OnUploadedLoad>((event, emit) async {
       emit(UploadedLoading());
@@ -89,6 +91,20 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
       final userId = session?.getUserId();
       final resultUpdate = await _updatePost.execute(event.postId, userId!, TextContent(text: event.content), event.title, event.stageId);
       resultUpdate.fold((l) => (emit(UploadedError(l.message))), (r) => 
+      emit(UploadedStart()));
+    });
+
+    on<OnUploadedDelete>((event, emit) async {
+      emit(UploadedLoading());
+      SessionModel? session;
+
+      final resultSession = await _getSession.execute();
+      resultSession.fold((l) => (emit(UploadedError(l.message))), (r) => {
+        session = SessionModel(token: r.token, username: r.username, name: r.name)
+      });
+      final userId = session?.getUserId();
+      final resultDelete = await _deletePost.execute(event.postId, userId!, event.stageId);
+      resultDelete.fold((l) => (emit(UploadedError(l.message))), (r) => 
       emit(UploadedStart()));
     });
 
