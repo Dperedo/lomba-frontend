@@ -357,7 +357,6 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
     }
   }
 
-  @override
   Future<ModelContainer<Post>> getVotedPosts(
       String orgaId,
       String userId,
@@ -555,7 +554,7 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
 
       //iteración por cada item
       for (var item in resObj['data']['items']) {
-        List<Stage> listStage = (item['stages'] as List)
+        /*  List<Stage> listStage = (item['stages'] as List)
             .map((e) => Stage(
                 id: e['id'].toString(),
                 name: e['name'].toString(),
@@ -574,8 +573,9 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
                     ? DateTime.parse(e['expires'].toString())
                     : null))
             .toList();
-
+*/
         //completar con lógica
+        /*
         List<PostItem> listPostItems = (item['postitems'] as List)
             .map((e) => PostItem(
                 content: e['content'],
@@ -594,7 +594,8 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
                     ? DateTime.parse(e['updated'].toString())
                     : null))
             .toList();
-
+*/
+/*
         List<Total> listTotals = (item['totals'] as List)
             .map((e) => Total(
                   flowId: e['flowId'].toString(),
@@ -604,7 +605,8 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
                   totalpositive: int.parse(e['totalpositive'].toString()),
                 ))
             .toList();
-
+*/
+/*
         List<Track> listTracks = (item['tracks'] as List)
             .map((e) => Track(
                 userId: e['userId'].toString(),
@@ -622,9 +624,9 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
                     ? DateTime.parse(e['updated'].toString())
                     : null))
             .toList();
-
+*/
         //se agrega uno a uno cada PostModel nuevo.
-        List<Vote> listVotes = item['votes'] != null
+        listVote = item['votes'] != null
             ? (item['votes'] as List)
                 .map((e) => Vote(
                       userId: e['userId'].toString(),

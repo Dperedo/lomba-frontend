@@ -25,7 +25,7 @@ class AddContentPage extends StatelessWidget {
       builder: (context, state) {
         return BlocListener<AddContentBloc, AddContentState>(
           listener: (context, state) {
-            if(state is AddContentError && state.message != ""){
+            if (state is AddContentError && state.message != "") {
               snackBarNotify(context, state.message, Icons.exit_to_app);
             }
           },
@@ -123,8 +123,8 @@ class AddContentPage extends StatelessWidget {
                           key: const ValueKey("btnSavedUp"),
                           label: const Text("Subir"),
                           onPressed: () {
-                            final AddContentLiveState checkos =
-                                context.read<AddContentLiveCubit>().state;
+                            //final AddContentLiveState checkos =
+                            //    context.read<AddContentLiveCubit>().state;
 
                             if (key.currentState?.validate() == true) {
                               context.read<AddContentBloc>().add(

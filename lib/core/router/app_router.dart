@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../presentation/addcontent/pages/addcontent_page.dart';
-import '../../presentation/home/pages/home_page.dart';
 import '../../presentation/nav/bloc/nav_state.dart';
 import '../../presentation/router/pages/router_page.dart';
 
@@ -19,7 +16,8 @@ class AppRouter {
         );
       case '/addcontent':
         return MaterialPageRoute(
-          builder: (context) => const RouterPage(naveItem: NavItem.pageAddContent),
+          builder: (context) =>
+              const RouterPage(naveItem: NavItem.pageAddContent),
         );
       case '/profile':
         return MaterialPageRoute(
@@ -39,7 +37,8 @@ class AppRouter {
         );
       case '/uploaded':
         return MaterialPageRoute(
-          builder: (context) => const RouterPage(naveItem: NavItem.pageUploaded),
+          builder: (context) =>
+              const RouterPage(naveItem: NavItem.pageUploaded),
         );
       case '/viewed':
         return MaterialPageRoute(
@@ -51,19 +50,23 @@ class AppRouter {
         );
       case '/tobeapproved':
         return MaterialPageRoute(
-          builder: (context) => const RouterPage(naveItem: NavItem.pageToBeApproved),
+          builder: (context) =>
+              const RouterPage(naveItem: NavItem.pageToBeApproved),
         );
       case '/approved':
         return MaterialPageRoute(
-          builder: (context) => const RouterPage(naveItem: NavItem.pageApproved),
+          builder: (context) =>
+              const RouterPage(naveItem: NavItem.pageApproved),
         );
       case '/rejected':
         return MaterialPageRoute(
-          builder: (context) => const RouterPage(naveItem: NavItem.pageRejected),
+          builder: (context) =>
+              const RouterPage(naveItem: NavItem.pageRejected),
         );
       case '/demolist':
         return MaterialPageRoute(
-          builder: (context) => const RouterPage(naveItem: NavItem.pageDemoList),
+          builder: (context) =>
+              const RouterPage(naveItem: NavItem.pageDemoList),
         );
       default:
         return null;

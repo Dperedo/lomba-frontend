@@ -194,7 +194,7 @@ class OrgaRemoteDataSourceImpl implements OrgaRemoteDataSource {
     if (resp.statusCode == 200) {
       final Map<dynamic, dynamic> resObj = json.decode(resp.body);
 
-      final item = resObj['data']['items'][0];
+      //final item = resObj['data']['items'][0];
 
       List<OrgaUserModel> orgaUsers = [];
 

@@ -23,20 +23,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final VotePublication _votePublication;
   final GetSessionRole _getSessionRole;
 
-  HomeBloc(
-    this._firebaseAuthInstance, 
-    this._hasLogin,
-    this._getSession,
-    this._getLatestPosts,
-    this._votePublication,
-    this._getSessionRole
-    ) : super(const HomeStart("")) {
+  HomeBloc(this._firebaseAuthInstance, this._hasLogin, this._getSession,
+      this._getLatestPosts, this._votePublication, this._getSessionRole)
+      : super(const HomeStart("")) {
     ///Evento que hace la consulta de sesión del usuario en el dispositivo.
     on<OnHomeLoading>(
       (event, emit) async {
         emit(HomeLoading());
         var auth = const SessionModel(token: "", username: "", name: "");
-        const orgaId ="00000200-0200-0200-0200-000000000200";
+        const orgaId = "00000200-0200-0200-0200-000000000200";
         const userId = '00000005-0005-0005-0005-000000000005';
         String flowId = Flows.votationFlowId;
         String stageId = StagesVotationFlow.stageId03Voting;
@@ -50,21 +45,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           if (!valid) {
             try {
               await signInAnonymously();
+              // ignore: empty_catches
             } catch (e) {}
-            
           }
         });
-        if (!validLogin){
-        final resultPosts = await _getLatestPosts.execute(
-                orgaId,
-                userId,
-                flowId,
-                stageId,       
-                event.searchText,
-                event.pageIndex,
-                event.pageSize
-              );
-        resultPosts.fold(
+        if (!validLogin) {
+          final resultPosts = await _getLatestPosts.execute(
+              orgaId,
+              userId,
+              flowId,
+              stageId,
+              event.searchText,
+              event.pageIndex,
+              event.pageSize);
+          resultPosts.fold(
               (l) => {emit(HomeError(l.message))},
               (r) => emit(HomeLoaded(
                   validLogin,
@@ -79,24 +73,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                   r.items,
                   r.currentItemCount,
                   r.items.length,
-                  r.items.length
-                  )));
+                  r.items.length)));
         } else {
           final listroles = await _getSessionRole.execute();
-          listroles.fold((l) => emit(HomeError(l.message)), (r) => {role = r[0]});
-          if (role == 'user'){
+          listroles.fold(
+              (l) => emit(HomeError(l.message)), (r) => {role = r[0]});
+          if (role == 'user') {
             final session = await _getSession.execute();
-              session.fold((l) => emit(HomeError(l.message)), (r) => {auth = r});
+            session.fold((l) => emit(HomeError(l.message)), (r) => {auth = r});
 
-              final resultPosts = await _getLatestPosts.execute(
+            final resultPosts = await _getLatestPosts.execute(
                 auth.getOrgaId()!,
                 auth.getUserId()!,
                 flowId,
-                stageId,       
+                stageId,
                 event.searchText,
                 event.pageIndex,
-                event.pageSize
-              );
+                event.pageSize);
             resultPosts.fold(
                 (l) => {emit(HomeError(l.message))},
                 (r) => emit(HomeLoaded(
@@ -112,8 +105,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                     r.items,
                     r.currentItemCount,
                     r.items.length,
-                    r.items.length
-                    )));
+                    r.items.length)));
           } else {
             emit(HomeOnlyUser());
           }
@@ -136,7 +128,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       final result = await _votePublication.execute(auth.getOrgaId()!,
           auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);
-      result.fold((l) => emit(HomeError(l.message)), (r) {emit(const HomeStart(""));});
+      result.fold((l) => emit(HomeError(l.message)), (r) {
+        emit(const HomeStart(""));
+      });
     });
   }
 

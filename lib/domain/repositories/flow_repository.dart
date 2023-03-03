@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dartz/dartz.dart';
 import 'package:lomba_frontend/core/model_container.dart';
 import 'package:lomba_frontend/domain/entities/flows/textcontent.dart';

@@ -3,13 +3,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/data/datasources/local_data_source.dart';
 import 'package:lomba_frontend/data/models/session_model.dart';
-import 'package:lomba_frontend/domain/usecases/login/change_orga.dart';
-import 'package:lomba_frontend/data/models/orga_model.dart';
 import 'package:lomba_frontend/data/models/user_model.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/exceptions.dart';
-import '../../domain/entities/user.dart';
 import '../models/login_access_model.dart';
 
 ///Interfaz para el DataSource remoto del Login
@@ -84,7 +81,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     }).timeout(const Duration(seconds: 10));
 
     if (resp.statusCode == 200) {
-      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+      //final Map<dynamic, dynamic> resObj = json.decode(resp.body);
 
       return true;
     } else {

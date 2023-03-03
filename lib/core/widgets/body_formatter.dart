@@ -4,7 +4,8 @@ import '../constants.dart';
 
 // Cambia el body dependiendo del tamaño de la pantalla
 class BodyFormatter extends StatelessWidget {
-  BodyFormatter({Key? key, required this.child, required this.screenWidth});
+  const BodyFormatter(
+      {super.key, required this.child, required this.screenWidth});
   final double screenWidth;
   final Widget child;
 
