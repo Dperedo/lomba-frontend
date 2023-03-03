@@ -11,6 +11,7 @@ abstract class FlowRepository {
       TextContent text, String title, String flowId, bool isDraft);
   Future<Either<Failure, Post>> updatePost(String postId, String userId,
       TextContent text, String title, String stageId);
+  Future<Either<Failure, Post>> deletePost(String postId, String userId, String stageId);
   Future<Either<Failure, ModelContainer<Post>>> getUploadedPosts(
       String orgaId,
       String userId,

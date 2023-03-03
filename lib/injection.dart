@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/domain/usecases/flow/add_text_post.dart';
+import 'package:lomba_frontend/domain/usecases/flow/delete_post.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_approved_posts.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_for_approve_posts.dart';
 import 'package:lomba_frontend/domain/usecases/flow/get_latest_posts.dart';
@@ -125,7 +126,7 @@ Future<void> init() async {
   locator.registerFactory(() => ProfileBloc(locator(), locator()));
   locator.registerFactory(() => DemoListBloc());
 
-  locator.registerFactory(() => UploadedBloc(locator(), locator(), locator(), locator()));
+  locator.registerFactory(() => UploadedBloc(locator(), locator(), locator(), locator(), locator()));
 
   locator.registerFactory(() => ApprovedBloc(locator(), locator(), locator()));
 
@@ -192,6 +193,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetVotedPosts(locator()));
   locator.registerLazySingleton(() => VotePublication(locator()));
   locator.registerLazySingleton(() => UpdateEdit(locator()));
+  locator.registerLazySingleton(() => DeletePost(locator()));
 
   // repository
   locator.registerLazySingleton<LoginRepository>(

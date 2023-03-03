@@ -53,5 +53,14 @@ class OnUploadedPrepareForEdit extends UploadedEvent {
   const OnUploadedPrepareForEdit(this.postId, this.title, this.content, this.stageId);
 
   @override
-  List<Object> get props => [title, content];
+  List<Object> get props => [postId, title, content, stageId];
+}
+
+class OnUploadedDelete extends UploadedEvent {
+  final String postId;
+  final String stageId;
+  const OnUploadedDelete(this.postId, this.stageId,);
+
+  @override
+  List<Object> get props => [postId, stageId];
 }
