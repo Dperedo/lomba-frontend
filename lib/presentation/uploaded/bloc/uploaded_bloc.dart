@@ -81,17 +81,15 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
     on<OnUploadedEdit>((event, emit) async {
       emit(UploadedLoading());
       SessionModel? session;
-      bool login = false;
-      const String flowId = Flows.votationFlowId;
 
       final resultSession = await _getSession.execute();
       resultSession.fold((l) => (emit(UploadedError(l.message))), (r) => {
         session = SessionModel(token: r.token, username: r.username, name: r.name)
       });
       final userId = session?.getUserId();
-      final result = await _updatePost.execute(event.postId, userId!, event.content as TextContent, event.title, event.stageId);
-      //
-      emit(UploadedEdit(event.postId, event.title, event.content, event.stageId));
+      final resultUpdate = await _updatePost.execute(event.postId, userId!, TextContent(text: event.content), event.title, event.stageId);
+      resultUpdate.fold((l) => (emit(UploadedError(l.message))), (r) => 
+      emit(UploadedStart()));
     });
 
     on<OnUploadedPrepareForEdit>((event, emit) async {

@@ -88,6 +88,8 @@ class UploadedPage extends StatelessWidget {
   Widget _uploadedEdit(BuildContext context, UploadedPrepareForEdit state, GlobalKey<FormState> key) {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController contentController = TextEditingController();
+    titleController.text = state.title;
+    contentController.text = state.content;
     
     return Column(
       children: [
@@ -139,7 +141,6 @@ class UploadedPage extends StatelessWidget {
                         titleController.text,
                         contentController.text,
                         state.stageId,
-                        //context.read<UploadedLiveCubit>().state.checks["keepasdraft"]!
                     ));
               }
             },
@@ -368,7 +369,7 @@ class UploadedPage extends StatelessWidget {
                 .add(OnUploadedPrepareForEdit(
                   state.listItems[index].id,
                   state.listItems[index].title,
-                  state.listItems[index].postitems[0].content.toString(),
+                  (state.listItems[index].postitems[0].content as TextContent).text,
                   state.listItems[index].stageId));
           },
           child: const Icon(Icons.edit)),

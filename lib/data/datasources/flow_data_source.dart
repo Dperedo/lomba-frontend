@@ -673,18 +673,18 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
   @override
   Future<PostModel> updatePost(String postId, String userId, TextContent text,
       String title, String stageId) async {
-    final Map<String, dynamic> newTextPost = {
+    final Map<String, dynamic> editPost = {
       'userId': userId,
       'postId': postId,
+      'stageId': stageId,
       'title': title,
-      'textContent': {'text': text.text},
-      'stageId': stageId
+      'textContent': {'text': text.text}
     };
     final session = await localDataSource.getSavedSession();
     final url = Uri.parse('${UrlBackend.base}/api/v1/post');
 
     http.Response resp =
-        await client.put(url, body: json.encode(newTextPost), headers: {
+        await client.put(url, body: json.encode(editPost), headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",
