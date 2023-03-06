@@ -4,11 +4,11 @@ import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_cubit.dart';
 import 'package:numberpicker/numberpicker.dart';
+
 import '../../../core/constants.dart';
 import '../../../core/validators.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/flows/textcontent.dart';
-import '../../sidedrawer/pages/sidedrawer_page.dart';
 import '../bloc/uploaded_bloc.dart';
 import '../bloc/uploaded_event.dart';
 import '../bloc/upoaded_state.dart';
@@ -136,8 +136,7 @@ class UploadedPage extends StatelessWidget {
                     OnUploadedEdit(
                         state.postId,
                         titleController.text,
-                        contentController.text,
-                        state.stageId,
+                        contentController.text
                     ));
               }
             },
@@ -364,12 +363,40 @@ class UploadedPage extends StatelessWidget {
                 ),
               ),
               onPressed: state.listItems[index].stageId == StagesVotationFlow.stageId01Load ? () {
-                context.read<UploadedBloc>()
-                    .add(OnUploadedPrepareForEdit(
-                      state.listItems[index].id,
-                      state.listItems[index].title,
-                      (state.listItems[index].postitems[0].content as TextContent).text,
-                      state.listItems[index].stageId));
+                //context.read<UploadedBloc>().add(OnUploadedPrepareForEdit(state.listItems[index].id,state.listItems[index].title,(state.listItems[index].postitems[0].content as TextContent).text));
+                showDialog(
+                  context: context,
+                  builder: (context) => GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: AlertDialog(
+                          title:
+                              const Text('¿Desea eliminar el post?'),
+                          content:
+                              const Text('La eliminación es permanente'),
+                          actions: <Widget>[
+                            TextButton(
+                              key: const ValueKey("btnConfirmDelete"),
+                              child: const Text('Eliminar'),
+                              onPressed: () {
+                                Navigator.pop(context, true);
+                              },
+                            ),
+                            TextButton(
+                              key: const ValueKey("btnCancelDelete"),
+                              child: const Text('Cancelar'),
+                              onPressed: () {
+                                Navigator.pop(context, false);
+                              },
+                            ),
+                          ],
+                        ),
+                      )).then((value) => {
+                        if (value)
+                          {
+                            context.read<UploadedBloc>().add(OnUploadedDelete(
+                                state.listItems[index].id))
+                          }
+                      });
               } : null,
               child: const Icon(Icons.delete)),
           ElevatedButton(
@@ -389,8 +416,7 @@ class UploadedPage extends StatelessWidget {
                     .add(OnUploadedPrepareForEdit(
                       state.listItems[index].id,
                       state.listItems[index].title,
-                      (state.listItems[index].postitems[0].content as TextContent).text,
-                      state.listItems[index].stageId));
+                      (state.listItems[index].postitems[0].content as TextContent).text));
               } : null,
               child: const Icon(Icons.edit)),
         ],

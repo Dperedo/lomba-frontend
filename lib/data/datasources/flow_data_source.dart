@@ -19,8 +19,8 @@ abstract class FlowRemoteDataSource {
   Future<PostModel> addTextPost(String orgaId, String userId, TextContent text,
       String title, String flowId, bool isDraft);
   Future<PostModel> updatePost(String postId, String userId, TextContent text,
-      String title, String stageId);
-  Future<PostModel> deletePost(String postId, String userId, String stageId);
+      String title);
+  Future<PostModel> deletePost(String postId, String userId);
   Future<ModelContainer<PostModel>> getPosts(
       String orgaId,
       String userId,
@@ -675,11 +675,10 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
 
   @override
   Future<PostModel> updatePost(String postId, String userId, TextContent text,
-      String title, String stageId) async {
+      String title) async {
     final Map<String, dynamic> editPost = {
       'userId': userId,
       'postId': postId,
-      'stageId': stageId,
       'title': title,
       'textContent': {'text': text.text}
     };
@@ -818,11 +817,10 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
   }
 
   @override
-  Future<PostModel> deletePost(String postId, String userId, String stageId) async {
+  Future<PostModel> deletePost(String postId, String userId) async {
     final Map<String, dynamic> deletePost = {
       'userId': userId,
       'postId': postId,
-      'stageId': stageId,
     };
     final session = await localDataSource.getSavedSession();
     final url = Uri.parse('${UrlBackend.base}/api/v1/post');
