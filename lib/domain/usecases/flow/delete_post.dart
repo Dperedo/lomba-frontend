@@ -9,8 +9,8 @@ class DeletePost {
   final FlowRepository repository;
   DeletePost(this.repository);
   Future<Either<Failure, Post>> execute(
-    String postId, String userId, String stageId)
+    String postId, String userId)
     async{
-    return await repository.deletePost(postId, userId, stageId);
+    return await repository.deletePost(postId, userId);
     }
 }

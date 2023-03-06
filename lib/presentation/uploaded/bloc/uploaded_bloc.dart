@@ -89,7 +89,7 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
         session = SessionModel(token: r.token, username: r.username, name: r.name)
       });
       final userId = session?.getUserId();
-      final resultUpdate = await _updatePost.execute(event.postId, userId!, TextContent(text: event.content), event.title, event.stageId);
+      final resultUpdate = await _updatePost.execute(event.postId, userId!, TextContent(text: event.content), event.title);
       resultUpdate.fold((l) => (emit(UploadedError(l.message))), (r) => 
       emit(UploadedStart()));
     });
@@ -103,13 +103,13 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
         session = SessionModel(token: r.token, username: r.username, name: r.name)
       });
       final userId = session?.getUserId();
-      final resultDelete = await _deletePost.execute(event.postId, userId!, event.stageId);
+      final resultDelete = await _deletePost.execute(event.postId, userId!);
       resultDelete.fold((l) => (emit(UploadedError(l.message))), (r) => 
       emit(UploadedStart()));
     });
 
     on<OnUploadedPrepareForEdit>((event, emit) async {
-      emit(UploadedPrepareForEdit(event.postId ,event.title, event.content, event.stageId));
+      emit(UploadedPrepareForEdit(event.postId ,event.title, event.content));
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {

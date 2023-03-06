@@ -34,10 +34,10 @@ class FlowRepositoryImpl implements FlowRepository {
 
   @override
   Future<Either<Failure, Post>> updatePost(String postId, String userId,
-      TextContent text, String title, String stageId) async {
+      TextContent text, String title) async {
     try {
       final result = await remoteDataSource.updatePost(
-          postId, userId, text, title, stageId);
+          postId, userId, text, title);
 
       return (Right(result.toEntity()));
     } on ServerException {
@@ -48,10 +48,10 @@ class FlowRepositoryImpl implements FlowRepository {
   }
 
   @override
-  Future<Either<Failure, Post>> deletePost(String postId, String userId, String stageId) async {
+  Future<Either<Failure, Post>> deletePost(String postId, String userId) async {
     try {
       final result = await remoteDataSource.deletePost(
-          postId, userId, stageId);
+          postId, userId);
 
       return (Right(result.toEntity()));
     } on ServerException {

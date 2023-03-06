@@ -38,8 +38,7 @@ class OnUploadedEdit extends UploadedEvent {
   final String postId;
   final String title;
   final String content;
-  final String stageId;
-  const OnUploadedEdit(this.postId, this.title, this.content, this.stageId,);
+  const OnUploadedEdit(this.postId, this.title, this.content);
 
   @override
   List<Object> get props => [title, content];
@@ -49,18 +48,16 @@ class OnUploadedPrepareForEdit extends UploadedEvent {
   final String postId;
   final String title;
   final String content;
-  final String stageId;
-  const OnUploadedPrepareForEdit(this.postId, this.title, this.content, this.stageId);
+  const OnUploadedPrepareForEdit(this.postId, this.title, this.content);
 
   @override
-  List<Object> get props => [postId, title, content, stageId];
+  List<Object> get props => [postId, title, content];
 }
 
 class OnUploadedDelete extends UploadedEvent {
   final String postId;
-  final String stageId;
-  const OnUploadedDelete(this.postId, this.stageId,);
+  const OnUploadedDelete(this.postId);
 
   @override
-  List<Object> get props => [postId, stageId];
+  List<Object> get props => [postId];
 }
