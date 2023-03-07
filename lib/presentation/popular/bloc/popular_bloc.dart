@@ -1,14 +1,14 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart';
+import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart';
 import 'package:lomba_frontend/presentation/popular/bloc/popular_event.dart';
 import 'package:lomba_frontend/presentation/popular/bloc/popular_state.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
-import '../../../domain/usecases/flow/get_popular_posts.dart';
+import '../../../domain/usecases/post/get_popular_posts.dart';
 import '../../../domain/usecases/local/get_has_login.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
 

@@ -1,23 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
-import 'package:lomba_frontend/domain/usecases/flow/add_text_post.dart';
-import 'package:lomba_frontend/domain/usecases/flow/delete_post.dart';
-import 'package:lomba_frontend/domain/usecases/flow/get_approved_posts.dart';
-import 'package:lomba_frontend/domain/usecases/flow/get_for_approve_posts.dart';
-import 'package:lomba_frontend/domain/usecases/flow/get_latest_posts.dart';
-import 'package:lomba_frontend/domain/usecases/flow/get_popular_posts.dart';
-import 'package:lomba_frontend/domain/usecases/flow/get_rejected_posts.dart';
-import 'package:lomba_frontend/domain/usecases/flow/get_uploaded_posts.dart';
-import 'package:lomba_frontend/domain/usecases/flow/get_voted_posts.dart';
-import 'package:lomba_frontend/domain/usecases/flow/update_edit.dart';
-import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart';
+import 'package:lomba_frontend/domain/usecases/post/add_text_post.dart';
+import 'package:lomba_frontend/domain/usecases/post/delete_post.dart';
+import 'package:lomba_frontend/domain/usecases/post/get_approved_posts.dart';
+import 'package:lomba_frontend/domain/usecases/post/get_for_approve_posts.dart';
+import 'package:lomba_frontend/domain/usecases/post/get_latest_posts.dart';
+import 'package:lomba_frontend/domain/usecases/post/get_popular_posts.dart';
+import 'package:lomba_frontend/domain/usecases/post/get_rejected_posts.dart';
+import 'package:lomba_frontend/domain/usecases/post/get_uploaded_posts.dart';
+import 'package:lomba_frontend/domain/usecases/post/get_voted_posts.dart';
+import 'package:lomba_frontend/domain/usecases/post/update_edit.dart';
+import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/login/change_orga.dart';
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate.dart';
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate_google.dart';
 import 'package:lomba_frontend/domain/usecases/login/register_user.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart';
 import 'package:lomba_frontend/presentation/approved/bloc/approved_bloc.dart';
+import 'package:lomba_frontend/presentation/flow/bloc/flow_bloc.dart';
 import 'package:lomba_frontend/presentation/login/bloc/login_bloc.dart';
 import 'package:lomba_frontend/data/datasources/orga_data_source.dart';
 import 'package:lomba_frontend/domain/usecases/orgas/add_orga.dart';
@@ -34,11 +35,16 @@ import 'package:lomba_frontend/presentation/voted/bloc/voted_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'data/datasources/flow_data_source.dart';
+import 'data/datasources/post_data_source.dart';
 import 'data/datasources/local_data_source.dart';
 import 'data/repositories/flow_repository_impl.dart';
+import 'data/repositories/post_repository_impl.dart';
 import 'data/repositories/local_repository_impl.dart';
 import 'domain/repositories/flow_repository.dart';
+import 'domain/repositories/post_repository.dart';
 import 'domain/repositories/local_repository.dart';
+import 'domain/usecases/flow/get_flow.dart';
+import 'domain/usecases/flow/get_flows.dart';
 import 'domain/usecases/local/get_has_login.dart';
 import 'domain/usecases/local/get_session_role.dart';
 import 'domain/usecases/local/get_session_status.dart';
@@ -143,6 +149,8 @@ Future<void> init() async {
 
   locator.registerFactory(
       () => VotedBloc(locator(), locator(), locator(), locator()));
+  locator.registerFactory(
+      () => FlowBloc(locator(), locator()));
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));
@@ -194,6 +202,8 @@ Future<void> init() async {
   locator.registerLazySingleton(() => VotePublication(locator()));
   locator.registerLazySingleton(() => UpdateEdit(locator()));
   locator.registerLazySingleton(() => DeletePost(locator()));
+  locator.registerLazySingleton(() => GetFlow(locator()));
+  locator.registerLazySingleton(() => GetFlows(locator()));
 
   // repository
   locator.registerLazySingleton<LoginRepository>(
@@ -213,6 +223,9 @@ Future<void> init() async {
   );
   locator.registerLazySingleton<RoleRepository>(
     () => RoleRepositoryImpl(remoteDataSource: locator()),
+  );
+  locator.registerLazySingleton<PostRepository>(
+    () => PostRepositoryImpl(remoteDataSource: locator()),
   );
   locator.registerLazySingleton<FlowRepository>(
     () => FlowRepositoryImpl(remoteDataSource: locator()),
@@ -243,6 +256,10 @@ Future<void> init() async {
   locator.registerLazySingleton<RoleRemoteDataSource>(
     () =>
         RoleRemoteDataSourceImpl(client: locator(), localDataSource: locator()),
+  );
+  locator.registerLazySingleton<PostRemoteDataSource>(
+    () =>
+        PostRemoteDataSourceImpl(client: locator(), localDataSource: locator()),
   );
   locator.registerLazySingleton<FlowRemoteDataSource>(
     () =>

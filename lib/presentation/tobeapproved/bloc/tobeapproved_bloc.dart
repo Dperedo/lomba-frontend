@@ -5,8 +5,8 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
-import '../../../domain/usecases/flow/get_for_approve_posts.dart';
-import '../../../domain/usecases/flow/vote_publication.dart';
+import '../../../domain/usecases/post/get_for_approve_posts.dart';
+import '../../../domain/usecases/post/vote_publication.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
 
 class ToBeApprovedBloc extends Bloc<ToBeApprovedEvent, ToBeApprovedState>{

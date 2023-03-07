@@ -5,7 +5,7 @@ import 'package:numberpicker/numberpicker.dart';
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
-import '../../../domain/entities/flows/textcontent.dart';
+import '../../../domain/entities/workflow/textcontent.dart';
 import '../../sidedrawer/pages/sidedrawer_page.dart';
 import '../bloc/voted_bloc.dart';
 import '../bloc/voted_cubit.dart';

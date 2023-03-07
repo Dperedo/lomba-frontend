@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/flows/post.dart';
+import '../../../domain/entities/workflow/post.dart';
 
 ///Interfaz de los estados de Home.
 abstract class HomeState extends Equatable {

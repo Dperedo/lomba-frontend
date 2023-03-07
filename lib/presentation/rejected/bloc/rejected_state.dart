@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/flows/post.dart';
+import '../../../domain/entities/workflow/post.dart';
 
 abstract class RejectedState extends Equatable {
   const RejectedState();

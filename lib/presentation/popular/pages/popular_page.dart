@@ -5,7 +5,7 @@ import 'package:numberpicker/numberpicker.dart';
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
-import '../../../domain/entities/flows/textcontent.dart';
+import '../../../domain/entities/workflow/textcontent.dart';
 import '../bloc/popular_bloc.dart';
 import '../bloc/popular_cubit.dart';
 import '../bloc/popular_event.dart';

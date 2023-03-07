@@ -1,16 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/constants.dart';
-import 'package:lomba_frontend/domain/entities/flows/textcontent.dart';
-import 'package:lomba_frontend/domain/usecases/flow/get_uploaded_posts.dart';
-import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart';
+import 'package:lomba_frontend/domain/entities/workflow/textcontent.dart';
+import 'package:lomba_frontend/domain/usecases/post/get_uploaded_posts.dart';
+import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_event.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/upoaded_state.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../data/models/session_model.dart';
-import '../../../domain/usecases/flow/delete_post.dart';
-import '../../../domain/usecases/flow/update_edit.dart';
+import '../../../domain/usecases/post/delete_post.dart';
+import '../../../domain/usecases/post/update_edit.dart';
 
 class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
   final GetUploadedPosts _getUploadedPosts;

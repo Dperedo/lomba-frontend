@@ -1,4 +1,4 @@
-import 'package:lomba_frontend/domain/entities/flows/post.dart';
+import 'package:lomba_frontend/domain/entities/workflow/post.dart';
 
 class PostModel extends Post{
   const PostModel({

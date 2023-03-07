@@ -1,14 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/domain/entities/flows/post.dart';
-import 'package:lomba_frontend/domain/usecases/flow/get_uploaded_posts.dart';
-import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart';
+import 'package:lomba_frontend/domain/entities/workflow/post.dart';
+import 'package:lomba_frontend/domain/usecases/post/get_uploaded_posts.dart';
+import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart';
 import 'package:lomba_frontend/presentation/voted/bloc/voted_event.dart';
 import 'package:lomba_frontend/presentation/voted/bloc/voted_state.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
-import '../../../domain/usecases/flow/get_voted_posts.dart';
+import '../../../domain/usecases/post/get_voted_posts.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
 
 class VotedBloc extends Bloc<VotedEvent, VotedState> {
