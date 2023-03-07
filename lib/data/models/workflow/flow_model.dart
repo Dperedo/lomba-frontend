@@ -1,3 +1,5 @@
+import 'package:lomba_frontend/domain/entities/workflow/stage.dart';
+
 import '../../../domain/entities/workflow/flow.dart';
 
 class FlowModel extends Flow {
@@ -29,12 +31,26 @@ class FlowModel extends Flow {
       name: json['name'],
       enabled: json['enabled'],
       builtIn: json['builtIn'],
-      created: json['created'],
-      stages: (json["stages"] as List<dynamic>).cast<String>(),
-      updated: json['updated'],
-      deleted: json['deleted'],
-      expires: json['expires']
+      created: DateTime.parse(json['created'].toString()),
+      stages: (json["stages"] as List<dynamic>).cast<Stage>(),
+      updated: json['updated'] != null? DateTime.parse(json['updated'].toString()): null,
+      deleted: json['deleted'] != null? DateTime.parse(json['deleted'].toString()): null,
+      expires: json['expires'] != null? DateTime.parse(json['expires'].toString()): null
     );
+  }
+
+  Map<String, dynamic> toJson(){
+    return{
+      'id': id,
+      'name': name,
+      'enabled': enabled,
+      'builtIn': builtIn,
+      'created': created,
+      'stages': stages,
+      'updated': updated,
+      'deleted': deleted,
+      'expires': expires
+    };
   }
 
   Flow toEntity() => Flow(

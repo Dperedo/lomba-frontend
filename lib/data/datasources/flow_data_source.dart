@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../../core/constants.dart';
 import '../../core/exceptions.dart';
+import '../../domain/entities/workflow/stage.dart';
 import '../models/workflow/flow_model.dart';
 import 'local_data_source.dart';
 
@@ -37,20 +38,30 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
       List<FlowModel> flows = [];
 
       for (var item in resObj['data']['items']) {
-        List<String> stageslist = [];
-        for (var r in item['stages']) {
-          stageslist.add(r['name']);
-        }
+        List<Stage> listStage = (item['stages'] as List)
+          .map((e) => Stage(
+              id: e['id'].toString(),
+              name: e['name'].toString(),
+              order: int.parse(e['order'].toString()),
+              queryOut: e['queryOut'],
+              enabled: e['enabled'].toString().toLowerCase() == 'true',
+              builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+              created: DateTime.parse(e['created'].toString()),
+              updated: e['updated'] != null? DateTime.parse(e['updated'].toString()): null,
+              deleted: e['deleted'] != null? DateTime.parse(e['deleted'].toString()): null,
+              expires: e['expires'] != null? DateTime.parse(e['expires'].toString()): null))
+          .toList();
+
         flows.add(FlowModel(
           id: item["id"].toString(),
           name: item["name"].toString(),
           enabled: item["enabled"].toString().toLowerCase() == 'true',
           builtIn: item["builtIn"].toString().toLowerCase() == 'true',
-          stages: stageslist,
-          created: item['created'].toString(),
-          updated: item['updated'].toString(),
-          deleted: item['deleted'].toString(),
-          expires: item['expires'].toString()
+          stages: listStage,
+          created: DateTime.parse(item['created'].toString()),
+        updated: item['updated'] != null? DateTime.parse(item['updated'].toString()): null,
+        deleted: item['deleted'] != null? DateTime.parse(item['deleted'].toString()): null,
+        expires: item['expires'] != null? DateTime.parse(item['expires'].toString()): null
         ));
       }
 
@@ -76,20 +87,30 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
 
       final item = resObj['data']['items'][0];
 
-      List<String> stageslist = [];
-      for (var r in item['stages']) {
-        stageslist.add(r['name']);
-      }
+      List<Stage> listStage = (item['stages'] as List)
+        .map((e) => Stage(
+            id: e['id'].toString(),
+            name: e['name'].toString(),
+            order: int.parse(e['order'].toString()),
+            queryOut: e['queryOut'],
+            enabled: e['enabled'].toString().toLowerCase() == 'true',
+            builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+            created: DateTime.parse(e['created'].toString()),
+            updated: e['updated'] != null? DateTime.parse(e['updated'].toString()): null,
+            deleted: e['deleted'] != null? DateTime.parse(e['deleted'].toString()): null,
+            expires: e['expires'] != null? DateTime.parse(e['expires'].toString()): null))
+        .toList();
+
       return Future.value(FlowModel(
         id: item["id"].toString(),
         name: item["name"].toString(),
         enabled: item["enabled"].toString().toLowerCase() == 'true',
         builtIn: item["builtIn"].toString().toLowerCase() == 'true',
-        stages: stageslist,
-        created: item['created'].toString(),
-        updated: item['updated'].toString(),
-        deleted: item['deleted'].toString(),
-        expires: item['expires'].toString()
+        stages: listStage,
+        created: DateTime.parse(item['created'].toString()),
+        updated: item['updated'] != null? DateTime.parse(item['updated'].toString()): null,
+        deleted: item['deleted'] != null? DateTime.parse(item['deleted'].toString()): null,
+        expires: item['expires'] != null? DateTime.parse(item['expires'].toString()): null
       ));
       
     } else {

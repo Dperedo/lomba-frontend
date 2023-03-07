@@ -99,14 +99,14 @@ class RolesPage extends StatelessWidget {
         children: [
           Text(state.flow.name),
           const Divider(),
-          Text("Rolename: ${state.flow.name}"),
+          Text("Flowname: ${state.flow.name}"),
           const Divider(),
           Text("Estado: ${state.flow.enabled}"),
           const Divider(),
           Row(
             children: [
               const VerticalDivider(),
-              ElevatedButton(
+              /*ElevatedButton(
                 key: const ValueKey("btnEnableOption"),
                 child:
                     Text((state.flow.enabled ? "Deshabilitar" : "Habilitar")),
@@ -145,7 +145,7 @@ class RolesPage extends StatelessWidget {
                           }
                       });
                 },
-              ),
+              ),*/
             ],
           ),
           const Divider(),

@@ -15,9 +15,9 @@ import 'package:lomba_frontend/core/model_container.dart' as _i12;
 import 'package:lomba_frontend/data/models/session_model.dart' as _i15;
 import 'package:lomba_frontend/domain/entities/workflow/post.dart' as _i13;
 import 'package:lomba_frontend/domain/entities/workflow/vote.dart' as _i17;
-import 'package:lomba_frontend/domain/repositories/post_repository.dart' as _i7;
 import 'package:lomba_frontend/domain/repositories/local_repository.dart'
     as _i2;
+import 'package:lomba_frontend/domain/repositories/post_repository.dart' as _i7;
 import 'package:lomba_frontend/domain/usecases/local/get_has_login.dart' as _i8;
 import 'package:lomba_frontend/domain/usecases/local/get_session_role.dart'
     as _i18;
@@ -104,9 +104,9 @@ class _FakeConfirmationResult_5 extends _i1.SmartFake
         );
 }
 
-class _FakeFlowRepository_6 extends _i1.SmartFake
+class _FakePostRepository_6 extends _i1.SmartFake
     implements _i7.PostRepository {
-  _FakeFlowRepository_6(
+  _FakePostRepository_6(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -652,7 +652,7 @@ class MockGetLatestPosts extends _i1.Mock implements _i11.GetLatestPosts {
   @override
   _i7.PostRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
-        returnValue: _FakeFlowRepository_6(
+        returnValue: _FakePostRepository_6(
           this,
           Invocation.getter(#repository),
         ),
@@ -747,7 +747,7 @@ class MockVotePublication extends _i1.Mock implements _i16.VotePublication {
   @override
   _i7.PostRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
-        returnValue: _FakeFlowRepository_6(
+        returnValue: _FakePostRepository_6(
           this,
           Invocation.getter(#repository),
         ),
