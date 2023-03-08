@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart';
 import 'package:lomba_frontend/presentation/approved/bloc/approved_bloc.dart';
+import 'package:lomba_frontend/presentation/flow/bloc/flow_bloc.dart';
 import 'package:lomba_frontend/presentation/nav/bloc/nav_bloc.dart';
 import 'package:lomba_frontend/presentation/approved/pages/approved_page.dart';
 import 'package:lomba_frontend/presentation/login/pages/login_page.dart';
@@ -83,6 +84,7 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<ToBeApprovedBloc>()),
         BlocProvider(create: (_) => di.locator<PopularBloc>()),
         BlocProvider(create: (_) => di.locator<RouterPageBloc>()),
+        BlocProvider(create: (_) => di.locator<FlowBloc>()),
       ],
       child: MaterialApp(
         //initialRoute: HomePage.route,

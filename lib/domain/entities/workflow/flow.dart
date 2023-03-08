@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:lomba_frontend/domain/entities/flows/stage.dart';
+import 'package:lomba_frontend/domain/entities/workflow/stage.dart';
 
 class Flow extends Equatable {
   const Flow({

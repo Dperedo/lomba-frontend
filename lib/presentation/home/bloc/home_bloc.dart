@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/domain/usecases/flow/get_latest_posts.dart';
-import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart';
+import 'package:lomba_frontend/domain/usecases/post/get_latest_posts.dart';
+import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_has_login.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_role.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';

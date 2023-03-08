@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:lomba_frontend/domain/entities/flows/vote.dart';
+import 'package:lomba_frontend/domain/entities/workflow/vote.dart';
 
 class PostVotes extends Equatable {
   const PostVotes({

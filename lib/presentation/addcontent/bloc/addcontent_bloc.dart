@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/domain/entities/flows/textcontent.dart';
-import 'package:lomba_frontend/domain/usecases/flow/add_text_post.dart';
+import 'package:lomba_frontend/domain/entities/workflow/textcontent.dart';
+import 'package:lomba_frontend/domain/usecases/post/add_text_post.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_has_login.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
 import 'package:rxdart/rxdart.dart';

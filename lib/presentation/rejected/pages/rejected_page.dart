@@ -4,7 +4,7 @@ import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-import '../../../../domain/entities/flows/textcontent.dart';
+import '../../../domain/entities/workflow/textcontent.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../bloc/rejected_bloc.dart';
 import '../bloc/rejected_cubit.dart';

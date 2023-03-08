@@ -8,7 +8,7 @@ import 'package:numberpicker/numberpicker.dart';
 import '../../../core/constants.dart';
 import '../../../core/validators.dart';
 import '../../../core/widgets/snackbar_notification.dart';
-import '../../../domain/entities/flows/textcontent.dart';
+import '../../../domain/entities/workflow/textcontent.dart';
 import '../bloc/uploaded_bloc.dart';
 import '../bloc/uploaded_event.dart';
 import '../bloc/upoaded_state.dart';

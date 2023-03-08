@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
-import 'package:lomba_frontend/domain/entities/flows/postitem.dart';
-import 'package:lomba_frontend/domain/entities/flows/stage.dart';
-import 'package:lomba_frontend/domain/entities/flows/total.dart';
-import 'package:lomba_frontend/domain/entities/flows/track.dart';
-import 'package:lomba_frontend/domain/entities/flows/vote.dart';
+import 'package:lomba_frontend/domain/entities/workflow/postitem.dart';
+import 'package:lomba_frontend/domain/entities/workflow/stage.dart';
+import 'package:lomba_frontend/domain/entities/workflow/total.dart';
+import 'package:lomba_frontend/domain/entities/workflow/track.dart';
+import 'package:lomba_frontend/domain/entities/workflow/vote.dart';
 
 class Post extends Equatable {
   const Post({

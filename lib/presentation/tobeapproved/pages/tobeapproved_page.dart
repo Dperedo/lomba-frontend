@@ -5,7 +5,7 @@ import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../../../core/widgets/snackbar_notification.dart';
-import '../../../domain/entities/flows/textcontent.dart';
+import '../../../domain/entities/workflow/textcontent.dart';
 import '../bloc/tobeapproved_bloc.dart';
 import '../bloc/tobeapproved_cubit.dart';
 import '../bloc/tobeapproved_event.dart';

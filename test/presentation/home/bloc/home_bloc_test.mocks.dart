@@ -13,20 +13,20 @@ import 'package:firebase_core/firebase_core.dart' as _i4;
 import 'package:lomba_frontend/core/failures.dart' as _i10;
 import 'package:lomba_frontend/core/model_container.dart' as _i12;
 import 'package:lomba_frontend/data/models/session_model.dart' as _i15;
-import 'package:lomba_frontend/domain/entities/flows/post.dart' as _i13;
-import 'package:lomba_frontend/domain/entities/flows/vote.dart' as _i17;
-import 'package:lomba_frontend/domain/repositories/flow_repository.dart' as _i7;
+import 'package:lomba_frontend/domain/entities/workflow/post.dart' as _i13;
+import 'package:lomba_frontend/domain/entities/workflow/vote.dart' as _i17;
 import 'package:lomba_frontend/domain/repositories/local_repository.dart'
     as _i2;
-import 'package:lomba_frontend/domain/usecases/flow/get_latest_posts.dart'
-    as _i11;
-import 'package:lomba_frontend/domain/usecases/flow/vote_publication.dart'
-    as _i16;
+import 'package:lomba_frontend/domain/repositories/post_repository.dart' as _i7;
 import 'package:lomba_frontend/domain/usecases/local/get_has_login.dart' as _i8;
 import 'package:lomba_frontend/domain/usecases/local/get_session_role.dart'
     as _i18;
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart'
     as _i14;
+import 'package:lomba_frontend/domain/usecases/post/get_latest_posts.dart'
+    as _i11;
+import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart'
+    as _i16;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -104,9 +104,9 @@ class _FakeConfirmationResult_5 extends _i1.SmartFake
         );
 }
 
-class _FakeFlowRepository_6 extends _i1.SmartFake
-    implements _i7.FlowRepository {
-  _FakeFlowRepository_6(
+class _FakePostRepository_6 extends _i1.SmartFake
+    implements _i7.PostRepository {
+  _FakePostRepository_6(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -650,13 +650,13 @@ class MockGetLatestPosts extends _i1.Mock implements _i11.GetLatestPosts {
   }
 
   @override
-  _i7.FlowRepository get repository => (super.noSuchMethod(
+  _i7.PostRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
-        returnValue: _FakeFlowRepository_6(
+        returnValue: _FakePostRepository_6(
           this,
           Invocation.getter(#repository),
         ),
-      ) as _i7.FlowRepository);
+      ) as _i7.PostRepository);
   @override
   _i9.Future<_i3.Either<_i10.Failure, _i12.ModelContainer<_i13.Post>>> execute(
     String? orgaId,
@@ -745,13 +745,13 @@ class MockVotePublication extends _i1.Mock implements _i16.VotePublication {
   }
 
   @override
-  _i7.FlowRepository get repository => (super.noSuchMethod(
+  _i7.PostRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
-        returnValue: _FakeFlowRepository_6(
+        returnValue: _FakePostRepository_6(
           this,
           Invocation.getter(#repository),
         ),
-      ) as _i7.FlowRepository);
+      ) as _i7.PostRepository);
   @override
   _i9.Future<_i3.Either<_i10.Failure, _i12.ModelContainer<_i17.Vote>>> execute(
     String? orgaId,

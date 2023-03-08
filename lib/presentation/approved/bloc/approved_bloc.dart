@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/domain/usecases/flow/get_approved_posts.dart';
+import 'package:lomba_frontend/domain/usecases/post/get_approved_posts.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
 
-import '../../../domain/usecases/flow/vote_publication.dart';
+import '../../../domain/usecases/post/vote_publication.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
 import 'approved_event.dart';
 import 'approved_state.dart';
