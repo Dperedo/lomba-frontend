@@ -12,14 +12,14 @@ import '../../nav/bloc/nav_event.dart';
 
 class RouterPage extends StatelessWidget {
   final NavItem naveItem;
-  
+
   const RouterPage({
     Key? key,
     required this.naveItem,
   }) : super(key: key);
 
   void _handleItemRoute(BuildContext context, NavItem item) {
-    BlocProvider.of<NavBloc>(context).add(NavigateTo(item));
+    BlocProvider.of<NavBloc>(context).add(NavigateTo(item, context));
     Navigator.pop(context);
   }
 
@@ -28,13 +28,13 @@ class RouterPage extends StatelessWidget {
     bool called = true;
     return BlocBuilder<RouterPageBloc, RouterPageState>(
       builder: (context, state) {
-        if(state is RouterPageEmpty && called) {
+        if (state is RouterPageEmpty && called) {
           context.read<RouterPageBloc>().add(OnRouterPageLoading(naveItem));
           called = false;
-        } else if(state is RouterPageRole) {
+        } else if (state is RouterPageRole) {
           _handleItemRoute(context, naveItem);
           context.read<RouterPageBloc>().add(const OnRouterPageReset());
-        } else if(state is RouterPageError) {
+        } else if (state is RouterPageError) {
           _handleItemRoute(context, NavItem.pageHome);
           context.read<RouterPageBloc>().add(const OnRouterPageReset());
         }

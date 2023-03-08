@@ -32,9 +32,9 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        if(state is LoginGoted && state.message != ""){
+        if (state is LoginGoted && state.message != "") {
           snackBarNotify(context, state.message, Icons.account_circle);
-        }else if(state is LoginError && state.message != ""){
+        } else if (state is LoginError && state.message != "") {
           snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
@@ -43,7 +43,9 @@ class LoginPage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.close),
             onPressed: () {
-              context.read<NavBloc>().add(const NavigateTo(NavItem.pageHome));
+              context
+                  .read<NavBloc>()
+                  .add(NavigateTo(NavItem.pageHome, context));
             },
           ),
           title: const Text(
@@ -72,10 +74,12 @@ class LoginPage extends StatelessWidget {
                             context
                                 .read<SideDrawerBloc>()
                                 .add(const OnSideDrawerLoading());
-                            context.read<HomeBloc>().add(const OnRestartHome(""));
+                            context
+                                .read<HomeBloc>()
+                                .add(const OnRestartHome(""));
 
                             BlocProvider.of<NavBloc>(context)
-                                .add(const NavigateTo(NavItem.pageHome));
+                                .add(NavigateTo(NavItem.pageHome, context));
                           });
                         } else if (state is LoginError) {
                           return Center(

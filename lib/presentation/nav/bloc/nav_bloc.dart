@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../voted/bloc/voted_bloc.dart';
+import '../../voted/bloc/voted_event.dart';
 import 'nav_event.dart';
 import 'nav_state.dart';
 
@@ -14,6 +16,10 @@ class NavBloc extends Bloc<NavEvent, NavState> {
     on<NavigateTo>(
       (event, emit) async {
         if (event.destination != state.selectedItem) {
+          if (state.selectedItem == NavItem.pageVoted) {
+            event.context.read<VotedBloc>().add(OnVotedStarter());
+          }
+
           emit(NavState(event.destination));
         }
       },

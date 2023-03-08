@@ -1,5 +1,7 @@
 // this import is needed to import NavItem,
 // which we'll use to represent the item the user has selected
+import 'package:flutter/widgets.dart';
+
 import 'nav_state.dart';
 
 // it's important to use an abstract class, even if you have one
@@ -18,5 +20,6 @@ abstract class NavEvent {
 /// destino
 class NavigateTo extends NavEvent {
   final NavItem destination;
-  const NavigateTo(this.destination);
+  final BuildContext context;
+  const NavigateTo(this.destination, this.context);
 }

@@ -16,19 +16,22 @@ class OnVotedLoad extends VotedEvent {
   final bool positive;
   final bool negative;
 
-  const OnVotedLoad(
-      this.searchText, this.fieldsOrder, this.pageIndex, this.pageSize, this.positive, this.negative);
+  const OnVotedLoad(this.searchText, this.fieldsOrder, this.pageIndex,
+      this.pageSize, this.positive, this.negative);
 
   @override
-  List<Object> get props => [searchText, fieldsOrder, pageIndex, pageSize, positive, negative];
+  List<Object> get props =>
+      [searchText, fieldsOrder, pageIndex, pageSize, positive, negative];
 }
 
 class OnVotedAddVote extends VotedEvent {
   final String postId;
   final int voteValue;
-  
+
   const OnVotedAddVote(this.postId, this.voteValue);
 
   @override
   List<Object> get props => [postId, voteValue];
 }
+
+class OnVotedStarter extends VotedEvent {}
