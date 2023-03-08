@@ -48,6 +48,8 @@ import 'domain/usecases/flow/get_flows.dart';
 import 'domain/usecases/local/get_has_login.dart';
 import 'domain/usecases/local/get_session_role.dart';
 import 'domain/usecases/local/get_session_status.dart';
+import 'domain/usecases/stage/get_stage.dart';
+import 'domain/usecases/stage/get_stages.dart';
 import 'presentation/nav/bloc/nav_bloc.dart';
 import 'presentation/demolist/bloc/demolist_bloc.dart';
 import 'presentation/home/bloc/home_bloc.dart';
@@ -90,6 +92,7 @@ import 'domain/usecases/users/exists_user.dart';
 import 'domain/usecases/users/get_user.dart';
 import 'domain/usecases/users/get_users.dart';
 import 'domain/usecases/users/update_user.dart';
+import 'presentation/stage/bloc/stage_bloc.dart';
 
 final locator = GetIt.instance;
 
@@ -151,6 +154,8 @@ Future<void> init() async {
       () => VotedBloc(locator(), locator(), locator(), locator()));
   locator.registerFactory(
       () => FlowBloc(locator(), locator()));
+  locator.registerFactory(
+      () => StageBloc(locator(), locator()));
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));
@@ -202,8 +207,12 @@ Future<void> init() async {
   locator.registerLazySingleton(() => VotePublication(locator()));
   locator.registerLazySingleton(() => UpdateEdit(locator()));
   locator.registerLazySingleton(() => DeletePost(locator()));
+
   locator.registerLazySingleton(() => GetFlow(locator()));
   locator.registerLazySingleton(() => GetFlows(locator()));
+
+  locator.registerLazySingleton(() => GetStage(locator()));
+  locator.registerLazySingleton(() => GetStages(locator()));
 
   // repository
   locator.registerLazySingleton<LoginRepository>(

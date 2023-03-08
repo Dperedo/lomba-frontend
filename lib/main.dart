@@ -35,6 +35,7 @@ import 'presentation/rejected/pages/rejected_page.dart';
 import 'presentation/roles/bloc/role_bloc.dart';
 import 'presentation/roles/pages/role_page.dart';
 import 'presentation/sidedrawer/bloc/sidedrawer_bloc.dart';
+import 'presentation/stage/bloc/stage_bloc.dart';
 import 'presentation/users/bloc/user_bloc.dart';
 import 'presentation/users/pages/users_page.dart';
 import 'injection.dart' as di;
@@ -85,6 +86,7 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<PopularBloc>()),
         BlocProvider(create: (_) => di.locator<RouterPageBloc>()),
         BlocProvider(create: (_) => di.locator<FlowBloc>()),
+        BlocProvider(create: (_) => di.locator<StageBloc>()),
       ],
       child: MaterialApp(
         //initialRoute: HomePage.route,

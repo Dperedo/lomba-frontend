@@ -23,7 +23,7 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
   @override
   Future<List<FlowModel>> getFlows() async {
     //parsea URL
-    final url = Uri.parse('${UrlBackend.base}/api/v1/post/flow/');
+    final url = Uri.parse('${UrlBackend.base}/api/v1/flow/');
     final session = await localDataSource.getSavedSession();
 
     http.Response resp = await client.get(url, headers: {
@@ -73,7 +73,7 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
 
   @override
   Future<FlowModel> getFlow(String flowId) async {
-    final url = Uri.parse('${UrlBackend.base}/api/v1/post/flow/$flowId');
+    final url = Uri.parse('${UrlBackend.base}/api/v1/flow/$flowId');
     final session = await localDataSource.getSavedSession();
 
     http.Response resp = await client.get(url, headers: {
