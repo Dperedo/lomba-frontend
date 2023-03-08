@@ -70,13 +70,13 @@ class LoginPage extends StatelessWidget {
                           );
                         } else if (state is LoginGoted) {
                           Future.delayed(Duration.zero, () {
-                            context.read<LoginBloc>().add(OnRestartLogin());
+                            context.read<LoginBloc>().add(OnLoginStarter());
                             context
                                 .read<SideDrawerBloc>()
                                 .add(const OnSideDrawerLoading());
                             context
                                 .read<HomeBloc>()
-                                .add(const OnRestartHome(""));
+                                .add(const OnHomeStarter(""));
 
                             BlocProvider.of<NavBloc>(context)
                                 .add(NavigateTo(NavItem.pageHome, context));
@@ -86,7 +86,7 @@ class LoginPage extends StatelessWidget {
                             child:
                                 Text('Something went wrong! ${state.message}'),
                           );
-                        } else if (state is LoginEmpty) {
+                        } else if (state is LoginStart) {
                           return Center(
                             child: SizedBox(
                               height: 400,
@@ -130,7 +130,6 @@ class LoginPage extends StatelessWidget {
                                     onPressed: () {
                                       if (_key.currentState?.validate() ==
                                           true) {
-                                        print('boton login');
                                         context.read<LoginBloc>().add(
                                             OnLoginTriest(_emailController.text,
                                                 _passwordController.text));

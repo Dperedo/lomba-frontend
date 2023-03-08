@@ -15,11 +15,10 @@ class ApprovedBloc extends Bloc<ApprovedEvent, ApprovedState> {
   final VotePublication _votePublication;
   final GetSession _getSession;
 
-  ApprovedBloc(
-    this._getApprovedPosts,
-    this._votePublication,
-    this._getSession)
+  ApprovedBloc(this._getApprovedPosts, this._votePublication, this._getSession)
       : super(ApprovedStart()) {
+    on<OnApprovedStarter>((event, emit) => emit(ApprovedStart()));
+
     on<OnApprovedLoad>((event, emit) async {
       emit(ApprovedLoading());
       String flowId = Flows.votationFlowId;
@@ -69,7 +68,6 @@ class ApprovedBloc extends Bloc<ApprovedEvent, ApprovedState> {
           auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);
       result.fold((l) => emit(ApprovedError(l.message)), (r) {});
     });
-
   }
   EventTransformer<T> debounce<T>(Duration duration) {
     return (events, mapper) => events.debounceTime(duration).flatMap(mapper);

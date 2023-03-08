@@ -19,13 +19,11 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
   final UpdateEdit _updatePost;
   final DeletePost _deletePost;
 
-  UploadedBloc(
-    this._getUploadedPosts,
-    this._getSession,
-    this._votePublication,
-    this._updatePost,
-    this._deletePost)
+  UploadedBloc(this._getUploadedPosts, this._getSession, this._votePublication,
+      this._updatePost, this._deletePost)
       : super(UploadedStart()) {
+    on<OnUploadedStarter>((event, emit) => emit(UploadedStart()));
+
     on<OnUploadedLoad>((event, emit) async {
       emit(UploadedLoading());
       String flowId = Flows.votationFlowId;
@@ -85,13 +83,17 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
       SessionModel? session;
 
       final resultSession = await _getSession.execute();
-      resultSession.fold((l) => (emit(UploadedError(l.message))), (r) => {
-        session = SessionModel(token: r.token, username: r.username, name: r.name)
-      });
+      resultSession.fold(
+          (l) => (emit(UploadedError(l.message))),
+          (r) => {
+                session = SessionModel(
+                    token: r.token, username: r.username, name: r.name)
+              });
       final userId = session?.getUserId();
-      final resultUpdate = await _updatePost.execute(event.postId, userId!, TextContent(text: event.content), event.title);
-      resultUpdate.fold((l) => (emit(UploadedError(l.message))), (r) => 
-      emit(UploadedStart()));
+      final resultUpdate = await _updatePost.execute(
+          event.postId, userId!, TextContent(text: event.content), event.title);
+      resultUpdate.fold((l) => (emit(UploadedError(l.message))),
+          (r) => emit(UploadedStart()));
     });
 
     on<OnUploadedDelete>((event, emit) async {
@@ -99,17 +101,20 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
       SessionModel? session;
 
       final resultSession = await _getSession.execute();
-      resultSession.fold((l) => (emit(UploadedError(l.message))), (r) => {
-        session = SessionModel(token: r.token, username: r.username, name: r.name)
-      });
+      resultSession.fold(
+          (l) => (emit(UploadedError(l.message))),
+          (r) => {
+                session = SessionModel(
+                    token: r.token, username: r.username, name: r.name)
+              });
       final userId = session?.getUserId();
       final resultDelete = await _deletePost.execute(event.postId, userId!);
-      resultDelete.fold((l) => (emit(UploadedError(l.message))), (r) => 
-      emit(UploadedStart()));
+      resultDelete.fold((l) => (emit(UploadedError(l.message))),
+          (r) => emit(UploadedStart()));
     });
 
     on<OnUploadedPrepareForEdit>((event, emit) async {
-      emit(UploadedPrepareForEdit(event.postId ,event.title, event.content));
+      emit(UploadedPrepareForEdit(event.postId, event.title, event.content));
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {

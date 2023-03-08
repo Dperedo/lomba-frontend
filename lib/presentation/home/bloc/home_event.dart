@@ -13,8 +13,7 @@ class OnHomeLoading extends HomeEvent {
   final int pageSize;
 
   const OnHomeLoading(
-    this.searchText, this.fieldsOrder, this.pageIndex, this.pageSize
-  );
+      this.searchText, this.fieldsOrder, this.pageIndex, this.pageSize);
 
   @override
   List<Object> get props => [searchText, fieldsOrder, pageIndex, pageSize];
@@ -29,9 +28,9 @@ class OnHomeLoaded extends HomeEvent {
 }
 
 ///Evento ocurre cuando se va a reiniciar el Home provocando la recarga
-class OnRestartHome extends HomeEvent {
+class OnHomeStarter extends HomeEvent {
   final String message;
-  const OnRestartHome(this.message);
+  const OnHomeStarter(this.message);
   @override
   List<Object?> get props => [message];
 }

@@ -15,3 +15,5 @@ class OnDemoListSearch extends DemoListEvent {
   const OnDemoListSearch(
       this.searchText, this.fieldsOrder, this.pageIndex, this.pageSize);
 }
+
+class OnDemoListStarter extends DemoListEvent {}

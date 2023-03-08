@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart';
@@ -12,28 +11,27 @@ import '../../../domain/usecases/post/get_popular_posts.dart';
 import '../../../domain/usecases/local/get_has_login.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
 
-class PopularBloc extends Bloc<PopularEvent, PopularState>{
+class PopularBloc extends Bloc<PopularEvent, PopularState> {
   final GetPopularPosts _getPopularPosts;
   final GetSession _getSession;
   final GetHasLogIn _hasLogin;
   final FirebaseAuth _firebaseAuthInstance;
   final VotePublication _votePublication;
 
-  PopularBloc(
-    this._getPopularPosts,
-    this._getSession,
-    this._firebaseAuthInstance,
-    this._hasLogin,
-    this._votePublication
-  ):super(PopularStart()){
-    on<OnPopularLoad>((event, emit)async{
-      emit(PopularLoading());
-      const orgaId ="00000200-0200-0200-0200-000000000200";
-      const userId = '00000005-0005-0005-0005-000000000005';
-      String flowId = Flows.votationFlowId;
-      String stageId = StagesVotationFlow.stageId03Voting;
-      var auth = const SessionModel(token: "", username: "", name: "");
-      var validLogin = false;
+  PopularBloc(this._getPopularPosts, this._getSession,
+      this._firebaseAuthInstance, this._hasLogin, this._votePublication)
+      : super(PopularStart()) {
+    on<OnPopularStarter>((event, emit) => emit(PopularStart()));
+
+    on<OnPopularLoad>(
+      (event, emit) async {
+        emit(PopularLoading());
+        const orgaId = "00000200-0200-0200-0200-000000000200";
+        const userId = '00000005-0005-0005-0005-000000000005';
+        String flowId = Flows.votationFlowId;
+        String stageId = StagesVotationFlow.stageId03Voting;
+        var auth = const SessionModel(token: "", username: "", name: "");
+        var validLogin = false;
 
         final result = await _hasLogin.execute();
 
@@ -43,22 +41,19 @@ class PopularBloc extends Bloc<PopularEvent, PopularState>{
             try {
               await signInAnonymously();
             } catch (e) {}
-            
           }
         });
 
-
-      if (!validLogin){
-        final resultPosts = await _getPopularPosts.execute(
-                orgaId,
-                userId,
-                flowId,
-                stageId,       
-                event.searchText,
-                event.pageIndex,
-                event.pageSize
-              );
-        resultPosts.fold(
+        if (!validLogin) {
+          final resultPosts = await _getPopularPosts.execute(
+              orgaId,
+              userId,
+              flowId,
+              stageId,
+              event.searchText,
+              event.pageIndex,
+              event.pageSize);
+          resultPosts.fold(
               (l) => {emit(PopularError(l.message))},
               (r) => emit(PopularLoaded(
                   validLogin,
@@ -73,21 +68,19 @@ class PopularBloc extends Bloc<PopularEvent, PopularState>{
                   r.items,
                   r.currentItemCount,
                   r.items.length,
-                  r.items.length
-                  )));
+                  r.items.length)));
         } else {
           final session = await _getSession.execute();
-            session.fold((l) => emit(PopularError(l.message)), (r) => {auth = r});
+          session.fold((l) => emit(PopularError(l.message)), (r) => {auth = r});
 
-            final resultPosts = await _getPopularPosts.execute(
+          final resultPosts = await _getPopularPosts.execute(
               auth.getOrgaId()!,
               auth.getUserId()!,
               flowId,
-              stageId,       
+              stageId,
               event.searchText,
               event.pageIndex,
-              event.pageSize
-            );
+              event.pageSize);
           resultPosts.fold(
               (l) => {emit(PopularError(l.message))},
               (r) => emit(PopularLoaded(
@@ -103,8 +96,7 @@ class PopularBloc extends Bloc<PopularEvent, PopularState>{
                   r.items,
                   r.currentItemCount,
                   r.items.length,
-                  r.items.length
-                  )));
+                  r.items.length)));
         }
       },
       transformer: debounce(const Duration(milliseconds: 0)),

@@ -9,55 +9,51 @@ import '../../../data/models/session_model.dart';
 import '../../../domain/usecases/post/get_rejected_posts.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
 
-class RejectedBloc extends Bloc<RejectedEvent, RejectedState>{
+class RejectedBloc extends Bloc<RejectedEvent, RejectedState> {
   final GetRejectedPosts _getRejectedPosts;
   final GetSession _getSession;
   final VotePublication _votePublication;
 
-  RejectedBloc(
-    this._getRejectedPosts,
-    this._getSession,
-    this._votePublication
-  ):super(RejectedStart()){
-    on<OnRejectedLoad>((event, emit)async{
+  RejectedBloc(this._getRejectedPosts, this._getSession, this._votePublication)
+      : super(RejectedStart()) {
+    on<OnRejectedStarter>((event, emit) => emit(RejectedStart()));
+
+    on<OnRejectedLoad>((event, emit) async {
       emit(RejectedLoading());
       String flowId = Flows.votationFlowId;
       String stageId = StagesVotationFlow.stageId02Approval;
-      
 
       var auth = const SessionModel(token: "", username: "", name: "");
       final session = await _getSession.execute();
       session.fold((l) => emit(RejectedError(l.message)), (r) => {auth = r});
 
       final result = await _getRejectedPosts.execute(
-          auth.getOrgaId()!,
-          auth.getUserId()!,
-          flowId,
-          stageId,       
-          event.searchText,
-          event.fieldsOrder,
-          event.pageIndex,
-          event.pageSize,
-          );
+        auth.getOrgaId()!,
+        auth.getUserId()!,
+        flowId,
+        stageId,
+        event.searchText,
+        event.fieldsOrder,
+        event.pageIndex,
+        event.pageSize,
+      );
 
       result.fold(
           (l) => {emit(RejectedError(l.message))},
           (r) => emit(RejectedLoaded(
-              auth.getOrgaId()!,
-              auth.getUserId()!,
-              flowId,
-              stageId,
-              event.searchText,
-              event.fieldsOrder,
-              event.pageIndex,
-              event.pageSize,
-              r.items,
-              r.currentItemCount,
-              r.items.length ,
-              r.items.length,
+                auth.getOrgaId()!,
+                auth.getUserId()!,
+                flowId,
+                stageId,
+                event.searchText,
+                event.fieldsOrder,
+                event.pageIndex,
+                event.pageSize,
+                r.items,
+                r.currentItemCount,
+                r.items.length,
+                r.items.length,
               )));
-
-
     });
 
     on<OnRejectedVote>((event, emit) async {

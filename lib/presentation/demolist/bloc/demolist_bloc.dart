@@ -6,6 +6,8 @@ import '../../../core/fakedata.dart';
 
 class DemoListBloc extends Bloc<DemoListEvent, DemoListState> {
   DemoListBloc() : super(DemoListStartState()) {
+    on<OnDemoListStarter>((event, emit) => emit(DemoListStartState()));
+
     on<OnDemoListSearch>(
       (event, emit) async {
         //lanza estado para mostrar el círculo de progreso

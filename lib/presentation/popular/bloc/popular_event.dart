@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-abstract class PopularEvent extends Equatable{
+abstract class PopularEvent extends Equatable {
   const PopularEvent();
 
   @override
@@ -8,15 +8,13 @@ abstract class PopularEvent extends Equatable{
 }
 
 class OnPopularLoad extends PopularEvent {
-  
   final String searchText;
   final Map<String, int> fieldsOrder;
   final int pageIndex;
   final int pageSize;
 
   const OnPopularLoad(
-    this.searchText, this.fieldsOrder, this.pageIndex, this.pageSize
-  );
+      this.searchText, this.fieldsOrder, this.pageIndex, this.pageSize);
 
   @override
   List<Object> get props => [searchText, fieldsOrder, pageIndex, pageSize];
@@ -31,3 +29,5 @@ class OnPopularVote extends PopularEvent {
   @override
   List<Object> get props => [postId, voteValue];
 }
+
+class OnPopularStarter extends PopularEvent {}

@@ -23,3 +23,5 @@ class OnAddContentUp extends AddContentEvent {
   @override
   List<Object> get props => [];
 }
+
+class OnAddContentStarter extends AddContentEvent {}

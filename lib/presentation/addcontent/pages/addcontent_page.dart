@@ -64,7 +64,7 @@ class AddContentPage extends StatelessWidget {
             key: key,
             child: BlocBuilder<AddContentBloc, AddContentState>(
               builder: (context, state) {
-                if (state is AddContentEmpty) {
+                if (state is AddContentStart) {
                   return Column(
                     children: [
                       TextFormField(

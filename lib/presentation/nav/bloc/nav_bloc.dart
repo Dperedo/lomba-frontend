@@ -1,6 +1,32 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../addcontent/bloc/addcontent_bloc.dart';
+import '../../addcontent/bloc/addcontent_event.dart';
+import '../../approved/bloc/approved_bloc.dart';
+import '../../approved/bloc/approved_event.dart';
+import '../../demolist/bloc/demolist_bloc.dart';
+import '../../demolist/bloc/demolist_event.dart';
+import '../../home/bloc/home_bloc.dart';
+import '../../home/bloc/home_event.dart';
+import '../../login/bloc/login_bloc.dart';
+import '../../login/bloc/login_event.dart';
+import '../../orgas/bloc/orga_bloc.dart';
+import '../../orgas/bloc/orga_event.dart';
+import '../../popular/bloc/popular_bloc.dart';
+import '../../popular/bloc/popular_event.dart';
+import '../../profile/bloc/profile_bloc.dart';
+import '../../profile/bloc/profile_event.dart';
+import '../../rejected/bloc/rejected_bloc.dart';
+import '../../rejected/bloc/rejected_event.dart';
+import '../../roles/bloc/role_bloc.dart';
+import '../../roles/bloc/role_event.dart';
+import '../../tobeapproved/bloc/tobeapproved_bloc.dart';
+import '../../tobeapproved/bloc/tobeapproved_event.dart';
+import '../../uploaded/bloc/uploaded_bloc.dart';
+import '../../uploaded/bloc/uploaded_event.dart';
+import '../../users/bloc/user_bloc.dart';
+import '../../users/bloc/user_event.dart';
 import '../../voted/bloc/voted_bloc.dart';
 import '../../voted/bloc/voted_event.dart';
 import 'nav_event.dart';
@@ -16,10 +42,85 @@ class NavBloc extends Bloc<NavEvent, NavState> {
     on<NavigateTo>(
       (event, emit) async {
         if (event.destination != state.selectedItem) {
-          if (state.selectedItem == NavItem.pageVoted) {
-            event.context.read<VotedBloc>().add(OnVotedStarter());
+          switch (state.selectedItem) {
+            case NavItem.pageVoted:
+              {
+                event.context.read<VotedBloc>().add(OnVotedStarter());
+              }
+              break;
+            case NavItem.pageHome:
+              {
+                event.context.read<HomeBloc>().add(const OnHomeStarter(''));
+              }
+              break;
+            case NavItem.pageLogin:
+              {
+                event.context.read<LoginBloc>().add(OnLoginStarter());
+              }
+              break;
+            case NavItem.pageLogOff:
+              {
+                event.context.read<HomeBloc>().add(const OnHomeStarter(''));
+              }
+              break;
+            case NavItem.pageOrgas:
+              {
+                event.context.read<OrgaBloc>().add(OnOrgaStarter());
+              }
+              break;
+            case NavItem.pageRoles:
+              {
+                event.context.read<RoleBloc>().add(OnRoleStarter());
+              }
+              break;
+            case NavItem.pageUsers:
+              {
+                event.context.read<UserBloc>().add(OnUserStarter());
+              }
+              break;
+            case NavItem.pageAddContent:
+              {
+                event.context.read<AddContentBloc>().add(OnAddContentStarter());
+              }
+              break;
+            case NavItem.pageApproved:
+              {
+                event.context.read<ApprovedBloc>().add(OnApprovedStarter());
+              }
+              break;
+            case NavItem.pagePopular:
+              {
+                event.context.read<PopularBloc>().add(OnPopularStarter());
+              }
+              break;
+            case NavItem.pageRejected:
+              {
+                event.context.read<RejectedBloc>().add(OnRejectedStarter());
+              }
+              break;
+            case NavItem.pageToBeApproved:
+              {
+                event.context
+                    .read<ToBeApprovedBloc>()
+                    .add(OnToBeApprovedStarter());
+              }
+              break;
+            case NavItem.pageUploaded:
+              {
+                event.context.read<UploadedBloc>().add(OnUploadedStarter());
+              }
+              break;
+            case NavItem.pageProfile:
+              {
+                event.context.read<ProfileBloc>().add(OnProfileStarter());
+              }
+              break;
+            case NavItem.pageDemoList:
+              {
+                event.context.read<DemoListBloc>().add(OnDemoListStarter());
+              }
+              break;
           }
-
           emit(NavState(event.destination));
         }
       },

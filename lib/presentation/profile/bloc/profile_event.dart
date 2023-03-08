@@ -2,7 +2,10 @@ import 'package:equatable/equatable.dart';
 
 abstract class ProfileEvent extends Equatable {
   const ProfileEvent();
+  @override
+  List<Object> get props => [];
 }
+
 class OnProfileLoad extends ProfileEvent {
   final String? id;
 
@@ -11,3 +14,5 @@ class OnProfileLoad extends ProfileEvent {
   @override
   List<Object> get props => [id!];
 }
+
+class OnProfileStarter extends ProfileEvent {}

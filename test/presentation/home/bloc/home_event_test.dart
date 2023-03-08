@@ -2,15 +2,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/presentation/home/bloc/home_event.dart';
 
 void main() {
-
   const tOnHomeLoaded = OnHomeLoaded();
   const t_OnHomeLoaded = OnHomeLoaded();
-  const tOnHomeVote = OnHomeVote('',1);
-  const t_OnHomeVote = OnHomeVote('',1);
-  const tOnHomeLoading = OnHomeLoading('',<String, int>{'created': 1},1,10);
-  const t_OnHomeLoading = OnHomeLoading('',<String, int>{'created': 1},1,10);
-  const tOnRestartHome = OnRestartHome('');
-  const t_OnRestartHome = OnRestartHome('');
+  const tOnHomeVote = OnHomeVote('', 1);
+  const t_OnHomeVote = OnHomeVote('', 1);
+  const tOnHomeLoading = OnHomeLoading('', <String, int>{'created': 1}, 1, 10);
+  const t_OnHomeLoading = OnHomeLoading('', <String, int>{'created': 1}, 1, 10);
+  const tOnHomeStarter = OnHomeStarter('');
+  const t_OnHomeStarter = OnHomeStarter('');
 
   group('home event', () {
     test('On Home Loaded', () {
@@ -42,8 +41,8 @@ void main() {
 
     test('On Restart Home', () {
       //act
-      final result = tOnRestartHome.props;
-      final result2 = t_OnRestartHome.props;
+      final result = tOnHomeStarter.props;
+      final result2 = t_OnHomeStarter.props;
 
       //assert
       expect(result, equals(result2));

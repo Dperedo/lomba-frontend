@@ -54,7 +54,7 @@ void main() {
   test(
     'el estado inicial debe ser vacío',
     () {
-      expect(loginBloc.state, LoginEmpty());
+      expect(loginBloc.state, LoginStart());
     },
   );
 
@@ -102,10 +102,8 @@ void main() {
     },
     act: (bloc) => bloc.add(const OnLoginTriest(tusername, tpassword)),
     wait: const Duration(milliseconds: 500),
-    expect: () => [
-      LoginGetting(),
-      const LoginSelectOrga(test_listOrga, tusername)
-    ],
+    expect: () =>
+        [LoginGetting(), const LoginSelectOrga(test_listOrga, tusername)],
     verify: (bloc) {
       verify(mockGetAuthenticate.execute(tusername, tpassword));
       verify(mockGetOrgasByUser.execute(test_userId));
@@ -113,34 +111,27 @@ void main() {
   );
 
   blocTest<LoginBloc, LoginState>(
-    'debe emitir el evento -LoginEmpty- para reiniciar la pantalla de login',
+    'debe emitir el evento -LoginStart- para reiniciar la pantalla de login',
     build: () {
       return loginBloc;
     },
-    act: (bloc) => bloc.add(OnRestartLogin()),
+    act: (bloc) => bloc.add(OnLoginStarter()),
     wait: const Duration(milliseconds: 500),
-    expect: () => [
-      LoginEmpty()
-    ],
-    verify: (bloc) {
-    },
+    expect: () => [LoginStart()],
+    verify: (bloc) {},
   );
 
   blocTest<LoginBloc, LoginState>(
     'debe emitir el evento -Goted- con la nueva sesión con orgaId',
     build: () {
-      when(mockChangeOrga.execute(tLoginAccess.username,test_orgaId))
+      when(mockChangeOrga.execute(tLoginAccess.username, test_orgaId))
           .thenAnswer((_) async => const Right(tLoginAccess));
       return loginBloc;
     },
-    act: (bloc) => bloc.add(OnLoginChangeOrga(tLoginAccess.username,test_orgaId)),
+    act: (bloc) =>
+        bloc.add(OnLoginChangeOrga(tLoginAccess.username, test_orgaId)),
     wait: const Duration(milliseconds: 500),
-    expect: () => [
-      LoginGetting(),
-      const LoginGoted(tLoginAccess, '')
-    ],
-    verify: (bloc) {
-    },
+    expect: () => [LoginGetting(), const LoginGoted(tLoginAccess, '')],
+    verify: (bloc) {},
   );
-
 }

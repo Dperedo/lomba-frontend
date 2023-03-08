@@ -115,7 +115,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
 
     ///Evento es llamado para reiniciar el Home y haga la consulta de sesión.
-    on<OnRestartHome>((event, emit) async {
+    on<OnHomeStarter>((event, emit) async {
       emit(HomeStart(event.message));
     });
 

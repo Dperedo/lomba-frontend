@@ -7,7 +7,7 @@ abstract class AddContentState extends Equatable {
   List<Object> get props => [];
 }
 
-class AddContentEmpty extends AddContentState {}
+class AddContentStart extends AddContentState {}
 
 class AddContentLoading extends AddContentState {}
 

@@ -28,7 +28,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginBloc(this._getAuthenticate, this._getOrgasByUser, this._changeOrga,
       this._getAuthenticateGoogle)
-      : super(LoginEmpty()) {
+      : super(LoginStart()) {
     on<OnLoginTriest>(
       (event, emit) async {
         final username = event.username;
@@ -50,7 +50,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         });
 
         if (session != null && session?.getOrgaId() == null) {
-          final userId = session?.getUserId()?? '';
+          final userId = session?.getUserId() ?? '';
           final resultOrgas = await _getOrgasByUser.execute(userId);
 
           resultOrgas.fold((l) => {emit(LoginError(l.message))}, (r) {
@@ -83,8 +83,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
 
     ///Evento que sólo busca reiniciar la pantalla de login
-    on<OnRestartLogin>((event, emit) async {
-      emit(LoginEmpty());
+    on<OnLoginStarter>((event, emit) async {
+      emit(LoginStart());
     });
 
     on<OnLoginWithGoogle>(

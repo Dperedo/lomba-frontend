@@ -326,7 +326,7 @@ void main() {
     build: () {
       return homeBloc;
     },
-    act: (bloc) => bloc.add(const OnRestartHome(test_log_off)),
+    act: (bloc) => bloc.add(const OnHomeStarter(test_log_off)),
     wait: const Duration(milliseconds: 500),
     expect: () => [const HomeStart(test_log_off)],
   );
