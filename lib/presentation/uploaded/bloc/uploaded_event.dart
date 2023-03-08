@@ -61,3 +61,5 @@ class OnUploadedDelete extends UploadedEvent {
   @override
   List<Object> get props => [postId];
 }
+
+class OnUploadedStarter extends UploadedEvent {}

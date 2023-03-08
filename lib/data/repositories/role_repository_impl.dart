@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:lomba_frontend/data/datasources/role_data_source.dart';
 
@@ -28,7 +26,8 @@ class RoleRepositoryImpl implements RoleRepository {
 
       return Right(list);
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -41,7 +40,8 @@ class RoleRepositoryImpl implements RoleRepository {
 
       return Right(result.toEntity());
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -58,7 +58,8 @@ class RoleRepositoryImpl implements RoleRepository {
       }
       return const Left(ServerFailure('No fue posible realizar la acción'));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }

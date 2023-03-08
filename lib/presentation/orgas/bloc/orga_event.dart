@@ -127,3 +127,5 @@ class OnOrgaValidateEdit extends OrgaEvent {
   @override
   List<Object> get props => [code, state];
 }
+
+class OnOrgaStarter extends OrgaEvent {}

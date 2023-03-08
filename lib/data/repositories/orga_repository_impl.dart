@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:lomba_frontend/data/datasources/orga_data_source.dart';
@@ -51,7 +49,8 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(list);
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -65,7 +64,8 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(result.toEntity());
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -87,7 +87,8 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(list);
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -110,7 +111,8 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(list);
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -136,7 +138,8 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(result.toEntity());
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -163,7 +166,8 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(result.toEntity());
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -177,7 +181,8 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(result);
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -192,7 +197,8 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(result);
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -210,7 +216,8 @@ class OrgaRepositoryImpl implements OrgaRepository {
       }
       return const Left(ServerFailure('No fue posible realizar la acción'));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -236,9 +243,11 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
         return Right(list[0]);
       }
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -259,7 +268,8 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(result.toEntity());
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -282,7 +292,8 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(result.toEntity());
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -299,7 +310,8 @@ class OrgaRepositoryImpl implements OrgaRepository {
         return Right(result.toEntity());
       }
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -320,7 +332,8 @@ class OrgaRepositoryImpl implements OrgaRepository {
 
       return Right(list);
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }

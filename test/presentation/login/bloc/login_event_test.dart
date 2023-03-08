@@ -2,13 +2,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/presentation/login/bloc/login_event.dart';
 
 void main() {
-  
   const tOnLoginChangeOrga = OnLoginChangeOrga('', '');
   const t_OnLoginChangeOrga = OnLoginChangeOrga('', '');
   final tOnLoginWithGoogle = OnLoginWithGoogle();
   final t_OnLoginWithGoogle = OnLoginWithGoogle();
-  final tOnRestartLogin = OnRestartLogin();
-  final t_OnRestartLogin = OnRestartLogin();
+  final tOnLoginStarter = OnLoginStarter();
+  final t_OnLoginStarter = OnLoginStarter();
 
   group('login event', () {
     test('On Login Change Orga', () {
@@ -29,10 +28,10 @@ void main() {
       expect(result, equals(result2));
     });
 
-    test('OnRestartLogin', () {
+    test('OnLoginStarter', () {
       //act
-      final result = tOnRestartLogin.props;
-      final result2 = t_OnRestartLogin.props;
+      final result = tOnLoginStarter.props;
+      final result2 = t_OnLoginStarter.props;
 
       //assert
       expect(result, equals(result2));

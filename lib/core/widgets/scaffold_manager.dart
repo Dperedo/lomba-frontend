@@ -6,7 +6,7 @@ import '../constants.dart';
 
 class ScaffoldManager extends StatelessWidget {
   const ScaffoldManager(
-      {Key? key,
+      {super.key,
       required this.title,
       required this.child,
       this.floatingActionButton});
@@ -28,12 +28,11 @@ class ScaffoldManager extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Scaffold(
-              appBar: title,
-              body: child,
-              floatingActionButton: floatingActionButton,
-            )
-          )
+              child: Scaffold(
+            appBar: title,
+            body: child,
+            floatingActionButton: floatingActionButton,
+          ))
         ],
       );
     } else {

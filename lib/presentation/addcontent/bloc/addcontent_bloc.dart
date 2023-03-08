@@ -19,7 +19,9 @@ class AddContentBloc extends Bloc<AddContentEvent, AddContentState> {
     this._addTextPost,
     this._hasLogIn,
     this._getSession,
-  ) : super(AddContentEmpty()) {
+  ) : super(AddContentStart()) {
+    on<OnAddContentStarter>((event, emit) => emit(AddContentStart()));
+
     on<OnAddContentAdd>(
       (event, emit) async {
         emit(AddContentLoading());
@@ -59,7 +61,7 @@ class AddContentBloc extends Bloc<AddContentEvent, AddContentState> {
 
     on<OnAddContentUp>(
       (event, emit) {
-        emit(AddContentEmpty());
+        emit(AddContentStart());
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );

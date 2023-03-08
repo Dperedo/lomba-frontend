@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/failures.dart';
-import 'package:lomba_frontend/core/fakedata.dart';
 import 'package:lomba_frontend/core/model_container.dart';
 import 'package:lomba_frontend/data/models/session_model.dart';
 import 'package:lomba_frontend/domain/entities/workflow/post.dart';
@@ -60,7 +59,7 @@ void main() {
   Datos de pruebas
    */
 
-  final test_stages = <Stage>[
+  final testStages = <Stage>[
     Stage(
         name: 'Carga',
         order: 1,
@@ -112,7 +111,7 @@ void main() {
         id: 'post1',
         enabled: true,
         created: DateTime.now(),
-        stages: test_stages,
+        stages: testStages,
         deleted: null,
         expires: null,
         flowId: '',
@@ -128,8 +127,6 @@ void main() {
   ];
 
   const List<Vote> test_listItemsVote = <Vote>[];
-  
-
 
   final int test_itemCount = 1;
   final int test_totalItems = 1;
@@ -212,10 +209,7 @@ void main() {
     act: (bloc) =>
         bloc.add(const OnHomeLoading('', <String, int>{'created': 1}, 1, 10)),
     wait: const Duration(milliseconds: 500),
-    expect: () => [
-      HomeLoading(),
-      HomeOnlyUser()
-    ],
+    expect: () => [HomeLoading(), HomeOnlyUser()],
     verify: (bloc) {
       verify(mockGetHasLogIn.execute());
     },
@@ -230,7 +224,8 @@ void main() {
           .thenAnswer((realInvocation) async => any as UserCredential);
       when(mockGetLatestPosts.execute(test_orgaId, test_userId, test_flowId,
               test_stageId, test_searchText, test_pageIndex, test_pageSize))
-          .thenAnswer((realInvocation) async => const Left(ConnectionFailure(test_connection_failure)));
+          .thenAnswer((realInvocation) async =>
+              const Left(ConnectionFailure(test_connection_failure)));
       when(mockGetSession.execute())
           .thenAnswer((_) async => const Right(test_Session));
       when(mockGetSessionRole.execute())
@@ -295,7 +290,7 @@ void main() {
       verify(mockGetHasLogIn.execute());
       verify(mockFirebaseAuthInstance.signInAnonymously());
       verify(mockGetLatestPosts.execute(test_orgaId, test_userId, test_flowId,
-              test_stageId, test_searchText, test_pageIndex, test_pageSize));
+          test_stageId, test_searchText, test_pageIndex, test_pageSize));
     },
   );
 
@@ -308,7 +303,8 @@ void main() {
           .thenAnswer((realInvocation) async => any as UserCredential);
       when(mockGetLatestPosts.execute(test_orgaId, test_userId, test_flowId,
               test_stageId, test_searchText, test_pageIndex, test_pageSize))
-          .thenAnswer((realInvocation) async => const Left(ConnectionFailure(test_connection_failure)));
+          .thenAnswer((realInvocation) async =>
+              const Left(ConnectionFailure(test_connection_failure)));
       when(mockGetSession.execute())
           .thenAnswer((_) async => const Right(test_Session));
       return homeBloc;
@@ -316,15 +312,12 @@ void main() {
     act: (bloc) =>
         bloc.add(const OnHomeLoading('', <String, int>{'created': 1}, 1, 10)),
     wait: const Duration(milliseconds: 500),
-    expect: () => [
-      HomeLoading(),
-      const HomeError(test_connection_failure)
-    ],
+    expect: () => [HomeLoading(), const HomeError(test_connection_failure)],
     verify: (bloc) {
       verify(mockGetHasLogIn.execute());
       verify(mockFirebaseAuthInstance.signInAnonymously());
       verify(mockGetLatestPosts.execute(test_orgaId, test_userId, test_flowId,
-              test_stageId, test_searchText, test_pageIndex, test_pageSize));
+          test_stageId, test_searchText, test_pageIndex, test_pageSize));
     },
   );
 
@@ -333,12 +326,9 @@ void main() {
     build: () {
       return homeBloc;
     },
-    act: (bloc) =>
-        bloc.add(const OnRestartHome(test_log_off)),
+    act: (bloc) => bloc.add(const OnHomeStarter(test_log_off)),
     wait: const Duration(milliseconds: 500),
-    expect: () => [
-      const HomeStart(test_log_off)
-    ],
+    expect: () => [const HomeStart(test_log_off)],
   );
 
   blocTest<HomeBloc, HomeState>(
@@ -346,25 +336,15 @@ void main() {
     build: () {
       when(mockGetSession.execute())
           .thenAnswer((_) async => const Right(test_Session));
-      when(mockVotePublication.execute(test_orgaId,test_userId,test_flowId
-      ,test_stageId,test_postId,1))
+      when(mockVotePublication.execute(test_orgaId, test_userId, test_flowId,
+              test_stageId, test_postId, 1))
           .thenAnswer((_) async => const Right(ModelContainer(
-              test_listItemsVote,
-              1,
-              null,
-              null,
-              null,
-              null,
-              null,
-              'kind')));
+              test_listItemsVote, 1, null, null, null, null, null, 'kind')));
       return homeBloc;
     },
-    act: (bloc) =>
-        bloc.add(const OnHomeVote(test_postId, 1)),
+    act: (bloc) => bloc.add(const OnHomeVote(test_postId, 1)),
     wait: const Duration(milliseconds: 500),
-    expect: () => [
-      const HomeStart("")
-    ],
+    expect: () => [const HomeStart("")],
     verify: (bloc) {
       verify(mockGetSession.execute());
     },

@@ -20,6 +20,8 @@ class VotedBloc extends Bloc<VotedEvent, VotedState> {
   VotedBloc(this._getVotedPosts, this._getSession, this._votePublication,
       this._getUploadedPosts)
       : super(VotedStart()) {
+    on<OnVotedStarter>((event, emit) => emit(VotedStart()));
+
     on<OnVotedLoad>((event, emit) async {
       emit(VotedLoading());
       String flowId = Flows.votationFlowId;
@@ -29,12 +31,10 @@ class VotedBloc extends Bloc<VotedEvent, VotedState> {
       final session = await _getSession.execute();
       session.fold((l) => emit(VotedError(l.message)), (r) => {auth = r});
       int voteValue = 0;
-      if(event.positive)
-      {
-       voteValue = 1;
-      } else if(event.negative)
-      {
-       voteValue = -1;
+      if (event.positive) {
+        voteValue = 1;
+      } else if (event.negative) {
+        voteValue = -1;
       }
       final result = await _getVotedPosts.execute(
         auth.getOrgaId()!,
@@ -46,7 +46,6 @@ class VotedBloc extends Bloc<VotedEvent, VotedState> {
         event.pageIndex,
         event.pageSize,
         voteValue,
-        
       );
       result.fold((l) => {emit(VotedError(l.message))}, (r) {
         VotedLoaded votedLoaded = VotedLoaded(

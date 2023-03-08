@@ -17,6 +17,8 @@ class RoleBloc extends Bloc<RoleEvent, RoleState> {
     this._getRole,
     this._getRoles,
   ) : super(RoleStart()) {
+    on<OnRoleStarter>((event, emit) => emit(RoleStart()));
+
     on<OnRoleLoad>(
       (event, emit) async {
         emit(RoleLoading());

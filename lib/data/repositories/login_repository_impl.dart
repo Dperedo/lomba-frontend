@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_guid/flutter_guid.dart';
 import 'package:lomba_frontend/data/models/session_model.dart';
 
 import '../../core/exceptions.dart';

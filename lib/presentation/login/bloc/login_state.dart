@@ -12,7 +12,7 @@ abstract class LoginState extends Equatable {
 }
 
 ///Estado de login vacío, es el inicial (Start)
-class LoginEmpty extends LoginState {}
+class LoginStart extends LoginState {}
 
 ///Estado que muestra el spinner en pantalla mientras intenta loguear.
 class LoginGetting extends LoginState {}

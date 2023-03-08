@@ -32,4 +32,4 @@ class OnLoginChangeOrga extends LoginEvent {
 class OnLoginWithGoogle extends LoginEvent {}
 
 ///Evento para el reinicio de la pantalla
-class OnRestartLogin extends LoginEvent {}
+class OnLoginStarter extends LoginEvent {}

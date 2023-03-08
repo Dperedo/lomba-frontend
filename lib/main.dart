@@ -50,7 +50,7 @@ Future<void> main() async {
   );
 
   await di.init();
-  print("1.0.0.2");
+
   runApp(const MyApp());
 }
 
@@ -90,19 +90,18 @@ class _MyApp extends State<MyApp> {
       ],
       child: MaterialApp(
         //initialRoute: HomePage.route,
-          title: 'App Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.deepOrange,
-          ),
-          home: BlocBuilder<NavBloc, NavState>(builder: (context, state) {
-            return AnimatedSwitcher(
-              switchInCurve: Curves.easeInExpo,
-              switchOutCurve: Curves.easeOutExpo,
-              duration: const Duration(milliseconds: 300),
-              child: _bodyForState(state),
-            );
-          }
+        title: 'App Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.deepOrange,
         ),
+        home: BlocBuilder<NavBloc, NavState>(builder: (context, state) {
+          return AnimatedSwitcher(
+            switchInCurve: Curves.easeInExpo,
+            switchOutCurve: Curves.easeOutExpo,
+            duration: const Duration(milliseconds: 300),
+            child: _bodyForState(state),
+          );
+        }),
         onGenerateRoute: _appRouter.onGenerateRoute,
       ),
     );

@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
 
   //static const String route = '/home';
   final TextEditingController _searchController = TextEditingController();
-  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  //final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final int _fixPageSize = 8;
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
       listener: (context, state) {
         if (state is HomeStart && state.message != "") {
           snackBarNotify(context, state.message, Icons.exit_to_app);
-        } else if(state is HomeError && state.message != ""){
+        } else if (state is HomeError && state.message != "") {
           snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
@@ -66,9 +66,7 @@ class HomePage extends StatelessWidget {
             );
           }
           if (state is HomeOnlyUser) {
-            return const Center(
-              child: Text('Bienvenidos a lomba!!!')
-            );
+            return const Center(child: Text('Bienvenidos a lomba!!!'));
           }
           if (state is HomeLoaded) {
             return Column(

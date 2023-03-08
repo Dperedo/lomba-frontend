@@ -33,13 +33,15 @@ class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
     this._updateOrga,
     this._existsOrga,
   ) : super(const OrgaStart("")) {
+    on<OnOrgaStarter>((event, emit) => emit(const OrgaStart('')));
+
     on<OnOrgaLoad>(
       (event, emit) async {
         emit(OrgaLoading());
         final result = await _getOrga.execute(event.id);
 
-        result.fold(
-            (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaLoaded(r, ""))});
+        result.fold((l) => emit(OrgaError(l.message)),
+            (r) => {emit(OrgaLoaded(r, ""))});
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
@@ -62,7 +64,9 @@ class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
           await _addOrga.execute(event.name, event.code, event.enabled);
 
       result.fold(
-          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart(" La organización ${event.name} fue creada"))});
+          (l) => emit(OrgaError(l.message)),
+          (r) =>
+              {emit(OrgaStart(" La organización ${event.name} fue creada"))});
     });
     on<OnOrgaPrepareForAdd>((event, emit) async {
       emit(OrgaAdding(false, false));
@@ -111,22 +115,35 @@ class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
 
       final result = await _updateOrga.execute(event.id, orga);
       result.fold(
-          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart(" La organización ${event.name} fue actualizado"))});
+          (l) => emit(OrgaError(l.message)),
+          (r) => {
+                emit(
+                    OrgaStart(" La organización ${event.name} fue actualizado"))
+              });
     });
     on<OnOrgaEnable>((event, emit) async {
       emit(OrgaLoading());
 
       final result = await _enableOrga.execute(event.id, event.enabled);
       result.fold(
-          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaLoaded(r,
-          (event.enabled?" La organización ${event.name} fue habilitado":" La organización ${event.name} fue deshabilitado")))});
+          (l) => emit(OrgaError(l.message)),
+          (r) => {
+                emit(OrgaLoaded(
+                    r,
+                    (event.enabled
+                        ? " La organización ${event.name} fue habilitado"
+                        : " La organización ${event.name} fue deshabilitado")))
+              });
     });
     on<OnOrgaDelete>((event, emit) async {
       emit(OrgaLoading());
 
       final result = await _deleteOrga.execute(event.id);
       result.fold(
-          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaStart(" La organización ${event.name} fue eliminado"))});
+          (l) => emit(OrgaError(l.message)),
+          (r) => {
+                emit(OrgaStart(" La organización ${event.name} fue eliminado"))
+              });
     });
     on<OnOrgaShowAddOrgaForm>((event, emit) async {
       emit(OrgaLoading());
@@ -136,7 +153,11 @@ class OrgaBloc extends Bloc<OrgaEvent, OrgaState> {
       final result = await _addOrga.execute(event.organame, event.code, true);
 
       result.fold(
-          (l) => emit(OrgaError(l.message)), (r) => {emit(OrgaLoaded(r," La organización ${event.organame} fue actualizada"))});
+          (l) => emit(OrgaError(l.message)),
+          (r) => {
+                emit(OrgaLoaded(
+                    r, " La organización ${event.organame} fue actualizada"))
+              });
     });
   }
 

@@ -1,14 +1,13 @@
-import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:lomba_frontend/data/datasources/user_data_source.dart';
 import 'package:lomba_frontend/data/models/user_model.dart';
-import '../models/sort_model.dart';
+
 import '../../core/exceptions.dart';
 import '../../core/failures.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/user_repository.dart';
+import '../models/sort_model.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final UserRemoteDataSource remoteDataSource;
@@ -36,7 +35,8 @@ class UserRepositoryImpl implements UserRepository {
 
       return Right(list);
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -70,7 +70,8 @@ class UserRepositoryImpl implements UserRepository {
 
       return Right(list);
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -83,7 +84,8 @@ class UserRepositoryImpl implements UserRepository {
 
       return Right(result.toEntity());
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -105,7 +107,8 @@ class UserRepositoryImpl implements UserRepository {
 
       return Right(result.toEntity());
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -118,7 +121,8 @@ class UserRepositoryImpl implements UserRepository {
 
       return Right(result);
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -133,9 +137,11 @@ class UserRepositoryImpl implements UserRepository {
         final resultItem = await remoteDataSource.getUser(userId);
         return Right(resultItem.toEntity());
       }
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -156,7 +162,8 @@ class UserRepositoryImpl implements UserRepository {
 
       return Right(result.toEntity());
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -174,7 +181,8 @@ class UserRepositoryImpl implements UserRepository {
         return Right(result.toEntity());
       }
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -189,7 +197,8 @@ class UserRepositoryImpl implements UserRepository {
 
       return Right(result);
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }

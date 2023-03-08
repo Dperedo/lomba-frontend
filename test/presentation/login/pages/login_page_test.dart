@@ -69,7 +69,7 @@ void main() {
     'debe accionar la consulta del login luego de presionar botón',
     (WidgetTester tester) async {
       // arrange
-      when(() => mockLoginBloc.state).thenReturn(LoginEmpty());
+      when(() => mockLoginBloc.state).thenReturn(LoginStart());
 
       // act
       await tester.pumpWidget(makeTestableWidget(LoginPage()));

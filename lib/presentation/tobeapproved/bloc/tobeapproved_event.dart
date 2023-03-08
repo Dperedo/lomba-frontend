@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-abstract class ToBeApprovedEvent extends Equatable{
+abstract class ToBeApprovedEvent extends Equatable {
   const ToBeApprovedEvent();
 
   @override
@@ -8,15 +8,13 @@ abstract class ToBeApprovedEvent extends Equatable{
 }
 
 class OnToBeApprovedLoad extends ToBeApprovedEvent {
-  
   final String searchText;
   final Map<String, int> fieldsOrder;
   final int pageIndex;
   final int pageSize;
 
   const OnToBeApprovedLoad(
-    this.searchText, this.fieldsOrder, this.pageIndex, this.pageSize
-  );
+      this.searchText, this.fieldsOrder, this.pageIndex, this.pageSize);
 
   @override
   List<Object> get props => [searchText, fieldsOrder, pageIndex, pageSize];
@@ -31,3 +29,5 @@ class OnToBeApprovedVote extends ToBeApprovedEvent {
   @override
   List<Object> get props => [postId, voteValue];
 }
+
+class OnToBeApprovedStarter extends ToBeApprovedEvent {}

@@ -1,11 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:lomba_frontend/domain/usecases/login/change_orga.dart';
-import 'package:lomba_frontend/data/models/orga_model.dart';
 
-import '../entities/session.dart';
 import '../../core/failures.dart';
-import '../entities/orga.dart';
-import '../../data/models/login_access_model.dart';
+import '../entities/session.dart';
 import '../entities/user.dart';
 
 ///Interfaz del repositorio del Login de usuario.

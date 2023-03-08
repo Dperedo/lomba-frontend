@@ -21,7 +21,7 @@ class SideDrawer extends StatelessWidget {
   }) : super(key: key);
 
   void _handleItemClick(BuildContext context, NavItem item) {
-    BlocProvider.of<NavBloc>(context).add(NavigateTo(item));
+    BlocProvider.of<NavBloc>(context).add(NavigateTo(item, context));
     final screenWidth = MediaQuery.of(context).size.width;
     if (screenWidth < ScreenSize.maxScreen) {
       Navigator.pop(context);
@@ -32,7 +32,7 @@ class SideDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<SideDrawerBloc, SideDrawerState>(
       listener: (context, state) {
-        if(state is SideDrawerError && state.message != ""){
+        if (state is SideDrawerError && state.message != "") {
           snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
@@ -283,8 +283,8 @@ class SideDrawer extends StatelessWidget {
                     context.read<SideDrawerBloc>().add(OnSideDrawerLogOff());
                     context
                         .read<HomeBloc>()
-                        .add(const OnRestartHome(" Sesión Cerrada"));
-                    context.read<LoginBloc>().add(OnRestartLogin());
+                        .add(const OnHomeStarter(" Sesión Cerrada"));
+                    context.read<LoginBloc>().add(OnLoginStarter());
 
                     _handleItemClick(context, NavItem.pageHome);
                   },
