@@ -128,9 +128,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       final result = await _votePublication.execute(auth.getOrgaId()!,
           auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);
-      result.fold((l) => emit(HomeError(l.message)), (r) {
-        emit(const HomeStart(""));
-      });
+      result.fold((l) => emit(HomeError(l.message)), (r) => null);
     });
   }
 

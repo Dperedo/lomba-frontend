@@ -25,7 +25,7 @@ class PopularPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<PopularBloc, PopularState>(
       listener: (context, state) {
-        if(state is PopularError && state.message != ""){
+        if (state is PopularError && state.message != "") {
           snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
@@ -205,126 +205,8 @@ class PopularPage extends StatelessWidget {
                                         ),
                                         const SizedBox(height: 10),
                                         SizedBox(
-                                          child: (state.validLogin)
-                                              ? Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    ElevatedButton(
-                                                        style: ButtonStyle(
-                                                          shape:
-                                                              MaterialStateProperty
-                                                                  .resolveWith(
-                                                            (states) =>
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20),
-                                                              side: BorderSide(
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .secondaryHeaderColor,
-                                                                width: 2,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        onPressed: state
-                                                                    .listItems[
-                                                                        index]
-                                                                    .votes
-                                                                    .any((element) =>
-                                                                        element
-                                                                            .value ==
-                                                                        -1) ||
-                                                                (statecubit.votes.containsKey(state
-                                                                        .listItems[
-                                                                            index]
-                                                                        .id) &&
-                                                                    statecubit.votes[state.listItems[index].id] ==
-                                                                        -1)
-                                                            ? null
-                                                            : () {
-                                                                context
-                                                                    .read<
-                                                                        PopularLiveCubit>()
-                                                                    .makeVote(
-                                                                        state
-                                                                            .listItems[index]
-                                                                            .id,
-                                                                        -1);
-                                                                context
-                                                                    .read<
-                                                                        PopularBloc>()
-                                                                    .add(OnPopularVote(
-                                                                        state
-                                                                            .listItems[index]
-                                                                            .id,
-                                                                        -1));
-                                                              },
-                                                        child: const Icon(Icons
-                                                            .keyboard_arrow_down)),
-                                                    ElevatedButton(
-                                                        style: ButtonStyle(
-                                                          shape:
-                                                              MaterialStateProperty
-                                                                  .resolveWith(
-                                                            (states) =>
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20.0),
-                                                              side: BorderSide(
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .secondaryHeaderColor,
-                                                                width: 2,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        onPressed: state
-                                                                    .listItems[
-                                                                        index]
-                                                                    .votes
-                                                                    .any((element) =>
-                                                                        element
-                                                                            .value ==
-                                                                        1) ||
-                                                                (statecubit.votes.containsKey(state
-                                                                        .listItems[
-                                                                            index]
-                                                                        .id) &&
-                                                                    statecubit.votes[state.listItems[index].id] ==
-                                                                        1)
-                                                            ? null
-                                                            : () {
-                                                                context
-                                                                    .read<
-                                                                        PopularLiveCubit>()
-                                                                    .makeVote(
-                                                                        state
-                                                                            .listItems[index]
-                                                                            .id,
-                                                                        1);
-                                                                context
-                                                                    .read<
-                                                                        PopularBloc>()
-                                                                    .add(OnPopularVote(
-                                                                        state
-                                                                            .listItems[index]
-                                                                            .id,
-                                                                        1));
-                                                              },
-                                                        child: const Icon(Icons
-                                                            .keyboard_arrow_up)),
-                                                  ],
-                                                )
-                                              : null,
-                                        ),
+                                            child: _showVoteButtons(state,
+                                                context, index, statecubit)),
                                         const SizedBox(height: 15),
                                       ],
                                     ),
@@ -344,5 +226,71 @@ class PopularPage extends StatelessWidget {
         }),
       ),
     );
+  }
+
+  Row? _showVoteButtons(PopularLoaded state, BuildContext context, int index,
+      PopularLiveState statecubit) {
+    return (state.validLogin)
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        side: BorderSide(
+                          color: Theme.of(context).secondaryHeaderColor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                  onPressed: state.listItems[index].votes
+                              .any((element) => element.value == -1) ||
+                          (statecubit.votes
+                                  .containsKey(state.listItems[index].id) &&
+                              statecubit.votes[state.listItems[index].id] == -1)
+                      ? null
+                      : () {
+                          state.listItems[index].votes.clear();
+                          context.read<PopularBloc>().add(
+                              OnPopularVote(state.listItems[index].id, -1));
+                          context
+                              .read<PopularLiveCubit>()
+                              .makeVote(state.listItems[index].id, -1);
+                        },
+                  child: const Icon(Icons.keyboard_arrow_down)),
+              ElevatedButton(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        side: BorderSide(
+                          color: Theme.of(context).secondaryHeaderColor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                  onPressed: state.listItems[index].votes
+                              .any((element) => element.value == 1) ||
+                          (statecubit.votes
+                                  .containsKey(state.listItems[index].id) &&
+                              statecubit.votes[state.listItems[index].id] == 1)
+                      ? null
+                      : () {
+                          state.listItems[index].votes.clear();
+                          context
+                              .read<PopularBloc>()
+                              .add(OnPopularVote(state.listItems[index].id, 1));
+                          context
+                              .read<PopularLiveCubit>()
+                              .makeVote(state.listItems[index].id, 1);
+                        },
+                  child: const Icon(Icons.keyboard_arrow_up)),
+            ],
+          )
+        : null;
   }
 }

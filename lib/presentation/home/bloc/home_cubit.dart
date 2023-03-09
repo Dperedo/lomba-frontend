@@ -2,7 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeLiveCubit extends Cubit<HomeLiveState> {
-  HomeLiveCubit() : super(HomeLiveState());
+  HomeLiveCubit()
+      : super(const HomeLiveState(<String, bool>{}, <String, int>{}));
 
   void changeCheckValue(String name, bool value) {
     emit(state.copyWithChangeCheck(name: name, changeState: value));
@@ -14,31 +15,29 @@ class HomeLiveCubit extends Cubit<HomeLiveState> {
 }
 
 class HomeLiveState extends Equatable {
-  Map<String, bool> checks = <String, bool>{};
-  Map<String, int> votes = <String, int>{};
+  final Map<String, bool> checks;
+  final Map<String, int> votes;
 
   @override
-  List<Object?> get props => [checks, votes];
+  List<Object?> get props => [checks, votes, votes.length];
 
-  HomeLiveState() {
-    checks.clear();
-  }
+  const HomeLiveState(this.checks, this.votes);
 
   HomeLiveState copyWithChangeCheck(
       {required String name, required bool changeState}) {
-    final ous = HomeLiveState();
-    ous.checks = checks;
-    ous.votes = votes;
-    ous.checks[name] = changeState;
+    Map<String, bool> nchecks = <String, bool>{};
+    nchecks.addAll(checks);
+    nchecks[name] = changeState;
+    final ous = HomeLiveState(nchecks, votes);
     return ous;
   }
 
   HomeLiveState copyWithMakeVote(
       {required String postId, required int voteValue}) {
-    final ous = HomeLiveState();
-    ous.checks = checks;
-    ous.votes = votes;
-    ous.votes[postId] = voteValue;
+    Map<String, int> nvotes = <String, int>{};
+    nvotes.addAll(votes);
+    nvotes[postId] = voteValue;
+    final ous = HomeLiveState(checks, nvotes);
     return ous;
   }
 }

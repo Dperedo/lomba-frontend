@@ -168,179 +168,64 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 BlocBuilder<HomeLiveCubit, HomeLiveState>(
-                    builder: (context, statecubit) {
-                  return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: state.listItems.length,
-                      itemBuilder: (context, index) {
-                        return SingleChildScrollView(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 20),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      children: [
-                                        ListTile(
-                                          leading: const Icon(Icons.person),
-                                          title: Text(
-                                              state.listItems[index].title),
-                                        ),
-                                        ListTile(
-                                          shape: const RoundedRectangleBorder(
-                                              side: BorderSide(
-                                                  color: Colors.grey, width: 2),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(2))),
-                                          // tileColor: Colors.grey,
-                                          title: Text(
-                                              (state
-                                                      .listItems[index]
-                                                      .postitems[0]
-                                                      .content as TextContent)
-                                                  .text,
-                                              textAlign: TextAlign.center),
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 100,
-                                                  vertical: 100),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        SizedBox(
-                                          child: (state.validLogin)
-                                              ? Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    ElevatedButton(
-                                                        style: ButtonStyle(
-                                                          shape:
-                                                              MaterialStateProperty
-                                                                  .resolveWith(
-                                                            (states) =>
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20),
-                                                              side: BorderSide(
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .secondaryHeaderColor,
-                                                                width: 2,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        onPressed: state
-                                                                    .listItems[
-                                                                        index]
-                                                                    .votes
-                                                                    .any((element) =>
-                                                                        element
-                                                                            .value ==
-                                                                        1) ||
-                                                                (statecubit.votes.containsKey(state
-                                                                        .listItems[
-                                                                            index]
-                                                                        .id) &&
-                                                                    statecubit.votes[state.listItems[index].id] ==
-                                                                        1)
-                                                            ? null
-                                                            : () {
-                                                                context
-                                                                    .read<
-                                                                        HomeLiveCubit>()
-                                                                    .makeVote(
-                                                                        state
-                                                                            .listItems[index]
-                                                                            .id,
-                                                                        -1);
-                                                                context
-                                                                    .read<
-                                                                        HomeBloc>()
-                                                                    .add(OnHomeVote(
-                                                                        state
-                                                                            .listItems[index]
-                                                                            .id,
-                                                                        -1));
-                                                              },
-                                                        child: const Icon(Icons
-                                                            .keyboard_arrow_down)),
-                                                    ElevatedButton(
-                                                        style: ButtonStyle(
-                                                          shape:
-                                                              MaterialStateProperty
-                                                                  .resolveWith(
-                                                            (states) =>
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20.0),
-                                                              side: BorderSide(
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .secondaryHeaderColor,
-                                                                width: 2,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        onPressed: state
-                                                                    .listItems[
-                                                                        index]
-                                                                    .votes
-                                                                    .any((element) =>
-                                                                        element
-                                                                            .value ==
-                                                                        1) ||
-                                                                (statecubit.votes.containsKey(state
-                                                                        .listItems[
-                                                                            index]
-                                                                        .id) &&
-                                                                    statecubit.votes[state.listItems[index].id] ==
-                                                                        1)
-                                                            ? null
-                                                            : () {
-                                                                context
-                                                                    .read<
-                                                                        HomeLiveCubit>()
-                                                                    .makeVote(
-                                                                        state
-                                                                            .listItems[index]
-                                                                            .id,
-                                                                        1);
-                                                                context
-                                                                    .read<
-                                                                        HomeBloc>()
-                                                                    .add(OnHomeVote(
-                                                                        state
-                                                                            .listItems[index]
-                                                                            .id,
-                                                                        1));
-                                                              },
-                                                        child: const Icon(Icons
-                                                            .keyboard_arrow_up)),
-                                                  ],
-                                                )
-                                              : null,
-                                        ),
-                                        const SizedBox(height: 15),
-                                      ],
+                  builder: (context, statecubit) {
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: state.listItems.length,
+                        itemBuilder: (context, index) {
+                          return SingleChildScrollView(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 20),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        children: [
+                                          ListTile(
+                                            leading: const Icon(Icons.person),
+                                            title: Text(
+                                                state.listItems[index].title),
+                                          ),
+                                          ListTile(
+                                            shape: const RoundedRectangleBorder(
+                                                side: BorderSide(
+                                                    color: Colors.grey,
+                                                    width: 2),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(2))),
+                                            // tileColor: Colors.grey,
+                                            title: Text(
+                                                (state
+                                                        .listItems[index]
+                                                        .postitems[0]
+                                                        .content as TextContent)
+                                                    .text,
+                                                textAlign: TextAlign.center),
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 100,
+                                                    vertical: 100),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          SizedBox(
+                                            child: _showVoteButtons(state,
+                                                context, index, statecubit),
+                                          ),
+                                          const SizedBox(height: 15),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              // const Divider()
-                            ],
-                          ),
-                        );
-                      });
-                }),
+                                  ],
+                                ),
+                                // const Divider()
+                              ],
+                            ),
+                          );
+                        });
+                  },
+                ),
               ],
             );
           }
@@ -348,5 +233,72 @@ class HomePage extends StatelessWidget {
         }),
       ),
     );
+  }
+
+  Row? _showVoteButtons(HomeLoaded state, BuildContext context, int index,
+      HomeLiveState statecubit) {
+    return (state.validLogin)
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        side: BorderSide(
+                          color: Theme.of(context).secondaryHeaderColor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                  onPressed: state.listItems[index].votes
+                              .any((element) => element.value == -1) ||
+                          (statecubit.votes
+                                  .containsKey(state.listItems[index].id) &&
+                              statecubit.votes[state.listItems[index].id] == -1)
+                      ? null
+                      : () {
+                          state.listItems[index].votes.clear();
+                          context
+                              .read<HomeBloc>()
+                              .add(OnHomeVote(state.listItems[index].id, -1));
+                          context
+                              .read<HomeLiveCubit>()
+                              .makeVote(state.listItems[index].id, -1);
+                        },
+                  child: const Icon(Icons.keyboard_arrow_down)),
+              ElevatedButton(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        side: BorderSide(
+                          color: Theme.of(context).secondaryHeaderColor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                  onPressed: state.listItems[index].votes
+                              .any((element) => element.value == 1) ||
+                          (statecubit.votes
+                                  .containsKey(state.listItems[index].id) &&
+                              statecubit.votes[state.listItems[index].id] == 1)
+                      ? null
+                      : () {
+                          state.listItems[index].votes.clear();
+                          context
+                              .read<HomeBloc>()
+                              .add(OnHomeVote(state.listItems[index].id, 1));
+                          context
+                              .read<HomeLiveCubit>()
+                              .makeVote(state.listItems[index].id, 1);
+                        },
+                  child: const Icon(Icons.keyboard_arrow_up)),
+            ],
+          )
+        : null;
   }
 }

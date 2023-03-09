@@ -3,8 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/presentation/home/bloc/home_cubit.dart';
 
 main() {
-  late HomeLiveState testStateChangeValue = HomeLiveState();
-  late HomeLiveState testStateMakeVote = HomeLiveState();
+  late HomeLiveState testStateChangeValue =
+      const HomeLiveState(<String, bool>{}, <String, int>{});
+  late HomeLiveState testStateMakeVote =
+      const HomeLiveState(<String, bool>{}, <String, int>{});
   setUp(() {
     testStateChangeValue.checks
         .addEntries(<String, bool>{"clave": true}.entries);

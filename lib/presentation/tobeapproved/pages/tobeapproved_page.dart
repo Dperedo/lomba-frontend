@@ -21,7 +21,7 @@ class ToBeApprovedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<ToBeApprovedBloc, ToBeApprovedState>(
       listener: (context, state) {
-        if(state is ToBeApprovedError && state.message != ""){
+        if (state is ToBeApprovedError && state.message != "") {
           snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
@@ -32,9 +32,9 @@ class ToBeApprovedPage extends StatelessWidget {
             child: Column(
               children: [
                 BodyFormatter(
-                  screenWidth: MediaQuery.of(context).size.width,
-                  child: _bodyToBeApproved(context)
-                  )],
+                    screenWidth: MediaQuery.of(context).size.width,
+                    child: _bodyToBeApproved(context))
+              ],
             ),
           ))),
     );
@@ -211,128 +211,8 @@ class ToBeApprovedPage extends StatelessWidget {
                                                         vertical: 100),
                                               ),
                                               const SizedBox(height: 10),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  ElevatedButton(
-                                                      style: ButtonStyle(
-                                                        shape:
-                                                            MaterialStateProperty
-                                                                .resolveWith(
-                                                          (states) =>
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                            side: BorderSide(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .secondaryHeaderColor,
-                                                              width: 2,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      onPressed: state
-                                                                  .listItems[
-                                                                      index]
-                                                                  .votes
-                                                                  .any((element) =>
-                                                                      element.value ==
-                                                                      -1) ||
-                                                              (statecubit.votes.containsKey(state
-                                                                      .listItems[
-                                                                          index]
-                                                                      .id) &&
-                                                                  statecubit.votes[state
-                                                                          .listItems[index]
-                                                                          .id] ==
-                                                                      -1)
-                                                          ? null
-                                                          : () {
-                                                              context
-                                                                  .read<
-                                                                      ToBeApprovedLiveCubit>()
-                                                                  .makeVote(
-                                                                      state
-                                                                          .listItems[
-                                                                              index]
-                                                                          .id,
-                                                                      -1);
-                                                              context
-                                                                  .read<
-                                                                      ToBeApprovedBloc>()
-                                                                  .add(OnToBeApprovedVote(
-                                                                      state
-                                                                          .listItems[
-                                                                              index]
-                                                                          .id,
-                                                                      -1));
-                                                            },
-                                                      child: const Icon(Icons.close)),
-                                                  ElevatedButton(
-                                                      style: ButtonStyle(
-                                                        shape:
-                                                            MaterialStateProperty
-                                                                .resolveWith(
-                                                          (states) =>
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20.0),
-                                                            side: BorderSide(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .secondaryHeaderColor,
-                                                              width: 2,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      onPressed: state
-                                                                  .listItems[
-                                                                      index]
-                                                                  .votes
-                                                                  .any((element) =>
-                                                                      element
-                                                                          .value ==
-                                                                      1) ||
-                                                              (statecubit.votes.containsKey(state
-                                                                      .listItems[
-                                                                          index]
-                                                                      .id) &&
-                                                                  statecubit.votes[state
-                                                                          .listItems[index]
-                                                                          .id] ==
-                                                                      1)
-                                                          ? null
-                                                          : () {
-                                                              context
-                                                                  .read<
-                                                                      ToBeApprovedLiveCubit>()
-                                                                  .makeVote(
-                                                                      state
-                                                                          .listItems[
-                                                                              index]
-                                                                          .id,
-                                                                      1);
-                                                              context
-                                                                  .read<
-                                                                      ToBeApprovedBloc>()
-                                                                  .add(OnToBeApprovedVote(
-                                                                      state
-                                                                          .listItems[
-                                                                              index]
-                                                                          .id,
-                                                                      1));
-                                                            },
-                                                      child: const Icon(Icons.check)),
-                                                ],
-                                              ),
+                                              _showVoteButtons(context, state,
+                                                  index, statecubit),
                                               const SizedBox(height: 15),
                                             ],
                                           ),
@@ -351,5 +231,68 @@ class ToBeApprovedPage extends StatelessWidget {
                 return const SizedBox();
               })),
         ));
+  }
+
+  Row _showVoteButtons(BuildContext context, ToBeApprovedLoaded state,
+      int index, ToBeApprovedLiveState statecubit) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ElevatedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.resolveWith(
+                (states) => RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(
+                    color: Theme.of(context).secondaryHeaderColor,
+                    width: 2,
+                  ),
+                ),
+              ),
+            ),
+            onPressed: state.listItems[index].votes
+                        .any((element) => element.value == -1) ||
+                    (statecubit.votes.containsKey(state.listItems[index].id) &&
+                        statecubit.votes[state.listItems[index].id] == -1)
+                ? null
+                : () {
+                    state.listItems[index].votes.clear();
+                    context
+                        .read<ToBeApprovedBloc>()
+                        .add(OnToBeApprovedVote(state.listItems[index].id, -1));
+                    context
+                        .read<ToBeApprovedLiveCubit>()
+                        .makeVote(state.listItems[index].id, -1);
+                  },
+            child: const Icon(Icons.close)),
+        ElevatedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.resolveWith(
+                (states) => RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  side: BorderSide(
+                    color: Theme.of(context).secondaryHeaderColor,
+                    width: 2,
+                  ),
+                ),
+              ),
+            ),
+            onPressed: state.listItems[index].votes
+                        .any((element) => element.value == 1) ||
+                    (statecubit.votes.containsKey(state.listItems[index].id) &&
+                        statecubit.votes[state.listItems[index].id] == 1)
+                ? null
+                : () {
+                    state.listItems[index].votes.clear();
+                    context
+                        .read<ToBeApprovedBloc>()
+                        .add(OnToBeApprovedVote(state.listItems[index].id, 1));
+                    context
+                        .read<ToBeApprovedLiveCubit>()
+                        .makeVote(state.listItems[index].id, 1);
+                  },
+            child: const Icon(Icons.check)),
+      ],
+    );
   }
 }

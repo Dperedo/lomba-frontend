@@ -95,19 +95,23 @@ class _MyApp extends State<MyApp> {
           primarySwatch: Colors.deepOrange,
         ),
         home: BlocBuilder<NavBloc, NavState>(builder: (context, state) {
-          return AnimatedSwitcher(
-            switchInCurve: Curves.easeInExpo,
-            switchOutCurve: Curves.easeOutExpo,
-            duration: const Duration(milliseconds: 300),
-            child: _bodyForState(state),
-          );
+          return _animatedSwitcher(state);
         }),
         onGenerateRoute: _appRouter.onGenerateRoute,
       ),
     );
   }
 
-  _bodyForState(NavState state) {
+  AnimatedSwitcher _animatedSwitcher(NavState state) {
+    return AnimatedSwitcher(
+      switchInCurve: Curves.easeInExpo,
+      switchOutCurve: Curves.easeOutExpo,
+      duration: const Duration(milliseconds: 200),
+      child: _bodyForState(state),
+    );
+  }
+
+  dynamic _bodyForState(NavState state) {
     if (state.selectedItem == NavItem.pageHome) {
       return HomePage();
     }

@@ -26,7 +26,7 @@ class RejectedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<RejectedBloc, RejectedState>(
       listener: (context, state) {
-        if(state is RejectedError && state.message != ""){
+        if (state is RejectedError && state.message != "") {
           snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
@@ -39,7 +39,8 @@ class RejectedPage extends StatelessWidget {
               BodyFormatter(
                 screenWidth: MediaQuery.of(context).size.width,
                 child: _bodyRejected(context),
-                )],
+              )
+            ],
           ),
         )),
       ),
@@ -215,93 +216,8 @@ class RejectedPage extends StatelessWidget {
                                                       vertical: 100),
                                             ),
                                             const SizedBox(height: 10),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                ElevatedButton(
-                                                    style: ButtonStyle(
-                                                      shape:
-                                                          MaterialStateProperty
-                                                              .resolveWith(
-                                                        (states) =>
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(20),
-                                                          side: BorderSide(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .secondaryHeaderColor,
-                                                            width: 2,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    onPressed: null,
-                                                    child: const Icon(
-                                                        Icons.close)),
-                                                ElevatedButton(
-                                                    style: ButtonStyle(
-                                                      shape:
-                                                          MaterialStateProperty
-                                                              .resolveWith(
-                                                        (states) =>
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(20),
-                                                          side: BorderSide(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .secondaryHeaderColor,
-                                                            width: 2,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    onPressed: state
-                                                                .listItems[
-                                                                    index]
-                                                                .votes
-                                                                .any((element) =>
-                                                                    element
-                                                                        .value ==
-                                                                    1) ||
-                                                            (statecubit.votes
-                                                                    .containsKey(state
-                                                                        .listItems[
-                                                                            index]
-                                                                        .id) &&
-                                                                statecubit.votes[state
-                                                                        .listItems[index]
-                                                                        .id] ==
-                                                                    1)
-                                                        ? null
-                                                        : () {
-                                                            context
-                                                                .read<
-                                                                    RejectedLiveCubit>()
-                                                                .makeVote(
-                                                                    state
-                                                                        .listItems[
-                                                                            index]
-                                                                        .id,
-                                                                    1);
-                                                            context
-                                                                .read<
-                                                                    RejectedBloc>()
-                                                                .add(OnRejectedVote(
-                                                                    state
-                                                                        .listItems[
-                                                                            index]
-                                                                        .id,
-                                                                    1));
-                                                          },
-                                                    child: const Icon(Icons.check)),
-                                              ],
-                                            ),
+                                            _showVoteButtons(context, state,
+                                                index, statecubit),
                                             const SizedBox(height: 15),
                                           ],
                                         ),
@@ -322,6 +238,69 @@ class RejectedPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Row _showVoteButtons(BuildContext context, RejectedLoaded state, int index,
+      RejectedLiveState statecubit) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ElevatedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.resolveWith(
+                (states) => RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(
+                    color: Theme.of(context).secondaryHeaderColor,
+                    width: 2,
+                  ),
+                ),
+              ),
+            ),
+            onPressed: state.listItems[index].votes
+                        .any((element) => element.value == -1) ||
+                    (statecubit.votes.containsKey(state.listItems[index].id) &&
+                        statecubit.votes[state.listItems[index].id] == -1)
+                ? null
+                : () {
+                    state.listItems[index].votes.clear();
+                    context
+                        .read<RejectedBloc>()
+                        .add(OnRejectedVote(state.listItems[index].id, -1));
+                    context
+                        .read<RejectedLiveCubit>()
+                        .makeVote(state.listItems[index].id, -1);
+                  },
+            child: const Icon(Icons.close)),
+        ElevatedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.resolveWith(
+                (states) => RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(
+                    color: Theme.of(context).secondaryHeaderColor,
+                    width: 2,
+                  ),
+                ),
+              ),
+            ),
+            onPressed: state.listItems[index].votes
+                        .any((element) => element.value == 1) ||
+                    (statecubit.votes.containsKey(state.listItems[index].id) &&
+                        statecubit.votes[state.listItems[index].id] == 1)
+                ? null
+                : () {
+                    state.listItems[index].votes.clear();
+                    context
+                        .read<RejectedBloc>()
+                        .add(OnRejectedVote(state.listItems[index].id, 1));
+                    context
+                        .read<RejectedLiveCubit>()
+                        .makeVote(state.listItems[index].id, 1);
+                  },
+            child: const Icon(Icons.check)),
+      ],
     );
   }
 }

@@ -1,7 +1,9 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RejectedLiveCubit extends Cubit<RejectedLiveState> {
-  RejectedLiveCubit() : super(RejectedLiveState());
+  RejectedLiveCubit()
+      : super(const RejectedLiveState(<String, bool>{}, <String, int>{}));
 
   void changeCheckValue(String name, bool value) {
     emit(state.copyWithChangeCheck(name: name, changeState: value));
@@ -12,30 +14,30 @@ class RejectedLiveCubit extends Cubit<RejectedLiveState> {
   }
 }
 
-class RejectedLiveState {
-  Map<String, bool> checks = <String, bool>{};
-  Map<String, int> votes = <String, int>{};
+class RejectedLiveState extends Equatable {
+  final Map<String, bool> checks;
+  final Map<String, int> votes;
 
-  RejectedLiveState() {
-    checks.clear();
-    checks.addEntries(<String, bool>{"onlydrafts": false}.entries);
-  }
+  @override
+  List<Object?> get props => [checks, votes, votes.length];
+
+  const RejectedLiveState(this.checks, this.votes);
 
   RejectedLiveState copyWithChangeCheck(
       {required String name, required bool changeState}) {
-    final ous = RejectedLiveState();
-    ous.checks = checks;
-    ous.votes = votes;
-    ous.checks[name] = changeState;
+    Map<String, bool> nchecks = <String, bool>{};
+    nchecks.addAll(checks);
+    nchecks[name] = changeState;
+    final ous = RejectedLiveState(nchecks, votes);
     return ous;
   }
 
   RejectedLiveState copyWithMakeVote(
       {required String postId, required int voteValue}) {
-    final ous = RejectedLiveState();
-    ous.checks = checks;
-    ous.votes = votes;
-    ous.votes[postId] = voteValue;
+    Map<String, int> nvotes = <String, int>{};
+    nvotes.addAll(votes);
+    nvotes[postId] = voteValue;
+    final ous = RejectedLiveState(checks, nvotes);
     return ous;
   }
 }

@@ -11,6 +11,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final GetSession _getSession;
 
   ProfileBloc(this._getUser, this._getSession) : super(ProfileStart()) {
+    on<OnProfileStarter>((event, emit) => emit(ProfileStart()));
+
     on<OnProfileLoad>(
       (event, emit) async {
         emit(ProfileLoading());
