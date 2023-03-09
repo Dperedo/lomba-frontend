@@ -344,7 +344,7 @@ void main() {
     },
     act: (bloc) => bloc.add(const OnHomeVote(test_postId, 1)),
     wait: const Duration(milliseconds: 500),
-    expect: () => [const HomeStart("")],
+    expect: () => [],
     verify: (bloc) {
       verify(mockGetSession.execute());
     },

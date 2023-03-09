@@ -4,14 +4,10 @@ import 'package:lomba_frontend/presentation/home/bloc/home_cubit.dart';
 
 main() {
   late HomeLiveState testStateChangeValue =
-      const HomeLiveState(<String, bool>{}, <String, int>{});
+      const HomeLiveState(<String, bool>{"clave": true}, <String, int>{});
   late HomeLiveState testStateMakeVote =
-      const HomeLiveState(<String, bool>{}, <String, int>{});
-  setUp(() {
-    testStateChangeValue.checks
-        .addEntries(<String, bool>{"clave": true}.entries);
-    testStateMakeVote.votes.addEntries(<String, int>{"postId": 1}.entries);
-  });
+      const HomeLiveState(<String, bool>{}, <String, int>{"postId": 1});
+  setUp(() {});
 
   blocTest<HomeLiveCubit, HomeLiveState>(
     'HomeLiveCubit change check value',
