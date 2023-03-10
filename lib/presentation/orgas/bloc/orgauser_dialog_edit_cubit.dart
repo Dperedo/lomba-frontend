@@ -19,15 +19,15 @@ class OrgaUserDialogEditCubit extends Cubit<OrgaUserDialogEditState> {
 }
 
 class OrgaUserDialogEditState extends Equatable {
-  Map<String, bool> checks = <String, bool>{};
+  late Map<String, bool> checks;
   late bool deleted;
 
   @override
-  List<Object?> get props => [deleted];
+  List<Object?> get props => [deleted, checks];
 
   OrgaUserDialogEditState(String name, bool changeState) {
-    checks.clear();
     deleted = false;
+    checks = <String, bool>{};
     checks.addEntries(<String, bool>{"enabled": false}.entries);
     Roles.toList().forEach((element) {
       checks.addEntries(<String, bool>{element: false}.entries);
@@ -37,11 +37,11 @@ class OrgaUserDialogEditState extends Equatable {
 
   OrgaUserDialogEditState copyWith(
       {required String name, required bool changeState}) {
+    Map<String, bool> nchecks = <String, bool>{};
+    nchecks.addAll(checks);
+    nchecks[name] = changeState;
     final ous = OrgaUserDialogEditState(name, changeState);
-    ous.checks = checks;
-
-    ous.checks[name] = changeState;
-
+    ous.checks = nchecks;
     return ous;
   }
 }

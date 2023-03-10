@@ -18,8 +18,8 @@ import 'local_data_source.dart';
 abstract class PostRemoteDataSource {
   Future<PostModel> addTextPost(String orgaId, String userId, TextContent text,
       String title, String flowId, bool isDraft);
-  Future<PostModel> updatePost(String postId, String userId, TextContent text,
-      String title);
+  Future<PostModel> updatePost(
+      String postId, String userId, TextContent text, String title);
   Future<PostModel> deletePost(String postId, String userId);
   Future<ModelContainer<PostModel>> getPosts(
       String orgaId,
@@ -210,7 +210,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
       Map<String, dynamic> params,
       String boxpage) async {
     final url = Uri.parse(
-        '${UrlBackend.base}/api/v1/post/box?orgaId=$orgaId&userId=$userId&flowId=$flowId&stageId=$stageId&searchtext=$searchText&order=${json.encode(order)}&pageindex=$pageIndex&pagesize=$pageSize&paramvars=${json.encode(params)}&boxpage=$boxpage');
+        '${UrlBackend.base}/api/v1/post/box?orgaId=$orgaId&userId=$userId&flowId=$flowId&stageId=$stageId&searchtext=$searchText&sort=${json.encode(order)}&pageindex=$pageIndex&pagesize=$pageSize&paramvars=${json.encode(params)}&boxpage=$boxpage');
     //final session = await localDataSource.getSavedSession();
 
     http.Response resp = await client.get(url, headers: {
@@ -681,8 +681,8 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
   }
 
   @override
-  Future<PostModel> updatePost(String postId, String userId, TextContent text,
-      String title) async {
+  Future<PostModel> updatePost(
+      String postId, String userId, TextContent text, String title) async {
     final Map<String, dynamic> editPost = {
       'userId': userId,
       'postId': postId,

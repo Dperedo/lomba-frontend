@@ -26,7 +26,7 @@ class RejectedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<RejectedBloc, RejectedState>(
       listener: (context, state) {
-        if(state is RejectedError && state.message != ""){
+        if (state is RejectedError && state.message != "") {
           snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
@@ -39,7 +39,8 @@ class RejectedPage extends StatelessWidget {
               BodyFormatter(
                 screenWidth: MediaQuery.of(context).size.width,
                 child: _bodyRejected(context),
-                )],
+              )
+            ],
           ),
         )),
       ),
@@ -47,7 +48,12 @@ class RejectedPage extends StatelessWidget {
   }
 
   Widget _bodyRejected(BuildContext context) {
-    List<String> listFields = <String>["rejected"];
+    //Ordenamiento
+    const Map<String, String> listFields = <String, String>{
+      "Creación": "created",
+      "Publicación": "tracks.created",
+      "Rechazado": "tracks.created"
+    };
     return BlocProvider<RejectedLiveCubit>(
       create: (context) => RejectedLiveCubit(),
       child: BlocListener<RejectedLiveCubit, RejectedLiveState>(
@@ -60,7 +66,10 @@ class RejectedPage extends StatelessWidget {
             builder: (context, state) {
               if (state is RejectedStart) {
                 context.read<RejectedBloc>().add(OnRejectedLoad(
-                    '', const <String, int>{'rejected': 1}, 1, _fixPageSize));
+                    '',
+                    <String, int>{listFields.values.first: -1},
+                    1,
+                    _fixPageSize));
               }
               if (state is RejectedLoading) {
                 return const Center(
@@ -100,7 +109,7 @@ class RejectedPage extends StatelessWidget {
                                         OnRejectedLoad(
                                             _searchController.text,
                                             <String, int>{
-                                              state.fieldsOrder.keys.first: 1
+                                              state.fieldsOrder.keys.first: -1
                                             },
                                             1,
                                             _fixPageSize));
@@ -131,31 +140,14 @@ class RejectedPage extends StatelessWidget {
                                       .add(OnRejectedLoad(
                                           _searchController.text,
                                           <String, int>{
-                                            state.fieldsOrder.keys.first: 1
+                                            state.fieldsOrder.keys.first: -1
                                           },
                                           value,
                                           _fixPageSize))),
                               const VerticalDivider(),
                               const Text("Orden:"),
                               const VerticalDivider(),
-                              DropdownButton(
-                                value: state.fieldsOrder.keys.first,
-                                items: listFields.map<DropdownMenuItem<String>>(
-                                    (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (String? value) {
-                                  context.read<RejectedBloc>().add(
-                                      OnRejectedLoad(
-                                          state.searchText,
-                                          <String, int>{value!: 1},
-                                          state.pageIndex,
-                                          _fixPageSize));
-                                },
-                              )
+                              _sortDropdownButton(state, listFields, context)
                             ],
                           ),
                           const SizedBox(
@@ -215,93 +207,8 @@ class RejectedPage extends StatelessWidget {
                                                       vertical: 100),
                                             ),
                                             const SizedBox(height: 10),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                ElevatedButton(
-                                                    style: ButtonStyle(
-                                                      shape:
-                                                          MaterialStateProperty
-                                                              .resolveWith(
-                                                        (states) =>
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(20),
-                                                          side: BorderSide(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .secondaryHeaderColor,
-                                                            width: 2,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    onPressed: null,
-                                                    child: const Icon(
-                                                        Icons.close)),
-                                                ElevatedButton(
-                                                    style: ButtonStyle(
-                                                      shape:
-                                                          MaterialStateProperty
-                                                              .resolveWith(
-                                                        (states) =>
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(20),
-                                                          side: BorderSide(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .secondaryHeaderColor,
-                                                            width: 2,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    onPressed: state
-                                                                .listItems[
-                                                                    index]
-                                                                .votes
-                                                                .any((element) =>
-                                                                    element
-                                                                        .value ==
-                                                                    1) ||
-                                                            (statecubit.votes
-                                                                    .containsKey(state
-                                                                        .listItems[
-                                                                            index]
-                                                                        .id) &&
-                                                                statecubit.votes[state
-                                                                        .listItems[index]
-                                                                        .id] ==
-                                                                    1)
-                                                        ? null
-                                                        : () {
-                                                            context
-                                                                .read<
-                                                                    RejectedLiveCubit>()
-                                                                .makeVote(
-                                                                    state
-                                                                        .listItems[
-                                                                            index]
-                                                                        .id,
-                                                                    1);
-                                                            context
-                                                                .read<
-                                                                    RejectedBloc>()
-                                                                .add(OnRejectedVote(
-                                                                    state
-                                                                        .listItems[
-                                                                            index]
-                                                                        .id,
-                                                                    1));
-                                                          },
-                                                    child: const Icon(Icons.check)),
-                                              ],
-                                            ),
+                                            _showVoteButtons(context, state,
+                                                index, statecubit),
                                             const SizedBox(height: 15),
                                           ],
                                         ),
@@ -322,6 +229,86 @@ class RejectedPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  DropdownButton<String> _sortDropdownButton(RejectedLoaded state,
+      Map<String, String> listFields, BuildContext context) {
+    return DropdownButton(
+      value: state.fieldsOrder.keys.first,
+      items: listFields.entries.map<DropdownMenuItem<String>>((field) {
+        return DropdownMenuItem<String>(
+          value: field.value,
+          child: Text(field.key),
+        );
+      }).toList(),
+      onChanged: (String? value) {
+        context.read<RejectedBloc>().add(OnRejectedLoad(state.searchText,
+            <String, int>{value!: -1}, state.pageIndex, _fixPageSize));
+      },
+    );
+  }
+
+  Row _showVoteButtons(BuildContext context, RejectedLoaded state, int index,
+      RejectedLiveState statecubit) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ElevatedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.resolveWith(
+                (states) => RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(
+                    color: Theme.of(context).secondaryHeaderColor,
+                    width: 2,
+                  ),
+                ),
+              ),
+            ),
+            onPressed: state.listItems[index].votes
+                        .any((element) => element.value == -1) ||
+                    (statecubit.votes.containsKey(state.listItems[index].id) &&
+                        statecubit.votes[state.listItems[index].id] == -1)
+                ? null
+                : () {
+                    state.listItems[index].votes.clear();
+                    context
+                        .read<RejectedBloc>()
+                        .add(OnRejectedVote(state.listItems[index].id, -1));
+                    context
+                        .read<RejectedLiveCubit>()
+                        .makeVote(state.listItems[index].id, -1);
+                  },
+            child: const Icon(Icons.close)),
+        ElevatedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.resolveWith(
+                (states) => RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(
+                    color: Theme.of(context).secondaryHeaderColor,
+                    width: 2,
+                  ),
+                ),
+              ),
+            ),
+            onPressed: state.listItems[index].votes
+                        .any((element) => element.value == 1) ||
+                    (statecubit.votes.containsKey(state.listItems[index].id) &&
+                        statecubit.votes[state.listItems[index].id] == 1)
+                ? null
+                : () {
+                    state.listItems[index].votes.clear();
+                    context
+                        .read<RejectedBloc>()
+                        .add(OnRejectedVote(state.listItems[index].id, 1));
+                    context
+                        .read<RejectedLiveCubit>()
+                        .makeVote(state.listItems[index].id, 1);
+                  },
+            child: const Icon(Icons.check)),
+      ],
     );
   }
 }

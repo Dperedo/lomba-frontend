@@ -1,7 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/presentation/detailedList/bloc/detailedList_bloc.dart';
-import 'package:rxdart/rxdart.dart';
-
 import '../../addcontent/bloc/addcontent_bloc.dart';
 import '../../addcontent/bloc/addcontent_event.dart';
 import '../../approved/bloc/approved_bloc.dart';
@@ -131,11 +129,6 @@ class NavBloc extends Bloc<NavEvent, NavState> {
           emit(NavState(event.destination));
         }
       },
-      transformer: debounce(const Duration(milliseconds: 0)),
     );
-  }
-
-  EventTransformer<T> debounce<T>(Duration duration) {
-    return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
   }
 }

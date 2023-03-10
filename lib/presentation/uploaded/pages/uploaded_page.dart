@@ -47,7 +47,11 @@ class UploadedPage extends StatelessWidget {
   }
 
   Widget _bodyUploaded(BuildContext context) {
-    List<String> listFields = <String>["uploaded"];
+    //Ordenamiento
+    const Map<String, String> listFields = <String, String>{
+      "Creación": "created",
+      "Publicación": "tracks.created"
+    };
     return BlocProvider<UploadedLiveCubit>(
       create: (context) => UploadedLiveCubit(),
       child: BlocListener<UploadedLiveCubit, UploadedLiveState>(
@@ -57,14 +61,19 @@ class UploadedPage extends StatelessWidget {
         child: SizedBox(
           width: 800,
           child: Form(
-            key: _key,
-            child: BlocBuilder<UploadedBloc, UploadedState>(
-              builder: (context, state) {
+              key: _key,
+              child: BlocBuilder<UploadedBloc, UploadedState>(
+                  builder: (context, state) {
                 if (state is UploadedStart) {
                   context.read<UploadedBloc>().add(OnUploadedLoad(
-                      '',const <String, int>{'uploaded': 1},1,
-                      _fixPageSize,context.read<UploadedLiveCubit>()
-                          .state.checks["onlydrafts"]!));
+                      '',
+                      <String, int>{listFields.values.first: -1},
+                      1,
+                      _fixPageSize,
+                      context
+                          .read<UploadedLiveCubit>()
+                          .state
+                          .checks["onlydrafts"]!));
                 }
                 if (state is UploadedLoading) {
                   return const Center(
@@ -78,28 +87,26 @@ class UploadedPage extends StatelessWidget {
                   return _uploadedEdit(context, state, _key);
                 }
                 return const SizedBox();
-              }
-            )
-          ),
+              })),
         ),
       ),
     );
   }
 
-  Widget _uploadedEdit(BuildContext context, UploadedPrepareForEdit state, GlobalKey<FormState> key) {
+  Widget _uploadedEdit(BuildContext context, UploadedPrepareForEdit state,
+      GlobalKey<FormState> key) {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController contentController = TextEditingController();
     titleController.text = state.title;
     contentController.text = state.content;
-    
+
     return Column(
       children: [
         TextFormField(
           key: const ValueKey('txtTitle'),
           maxLength: 150,
           controller: titleController,
-          validator: (value) =>
-              Validators.validateName(value ?? ""),
+          validator: (value) => Validators.validateName(value ?? ""),
           decoration: const InputDecoration(
               labelText: 'Titulo', icon: Icon(Icons.title)),
         ),
@@ -111,8 +118,7 @@ class UploadedPage extends StatelessWidget {
           maxLength: 500,
           maxLines: 8,
           controller: contentController,
-          validator: (value) =>
-              Validators.validateName(value ?? ""),
+          validator: (value) => Validators.validateName(value ?? ""),
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             hintText: 'Contenido del Post',
@@ -132,12 +138,8 @@ class UploadedPage extends StatelessWidget {
               final UploadedLiveState checkos =
                   context.read<UploadedLiveCubit>().state;
               if (key.currentState?.validate() == true) {
-                context.read<UploadedBloc>().add(
-                    OnUploadedEdit(
-                        state.postId,
-                        titleController.text,
-                        contentController.text
-                    ));
+                context.read<UploadedBloc>().add(OnUploadedEdit(state.postId,
+                    titleController.text, contentController.text));
               }
             },
           ),
@@ -146,8 +148,8 @@ class UploadedPage extends StatelessWidget {
     );
   }
 
-  Column _uploadedLoaded(
-      BuildContext context, UploadedLoaded state, List<String> listFields) {
+  Column _uploadedLoaded(BuildContext context, UploadedLoaded state,
+      Map<String, String> listFields) {
     return Column(
       children: [
         Container(
@@ -177,7 +179,7 @@ class UploadedPage extends StatelessWidget {
                       onPressed: () {
                         context.read<UploadedBloc>().add(OnUploadedLoad(
                             _searchController.text,
-                            <String, int>{state.fieldsOrder.keys.first: 1},
+                            <String, int>{state.fieldsOrder.keys.first: -1},
                             1,
                             _fixPageSize,
                             context
@@ -202,7 +204,7 @@ class UploadedPage extends StatelessWidget {
 
                       context.read<UploadedBloc>().add(OnUploadedLoad(
                           _searchController.text,
-                          <String, int>{state.fieldsOrder.keys.first: 1},
+                          <String, int>{state.fieldsOrder.keys.first: -1},
                           1,
                           _fixPageSize,
                           statecubit.checks["onlydrafts"]!));
@@ -226,7 +228,7 @@ class UploadedPage extends StatelessWidget {
                       onChanged: (value) => context.read<UploadedBloc>().add(
                           OnUploadedLoad(
                               _searchController.text,
-                              <String, int>{state.fieldsOrder.keys.first: 1},
+                              <String, int>{state.fieldsOrder.keys.first: -1},
                               value,
                               _fixPageSize,
                               context
@@ -236,27 +238,7 @@ class UploadedPage extends StatelessWidget {
                   const VerticalDivider(),
                   const Text("Orden:"),
                   const VerticalDivider(),
-                  DropdownButton(
-                    value: state.fieldsOrder.keys.first,
-                    items: listFields
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String? value) {
-                      context.read<UploadedBloc>().add(OnUploadedLoad(
-                          state.searchText,
-                          <String, int>{value!: 1},
-                          state.pageIndex,
-                          _fixPageSize,
-                          context
-                              .read<UploadedLiveCubit>()
-                              .state
-                              .checks["onlydrafts"]!));
-                    },
-                  )
+                  _sortDropdownButton(state, listFields, context)
                 ],
               ),
               const SizedBox(
@@ -329,6 +311,27 @@ class UploadedPage extends StatelessWidget {
     );
   }
 
+  DropdownButton<String> _sortDropdownButton(UploadedLoaded state,
+      Map<String, String> listFields, BuildContext context) {
+    return DropdownButton(
+      value: state.fieldsOrder.keys.first,
+      items: listFields.entries.map<DropdownMenuItem<String>>((field) {
+        return DropdownMenuItem<String>(
+          value: field.value,
+          child: Text(field.key),
+        );
+      }).toList(),
+      onChanged: (String? value) {
+        context.read<UploadedBloc>().add(OnUploadedLoad(
+            state.searchText,
+            <String, int>{value!: -1},
+            state.pageIndex,
+            _fixPageSize,
+            context.read<UploadedLiveCubit>().state.checks["onlydrafts"]!));
+      },
+    );
+  }
+
   List<Widget> showButtonPublish(UploadedLoaded state, int index,
       UploadedLiveState statecubit, BuildContext context) {
     return [
@@ -340,14 +343,14 @@ class UploadedPage extends StatelessWidget {
               onPressed: () {
                 if (_key.currentState?.validate() == true) {
                   context
-                      .read<UploadedLiveCubit>()
-                      .makeVote(state.listItems[index].id, 1);
-                  context
                       .read<UploadedBloc>()
                       .add(OnUploadedVote(state.listItems[index].id, 1));
+                  context
+                      .read<UploadedLiveCubit>()
+                      .makeVote(state.listItems[index].id, 1);
                 }
               },
-              child: const Text('Publicar')), 
+              child: const Text('Publicar')),
       Row(
         children: [
           ElevatedButton(
@@ -362,42 +365,43 @@ class UploadedPage extends StatelessWidget {
                   ),
                 ),
               ),
-              onPressed: state.listItems[index].stageId == StagesVotationFlow.stageId01Load ? () {
-                //context.read<UploadedBloc>().add(OnUploadedPrepareForEdit(state.listItems[index].id,state.listItems[index].title,(state.listItems[index].postitems[0].content as TextContent).text));
-                showDialog(
-                  context: context,
-                  builder: (context) => GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: AlertDialog(
-                          title:
-                              const Text('¿Desea eliminar el post?'),
-                          content:
-                              const Text('La eliminación es permanente'),
-                          actions: <Widget>[
-                            TextButton(
-                              key: const ValueKey("btnConfirmDelete"),
-                              child: const Text('Eliminar'),
-                              onPressed: () {
-                                Navigator.pop(context, true);
-                              },
-                            ),
-                            TextButton(
-                              key: const ValueKey("btnCancelDelete"),
-                              child: const Text('Cancelar'),
-                              onPressed: () {
-                                Navigator.pop(context, false);
-                              },
-                            ),
-                          ],
-                        ),
-                      )).then((value) => {
-                        if (value)
-                          {
-                            context.read<UploadedBloc>().add(OnUploadedDelete(
-                                state.listItems[index].id))
-                          }
-                      });
-              } : null,
+              onPressed: state.listItems[index].stageId ==
+                      StagesVotationFlow.stageId01Load
+                  ? () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => GestureDetector(
+                                onTap: () => Navigator.pop(context),
+                                child: AlertDialog(
+                                  title: const Text('¿Desea eliminar el post?'),
+                                  content: const Text(
+                                      'La eliminación es permanente'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      key: const ValueKey("btnConfirmDelete"),
+                                      child: const Text('Eliminar'),
+                                      onPressed: () {
+                                        Navigator.pop(context, true);
+                                      },
+                                    ),
+                                    TextButton(
+                                      key: const ValueKey("btnCancelDelete"),
+                                      child: const Text('Cancelar'),
+                                      onPressed: () {
+                                        Navigator.pop(context, false);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              )).then((value) => {
+                            if (value)
+                              {
+                                context.read<UploadedBloc>().add(
+                                    OnUploadedDelete(state.listItems[index].id))
+                              }
+                          });
+                    }
+                  : null,
               child: const Icon(Icons.delete)),
           ElevatedButton(
               style: ButtonStyle(
@@ -411,13 +415,17 @@ class UploadedPage extends StatelessWidget {
                   ),
                 ),
               ),
-              onPressed: state.listItems[index].stageId == StagesVotationFlow.stageId01Load ? () {
-                context.read<UploadedBloc>()
-                    .add(OnUploadedPrepareForEdit(
-                      state.listItems[index].id,
-                      state.listItems[index].title,
-                      (state.listItems[index].postitems[0].content as TextContent).text));
-              } : null,
+              onPressed: state.listItems[index].stageId ==
+                      StagesVotationFlow.stageId01Load
+                  ? () {
+                      context.read<UploadedBloc>().add(OnUploadedPrepareForEdit(
+                          state.listItems[index].id,
+                          state.listItems[index].title,
+                          (state.listItems[index].postitems[0].content
+                                  as TextContent)
+                              .text));
+                    }
+                  : null,
               child: const Icon(Icons.edit)),
         ],
       ),
