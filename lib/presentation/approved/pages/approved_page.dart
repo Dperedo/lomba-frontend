@@ -50,7 +50,12 @@ class ApprovedPage extends StatelessWidget {
   }
 
   Widget _bodyApproved(BuildContext context) {
-    List<String> listFields = <String>["approved"];
+    //Ordenamiento
+    const Map<String, String> listFields = <String, String>{
+      "Creación": "created",
+      "Publicación": "tracks.created",
+      "Aprobación": "tracks.created"
+    };
     return BlocProvider<ApprovedLiveCubit>(
         create: (context) => ApprovedLiveCubit(),
         child: BlocListener<ApprovedLiveCubit, ApprovedLiveState>(
@@ -66,7 +71,7 @@ class ApprovedPage extends StatelessWidget {
                       if (state is ApprovedStart) {
                         context.read<ApprovedBloc>().add(OnApprovedLoad(
                             '',
-                            const <String, int>{'approved': 1},
+                            <String, int>{listFields.values.first: -1},
                             1,
                             _fixPageSize));
                       }
@@ -111,7 +116,7 @@ class ApprovedPage extends StatelessWidget {
                                                     _searchController.text,
                                                     <String, int>{
                                                       state.fieldsOrder.keys
-                                                          .first: 1
+                                                          .first: -1
                                                     },
                                                     1,
                                                     _fixPageSize));
@@ -144,32 +149,15 @@ class ApprovedPage extends StatelessWidget {
                                                   _searchController.text,
                                                   <String, int>{
                                                     state.fieldsOrder.keys
-                                                        .first: 1
+                                                        .first: -1
                                                   },
                                                   value,
                                                   _fixPageSize))),
                                       const VerticalDivider(),
                                       const Text("Orden:"),
                                       const VerticalDivider(),
-                                      DropdownButton(
-                                        value: state.fieldsOrder.keys.first,
-                                        items: listFields
-                                            .map<DropdownMenuItem<String>>(
-                                                (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                        onChanged: (String? value) {
-                                          context.read<ApprovedBloc>().add(
-                                              OnApprovedLoad(
-                                                  state.searchText,
-                                                  <String, int>{value!: 1},
-                                                  state.pageIndex,
-                                                  _fixPageSize));
-                                        },
-                                      )
+                                      _sortDropdownButton(
+                                          state, listFields, context)
                                     ],
                                   ),
                                   const SizedBox(
@@ -259,6 +247,23 @@ class ApprovedPage extends StatelessWidget {
                     },
                   ))),
         ));
+  }
+
+  DropdownButton<String> _sortDropdownButton(ApprovedLoaded state,
+      Map<String, String> listFields, BuildContext context) {
+    return DropdownButton(
+      value: state.fieldsOrder.keys.first,
+      items: listFields.entries.map<DropdownMenuItem<String>>((field) {
+        return DropdownMenuItem<String>(
+          value: field.value,
+          child: Text(field.key),
+        );
+      }).toList(),
+      onChanged: (String? value) {
+        context.read<ApprovedBloc>().add(OnApprovedLoad(state.searchText,
+            <String, int>{value!: -1}, state.pageIndex, _fixPageSize));
+      },
+    );
   }
 
   Row _showVoteButtons(BuildContext context, ApprovedLoaded state, int index,

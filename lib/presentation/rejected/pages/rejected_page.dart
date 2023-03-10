@@ -48,7 +48,12 @@ class RejectedPage extends StatelessWidget {
   }
 
   Widget _bodyRejected(BuildContext context) {
-    List<String> listFields = <String>["rejected"];
+    //Ordenamiento
+    const Map<String, String> listFields = <String, String>{
+      "Creación": "created",
+      "Publicación": "tracks.created",
+      "Rechazado": "tracks.created"
+    };
     return BlocProvider<RejectedLiveCubit>(
       create: (context) => RejectedLiveCubit(),
       child: BlocListener<RejectedLiveCubit, RejectedLiveState>(
@@ -61,7 +66,10 @@ class RejectedPage extends StatelessWidget {
             builder: (context, state) {
               if (state is RejectedStart) {
                 context.read<RejectedBloc>().add(OnRejectedLoad(
-                    '', const <String, int>{'rejected': 1}, 1, _fixPageSize));
+                    '',
+                    <String, int>{listFields.values.first: -1},
+                    1,
+                    _fixPageSize));
               }
               if (state is RejectedLoading) {
                 return const Center(
@@ -101,7 +109,7 @@ class RejectedPage extends StatelessWidget {
                                         OnRejectedLoad(
                                             _searchController.text,
                                             <String, int>{
-                                              state.fieldsOrder.keys.first: 1
+                                              state.fieldsOrder.keys.first: -1
                                             },
                                             1,
                                             _fixPageSize));
@@ -132,31 +140,14 @@ class RejectedPage extends StatelessWidget {
                                       .add(OnRejectedLoad(
                                           _searchController.text,
                                           <String, int>{
-                                            state.fieldsOrder.keys.first: 1
+                                            state.fieldsOrder.keys.first: -1
                                           },
                                           value,
                                           _fixPageSize))),
                               const VerticalDivider(),
                               const Text("Orden:"),
                               const VerticalDivider(),
-                              DropdownButton(
-                                value: state.fieldsOrder.keys.first,
-                                items: listFields.map<DropdownMenuItem<String>>(
-                                    (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (String? value) {
-                                  context.read<RejectedBloc>().add(
-                                      OnRejectedLoad(
-                                          state.searchText,
-                                          <String, int>{value!: 1},
-                                          state.pageIndex,
-                                          _fixPageSize));
-                                },
-                              )
+                              _sortDropdownButton(state, listFields, context)
                             ],
                           ),
                           const SizedBox(
@@ -238,6 +229,23 @@ class RejectedPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  DropdownButton<String> _sortDropdownButton(RejectedLoaded state,
+      Map<String, String> listFields, BuildContext context) {
+    return DropdownButton(
+      value: state.fieldsOrder.keys.first,
+      items: listFields.entries.map<DropdownMenuItem<String>>((field) {
+        return DropdownMenuItem<String>(
+          value: field.value,
+          child: Text(field.key),
+        );
+      }).toList(),
+      onChanged: (String? value) {
+        context.read<RejectedBloc>().add(OnRejectedLoad(state.searchText,
+            <String, int>{value!: -1}, state.pageIndex, _fixPageSize));
+      },
     );
   }
 

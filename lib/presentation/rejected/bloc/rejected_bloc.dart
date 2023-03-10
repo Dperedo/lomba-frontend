@@ -38,22 +38,25 @@ class RejectedBloc extends Bloc<RejectedEvent, RejectedState> {
         event.pageSize,
       );
 
-      result.fold(
-          (l) => {emit(RejectedError(l.message))},
-          (r) => emit(RejectedLoaded(
-                auth.getOrgaId()!,
-                auth.getUserId()!,
-                flowId,
-                stageId,
-                event.searchText,
-                event.fieldsOrder,
-                event.pageIndex,
-                event.pageSize,
-                r.items,
-                r.currentItemCount,
-                r.items.length,
-                r.items.length,
-              )));
+      result.fold((l) => {emit(RejectedError(l.message))}, (r) {
+        int totalPages = (r.items.length / event.pageSize).round();
+        if (totalPages == 0) totalPages = 1;
+
+        emit(RejectedLoaded(
+          auth.getOrgaId()!,
+          auth.getUserId()!,
+          flowId,
+          stageId,
+          event.searchText,
+          event.fieldsOrder,
+          event.pageIndex,
+          event.pageSize,
+          r.items,
+          r.currentItemCount,
+          r.items.length,
+          totalPages,
+        ));
+      });
     });
 
     on<OnRejectedVote>((event, emit) async {

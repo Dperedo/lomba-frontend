@@ -58,7 +58,7 @@ class HomePage extends StatelessWidget {
         child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
           if (state is HomeStart) {
             context.read<HomeBloc>().add(OnHomeLoading(
-                '', const <String, int>{'latest': 1}, 1, _fixPageSize));
+                '', const <String, int>{'created': -1}, 1, _fixPageSize));
           }
           if (state is HomeLoading) {
             return const Center(
@@ -135,25 +135,6 @@ class HomePage extends StatelessWidget {
                                       value,
                                       _fixPageSize))),
                           const VerticalDivider(),
-                          const Text("Orden:"),
-                          const VerticalDivider(),
-                          DropdownButton(
-                            value: state.fieldsOrder.keys.first,
-                            items: listFields
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (String? value) {
-                              context.read<HomeBloc>().add(OnHomeLoading(
-                                  state.searchText,
-                                  <String, int>{value!: 1},
-                                  state.pageIndex,
-                                  _fixPageSize));
-                            },
-                          )
                         ],
                       ),
                       const SizedBox(

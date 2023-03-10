@@ -39,21 +39,24 @@ class ToBeApprovedBloc extends Bloc<ToBeApprovedEvent, ToBeApprovedState> {
           event.pageIndex,
           event.pageSize);
 
-      result.fold(
-          (l) => {emit(ToBeApprovedError(l.message))},
-          (r) => emit(ToBeApprovedLoaded(
-              auth.getOrgaId()!,
-              auth.getUserId()!,
-              flowId,
-              stageId,
-              event.searchText,
-              event.fieldsOrder,
-              event.pageIndex,
-              event.pageSize,
-              r.items,
-              r.currentItemCount,
-              r.items.length,
-              r.items.length)));
+      result.fold((l) => {emit(ToBeApprovedError(l.message))}, (r) {
+        int totalPages = (r.items.length / event.pageSize).round();
+        if (totalPages == 0) totalPages = 1;
+
+        emit(ToBeApprovedLoaded(
+            auth.getOrgaId()!,
+            auth.getUserId()!,
+            flowId,
+            stageId,
+            event.searchText,
+            event.fieldsOrder,
+            event.pageIndex,
+            event.pageSize,
+            r.items,
+            r.currentItemCount,
+            r.items.length,
+            totalPages));
+      });
     });
 
     on<OnToBeApprovedVote>((event, emit) async {

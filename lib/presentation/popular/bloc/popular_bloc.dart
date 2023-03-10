@@ -53,22 +53,25 @@ class PopularBloc extends Bloc<PopularEvent, PopularState> {
               event.searchText,
               event.pageIndex,
               event.pageSize);
-          resultPosts.fold(
-              (l) => {emit(PopularError(l.message))},
-              (r) => emit(PopularLoaded(
-                  validLogin,
-                  orgaId,
-                  userId,
-                  flowId,
-                  stageId,
-                  event.searchText,
-                  event.fieldsOrder,
-                  event.pageIndex,
-                  event.pageSize,
-                  r.items,
-                  r.currentItemCount,
-                  r.items.length,
-                  r.items.length)));
+          resultPosts.fold((l) => {emit(PopularError(l.message))}, (r) {
+            int totalPages = (r.items.length / event.pageSize).round();
+            if (totalPages == 0) totalPages = 1;
+
+            emit(PopularLoaded(
+                validLogin,
+                orgaId,
+                userId,
+                flowId,
+                stageId,
+                event.searchText,
+                event.fieldsOrder,
+                event.pageIndex,
+                event.pageSize,
+                r.items,
+                r.currentItemCount,
+                r.items.length,
+                totalPages));
+          });
         } else {
           final session = await _getSession.execute();
           session.fold((l) => emit(PopularError(l.message)), (r) => {auth = r});
@@ -81,22 +84,25 @@ class PopularBloc extends Bloc<PopularEvent, PopularState> {
               event.searchText,
               event.pageIndex,
               event.pageSize);
-          resultPosts.fold(
-              (l) => {emit(PopularError(l.message))},
-              (r) => emit(PopularLoaded(
-                  validLogin,
-                  auth.getOrgaId()!,
-                  auth.getUserId()!,
-                  flowId,
-                  stageId,
-                  event.searchText,
-                  event.fieldsOrder,
-                  event.pageIndex,
-                  event.pageSize,
-                  r.items,
-                  r.currentItemCount,
-                  r.items.length,
-                  r.items.length)));
+          resultPosts.fold((l) => {emit(PopularError(l.message))}, (r) {
+            int totalPages = (r.items.length / event.pageSize).round();
+            if (totalPages == 0) totalPages = 1;
+
+            emit(PopularLoaded(
+                validLogin,
+                auth.getOrgaId()!,
+                auth.getUserId()!,
+                flowId,
+                stageId,
+                event.searchText,
+                event.fieldsOrder,
+                event.pageIndex,
+                event.pageSize,
+                r.items,
+                r.currentItemCount,
+                r.items.length,
+                totalPages));
+          });
         }
       },
       transformer: debounce(const Duration(milliseconds: 0)),

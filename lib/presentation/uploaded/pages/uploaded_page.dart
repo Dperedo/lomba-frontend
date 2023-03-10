@@ -47,7 +47,11 @@ class UploadedPage extends StatelessWidget {
   }
 
   Widget _bodyUploaded(BuildContext context) {
-    List<String> listFields = <String>["uploaded"];
+    //Ordenamiento
+    const Map<String, String> listFields = <String, String>{
+      "Creación": "created",
+      "Publicación": "tracks.created"
+    };
     return BlocProvider<UploadedLiveCubit>(
       create: (context) => UploadedLiveCubit(),
       child: BlocListener<UploadedLiveCubit, UploadedLiveState>(
@@ -63,7 +67,7 @@ class UploadedPage extends StatelessWidget {
                 if (state is UploadedStart) {
                   context.read<UploadedBloc>().add(OnUploadedLoad(
                       '',
-                      const <String, int>{'uploaded': 1},
+                      <String, int>{listFields.values.first: -1},
                       1,
                       _fixPageSize,
                       context
@@ -144,8 +148,8 @@ class UploadedPage extends StatelessWidget {
     );
   }
 
-  Column _uploadedLoaded(
-      BuildContext context, UploadedLoaded state, List<String> listFields) {
+  Column _uploadedLoaded(BuildContext context, UploadedLoaded state,
+      Map<String, String> listFields) {
     return Column(
       children: [
         Container(
@@ -175,7 +179,7 @@ class UploadedPage extends StatelessWidget {
                       onPressed: () {
                         context.read<UploadedBloc>().add(OnUploadedLoad(
                             _searchController.text,
-                            <String, int>{state.fieldsOrder.keys.first: 1},
+                            <String, int>{state.fieldsOrder.keys.first: -1},
                             1,
                             _fixPageSize,
                             context
@@ -200,7 +204,7 @@ class UploadedPage extends StatelessWidget {
 
                       context.read<UploadedBloc>().add(OnUploadedLoad(
                           _searchController.text,
-                          <String, int>{state.fieldsOrder.keys.first: 1},
+                          <String, int>{state.fieldsOrder.keys.first: -1},
                           1,
                           _fixPageSize,
                           statecubit.checks["onlydrafts"]!));
@@ -224,7 +228,7 @@ class UploadedPage extends StatelessWidget {
                       onChanged: (value) => context.read<UploadedBloc>().add(
                           OnUploadedLoad(
                               _searchController.text,
-                              <String, int>{state.fieldsOrder.keys.first: 1},
+                              <String, int>{state.fieldsOrder.keys.first: -1},
                               value,
                               _fixPageSize,
                               context
@@ -234,27 +238,7 @@ class UploadedPage extends StatelessWidget {
                   const VerticalDivider(),
                   const Text("Orden:"),
                   const VerticalDivider(),
-                  DropdownButton(
-                    value: state.fieldsOrder.keys.first,
-                    items: listFields
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String? value) {
-                      context.read<UploadedBloc>().add(OnUploadedLoad(
-                          state.searchText,
-                          <String, int>{value!: 1},
-                          state.pageIndex,
-                          _fixPageSize,
-                          context
-                              .read<UploadedLiveCubit>()
-                              .state
-                              .checks["onlydrafts"]!));
-                    },
-                  )
+                  _sortDropdownButton(state, listFields, context)
                 ],
               ),
               const SizedBox(
@@ -324,6 +308,27 @@ class UploadedPage extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+
+  DropdownButton<String> _sortDropdownButton(UploadedLoaded state,
+      Map<String, String> listFields, BuildContext context) {
+    return DropdownButton(
+      value: state.fieldsOrder.keys.first,
+      items: listFields.entries.map<DropdownMenuItem<String>>((field) {
+        return DropdownMenuItem<String>(
+          value: field.value,
+          child: Text(field.key),
+        );
+      }).toList(),
+      onChanged: (String? value) {
+        context.read<UploadedBloc>().add(OnUploadedLoad(
+            state.searchText,
+            <String, int>{value!: -1},
+            state.pageIndex,
+            _fixPageSize,
+            context.read<UploadedLiveCubit>().state.checks["onlydrafts"]!));
+      },
     );
   }
 

@@ -48,6 +48,9 @@ class VotedBloc extends Bloc<VotedEvent, VotedState> {
         voteValue,
       );
       result.fold((l) => {emit(VotedError(l.message))}, (r) {
+        int totalPages = (r.items.length / event.pageSize).round();
+        if (totalPages == 0) totalPages = 1;
+
         VotedLoaded votedLoaded = VotedLoaded(
           auth.getOrgaId()!,
           auth.getUserId()!,
@@ -61,7 +64,7 @@ class VotedBloc extends Bloc<VotedEvent, VotedState> {
           r.items,
           r.currentItemCount,
           r.items.length,
-          r.items.length,
+          totalPages,
         );
 
         emit(votedLoaded);

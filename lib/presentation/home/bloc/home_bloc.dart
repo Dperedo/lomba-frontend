@@ -58,22 +58,25 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
               event.searchText,
               event.pageIndex,
               event.pageSize);
-          resultPosts.fold(
-              (l) => {emit(HomeError(l.message))},
-              (r) => emit(HomeLoaded(
-                  validLogin,
-                  orgaId,
-                  userId,
-                  flowId,
-                  stageId,
-                  event.searchText,
-                  event.fieldsOrder,
-                  event.pageIndex,
-                  event.pageSize,
-                  r.items,
-                  r.currentItemCount,
-                  r.items.length,
-                  r.items.length)));
+          resultPosts.fold((l) => {emit(HomeError(l.message))}, (r) {
+            int totalPages = (r.items.length / event.pageSize).round();
+            if (totalPages == 0) totalPages = 1;
+
+            emit(HomeLoaded(
+                validLogin,
+                orgaId,
+                userId,
+                flowId,
+                stageId,
+                event.searchText,
+                event.fieldsOrder,
+                event.pageIndex,
+                event.pageSize,
+                r.items,
+                r.currentItemCount,
+                r.items.length,
+                totalPages));
+          });
         } else {
           final listroles = await _getSessionRole.execute();
           listroles.fold(
@@ -90,22 +93,25 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 event.searchText,
                 event.pageIndex,
                 event.pageSize);
-            resultPosts.fold(
-                (l) => {emit(HomeError(l.message))},
-                (r) => emit(HomeLoaded(
-                    validLogin,
-                    auth.getOrgaId()!,
-                    auth.getUserId()!,
-                    flowId,
-                    stageId,
-                    event.searchText,
-                    event.fieldsOrder,
-                    event.pageIndex,
-                    event.pageSize,
-                    r.items,
-                    r.currentItemCount,
-                    r.items.length,
-                    r.items.length)));
+            resultPosts.fold((l) => {emit(HomeError(l.message))}, (r) {
+              int totalPages = (r.items.length / event.pageSize).round();
+              if (totalPages == 0) totalPages = 1;
+
+              emit(HomeLoaded(
+                  validLogin,
+                  auth.getOrgaId()!,
+                  auth.getUserId()!,
+                  flowId,
+                  stageId,
+                  event.searchText,
+                  event.fieldsOrder,
+                  event.pageIndex,
+                  event.pageSize,
+                  r.items,
+                  r.currentItemCount,
+                  r.items.length,
+                  totalPages));
+            });
           } else {
             emit(HomeOnlyUser());
           }

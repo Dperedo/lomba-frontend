@@ -41,7 +41,11 @@ class ToBeApprovedPage extends StatelessWidget {
   }
 
   Widget _bodyToBeApproved(BuildContext context) {
-    List<String> listFields = <String>["forapprove"];
+    //Ordenamiento
+    const Map<String, String> listFields = <String, String>{
+      "Creación": "created",
+      "Publicación": "tracks.created"
+    };
     return BlocProvider<ToBeApprovedLiveCubit>(
         create: (context) => ToBeApprovedLiveCubit(),
         child: SizedBox(
@@ -51,8 +55,11 @@ class ToBeApprovedPage extends StatelessWidget {
               child: BlocBuilder<ToBeApprovedBloc, ToBeApprovedState>(
                   builder: (context, state) {
                 if (state is ToBeApprovedStart) {
-                  context.read<ToBeApprovedBloc>().add(OnToBeApprovedLoad('',
-                      const <String, int>{'forapprove': 1}, 1, _fixPageSize));
+                  context.read<ToBeApprovedBloc>().add(OnToBeApprovedLoad(
+                      '',
+                      <String, int>{listFields.values.first: -1},
+                      1,
+                      _fixPageSize));
                 }
                 if (state is ToBeApprovedLoading) {
                   return const Center(
@@ -131,25 +138,7 @@ class ToBeApprovedPage extends StatelessWidget {
                                 const VerticalDivider(),
                                 const Text("Orden:"),
                                 const VerticalDivider(),
-                                DropdownButton(
-                                  value: state.fieldsOrder.keys.first,
-                                  items: listFields
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? value) {
-                                    context.read<ToBeApprovedBloc>().add(
-                                        OnToBeApprovedLoad(
-                                            state.searchText,
-                                            <String, int>{value!: 1},
-                                            state.pageIndex,
-                                            _fixPageSize));
-                                  },
-                                )
+                                _sortDropdownButton(state, listFields, context)
                               ],
                             ),
                             const SizedBox(
@@ -231,6 +220,26 @@ class ToBeApprovedPage extends StatelessWidget {
                 return const SizedBox();
               })),
         ));
+  }
+
+  DropdownButton<String> _sortDropdownButton(ToBeApprovedLoaded state,
+      Map<String, String> listFields, BuildContext context) {
+    return DropdownButton(
+      value: state.fieldsOrder.keys.first,
+      items: listFields.entries.map<DropdownMenuItem<String>>((field) {
+        return DropdownMenuItem<String>(
+          value: field.value,
+          child: Text(field.key),
+        );
+      }).toList(),
+      onChanged: (String? value) {
+        context.read<ToBeApprovedBloc>().add(OnToBeApprovedLoad(
+            state.searchText,
+            <String, int>{value!: 1},
+            state.pageIndex,
+            _fixPageSize));
+      },
+    );
   }
 
   Row _showVoteButtons(BuildContext context, ToBeApprovedLoaded state,

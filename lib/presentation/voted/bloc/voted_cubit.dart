@@ -29,6 +29,8 @@ class VotedLiveState extends Equatable {
     Map<String, bool> nchecks = <String, bool>{};
     nchecks.addAll(checks);
     nchecks[name] = changeState;
+    if (name == "positive" && changeState) nchecks["negative"] = !changeState;
+    if (name == "negative" && changeState) nchecks["positive"] = !changeState;
     final ous = VotedLiveState(nchecks, votes);
     return ous;
   }
