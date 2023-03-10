@@ -53,7 +53,6 @@ class ApprovedPage extends StatelessWidget {
     //Ordenamiento
     const Map<String, String> listFields = <String, String>{
       "Creación": "created",
-      "Publicación": "tracks.created",
       "Aprobación": "tracks.created"
     };
     return BlocProvider<ApprovedLiveCubit>(

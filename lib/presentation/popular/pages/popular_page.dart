@@ -131,25 +131,6 @@ class PopularPage extends StatelessWidget {
                                       value,
                                       _fixPageSize))),
                           const VerticalDivider(),
-                          const Text("Orden:"),
-                          const VerticalDivider(),
-                          DropdownButton(
-                            value: state.fieldsOrder.keys.first,
-                            items: listFields
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (String? value) {
-                              context.read<PopularBloc>().add(OnPopularLoad(
-                                  state.searchText,
-                                  <String, int>{value!: 1},
-                                  state.pageIndex,
-                                  _fixPageSize));
-                            },
-                          )
                         ],
                       ),
                       const SizedBox(

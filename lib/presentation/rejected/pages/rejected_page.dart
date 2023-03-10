@@ -51,7 +51,6 @@ class RejectedPage extends StatelessWidget {
     //Ordenamiento
     const Map<String, String> listFields = <String, String>{
       "Creación": "created",
-      "Publicación": "tracks.created",
       "Rechazado": "tracks.created"
     };
     return BlocProvider<RejectedLiveCubit>(
