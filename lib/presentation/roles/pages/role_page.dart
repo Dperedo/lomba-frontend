@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/roles/bloc/role_event.dart';
-import 'package:lomba_frontend/presentation/sidedrawer/pages/sidedrawer_page.dart';
 
 import '../../../core/widgets/snackbar_notification.dart';
 import '../bloc/role_bloc.dart';

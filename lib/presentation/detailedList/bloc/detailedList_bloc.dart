@@ -74,6 +74,10 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
       emit(const DetailedListStart());
     });
 
+    on<OnDetailedListEdit>((event, emit) async {
+      emit(DetailedListEdit(event.post));
+    });
+
     on<OnDetailedListVote>((event, emit) async {
       String flowId = Flows.votationFlowId;
       String stageId = StagesVotationFlow.stageId03Voting;

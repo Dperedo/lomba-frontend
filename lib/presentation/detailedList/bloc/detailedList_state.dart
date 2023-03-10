@@ -63,4 +63,13 @@ class DetailedListError extends DetailedListState {
   List<Object> get props => [message];
 }
 
+class DetailedListEdit extends DetailedListState {
+  final Post post;
+
+  const DetailedListEdit(this.post);
+
+  @override
+  List<Object> get props => [post];
+}
+
 class DetailedListOnlyUser extends DetailedListState {}

@@ -170,26 +170,121 @@ class DetailedListPage extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return SingleChildScrollView(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
+                              horizontal: 20, vertical: 5),
                           child: Column(
                             children: [
                               Row(
                                 children: [
                                   Expanded(
-                                    child: ListTile(
-                                      leading: const Icon(Icons.person),
-                                      title: Text(
-                                          state.listItems[index].title),
+                                    child: TextButton(
+                                      child: ListTile(
+                                        leading: const Icon(Icons.person),
+                                        title: Text(
+                                            state.listItems[index].title),
+                                      ),
+                                      onPressed: () {
+                                        context.read<DetailedListBloc>().add(OnDetailedListEdit(state.listItems[index]));
+                                      }
                                     ),
                                   ),
                                 ],
                               ),
-                              // const Divider()
+                              const Divider(),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      children: [
+                                        Text("Votos: ${state.listItems[index].votes.length.toString()} "),
+                                        Text("Fecha: ${state.listItems[index].created.month}/${
+                                          state.listItems[index].created.day}/${
+                                          state.listItems[index].created.year} "),
+                                      ],
+                                    ),
+                                  ),
+                                  Icon(state.listItems[index].enabled
+                                    ? Icons.toggle_on
+                                    : Icons.toggle_off_outlined,
+                                    size: 40)
+                                ],
+                              ),
                             ],
                           ),
                         );
                       });
                 }),
+              ],
+            );
+          }
+          if (state is DetailedListEdit) {
+            return Column(
+              children: [
+                Row(
+                  children: const [
+                    Text("Usuario: "),
+                    Icon(Icons.person),
+                    Text("Username: ")
+                  ],
+                ),
+                ListTile(
+                  leading: const Icon(Icons.person),
+                  title: Text(state.post.title),
+                ),
+                ListTile(
+                  shape: const RoundedRectangleBorder(
+                      side: BorderSide(
+                          color: Colors.grey, width: 2),
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(2))),
+                  title: Text(
+                    (state.post.postitems[0].content as TextContent).text,
+                    textAlign: TextAlign.center),
+                  contentPadding:
+                    const EdgeInsets.symmetric(
+                      horizontal: 100,
+                      vertical: 100),
+                ),
+                ElevatedButton(
+                key: const ValueKey("btnEnableOption"),
+                child:
+                    Text((state.post.enabled ? "Deshabilitar" : "Habilitar")),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) => GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: AlertDialog(
+                          title: Text(
+                              '¿Desea ${(state.post.enabled ? "deshabilitar" : "habilitar")} el usuario'),
+                          content: const Text(
+                              'Puede cambiar después su elección'),
+                          actions: <Widget>[
+                            TextButton(
+                              key: const ValueKey("btnConfirmEnable"),
+                              child: Text((state.post.enabled
+                                  ? "Deshabilitar"
+                                  : "Habilitar")),
+                              onPressed: () {
+                                Navigator.pop(context, true);
+                              },
+                            ),
+                            TextButton(
+                              key: const ValueKey("btnCancelEnable"),
+                              child: const Text('Cancelar'),
+                              onPressed: () {
+                                Navigator.pop(context, false);
+                              },
+                            ),
+                          ],
+                        ),
+                      )).then((value) => {
+                        if (value)
+                          {
+                            context.read<DetailedListBloc>().add(OnDetailedListEnable())
+                          }
+                      });
+                },
+              ),
               ],
             );
           }

@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../domain/entities/workflow/post.dart';
+
 ///Interfaz del evento de controla la página principal.
 abstract class DetailedListEvent extends Equatable {
   const DetailedListEvent();
@@ -43,4 +45,21 @@ class OnDetailedListVote extends DetailedListEvent {
 
   @override
   List<Object> get props => [postId, voteValue];
+}
+
+class OnDetailedListEdit extends DetailedListEvent{
+  final Post post;
+
+  const OnDetailedListEdit(this.post);
+
+  
+  @override
+  List<Object> get props => [post];
+}
+
+class OnDetailedListEnable extends DetailedListEvent{
+  const OnDetailedListEnable();
+
+  @override
+  List<Object> get props => [];
 }
