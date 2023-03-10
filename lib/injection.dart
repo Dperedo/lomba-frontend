@@ -18,6 +18,7 @@ import 'package:lomba_frontend/domain/usecases/login/get_authenticate_google.dar
 import 'package:lomba_frontend/domain/usecases/login/register_user.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart';
 import 'package:lomba_frontend/presentation/approved/bloc/approved_bloc.dart';
+import 'package:lomba_frontend/presentation/detailedList/bloc/detailedList_bloc.dart';
 import 'package:lomba_frontend/presentation/flow/bloc/flow_bloc.dart';
 import 'package:lomba_frontend/presentation/login/bloc/login_bloc.dart';
 import 'package:lomba_frontend/data/datasources/orga_data_source.dart';
@@ -48,6 +49,7 @@ import 'domain/usecases/flow/get_flows.dart';
 import 'domain/usecases/local/get_has_login.dart';
 import 'domain/usecases/local/get_session_role.dart';
 import 'domain/usecases/local/get_session_status.dart';
+import 'domain/usecases/post/get_detailedlist_posts.dart';
 import 'domain/usecases/stage/get_stage.dart';
 import 'domain/usecases/stage/get_stages.dart';
 import 'presentation/nav/bloc/nav_bloc.dart';
@@ -156,6 +158,8 @@ Future<void> init() async {
       () => FlowBloc(locator(), locator()));
   locator.registerFactory(
       () => StageBloc(locator(), locator()));
+  locator.registerFactory(
+      () => DetailedListBloc(locator(), locator(), locator(), locator()));
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));
@@ -207,6 +211,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => VotePublication(locator()));
   locator.registerLazySingleton(() => UpdateEdit(locator()));
   locator.registerLazySingleton(() => DeletePost(locator()));
+  locator.registerLazySingleton(() => GetDetailedListPosts(locator()));
 
   locator.registerLazySingleton(() => GetFlow(locator()));
   locator.registerLazySingleton(() => GetFlows(locator()));

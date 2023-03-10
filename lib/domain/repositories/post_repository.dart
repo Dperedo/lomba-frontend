@@ -82,4 +82,12 @@ abstract class PostRepository {
       String stageId,
       String postId,
       int voteValue);
+  Future<Either<Failure, ModelContainer<Post>>> getDetailedListPosts(
+      String orgaId,
+      String userId,
+      String flowId,
+      String stageId,
+      String searchText,
+      int pageIndex,
+      int pageSize);
 }

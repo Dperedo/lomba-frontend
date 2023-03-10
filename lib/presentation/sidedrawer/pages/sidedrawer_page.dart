@@ -275,6 +275,16 @@ class SideDrawer extends StatelessWidget {
                 ));
               }
 
+              if (state.opts.contains(SideDrawerUserOptions.optDetailList)) {
+                childrenOptionsList.add(ListTile(
+                  leading: const Icon(Icons.edit_document),
+                  title: const Text('Todos los post'),
+                  onTap: () {
+                    _handleItemClick(context, NavItem.pageDetailedList);
+                  },
+                ));
+              }
+
               if (state.opts.contains(SideDrawerUserOptions.optLogOff)) {
                 childrenOptionsList.add(ListTile(
                   leading: const Icon(Icons.logout),

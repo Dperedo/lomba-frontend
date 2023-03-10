@@ -33,5 +33,6 @@ enum NavItem {
   pageUploaded,
   pageVoted,
   pageProfile,
-  pageDemoList
+  pageDemoList,
+  pageDetailedList
 }

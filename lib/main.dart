@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart';
 import 'package:lomba_frontend/presentation/approved/bloc/approved_bloc.dart';
+import 'package:lomba_frontend/presentation/detailedList/bloc/detailedList_bloc.dart';
+import 'package:lomba_frontend/presentation/detailedList/page/detailedList_page.dart';
 import 'package:lomba_frontend/presentation/flow/bloc/flow_bloc.dart';
 import 'package:lomba_frontend/presentation/nav/bloc/nav_bloc.dart';
 import 'package:lomba_frontend/presentation/approved/pages/approved_page.dart';
@@ -87,6 +89,7 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<RouterPageBloc>()),
         BlocProvider(create: (_) => di.locator<FlowBloc>()),
         BlocProvider(create: (_) => di.locator<StageBloc>()),
+        BlocProvider(create: (_) => di.locator<DetailedListBloc>()),
       ],
       child: MaterialApp(
         //initialRoute: HomePage.route,
@@ -155,6 +158,9 @@ class _MyApp extends State<MyApp> {
     }
     if (state.selectedItem == NavItem.pageDemoList) {
       return DemoListPage();
+    }
+    if (state.selectedItem == NavItem.pageDetailedList) {
+      return DetailedListPage();
     }
   }
 }

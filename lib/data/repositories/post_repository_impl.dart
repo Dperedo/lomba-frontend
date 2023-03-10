@@ -458,4 +458,51 @@ class PostRepositoryImpl implements PostRepository {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
+
+  @override
+  Future<Either<Failure, ModelContainer<Post>>> getDetailedListPosts(
+      String orgaId,
+      String userId,
+      String flowId,
+      String stageId,
+      String searchText,
+      int pageIndex,
+      int pageSize) async {
+    try {
+      final Map<String, dynamic> params = {'onlyEnables': null};
+      List<dynamic> order = [];
+
+      final resultModelContainer = await remoteDataSource.getAdminViewPosts(
+          orgaId,
+          userId,
+          flowId,
+          stageId,
+          searchText,
+          order,
+          pageIndex,
+          pageSize,
+          params);
+
+      List<Post> list = [];
+
+      if (resultModelContainer.currentItemCount > 0) {
+        for (var element in resultModelContainer.items) {
+          list.add(element.toEntity());
+        }
+      }
+      return Right(ModelContainer<Post>(
+          list,
+          resultModelContainer.currentItemCount,
+          resultModelContainer.itemsPerPage,
+          resultModelContainer.startIndex,
+          resultModelContainer.totalItems,
+          resultModelContainer.pageIndex,
+          resultModelContainer.totalPages,
+          resultModelContainer.kind));
+    } on ServerException {
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
+    }
+  }
 }

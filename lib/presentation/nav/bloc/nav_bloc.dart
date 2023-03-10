@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/presentation/detailedList/bloc/detailedList_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../addcontent/bloc/addcontent_bloc.dart';
@@ -7,6 +8,7 @@ import '../../approved/bloc/approved_bloc.dart';
 import '../../approved/bloc/approved_event.dart';
 import '../../demolist/bloc/demolist_bloc.dart';
 import '../../demolist/bloc/demolist_event.dart';
+import '../../detailedList/bloc/detailedList_event.dart';
 import '../../home/bloc/home_bloc.dart';
 import '../../home/bloc/home_event.dart';
 import '../../login/bloc/login_bloc.dart';
@@ -118,6 +120,11 @@ class NavBloc extends Bloc<NavEvent, NavState> {
             case NavItem.pageDemoList:
               {
                 event.context.read<DemoListBloc>().add(OnDemoListStarter());
+              }
+              break;
+            case NavItem.pageDetailedList:
+              {
+                event.context.read<DetailedListBloc>().add(const OnDetailedListStarter(''));
               }
               break;
           }
