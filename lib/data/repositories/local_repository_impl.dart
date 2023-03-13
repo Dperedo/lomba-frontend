@@ -131,10 +131,14 @@ class LocalRepositoryImpl implements LocalRepository {
         opts.add(SideDrawerUserOptions.optOrgas);
         opts.add(SideDrawerUserOptions.optUsers);
         opts.add(SideDrawerUserOptions.optRoles);
+        opts.add(SideDrawerUserOptions.optDetailList);
       }
 
       if (roles.contains(Roles.roleAdmin)) {
         opts.add(SideDrawerUserOptions.optUsers);
+        opts.add(SideDrawerUserOptions.optDetailList);
+        opts.add(SideDrawerUserOptions.optFlow);
+        opts.add(SideDrawerUserOptions.optStage);
       }
 
       if (roles.contains(Roles.roleUser)) {

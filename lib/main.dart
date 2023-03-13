@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart';
 import 'package:lomba_frontend/presentation/approved/bloc/approved_bloc.dart';
+import 'package:lomba_frontend/presentation/detailedList/bloc/detailedList_bloc.dart';
+import 'package:lomba_frontend/presentation/detailedList/page/detailedList_page.dart';
 import 'package:lomba_frontend/presentation/flow/bloc/flow_bloc.dart';
+import 'package:lomba_frontend/presentation/flow/page/flow_page.dart';
 import 'package:lomba_frontend/presentation/nav/bloc/nav_bloc.dart';
 import 'package:lomba_frontend/presentation/approved/pages/approved_page.dart';
 import 'package:lomba_frontend/presentation/login/pages/login_page.dart';
@@ -11,6 +14,7 @@ import 'package:lomba_frontend/presentation/orgas/pages/orgas_page.dart';
 import 'package:lomba_frontend/presentation/popular/bloc/popular_bloc.dart';
 import 'package:lomba_frontend/presentation/popular/pages/popular_page.dart';
 import 'package:lomba_frontend/presentation/router/bloc/router_bloc.dart';
+import 'package:lomba_frontend/presentation/stage/page/stage_page.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_bloc.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/pages/tobeapproved_page.dart';
 import 'package:lomba_frontend/presentation/rejected/bloc/rejected_bloc.dart';
@@ -87,6 +91,7 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<RouterPageBloc>()),
         BlocProvider(create: (_) => di.locator<FlowBloc>()),
         BlocProvider(create: (_) => di.locator<StageBloc>()),
+        BlocProvider(create: (_) => di.locator<DetailedListBloc>()),
       ],
       child: MaterialApp(
         //initialRoute: HomePage.route,
@@ -159,6 +164,15 @@ class _MyApp extends State<MyApp> {
     }
     if (state.selectedItem == NavItem.pageDemoList) {
       return DemoListPage();
+    }
+    if (state.selectedItem == NavItem.pageDetailedList) {
+      return DetailedListPage();
+    }
+    if (state.selectedItem == NavItem.pageFlow) {
+      return const FlowPage();
+    }
+    if (state.selectedItem == NavItem.pageStage) {
+      return const StagePage();
     }
   }
 }

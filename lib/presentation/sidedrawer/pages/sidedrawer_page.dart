@@ -275,12 +275,42 @@ class SideDrawer extends StatelessWidget {
                 ));
               }
 
+              if (state.opts.contains(SideDrawerUserOptions.optDetailList)) {
+                childrenOptionsList.add(ListTile(
+                  leading: const Icon(Icons.edit_document),
+                  title: const Text('Todos los post'),
+                  onTap: () {
+                    _handleItemClick(context, NavItem.pageDetailedList);
+                  },
+                ));
+              }
+
+              if (state.opts.contains(SideDrawerUserOptions.optFlow)) {
+                childrenOptionsList.add(ListTile(
+                  leading: const Icon(Icons.fluorescent),
+                  title: const Text('Flujo'),
+                  onTap: () {
+                    _handleItemClick(context, NavItem.pageFlow);
+                  },
+                ));
+              }
+
+              if (state.opts.contains(SideDrawerUserOptions.optStage)) {
+                childrenOptionsList.add(ListTile(
+                  leading: const Icon(Icons.storage),
+                  title: const Text('Estado'),
+                  onTap: () {
+                    _handleItemClick(context, NavItem.pageStage);
+                  },
+                ));
+              }
+
               if (state.opts.contains(SideDrawerUserOptions.optLogOff)) {
                 childrenOptionsList.add(ListTile(
                   leading: const Icon(Icons.logout),
                   title: const Text('Cerrar sesión'),
                   onTap: () {
-                    context.read<SideDrawerBloc>().add(OnSideDrawerLogOff());
+                    context.read<SideDrawerBloc>().add(const OnSideDrawerLogOff());
                     context
                         .read<HomeBloc>()
                         .add(const OnHomeStarter(" Sesión Cerrada"));

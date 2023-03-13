@@ -1,11 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:lomba_frontend/presentation/detailedList/bloc/detailedList_bloc.dart';
+import 'package:lomba_frontend/presentation/flow/bloc/flow_event.dart';
+import 'package:lomba_frontend/presentation/stage/bloc/stage_event.dart';
 import '../../addcontent/bloc/addcontent_bloc.dart';
 import '../../addcontent/bloc/addcontent_event.dart';
 import '../../approved/bloc/approved_bloc.dart';
 import '../../approved/bloc/approved_event.dart';
 import '../../demolist/bloc/demolist_bloc.dart';
 import '../../demolist/bloc/demolist_event.dart';
+import '../../detailedList/bloc/detailedList_event.dart';
+import '../../flow/bloc/flow_bloc.dart';
 import '../../home/bloc/home_bloc.dart';
 import '../../home/bloc/home_event.dart';
 import '../../login/bloc/login_bloc.dart';
@@ -20,6 +24,7 @@ import '../../rejected/bloc/rejected_bloc.dart';
 import '../../rejected/bloc/rejected_event.dart';
 import '../../roles/bloc/role_bloc.dart';
 import '../../roles/bloc/role_event.dart';
+import '../../stage/bloc/stage_bloc.dart';
 import '../../tobeapproved/bloc/tobeapproved_bloc.dart';
 import '../../tobeapproved/bloc/tobeapproved_event.dart';
 import '../../uploaded/bloc/uploaded_bloc.dart';
@@ -117,6 +122,21 @@ class NavBloc extends Bloc<NavEvent, NavState> {
             case NavItem.pageDemoList:
               {
                 event.context.read<DemoListBloc>().add(OnDemoListStarter());
+              }
+              break;
+            case NavItem.pageDetailedList:
+              {
+                event.context.read<DetailedListBloc>().add(const OnDetailedListStarter(''));
+              }
+              break;
+            case NavItem.pageFlow:
+              {
+                event.context.read<FlowBloc>().add(const OnFlowListStarter());
+              }
+              break;
+            case NavItem.pageStage:
+              {
+                event.context.read<StageBloc>().add(const OnStageListStarter());
               }
               break;
           }

@@ -8,8 +8,8 @@ import '../bloc/stage_bloc.dart';
 import '../bloc/stage_event.dart';
 import '../bloc/stage_state.dart';
 
-class RolesPage extends StatelessWidget {
-  const RolesPage({Key? key}) : super(key: key);
+class StagePage extends StatelessWidget {
+  const StagePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class RolesPage extends StatelessWidget {
                           onPressed: () {
                             context
                                 .read<StageBloc>()
-                                .add(OnStageLoad(state.stages[index].name));
+                                .add(OnStageLoad(state.stages[index].id));
                           })),
                   Icon(
                       state.stages[index].enabled
@@ -124,7 +124,7 @@ class RolesPage extends StatelessWidget {
   AppBar _variableAppBar(BuildContext context, StageState state) {
     if (state is StageLoaded) {
       return AppBar(
-          title: const Text("Rol"),
+          title: const Text("Estado"),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -133,6 +133,6 @@ class RolesPage extends StatelessWidget {
           ));
     }
 
-    return AppBar(title: const Text("Roles"));
+    return AppBar(title: const Text("Estados"));
   }
 }

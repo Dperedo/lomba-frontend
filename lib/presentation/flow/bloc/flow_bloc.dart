@@ -20,10 +20,10 @@ class FlowBloc extends Bloc<FlowEvent, FlowState> {
       (event, emit) async {
         emit(FlowLoading());
 
-        final result = await _getFlow.execute(event.name);
+        final result = await _getFlow.execute(event.id);
 
         result.fold((l) => emit(FlowError(l.message)),
-            (role) => {emit(FlowLoaded(role))});
+            (flow) => {emit(FlowLoaded(flow))});
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
@@ -35,6 +35,13 @@ class FlowBloc extends Bloc<FlowEvent, FlowState> {
 
         result.fold((l) => emit(FlowError(l.message)),
             (listFlows) => {emit(FlowListLoaded(listFlows))});
+      },
+      transformer: debounce(const Duration(milliseconds: 0)),
+    );
+
+    on<OnFlowListStarter>(
+      (event, emit) async {
+        emit(FlowStart());
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
