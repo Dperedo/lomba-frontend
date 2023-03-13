@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:numberpicker/numberpicker.dart';
+import 'package:number_paginator/number_paginator.dart';
 
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
@@ -49,7 +49,9 @@ class PopularPage extends StatelessWidget {
   }
 
   Widget _bodyPopular(BuildContext context) {
-    List<String> listFields = <String>["popular"];
+    const Map<String, String> listFields = <String, String>{
+      "Popular": "totals.totalpositive"
+    };
     return BlocProvider<PopularLiveCubit>(
       create: (context) => PopularLiveCubit(),
       child: SizedBox(
@@ -57,8 +59,8 @@ class PopularPage extends StatelessWidget {
         child:
             BlocBuilder<PopularBloc, PopularState>(builder: (context, state) {
           if (state is PopularStart) {
-            context.read<PopularBloc>().add(OnPopularLoad(
-                '', const <String, int>{'popular': 1}, 1, _fixPageSize));
+            context.read<PopularBloc>().add(OnPopularLoading('',
+                <String, int>{listFields.values.first: -1}, 1, _fixPageSize));
           }
           if (state is PopularLoading) {
             return const Center(
@@ -77,6 +79,7 @@ class PopularPage extends StatelessWidget {
                           Flexible(
                             flex: 1,
                             child: TextFormField(
+                              key: const ValueKey('search_field'),
                               controller: _searchController,
                               cursorColor: Colors.grey,
                               decoration: InputDecoration(
@@ -93,13 +96,14 @@ class PopularPage extends StatelessWidget {
                           ),
                           IconButton(
                               onPressed: () {
-                                context.read<PopularBloc>().add(OnPopularLoad(
-                                    _searchController.text,
-                                    <String, int>{
-                                      state.fieldsOrder.keys.first: 1
-                                    },
-                                    1,
-                                    _fixPageSize));
+                                context.read<PopularBloc>().add(
+                                    OnPopularLoading(
+                                        _searchController.text,
+                                        <String, int>{
+                                          state.fieldsOrder.keys.first: -1
+                                        },
+                                        1,
+                                        _fixPageSize));
                               },
                               icon: const Icon(Icons.search)),
                         ],
@@ -110,45 +114,27 @@ class PopularPage extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text("Páginas: "),
-                          const VerticalDivider(),
-                          NumberPicker(
-                              itemWidth: 40,
-                              haptics: true,
-                              step: 1,
-                              axis: Axis.horizontal,
-                              value:
-                                  state.totalPages == 0 ? 0 : state.pageIndex,
-                              minValue: state.totalPages == 0 ? 0 : 1,
-                              maxValue: state.totalPages,
-                              onChanged: (value) => context
-                                  .read<PopularBloc>()
-                                  .add(OnPopularLoad(
-                                      _searchController.text,
-                                      <String, int>{
-                                        state.fieldsOrder.keys.first: 1
-                                      },
-                                      value,
-                                      _fixPageSize))),
-                          const VerticalDivider(),
-                          const Text("Orden:"),
-                          const VerticalDivider(),
-                          DropdownButton(
-                            value: state.fieldsOrder.keys.first,
-                            items: listFields
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (String? value) {
-                              context.read<PopularBloc>().add(OnPopularLoad(
-                                  state.searchText,
-                                  <String, int>{value!: 1},
-                                  state.pageIndex,
-                                  _fixPageSize));
-                            },
+                          SizedBox(
+                            width: 200,
+                            child: NumberPaginator(
+                              numberPages: state.totalPages,
+                              contentBuilder: (index) => Expanded(
+                                child: Center(
+                                  child: Text(
+                                      "Página: ${index + 1} de ${state.totalPages}"),
+                                ),
+                              ),
+                              onPageChange: (int index) {
+                                context.read<PopularBloc>().add(
+                                    OnPopularLoading(
+                                        _searchController.text,
+                                        <String, int>{
+                                          state.fieldsOrder.keys.first: -1
+                                        },
+                                        index + 1,
+                                        _fixPageSize));
+                              },
+                            ),
                           )
                         ],
                       ),
@@ -156,7 +142,7 @@ class PopularPage extends StatelessWidget {
                         height: 8,
                       ),
                       Text(
-                          "${(state.searchText != "" ? "Buscando por \"${state.searchText}\", mostrando " : "Mostrando ")}${state.itemCount} registros de ${state.totalItems}. Página ${state.pageIndex} de ${state.totalPages}. Ordenado por ${state.fieldsOrder.keys.first}."),
+                          "${(state.searchText != "" ? "Buscando por \"${state.searchText}\", mostrando " : "Mostrando ")}${state.itemCount} registros de ${state.totalItems}."),
                       const SizedBox(
                         height: 10,
                       ),

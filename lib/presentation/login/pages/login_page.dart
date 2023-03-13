@@ -95,6 +95,7 @@ class LoginPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   TextFormField(
+                                    textInputAction: TextInputAction.next,
                                     controller: _emailController,
                                     key: const ValueKey("email_id"),
                                     decoration: const InputDecoration(
@@ -109,6 +110,7 @@ class LoginPage extends StatelessWidget {
                                     height: 20,
                                   ),
                                   TextFormField(
+                                    textInputAction: TextInputAction.next,
                                     controller: _passwordController,
                                     key: const ValueKey("password"),
                                     obscureText: true,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:numberpicker/numberpicker.dart';
+import 'package:number_paginator/number_paginator.dart';
 
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
@@ -50,15 +50,17 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _bodyHome(BuildContext context) {
-    List<String> listFields = <String>["latest"];
+    const Map<String, String> listFields = <String, String>{
+      "Creación": "created"
+    };
     return BlocProvider<HomeLiveCubit>(
       create: (context) => HomeLiveCubit(),
       child: SizedBox(
         width: 800,
         child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
           if (state is HomeStart) {
-            context.read<HomeBloc>().add(OnHomeLoading(
-                '', const <String, int>{'created': -1}, 1, _fixPageSize));
+            context.read<HomeBloc>().add(OnHomeLoading('',
+                <String, int>{listFields.values.first: -1}, 1, _fixPageSize));
           }
           if (state is HomeLoading) {
             return const Center(
@@ -100,7 +102,7 @@ class HomePage extends StatelessWidget {
                                 context.read<HomeBloc>().add(OnHomeLoading(
                                     _searchController.text,
                                     <String, int>{
-                                      state.fieldsOrder.keys.first: 1
+                                      state.fieldsOrder.keys.first: -1
                                     },
                                     1,
                                     _fixPageSize));
@@ -114,34 +116,34 @@ class HomePage extends StatelessWidget {
                       Wrap(
                         //mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text("Páginas: "),
-                          const VerticalDivider(),
-                          NumberPicker(
-                              itemWidth: 40,
-                              haptics: true,
-                              step: 1,
-                              axis: Axis.horizontal,
-                              value:
-                                  state.totalPages == 0 ? 0 : state.pageIndex,
-                              minValue: state.totalPages == 0 ? 0 : 1,
-                              maxValue: state.totalPages,
-                              onChanged: (value) => context
-                                  .read<HomeBloc>()
-                                  .add(OnHomeLoading(
-                                      _searchController.text,
-                                      <String, int>{
-                                        state.fieldsOrder.keys.first: 1
-                                      },
-                                      value,
-                                      _fixPageSize))),
-                          const VerticalDivider(),
+                          SizedBox(
+                            width: 200,
+                            child: NumberPaginator(
+                              numberPages: state.totalPages,
+                              contentBuilder: (index) => Expanded(
+                                child: Center(
+                                  child: Text(
+                                      "Página: ${index + 1} de ${state.totalPages}"),
+                                ),
+                              ),
+                              onPageChange: (int index) {
+                                context.read<HomeBloc>().add(OnHomeLoading(
+                                    _searchController.text,
+                                    <String, int>{
+                                      state.fieldsOrder.keys.first: -1
+                                    },
+                                    index + 1,
+                                    _fixPageSize));
+                              },
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(
                         height: 8,
                       ),
                       Text(
-                          "${(state.searchText != "" ? "Buscando por \"${state.searchText}\", mostrando " : "Mostrando ")}${state.itemCount} registros de ${state.totalItems}. Página ${state.pageIndex} de ${state.totalPages}. Ordenado por ${state.fieldsOrder.keys.first}."),
+                          "${(state.searchText != "" ? "Buscando por \"${state.searchText}\", mostrando " : "Mostrando ")}${state.itemCount} registros de ${state.totalItems}."),
                       const SizedBox(
                         height: 10,
                       ),

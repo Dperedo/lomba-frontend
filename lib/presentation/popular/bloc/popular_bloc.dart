@@ -23,7 +23,7 @@ class PopularBloc extends Bloc<PopularEvent, PopularState> {
       : super(PopularStart()) {
     on<OnPopularStarter>((event, emit) => emit(PopularStart()));
 
-    on<OnPopularLoad>(
+    on<OnPopularLoading>(
       (event, emit) async {
         emit(PopularLoading());
         const orgaId = "00000200-0200-0200-0200-000000000200";

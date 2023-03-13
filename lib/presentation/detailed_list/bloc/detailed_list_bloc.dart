@@ -9,8 +9,8 @@ import 'package:rxdart/rxdart.dart';
 import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
 import '../../../domain/usecases/post/get_detailedlist_posts.dart';
-import 'detailedList_event.dart';
-import 'detailedList_state.dart';
+import 'detailed_list_event.dart';
+import 'detailed_list_state.dart';
 
 ///BLOC para el control de la página principal o DetailedList
 ///
@@ -22,12 +22,8 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
   final GetSessionRole _getSessionRole;
   final GetStages _getStages;
 
-  DetailedListBloc(
-    this._getSession,
-    this._getDetailedListPosts, 
-    this._votePublication, 
-    this._getSessionRole,
-    this._getStages)
+  DetailedListBloc(this._getSession, this._getDetailedListPosts,
+      this._votePublication, this._getSessionRole, this._getStages)
       : super(const DetailedListStart()) {
     ///Evento que hace la consulta de sesión del usuario en el dispositivo.
     on<OnDetailedListLoading>(
@@ -38,13 +34,14 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
         String stageId = StagesVotationFlow.stageId03Voting;
         String role = '';
         var validLogin = false;
-        
+
         final listroles = await _getSessionRole.execute();
         listroles.fold(
             (l) => emit(DetailedListError(l.message)), (r) => {role = r[0]});
 
         final session = await _getSession.execute();
-        session.fold((l) => emit(DetailedListError(l.message)), (r) => {auth = r});
+        session.fold(
+            (l) => emit(DetailedListError(l.message)), (r) => {auth = r});
 
         final resultPosts = await _getDetailedListPosts.execute(
             auth.getOrgaId()!,
@@ -70,8 +67,6 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
                 r.currentItemCount,
                 r.items.length,
                 r.items.length)));
-
-        
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
@@ -85,9 +80,8 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
       emit(DetailedListLoading());
 
       final resultStage = await _getStages.execute();
-      resultStage.fold((l) => emit(DetailedListError(l.message)), (r) => 
-        emit(DetailedListEdit(event.post, r))
-      );
+      resultStage.fold((l) => emit(DetailedListError(l.message)),
+          (r) => emit(DetailedListEdit(event.post, r)));
       //emit(DetailedListEdit(event.post, []));
     });
 
@@ -96,7 +90,8 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
       String stageId = StagesVotationFlow.stageId03Voting;
       var auth = const SessionModel(token: "", username: "", name: "");
       final session = await _getSession.execute();
-      session.fold((l) => emit(DetailedListError(l.message)), (r) => {auth = r});
+      session.fold(
+          (l) => emit(DetailedListError(l.message)), (r) => {auth = r});
 
       final result = await _votePublication.execute(auth.getOrgaId()!,
           auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);

@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/presentation/detailed_list/bloc/detailedList_bloc.dart';
+import 'package:lomba_frontend/presentation/detailed_list/bloc/detailed_list_bloc.dart';
 import 'package:lomba_frontend/presentation/flow/bloc/flow_event.dart';
 import 'package:lomba_frontend/presentation/stage/bloc/stage_event.dart';
 import '../../addcontent/bloc/addcontent_bloc.dart';
@@ -126,7 +126,9 @@ class NavBloc extends Bloc<NavEvent, NavState> {
               break;
             case NavItem.pageDetailedList:
               {
-                event.context.read<DetailedListBloc>().add(const OnDetailedListStarter(''));
+                event.context
+                    .read<DetailedListBloc>()
+                    .add(const OnDetailedListStarter(''));
               }
               break;
             case NavItem.pageFlow:

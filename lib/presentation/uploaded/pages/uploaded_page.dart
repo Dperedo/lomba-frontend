@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_cubit.dart';
-import 'package:numberpicker/numberpicker.dart';
+import 'package:number_paginator/number_paginator.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/validators.dart';
@@ -50,7 +50,7 @@ class UploadedPage extends StatelessWidget {
     //Ordenamiento
     const Map<String, String> listFields = <String, String>{
       "Creación": "created",
-      "Publicación": "tracks.created"
+      "Modificación": "updated"
     };
     return BlocProvider<UploadedLiveCubit>(
       create: (context) => UploadedLiveCubit(),
@@ -215,26 +215,29 @@ class UploadedPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Páginas: "),
-                  const VerticalDivider(),
-                  NumberPicker(
-                      itemWidth: 40,
-                      haptics: true,
-                      step: 1,
-                      axis: Axis.horizontal,
-                      value: state.totalPages == 0 ? 0 : state.pageIndex,
-                      minValue: state.totalPages == 0 ? 0 : 1,
-                      maxValue: state.totalPages,
-                      onChanged: (value) => context.read<UploadedBloc>().add(
-                          OnUploadedLoad(
-                              _searchController.text,
-                              <String, int>{state.fieldsOrder.keys.first: -1},
-                              value,
-                              _fixPageSize,
-                              context
-                                  .read<UploadedLiveCubit>()
-                                  .state
-                                  .checks["onlydrafts"]!))),
+                  SizedBox(
+                    width: 200,
+                    child: NumberPaginator(
+                      numberPages: state.totalPages,
+                      contentBuilder: (index) => Expanded(
+                        child: Center(
+                          child: Text(
+                              "Página: ${index + 1} de ${state.totalPages}"),
+                        ),
+                      ),
+                      onPageChange: (int index) {
+                        context.read<UploadedBloc>().add(OnUploadedLoad(
+                            _searchController.text,
+                            <String, int>{state.fieldsOrder.keys.first: -1},
+                            index + 1,
+                            _fixPageSize,
+                            context
+                                .read<UploadedLiveCubit>()
+                                .state
+                                .checks["onlydrafts"]!));
+                      },
+                    ),
+                  ),
                   const VerticalDivider(),
                   const Text("Orden:"),
                   const VerticalDivider(),
@@ -245,7 +248,7 @@ class UploadedPage extends StatelessWidget {
                 height: 8,
               ),
               Text(
-                  "${(state.searchText != "" ? "Buscando por \"${state.searchText}\", mostrando " : "Mostrando ")}${state.itemCount} registros de ${state.totalItems}. Página ${state.pageIndex} de ${state.totalPages}. Ordenado por ${state.fieldsOrder.keys.first}."),
+                  "${(state.searchText != "" ? "Buscando por \"${state.searchText}\", mostrando " : "Mostrando ")}${state.itemCount} registros de ${state.totalItems}."),
               const SizedBox(
                 height: 10,
               ),
@@ -314,6 +317,7 @@ class UploadedPage extends StatelessWidget {
   DropdownButton<String> _sortDropdownButton(UploadedLoaded state,
       Map<String, String> listFields, BuildContext context) {
     return DropdownButton(
+      style: const TextStyle(fontSize: 14),
       value: state.fieldsOrder.keys.first,
       items: listFields.entries.map<DropdownMenuItem<String>>((field) {
         return DropdownMenuItem<String>(
