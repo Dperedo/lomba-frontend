@@ -18,7 +18,7 @@ import 'package:lomba_frontend/domain/usecases/login/get_authenticate_google.dar
 import 'package:lomba_frontend/domain/usecases/login/register_user.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart';
 import 'package:lomba_frontend/presentation/approved/bloc/approved_bloc.dart';
-import 'package:lomba_frontend/presentation/detailedList/bloc/detailedList_bloc.dart';
+import 'package:lomba_frontend/presentation/detailed_list/bloc/detailedList_bloc.dart';
 import 'package:lomba_frontend/presentation/flow/bloc/flow_bloc.dart';
 import 'package:lomba_frontend/presentation/login/bloc/login_bloc.dart';
 import 'package:lomba_frontend/data/datasources/orga_data_source.dart';

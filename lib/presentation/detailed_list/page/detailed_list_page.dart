@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/presentation/detailed_list/bloc/detailedList_bloc.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-import '../../../core/constants.dart';
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/workflow/stage.dart';
 import '../../../domain/entities/workflow/textcontent.dart';
-import '../bloc/detailedList_bloc.dart';
-import '../bloc/detailedList_cubit.dart';
-import '../bloc/detailedList_event.dart';
-import '../bloc/detailedList_state.dart';
+import '../bloc/detailed_list_cubit.dart';
+import '../bloc/detailed_list_event.dart';
+import '../bloc/detailed_list_state.dart';
 
 ///DetailedListPage del sistema, en el futuro debe cambiar a página principal
 ///

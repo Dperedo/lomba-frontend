@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/presentation/detailedList/bloc/detailedList_bloc.dart';
+import 'package:lomba_frontend/presentation/detailed_list/bloc/detailedList_bloc.dart';
 import 'package:lomba_frontend/presentation/flow/bloc/flow_event.dart';
 import 'package:lomba_frontend/presentation/stage/bloc/stage_event.dart';
 import '../../addcontent/bloc/addcontent_bloc.dart';
@@ -8,7 +8,7 @@ import '../../approved/bloc/approved_bloc.dart';
 import '../../approved/bloc/approved_event.dart';
 import '../../demolist/bloc/demolist_bloc.dart';
 import '../../demolist/bloc/demolist_event.dart';
-import '../../detailedList/bloc/detailedList_event.dart';
+import '../../detailed_list/bloc/detailed_list_event.dart';
 import '../../flow/bloc/flow_bloc.dart';
 import '../../home/bloc/home_bloc.dart';
 import '../../home/bloc/home_event.dart';
