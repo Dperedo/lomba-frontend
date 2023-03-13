@@ -85,7 +85,44 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
     if (resp.statusCode == 200) {
       final Map<dynamic, dynamic> resObj = json.decode(resp.body);
 
-      final item = resObj['data']['items'][0];
+      List<FlowModel> listFlow = [];
+
+      for (var item in resObj['data']['items']) {
+        List<Stage> listStage = (item['stages'] as List)
+          .map((e) => Stage(
+              id: e['id'].toString(),
+              name: e['name'].toString(),
+              order: int.parse(e['order'].toString()),
+              queryOut: e['queryOut'],
+              enabled: e['enabled'].toString().toLowerCase() == 'true',
+              builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+              created: DateTime.parse(e['created'].toString()),
+              updated: e['updated'] != null? DateTime.parse(e['updated'].toString()): null,
+              deleted: e['deleted'] != null? DateTime.parse(e['deleted'].toString()): null,
+              expires: e['expires'] != null? DateTime.parse(e['expires'].toString()): null))
+          .toList();
+
+        listFlow.add(FlowModel(
+          id: item["id"].toString(),
+          name: item["name"].toString(),
+          enabled: item["enabled"].toString().toLowerCase() == 'true',
+          builtIn: item["builtIn"].toString().toLowerCase() == 'true',
+          stages: listStage,
+          created: DateTime.parse(item['created'].toString()),
+        updated: item['updated'] != null? DateTime.parse(item['updated'].toString()): null,
+        deleted: item['deleted'] != null? DateTime.parse(item['deleted'].toString()): null,
+        expires: item['expires'] != null? DateTime.parse(item['expires'].toString()): null
+        ));
+      }
+
+      return Future.value(listFlow[0]);
+    } else {
+      throw ServerException();
+    }
+  }
+}
+
+/*final item = resObj['data']['items'][0];
 
       List<Stage> listStage = (item['stages'] as List)
         .map((e) => Stage(
@@ -101,7 +138,7 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
             expires: e['expires'] != null? DateTime.parse(e['expires'].toString()): null))
         .toList();
 
-      return Future.value(FlowModel(
+        return Future.value(FlowModel(
         id: item["id"].toString(),
         name: item["name"].toString(),
         enabled: item["enabled"].toString().toLowerCase() == 'true',
@@ -111,10 +148,4 @@ class FlowRemoteDataSourceImpl implements FlowRemoteDataSource {
         updated: item['updated'] != null? DateTime.parse(item['updated'].toString()): null,
         deleted: item['deleted'] != null? DateTime.parse(item['deleted'].toString()): null,
         expires: item['expires'] != null? DateTime.parse(item['expires'].toString()): null
-      ));
-      
-    } else {
-      throw ServerException();
-    }
-  }
-}
+      ));*/

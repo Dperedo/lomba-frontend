@@ -127,6 +127,8 @@ class SideDrawerUserOptions {
   static const String optUploaded = "uploaded";
   static const String optDemoList = "demolist";
   static const String optDetailList = "detaillist";
+  static const String optFlow = "flow";
+  static const String optStage = "stage";
 }
 
 ///Listado de los roles del sistema. Por ahora pueden seguir en esta opción.

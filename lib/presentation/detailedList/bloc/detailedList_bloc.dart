@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_role.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
 import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart';
+import 'package:lomba_frontend/domain/usecases/stage/get_stage.dart';
+import 'package:lomba_frontend/domain/usecases/stage/get_stages.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../core/constants.dart';
@@ -18,9 +20,14 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
   final GetDetailedListPosts _getDetailedListPosts;
   final VotePublication _votePublication;
   final GetSessionRole _getSessionRole;
+  final GetStages _getStages;
 
-  DetailedListBloc(this._getSession,
-      this._getDetailedListPosts, this._votePublication, this._getSessionRole)
+  DetailedListBloc(
+    this._getSession,
+    this._getDetailedListPosts, 
+    this._votePublication, 
+    this._getSessionRole,
+    this._getStages)
       : super(const DetailedListStart()) {
     ///Evento que hace la consulta de sesión del usuario en el dispositivo.
     on<OnDetailedListLoading>(
@@ -75,7 +82,13 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
     });
 
     on<OnDetailedListEdit>((event, emit) async {
-      emit(DetailedListEdit(event.post));
+      emit(DetailedListLoading());
+
+      final resultStage = await _getStages.execute();
+      resultStage.fold((l) => emit(DetailedListError(l.message)), (r) => 
+        emit(DetailedListEdit(event.post, r))
+      );
+      //emit(DetailedListEdit(event.post, []));
     });
 
     on<OnDetailedListVote>((event, emit) async {

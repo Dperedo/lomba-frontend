@@ -6,6 +6,7 @@ import 'package:lomba_frontend/presentation/approved/bloc/approved_bloc.dart';
 import 'package:lomba_frontend/presentation/detailedList/bloc/detailedList_bloc.dart';
 import 'package:lomba_frontend/presentation/detailedList/page/detailedList_page.dart';
 import 'package:lomba_frontend/presentation/flow/bloc/flow_bloc.dart';
+import 'package:lomba_frontend/presentation/flow/page/flow_page.dart';
 import 'package:lomba_frontend/presentation/nav/bloc/nav_bloc.dart';
 import 'package:lomba_frontend/presentation/approved/pages/approved_page.dart';
 import 'package:lomba_frontend/presentation/login/pages/login_page.dart';
@@ -13,6 +14,7 @@ import 'package:lomba_frontend/presentation/orgas/pages/orgas_page.dart';
 import 'package:lomba_frontend/presentation/popular/bloc/popular_bloc.dart';
 import 'package:lomba_frontend/presentation/popular/pages/popular_page.dart';
 import 'package:lomba_frontend/presentation/router/bloc/router_bloc.dart';
+import 'package:lomba_frontend/presentation/stage/page/stage_page.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_bloc.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/pages/tobeapproved_page.dart';
 import 'package:lomba_frontend/presentation/rejected/bloc/rejected_bloc.dart';
@@ -165,6 +167,12 @@ class _MyApp extends State<MyApp> {
     }
     if (state.selectedItem == NavItem.pageDetailedList) {
       return DetailedListPage();
+    }
+    if (state.selectedItem == NavItem.pageFlow) {
+      return const FlowPage();
+    }
+    if (state.selectedItem == NavItem.pageStage) {
+      return const StagePage();
     }
   }
 }

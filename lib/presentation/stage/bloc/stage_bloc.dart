@@ -20,7 +20,7 @@ class StageBloc extends Bloc<StageEvent, StageState> {
       (event, emit) async {
         emit(StageLoading());
 
-        final result = await _getStage.execute(event.name);
+        final result = await _getStage.execute(event.id);
 
         result.fold((l) => emit(StageError(l.message)),
             (role) => {emit(StageLoaded(role))});
@@ -35,6 +35,13 @@ class StageBloc extends Bloc<StageEvent, StageState> {
 
         result.fold((l) => emit(StageError(l.message)),
             (listStages) => {emit(StageListLoaded(listStages))});
+      },
+      transformer: debounce(const Duration(milliseconds: 0)),
+    );
+
+    on<OnStageListStarter>(
+      (event, emit) async {
+        emit(StageStart());
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );

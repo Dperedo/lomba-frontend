@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:numberpicker/numberpicker.dart';
 
+import '../../../core/constants.dart';
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
+import '../../../domain/entities/workflow/stage.dart';
 import '../../../domain/entities/workflow/textcontent.dart';
 import '../bloc/detailedList_bloc.dart';
 import '../bloc/detailedList_cubit.dart';
@@ -187,27 +189,22 @@ class DetailedListPage extends StatelessWidget {
                                       }
                                     ),
                                   ),
-                                ],
-                              ),
-                              const Divider(),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      children: [
-                                        Text("Votos: ${state.listItems[index].votes.length.toString()} "),
-                                        Text("Fecha: ${state.listItems[index].created.month}/${
-                                          state.listItems[index].created.day}/${
-                                          state.listItems[index].created.year} "),
-                                      ],
-                                    ),
-                                  ),
                                   Icon(state.listItems[index].enabled
                                     ? Icons.toggle_on
                                     : Icons.toggle_off_outlined,
                                     size: 40)
                                 ],
                               ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text("Votos: ${state.listItems[index].votes.length.toString()} ")),
+                                  Text("Fecha: ${state.listItems[index].created.month}/${
+                                    state.listItems[index].created.day}/${
+                                    state.listItems[index].created.year} "),
+                                ],
+                              ),
+                              const Divider(),
                             ],
                           ),
                         );
@@ -243,6 +240,23 @@ class DetailedListPage extends StatelessWidget {
                     const EdgeInsets.symmetric(
                       horizontal: 100,
                       vertical: 100),
+                ),
+                DropdownButton(
+                  value: state.liststage.firstWhere((e) => e.id == state.post.stageId).id,
+                  items: state.liststage.map<DropdownMenuItem<String>>((Stage stage) {
+                    return DropdownMenuItem<String>(
+                      value: stage.id,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 25.0),
+                        child: Text(stage.name),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value.toString() != state.post.stageId) {
+                      context.read<DetailedListBloc>().add(OnDetailedListEdit(state.post));
+                    }
+                  },
                 ),
                 ElevatedButton(
                 key: const ValueKey("btnEnableOption"),
@@ -292,5 +306,20 @@ class DetailedListPage extends StatelessWidget {
         }),
       ),
     );
+  }
+
+  AppBar _variableAppBar(BuildContext context, DetailedListState state) {
+    if (state is DetailedListLoaded) {
+      return AppBar(
+          title: const Text("Detalle"),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              context.read<DetailedListBloc>().add(const OnDetailedListStarter(''));
+            },
+          ));
+    }
+
+    return AppBar(title: const Text(""));
   }
 }

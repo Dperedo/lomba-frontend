@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:lomba_frontend/domain/entities/workflow/stage.dart';
 
 import '../../../domain/entities/workflow/post.dart';
 
@@ -65,11 +66,12 @@ class DetailedListError extends DetailedListState {
 
 class DetailedListEdit extends DetailedListState {
   final Post post;
+  final List<Stage> liststage;
 
-  const DetailedListEdit(this.post);
+  const DetailedListEdit(this.post, this.liststage);
 
   @override
-  List<Object> get props => [post];
+  List<Object> get props => [post,liststage];
 }
 
 class DetailedListOnlyUser extends DetailedListState {}

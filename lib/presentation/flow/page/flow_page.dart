@@ -8,8 +8,8 @@ import '../bloc/flow_bloc.dart';
 import '../bloc/flow_event.dart';
 import '../bloc/flow_state.dart';
 
-class RolesPage extends StatelessWidget {
-  const RolesPage({Key? key}) : super(key: key);
+class FlowPage extends StatelessWidget {
+  const FlowPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class RolesPage extends StatelessWidget {
                           onPressed: () {
                             context
                                 .read<FlowBloc>()
-                                .add(OnFlowLoad(state.flows[index].name));
+                                .add(OnFlowLoad(state.flows[index].id));
                           })),
                   Icon(
                       state.flows[index].enabled
@@ -103,10 +103,39 @@ class RolesPage extends StatelessWidget {
           const Divider(),
           Text("Estado: ${state.flow.enabled}"),
           const Divider(),
-          Row(
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: state.flow.stages.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ListTile(
+                          leading: const Icon(Icons.key_outlined),
+                          title: Text(
+                            state.flow.stages[index].name,
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                        ),
+                      ),
+                      Icon(
+                      state.flow.stages[index].enabled
+                          ? Icons.toggle_on
+                          : Icons.toggle_off_outlined,
+                      size: 40)
+                    ]
+                  ),
+                  const Divider(),
+                ]
+              );
+            }
+          ),
+          /*Row(
             children: [
               const VerticalDivider(),
-              /*ElevatedButton(
+              ElevatedButton(
                 key: const ValueKey("btnEnableOption"),
                 child:
                     Text((state.flow.enabled ? "Deshabilitar" : "Habilitar")),
@@ -145,10 +174,9 @@ class RolesPage extends StatelessWidget {
                           }
                       });
                 },
-              ),*/
+              ),
             ],
-          ),
-          const Divider(),
+          ),*/
           Row(
             children: [
               ElevatedButton(
@@ -170,7 +198,7 @@ class RolesPage extends StatelessWidget {
   AppBar _variableAppBar(BuildContext context, FlowState state) {
     if (state is FlowLoaded) {
       return AppBar(
-          title: const Text("Rol"),
+          title: const Text("Flujo"),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -179,6 +207,6 @@ class RolesPage extends StatelessWidget {
           ));
     }
 
-    return AppBar(title: const Text("Roles"));
+    return AppBar(title: const Text("Flujos"));
   }
 }

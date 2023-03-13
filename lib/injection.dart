@@ -38,12 +38,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'data/datasources/flow_data_source.dart';
 import 'data/datasources/post_data_source.dart';
 import 'data/datasources/local_data_source.dart';
+import 'data/datasources/stage_data_source.dart';
 import 'data/repositories/flow_repository_impl.dart';
 import 'data/repositories/post_repository_impl.dart';
 import 'data/repositories/local_repository_impl.dart';
+import 'data/repositories/stage_repository_impl.dart';
 import 'domain/repositories/flow_repository.dart';
 import 'domain/repositories/post_repository.dart';
 import 'domain/repositories/local_repository.dart';
+import 'domain/repositories/stage_repository.dart';
 import 'domain/usecases/flow/get_flow.dart';
 import 'domain/usecases/flow/get_flows.dart';
 import 'domain/usecases/local/get_has_login.dart';
@@ -159,7 +162,7 @@ Future<void> init() async {
   locator.registerFactory(
       () => StageBloc(locator(), locator()));
   locator.registerFactory(
-      () => DetailedListBloc(locator(), locator(), locator(), locator()));
+      () => DetailedListBloc(locator(), locator(), locator(), locator(), locator()));
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));
@@ -244,6 +247,9 @@ Future<void> init() async {
   locator.registerLazySingleton<FlowRepository>(
     () => FlowRepositoryImpl(remoteDataSource: locator()),
   );
+  locator.registerLazySingleton<StageRepository>(
+    () => StageRepositoryImpl(remoteDataSource: locator()),
+  );
 
   // data source
   locator.registerLazySingleton<RemoteDataSource>(
@@ -278,6 +284,10 @@ Future<void> init() async {
   locator.registerLazySingleton<FlowRemoteDataSource>(
     () =>
         FlowRemoteDataSourceImpl(client: locator(), localDataSource: locator()),
+  );
+  locator.registerLazySingleton<StageRemoteDataSource>(
+    () =>
+        StageRemoteDataSourceImpl(client: locator(), localDataSource: locator()),
   );
 
   // external

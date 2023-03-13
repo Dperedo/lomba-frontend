@@ -5,14 +5,14 @@ abstract class FlowEvent extends Equatable {
   const FlowEvent();
 }
 
-///Evento para llamar y traer el flow asignado al [name]
+///Evento para llamar y traer el flow asignado al [id]
 class OnFlowLoad extends FlowEvent {
-  final String name;
+  final String id;
 
-  const OnFlowLoad(this.name);
+  const OnFlowLoad(this.id);
 
   @override
-  List<Object> get props => [name];
+  List<Object> get props => [id];
 }
 
 ///Evento para traer la lista de flows
@@ -20,6 +20,12 @@ class OnFlowListLoad extends FlowEvent {
 
   const OnFlowListLoad();
 
+  @override
+  List<Object> get props => [];
+}
+
+class OnFlowListStarter extends FlowEvent {
+  const OnFlowListStarter();
   @override
   List<Object> get props => [];
 }
