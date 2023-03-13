@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:number_paginator/number_paginator.dart';
-import 'package:numberpicker/numberpicker.dart';
 
 import '../../../domain/entities/workflow/textcontent.dart';
 import '../../../core/widgets/snackbar_notification.dart';

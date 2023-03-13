@@ -4,7 +4,6 @@ import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_cubit.dart';
 import 'package:number_paginator/number_paginator.dart';
-import 'package:numberpicker/numberpicker.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/validators.dart';
