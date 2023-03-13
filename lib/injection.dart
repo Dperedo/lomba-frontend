@@ -18,7 +18,7 @@ import 'package:lomba_frontend/domain/usecases/login/get_authenticate_google.dar
 import 'package:lomba_frontend/domain/usecases/login/register_user.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart';
 import 'package:lomba_frontend/presentation/approved/bloc/approved_bloc.dart';
-import 'package:lomba_frontend/presentation/detailedList/bloc/detailedList_bloc.dart';
+import 'package:lomba_frontend/presentation/detailed_list/bloc/detailed_list_bloc.dart';
 import 'package:lomba_frontend/presentation/flow/bloc/flow_bloc.dart';
 import 'package:lomba_frontend/presentation/login/bloc/login_bloc.dart';
 import 'package:lomba_frontend/data/datasources/orga_data_source.dart';
@@ -105,10 +105,10 @@ Future<void> init() async {
   // bloc
   locator.registerFactory(
       () => LoginBloc(locator(), locator(), locator(), locator()));
-  locator.registerFactory(
-      () => HomeBloc(locator(), locator(), locator(), locator(), locator(), locator()));
-  locator.registerFactory(() => SideDrawerBloc(locator(), locator(), locator(),
-      locator(), locator(), locator()));
+  locator.registerFactory(() => HomeBloc(
+      locator(), locator(), locator(), locator(), locator(), locator()));
+  locator.registerFactory(() => SideDrawerBloc(
+      locator(), locator(), locator(), locator(), locator(), locator()));
   locator.registerFactory(() => NavBloc());
   locator.registerFactory(() => RouterPageBloc(locator()));
   locator.registerFactory(() => OrgaBloc(
@@ -140,7 +140,8 @@ Future<void> init() async {
   locator.registerFactory(() => ProfileBloc(locator(), locator()));
   locator.registerFactory(() => DemoListBloc());
 
-  locator.registerFactory(() => UploadedBloc(locator(), locator(), locator(), locator(), locator()));
+  locator.registerFactory(() =>
+      UploadedBloc(locator(), locator(), locator(), locator(), locator()));
 
   locator.registerFactory(() => ApprovedBloc(locator(), locator(), locator()));
 
@@ -157,12 +158,10 @@ Future<void> init() async {
 
   locator.registerFactory(
       () => VotedBloc(locator(), locator(), locator(), locator()));
-  locator.registerFactory(
-      () => FlowBloc(locator(), locator()));
-  locator.registerFactory(
-      () => StageBloc(locator(), locator()));
-  locator.registerFactory(
-      () => DetailedListBloc(locator(), locator(), locator(), locator(), locator()));
+  locator.registerFactory(() => FlowBloc(locator(), locator()));
+  locator.registerFactory(() => StageBloc(locator(), locator()));
+  locator.registerFactory(() =>
+      DetailedListBloc(locator(), locator(), locator(), locator(), locator()));
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));
@@ -286,8 +285,8 @@ Future<void> init() async {
         FlowRemoteDataSourceImpl(client: locator(), localDataSource: locator()),
   );
   locator.registerLazySingleton<StageRemoteDataSource>(
-    () =>
-        StageRemoteDataSourceImpl(client: locator(), localDataSource: locator()),
+    () => StageRemoteDataSourceImpl(
+        client: locator(), localDataSource: locator()),
   );
 
   // external

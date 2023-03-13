@@ -47,17 +47,16 @@ class OnDetailedListVote extends DetailedListEvent {
   List<Object> get props => [postId, voteValue];
 }
 
-class OnDetailedListEdit extends DetailedListEvent{
+class OnDetailedListEdit extends DetailedListEvent {
   final Post post;
 
   const OnDetailedListEdit(this.post);
 
-  
   @override
   List<Object> get props => [post];
 }
 
-class OnDetailedListEnable extends DetailedListEvent{
+class OnDetailedListEnable extends DetailedListEvent {
   const OnDetailedListEnable();
 
   @override

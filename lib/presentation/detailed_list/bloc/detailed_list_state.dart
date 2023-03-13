@@ -17,7 +17,7 @@ class DetailedListLoaded extends DetailedListState {
   final String orgaId;
   final String userId;
   final String flowId;
-  final String stageId;  
+  final String stageId;
   final String searchText;
   final Map<String, int> fieldsOrder;
   final int pageIndex;
@@ -31,7 +31,7 @@ class DetailedListLoaded extends DetailedListState {
       this.orgaId,
       this.userId,
       this.flowId,
-      this.stageId,      
+      this.stageId,
       this.searchText,
       this.fieldsOrder,
       this.pageIndex,
@@ -71,7 +71,7 @@ class DetailedListEdit extends DetailedListState {
   const DetailedListEdit(this.post, this.liststage);
 
   @override
-  List<Object> get props => [post,liststage];
+  List<Object> get props => [post, liststage];
 }
 
 class DetailedListOnlyUser extends DetailedListState {}

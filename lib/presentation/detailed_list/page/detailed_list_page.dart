@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:numberpicker/numberpicker.dart';
-
 import '../../../core/constants.dart';
+import 'package:number_paginator/number_paginator.dart';
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/workflow/stage.dart';
 import '../../../domain/entities/workflow/textcontent.dart';
-import '../bloc/detailedList_bloc.dart';
-import '../bloc/detailedList_cubit.dart';
-import '../bloc/detailedList_event.dart';
-import '../bloc/detailedList_state.dart';
+import '../bloc/detailed_list_bloc.dart';
+import '../bloc/detailed_list_cubit.dart';
+import '../bloc/detailed_list_event.dart';
+import '../bloc/detailed_list_state.dart';
 
 ///DetailedListPage del sistema, en el futuro debe cambiar a página principal
 ///
@@ -28,7 +27,8 @@ class DetailedListPage extends StatelessWidget {
       listener: (context, state) {
         /*if (state is DetailedListStart && state.message != "") {
           snackBarNotify(context, state.message, Icons.exit_to_app);
-        } else*/ if (state is DetailedListError && state.message != "") {
+        } else*/
+        if (state is DetailedListError && state.message != "") {
           snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
@@ -55,7 +55,8 @@ class DetailedListPage extends StatelessWidget {
       create: (context) => DetailedListLiveCubit(),
       child: SizedBox(
         width: 800,
-        child: BlocBuilder<DetailedListBloc, DetailedListState>(builder: (context, state) {
+        child: BlocBuilder<DetailedListBloc, DetailedListState>(
+            builder: (context, state) {
           if (state is DetailedListStart) {
             context.read<DetailedListBloc>().add(OnDetailedListLoading(
                 '', const <String, int>{'latest': 1}, 1, _fixPageSize));
@@ -94,13 +95,14 @@ class DetailedListPage extends StatelessWidget {
                           ),
                           IconButton(
                               onPressed: () {
-                                context.read<DetailedListBloc>().add(OnDetailedListLoading(
-                                    _searchController.text,
-                                    <String, int>{
-                                      state.fieldsOrder.keys.first: 1
-                                    },
-                                    1,
-                                    _fixPageSize));
+                                context.read<DetailedListBloc>().add(
+                                    OnDetailedListLoading(
+                                        _searchController.text,
+                                        <String, int>{
+                                          state.fieldsOrder.keys.first: 1
+                                        },
+                                        1,
+                                        _fixPageSize));
                               },
                               icon: const Icon(Icons.search)),
                         ],
@@ -111,26 +113,28 @@ class DetailedListPage extends StatelessWidget {
                       Wrap(
                         //mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text("Páginas: "),
-                          const VerticalDivider(),
-                          NumberPicker(
-                              itemWidth: 40,
-                              haptics: true,
-                              step: 1,
-                              axis: Axis.horizontal,
-                              value:
-                                  state.totalPages == 0 ? 0 : state.pageIndex,
-                              minValue: state.totalPages == 0 ? 0 : 1,
-                              maxValue: state.totalPages,
-                              onChanged: (value) => context
-                                  .read<DetailedListBloc>()
-                                  .add(OnDetailedListLoading(
-                                      _searchController.text,
-                                      <String, int>{
-                                        state.fieldsOrder.keys.first: 1
-                                      },
-                                      value,
-                                      _fixPageSize))),
+                          SizedBox(
+                            width: 200,
+                            child: NumberPaginator(
+                              numberPages: state.totalPages,
+                              contentBuilder: (index) => Expanded(
+                                child: Center(
+                                  child: Text(
+                                      "Página: ${index + 1} de ${state.totalPages}"),
+                                ),
+                              ),
+                              onPageChange: (int index) {
+                                context.read<DetailedListBloc>().add(
+                                    OnDetailedListLoading(
+                                        _searchController.text,
+                                        <String, int>{
+                                          state.fieldsOrder.keys.first: 1
+                                        },
+                                        index + 1,
+                                        _fixPageSize));
+                              },
+                            ),
+                          ),
                           const VerticalDivider(),
                           const Text("Orden:"),
                           const VerticalDivider(),
@@ -144,11 +148,12 @@ class DetailedListPage extends StatelessWidget {
                               );
                             }).toList(),
                             onChanged: (String? value) {
-                              context.read<DetailedListBloc>().add(OnDetailedListLoading(
-                                  state.searchText,
-                                  <String, int>{value!: 1},
-                                  state.pageIndex,
-                                  _fixPageSize));
+                              context.read<DetailedListBloc>().add(
+                                  OnDetailedListLoading(
+                                      state.searchText,
+                                      <String, int>{value!: 1},
+                                      state.pageIndex,
+                                      _fixPageSize));
                             },
                           )
                         ],
@@ -179,29 +184,31 @@ class DetailedListPage extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: TextButton(
-                                      child: ListTile(
-                                        leading: const Icon(Icons.person),
-                                        title: Text(
-                                            state.listItems[index].title),
-                                      ),
-                                      onPressed: () {
-                                        context.read<DetailedListBloc>().add(OnDetailedListEdit(state.listItems[index]));
-                                      }
-                                    ),
+                                        child: ListTile(
+                                          leading: const Icon(Icons.person),
+                                          title: Text(
+                                              state.listItems[index].title),
+                                        ),
+                                        onPressed: () {
+                                          context.read<DetailedListBloc>().add(
+                                              OnDetailedListEdit(
+                                                  state.listItems[index]));
+                                        }),
                                   ),
-                                  Icon(state.listItems[index].enabled
-                                    ? Icons.toggle_on
-                                    : Icons.toggle_off_outlined,
-                                    size: 40)
+                                  Icon(
+                                      state.listItems[index].enabled
+                                          ? Icons.toggle_on
+                                          : Icons.toggle_off_outlined,
+                                      size: 40)
                                 ],
                               ),
                               Row(
                                 children: [
                                   Expanded(
-                                    child: Text("Votos: ${state.listItems[index].votes.length.toString()} ")),
-                                  Text("Fecha: ${state.listItems[index].created.month}/${
-                                    state.listItems[index].created.day}/${
-                                    state.listItems[index].created.year} "),
+                                      child: Text(
+                                          "Votos: ${state.listItems[index].votes.length.toString()} ")),
+                                  Text(
+                                      "Fecha: ${state.listItems[index].created.month}/${state.listItems[index].created.day}/${state.listItems[index].created.year} "),
                                 ],
                               ),
                               const Divider(),
@@ -229,21 +236,20 @@ class DetailedListPage extends StatelessWidget {
                 ),
                 ListTile(
                   shape: const RoundedRectangleBorder(
-                      side: BorderSide(
-                          color: Colors.grey, width: 2),
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(2))),
+                      side: BorderSide(color: Colors.grey, width: 2),
+                      borderRadius: BorderRadius.all(Radius.circular(2))),
                   title: Text(
-                    (state.post.postitems[0].content as TextContent).text,
-                    textAlign: TextAlign.center),
-                  contentPadding:
-                    const EdgeInsets.symmetric(
-                      horizontal: 100,
-                      vertical: 100),
+                      (state.post.postitems[0].content as TextContent).text,
+                      textAlign: TextAlign.center),
+                  contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 100, vertical: 100),
                 ),
                 DropdownButton(
-                  value: state.liststage.firstWhere((e) => e.id == state.post.stageId).id,
-                  items: state.liststage.map<DropdownMenuItem<String>>((Stage stage) {
+                  value: state.liststage
+                      .firstWhere((e) => e.id == state.post.stageId)
+                      .id,
+                  items: state.liststage
+                      .map<DropdownMenuItem<String>>((Stage stage) {
                     return DropdownMenuItem<String>(
                       value: stage.id,
                       child: Padding(
@@ -254,51 +260,55 @@ class DetailedListPage extends StatelessWidget {
                   }).toList(),
                   onChanged: (value) {
                     if (value.toString() != state.post.stageId) {
-                      context.read<DetailedListBloc>().add(OnDetailedListEdit(state.post));
+                      context
+                          .read<DetailedListBloc>()
+                          .add(OnDetailedListEdit(state.post));
                     }
                   },
                 ),
                 ElevatedButton(
-                key: const ValueKey("btnEnableOption"),
-                child:
-                    Text((state.post.enabled ? "Deshabilitar" : "Habilitar")),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: AlertDialog(
-                          title: Text(
-                              '¿Desea ${(state.post.enabled ? "deshabilitar" : "habilitar")} el usuario'),
-                          content: const Text(
-                              'Puede cambiar después su elección'),
-                          actions: <Widget>[
-                            TextButton(
-                              key: const ValueKey("btnConfirmEnable"),
-                              child: Text((state.post.enabled
-                                  ? "Deshabilitar"
-                                  : "Habilitar")),
-                              onPressed: () {
-                                Navigator.pop(context, true);
-                              },
-                            ),
-                            TextButton(
-                              key: const ValueKey("btnCancelEnable"),
-                              child: const Text('Cancelar'),
-                              onPressed: () {
-                                Navigator.pop(context, false);
-                              },
-                            ),
-                          ],
-                        ),
-                      )).then((value) => {
-                        if (value)
-                          {
-                            context.read<DetailedListBloc>().add(OnDetailedListEnable())
-                          }
-                      });
-                },
-              ),
+                  key: const ValueKey("btnEnableOption"),
+                  child:
+                      Text((state.post.enabled ? "Deshabilitar" : "Habilitar")),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => GestureDetector(
+                              onTap: () => Navigator.pop(context),
+                              child: AlertDialog(
+                                title: Text(
+                                    '¿Desea ${(state.post.enabled ? "deshabilitar" : "habilitar")} el usuario'),
+                                content: const Text(
+                                    'Puede cambiar después su elección'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    key: const ValueKey("btnConfirmEnable"),
+                                    child: Text((state.post.enabled
+                                        ? "Deshabilitar"
+                                        : "Habilitar")),
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                    },
+                                  ),
+                                  TextButton(
+                                    key: const ValueKey("btnCancelEnable"),
+                                    child: const Text('Cancelar'),
+                                    onPressed: () {
+                                      Navigator.pop(context, false);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            )).then((value) => {
+                          if (value)
+                            {
+                              context
+                                  .read<DetailedListBloc>()
+                                  .add(OnDetailedListEnable())
+                            }
+                        });
+                  },
+                ),
               ],
             );
           }
@@ -315,7 +325,9 @@ class DetailedListPage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              context.read<DetailedListBloc>().add(const OnDetailedListStarter(''));
+              context
+                  .read<DetailedListBloc>()
+                  .add(const OnDetailedListStarter(''));
             },
           ));
     }
