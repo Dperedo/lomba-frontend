@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
+import 'package:number_paginator/number_paginator.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../../../core/widgets/snackbar_notification.dart';
@@ -100,7 +101,7 @@ class ToBeApprovedPage extends StatelessWidget {
                                           OnToBeApprovedLoad(
                                               _searchController.text,
                                               <String, int>{
-                                                state.fieldsOrder.keys.first: 1
+                                                state.fieldsOrder.keys.first: -1
                                               },
                                               1,
                                               _fixPageSize));
@@ -114,27 +115,31 @@ class ToBeApprovedPage extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text("Páginas: "),
-                                const VerticalDivider(),
-                                NumberPicker(
-                                    itemWidth: 40,
-                                    haptics: true,
-                                    step: 1,
-                                    axis: Axis.horizontal,
-                                    value: state.totalPages == 0
-                                        ? 0
-                                        : state.pageIndex,
-                                    minValue: state.totalPages == 0 ? 0 : 1,
-                                    maxValue: state.totalPages,
-                                    onChanged: (value) => context
-                                        .read<ToBeApprovedBloc>()
-                                        .add(OnToBeApprovedLoad(
-                                            _searchController.text,
-                                            <String, int>{
-                                              state.fieldsOrder.keys.first: 1
-                                            },
-                                            value,
-                                            _fixPageSize))),
+                                SizedBox(
+                                  width: 200,
+                                  child: NumberPaginator(
+                                    numberPages: state.totalPages,
+                                    contentBuilder: (index) => Expanded(
+                                      child: Center(
+                                        child: Text(
+                                            "Página: ${index + 1} de ${state.totalPages}"),
+                                      ),
+                                    ),
+                                    onPageChange: (int index) {
+                                      context
+                                          .read<ToBeApprovedBloc>()
+                                          .add(
+                                              OnToBeApprovedLoad(
+                                                  _searchController.text,
+                                                  <String, int>{
+                                                    state.fieldsOrder.keys
+                                                        .first: -1
+                                                  },
+                                                  index + 1,
+                                                  _fixPageSize));
+                                    },
+                                  ),
+                                ),
                                 const VerticalDivider(),
                                 const Text("Orden:"),
                                 const VerticalDivider(),
@@ -145,7 +150,7 @@ class ToBeApprovedPage extends StatelessWidget {
                               height: 8,
                             ),
                             Text(
-                                "${(state.searchText != "" ? "Buscando por \"${state.searchText}\", mostrando " : "Mostrando ")}${state.itemCount} registros de ${state.totalItems}. Página ${state.pageIndex} de ${state.totalPages}. Ordenado por ${state.fieldsOrder.keys.first}."),
+                                "${(state.searchText != "" ? "Buscando por \"${state.searchText}\", mostrando " : "Mostrando ")}${state.itemCount} registros de ${state.totalItems}."),
                             const SizedBox(
                               height: 10,
                             ),
@@ -225,6 +230,7 @@ class ToBeApprovedPage extends StatelessWidget {
   DropdownButton<String> _sortDropdownButton(ToBeApprovedLoaded state,
       Map<String, String> listFields, BuildContext context) {
     return DropdownButton(
+      style: const TextStyle(fontSize: 14),
       value: state.fieldsOrder.keys.first,
       items: listFields.entries.map<DropdownMenuItem<String>>((field) {
         return DropdownMenuItem<String>(

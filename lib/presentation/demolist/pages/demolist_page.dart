@@ -1,9 +1,11 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/presentation/demolist/bloc/demolist_bloc.dart';
 import 'package:lomba_frontend/presentation/demolist/bloc/demolist_event.dart';
 import 'package:lomba_frontend/presentation/demolist/bloc/demolist_state.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:number_paginator/number_paginator.dart';
 
 import '../../sidedrawer/pages/sidedrawer_page.dart';
 
@@ -15,6 +17,7 @@ class DemoListPage extends StatelessWidget {
   DemoListPage({Key? key}) : super(key: key);
 
   final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _pagerController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final int _fixPageSize = 8;
   @override
@@ -31,7 +34,6 @@ class DemoListPage extends StatelessWidget {
   }
 
   Widget _firstDemo(BuildContext context) {
-    
     List<String> listFields = <String>["id", "name", "num", "text"];
     return Form(
       key: _key,
@@ -50,6 +52,8 @@ class DemoListPage extends StatelessWidget {
             );
           }
           if (state is DemoListLoadedState) {
+            List<int> list = [];
+
             return Column(
               children: [
                 Container(
@@ -91,25 +95,28 @@ class DemoListPage extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          const Text("Páginas: "),
-                          const VerticalDivider(),
-                          NumberPicker(
-                              itemWidth: 40,
-                              haptics: true,
-                              step: 1,
-                              axis: Axis.horizontal,
-                              value: state.pageIndex,
-                              minValue: 1,
-                              maxValue: state.totalPages,
-                              onChanged: (value) => context
-                                  .read<DemoListBloc>()
-                                  .add(OnDemoListSearch(
-                                      _searchController.text,
-                                      <String, int>{
-                                        state.fieldsOrder.keys.first: 1
-                                      },
-                                      value,
-                                      _fixPageSize))),
+                          SizedBox(
+                            width: 200,
+                            child: NumberPaginator(
+                              numberPages: state.totalPages,
+                              contentBuilder: (index) => Expanded(
+                                child: Center(
+                                  child: Text(
+                                      "Página: ${index + 1} de ${state.totalPages}"),
+                                ),
+                              ),
+                              onPageChange: (int index) {
+                                context.read<DemoListBloc>().add(
+                                    OnDemoListSearch(
+                                        _searchController.text,
+                                        <String, int>{
+                                          state.fieldsOrder.keys.first: 1
+                                        },
+                                        index + 1,
+                                        _fixPageSize));
+                              },
+                            ),
+                          ),
                           const VerticalDivider(),
                           const Text("Orden:"),
                           const VerticalDivider(),
@@ -170,8 +177,7 @@ class DemoListPage extends StatelessWidget {
                           const Divider()
                         ],
                       );
-                    }
-                ),
+                    }),
               ],
             );
           }

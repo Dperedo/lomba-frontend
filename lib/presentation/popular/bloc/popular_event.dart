@@ -7,13 +7,13 @@ abstract class PopularEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class OnPopularLoad extends PopularEvent {
+class OnPopularLoading extends PopularEvent {
   final String searchText;
   final Map<String, int> fieldsOrder;
   final int pageIndex;
   final int pageSize;
 
-  const OnPopularLoad(
+  const OnPopularLoading(
       this.searchText, this.fieldsOrder, this.pageIndex, this.pageSize);
 
   @override
