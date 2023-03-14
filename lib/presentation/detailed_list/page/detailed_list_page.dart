@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/constants.dart';
 import 'package:number_paginator/number_paginator.dart';
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
+import '../../../domain/entities/workflow/flow.dart' as flw;
 import '../../../domain/entities/workflow/stage.dart';
 import '../../../domain/entities/workflow/textcontent.dart';
 import '../bloc/detailed_list_bloc.dart';
@@ -51,6 +51,14 @@ class DetailedListPage extends StatelessWidget {
 
   Widget _bodyDetailedList(BuildContext context) {
     List<String> listFields = <String>["latest"];
+    const Map<String, String> listStage = <String, String>{
+      "Aprobación": "name",
+      "Carga": "name",
+      "Votación": "name"
+    };
+    const Map<String, String> listFlow = <String, String>{
+      "Flujo de Votación": "name",
+    };
     return BlocProvider<DetailedListLiveCubit>(
       create: (context) => DetailedListLiveCubit(),
       child: SizedBox(
@@ -59,7 +67,15 @@ class DetailedListPage extends StatelessWidget {
             builder: (context, state) {
           if (state is DetailedListStart) {
             context.read<DetailedListBloc>().add(OnDetailedListLoading(
-                '', const <String, int>{'latest': 1}, 1, _fixPageSize));
+                '', const <String, int>{'latest': 1}, 1, _fixPageSize,
+                context
+                    .read<DetailedListLiveCubit>()
+                    .state
+                    .checks["enabled"]!,
+                context
+                    .read<DetailedListLiveCubit>()
+                    .state
+                    .checks["disabled"]!));
           }
           if (state is DetailedListLoading) {
             return const Center(
@@ -102,9 +118,127 @@ class DetailedListPage extends StatelessWidget {
                                           state.fieldsOrder.keys.first: 1
                                         },
                                         1,
-                                        _fixPageSize));
+                                        _fixPageSize,
+                                        context
+                                            .read<DetailedListLiveCubit>()
+                                            .state
+                                            .checks["enabled"]!,
+                                        context
+                                            .read<DetailedListLiveCubit>()
+                                            .state
+                                            .checks["disabled"]!));
                               },
                               icon: const Icon(Icons.search)),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      BlocBuilder<DetailedListLiveCubit, DetailedListLiveState>(
+                          builder: (context, statecubit) {
+                            return Column(
+                              children: [
+                                SwitchListTile.adaptive(
+                                  title: const Text('Mostrar habilitados'),
+                                  value: statecubit.checks["enabled"]!,
+                                  onChanged: (value) {
+                                    context.read<DetailedListLiveCubit>().changeCheckValue("enabled", value);
+
+                                    context.read<DetailedListBloc>().add(OnDetailedListLoading(
+                                        _searchController.text,
+                                        <String, int>{state.fieldsOrder.keys.first: -1},
+                                        1,
+                                        _fixPageSize,
+                                        value,
+                                        value ? !value : statecubit.checks["disabled"]!));
+                                  },
+                                ),
+                                SwitchListTile.adaptive(
+                                  title: const Text('Mostrar deshabilitados'),
+                                  value: statecubit.checks["disabled"]!,
+                                  onChanged: (value) {
+                                    context.read<DetailedListLiveCubit>().changeCheckValue("disabled", value);
+
+                                    context.read<DetailedListBloc>().add(OnDetailedListLoading(
+                                        _searchController.text,
+                                        <String, int>{state.fieldsOrder.keys.first: -1},
+                                        1,
+                                        _fixPageSize,
+                                        value ? !value : statecubit.checks["enabled"]!,
+                                        value));
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Wrap(
+                        children: [
+                          DropdownButton(
+                            value: state.listFlows.first.id,
+                            items: state.listFlows
+                                .map<DropdownMenuItem<String>>((flw.Flow flow) {
+                              return DropdownMenuItem<String>(
+                                value: flow.id,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 25.0),
+                                  child: Text(flow.name),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              if (value.toString() != state.listFlows.first.id) {
+                                context
+                                    .read<DetailedListBloc>()
+                                    .add(OnDetailedListLoading(
+                                      value.toString(),
+                                      const <String, int>{'latest': 1}, 1, _fixPageSize,
+                                      context
+                                          .read<DetailedListLiveCubit>()
+                                          .state
+                                          .checks["enabled"]!,
+                                      context
+                                          .read<DetailedListLiveCubit>()
+                                          .state
+                                          .checks["disabled"]!
+                                      ));
+                              }
+                            },
+                          ),
+                          DropdownButton(
+                            value: state.listStages.first.id,
+                            items: state.listStages
+                                .map<DropdownMenuItem<String>>((Stage stage) {
+                              return DropdownMenuItem<String>(
+                                value: stage.id,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 25.0),
+                                  child: Text(stage.name),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              if (value.toString() != state.listStages.first.id) {
+                                context
+                                    .read<DetailedListBloc>()
+                                    .add(OnDetailedListLoading(
+                                      value.toString(),
+                                      const <String, int>{'latest': 1}, 1, _fixPageSize,
+                                      context
+                                          .read<DetailedListLiveCubit>()
+                                          .state
+                                          .checks["enabled"]!,
+                                      context
+                                          .read<DetailedListLiveCubit>()
+                                          .state
+                                          .checks["disabled"]!
+                                      ));
+                              }
+                            },
+                          ),
                         ],
                       ),
                       const SizedBox(
@@ -131,7 +265,15 @@ class DetailedListPage extends StatelessWidget {
                                           state.fieldsOrder.keys.first: 1
                                         },
                                         index + 1,
-                                        _fixPageSize));
+                                        _fixPageSize,
+                                        context
+                                            .read<DetailedListLiveCubit>()
+                                            .state
+                                            .checks["enabled"]!,
+                                        context
+                                            .read<DetailedListLiveCubit>()
+                                            .state
+                                            .checks["disabled"]!));
                               },
                             ),
                           ),
@@ -153,7 +295,15 @@ class DetailedListPage extends StatelessWidget {
                                       state.searchText,
                                       <String, int>{value!: 1},
                                       state.pageIndex,
-                                      _fixPageSize));
+                                      _fixPageSize,
+                                      context
+                                          .read<DetailedListLiveCubit>()
+                                          .state
+                                          .checks["enabled"]!,
+                                      context
+                                          .read<DetailedListLiveCubit>()
+                                          .state
+                                          .checks["disabled"]!));
                             },
                           )
                         ],

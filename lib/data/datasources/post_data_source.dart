@@ -42,8 +42,13 @@ abstract class PostRemoteDataSource {
       int pageIndex,
       int pageSize,
       Map<String, dynamic> params);
-  Future<ModelContainer<Vote>> votePublication(String orgaId, String userId,
-      String flowId, String stageId, String postId, int voteValue);
+  Future<ModelContainer<Vote>> votePublication(
+      String orgaId,
+      String userId,
+      String flowId,
+      String stageId,
+      String postId,
+      int voteValue);
 }
 
 class PostRemoteDataSourceImpl implements PostRemoteDataSource {

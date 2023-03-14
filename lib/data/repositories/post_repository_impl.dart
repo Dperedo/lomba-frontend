@@ -467,9 +467,10 @@ class PostRepositoryImpl implements PostRepository {
       String stageId,
       String searchText,
       int pageIndex,
-      int pageSize) async {
+      int pageSize,
+      int enableValue) async {
     try {
-      final Map<String, dynamic> params = {'onlyEnables': null};
+      final Map<String, dynamic> params = {'postEnabled': enableValue};
       List<dynamic> order = [];
 
       final resultModelContainer = await remoteDataSource.getAdminViewPosts(

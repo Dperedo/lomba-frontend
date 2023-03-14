@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/domain/entities/workflow/stage.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_role.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
 import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart';
@@ -8,6 +9,8 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
+import '../../../domain/entities/workflow/flow.dart';
+import '../../../domain/usecases/flow/get_flows.dart';
 import '../../../domain/usecases/post/get_detailedlist_posts.dart';
 import 'detailed_list_event.dart';
 import 'detailed_list_state.dart';
@@ -21,9 +24,15 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
   final VotePublication _votePublication;
   final GetSessionRole _getSessionRole;
   final GetStages _getStages;
+  final GetFlows _getFlows;
 
-  DetailedListBloc(this._getSession, this._getDetailedListPosts,
-      this._votePublication, this._getSessionRole, this._getStages)
+  DetailedListBloc(
+    this._getSession,
+    this._getDetailedListPosts,
+    this._votePublication,
+    this._getSessionRole,
+    this._getStages,
+    this._getFlows)
       : super(const DetailedListStart()) {
     ///Evento que hace la consulta de sesión del usuario en el dispositivo.
     on<OnDetailedListLoading>(
@@ -33,6 +42,8 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
         String flowId = Flows.votationFlowId;
         String stageId = StagesVotationFlow.stageId03Voting;
         String role = '';
+        List<Flow> listFlows = [];
+        List<Stage> listStages = [];
         var validLogin = false;
 
         final listroles = await _getSessionRole.execute();
@@ -42,6 +53,18 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
         final session = await _getSession.execute();
         session.fold(
             (l) => emit(DetailedListError(l.message)), (r) => {auth = r});
+        final resultGetFlows = await _getFlows.execute();
+        resultGetFlows.fold(
+            (l) => emit(DetailedListError(l.message)), (r) => {listFlows = r});
+        final resultGetStages = await _getStages.execute();
+        resultGetStages.fold(
+            (l) => emit(DetailedListError(l.message)), (r) => {listStages = r});
+        int enableValue = 0;
+        if (event.enabled) {
+          enableValue = 1;
+        } else if (event.disabled) {
+          enableValue = -1;
+        }
 
         final resultPosts = await _getDetailedListPosts.execute(
             auth.getOrgaId()!,
@@ -50,7 +73,8 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
             stageId,
             event.searchText,
             event.pageIndex,
-            event.pageSize);
+            event.pageSize,
+            enableValue);
         resultPosts.fold(
             (l) => {emit(DetailedListError(l.message))},
             (r) => emit(DetailedListLoaded(
@@ -66,7 +90,9 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
                 r.items,
                 r.currentItemCount,
                 r.items.length,
-                r.items.length)));
+                r.items.length,
+                listFlows,
+                listStages)));
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );

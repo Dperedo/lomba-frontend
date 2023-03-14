@@ -13,12 +13,14 @@ class OnDetailedListLoading extends DetailedListEvent {
   final Map<String, int> fieldsOrder;
   final int pageIndex;
   final int pageSize;
+  final bool enabled;
+  final bool disabled;
 
   const OnDetailedListLoading(
-      this.searchText, this.fieldsOrder, this.pageIndex, this.pageSize);
+      this.searchText, this.fieldsOrder, this.pageIndex, this.pageSize, this.enabled, this.disabled);
 
   @override
-  List<Object> get props => [searchText, fieldsOrder, pageIndex, pageSize];
+  List<Object> get props => [searchText, fieldsOrder, pageIndex, pageSize, enabled, disabled];
 }
 
 ///Evento ocurre cuando la página de DetailedList ya fue cargada

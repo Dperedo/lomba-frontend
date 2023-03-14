@@ -89,5 +89,6 @@ abstract class PostRepository {
       String stageId,
       String searchText,
       int pageIndex,
-      int pageSize);
+      int pageSize,
+      int enableValue);
 }

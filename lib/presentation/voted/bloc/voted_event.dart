@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:lomba_frontend/presentation/voted/bloc/voted_state.dart';
 
 abstract class VotedEvent extends Equatable {
   const VotedEvent();

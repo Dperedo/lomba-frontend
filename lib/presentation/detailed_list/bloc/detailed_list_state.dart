@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:lomba_frontend/domain/entities/workflow/stage.dart';
 
+import '../../../domain/entities/workflow/flow.dart';
 import '../../../domain/entities/workflow/post.dart';
 
 ///Interfaz de los estados de DetailedList.
@@ -26,6 +27,8 @@ class DetailedListLoaded extends DetailedListState {
   final int itemCount;
   final int totalItems;
   final int totalPages;
+  final List<Flow> listFlows;
+  final List<Stage> listStages;
   const DetailedListLoaded(
       this.validLogin,
       this.orgaId,
@@ -39,7 +42,9 @@ class DetailedListLoaded extends DetailedListState {
       this.listItems,
       this.itemCount,
       this.totalItems,
-      this.totalPages);
+      this.totalPages,
+      this.listFlows,
+      this.listStages);
 
   //const DetailedListLoaded(this.validLogin);
 }
