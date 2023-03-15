@@ -1,10 +1,8 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/presentation/demolist/bloc/demolist_bloc.dart';
 import 'package:lomba_frontend/presentation/demolist/bloc/demolist_event.dart';
 import 'package:lomba_frontend/presentation/demolist/bloc/demolist_state.dart';
-
 import 'package:number_paginator/number_paginator.dart';
 
 import '../../sidedrawer/pages/sidedrawer_page.dart';
@@ -19,7 +17,7 @@ class DemoListPage extends StatelessWidget {
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _pagerController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  final int _fixPageSize = 8;
+  final int _fixPageSize = 10;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,6 +96,7 @@ class DemoListPage extends StatelessWidget {
                           SizedBox(
                             width: 200,
                             child: NumberPaginator(
+                              initialPage: state.pageIndex - 1,
                               numberPages: state.totalPages,
                               contentBuilder: (index) => Expanded(
                                 child: Center(

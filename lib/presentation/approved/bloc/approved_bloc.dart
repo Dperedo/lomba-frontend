@@ -40,9 +40,6 @@ class ApprovedBloc extends Bloc<ApprovedEvent, ApprovedState> {
       );
 
       result.fold((l) => {emit(ApprovedError(l.message))}, (r) {
-        int totalPages = (r.items.length / event.pageSize).round();
-        if (totalPages == 0) totalPages = 1;
-
         emit(ApprovedLoaded(
           auth.getOrgaId()!,
           auth.getUserId()!,
@@ -54,8 +51,8 @@ class ApprovedBloc extends Bloc<ApprovedEvent, ApprovedState> {
           event.pageSize,
           r.items,
           r.currentItemCount,
-          r.items.length,
-          totalPages,
+          r.totalItems ?? 0,
+          r.totalPages ?? 1,
         ));
       });
     });

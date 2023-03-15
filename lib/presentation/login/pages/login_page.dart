@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_signin_button/button_list.dart';
-import 'package:flutter_signin_button/button_view.dart';
 import 'package:lomba_frontend/presentation/nav/bloc/nav_state.dart';
 import 'package:lomba_frontend/presentation/home/bloc/home_bloc.dart';
 import 'package:lomba_frontend/presentation/home/bloc/home_event.dart';

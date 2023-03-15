@@ -54,9 +54,6 @@ class PopularBloc extends Bloc<PopularEvent, PopularState> {
               event.pageIndex,
               event.pageSize);
           resultPosts.fold((l) => {emit(PopularError(l.message))}, (r) {
-            int totalPages = (r.items.length / event.pageSize).round();
-            if (totalPages == 0) totalPages = 1;
-
             emit(PopularLoaded(
                 validLogin,
                 orgaId,
@@ -69,8 +66,8 @@ class PopularBloc extends Bloc<PopularEvent, PopularState> {
                 event.pageSize,
                 r.items,
                 r.currentItemCount,
-                r.items.length,
-                totalPages));
+                r.totalItems ?? 0,
+                r.totalPages ?? 1));
           });
         } else {
           final session = await _getSession.execute();
@@ -85,9 +82,6 @@ class PopularBloc extends Bloc<PopularEvent, PopularState> {
               event.pageIndex,
               event.pageSize);
           resultPosts.fold((l) => {emit(PopularError(l.message))}, (r) {
-            int totalPages = (r.items.length / event.pageSize).round();
-            if (totalPages == 0) totalPages = 1;
-
             emit(PopularLoaded(
                 validLogin,
                 auth.getOrgaId()!,
@@ -100,8 +94,8 @@ class PopularBloc extends Bloc<PopularEvent, PopularState> {
                 event.pageSize,
                 r.items,
                 r.currentItemCount,
-                r.items.length,
-                totalPages));
+                r.totalItems ?? 0,
+                r.totalPages ?? 1));
           });
         }
       },
