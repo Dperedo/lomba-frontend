@@ -99,6 +99,7 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
             flowId,
             stageId,
             event.searchText,
+            event.fieldsOrder,
             event.pageIndex,
             event.pageSize,
             enableValue);

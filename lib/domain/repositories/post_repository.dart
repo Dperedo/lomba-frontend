@@ -88,6 +88,7 @@ abstract class PostRepository {
       String flowId,
       String stageId,
       String searchText,
+      Map<String, int> fieldsOrder,
       int pageIndex,
       int pageSize,
       int enableValue);
