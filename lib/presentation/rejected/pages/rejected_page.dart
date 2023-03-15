@@ -20,7 +20,7 @@ class RejectedPage extends StatelessWidget {
 
   final TextEditingController _searchController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  final int _fixPageSize = 8;
+  final int _fixPageSize = 10;
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +125,7 @@ class RejectedPage extends StatelessWidget {
                               SizedBox(
                                 width: 200,
                                 child: NumberPaginator(
+                                  initialPage: state.pageIndex - 1,
                                   numberPages: state.totalPages,
                                   contentBuilder: (index) => Expanded(
                                     child: Center(

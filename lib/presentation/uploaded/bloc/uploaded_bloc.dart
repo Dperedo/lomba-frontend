@@ -49,9 +49,6 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
             ? <String, int>{e.id: e.votes.first.value}
             : <String, int>{});
 
-        int totalPages = (r.items.length / event.pageSize).round();
-        if (totalPages == 0) totalPages = 1;
-
         emit(UploadedLoaded(
             auth.getOrgaId()!,
             auth.getUserId()!,
@@ -64,8 +61,8 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
             event.pageSize,
             r.items,
             r.currentItemCount,
-            r.items.length,
-            totalPages));
+            r.totalItems ?? 0,
+            r.totalPages ?? 1));
       });
     });
 

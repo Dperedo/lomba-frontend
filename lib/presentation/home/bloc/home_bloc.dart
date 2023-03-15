@@ -59,9 +59,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
               event.pageIndex,
               event.pageSize);
           resultPosts.fold((l) => {emit(HomeError(l.message))}, (r) {
-            int totalPages = (r.items.length / event.pageSize).round();
-            if (totalPages == 0) totalPages = 1;
-
             emit(HomeLoaded(
                 validLogin,
                 orgaId,
@@ -74,8 +71,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 event.pageSize,
                 r.items,
                 r.currentItemCount,
-                r.items.length,
-                totalPages));
+                r.totalItems ?? 0,
+                r.totalPages ?? 1));
           });
         } else {
           final listroles = await _getSessionRole.execute();
@@ -94,9 +91,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 event.pageIndex,
                 event.pageSize);
             resultPosts.fold((l) => {emit(HomeError(l.message))}, (r) {
-              int totalPages = (r.items.length / event.pageSize).round();
-              if (totalPages == 0) totalPages = 1;
-
               emit(HomeLoaded(
                   validLogin,
                   auth.getOrgaId()!,
@@ -109,8 +103,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                   event.pageSize,
                   r.items,
                   r.currentItemCount,
-                  r.items.length,
-                  totalPages));
+                  r.totalItems ?? 0,
+                  r.totalPages ?? 1));
             });
           } else {
             emit(HomeOnlyUser());

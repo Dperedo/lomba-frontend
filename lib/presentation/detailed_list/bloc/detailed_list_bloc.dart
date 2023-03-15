@@ -65,8 +65,8 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
                 event.pageSize,
                 r.items,
                 r.currentItemCount,
-                r.items.length,
-                r.items.length)));
+                r.totalItems ?? 0,
+                r.totalPages ?? 1)));
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );

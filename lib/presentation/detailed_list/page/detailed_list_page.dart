@@ -20,7 +20,7 @@ class DetailedListPage extends StatelessWidget {
   DetailedListPage({Key? key}) : super(key: key);
 
   final TextEditingController _searchController = TextEditingController();
-  final int _fixPageSize = 8;
+  final int _fixPageSize = 10;
   @override
   Widget build(BuildContext context) {
     return BlocListener<DetailedListBloc, DetailedListState>(
@@ -116,6 +116,7 @@ class DetailedListPage extends StatelessWidget {
                           SizedBox(
                             width: 200,
                             child: NumberPaginator(
+                              initialPage: state.pageIndex - 1,
                               numberPages: state.totalPages,
                               contentBuilder: (index) => Expanded(
                                 child: Center(

@@ -288,7 +288,7 @@ class SideDrawer extends StatelessWidget {
               if (state.opts.contains(SideDrawerUserOptions.optFlow)) {
                 childrenOptionsList.add(ListTile(
                   leading: const Icon(Icons.fluorescent),
-                  title: const Text('Flujo'),
+                  title: const Text('Flujos'),
                   onTap: () {
                     _handleItemClick(context, NavItem.pageFlow);
                   },
@@ -298,7 +298,7 @@ class SideDrawer extends StatelessWidget {
               if (state.opts.contains(SideDrawerUserOptions.optStage)) {
                 childrenOptionsList.add(ListTile(
                   leading: const Icon(Icons.storage),
-                  title: const Text('Estado'),
+                  title: const Text('Etapas de flujo'),
                   onTap: () {
                     _handleItemClick(context, NavItem.pageStage);
                   },
@@ -310,7 +310,9 @@ class SideDrawer extends StatelessWidget {
                   leading: const Icon(Icons.logout),
                   title: const Text('Cerrar sesión'),
                   onTap: () {
-                    context.read<SideDrawerBloc>().add(const OnSideDrawerLogOff());
+                    context
+                        .read<SideDrawerBloc>()
+                        .add(const OnSideDrawerLogOff());
                     context
                         .read<HomeBloc>()
                         .add(const OnHomeStarter(" Sesión Cerrada"));

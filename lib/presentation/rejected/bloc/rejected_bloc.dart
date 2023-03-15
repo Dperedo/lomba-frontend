@@ -39,9 +39,6 @@ class RejectedBloc extends Bloc<RejectedEvent, RejectedState> {
       );
 
       result.fold((l) => {emit(RejectedError(l.message))}, (r) {
-        int totalPages = (r.items.length / event.pageSize).round();
-        if (totalPages == 0) totalPages = 1;
-
         emit(RejectedLoaded(
           auth.getOrgaId()!,
           auth.getUserId()!,
@@ -53,8 +50,8 @@ class RejectedBloc extends Bloc<RejectedEvent, RejectedState> {
           event.pageSize,
           r.items,
           r.currentItemCount,
-          r.items.length,
-          totalPages,
+          r.totalItems ?? 0,
+          r.totalPages ?? 1,
         ));
       });
     });
