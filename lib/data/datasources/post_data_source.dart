@@ -6,7 +6,6 @@ import 'package:lomba_frontend/domain/entities/workflow/textcontent.dart';
 import '../../core/constants.dart';
 import '../../core/exceptions.dart';
 import '../../core/model_container.dart';
-import '../../domain/entities/workflow/post.dart';
 import '../../domain/entities/workflow/postitem.dart';
 import '../../domain/entities/workflow/stage.dart';
 import '../../domain/entities/workflow/total.dart';
@@ -367,6 +366,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
     }
   }
 
+/*
   @override
   Future<ModelContainer<Post>> getVotedPosts(
       String orgaId,
@@ -535,7 +535,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
       throw ServerException();
     }
   }
-
+*/
   @override
   Future<ModelContainer<Vote>> votePublication(String orgaId, String userId,
       String flowId, String stageId, String postId, int voteValue) async {

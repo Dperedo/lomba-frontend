@@ -1,10 +1,8 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/presentation/demolist/bloc/demolist_bloc.dart';
 import 'package:lomba_frontend/presentation/demolist/bloc/demolist_event.dart';
 import 'package:lomba_frontend/presentation/demolist/bloc/demolist_state.dart';
-
 import 'package:number_paginator/number_paginator.dart';
 
 import '../../sidedrawer/pages/sidedrawer_page.dart';

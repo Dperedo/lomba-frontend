@@ -46,9 +46,6 @@ dependencies:
   firebase_core: ^2.4.1
   firebase_auth: ^4.2.5
   google_sign_in: ^5.4.3
-  flutter_signin_button: ^2.0.0
-  flutter_facebook_auth: ^5.0.7
-  carousel_slider: ^4.2.1
   number_paginator: ^0.2.3
 
 
