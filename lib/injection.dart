@@ -161,7 +161,13 @@ Future<void> init() async {
   locator.registerFactory(() => FlowBloc(locator(), locator()));
   locator.registerFactory(() => StageBloc(locator(), locator()));
   locator.registerFactory(() =>
-      DetailedListBloc(locator(), locator(), locator(), locator(), locator()));
+      DetailedListBloc(
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),));
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));

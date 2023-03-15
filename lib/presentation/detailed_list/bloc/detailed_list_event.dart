@@ -10,6 +10,8 @@ abstract class DetailedListEvent extends Equatable {
 ///Evento que ocurre cuando se comienza a cargar la página de DetailedList.
 class OnDetailedListLoading extends DetailedListEvent {
   final String searchText;
+  final String flowId;
+  final String stageId;
   final Map<String, int> fieldsOrder;
   final int pageIndex;
   final int pageSize;
@@ -17,10 +19,10 @@ class OnDetailedListLoading extends DetailedListEvent {
   final bool disabled;
 
   const OnDetailedListLoading(
-      this.searchText, this.fieldsOrder, this.pageIndex, this.pageSize, this.enabled, this.disabled);
+      this.searchText, this.flowId, this.stageId, this.fieldsOrder, this.pageIndex, this.pageSize, this.enabled, this.disabled);
 
   @override
-  List<Object> get props => [searchText, fieldsOrder, pageIndex, pageSize, enabled, disabled];
+  List<Object> get props => [searchText, flowId, stageId, fieldsOrder, pageIndex, pageSize, enabled, disabled];
 }
 
 ///Evento ocurre cuando la página de DetailedList ya fue cargada

@@ -50,14 +50,9 @@ class DetailedListPage extends StatelessWidget {
   }
 
   Widget _bodyDetailedList(BuildContext context) {
-    List<String> listFields = <String>["latest"];
-    const Map<String, String> listStage = <String, String>{
-      "Aprobación": "name",
-      "Carga": "name",
-      "Votación": "name"
-    };
-    const Map<String, String> listFlow = <String, String>{
-      "Flujo de Votación": "name",
+    const Map<String, String> listFields = <String, String>{
+      "Creación": "created",
+      "Modificación": "updated"
     };
     return BlocProvider<DetailedListLiveCubit>(
       create: (context) => DetailedListLiveCubit(),
@@ -67,7 +62,7 @@ class DetailedListPage extends StatelessWidget {
             builder: (context, state) {
           if (state is DetailedListStart) {
             context.read<DetailedListBloc>().add(OnDetailedListLoading(
-                '', const <String, int>{'latest': 1}, 1, _fixPageSize,
+                '', '', '', <String, int>{listFields.values.first: -1}, 1, _fixPageSize,
                 context
                     .read<DetailedListLiveCubit>()
                     .state
@@ -114,6 +109,8 @@ class DetailedListPage extends StatelessWidget {
                                 context.read<DetailedListBloc>().add(
                                     OnDetailedListLoading(
                                         _searchController.text,
+                                        state.flowId,
+                                        state.stageId,
                                         <String, int>{
                                           state.fieldsOrder.keys.first: 1
                                         },
@@ -146,6 +143,8 @@ class DetailedListPage extends StatelessWidget {
 
                                     context.read<DetailedListBloc>().add(OnDetailedListLoading(
                                         _searchController.text,
+                                        state.flowId,
+                                        state.stageId,
                                         <String, int>{state.fieldsOrder.keys.first: -1},
                                         1,
                                         _fixPageSize,
@@ -161,6 +160,8 @@ class DetailedListPage extends StatelessWidget {
 
                                     context.read<DetailedListBloc>().add(OnDetailedListLoading(
                                         _searchController.text,
+                                        state.flowId,
+                                        state.stageId,
                                         <String, int>{state.fieldsOrder.keys.first: -1},
                                         1,
                                         _fixPageSize,
@@ -178,7 +179,7 @@ class DetailedListPage extends StatelessWidget {
                       Wrap(
                         children: [
                           DropdownButton(
-                            value: state.listFlows.first.id,
+                            value: state.listFlows.firstWhere((e) => e.id == state.flowId).id,
                             items: state.listFlows
                                 .map<DropdownMenuItem<String>>((flw.Flow flow) {
                               return DropdownMenuItem<String>(
@@ -190,11 +191,13 @@ class DetailedListPage extends StatelessWidget {
                               );
                             }).toList(),
                             onChanged: (value) {
-                              if (value.toString() != state.listFlows.first.id) {
+                              if (value.toString() != state.flowId) {
                                 context
                                     .read<DetailedListBloc>()
                                     .add(OnDetailedListLoading(
+                                      state.searchText,
                                       value.toString(),
+                                      state.stageId,
                                       const <String, int>{'latest': 1}, 1, _fixPageSize,
                                       context
                                           .read<DetailedListLiveCubit>()
@@ -208,8 +211,11 @@ class DetailedListPage extends StatelessWidget {
                               }
                             },
                           ),
+                          const SizedBox(
+                            width: 8,
+                          ),
                           DropdownButton(
-                            value: state.listStages.first.id,
+                            value: state.listStages.firstWhere((e) => e.id == state.stageId).id,
                             items: state.listStages
                                 .map<DropdownMenuItem<String>>((Stage stage) {
                               return DropdownMenuItem<String>(
@@ -221,10 +227,12 @@ class DetailedListPage extends StatelessWidget {
                               );
                             }).toList(),
                             onChanged: (value) {
-                              if (value.toString() != state.listStages.first.id) {
+                              if (value.toString() != state.stageId) {
                                 context
                                     .read<DetailedListBloc>()
                                     .add(OnDetailedListLoading(
+                                      state.searchText,
+                                      state.flowId,
                                       value.toString(),
                                       const <String, int>{'latest': 1}, 1, _fixPageSize,
                                       context
@@ -261,6 +269,8 @@ class DetailedListPage extends StatelessWidget {
                                 context.read<DetailedListBloc>().add(
                                     OnDetailedListLoading(
                                         _searchController.text,
+                                        state.flowId,
+                                        state.stageId,
                                         <String, int>{
                                           state.fieldsOrder.keys.first: 1
                                         },
@@ -282,17 +292,19 @@ class DetailedListPage extends StatelessWidget {
                           const VerticalDivider(),
                           DropdownButton(
                             value: state.fieldsOrder.keys.first,
-                            items: listFields
-                                .map<DropdownMenuItem<String>>((String value) {
+                            items: listFields.entries
+                                .map<DropdownMenuItem<String>>((field) {
                               return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
+                                value: field.value,
+                                child: Text(field.key),
                               );
                             }).toList(),
                             onChanged: (String? value) {
                               context.read<DetailedListBloc>().add(
                                   OnDetailedListLoading(
                                       state.searchText,
+                                      state.flowId,
+                                      state.stageId,
                                       <String, int>{value!: 1},
                                       state.pageIndex,
                                       _fixPageSize,

@@ -39,11 +39,36 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
       (event, emit) async {
         emit(DetailedListLoading());
         var auth = const SessionModel(token: "", username: "", name: "");
-        String flowId = Flows.votationFlowId;
-        String stageId = StagesVotationFlow.stageId03Voting;
+        String flowId = event.flowId;
+        String stageId = event.stageId;
         String role = '';
-        List<Flow> listFlows = [];
-        List<Stage> listStages = [];
+        List<Flow> listFlows = [
+          Flow(
+            id: '',
+            name: 'Todos los Flujos',
+            enabled: true,
+            builtIn: true,
+            created: DateTime.parse('2023-02-17 19:16:08.700Z'),
+            stages: const [],
+            updated: null,
+            deleted: null,
+            expires: null
+          )
+        ];
+        List<Stage> listStages = [
+          Stage(
+            id: '',
+            name: 'Todos los estados',
+            order: 2,
+            queryOut: null,
+            enabled: true,
+            builtIn: true,
+            created: DateTime.parse('2023-02-17 19:16:08.700Z'),
+            updated: null,
+            deleted: null,
+            expires: null
+          )
+        ];
         var validLogin = false;
 
         final listroles = await _getSessionRole.execute();
@@ -55,10 +80,12 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
             (l) => emit(DetailedListError(l.message)), (r) => {auth = r});
         final resultGetFlows = await _getFlows.execute();
         resultGetFlows.fold(
-            (l) => emit(DetailedListError(l.message)), (r) => {listFlows = r});
+            (l) => emit(DetailedListError(l.message)), (r) =>
+            {for(var item in r) {listFlows.add(item)}});
         final resultGetStages = await _getStages.execute();
         resultGetStages.fold(
-            (l) => emit(DetailedListError(l.message)), (r) => {listStages = r});
+            (l) => emit(DetailedListError(l.message)), (r) => 
+            {for(var item in r) {listStages.add(item)}});
         int enableValue = 0;
         if (event.enabled) {
           enableValue = 1;

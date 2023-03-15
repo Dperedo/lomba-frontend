@@ -18,7 +18,7 @@ class DetailedListLiveCubit extends Cubit<DetailedListLiveState> {
 
 class DetailedListLiveState extends Equatable {
   Map<String, bool> checks;// = <String, bool>{};
-  Map<String, int> votes = <String, int>{};
+  Map<String, int> votes;
 
   @override
   List<Object?> get props => [checks, votes];
