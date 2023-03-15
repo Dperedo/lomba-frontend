@@ -63,8 +63,12 @@ class LoginPage extends StatelessWidget {
                         //envolver y entregar el content predeterminado
 
                         if (state is LoginGetting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
+                          return SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height / 1.3,
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
                           );
                         } else if (state is LoginGoted) {
                           Future.delayed(Duration.zero, () {

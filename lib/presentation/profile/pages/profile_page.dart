@@ -61,8 +61,12 @@ class ProfilePage extends StatelessWidget {
       context.read<ProfileBloc>().add(const OnProfileLoad(null));
     }
     if (state is ProfileLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height / 1.3,
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
       );
     }
     if (state is ProfileLoaded) {

@@ -22,7 +22,7 @@ class UsersPage extends StatelessWidget {
           snackBarNotify(context, state.message, Icons.account_circle);
         } else if (state is UserStart && state.message != "") {
           snackBarNotify(context, state.message, Icons.account_circle);
-        } else if (state is UserError && state.message != ""){
+        } else if (state is UserError && state.message != "") {
           snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
@@ -73,8 +73,12 @@ class UsersPage extends StatelessWidget {
       context.read<UserBloc>().add(const OnUserListLoad("", "", "", 1));
     }
     if (state is UserLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height / 1.3,
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
       );
     }
     if (state is UserError) {
@@ -83,6 +87,7 @@ class UsersPage extends StatelessWidget {
     if (state is UserListLoaded) {
       return Column(children: [
         ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: state.users.length,
           itemBuilder: (context, index) {
@@ -143,14 +148,16 @@ class UsersPage extends StatelessWidget {
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text("Username: ${state.user.username}",
-                      style: const TextStyle(fontSize: 14))),
+                      style:
+                          const TextStyle(fontSize: 14, color: Colors.black))),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text("Email: ${state.user.email}",
-                      style: const TextStyle(fontSize: 14))),
+                      style:
+                          const TextStyle(fontSize: 14, color: Colors.black))),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),

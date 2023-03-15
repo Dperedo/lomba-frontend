@@ -17,7 +17,7 @@ class StagePage extends StatelessWidget {
       builder: (context, state) {
         return BlocListener<StageBloc, StageState>(
           listener: (context, state) {
-            if(state is StageError && state.message != ""){
+            if (state is StageError && state.message != "") {
               snackBarNotify(context, state.message, Icons.cancel_outlined);
             }
           },
@@ -28,9 +28,9 @@ class StagePage extends StatelessWidget {
               child: Column(
                 children: [
                   BodyFormatter(
-                    screenWidth: MediaQuery.of(context).size.width,
-                    child: _bodyRoles(context, state)
-                    )],
+                      screenWidth: MediaQuery.of(context).size.width,
+                      child: _bodyRoles(context, state))
+                ],
               ),
             )),
           ),
@@ -44,8 +44,12 @@ class StagePage extends StatelessWidget {
       context.read<StageBloc>().add(const OnStageListLoad());
     }
     if (state is StageLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height / 1.3,
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
       );
     }
     if (state is StageError) {
@@ -53,6 +57,7 @@ class StagePage extends StatelessWidget {
     }
     if (state is StageListLoaded) {
       return ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: state.stages.length,
         itemBuilder: (context, index) {

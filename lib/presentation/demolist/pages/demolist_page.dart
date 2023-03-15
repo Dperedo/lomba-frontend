@@ -40,13 +40,14 @@ class DemoListPage extends StatelessWidget {
           if (state is DemoListStartState) {
             context.read<DemoListBloc>().add(OnDemoListSearch(
                 "", const <String, int>{'num': 1}, 1, _fixPageSize));
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
           }
           if (state is DemoListLoadingState) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 1.3,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
           if (state is DemoListLoadedState) {
@@ -144,6 +145,7 @@ class DemoListPage extends StatelessWidget {
                   ),
                 ),
                 ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: state.listRandomItems.length,
                     itemBuilder: (context, index) {

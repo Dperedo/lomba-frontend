@@ -75,8 +75,12 @@ class ApprovedPage extends StatelessWidget {
                             _fixPageSize));
                       }
                       if (state is ApprovedLoading) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
+                        return SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height / 1.3,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
                         );
                       }
                       if (state is ApprovedLoaded) {
@@ -174,69 +178,61 @@ class ApprovedPage extends StatelessWidget {
                             BlocBuilder<ApprovedLiveCubit, ApprovedLiveState>(
                                 builder: (context, statecubit) {
                               return ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   itemCount: state.listItems.length,
                                   itemBuilder: (context, index) {
-                                    return SingleChildScrollView(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 20),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Column(
-                                                  children: [
-                                                    ListTile(
-                                                      leading: const Icon(
-                                                          Icons.person),
-                                                      title: Text(state
-                                                          .listItems[index]
-                                                          .title),
-                                                    ),
-                                                    ListTile(
-                                                      shape: const RoundedRectangleBorder(
-                                                          side: BorderSide(
-                                                              color:
-                                                                  Colors.grey,
-                                                              width: 2),
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          2))),
-                                                      // tileColor: Colors.grey,
-                                                      title: Text(
-                                                          (state
-                                                                      .listItems[
-                                                                          index]
-                                                                      .postitems[0]
-                                                                      .content
-                                                                  as TextContent)
-                                                              .text,
-                                                          textAlign:
-                                                              TextAlign.center),
-                                                      contentPadding:
-                                                          const EdgeInsets
-                                                                  .symmetric(
-                                                              horizontal: 100,
-                                                              vertical: 100),
-                                                    ),
-                                                    const SizedBox(height: 10),
-                                                    _showVoteButtons(
-                                                        context,
-                                                        state,
-                                                        index,
-                                                        statecubit),
-                                                    const SizedBox(height: 15),
-                                                  ],
-                                                ),
+                                    return Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                children: [
+                                                  ListTile(
+                                                    leading: const Icon(
+                                                        Icons.person),
+                                                    title: Text(state
+                                                        .listItems[index]
+                                                        .title),
+                                                  ),
+                                                  ListTile(
+                                                    shape: const RoundedRectangleBorder(
+                                                        side: BorderSide(
+                                                            color: Colors.grey,
+                                                            width: 2),
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    2))),
+                                                    // tileColor: Colors.grey,
+                                                    title: Text(
+                                                        (state
+                                                                    .listItems[
+                                                                        index]
+                                                                    .postitems[0]
+                                                                    .content
+                                                                as TextContent)
+                                                            .text,
+                                                        textAlign:
+                                                            TextAlign.center),
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                                .symmetric(
+                                                            horizontal: 100,
+                                                            vertical: 100),
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  _showVoteButtons(context,
+                                                      state, index, statecubit),
+                                                  const SizedBox(height: 15),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                          // const Divider()
-                                        ],
-                                      ),
+                                            ),
+                                          ],
+                                        ),
+                                        // const Divider()
+                                      ],
                                     );
                                   });
                             }),
@@ -252,7 +248,7 @@ class ApprovedPage extends StatelessWidget {
   DropdownButton<String> _sortDropdownButton(ApprovedLoaded state,
       Map<String, String> listFields, BuildContext context) {
     return DropdownButton(
-      style: const TextStyle(fontSize: 14),
+      style: const TextStyle(fontSize: 14, color: Colors.black),
       value: state.fieldsOrder.keys.first,
       items: listFields.entries.map<DropdownMenuItem<String>>((field) {
         return DropdownMenuItem<String>(

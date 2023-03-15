@@ -78,12 +78,17 @@ class OrgasPage extends StatelessWidget {
       context.read<OrgaBloc>().add(const OnOrgaListLoad("", "", 1));
     }
     if (state is OrgaLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height / 1.3,
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
       );
     }
     if (state is OrgaListLoaded) {
       return ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: state.orgas.length,
           itemBuilder: (context, index) {
@@ -140,7 +145,8 @@ class OrgasPage extends StatelessWidget {
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text("Código: ${state.orga.code}",
-                      style: const TextStyle(fontSize: 14))),
+                      style:
+                          const TextStyle(fontSize: 14, color: Colors.black))),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -471,120 +477,117 @@ class OrgasPage extends StatelessWidget {
             child:
                 BlocBuilder<OrgaUserDialogEditCubit, OrgaUserDialogEditState>(
                     builder: (context, state) {
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(user.name,
-                            style: const TextStyle(fontSize: 18))),
-                    const VerticalDivider(),
-                    Wrap(
-                      runSpacing: 12,
-                      //mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text("Asociación habilitada: "),
-                        Checkbox(
-                            value: state.checks["enabled"],
-                            onChanged: ((value) => {
-                                  context
-                                      .read<OrgaUserDialogEditCubit>()
-                                      .changeValue("enabled", value!)
-                                })),
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => GestureDetector(
-                                        onTap: () => Navigator.pop(context),
-                                        child: AlertDialog(
-                                          title: const Text(
-                                              '¿Desea eliminar la asociación?'),
-                                          content: const Text(
-                                              'Esta acción afecta el acceso de los usuarios al sistema'),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              key: const ValueKey(
-                                                  "btnConfirmDeleteOrgaUser"),
-                                              child: const Text("Eliminar"),
-                                              onPressed: () {
-                                                Navigator.pop(context, true);
-                                              },
-                                            ),
-                                            TextButton(
-                                              key: const ValueKey(
-                                                  "btnCancelDeleteOrgaUser"),
-                                              child: const Text('Cancelar'),
-                                              onPressed: () {
-                                                Navigator.pop(context, false);
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      )).then((value) {
-                                if (value) {
-                                  state.deleted = true;
-                                  Navigator.pop(context, state);
-                                }
-                              });
-                            },
-                            key: const ValueKey("btnEliminarAsociacion"),
-                            icon: const Icon(Icons.delete),
-                            label: const Text("Eliminar asociación"))
-                      ],
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(user.name,
+                          style: const TextStyle(fontSize: 18))),
+                  const VerticalDivider(),
+                  Wrap(
+                    runSpacing: 12,
+                    //mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Asociación habilitada: "),
+                      Checkbox(
+                          value: state.checks["enabled"],
+                          onChanged: ((value) => {
+                                context
+                                    .read<OrgaUserDialogEditCubit>()
+                                    .changeValue("enabled", value!)
+                              })),
+                      ElevatedButton.icon(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => GestureDetector(
+                                      onTap: () => Navigator.pop(context),
+                                      child: AlertDialog(
+                                        title: const Text(
+                                            '¿Desea eliminar la asociación?'),
+                                        content: const Text(
+                                            'Esta acción afecta el acceso de los usuarios al sistema'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            key: const ValueKey(
+                                                "btnConfirmDeleteOrgaUser"),
+                                            child: const Text("Eliminar"),
+                                            onPressed: () {
+                                              Navigator.pop(context, true);
+                                            },
+                                          ),
+                                          TextButton(
+                                            key: const ValueKey(
+                                                "btnCancelDeleteOrgaUser"),
+                                            child: const Text('Cancelar'),
+                                            onPressed: () {
+                                              Navigator.pop(context, false);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    )).then((value) {
+                              if (value) {
+                                state.deleted = true;
+                                Navigator.pop(context, state);
+                              }
+                            });
+                          },
+                          key: const ValueKey("btnEliminarAsociacion"),
+                          icon: const Icon(Icons.delete),
+                          label: const Text("Eliminar asociación"))
+                    ],
+                  ),
+                  const VerticalDivider(),
+                  SizedBox(
+                    width: 300,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: fakeRoles.length,
+                          itemBuilder: (context, index) {
+                            return CheckboxListTile(
+                                title: Text(
+                                  fakeRoles[index].name,
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                value: state
+                                    .checks[fakeRoles[index].name.toString()],
+                                onChanged: ((value) => {
+                                      context
+                                          .read<OrgaUserDialogEditCubit>()
+                                          .changeValue(
+                                              fakeRoles[index].name.toString(),
+                                              value!)
+                                    }));
+                          }),
                     ),
-                    const VerticalDivider(),
-                    SizedBox(
-                      width: 300,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: fakeRoles.length,
-                            itemBuilder: (context, index) {
-                              return CheckboxListTile(
-                                  title: Text(
-                                    fakeRoles[index].name,
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                  value: state
-                                      .checks[fakeRoles[index].name.toString()],
-                                  onChanged: ((value) => {
-                                        context
-                                            .read<OrgaUserDialogEditCubit>()
-                                            .changeValue(
-                                                fakeRoles[index]
-                                                    .name
-                                                    .toString(),
-                                                value!)
-                                      }));
-                            }),
-                      ),
-                    ),
-                    const VerticalDivider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton.icon(
-                            icon: const Icon(Icons.save),
-                            onPressed: () {
-                              Navigator.pop(context, state);
-                            },
-                            key: const ValueKey('btnGuardarAsoc'),
-                            label: const Text("Guardar")),
-                        const VerticalDivider(),
-                        ElevatedButton.icon(
-                            icon: const Icon(Icons.cancel),
-                            onPressed: () {
-                              Navigator.pop(context, null);
-                            },
-                            key: const ValueKey('btnCancelarAsoc'),
-                            label: const Text("Cancelar"))
-                      ],
-                    )
-                  ],
-                ),
+                  ),
+                  const VerticalDivider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton.icon(
+                          icon: const Icon(Icons.save),
+                          onPressed: () {
+                            Navigator.pop(context, state);
+                          },
+                          key: const ValueKey('btnGuardarAsoc'),
+                          label: const Text("Guardar")),
+                      const VerticalDivider(),
+                      ElevatedButton.icon(
+                          icon: const Icon(Icons.cancel),
+                          onPressed: () {
+                            Navigator.pop(context, null);
+                          },
+                          key: const ValueKey('btnCancelarAsoc'),
+                          label: const Text("Cancelar"))
+                    ],
+                  )
+                ],
               );
             }),
           ),
@@ -640,6 +643,7 @@ class OrgasPage extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: fakeRoles.length,
                           itemBuilder: (context, index) {
@@ -702,8 +706,12 @@ class OrgasPage extends StatelessWidget {
       child: BlocBuilder<OrgaUserBloc, OrgaUserState>(
         builder: (context, state) {
           if (state is OrgaUserLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 1.3,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
 
@@ -711,6 +719,7 @@ class OrgasPage extends StatelessWidget {
             return Column(
               children: [
                 ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: state.users.length,
                   itemBuilder: (context, index) {
@@ -826,6 +835,7 @@ class OrgasPage extends StatelessWidget {
                 const Text("Usuarios disponibles"),
                 const Divider(),
                 ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: state.users.length,
                   itemBuilder: (context, index) {

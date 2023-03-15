@@ -17,7 +17,7 @@ class FlowPage extends StatelessWidget {
       builder: (context, state) {
         return BlocListener<FlowBloc, FlowState>(
           listener: (context, state) {
-            if(state is FlowError && state.message != ""){
+            if (state is FlowError && state.message != "") {
               snackBarNotify(context, state.message, Icons.cancel_outlined);
             }
           },
@@ -28,9 +28,9 @@ class FlowPage extends StatelessWidget {
               child: Column(
                 children: [
                   BodyFormatter(
-                    screenWidth: MediaQuery.of(context).size.width,
-                    child: _bodyRoles(context, state)
-                    )],
+                      screenWidth: MediaQuery.of(context).size.width,
+                      child: _bodyRoles(context, state))
+                ],
               ),
             )),
           ),
@@ -44,8 +44,12 @@ class FlowPage extends StatelessWidget {
       context.read<FlowBloc>().add(const OnFlowListLoad());
     }
     if (state is FlowLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height / 1.3,
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
       );
     }
     if (state is FlowError) {
@@ -53,6 +57,7 @@ class FlowPage extends StatelessWidget {
     }
     if (state is FlowListLoaded) {
       return ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: state.flows.length,
         itemBuilder: (context, index) {
@@ -104,34 +109,29 @@ class FlowPage extends StatelessWidget {
           Text("Estado: ${state.flow.enabled}"),
           const Divider(),
           ListView.builder(
-            shrinkWrap: true,
-            itemCount: state.flow.stages.length,
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ListTile(
-                          leading: const Icon(Icons.key_outlined),
-                          title: Text(
-                            state.flow.stages[index].name,
-                            style: const TextStyle(fontSize: 18),
-                          ),
+              shrinkWrap: true,
+              itemCount: state.flow.stages.length,
+              itemBuilder: (context, index) {
+                return Column(children: [
+                  Row(children: [
+                    Expanded(
+                      child: ListTile(
+                        leading: const Icon(Icons.key_outlined),
+                        title: Text(
+                          state.flow.stages[index].name,
+                          style: const TextStyle(fontSize: 18),
                         ),
                       ),
-                      Icon(
-                      state.flow.stages[index].enabled
-                          ? Icons.toggle_on
-                          : Icons.toggle_off_outlined,
-                      size: 40)
-                    ]
-                  ),
+                    ),
+                    Icon(
+                        state.flow.stages[index].enabled
+                            ? Icons.toggle_on
+                            : Icons.toggle_off_outlined,
+                        size: 40)
+                  ]),
                   const Divider(),
-                ]
-              );
-            }
-          ),
+                ]);
+              }),
           /*Row(
             children: [
               const VerticalDivider(),

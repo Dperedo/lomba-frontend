@@ -17,7 +17,7 @@ class RolesPage extends StatelessWidget {
       builder: (context, state) {
         return BlocListener<RoleBloc, RoleState>(
           listener: (context, state) {
-            if(state is RoleError && state.message != ""){
+            if (state is RoleError && state.message != "") {
               snackBarNotify(context, state.message, Icons.cancel_outlined);
             }
           },
@@ -28,9 +28,9 @@ class RolesPage extends StatelessWidget {
               child: Column(
                 children: [
                   BodyFormatter(
-                    screenWidth: MediaQuery.of(context).size.width,
-                    child: _bodyRoles(context, state)
-                    )],
+                      screenWidth: MediaQuery.of(context).size.width,
+                      child: _bodyRoles(context, state))
+                ],
               ),
             )),
           ),
@@ -44,8 +44,12 @@ class RolesPage extends StatelessWidget {
       context.read<RoleBloc>().add(const OnRoleListLoad());
     }
     if (state is RoleLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height / 1.3,
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
       );
     }
     if (state is RoleError) {
@@ -53,6 +57,7 @@ class RolesPage extends StatelessWidget {
     }
     if (state is RoleListLoaded) {
       return ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: state.roles.length,
         itemBuilder: (context, index) {

@@ -63,8 +63,12 @@ class PopularPage extends StatelessWidget {
                 <String, int>{listFields.values.first: -1}, 1, _fixPageSize));
           }
           if (state is PopularLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 1.3,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
           if (state is PopularLoaded) {
@@ -153,56 +157,50 @@ class PopularPage extends StatelessWidget {
                 BlocBuilder<PopularLiveCubit, PopularLiveState>(
                     builder: (context, statecubit) {
                   return ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: state.listItems.length,
                       itemBuilder: (context, index) {
-                        return SingleChildScrollView(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 20),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      children: [
-                                        ListTile(
-                                          leading: const Icon(Icons.person),
-                                          title: Text(
-                                              state.listItems[index].title),
-                                        ),
-                                        ListTile(
-                                          shape: const RoundedRectangleBorder(
-                                              side: BorderSide(
-                                                  color: Colors.grey, width: 2),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(2))),
-                                          // tileColor: Colors.grey,
-                                          title: Text(
-                                              (state
-                                                      .listItems[index]
-                                                      .postitems[0]
-                                                      .content as TextContent)
-                                                  .text,
-                                              textAlign: TextAlign.center),
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 100,
-                                                  vertical: 100),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        SizedBox(
-                                            child: _showVoteButtons(state,
-                                                context, index, statecubit)),
-                                        const SizedBox(height: 15),
-                                      ],
-                                    ),
+                        return Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      ListTile(
+                                        leading: const Icon(Icons.person),
+                                        title:
+                                            Text(state.listItems[index].title),
+                                      ),
+                                      ListTile(
+                                        shape: const RoundedRectangleBorder(
+                                            side: BorderSide(
+                                                color: Colors.grey, width: 2),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(2))),
+                                        // tileColor: Colors.grey,
+                                        title: Text(
+                                            (state.listItems[index].postitems[0]
+                                                    .content as TextContent)
+                                                .text,
+                                            textAlign: TextAlign.center),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 100, vertical: 100),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      SizedBox(
+                                          child: _showVoteButtons(state,
+                                              context, index, statecubit)),
+                                      const SizedBox(height: 15),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              // const Divider()
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                            // const Divider()
+                          ],
                         );
                       });
                 }),

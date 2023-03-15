@@ -168,8 +168,12 @@ class AddContentPage extends StatelessWidget {
                 }
 
                 if (state is AddContentLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
+                  return SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 1.3,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   );
                 }
 

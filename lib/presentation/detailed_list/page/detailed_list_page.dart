@@ -62,8 +62,12 @@ class DetailedListPage extends StatelessWidget {
                 '', const <String, int>{'latest': 1}, 1, _fixPageSize));
           }
           if (state is DetailedListLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 1.3,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
           if (state is DetailedListLoaded) {
@@ -173,48 +177,45 @@ class DetailedListPage extends StatelessWidget {
                 BlocBuilder<DetailedListLiveCubit, DetailedListLiveState>(
                     builder: (context, statecubit) {
                   return ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: state.listItems.length,
                       itemBuilder: (context, index) {
-                        return SingleChildScrollView(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 5),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: TextButton(
-                                        child: ListTile(
-                                          leading: const Icon(Icons.person),
-                                          title: Text(
-                                              state.listItems[index].title),
-                                        ),
-                                        onPressed: () {
-                                          context.read<DetailedListBloc>().add(
-                                              OnDetailedListEdit(
-                                                  state.listItems[index]));
-                                        }),
-                                  ),
-                                  Icon(
-                                      state.listItems[index].enabled
-                                          ? Icons.toggle_on
-                                          : Icons.toggle_off_outlined,
-                                      size: 40)
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                      child: Text(
-                                          "Votos: ${state.listItems[index].votes.length.toString()} ")),
-                                  Text(
-                                      "Fecha: ${state.listItems[index].created.month}/${state.listItems[index].created.day}/${state.listItems[index].created.year} "),
-                                ],
-                              ),
-                              const Divider(),
-                            ],
-                          ),
+                        return Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextButton(
+                                      child: ListTile(
+                                        leading: const Icon(Icons.person),
+                                        title:
+                                            Text(state.listItems[index].title),
+                                      ),
+                                      onPressed: () {
+                                        context.read<DetailedListBloc>().add(
+                                            OnDetailedListEdit(
+                                                state.listItems[index]));
+                                      }),
+                                ),
+                                Icon(
+                                    state.listItems[index].enabled
+                                        ? Icons.toggle_on
+                                        : Icons.toggle_off_outlined,
+                                    size: 40)
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                    child: Text(
+                                        "Votos: ${state.listItems[index].votes.length.toString()} ")),
+                                Text(
+                                    "Fecha: ${state.listItems[index].created.month}/${state.listItems[index].created.day}/${state.listItems[index].created.year} "),
+                              ],
+                            ),
+                            const Divider(),
+                          ],
                         );
                       });
                 }),
