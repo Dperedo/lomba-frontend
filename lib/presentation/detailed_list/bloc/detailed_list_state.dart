@@ -72,11 +72,13 @@ class DetailedListError extends DetailedListState {
 class DetailedListEdit extends DetailedListState {
   final Post post;
   final List<Stage> liststage;
+  final String name;
+  final String username;
 
-  const DetailedListEdit(this.post, this.liststage);
+  const DetailedListEdit(this.post, this.liststage, this.name, this.username);
 
   @override
-  List<Object> get props => [post, liststage];
+  List<Object> get props => [post, liststage, name, username];
 }
 
 class DetailedListEditContent extends DetailedListState {

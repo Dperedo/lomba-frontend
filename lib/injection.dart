@@ -173,6 +173,7 @@ Future<void> init() async {
         locator(),
         locator(),
         locator(),
+        locator(),
         locator(),));
 
   // usecase

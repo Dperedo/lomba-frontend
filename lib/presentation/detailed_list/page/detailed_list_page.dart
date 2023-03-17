@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:number_paginator/number_paginator.dart';
 import '../../../core/validators.dart';
@@ -34,19 +35,23 @@ class DetailedListPage extends StatelessWidget {
           snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
-      child: ScaffoldManager(
-        title: AppBar(),
-        child: SingleChildScrollView(
-            child: Center(
-          child: Column(
-            children: [
-              BodyFormatter(
-                screenWidth: MediaQuery.of(context).size.width,
-                child: _bodyDetailedList(context),
-              )
-            ],
-          ),
-        )),
+      child: BlocBuilder<DetailedListBloc, DetailedListState>(
+        builder: (context, state) {
+          return ScaffoldManager(
+            title: _variableAppBar(context, state),
+            child: SingleChildScrollView(
+                child: Center(
+              child: Column(
+                children: [
+                  BodyFormatter(
+                    screenWidth: MediaQuery.of(context).size.width,
+                    child: _bodyDetailedList(context),
+                  )
+                ],
+              ),
+            )),
+          );
+        },
       ),
     );
   }
@@ -64,11 +69,13 @@ class DetailedListPage extends StatelessWidget {
             builder: (context, state) {
           if (state is DetailedListStart) {
             context.read<DetailedListBloc>().add(OnDetailedListLoading(
-                '', '', '', <String, int>{listFields.values.first: -1}, 1, _fixPageSize,
-                context
-                    .read<DetailedListLiveCubit>()
-                    .state
-                    .checks["enabled"]!,
+                '',
+                '',
+                '',
+                <String, int>{listFields.values.first: -1},
+                1,
+                _fixPageSize,
+                context.read<DetailedListLiveCubit>().state.checks["enabled"]!,
                 context
                     .read<DetailedListLiveCubit>()
                     .state
@@ -134,46 +141,61 @@ class DetailedListPage extends StatelessWidget {
                         height: 8,
                       ),
                       BlocBuilder<DetailedListLiveCubit, DetailedListLiveState>(
-                          builder: (context, statecubit) {
-                            return Column(
-                              children: [
-                                SwitchListTile.adaptive(
-                                  title: const Text('Mostrar habilitados'),
-                                  value: statecubit.checks["enabled"]!,
-                                  onChanged: (value) {
-                                    context.read<DetailedListLiveCubit>().changeCheckValue("enabled", value);
+                        builder: (context, statecubit) {
+                          return Column(
+                            children: [
+                              SwitchListTile.adaptive(
+                                title: const Text('Mostrar habilitados'),
+                                value: statecubit.checks["enabled"]!,
+                                onChanged: (value) {
+                                  context
+                                      .read<DetailedListLiveCubit>()
+                                      .changeCheckValue("enabled", value);
 
-                                    context.read<DetailedListBloc>().add(OnDetailedListLoading(
-                                        _searchController.text,
-                                        state.flowId,
-                                        state.stageId,
-                                        <String, int>{state.fieldsOrder.keys.first: -1},
-                                        1,
-                                        _fixPageSize,
-                                        value,
-                                        value ? !value : statecubit.checks["disabled"]!));
-                                  },
-                                ),
-                                SwitchListTile.adaptive(
-                                  title: const Text('Mostrar deshabilitados'),
-                                  value: statecubit.checks["disabled"]!,
-                                  onChanged: (value) {
-                                    context.read<DetailedListLiveCubit>().changeCheckValue("disabled", value);
+                                  context.read<DetailedListBloc>().add(
+                                      OnDetailedListLoading(
+                                          _searchController.text,
+                                          state.flowId,
+                                          state.stageId,
+                                          <String, int>{
+                                            state.fieldsOrder.keys.first: -1
+                                          },
+                                          1,
+                                          _fixPageSize,
+                                          value,
+                                          value
+                                              ? !value
+                                              : statecubit
+                                                  .checks["disabled"]!));
+                                },
+                              ),
+                              SwitchListTile.adaptive(
+                                title: const Text('Mostrar deshabilitados'),
+                                value: statecubit.checks["disabled"]!,
+                                onChanged: (value) {
+                                  context
+                                      .read<DetailedListLiveCubit>()
+                                      .changeCheckValue("disabled", value);
 
-                                    context.read<DetailedListBloc>().add(OnDetailedListLoading(
-                                        _searchController.text,
-                                        state.flowId,
-                                        state.stageId,
-                                        <String, int>{state.fieldsOrder.keys.first: -1},
-                                        1,
-                                        _fixPageSize,
-                                        value ? !value : statecubit.checks["enabled"]!,
-                                        value));
-                                  },
-                                ),
-                              ],
-                            );
-                          },
+                                  context.read<DetailedListBloc>().add(
+                                      OnDetailedListLoading(
+                                          _searchController.text,
+                                          state.flowId,
+                                          state.stageId,
+                                          <String, int>{
+                                            state.fieldsOrder.keys.first: -1
+                                          },
+                                          1,
+                                          _fixPageSize,
+                                          value
+                                              ? !value
+                                              : statecubit.checks["enabled"]!,
+                                          value));
+                                },
+                              ),
+                            ],
+                          );
+                        },
                       ),
                       const SizedBox(
                         height: 8,
@@ -181,7 +203,9 @@ class DetailedListPage extends StatelessWidget {
                       Wrap(
                         children: [
                           DropdownButton(
-                            value: state.listFlows.firstWhere((e) => e.id == state.flowId).id,
+                            value: state.listFlows
+                                .firstWhere((e) => e.id == state.flowId)
+                                .id,
                             items: state.listFlows
                                 .map<DropdownMenuItem<String>>((flw.Flow flow) {
                               return DropdownMenuItem<String>(
@@ -194,22 +218,22 @@ class DetailedListPage extends StatelessWidget {
                             }).toList(),
                             onChanged: (value) {
                               if (value.toString() != state.flowId) {
-                                context
-                                    .read<DetailedListBloc>()
-                                    .add(OnDetailedListLoading(
-                                      state.searchText,
-                                      value.toString(),
-                                      state.stageId,
-                                      const <String, int>{'latest': 1}, 1, _fixPageSize,
-                                      context
-                                          .read<DetailedListLiveCubit>()
-                                          .state
-                                          .checks["enabled"]!,
-                                      context
-                                          .read<DetailedListLiveCubit>()
-                                          .state
-                                          .checks["disabled"]!
-                                      ));
+                                context.read<DetailedListBloc>().add(
+                                    OnDetailedListLoading(
+                                        state.searchText,
+                                        value.toString(),
+                                        state.stageId,
+                                        const <String, int>{'latest': 1},
+                                        1,
+                                        _fixPageSize,
+                                        context
+                                            .read<DetailedListLiveCubit>()
+                                            .state
+                                            .checks["enabled"]!,
+                                        context
+                                            .read<DetailedListLiveCubit>()
+                                            .state
+                                            .checks["disabled"]!));
                               }
                             },
                           ),
@@ -217,7 +241,9 @@ class DetailedListPage extends StatelessWidget {
                             width: 8,
                           ),
                           DropdownButton(
-                            value: state.listStages.firstWhere((e) => e.id == state.stageId).id,
+                            value: state.listStages
+                                .firstWhere((e) => e.id == state.stageId)
+                                .id,
                             items: state.listStages
                                 .map<DropdownMenuItem<String>>((Stage stage) {
                               return DropdownMenuItem<String>(
@@ -230,22 +256,22 @@ class DetailedListPage extends StatelessWidget {
                             }).toList(),
                             onChanged: (value) {
                               if (value.toString() != state.stageId) {
-                                context
-                                    .read<DetailedListBloc>()
-                                    .add(OnDetailedListLoading(
-                                      state.searchText,
-                                      state.flowId,
-                                      value.toString(),
-                                      const <String, int>{'latest': 1}, 1, _fixPageSize,
-                                      context
-                                          .read<DetailedListLiveCubit>()
-                                          .state
-                                          .checks["enabled"]!,
-                                      context
-                                          .read<DetailedListLiveCubit>()
-                                          .state
-                                          .checks["disabled"]!
-                                      ));
+                                context.read<DetailedListBloc>().add(
+                                    OnDetailedListLoading(
+                                        state.searchText,
+                                        state.flowId,
+                                        value.toString(),
+                                        const <String, int>{'latest': 1},
+                                        1,
+                                        _fixPageSize,
+                                        context
+                                            .read<DetailedListLiveCubit>()
+                                            .state
+                                            .checks["enabled"]!,
+                                        context
+                                            .read<DetailedListLiveCubit>()
+                                            .state
+                                            .checks["disabled"]!));
                               }
                             },
                           ),
@@ -373,7 +399,7 @@ class DetailedListPage extends StatelessWidget {
                                       child: Text(
                                           "Votos: ${state.listItems[index].votes.length.toString()} ")),
                                   Text(
-                                      "Fecha: ${state.listItems[index].created.month}/${state.listItems[index].created.day}/${state.listItems[index].created.year} "),
+                                      "Fecha: ${DateFormat('dd/MM/yyyy HH:mm:ss').format(state.listItems[index].created)} "),
                                 ],
                               ),
                               const Divider(),
@@ -389,11 +415,77 @@ class DetailedListPage extends StatelessWidget {
             return Column(
               children: [
                 Row(
-                  children: const [
-                    Text("Usuario: "),
-                    Icon(Icons.person),
-                    Text("Username: ")
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Title(
+                          color: Colors.black, 
+                          child: Text("Usuario: ${state.name}"),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    //Text("Usuario: ${state.name}"),
+                    const Icon(Icons.person),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Title(
+                        color: Colors.black, 
+                        child: Text("Username: ${state.username}"),
+                      ),
+                    ),
+                    //Text("Username: ${state.username}")
                   ],
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: state.post.tracks.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return Table(
+                        border: TableBorder.all(),
+                        children: const [
+                          TableRow(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text("Descripción"),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text("Fecha"),
+                              ),
+                            ]
+                          )
+                        ]
+                      );
+                    } else {
+                      final item = index - 1;
+                      return Table(
+                        border: TableBorder.all(),
+                        children: [
+                          TableRow(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Text(state.post.tracks[item].description),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Text(DateFormat('dd/MM/yyyy HH:mm:ss').format(state.post.tracks[item].created)),
+                              ),
+                            ]
+                          )
+                        ],
+                      );
+                    }
+                  }
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
                 ListTile(
                   leading: const Icon(Icons.person),
@@ -422,10 +514,11 @@ class DetailedListPage extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                            context.read<DetailedListBloc>().add(OnDetailedListPrepareEditContent(state.post));
-                          },
-                    child: const Icon(Icons.edit)
-                ),
+                      context
+                          .read<DetailedListBloc>()
+                          .add(OnDetailedListPrepareEditContent(state.post));
+                    },
+                    child: const Icon(Icons.edit)),
                 const SizedBox(
                   height: 10,
                 ),
@@ -447,20 +540,19 @@ class DetailedListPage extends StatelessWidget {
                       }).toList(),
                       onChanged: (value) {
                         if (value.toString() != state.post.stageId) {
-                          context
-                              .read<DetailedListBloc>()
-                              .add(OnDetailedListChangeStage(
-                                state.post, value.toString(), state.liststage));
+                          context.read<DetailedListBloc>().add(
+                              OnDetailedListChangeStage(state.post,
+                                  value.toString(), state.liststage));
                         }
                       },
                     ),
                     const SizedBox(
-                        width: 10,
-                      ),
+                      width: 10,
+                    ),
                     ElevatedButton(
                       key: const ValueKey("btnEnableOption"),
-                      child:
-                          Text((state.post.enabled ? "Deshabilitar" : "Habilitar")),
+                      child: Text(
+                          (state.post.enabled ? "Deshabilitar" : "Habilitar")),
                       onPressed: () {
                         showDialog(
                             context: context,
@@ -491,13 +583,13 @@ class DetailedListPage extends StatelessWidget {
                                     ],
                                   ),
                                 )).then((value) => {
-                                if (value)
-                                  {
-                                    context
-                                        .read<DetailedListBloc>()
-                                        .add(OnDetailedListEnable(state.post, state.liststage))
-                                  }
-                                });
+                              if (value)
+                                {
+                                  context.read<DetailedListBloc>().add(
+                                      OnDetailedListEnable(
+                                          state.post, state.liststage))
+                                }
+                            });
                       },
                     ),
                   ],
@@ -506,10 +598,13 @@ class DetailedListPage extends StatelessWidget {
             );
           }
           if (state is DetailedListEditContent) {
-            final TextEditingController titleController = TextEditingController();
-            final TextEditingController contentController = TextEditingController();
+            final TextEditingController titleController =
+                TextEditingController();
+            final TextEditingController contentController =
+                TextEditingController();
             titleController.text = state.post.title;
-            contentController.text = (state.post.postitems[0].content as TextContent).text;
+            contentController.text =
+                (state.post.postitems[0].content as TextContent).text;
             return Form(
               key: _key,
               child: Column(
@@ -548,8 +643,12 @@ class DetailedListPage extends StatelessWidget {
                       label: const Text("Subir"),
                       onPressed: () {
                         if (_key.currentState?.validate() == true) {
-                          context.read<DetailedListBloc>().add(OnDetailedListEditContent(
-                            state.post.id,state.post.userId,titleController.text,contentController.text));
+                          context.read<DetailedListBloc>().add(
+                              OnDetailedListEditContent(
+                                  state.post.id,
+                                  state.post.userId,
+                                  titleController.text,
+                                  contentController.text));
                         }
                       },
                     ),
@@ -565,9 +664,9 @@ class DetailedListPage extends StatelessWidget {
   }
 
   AppBar _variableAppBar(BuildContext context, DetailedListState state) {
-    if (state is DetailedListLoaded) {
+    if (state is DetailedListEdit) {
       return AppBar(
-          title: const Text("Detalle"),
+          title: const Text("Detalle del Post"),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -576,8 +675,19 @@ class DetailedListPage extends StatelessWidget {
                   .add(const OnDetailedListStarter(''));
             },
           ));
+    } else if (state is DetailedListEditContent) {
+      return AppBar(
+          title: const Text("Edit del Post"),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              context
+                  .read<DetailedListBloc>()
+                  .add(OnDetailedListEdit(state.post));
+            },
+          ));
     }
 
-    return AppBar(title: const Text(""));
+    return AppBar(title: const Text("Todos los Post"));
   }
 }

@@ -17,6 +17,7 @@ import '../../../domain/usecases/flow/get_flows.dart';
 import '../../../domain/usecases/post/change_stage_post.dart';
 import '../../../domain/usecases/post/enable_post.dart';
 import '../../../domain/usecases/post/get_detailedlist_posts.dart';
+import '../../../domain/usecases/users/get_user.dart';
 import 'detailed_list_event.dart';
 import 'detailed_list_state.dart';
 
@@ -33,6 +34,7 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
   final ChangeStagePost _changeStagePost;
   final EnablePost _enablePost;
   final UpdateEdit _updateEdit;
+  final GetUser _getUser;
 
   DetailedListBloc(
     this._getSession,
@@ -43,7 +45,8 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
     this._getFlows,
     this._changeStagePost,
     this._enablePost,
-    this._updateEdit)
+    this._updateEdit,
+    this._getUser)
       : super(const DetailedListStart()) {
     ///Evento que hace la consulta de sesión del usuario en el dispositivo.
     on<OnDetailedListLoading>(
@@ -144,9 +147,18 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
     on<OnDetailedListEdit>((event, emit) async {
       emit(DetailedListLoading());
 
+      String name = '';
+      String username = '';
+
+      final resultUser = await _getUser.execute(event.post.userId);
+      resultUser.fold((l) => emit(DetailedListError(l.message)), (r) {
+        name = r.name;
+        username = r.username;
+      });
+
       final resultStage = await _getStages.execute();
       resultStage.fold((l) => emit(DetailedListError(l.message)),
-          (r) => emit(DetailedListEdit(event.post, r)));
+          (r) => emit(DetailedListEdit(event.post, r, name, username)));
     });
 
     on<OnDetailedListPrepareEditContent>((event, emit) async {
@@ -157,6 +169,15 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
       emit(DetailedListLoading());
       List<Stage> listStage = [];
 
+      String name = '';
+      String username = '';
+
+      final resultUser = await _getUser.execute(event.userId);
+      resultUser.fold((l) => emit(DetailedListError(l.message)), (r) {
+        name = r.name;
+        username = r.username;
+      });
+
       final resultStage = await _getStages.execute();
       resultStage.fold((l) => emit(DetailedListError(l.message)),
           (r) => listStage = r);
@@ -164,15 +185,24 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
       final resultUpdate = await _updateEdit.execute(
         event.postId, event.userId, TextContent(text: event.content), event.title);
         resultUpdate.fold((l) => emit(DetailedListError(l.message)), (r) => 
-        emit(DetailedListEdit(r, listStage)));
+        emit(DetailedListEdit(r, listStage, name, username)));
     });
 
     on<OnDetailedListChangeStage>((event, emit) async {
       emit(DetailedListLoading());
 
+      String name = '';
+      String username = '';
+
+      final resultUser = await _getUser.execute(event.post.userId);
+      resultUser.fold((l) => emit(DetailedListError(l.message)), (r) {
+        name = r.name;
+        username = r.username;
+      });
+
       final editStage = await _changeStagePost.execute(event.post.id,event.post.flowId,event.stageId);
       editStage.fold((l) => emit(DetailedListError(l.message)),
-          (post) => emit(DetailedListEdit(post, event.listStage)));
+          (post) => emit(DetailedListEdit(post, event.listStage, name, username)));
     });
 
     on<OnDetailedListEnable>((event, emit) async {
@@ -180,9 +210,18 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
 
       Post post = event.post;
 
+      String name = '';
+      String username = '';
+
+      final resultUser = await _getUser.execute(event.post.userId);
+      resultUser.fold((l) => emit(DetailedListError(l.message)), (r) {
+        name = r.name;
+        username = r.username;
+      });
+
       final editStage = await _enablePost.execute(post.id, !post.enabled);
       editStage.fold((l) => emit(DetailedListError(l.message)),
-          (r) => emit(DetailedListEdit(r, event.listStage)));
+          (r) => emit(DetailedListEdit(r, event.listStage, name, username)));
     });
 
     on<OnDetailedListVote>((event, emit) async {

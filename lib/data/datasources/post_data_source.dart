@@ -142,9 +142,12 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
       List<Track> listTracks = (item['tracks'] as List)
           .map((e) => Track(
+              name: e['name'].toString(),
+              description: e['description'].toString(),
               userId: e['userId'].toString(),
               flowId: e['flowId'].toString(),
-              stageId: e['stageId'].toString(),
+              stageIdOld: e['stageIdOld'].toString(),
+              stageIdNew: e['stageIdNew'].toString(),
               change: e['change'].toString(),
               created: DateTime.parse(e['created'].toString()),
               deleted: e['deleted'] != null
@@ -281,9 +284,12 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
         List<Track> listTracks = (item['tracks'] as List)
             .map((e) => Track(
+                name: e['name'].toString(),
+                description: e['description'].toString(),
                 userId: e['userId'].toString(),
                 flowId: e['flowId'].toString(),
-                stageId: e['stageId'].toString(),
+                stageIdOld: e['stageIdOld'].toString(),
+                stageIdNew: e['stageIdNew'].toString(),
                 change: e['change'].toString(),
                 created: DateTime.parse(e['created'].toString()),
                 deleted: e['deleted'] != null
@@ -433,9 +439,12 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
         List<Track> listTracks = (item['tracks'] as List)
             .map((e) => Track(
+                name: e['name'].toString(),
+                description: e['description'].toString(),
                 userId: e['userId'].toString(),
                 flowId: e['flowId'].toString(),
-                stageId: e['stageId'].toString(),
+                stageIdOld: e['stageIdOld'].toString(),
+                stageIdNew: e['stageIdNew'].toString(),
                 change: e['change'].toString(),
                 created: DateTime.parse(e['created'].toString()),
                 deleted: e['deleted'] != null
@@ -773,9 +782,12 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
         List<Track> listTracks = (item['tracks'] as List)
             .map((e) => Track(
+                name: e['name'].toString(),
+                description: e['description'].toString(),
                 userId: e['userId'].toString(),
                 flowId: e['flowId'].toString(),
-                stageId: e['stageId'].toString(),
+                stageIdOld: e['stageIdOld'].toString(),
+                stageIdNew: e['stageIdNew'].toString(),
                 change: e['change'].toString(),
                 created: DateTime.parse(e['created'].toString()),
                 deleted: e['deleted'] != null
@@ -912,9 +924,12 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
       List<Track> listTracks = (item['tracks'] as List)
           .map((e) => Track(
+              name: e['name'].toString(),
+              description: e['description'].toString(),
               userId: e['userId'].toString(),
               flowId: e['flowId'].toString(),
-              stageId: e['stageId'].toString(),
+              stageIdOld: e['stageIdOld'].toString(),
+              stageIdNew: e['stageIdNew'].toString(),
               change: e['change'].toString(),
               created: DateTime.parse(e['created'].toString()),
               deleted: e['deleted'] != null
@@ -1052,9 +1067,12 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
       List<Track> listTracks = (item['tracks'] as List)
           .map((e) => Track(
+              name: e['name'].toString(),
+              description: e['description'].toString(),
               userId: e['userId'].toString(),
               flowId: e['flowId'].toString(),
-              stageId: e['stageId'].toString(),
+              stageIdOld: e['stageIdOld'].toString(),
+              stageIdNew: e['stageIdNew'].toString(),
               change: e['change'].toString(),
               created: DateTime.parse(e['created'].toString()),
               deleted: e['deleted'] != null
@@ -1199,9 +1217,12 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
         List<Track> listTracks = (item['tracks'] as List)
             .map((e) => Track(
+                name: e['name'].toString(),
+                description: e['description'].toString(),
                 userId: e['userId'].toString(),
                 flowId: e['flowId'].toString(),
-                stageId: e['stageId'].toString(),
+                stageIdOld: e['stageIdOld'].toString(),
+                stageIdNew: e['stageIdNew'].toString(),
                 change: e['change'].toString(),
                 created: DateTime.parse(e['created'].toString()),
                 deleted: e['deleted'] != null
@@ -1362,9 +1383,12 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
         List<Track> listTracks = (item['tracks'] as List)
             .map((e) => Track(
+                name: e['name'].toString(),
+                description: e['description'].toString(),
                 userId: e['userId'].toString(),
                 flowId: e['flowId'].toString(),
-                stageId: e['stageId'].toString(),
+                stageIdOld: e['stageIdOld'].toString(),
+                stageIdNew: e['stageIdNew'].toString(),
                 change: e['change'].toString(),
                 created: DateTime.parse(e['created'].toString()),
                 deleted: e['deleted'] != null
