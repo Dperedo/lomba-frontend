@@ -79,4 +79,13 @@ class DetailedListEdit extends DetailedListState {
   List<Object> get props => [post, liststage];
 }
 
+class DetailedListEditContent extends DetailedListState {
+  final Post post;
+
+  const DetailedListEditContent(this.post);
+
+  @override
+  List<Object> get props => [post];
+}
+
 class DetailedListOnlyUser extends DetailedListState {}

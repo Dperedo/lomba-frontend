@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:number_paginator/number_paginator.dart';
+import '../../../core/validators.dart';
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
@@ -20,6 +21,7 @@ class DetailedListPage extends StatelessWidget {
   DetailedListPage({Key? key}) : super(key: key);
 
   final TextEditingController _searchController = TextEditingController();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final int _fixPageSize = 10;
   @override
   Widget build(BuildContext context) {
@@ -407,72 +409,153 @@ class DetailedListPage extends StatelessWidget {
                   contentPadding: const EdgeInsets.symmetric(
                       horizontal: 100, vertical: 100),
                 ),
-                DropdownButton(
-                  value: state.liststage
-                      .firstWhere((e) => e.id == state.post.stageId)
-                      .id,
-                  items: state.liststage
-                      .map<DropdownMenuItem<String>>((Stage stage) {
-                    return DropdownMenuItem<String>(
-                      value: stage.id,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 25.0),
-                        child: Text(stage.name),
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    if (value.toString() != state.post.stageId) {
-                      context
-                          .read<DetailedListBloc>()
-                          .add(OnDetailedListEdit(state.post));
-                    }
-                  },
-                ),
                 ElevatedButton(
-                  key: const ValueKey("btnEnableOption"),
-                  child:
-                      Text((state.post.enabled ? "Deshabilitar" : "Habilitar")),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => GestureDetector(
-                              onTap: () => Navigator.pop(context),
-                              child: AlertDialog(
-                                title: Text(
-                                    '¿Desea ${(state.post.enabled ? "deshabilitar" : "habilitar")} el usuario'),
-                                content: const Text(
-                                    'Puede cambiar después su elección'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    key: const ValueKey("btnConfirmEnable"),
-                                    child: Text((state.post.enabled
-                                        ? "Deshabilitar"
-                                        : "Habilitar")),
-                                    onPressed: () {
-                                      Navigator.pop(context, true);
-                                    },
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.resolveWith(
+                        (states) => RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          side: BorderSide(
+                            color: Theme.of(context).secondaryHeaderColor,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                            context.read<DetailedListBloc>().add(OnDetailedListPrepareEditContent(state.post));
+                          },
+                    child: const Icon(Icons.edit)
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    DropdownButton(
+                      value: state.liststage
+                          .firstWhere((e) => e.id == state.post.stageId)
+                          .id,
+                      items: state.liststage
+                          .map<DropdownMenuItem<String>>((Stage stage) {
+                        return DropdownMenuItem<String>(
+                          value: stage.id,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 25.0),
+                            child: Text(stage.name),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        if (value.toString() != state.post.stageId) {
+                          context
+                              .read<DetailedListBloc>()
+                              .add(OnDetailedListChangeStage(
+                                state.post, value.toString(), state.liststage));
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                        width: 10,
+                      ),
+                    ElevatedButton(
+                      key: const ValueKey("btnEnableOption"),
+                      child:
+                          Text((state.post.enabled ? "Deshabilitar" : "Habilitar")),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => GestureDetector(
+                                  onTap: () => Navigator.pop(context),
+                                  child: AlertDialog(
+                                    title: Text(
+                                        '¿Desea ${(state.post.enabled ? "deshabilitar" : "habilitar")} la publicación?'),
+                                    content: const Text(
+                                        'Puede cambiar después su elección'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        key: const ValueKey("btnConfirmEnable"),
+                                        child: Text((state.post.enabled
+                                            ? "Deshabilitar"
+                                            : "Habilitar")),
+                                        onPressed: () {
+                                          Navigator.pop(context, true);
+                                        },
+                                      ),
+                                      TextButton(
+                                        key: const ValueKey("btnCancelEnable"),
+                                        child: const Text('Cancelar'),
+                                        onPressed: () {
+                                          Navigator.pop(context, false);
+                                        },
+                                      ),
+                                    ],
                                   ),
-                                  TextButton(
-                                    key: const ValueKey("btnCancelEnable"),
-                                    child: const Text('Cancelar'),
-                                    onPressed: () {
-                                      Navigator.pop(context, false);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            )).then((value) => {
-                          if (value)
-                            {
-                              context
-                                  .read<DetailedListBloc>()
-                                  .add(OnDetailedListEnable())
-                            }
-                        });
-                  },
+                                )).then((value) => {
+                                if (value)
+                                  {
+                                    context
+                                        .read<DetailedListBloc>()
+                                        .add(OnDetailedListEnable(state.post, state.liststage))
+                                  }
+                                });
+                      },
+                    ),
+                  ],
                 ),
               ],
+            );
+          }
+          if (state is DetailedListEditContent) {
+            final TextEditingController titleController = TextEditingController();
+            final TextEditingController contentController = TextEditingController();
+            titleController.text = state.post.title;
+            contentController.text = (state.post.postitems[0].content as TextContent).text;
+            return Form(
+              key: _key,
+              child: Column(
+                children: [
+                  TextFormField(
+                    key: const ValueKey('txtTitle'),
+                    maxLength: 150,
+                    controller: titleController,
+                    validator: (value) => Validators.validateName(value ?? ""),
+                    decoration: const InputDecoration(
+                        labelText: 'Titulo', icon: Icon(Icons.title)),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    key: const ValueKey('txtContent'),
+                    maxLength: 500,
+                    maxLines: 8,
+                    controller: contentController,
+                    validator: (value) => Validators.validateName(value ?? ""),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Contenido del Post',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  SizedBox(
+                    width: 150,
+                    height: 50,
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.publish),
+                      key: const ValueKey("btnSavedUp"),
+                      label: const Text("Subir"),
+                      onPressed: () {
+                        if (_key.currentState?.validate() == true) {
+                          context.read<DetailedListBloc>().add(OnDetailedListEditContent(
+                            state.post.id,state.post.userId,titleController.text,contentController.text));
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
             );
           }
           return const SizedBox();

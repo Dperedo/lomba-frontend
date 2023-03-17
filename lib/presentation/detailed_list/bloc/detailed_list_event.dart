@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../domain/entities/workflow/post.dart';
+import '../../../domain/entities/workflow/stage.dart';
 
 ///Interfaz del evento de controla la página principal.
 abstract class DetailedListEvent extends Equatable {
@@ -61,8 +62,38 @@ class OnDetailedListEdit extends DetailedListEvent {
 }
 
 class OnDetailedListEnable extends DetailedListEvent {
-  const OnDetailedListEnable();
+  final Post post;
+  final List<Stage> listStage;
+
+  const OnDetailedListEnable(this.post, this.listStage);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [post, listStage];
+}
+
+class OnDetailedListChangeStage extends DetailedListEvent {
+  final Post post;
+  final String stageId;
+  final List<Stage> listStage;
+  const OnDetailedListChangeStage(this.post, this.stageId, this.listStage);
+
+  @override
+  List<Object> get props => [post, stageId, listStage];
+}
+
+class OnDetailedListPrepareEditContent extends DetailedListEvent {
+  final Post post;
+  const OnDetailedListPrepareEditContent(this.post);
+  @override
+  List<Object> get props => [post];
+}
+
+class OnDetailedListEditContent extends DetailedListEvent {
+  final String postId;
+  final String userId;
+  final String title;
+  final String content;
+  const OnDetailedListEditContent(this.postId, this.userId, this.title, this.content);
+  @override
+  List<Object> get props => [postId,userId,title,content];
 }

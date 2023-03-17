@@ -2,11 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/domain/usecases/post/add_text_post.dart';
+import 'package:lomba_frontend/domain/usecases/post/change_stage_post.dart';
 import 'package:lomba_frontend/domain/usecases/post/delete_post.dart';
+import 'package:lomba_frontend/domain/usecases/post/enable_post.dart';
 import 'package:lomba_frontend/domain/usecases/post/get_approved_posts.dart';
 import 'package:lomba_frontend/domain/usecases/post/get_for_approve_posts.dart';
 import 'package:lomba_frontend/domain/usecases/post/get_latest_posts.dart';
 import 'package:lomba_frontend/domain/usecases/post/get_popular_posts.dart';
+import 'package:lomba_frontend/domain/usecases/post/get_post.dart';
 import 'package:lomba_frontend/domain/usecases/post/get_rejected_posts.dart';
 import 'package:lomba_frontend/domain/usecases/post/get_uploaded_posts.dart';
 import 'package:lomba_frontend/domain/usecases/post/get_voted_posts.dart';
@@ -167,6 +170,9 @@ Future<void> init() async {
         locator(),
         locator(),
         locator(),
+        locator(),
+        locator(),
+        locator(),
         locator(),));
 
   // usecase
@@ -220,6 +226,9 @@ Future<void> init() async {
   locator.registerLazySingleton(() => UpdateEdit(locator()));
   locator.registerLazySingleton(() => DeletePost(locator()));
   locator.registerLazySingleton(() => GetDetailedListPosts(locator()));
+  locator.registerLazySingleton(() => EnablePost(locator()));
+  locator.registerLazySingleton(() => ChangeStagePost(locator()));
+  locator.registerLazySingleton(() => GetPost(locator()));
 
   locator.registerLazySingleton(() => GetFlow(locator()));
   locator.registerLazySingleton(() => GetFlows(locator()));

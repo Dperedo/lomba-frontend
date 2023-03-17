@@ -60,6 +60,52 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
+  Future<Either<Failure, Post>> changeStagePost(String postId, String flowId,
+    String stageId,) async {
+    try {
+      final result = await remoteDataSource.changeStagePost(
+          postId, flowId, stageId);
+
+      return (Right(result.toEntity()));
+    } on ServerException {
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Post>> enablePost(String postId, bool enableOrDisable) async {
+    try {
+      final result = await remoteDataSource.enablePost(
+          postId, enableOrDisable);
+
+      if (result) {
+        final resultItem = await remoteDataSource.getPost(postId);
+        return Right(resultItem.toEntity());
+      }
+      return const Left(ServerFailure('No fue posible realizar la acción'));
+    } on ServerException {
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Post>> getPost(String postId) async {
+    try {
+      final result = await remoteDataSource.getPost(postId);
+
+      return Right(result.toEntity());
+    } on ServerException {
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
+    }
+  }
+
+  @override
   Future<Either<Failure, ModelContainer<Post>>> getApprovedPosts(
       String orgaId,
       String userId,

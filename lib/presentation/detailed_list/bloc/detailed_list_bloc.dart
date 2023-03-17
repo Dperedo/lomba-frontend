@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/domain/entities/workflow/stage.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_role.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
+import 'package:lomba_frontend/domain/usecases/post/update_edit.dart';
 import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/stage/get_stage.dart';
 import 'package:lomba_frontend/domain/usecases/stage/get_stages.dart';
@@ -10,7 +11,11 @@ import 'package:rxdart/rxdart.dart';
 import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
 import '../../../domain/entities/workflow/flow.dart';
+import '../../../domain/entities/workflow/post.dart';
+import '../../../domain/entities/workflow/textcontent.dart';
 import '../../../domain/usecases/flow/get_flows.dart';
+import '../../../domain/usecases/post/change_stage_post.dart';
+import '../../../domain/usecases/post/enable_post.dart';
 import '../../../domain/usecases/post/get_detailedlist_posts.dart';
 import 'detailed_list_event.dart';
 import 'detailed_list_state.dart';
@@ -25,6 +30,9 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
   final GetSessionRole _getSessionRole;
   final GetStages _getStages;
   final GetFlows _getFlows;
+  final ChangeStagePost _changeStagePost;
+  final EnablePost _enablePost;
+  final UpdateEdit _updateEdit;
 
   DetailedListBloc(
     this._getSession,
@@ -32,7 +40,10 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
     this._votePublication,
     this._getSessionRole,
     this._getStages,
-    this._getFlows)
+    this._getFlows,
+    this._changeStagePost,
+    this._enablePost,
+    this._updateEdit)
       : super(const DetailedListStart()) {
     ///Evento que hace la consulta de sesión del usuario en el dispositivo.
     on<OnDetailedListLoading>(
@@ -136,7 +147,42 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
       final resultStage = await _getStages.execute();
       resultStage.fold((l) => emit(DetailedListError(l.message)),
           (r) => emit(DetailedListEdit(event.post, r)));
-      //emit(DetailedListEdit(event.post, []));
+    });
+
+    on<OnDetailedListPrepareEditContent>((event, emit) async {
+      emit(DetailedListEditContent(event.post));
+    });
+
+    on<OnDetailedListEditContent>((event, emit) async {
+      emit(DetailedListLoading());
+      List<Stage> listStage = [];
+
+      final resultStage = await _getStages.execute();
+      resultStage.fold((l) => emit(DetailedListError(l.message)),
+          (r) => listStage = r);
+
+      final resultUpdate = await _updateEdit.execute(
+        event.postId, event.userId, TextContent(text: event.content), event.title);
+        resultUpdate.fold((l) => emit(DetailedListError(l.message)), (r) => 
+        emit(DetailedListEdit(r, listStage)));
+    });
+
+    on<OnDetailedListChangeStage>((event, emit) async {
+      emit(DetailedListLoading());
+
+      final editStage = await _changeStagePost.execute(event.post.id,event.post.flowId,event.stageId);
+      editStage.fold((l) => emit(DetailedListError(l.message)),
+          (post) => emit(DetailedListEdit(post, event.listStage)));
+    });
+
+    on<OnDetailedListEnable>((event, emit) async {
+      emit(DetailedListLoading());
+
+      Post post = event.post;
+
+      final editStage = await _enablePost.execute(post.id, !post.enabled);
+      editStage.fold((l) => emit(DetailedListError(l.message)),
+          (r) => emit(DetailedListEdit(r, event.listStage)));
     });
 
     on<OnDetailedListVote>((event, emit) async {

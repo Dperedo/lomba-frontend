@@ -11,6 +11,9 @@ abstract class PostRepository {
       TextContent text, String title, String flowId, bool isDraft);
   Future<Either<Failure, Post>> updatePost(String postId, String userId,
       TextContent text, String title);
+  Future<Either<Failure, Post>> changeStagePost(String postId, String flowId, String stageId);
+  Future<Either<Failure, Post>> getPost(String postId);
+  Future<Either<Failure, Post>> enablePost(String postId, bool enableOrDisable);
   Future<Either<Failure, Post>> deletePost(String postId, String userId);
   Future<Either<Failure, ModelContainer<Post>>> getUploadedPosts(
       String orgaId,
