@@ -20,6 +20,7 @@ abstract class PostRemoteDataSource {
   Future<PostModel> updatePost(
       String postId, String userId, TextContent text, String title);
   Future<PostModel> deletePost(String postId, String userId);
+  Future<PostModel> getPost(String postId);
   Future<ModelContainer<PostModel>> getPosts(
       String orgaId,
       String userId,
@@ -41,8 +42,20 @@ abstract class PostRemoteDataSource {
       int pageIndex,
       int pageSize,
       Map<String, dynamic> params);
-  Future<ModelContainer<Vote>> votePublication(String orgaId, String userId,
-      String flowId, String stageId, String postId, int voteValue);
+  Future<ModelContainer<Vote>> votePublication(
+      String orgaId,
+      String userId,
+      String flowId,
+      String stageId,
+      String postId,
+      int voteValue);
+  Future<PostModel> changeStagePost(
+      String postId,
+      String flowId,
+      String stageId,);
+  Future<bool> enablePost(
+      String postId,
+      bool enableOrDisable);
 }
 
 class PostRemoteDataSourceImpl implements PostRemoteDataSource {
@@ -129,9 +142,12 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
       List<Track> listTracks = (item['tracks'] as List)
           .map((e) => Track(
+              name: e['name'].toString(),
+              description: e['description'].toString(),
               userId: e['userId'].toString(),
               flowId: e['flowId'].toString(),
-              stageId: e['stageId'].toString(),
+              stageIdOld: e['stageIdOld'].toString(),
+              stageIdNew: e['stageIdNew'].toString(),
               change: e['change'].toString(),
               created: DateTime.parse(e['created'].toString()),
               deleted: e['deleted'] != null
@@ -170,7 +186,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
         id: item['id'].toString(),
         enabled: item['enabled'].toString().toLowerCase() == 'true',
         builtIn: item['builtIn'].toString().toLowerCase() == 'true',
-        title: item['titles'].toString(),
+        title: item['title'].toString(),
         orgaId: item['orgaId'].toString(),
         userId: item['userId'].toString(),
         flowId: item['flowId'].toString(),
@@ -191,6 +207,152 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
         tracks: listTracks,
         votes: listVotes,
       ));
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<PostModel> getPost(
+      String postId,) async {
+    final url = Uri.parse(
+        '${UrlBackend.base}/api/v1/post/$postId');
+    final session = await localDataSource.getSavedSession();
+
+    http.Response resp = await client.get(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      List<PostModel> listPostModel = [];
+
+      //iteración por cada item
+      for (var item in resObj['data']['items']) {
+        List<Stage> listStage = (item['stages'] as List)
+            .map((e) => Stage(
+                id: e['id'].toString(),
+                name: e['name'].toString(),
+                order: int.parse(e['order'].toString()),
+                queryOut: e['queryOut'],
+                enabled: e['enabled'].toString().toLowerCase() == 'true',
+                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+                created: DateTime.parse(e['created'].toString()),
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null,
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null))
+            .toList();
+
+        //completar con lógica
+        List<PostItem> listPostItems = (item['postitems'] as List)
+            .map((e) => PostItem(
+                content: TextContent(text: e['content']['text'].toString()),
+                type: e['type'].toString(),
+                order: int.parse(e['order'].toString()),
+                format: e['format'].toString(),
+                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null))
+            .toList();
+
+        List<Total> listTotals = (item['totals'] as List)
+            .map((e) => Total(
+                  flowId: e['flowId'].toString(),
+                  stageId: e['stageId'].toString(),
+                  totalcount: int.parse(e['totalcount'].toString()),
+                  totalnegative: int.parse(e['totalnegative'].toString()),
+                  totalpositive: int.parse(e['totalpositive'].toString()),
+                ))
+            .toList();
+
+        List<Track> listTracks = (item['tracks'] as List)
+            .map((e) => Track(
+                name: e['name'].toString(),
+                description: e['description'].toString(),
+                userId: e['userId'].toString(),
+                flowId: e['flowId'].toString(),
+                stageIdOld: e['stageIdOld'].toString(),
+                stageIdNew: e['stageIdNew'].toString(),
+                change: e['change'].toString(),
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null))
+            .toList();
+
+        List<Vote> listVotes = item['votes'] != null
+            ? (item['votes'] as List)
+                .map((e) => Vote(
+                      userId: e['userId'].toString(),
+                      flowId: e['flowId'].toString(),
+                      stageId: e['stageId'].toString(),
+                      created: DateTime.parse(e['created'].toString()),
+                      updated: e['updated'] != null
+                          ? DateTime.parse(e['updated'].toString())
+                          : null,
+                      deleted: e['deleted'] != null
+                          ? DateTime.parse(e['deleted'].toString())
+                          : null,
+                      expires: e['expires'] != null
+                          ? DateTime.parse(e['expires'].toString())
+                          : null,
+                      value: int.parse(e['value'].toString()),
+                    ))
+                .toList()
+            : [];
+
+        //se agrega uno a uno cada PostModel nuevo.
+        listPostModel.add(PostModel(
+          id: item['id'].toString(),
+          enabled: item['enabled'].toString().toLowerCase() == 'true',
+          builtIn: item['builtIn'].toString().toLowerCase() == 'true',
+          title: item['title'].toString(),
+          orgaId: item['orgaId'].toString(),
+          userId: item['userId'].toString(),
+          flowId: item['flowId'].toString(),
+          stageId: item['stageId'].toString(),
+          created: DateTime.parse(item['created'].toString()),
+          updated: item['updated'] != null
+              ? DateTime.parse(item['updated'].toString())
+              : null,
+          deleted: item['deleted'] != null
+              ? DateTime.parse(item['deleted'].toString())
+              : null,
+          expires: item['expires'] != null
+              ? DateTime.parse(item['expires'].toString())
+              : null,
+          stages: listStage,
+          postitems: listPostItems,
+          totals: listTotals,
+          tracks: listTracks,
+          votes: listVotes,
+        ));
+      }
+
+      return Future.value(listPostModel[0]);
     } else {
       throw ServerException();
     }
@@ -277,9 +439,12 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
         List<Track> listTracks = (item['tracks'] as List)
             .map((e) => Track(
+                name: e['name'].toString(),
+                description: e['description'].toString(),
                 userId: e['userId'].toString(),
                 flowId: e['flowId'].toString(),
-                stageId: e['stageId'].toString(),
+                stageIdOld: e['stageIdOld'].toString(),
+                stageIdNew: e['stageIdNew'].toString(),
                 change: e['change'].toString(),
                 created: DateTime.parse(e['created'].toString()),
                 deleted: e['deleted'] != null
@@ -489,7 +654,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
           id: item['id'].toString(),
           enabled: item['enabled'].toString().toLowerCase() == 'true',
           builtIn: item['builtIn'].toString().toLowerCase() == 'true',
-          title: item['titles'].toString(),
+          title: item['title'].toString(),
           orgaId: item['orgaId'].toString(),
           userId: item['userId'].toString(),
           flowId: item['flowId'].toString(),
@@ -617,9 +782,12 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
         List<Track> listTracks = (item['tracks'] as List)
             .map((e) => Track(
+                name: e['name'].toString(),
+                description: e['description'].toString(),
                 userId: e['userId'].toString(),
                 flowId: e['flowId'].toString(),
-                stageId: e['stageId'].toString(),
+                stageIdOld: e['stageIdOld'].toString(),
+                stageIdNew: e['stageIdNew'].toString(),
                 change: e['change'].toString(),
                 created: DateTime.parse(e['created'].toString()),
                 deleted: e['deleted'] != null
@@ -756,9 +924,12 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
       List<Track> listTracks = (item['tracks'] as List)
           .map((e) => Track(
+              name: e['name'].toString(),
+              description: e['description'].toString(),
               userId: e['userId'].toString(),
               flowId: e['flowId'].toString(),
-              stageId: e['stageId'].toString(),
+              stageIdOld: e['stageIdOld'].toString(),
+              stageIdNew: e['stageIdNew'].toString(),
               change: e['change'].toString(),
               created: DateTime.parse(e['created'].toString()),
               deleted: e['deleted'] != null
@@ -797,7 +968,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
         id: item['id'].toString(),
         enabled: item['enabled'].toString().toLowerCase() == 'true',
         builtIn: item['builtIn'].toString().toLowerCase() == 'true',
-        title: item['titles'].toString(),
+        title: item['title'].toString(),
         orgaId: item['orgaId'].toString(),
         userId: item['userId'].toString(),
         flowId: item['flowId'].toString(),
@@ -896,9 +1067,12 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
       List<Track> listTracks = (item['tracks'] as List)
           .map((e) => Track(
+              name: e['name'].toString(),
+              description: e['description'].toString(),
               userId: e['userId'].toString(),
               flowId: e['flowId'].toString(),
-              stageId: e['stageId'].toString(),
+              stageIdOld: e['stageIdOld'].toString(),
+              stageIdNew: e['stageIdNew'].toString(),
               change: e['change'].toString(),
               created: DateTime.parse(e['created'].toString()),
               deleted: e['deleted'] != null
@@ -937,7 +1111,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
         id: item['id'].toString(),
         enabled: item['enabled'].toString().toLowerCase() == 'true',
         builtIn: item['builtIn'].toString().toLowerCase() == 'true',
-        title: item['titles'].toString(),
+        title: item['title'].toString(),
         orgaId: item['orgaId'].toString(),
         userId: item['userId'].toString(),
         flowId: item['flowId'].toString(),
@@ -975,7 +1149,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
       int pageSize,
       Map<String, dynamic> params) async {
     final url = Uri.parse(
-        '${UrlBackend.base}/api/v1/post/admin?orgaId=$orgaId&userId=$userId&flowId=$flowId&stageId=$stageId&searchtext=$searchText&order=${json.encode(order)}&pageindex=$pageIndex&pagesize=$pageSize&paramvars=${json.encode(params)}');
+        '${UrlBackend.base}/api/v1/post/admin?orgaId=$orgaId&userId=$userId&flowId=$flowId&stageId=$stageId&searchtext=$searchText&sort=${json.encode(order)}&pageindex=$pageIndex&pagesize=$pageSize&paramvars=${json.encode(params)}');
     final session = await localDataSource.getSavedSession();
 
     http.Response resp = await client.get(url, headers: {
@@ -1043,9 +1217,12 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
         List<Track> listTracks = (item['tracks'] as List)
             .map((e) => Track(
+                name: e['name'].toString(),
+                description: e['description'].toString(),
                 userId: e['userId'].toString(),
                 flowId: e['flowId'].toString(),
-                stageId: e['stageId'].toString(),
+                stageIdOld: e['stageIdOld'].toString(),
+                stageIdNew: e['stageIdNew'].toString(),
                 change: e['change'].toString(),
                 created: DateTime.parse(e['created'].toString()),
                 deleted: e['deleted'] != null
@@ -1127,6 +1304,178 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
               ? int.parse(resObj['data']['totalPages'].toString())
               : null,
           resObj['data']['kind'].toString()));
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<PostModel> changeStagePost(
+      String postId,
+      String flowId,
+      String stageId) async {
+    final url = Uri.parse(
+        '${UrlBackend.base}/api/v1/post/stage/$postId?flowId=$flowId&stageId=$stageId');
+    final session = await localDataSource.getSavedSession();
+
+    http.Response resp = await client.put(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      List<PostModel> listPostModel = [];
+
+      //iteración por cada item
+      for (var item in resObj['data']['items']) {
+        List<Stage> listStage = (item['stages'] as List)
+            .map((e) => Stage(
+                id: e['id'].toString(),
+                name: e['name'].toString(),
+                order: int.parse(e['order'].toString()),
+                queryOut: e['queryOut'],
+                enabled: e['enabled'].toString().toLowerCase() == 'true',
+                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+                created: DateTime.parse(e['created'].toString()),
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null,
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null))
+            .toList();
+
+        //completar con lógica
+        List<PostItem> listPostItems = (item['postitems'] as List)
+            .map((e) => PostItem(
+                content: TextContent(text: e['content']['text'].toString()),
+                type: e['type'].toString(),
+                order: int.parse(e['order'].toString()),
+                format: e['format'].toString(),
+                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null))
+            .toList();
+
+        List<Total> listTotals = (item['totals'] as List)
+            .map((e) => Total(
+                  flowId: e['flowId'].toString(),
+                  stageId: e['stageId'].toString(),
+                  totalcount: int.parse(e['totalcount'].toString()),
+                  totalnegative: int.parse(e['totalnegative'].toString()),
+                  totalpositive: int.parse(e['totalpositive'].toString()),
+                ))
+            .toList();
+
+        List<Track> listTracks = (item['tracks'] as List)
+            .map((e) => Track(
+                name: e['name'].toString(),
+                description: e['description'].toString(),
+                userId: e['userId'].toString(),
+                flowId: e['flowId'].toString(),
+                stageIdOld: e['stageIdOld'].toString(),
+                stageIdNew: e['stageIdNew'].toString(),
+                change: e['change'].toString(),
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null))
+            .toList();
+
+        List<Vote> listVotes = item['votes'] != null
+            ? (item['votes'] as List)
+                .map((e) => Vote(
+                      userId: e['userId'].toString(),
+                      flowId: e['flowId'].toString(),
+                      stageId: e['stageId'].toString(),
+                      created: DateTime.parse(e['created'].toString()),
+                      updated: e['updated'] != null
+                          ? DateTime.parse(e['updated'].toString())
+                          : null,
+                      deleted: e['deleted'] != null
+                          ? DateTime.parse(e['deleted'].toString())
+                          : null,
+                      expires: e['expires'] != null
+                          ? DateTime.parse(e['expires'].toString())
+                          : null,
+                      value: int.parse(e['value'].toString()),
+                    ))
+                .toList()
+            : [];
+
+        //se agrega uno a uno cada PostModel nuevo.
+        listPostModel.add(PostModel(
+          id: item['id'].toString(),
+          enabled: item['enabled'].toString().toLowerCase() == 'true',
+          builtIn: item['builtIn'].toString().toLowerCase() == 'true',
+          title: item['title'].toString(),
+          orgaId: item['orgaId'].toString(),
+          userId: item['userId'].toString(),
+          flowId: item['flowId'].toString(),
+          stageId: item['stageId'].toString(),
+          created: DateTime.parse(item['created'].toString()),
+          updated: item['updated'] != null
+              ? DateTime.parse(item['updated'].toString())
+              : null,
+          deleted: item['deleted'] != null
+              ? DateTime.parse(item['deleted'].toString())
+              : null,
+          expires: item['expires'] != null
+              ? DateTime.parse(item['expires'].toString())
+              : null,
+          stages: listStage,
+          postitems: listPostItems,
+          totals: listTotals,
+          tracks: listTracks,
+          votes: listVotes,
+        ));
+      }
+
+      return Future.value(listPostModel[0]);
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<bool> enablePost(
+      String postId,
+      bool enableOrDisable) async {
+    final url = Uri.parse(
+        '${UrlBackend.base}/api/v1/post/enable/$postId?enable=${enableOrDisable.toString()}');
+    final session = await localDataSource.getSavedSession();
+
+    http.Response resp = await client.put(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      return Future.value(
+          resObj['data']['items'][0].toString().toLowerCase() == 'true');
     } else {
       throw ServerException();
     }

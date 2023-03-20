@@ -1,7 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/workflow/post.dart';
-
 abstract class UploadedEvent extends Equatable {
   const UploadedEvent();
 

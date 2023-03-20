@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:lomba_frontend/domain/entities/workflow/stage.dart';
 
+import '../../../domain/entities/workflow/flow.dart';
 import '../../../domain/entities/workflow/post.dart';
 
 ///Interfaz de los estados de DetailedList.
@@ -26,6 +27,8 @@ class DetailedListLoaded extends DetailedListState {
   final int itemCount;
   final int totalItems;
   final int totalPages;
+  final List<Flow> listFlows;
+  final List<Stage> listStages;
   const DetailedListLoaded(
       this.validLogin,
       this.orgaId,
@@ -39,7 +42,9 @@ class DetailedListLoaded extends DetailedListState {
       this.listItems,
       this.itemCount,
       this.totalItems,
-      this.totalPages);
+      this.totalPages,
+      this.listFlows,
+      this.listStages);
 
   //const DetailedListLoaded(this.validLogin);
 }
@@ -67,11 +72,22 @@ class DetailedListError extends DetailedListState {
 class DetailedListEdit extends DetailedListState {
   final Post post;
   final List<Stage> liststage;
+  final String name;
+  final String username;
 
-  const DetailedListEdit(this.post, this.liststage);
+  const DetailedListEdit(this.post, this.liststage, this.name, this.username);
 
   @override
-  List<Object> get props => [post, liststage];
+  List<Object> get props => [post, liststage, name, username];
+}
+
+class DetailedListEditContent extends DetailedListState {
+  final Post post;
+
+  const DetailedListEditContent(this.post);
+
+  @override
+  List<Object> get props => [post];
 }
 
 class DetailedListOnlyUser extends DetailedListState {}

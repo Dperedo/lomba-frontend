@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/domain/entities/workflow/stage.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_role.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
+import 'package:lomba_frontend/domain/usecases/post/update_edit.dart';
 import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/stage/get_stage.dart';
 import 'package:lomba_frontend/domain/usecases/stage/get_stages.dart';
@@ -8,7 +10,14 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
+import '../../../domain/entities/workflow/flow.dart';
+import '../../../domain/entities/workflow/post.dart';
+import '../../../domain/entities/workflow/textcontent.dart';
+import '../../../domain/usecases/flow/get_flows.dart';
+import '../../../domain/usecases/post/change_stage_post.dart';
+import '../../../domain/usecases/post/enable_post.dart';
 import '../../../domain/usecases/post/get_detailedlist_posts.dart';
+import '../../../domain/usecases/users/get_user.dart';
 import 'detailed_list_event.dart';
 import 'detailed_list_state.dart';
 
@@ -21,18 +30,59 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
   final VotePublication _votePublication;
   final GetSessionRole _getSessionRole;
   final GetStages _getStages;
+  final GetFlows _getFlows;
+  final ChangeStagePost _changeStagePost;
+  final EnablePost _enablePost;
+  final UpdateEdit _updateEdit;
+  final GetUser _getUser;
 
-  DetailedListBloc(this._getSession, this._getDetailedListPosts,
-      this._votePublication, this._getSessionRole, this._getStages)
+  DetailedListBloc(
+    this._getSession,
+    this._getDetailedListPosts,
+    this._votePublication,
+    this._getSessionRole,
+    this._getStages,
+    this._getFlows,
+    this._changeStagePost,
+    this._enablePost,
+    this._updateEdit,
+    this._getUser)
       : super(const DetailedListStart()) {
     ///Evento que hace la consulta de sesión del usuario en el dispositivo.
     on<OnDetailedListLoading>(
       (event, emit) async {
         emit(DetailedListLoading());
         var auth = const SessionModel(token: "", username: "", name: "");
-        String flowId = Flows.votationFlowId;
-        String stageId = StagesVotationFlow.stageId03Voting;
+        String flowId = event.flowId;
+        String stageId = event.stageId;
         String role = '';
+        List<Flow> listFlows = [
+          Flow(
+            id: '',
+            name: 'Todos los Flujos',
+            enabled: true,
+            builtIn: true,
+            created: DateTime.parse('2023-02-17 19:16:08.700Z'),
+            stages: const [],
+            updated: null,
+            deleted: null,
+            expires: null
+          )
+        ];
+        List<Stage> listStages = [
+          Stage(
+            id: '',
+            name: 'Todos los estados',
+            order: 2,
+            queryOut: null,
+            enabled: true,
+            builtIn: true,
+            created: DateTime.parse('2023-02-17 19:16:08.700Z'),
+            updated: null,
+            deleted: null,
+            expires: null
+          )
+        ];
         var validLogin = false;
 
         final listroles = await _getSessionRole.execute();
@@ -42,6 +92,20 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
         final session = await _getSession.execute();
         session.fold(
             (l) => emit(DetailedListError(l.message)), (r) => {auth = r});
+        final resultGetFlows = await _getFlows.execute();
+        resultGetFlows.fold(
+            (l) => emit(DetailedListError(l.message)), (r) =>
+            {for(var item in r) {listFlows.add(item)}});
+        final resultGetStages = await _getStages.execute();
+        resultGetStages.fold(
+            (l) => emit(DetailedListError(l.message)), (r) => 
+            {for(var item in r) {listStages.add(item)}});
+        int enableValue = 0;
+        if (event.enabled) {
+          enableValue = 1;
+        } else if (event.disabled) {
+          enableValue = -1;
+        }
 
         final resultPosts = await _getDetailedListPosts.execute(
             auth.getOrgaId()!,
@@ -49,8 +113,10 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
             flowId,
             stageId,
             event.searchText,
+            event.fieldsOrder,
             event.pageIndex,
-            event.pageSize);
+            event.pageSize,
+            enableValue);
         resultPosts.fold(
             (l) => {emit(DetailedListError(l.message))},
             (r) => emit(DetailedListLoaded(
@@ -66,7 +132,9 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
                 r.items,
                 r.currentItemCount,
                 r.totalItems ?? 0,
-                r.totalPages ?? 1)));
+                r.totalPages ?? 1,
+                listFlows,
+                listStages)));
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
@@ -79,10 +147,81 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
     on<OnDetailedListEdit>((event, emit) async {
       emit(DetailedListLoading());
 
+      String name = '';
+      String username = '';
+
+      final resultUser = await _getUser.execute(event.post.userId);
+      resultUser.fold((l) => emit(DetailedListError(l.message)), (r) {
+        name = r.name;
+        username = r.username;
+      });
+
       final resultStage = await _getStages.execute();
       resultStage.fold((l) => emit(DetailedListError(l.message)),
-          (r) => emit(DetailedListEdit(event.post, r)));
-      //emit(DetailedListEdit(event.post, []));
+          (r) => emit(DetailedListEdit(event.post, r, name, username)));
+    });
+
+    on<OnDetailedListPrepareEditContent>((event, emit) async {
+      emit(DetailedListEditContent(event.post));
+    });
+
+    on<OnDetailedListEditContent>((event, emit) async {
+      emit(DetailedListLoading());
+      List<Stage> listStage = [];
+
+      String name = '';
+      String username = '';
+
+      final resultUser = await _getUser.execute(event.userId);
+      resultUser.fold((l) => emit(DetailedListError(l.message)), (r) {
+        name = r.name;
+        username = r.username;
+      });
+
+      final resultStage = await _getStages.execute();
+      resultStage.fold((l) => emit(DetailedListError(l.message)),
+          (r) => listStage = r);
+
+      final resultUpdate = await _updateEdit.execute(
+        event.postId, event.userId, TextContent(text: event.content), event.title);
+        resultUpdate.fold((l) => emit(DetailedListError(l.message)), (r) => 
+        emit(DetailedListEdit(r, listStage, name, username)));
+    });
+
+    on<OnDetailedListChangeStage>((event, emit) async {
+      emit(DetailedListLoading());
+
+      String name = '';
+      String username = '';
+
+      final resultUser = await _getUser.execute(event.post.userId);
+      resultUser.fold((l) => emit(DetailedListError(l.message)), (r) {
+        name = r.name;
+        username = r.username;
+      });
+
+      final editStage = await _changeStagePost.execute(event.post.id,event.post.flowId,event.stageId);
+      editStage.fold((l) => emit(DetailedListError(l.message)),
+          (post) => emit(DetailedListEdit(post, event.listStage, name, username)));
+    });
+
+    on<OnDetailedListEnable>((event, emit) async {
+      emit(DetailedListLoading());
+
+      Post post = event.post;
+
+      String name = '';
+      String username = '';
+
+      final resultUser = await _getUser.execute(event.post.userId);
+      resultUser.fold((l) => emit(DetailedListError(l.message)), (r) {
+        name = r.name;
+        username = r.username;
+      });
+
+      final editStage = await _enablePost.execute(post.id, !post.enabled);
+      editStage.fold((l) => emit(DetailedListError(l.message)),
+          (r) => emit(DetailedListEdit(r, event.listStage, name, username)));
     });
 
     on<OnDetailedListVote>((event, emit) async {

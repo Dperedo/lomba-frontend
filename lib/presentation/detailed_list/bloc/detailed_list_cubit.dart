@@ -2,7 +2,10 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DetailedListLiveCubit extends Cubit<DetailedListLiveState> {
-  DetailedListLiveCubit() : super(DetailedListLiveState());
+  DetailedListLiveCubit() 
+    : super(DetailedListLiveState(
+      const <String, bool>{'enabled': false, 'disabled': false},
+      const <String, int>{}));
 
   void changeCheckValue(String name, bool value) {
     emit(state.copyWithChangeCheck(name: name, changeState: value));
@@ -14,31 +17,41 @@ class DetailedListLiveCubit extends Cubit<DetailedListLiveState> {
 }
 
 class DetailedListLiveState extends Equatable {
-  Map<String, bool> checks = <String, bool>{};
-  Map<String, int> votes = <String, int>{};
+  Map<String, bool> checks;// = <String, bool>{};
+  Map<String, int> votes;
 
   @override
   List<Object?> get props => [checks, votes];
 
-  DetailedListLiveState() {
+  DetailedListLiveState(this.checks, this.votes);
+
+  /*DetailedListLiveState() {
     checks.clear();
-  }
+  }*/
 
   DetailedListLiveState copyWithChangeCheck(
       {required String name, required bool changeState}) {
-    final ous = DetailedListLiveState();
-    ous.checks = checks;
-    ous.votes = votes;
-    ous.checks[name] = changeState;
+    Map<String, bool> nchecks = <String, bool>{};
+    nchecks.addAll(checks);
+    nchecks[name] = changeState;
+    if (name == "enabled" && changeState) nchecks["disabled"] = !changeState;
+    if (name == "disabled" && changeState) nchecks["enabled"] = !changeState;
+    final ous = DetailedListLiveState(nchecks, votes);
+    //ous.checks = checks;
+    //ous.votes = votes;
+    //ous.checks[name] = changeState;
     return ous;
   }
 
   DetailedListLiveState copyWithMakeVote(
       {required String postId, required int voteValue}) {
-    final ous = DetailedListLiveState();
-    ous.checks = checks;
-    ous.votes = votes;
-    ous.votes[postId] = voteValue;
+    Map<String, int> nvotes = <String, int>{};
+    nvotes.addAll(votes);
+    nvotes[postId] = voteValue;
+    final ous = DetailedListLiveState(checks, nvotes);
+    //ous.checks = checks;
+    //ous.votes = votes;
+    //ous.votes[postId] = voteValue;
     return ous;
   }
 }

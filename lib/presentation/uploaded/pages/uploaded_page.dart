@@ -434,7 +434,8 @@ class UploadedPage extends StatelessWidget {
                               .text));
                     }
                   : null,
-              child: const Icon(Icons.edit)),
+              child: const Icon(Icons.edit)
+          ),
         ],
       ),
     ];
