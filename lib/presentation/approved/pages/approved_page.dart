@@ -59,7 +59,7 @@ class ApprovedPage extends StatelessWidget {
         create: (context) => ApprovedLiveCubit(),
         child: BlocListener<ApprovedLiveCubit, ApprovedLiveState>(
           listener: (context, state) {
-            snackBarNotify(context, "okok", Icons.account_circle);
+            snackBarNotify(context, state.message, Icons.account_circle);
           },
           child: SizedBox(
               width: 800,

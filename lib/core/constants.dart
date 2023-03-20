@@ -64,8 +64,8 @@ class ScreenSize {
   static const maxScreen = 1200;
 }
 
-class ShowTime {
-  static const snackbarDuration = 3000;
+class snackBarConfig {
+  static const snackbarDuration = 1500;
 }
 
 class StagesVotationFlow {

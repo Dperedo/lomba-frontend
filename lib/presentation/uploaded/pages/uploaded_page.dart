@@ -57,7 +57,7 @@ class UploadedPage extends StatelessWidget {
       create: (context) => UploadedLiveCubit(),
       child: BlocListener<UploadedLiveCubit, UploadedLiveState>(
         listener: (context, state) {
-          snackBarNotify(context, "Subido", Icons.upload);
+          snackBarNotify(context, "Publicado!", Icons.upload);
         },
         child: SizedBox(
           width: 800,
@@ -434,8 +434,7 @@ class UploadedPage extends StatelessWidget {
                               .text));
                     }
                   : null,
-              child: const Icon(Icons.edit)
-          ),
+              child: const Icon(Icons.edit)),
         ],
       ),
     ];
