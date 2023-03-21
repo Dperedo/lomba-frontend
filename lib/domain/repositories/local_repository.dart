@@ -16,4 +16,6 @@ abstract class LocalRepository {
   Future<Either<Failure, List<String>>> getSideMenuListOptions();
   Future<Either<Failure, bool>> doLogOff();
   Future<Either<Failure, List<String>>> getSessionRoles();
+  Future<Either<Failure, bool>> readIfRedirectLogin();
+  Future<Either<Failure, bool>> startRedirectLogin();
 }

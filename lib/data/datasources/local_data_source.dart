@@ -17,6 +17,9 @@ abstract class LocalDataSource {
   Future<bool> saveSession(SessionModel session);
   Future<bool> hasSession();
   Future<bool> cleanSession();
+  Future<bool> saveStartRedirectLogin();
+  Future<bool> getIfRedirectLogin();
+  Future<bool> cleanRedirectLogin();
 }
 
 ///Define el nombre que tiene la variable para almacenar la Sesión.
@@ -68,5 +71,34 @@ class LocalDataSourceImpl implements LocalDataSource {
   @override
   Future<bool> hasSession() {
     return Future.value(sharedPreferences.containsKey(cachedSessionKey));
+  }
+
+  @override
+  Future<bool> cleanRedirectLogin() {
+    sharedPreferences.setString(
+      "redirect",
+      "",
+    );
+
+    return Future.value(true);
+  }
+
+  @override
+  Future<bool> getIfRedirectLogin() {
+    final value = sharedPreferences.getString("redirect");
+    if (value != null && value != "" && value == "yes") {
+      return Future.value(true);
+    } else {
+      return Future.value(false);
+    }
+  }
+
+  @override
+  Future<bool> saveStartRedirectLogin() {
+    sharedPreferences.setString(
+      "redirect",
+      "yes",
+    );
+    return Future.value(true);
   }
 }

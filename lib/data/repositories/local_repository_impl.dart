@@ -79,7 +79,8 @@ class LocalRepositoryImpl implements LocalRepository {
         return const Right(false);
       }
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on SocketException {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     } on CacheException {
@@ -155,5 +156,30 @@ class LocalRepositoryImpl implements LocalRepository {
       }
     }
     return Right(opts);
+  }
+
+  @override
+  Future<Either<Failure, bool>> readIfRedirectLogin() async {
+    try {
+      final start = await localDataSource.getIfRedirectLogin();
+
+      if (start) {
+        await localDataSource.cleanRedirectLogin();
+      }
+      return Right(start);
+    } on CacheException {
+      return Future.value(const Right(false));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> startRedirectLogin() async {
+    try {
+      final start = await localDataSource.saveStartRedirectLogin();
+
+      return Right(start);
+    } on CacheException {
+      return Future.value(const Right(false));
+    }
   }
 }

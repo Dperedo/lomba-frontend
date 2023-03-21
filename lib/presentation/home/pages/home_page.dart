@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/presentation/login/bloc/login_bloc.dart';
+import 'package:lomba_frontend/presentation/nav/bloc/nav_bloc.dart';
+import 'package:lomba_frontend/presentation/nav/bloc/nav_state.dart';
 import 'package:number_paginator/number_paginator.dart';
 
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/workflow/textcontent.dart';
+import '../../login/bloc/login_event.dart';
+import '../../nav/bloc/nav_event.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_cubit.dart';
 import '../bloc/home_event.dart';
@@ -71,6 +76,10 @@ class HomePage extends StatelessWidget {
                 child: CircularProgressIndicator(),
               ),
             );
+          }
+          if (state is HomeHasLoginGoogleRedirect) {
+            context.read<NavBloc>().add(NavigateTo(NavItem.pageLogin, context));
+            context.read<LoginBloc>().add(OnLoginRedirectWithGoogle());
           }
           if (state is HomeOnlyUser) {
             return const Center(child: Text('Bienvenidos a lomba!!!'));

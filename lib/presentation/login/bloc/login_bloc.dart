@@ -7,6 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lomba_frontend/domain/usecases/login/change_orga.dart';
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate.dart';
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate_google.dart';
+import 'package:lomba_frontend/domain/usecases/login/start_redirect_login.dart';
 import 'package:lomba_frontend/domain/usecases/orgas/get_orgasbyuser.dart';
 import 'package:lomba_frontend/domain/entities/user.dart' as entities;
 import 'package:rxdart/rxdart.dart';
@@ -25,9 +26,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final GetOrgasByUser _getOrgasByUser;
   final ChangeOrga _changeOrga;
   final GetAuthenticateGoogle _getAuthenticateGoogle;
+  final StartRedirectLogin _startRedirectLogin;
 
   LoginBloc(this._getAuthenticate, this._getOrgasByUser, this._changeOrga,
-      this._getAuthenticateGoogle)
+      this._getAuthenticateGoogle, this._startRedirectLogin)
       : super(LoginStart()) {
     on<OnLoginTriest>(
       (event, emit) async {
@@ -97,7 +99,66 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
         if (kIsWeb) {
           try {
-            credentials = await signInWithGoogle();
+            //credentials = await signInWithGoogle();
+
+            _startRedirectLogin.execute();
+            await signInWithGoogleRedirect();
+          } catch (e) {}
+        } else {
+          if (Platform.isAndroid || Platform.isIOS) {
+            try {
+              credentials = await signInWithGoogleMobile();
+            } catch (e) {}
+          }
+        }
+
+        if (credentials != null) {
+          entities.User user = entities.User(
+              id: "",
+              name: credentials.user!.displayName ?? "",
+              username: credentials.user!.email ?? "",
+              email: credentials.user!.email ?? "",
+              enabled: true,
+              builtIn: false);
+
+          String userToken = await credentials.user!.getIdToken();
+
+          final result = await _getAuthenticateGoogle.execute(user, userToken);
+          result.fold((l) {
+            emit(LoginError(l.message));
+            return;
+          }, (r) {
+            session = SessionModel(
+                token: r.token, username: r.username, name: r.name);
+          });
+
+          if (session != null && session?.getOrgaId() == null) {
+            final userId = session?.getUserId();
+            final resultOrgas = await _getOrgasByUser.execute(userId!);
+
+            resultOrgas.fold((l) => {emit(LoginError(l.message))}, (r) {
+              listorgas = r;
+            });
+            emit(LoginSelectOrga(listorgas, session!.username));
+          } else {
+            emit(LoginGoted(
+                session, " Bienvenido usuario ${session?.username}"));
+          }
+        }
+      },
+    );
+
+    on<OnLoginRedirectWithGoogle>(
+      (event, emit) async {
+        emit(LoginGetting());
+        UserCredential? credentials;
+
+        List<Orga> listorgas = [];
+        SessionModel? session;
+
+        if (kIsWeb) {
+          try {
+            credentials = await FirebaseAuth.instance.getRedirectResult();
           } catch (e) {}
         } else {
           if (Platform.isAndroid || Platform.isIOS) {
@@ -162,6 +223,23 @@ Future<UserCredential> signInWithGoogle() async {
 
   // Or use signInWithRedirect
   // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+}
+
+Future<void> signInWithGoogleRedirect() async {
+  // Create a new provider
+  GoogleAuthProvider googleProvider = GoogleAuthProvider();
+
+  //googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+  googleProvider.addScope('email');
+  googleProvider.setCustomParameters({'prompt': 'select_account'});
+
+  // Once signed in, return the UserCredential
+  //return await FirebaseAuth.instance.signInWithPopup(googleProvider);
+
+  // Or use signInWithRedirect
+  await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+
+  return;
 }
 
 Future<UserCredential> signInWithGoogleMobile() async {

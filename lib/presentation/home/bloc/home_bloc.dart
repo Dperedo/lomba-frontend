@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/domain/usecases/login/readif_redirect_login.dart';
 import 'package:lomba_frontend/domain/usecases/post/get_latest_posts.dart';
 import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_has_login.dart';
@@ -22,14 +23,30 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetLatestPosts _getLatestPosts;
   final VotePublication _votePublication;
   final GetSessionRole _getSessionRole;
+  final ReadIfRedirectLogin _readIfRedirectLogin;
 
-  HomeBloc(this._firebaseAuthInstance, this._hasLogin, this._getSession,
-      this._getLatestPosts, this._votePublication, this._getSessionRole)
+  HomeBloc(
+      this._firebaseAuthInstance,
+      this._hasLogin,
+      this._getSession,
+      this._getLatestPosts,
+      this._votePublication,
+      this._getSessionRole,
+      this._readIfRedirectLogin)
       : super(const HomeStart("")) {
     ///Evento que hace la consulta de sesión del usuario en el dispositivo.
     on<OnHomeLoading>(
       (event, emit) async {
         emit(HomeLoading());
+
+        final resultHasRedirect = await _readIfRedirectLogin.execute();
+        final hasRedirect = resultHasRedirect.getOrElse(() => false);
+
+        if (hasRedirect) {
+          emit(HomeHasLoginGoogleRedirect());
+          return;
+        }
+
         var auth = const SessionModel(token: "", username: "", name: "");
         const orgaId = "00000200-0200-0200-0200-000000000200";
         const userId = '00000005-0005-0005-0005-000000000005';

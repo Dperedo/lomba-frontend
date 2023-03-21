@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 ///Interfaz de los eventos de Login con herencia de Equatable
 abstract class LoginEvent extends Equatable {
@@ -30,6 +31,8 @@ class OnLoginChangeOrga extends LoginEvent {
 }
 
 class OnLoginWithGoogle extends LoginEvent {}
+
+class OnLoginRedirectWithGoogle extends LoginEvent {}
 
 ///Evento para el reinicio de la pantalla
 class OnLoginStarter extends LoginEvent {}

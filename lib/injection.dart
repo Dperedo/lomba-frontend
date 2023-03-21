@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:lomba_frontend/domain/usecases/login/readif_redirect_login.dart';
+import 'package:lomba_frontend/domain/usecases/login/start_redirect_login.dart';
 import 'package:lomba_frontend/domain/usecases/post/add_text_post.dart';
 import 'package:lomba_frontend/domain/usecases/post/change_stage_post.dart';
 import 'package:lomba_frontend/domain/usecases/post/delete_post.dart';
@@ -107,9 +109,9 @@ final locator = GetIt.instance;
 Future<void> init() async {
   // bloc
   locator.registerFactory(
-      () => LoginBloc(locator(), locator(), locator(), locator()));
-  locator.registerFactory(() => HomeBloc(
-      locator(), locator(), locator(), locator(), locator(), locator()));
+      () => LoginBloc(locator(), locator(), locator(), locator(), locator()));
+  locator.registerFactory(() => HomeBloc(locator(), locator(), locator(),
+      locator(), locator(), locator(), locator()));
   locator.registerFactory(() => SideDrawerBloc(
       locator(), locator(), locator(), locator(), locator(), locator()));
   locator.registerFactory(() => NavBloc());
@@ -163,8 +165,7 @@ Future<void> init() async {
       () => VotedBloc(locator(), locator(), locator(), locator()));
   locator.registerFactory(() => FlowBloc(locator(), locator()));
   locator.registerFactory(() => StageBloc(locator(), locator()));
-  locator.registerFactory(() =>
-      DetailedListBloc(
+  locator.registerFactory(() => DetailedListBloc(
         locator(),
         locator(),
         locator(),
@@ -174,7 +175,8 @@ Future<void> init() async {
         locator(),
         locator(),
         locator(),
-        locator(),));
+        locator(),
+      ));
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));
@@ -236,6 +238,9 @@ Future<void> init() async {
 
   locator.registerLazySingleton(() => GetStage(locator()));
   locator.registerLazySingleton(() => GetStages(locator()));
+
+  locator.registerLazySingleton(() => ReadIfRedirectLogin(locator()));
+  locator.registerLazySingleton(() => StartRedirectLogin(locator()));
 
   // repository
   locator.registerLazySingleton<LoginRepository>(

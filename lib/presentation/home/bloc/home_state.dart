@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../domain/entities/workflow/post.dart';
 
@@ -16,7 +17,7 @@ class HomeLoaded extends HomeState {
   final String orgaId;
   final String userId;
   final String flowId;
-  final String stageId;  
+  final String stageId;
   final String searchText;
   final Map<String, int> fieldsOrder;
   final int pageIndex;
@@ -30,7 +31,7 @@ class HomeLoaded extends HomeState {
       this.orgaId,
       this.userId,
       this.flowId,
-      this.stageId,      
+      this.stageId,
       this.searchText,
       this.fieldsOrder,
       this.pageIndex,
@@ -65,3 +66,5 @@ class HomeError extends HomeState {
 }
 
 class HomeOnlyUser extends HomeState {}
+
+class HomeHasLoginGoogleRedirect extends HomeState {}
