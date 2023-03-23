@@ -254,9 +254,8 @@ class OrgasPage extends StatelessWidget {
                   key: const ValueKey("btnViewUsersOption"),
                   label: const Text("Ver usuarios"),
                   onPressed: () {
-                    context
-                        .read<OrgaUserBloc>()
-                        .add(OnOrgaUserListLoad(state.orga.id));
+                    context.read<OrgaUserBloc>()
+                      .add(OnOrgaUserListLoad(state.orga.id));
                   },
                 ),
               ],

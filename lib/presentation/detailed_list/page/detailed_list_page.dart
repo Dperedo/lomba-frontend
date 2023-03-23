@@ -429,7 +429,6 @@ class DetailedListPage extends StatelessWidget {
                     const SizedBox(
                       width: 20,
                     ),
-                    //Text("Usuario: ${state.name}"),
                     const Icon(Icons.person),
                     Padding(
                       padding: const EdgeInsets.all(20.0),
@@ -438,7 +437,6 @@ class DetailedListPage extends StatelessWidget {
                         child: Text("Username: ${state.username}"),
                       ),
                     ),
-                    //Text("Username: ${state.username}")
                   ],
                 ),
                 ListView.builder(

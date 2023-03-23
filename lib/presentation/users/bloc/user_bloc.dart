@@ -8,9 +8,14 @@ import 'package:lomba_frontend/domain/usecases/users/update_user.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../data/models/session_model.dart';
+import '../../../domain/entities/orgauser.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
 import '../../../domain/usecases/login/register_user.dart';
 import '../../../domain/entities/user.dart';
+import '../../../domain/usecases/orgas/delete_orgauser.dart';
+import '../../../domain/usecases/orgas/get_orgauser.dart';
+import '../../../domain/usecases/orgas/get_orgausers.dart';
+import '../../../domain/usecases/orgas/update_orgauser.dart';
 import '../../../domain/usecases/users/get_users.dart';
 import '../../../domain/usecases/users/update_user_password.dart';
 import 'user_event.dart';
@@ -27,6 +32,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final GetSession _getSession;
   final ExistsUser _existsUser;
   final UpdateUserPassword _updateUserPassword;
+  final GetOrgaUser _getOrgaUser;
+  final UpdateOrgaUser _updateOrgaUser;
+  final DeleteOrgaUser _deleteOrgaUser;
 
   UserBloc(
       this._addUser,
@@ -38,17 +46,39 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       this._registerUser,
       this._getSession,
       this._existsUser,
-      this._updateUserPassword)
+      this._updateUserPassword,
+      this._getOrgaUser,
+      this._updateOrgaUser,
+      this._deleteOrgaUser)
       : super(const UserStart("")) {
     on<OnUserStarter>((event, emit) => emit(const UserStart('')));
 
     on<OnUserLoad>(
       (event, emit) async {
         emit(UserLoading());
-        final result = await _getUser.execute(event.id);
 
+        var user = const User(
+          id: '',
+          name: '',
+          username: '',
+          email: '',
+          enabled: true,
+          builtIn: true);
+        final result = await _getUser.execute(event.userId);
         result.fold((l) => emit(UserError(l.message)),
-            (r) => {emit(UserLoaded(r, ""))});
+            (r) => user = r);
+
+        
+        var auth = const SessionModel(token: "", username: "", name: "");
+        final session = await _getSession.execute();
+        session.fold((l) => emit(UserError(l.message)), (r) => {auth = r});
+        final orgaId = auth.getOrgaId();
+
+        List<OrgaUser> listOrgaUsers = [];
+        final resultOrgaUser = await _getOrgaUser.execute(orgaId!,event.userId);
+        resultOrgaUser.fold((l) => emit(UserError(l.message)), (r) {
+          listOrgaUsers = r;
+          emit(UserLoaded(user, listOrgaUsers[0], ''));});
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
@@ -147,12 +177,24 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<OnUserEnable>((event, emit) async {
       emit(UserLoading());
 
+      //-----------------
+      var auth = const SessionModel(token: "", username: "", name: "");
+        final session = await _getSession.execute();
+        session.fold((l) => emit(UserError(l.message)), (r) => {auth = r});
+        final orgaId = auth.getOrgaId();
+
+        List<OrgaUser> listOrgaUsers = [];
+        final resultOrgaUser = await _getOrgaUser.execute(orgaId!,event.id);
+        resultOrgaUser.fold((l) => emit(UserError(l.message)), (r) =>listOrgaUsers = r);
+      //-----------------
+
       final result = await _enableUser.execute(event.id, event.enabled);
       result.fold(
           (l) => emit(UserError(l.message)),
           (r) => {
                 emit(UserLoaded(
                     r,
+                    listOrgaUsers[0],
                     (event.enabled
                         ? " El usuario ${event.username} fue habilitado"
                         : " El usuario ${event.username} fue deshabilitado")))
@@ -161,7 +203,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<OnUserDelete>((event, emit) async {
       emit(UserLoading());
 
-      final result = await _deleteUser.execute(event.id);
+      final result = await _deleteUser.execute(event.userId);
       result.fold(
           (l) => emit(UserError(l.message)),
           (r) =>
@@ -174,11 +216,90 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     });
     on<OnUserSaveNewPassword>((event, emit) async {
       emit(UserLoading());
+
+      //-----------------
+      var auth = const SessionModel(token: "", username: "", name: "");
+        final session = await _getSession.execute();
+        session.fold((l) => emit(UserError(l.message)), (r) => {auth = r});
+        final orgaId = auth.getOrgaId();
+
+        List<OrgaUser> listOrgaUsers = [];
+        final resultOrgaUser = await _getOrgaUser.execute(orgaId!,event.user.id);
+        resultOrgaUser.fold((l) => emit(UserError(l.message)), (r) =>listOrgaUsers = r);
+      //-----------------
+
       final result =
           await _updateUserPassword.execute(event.user.id, event.password);
 
       result.fold((l) => emit(UserError(l.message)),
-          (r) => {emit(UserLoaded(event.user, " Contraseña Modificada"))});
+          (r) => {emit(UserLoaded(event.user, listOrgaUsers[0], " Contraseña Modificada"))});
+    });
+    on<OnUserOrgaEdit>((event, emit) async {
+      emit(UserLoading());
+
+      var orgaUser = OrgaUser(
+          orgaId: event.orgaUser.orgaId,
+          userId: event.orgaUser.userId,
+          roles: event.roles,
+          enabled: event.enabled,
+          builtIn: false);
+
+      bool isUpdated = false;
+
+      final result =
+          await _updateOrgaUser.execute(event.orgaUser.orgaId, event.orgaUser.userId, orgaUser);
+      result.fold(
+          (l) => emit(UserError(l.message)), (r) => {isUpdated = true});
+
+      if (isUpdated) {
+        final resUser = await _getUser.execute(event.orgaUser.userId);
+
+        final resultOU = await _getOrgaUser.execute(event.orgaUser.orgaId, event.orgaUser.userId);
+
+        var user = const User(
+          id: '',
+          name: '',
+          username: '',
+          email: '',
+          enabled: false,
+          builtIn: false);
+        resUser.fold(
+            (l) => emit(UserError(l.message)), (r) => {user = r});
+
+        List<OrgaUser> listOrgaUsers = [];
+        resultOU.fold(
+            (l) => emit(UserError(l.message)), (r) => {listOrgaUsers = r});
+
+        emit(UserLoaded(user, listOrgaUsers[0], ''));
+      }
+    });
+    on<OnUserOrgaDelete>((event, emit) async {
+      emit(UserLoading());
+
+      //-------------
+      var user = const User(
+          id: '',
+          name: '',
+          username: '',
+          email: '',
+          enabled: false,
+          builtIn: false);
+      final resUser = await _getUser.execute(event.orgaUser.orgaId);
+      resUser.fold((l) => emit(UserError(l.message)), (r) => {user = r});
+      //-------------
+
+      bool isDeleted = false;
+
+      final result = await _deleteOrgaUser.execute(event.orgaUser.orgaId, event.orgaUser.userId);
+      result.fold(
+          (l) => emit(UserError(l.message)), (r) => {isDeleted = r});
+
+      if (isDeleted) {
+        emit(UserLoaded(
+          user,
+          event.orgaUser,
+            " El Usuario ${user.name} fue desasociado de la organización"));
+      }
     });
   }
 
