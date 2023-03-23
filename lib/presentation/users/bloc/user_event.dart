@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:lomba_frontend/presentation/users/bloc/user_state.dart';
 
+import '../../../domain/entities/orgauser.dart';
 import '../../../domain/entities/user.dart';
 
 abstract class UserEvent extends Equatable {
@@ -11,12 +12,12 @@ abstract class UserEvent extends Equatable {
 }
 
 class OnUserLoad extends UserEvent {
-  final String id;
+  final String userId;
 
-  const OnUserLoad(this.id);
+  const OnUserLoad(this.userId);
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [userId];
 }
 
 class OnUserListLoad extends UserEvent {
@@ -105,13 +106,13 @@ class OnUserEnable extends UserEvent {
 }
 
 class OnUserDelete extends UserEvent {
-  final String id;
+  final String userId;
   final String username;
 
-  const OnUserDelete(this.id, this.username);
+  const OnUserDelete(this.userId, this.username);
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [userId];
 }
 
 class OnUserShowPasswordModifyForm extends UserEvent {
@@ -131,6 +132,25 @@ class OnUserSaveNewPassword extends UserEvent {
 
   @override
   List<Object> get props => [password];
+}
+
+class OnUserOrgaEdit extends UserEvent {
+  final OrgaUser orgaUser;
+  final List<String> roles;
+  final bool enabled;
+
+  const OnUserOrgaEdit(this.orgaUser, this.roles, this.enabled);
+
+  @override
+  List<Object> get props => [orgaUser, roles, enabled];
+}
+
+class OnUserOrgaDelete extends UserEvent {
+  final OrgaUser orgaUser;
+
+  const OnUserOrgaDelete(this.orgaUser);
+  @override
+  List<Object> get props => [orgaUser];
 }
 
 class OnUserStarter extends UserEvent {}

@@ -55,6 +55,7 @@ import 'domain/usecases/flow/get_flows.dart';
 import 'domain/usecases/local/get_has_login.dart';
 import 'domain/usecases/local/get_session_role.dart';
 import 'domain/usecases/local/get_session_status.dart';
+import 'domain/usecases/orgas/get_orgauser.dart';
 import 'domain/usecases/post/get_detailedlist_posts.dart';
 import 'domain/usecases/stage/get_stage.dart';
 import 'domain/usecases/stage/get_stages.dart';
@@ -138,7 +139,10 @@ Future<void> init() async {
       locator(),
       locator(),
       locator(),
-      locator()));
+      locator(),
+      locator(),
+      locator(),
+      locator(),));
 
   locator.registerFactory(() => ProfileBloc(locator(), locator()));
   locator.registerFactory(() => DemoListBloc());
@@ -196,6 +200,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetOrga(locator()));
   locator.registerLazySingleton(() => GetOrgas(locator()));
   locator.registerLazySingleton(() => GetOrgaUsers(locator()));
+  locator.registerLazySingleton(() => GetOrgaUser(locator()));
   locator.registerLazySingleton(() => UpdateOrga(locator()));
   locator.registerLazySingleton(() => ExistsOrga(locator()));
   locator.registerLazySingleton(() => UpdateOrgaUser(locator()));
