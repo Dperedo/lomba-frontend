@@ -3,23 +3,27 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i6;
+import 'dart:async' as _i7;
 
 import 'package:dartz/dartz.dart' as _i3;
-import 'package:lomba_frontend/core/failures.dart' as _i7;
-import 'package:lomba_frontend/domain/entities/orga.dart' as _i10;
-import 'package:lomba_frontend/domain/entities/session.dart' as _i8;
-import 'package:lomba_frontend/domain/entities/user.dart' as _i13;
+import 'package:lomba_frontend/core/failures.dart' as _i8;
+import 'package:lomba_frontend/domain/entities/orga.dart' as _i11;
+import 'package:lomba_frontend/domain/entities/session.dart' as _i9;
+import 'package:lomba_frontend/domain/entities/user.dart' as _i14;
+import 'package:lomba_frontend/domain/repositories/local_repository.dart'
+    as _i5;
 import 'package:lomba_frontend/domain/repositories/login_repository.dart'
     as _i2;
 import 'package:lomba_frontend/domain/repositories/orga_repository.dart' as _i4;
-import 'package:lomba_frontend/domain/usecases/login/change_orga.dart' as _i11;
+import 'package:lomba_frontend/domain/usecases/login/change_orga.dart' as _i12;
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate.dart'
-    as _i5;
+    as _i6;
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate_google.dart'
-    as _i12;
+    as _i13;
+import 'package:lomba_frontend/domain/usecases/login/start_redirect_login.dart'
+    as _i15;
 import 'package:lomba_frontend/domain/usecases/orgas/get_orgasbyuser.dart'
-    as _i9;
+    as _i10;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -65,10 +69,21 @@ class _FakeOrgaRepository_2 extends _i1.SmartFake
         );
 }
 
+class _FakeLocalRepository_3 extends _i1.SmartFake
+    implements _i5.LocalRepository {
+  _FakeLocalRepository_3(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [GetAuthenticate].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetAuthenticate extends _i1.Mock implements _i5.GetAuthenticate {
+class MockGetAuthenticate extends _i1.Mock implements _i6.GetAuthenticate {
   MockGetAuthenticate() {
     _i1.throwOnMissingStub(this);
   }
@@ -82,7 +97,7 @@ class MockGetAuthenticate extends _i1.Mock implements _i5.GetAuthenticate {
         ),
       ) as _i2.LoginRepository);
   @override
-  _i6.Future<_i3.Either<_i7.Failure, _i8.Session>> execute(
+  _i7.Future<_i3.Either<_i8.Failure, _i9.Session>> execute(
     String? username,
     String? password,
   ) =>
@@ -94,8 +109,8 @@ class MockGetAuthenticate extends _i1.Mock implements _i5.GetAuthenticate {
             password,
           ],
         ),
-        returnValue: _i6.Future<_i3.Either<_i7.Failure, _i8.Session>>.value(
-            _FakeEither_1<_i7.Failure, _i8.Session>(
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, _i9.Session>>.value(
+            _FakeEither_1<_i8.Failure, _i9.Session>(
           this,
           Invocation.method(
             #execute,
@@ -105,13 +120,13 @@ class MockGetAuthenticate extends _i1.Mock implements _i5.GetAuthenticate {
             ],
           ),
         )),
-      ) as _i6.Future<_i3.Either<_i7.Failure, _i8.Session>>);
+      ) as _i7.Future<_i3.Either<_i8.Failure, _i9.Session>>);
 }
 
 /// A class which mocks [GetOrgasByUser].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetOrgasByUser extends _i1.Mock implements _i9.GetOrgasByUser {
+class MockGetOrgasByUser extends _i1.Mock implements _i10.GetOrgasByUser {
   MockGetOrgasByUser() {
     _i1.throwOnMissingStub(this);
   }
@@ -125,28 +140,28 @@ class MockGetOrgasByUser extends _i1.Mock implements _i9.GetOrgasByUser {
         ),
       ) as _i4.OrgaRepository);
   @override
-  _i6.Future<_i3.Either<_i7.Failure, List<_i10.Orga>>> execute(
+  _i7.Future<_i3.Either<_i8.Failure, List<_i11.Orga>>> execute(
           String? userId) =>
       (super.noSuchMethod(
         Invocation.method(
           #execute,
           [userId],
         ),
-        returnValue: _i6.Future<_i3.Either<_i7.Failure, List<_i10.Orga>>>.value(
-            _FakeEither_1<_i7.Failure, List<_i10.Orga>>(
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, List<_i11.Orga>>>.value(
+            _FakeEither_1<_i8.Failure, List<_i11.Orga>>(
           this,
           Invocation.method(
             #execute,
             [userId],
           ),
         )),
-      ) as _i6.Future<_i3.Either<_i7.Failure, List<_i10.Orga>>>);
+      ) as _i7.Future<_i3.Either<_i8.Failure, List<_i11.Orga>>>);
 }
 
 /// A class which mocks [ChangeOrga].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockChangeOrga extends _i1.Mock implements _i11.ChangeOrga {
+class MockChangeOrga extends _i1.Mock implements _i12.ChangeOrga {
   MockChangeOrga() {
     _i1.throwOnMissingStub(this);
   }
@@ -160,7 +175,7 @@ class MockChangeOrga extends _i1.Mock implements _i11.ChangeOrga {
         ),
       ) as _i2.LoginRepository);
   @override
-  _i6.Future<_i3.Either<_i7.Failure, _i8.Session>> execute(
+  _i7.Future<_i3.Either<_i8.Failure, _i9.Session>> execute(
     String? username,
     String? orgaId,
   ) =>
@@ -172,8 +187,8 @@ class MockChangeOrga extends _i1.Mock implements _i11.ChangeOrga {
             orgaId,
           ],
         ),
-        returnValue: _i6.Future<_i3.Either<_i7.Failure, _i8.Session>>.value(
-            _FakeEither_1<_i7.Failure, _i8.Session>(
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, _i9.Session>>.value(
+            _FakeEither_1<_i8.Failure, _i9.Session>(
           this,
           Invocation.method(
             #execute,
@@ -183,14 +198,14 @@ class MockChangeOrga extends _i1.Mock implements _i11.ChangeOrga {
             ],
           ),
         )),
-      ) as _i6.Future<_i3.Either<_i7.Failure, _i8.Session>>);
+      ) as _i7.Future<_i3.Either<_i8.Failure, _i9.Session>>);
 }
 
 /// A class which mocks [GetAuthenticateGoogle].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockGetAuthenticateGoogle extends _i1.Mock
-    implements _i12.GetAuthenticateGoogle {
+    implements _i13.GetAuthenticateGoogle {
   MockGetAuthenticateGoogle() {
     _i1.throwOnMissingStub(this);
   }
@@ -204,8 +219,8 @@ class MockGetAuthenticateGoogle extends _i1.Mock
         ),
       ) as _i2.LoginRepository);
   @override
-  _i6.Future<_i3.Either<_i7.Failure, _i8.Session>> execute(
-    _i13.User? user,
+  _i7.Future<_i3.Either<_i8.Failure, _i9.Session>> execute(
+    _i14.User? user,
     String? googleToken,
   ) =>
       (super.noSuchMethod(
@@ -216,8 +231,8 @@ class MockGetAuthenticateGoogle extends _i1.Mock
             googleToken,
           ],
         ),
-        returnValue: _i6.Future<_i3.Either<_i7.Failure, _i8.Session>>.value(
-            _FakeEither_1<_i7.Failure, _i8.Session>(
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, _i9.Session>>.value(
+            _FakeEither_1<_i8.Failure, _i9.Session>(
           this,
           Invocation.method(
             #execute,
@@ -227,5 +242,39 @@ class MockGetAuthenticateGoogle extends _i1.Mock
             ],
           ),
         )),
-      ) as _i6.Future<_i3.Either<_i7.Failure, _i8.Session>>);
+      ) as _i7.Future<_i3.Either<_i8.Failure, _i9.Session>>);
+}
+
+/// A class which mocks [StartRedirectLogin].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockStartRedirectLogin extends _i1.Mock
+    implements _i15.StartRedirectLogin {
+  MockStartRedirectLogin() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.LocalRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeLocalRepository_3(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i5.LocalRepository);
+  @override
+  _i7.Future<_i3.Either<_i8.Failure, bool>> execute() => (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [],
+        ),
+        returnValue: _i7.Future<_i3.Either<_i8.Failure, bool>>.value(
+            _FakeEither_1<_i8.Failure, bool>(
+          this,
+          Invocation.method(
+            #execute,
+            [],
+          ),
+        )),
+      ) as _i7.Future<_i3.Either<_i8.Failure, bool>>);
 }

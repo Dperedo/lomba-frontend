@@ -192,6 +192,30 @@ class MockLocalDataSource extends _i1.Mock implements _i6.LocalDataSource {
         ),
         returnValue: _i5.Future<bool>.value(false),
       ) as _i5.Future<bool>);
+  @override
+  _i5.Future<bool> saveStartRedirectLogin() => (super.noSuchMethod(
+        Invocation.method(
+          #saveStartRedirectLogin,
+          [],
+        ),
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
+  @override
+  _i5.Future<bool> getIfRedirectLogin() => (super.noSuchMethod(
+        Invocation.method(
+          #getIfRedirectLogin,
+          [],
+        ),
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
+  @override
+  _i5.Future<bool> cleanRedirectLogin() => (super.noSuchMethod(
+        Invocation.method(
+          #cleanRedirectLogin,
+          [],
+        ),
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
 }
 
 /// A class which mocks [UserRemoteDataSource].

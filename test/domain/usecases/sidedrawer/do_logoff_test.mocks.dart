@@ -137,4 +137,36 @@ class MockLocalRepository extends _i1.Mock implements _i3.LocalRepository {
           ),
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, List<String>>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, bool>> readIfRedirectLogin() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #readIfRedirectLogin,
+          [],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, bool>>.value(
+            _FakeEither_0<_i5.Failure, bool>(
+          this,
+          Invocation.method(
+            #readIfRedirectLogin,
+            [],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, bool>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, bool>> startRedirectLogin() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #startRedirectLogin,
+          [],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, bool>>.value(
+            _FakeEither_0<_i5.Failure, bool>(
+          this,
+          Invocation.method(
+            #startRedirectLogin,
+            [],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, bool>>);
 }

@@ -38,7 +38,9 @@ class HomePage extends StatelessWidget {
         }
       },
       child: ScaffoldManager(
-        title: AppBar(),
+        title: AppBar(
+          title: const Text("Recientes"),
+        ),
         child: SingleChildScrollView(
           child: Center(
             child: Column(

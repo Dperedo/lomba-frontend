@@ -205,6 +205,19 @@ void main() {
     expect(indicator, findsOneWidget);
   });
 
+  testWidgets('mostrar el texto recientes en el título',
+      (WidgetTester tester) async {
+    //arrange
+    when(() => mockHomeBloc.state).thenReturn(const HomeStart(''));
+
+    //act
+    await tester.pumpWidget(makeTestableWidget(HomePage()));
+    final recientes = find.text("Recientes");
+
+    //assert
+    expect(recientes, findsOneWidget);
+  });
+
   /*testWidgets('debe emitir el evento OnHomeLoading',
       (WidgetTester tester) async {
     //arrange

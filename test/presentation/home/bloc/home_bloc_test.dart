@@ -9,6 +9,7 @@ import 'package:lomba_frontend/data/models/session_model.dart';
 import 'package:lomba_frontend/domain/entities/workflow/post.dart';
 import 'package:lomba_frontend/domain/entities/workflow/stage.dart';
 import 'package:lomba_frontend/domain/entities/workflow/vote.dart';
+import 'package:lomba_frontend/domain/usecases/login/readif_redirect_login.dart';
 import 'package:lomba_frontend/domain/usecases/post/get_latest_posts.dart';
 import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_has_login.dart';
@@ -28,7 +29,8 @@ import 'home_bloc_test.mocks.dart';
   GetLatestPosts,
   GetSession,
   VotePublication,
-  GetSessionRole
+  GetSessionRole,
+  ReadIfRedirectLogin
 ])
 void main() {
   late MockGetHasLogIn mockGetHasLogIn;
@@ -38,6 +40,7 @@ void main() {
   late MockGetSession mockGetSession;
   late MockVotePublication mockVotePublication;
   late MockGetSessionRole mockGetSessionRole;
+  late MockReadIfRedirectLogin mockReadIfRedirectLogin;
 
   setUp(() {
     mockGetHasLogIn = MockGetHasLogIn();
@@ -46,13 +49,15 @@ void main() {
     mockGetLatestPosts = MockGetLatestPosts();
     mockVotePublication = MockVotePublication();
     mockGetSessionRole = MockGetSessionRole();
+    mockReadIfRedirectLogin = MockReadIfRedirectLogin();
     homeBloc = HomeBloc(
         mockFirebaseAuthInstance,
         mockGetHasLogIn,
         mockGetSession,
         mockGetLatestPosts,
         mockVotePublication,
-        mockGetSessionRole);
+        mockGetSessionRole,
+        mockReadIfRedirectLogin);
   });
 
   /*
@@ -147,6 +152,8 @@ void main() {
   blocTest<HomeBloc, HomeState>(
     'debe responder con estado con home cargado con user',
     build: () {
+      when(mockReadIfRedirectLogin.execute())
+          .thenAnswer((_) async => const Right(false));
       when(mockGetHasLogIn.execute())
           .thenAnswer((_) async => const Right(true));
       when(mockFirebaseAuthInstance.signInAnonymously())
@@ -196,6 +203,8 @@ void main() {
   blocTest<HomeBloc, HomeState>(
     'debe responder con estado con home onlyUser con admin',
     build: () {
+      when(mockReadIfRedirectLogin.execute())
+          .thenAnswer((_) async => const Right(false));
       when(mockGetHasLogIn.execute())
           .thenAnswer((_) async => const Right(true));
       when(mockFirebaseAuthInstance.signInAnonymously())
@@ -218,6 +227,8 @@ void main() {
   blocTest<HomeBloc, HomeState>(
     'debe responder con estado con home error',
     build: () {
+      when(mockReadIfRedirectLogin.execute())
+          .thenAnswer((_) async => const Right(false));
       when(mockGetHasLogIn.execute())
           .thenAnswer((_) async => const Right(true));
       when(mockFirebaseAuthInstance.signInAnonymously())
@@ -247,6 +258,8 @@ void main() {
   blocTest<HomeBloc, HomeState>(
     'debe responder con estado de login FALSE después de cargar',
     build: () {
+      when(mockReadIfRedirectLogin.execute())
+          .thenAnswer((_) async => const Right(false));
       when(mockGetHasLogIn.execute())
           .thenAnswer((_) async => const Right(false));
       when(mockFirebaseAuthInstance.signInAnonymously())
@@ -297,6 +310,8 @@ void main() {
   blocTest<HomeBloc, HomeState>(
     'debe responder con estado de login FALSE y cargar home error',
     build: () {
+      when(mockReadIfRedirectLogin.execute())
+          .thenAnswer((_) async => const Right(false));
       when(mockGetHasLogIn.execute())
           .thenAnswer((_) async => const Right(false));
       when(mockFirebaseAuthInstance.signInAnonymously())

@@ -23,6 +23,8 @@ import 'package:lomba_frontend/domain/usecases/local/get_session_role.dart'
     as _i18;
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart'
     as _i14;
+import 'package:lomba_frontend/domain/usecases/login/readif_redirect_login.dart'
+    as _i19;
 import 'package:lomba_frontend/domain/usecases/post/get_latest_posts.dart'
     as _i11;
 import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart'
@@ -825,4 +827,38 @@ class MockGetSessionRole extends _i1.Mock implements _i18.GetSessionRole {
           ),
         )),
       ) as _i9.Future<_i3.Either<_i10.Failure, List<String>>>);
+}
+
+/// A class which mocks [ReadIfRedirectLogin].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockReadIfRedirectLogin extends _i1.Mock
+    implements _i19.ReadIfRedirectLogin {
+  MockReadIfRedirectLogin() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.LocalRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeLocalRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.LocalRepository);
+  @override
+  _i9.Future<_i3.Either<_i10.Failure, bool>> execute() => (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [],
+        ),
+        returnValue: _i9.Future<_i3.Either<_i10.Failure, bool>>.value(
+            _FakeEither_1<_i10.Failure, bool>(
+          this,
+          Invocation.method(
+            #execute,
+            [],
+          ),
+        )),
+      ) as _i9.Future<_i3.Either<_i10.Failure, bool>>);
 }

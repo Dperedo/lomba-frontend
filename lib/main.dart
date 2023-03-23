@@ -94,7 +94,6 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<DetailedListBloc>()),
       ],
       child: MaterialApp(
-        //initialRoute: HomePage.route,
         title: 'App Demo',
         theme: ThemeData(
           primarySwatch: Colors.deepOrange,

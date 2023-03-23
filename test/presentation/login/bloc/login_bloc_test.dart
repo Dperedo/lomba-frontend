@@ -8,6 +8,7 @@ import 'package:lomba_frontend/domain/entities/orga.dart';
 import 'package:lomba_frontend/domain/usecases/login/change_orga.dart';
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate.dart';
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate_google.dart';
+import 'package:lomba_frontend/domain/usecases/login/start_redirect_login.dart';
 import 'package:lomba_frontend/presentation/login/bloc/login_bloc.dart';
 import 'package:lomba_frontend/presentation/login/bloc/login_event.dart';
 import 'package:lomba_frontend/presentation/login/bloc/login_state.dart';
@@ -17,13 +18,19 @@ import 'package:mockito/mockito.dart';
 
 import 'login_bloc_test.mocks.dart';
 
-@GenerateMocks(
-    [GetAuthenticate, GetOrgasByUser, ChangeOrga, GetAuthenticateGoogle])
+@GenerateMocks([
+  GetAuthenticate,
+  GetOrgasByUser,
+  ChangeOrga,
+  GetAuthenticateGoogle,
+  StartRedirectLogin
+])
 void main() {
   late MockGetAuthenticate mockGetAuthenticate;
   late MockGetOrgasByUser mockGetOrgasByUser;
   late MockChangeOrga mockChangeOrga;
   late MockGetAuthenticateGoogle mockGetAuthenticateGoogle;
+  late MockStartRedirectLogin mockStartRedirectLogin;
   late LoginBloc loginBloc;
 
   setUp(() {
@@ -31,8 +38,9 @@ void main() {
     mockGetOrgasByUser = MockGetOrgasByUser();
     mockChangeOrga = MockChangeOrga();
     mockGetAuthenticateGoogle = MockGetAuthenticateGoogle();
+    mockStartRedirectLogin = MockStartRedirectLogin();
     loginBloc = LoginBloc(mockGetAuthenticate, mockGetOrgasByUser,
-        mockChangeOrga, mockGetAuthenticateGoogle);
+        mockChangeOrga, mockGetAuthenticateGoogle, mockStartRedirectLogin);
   });
 
   const tLoginAccess = SessionModel(
