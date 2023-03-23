@@ -4,9 +4,9 @@ import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/data/models/session_model.dart';
+import 'package:lomba_frontend/domain/entities/user.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
 import 'package:lomba_frontend/domain/usecases/login/register_user.dart';
-import 'package:lomba_frontend/domain/entities/user.dart';
 import 'package:lomba_frontend/domain/usecases/users/add_user.dart';
 import 'package:lomba_frontend/domain/usecases/users/delete_user.dart';
 import 'package:lomba_frontend/domain/usecases/users/enable_user.dart';
@@ -14,7 +14,6 @@ import 'package:lomba_frontend/domain/usecases/users/exists_user.dart';
 import 'package:lomba_frontend/domain/usecases/users/get_user.dart';
 import 'package:lomba_frontend/domain/usecases/users/get_users.dart';
 import 'package:lomba_frontend/domain/usecases/users/update_user.dart';
-import 'package:lomba_frontend/domain/usecases/users/exists_user.dart';
 import 'package:lomba_frontend/domain/usecases/users/update_user_password.dart';
 import 'package:lomba_frontend/presentation/users/bloc/user_bloc.dart';
 import 'package:lomba_frontend/presentation/users/bloc/user_event.dart';
@@ -177,12 +176,9 @@ Future<void> main() async {
       build: () {
         return userBloc;
       },
-      act: (bloc) =>
-          bloc.add(OnUserPrepareForAdd()),
+      act: (bloc) => bloc.add(OnUserPrepareForAdd()),
       wait: const Duration(milliseconds: 500),
-      expect: () => [
-        UserAdding(false, false)
-      ],
+      expect: () => [UserAdding(false, false)],
       verify: (bloc) {},
     );
   });
@@ -248,12 +244,9 @@ Future<void> main() async {
       build: () {
         return userBloc;
       },
-      act: (bloc) =>
-          bloc.add(OnUserPrepareForEdit(tUser)),
+      act: (bloc) => bloc.add(OnUserPrepareForEdit(tUser)),
       wait: const Duration(milliseconds: 500),
-      expect: () => [
-        UserEditing(false, false, tUser)
-      ],
+      expect: () => [UserEditing(false, false, tUser)],
       verify: (bloc) {},
     );
   });
@@ -297,7 +290,8 @@ Future<void> main() async {
             .thenAnswer((_) async => Right(tUser));
         return userBloc;
       },
-      act: (bloc) => bloc.add(OnUserValidate(tUser.username, tUser.email, UserAdding(true, true))),
+      act: (bloc) => bloc.add(
+          OnUserValidate(tUser.username, tUser.email, UserAdding(true, true))),
       wait: const Duration(milliseconds: 500),
       expect: () => [],
       verify: (bloc) {
@@ -312,7 +306,8 @@ Future<void> main() async {
             .thenAnswer((_) async => const Right(null));
         return userBloc;
       },
-      act: (bloc) => bloc.add(OnUserValidate(tUser.username, tUser.email, UserAdding(true, true))),
+      act: (bloc) => bloc.add(
+          OnUserValidate(tUser.username, tUser.email, UserAdding(true, true))),
       wait: const Duration(milliseconds: 500),
       expect: () => [],
       verify: (bloc) {
@@ -327,7 +322,8 @@ Future<void> main() async {
             .thenAnswer((_) async => Right(tUser));
         return userBloc;
       },
-      act: (bloc) => bloc.add(OnUserValidateEdit(tUser.id, tUser.username, tUser.email, UserEditing(true, true, tUser))),
+      act: (bloc) => bloc.add(OnUserValidateEdit(tUser.id, tUser.username,
+          tUser.email, UserEditing(true, true, tUser))),
       wait: const Duration(milliseconds: 500),
       expect: () => [],
       verify: (bloc) {
@@ -342,7 +338,8 @@ Future<void> main() async {
             .thenAnswer((_) async => const Right(null));
         return userBloc;
       },
-      act: (bloc) => bloc.add(OnUserValidateEdit(tUser.id, tUser.username, tUser.email, UserEditing(true, true, tUser))),
+      act: (bloc) => bloc.add(OnUserValidateEdit(tUser.id, tUser.username,
+          tUser.email, UserEditing(true, true, tUser))),
       wait: const Duration(milliseconds: 500),
       expect: () => [],
       verify: (bloc) {
