@@ -33,7 +33,7 @@ class RouterPage extends StatelessWidget {
           _handleItemRoute(context, naveItem);
           context.read<RouterPageBloc>().add(const OnRouterPageReset());
         } else if (state is RouterPageError) {
-          _handleItemRoute(context, NavItem.pageHome);
+          _handleItemRoute(context, NavItem.pageRecent);
           context.read<RouterPageBloc>().add(const OnRouterPageReset());
         }
         return const SizedBox();

@@ -10,13 +10,13 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
-import 'home_event.dart';
-import 'home_state.dart';
+import 'recent_event.dart';
+import 'recent_state.dart';
 
-///BLOC para el control de la página principal o Home
+///BLOC para el control de la página principal o Recent
 ///
 ///Consulta si el usuario está logueado o no.
-class HomeBloc extends Bloc<HomeEvent, HomeState> {
+class RecentBloc extends Bloc<RecentEvent, RecentState> {
   final GetHasLogIn _hasLogin;
   final FirebaseAuth _firebaseAuthInstance;
   final GetSession _getSession;
@@ -25,7 +25,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetSessionRole _getSessionRole;
   final ReadIfRedirectLogin _readIfRedirectLogin;
 
-  HomeBloc(
+  RecentBloc(
       this._firebaseAuthInstance,
       this._hasLogin,
       this._getSession,
@@ -33,17 +33,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       this._votePublication,
       this._getSessionRole,
       this._readIfRedirectLogin)
-      : super(const HomeStart("")) {
+      : super(const RecentStart("")) {
     ///Evento que hace la consulta de sesión del usuario en el dispositivo.
-    on<OnHomeLoading>(
+    on<OnRecentLoading>(
       (event, emit) async {
-        emit(HomeLoading());
+        emit(RecentLoading());
 
         final resultHasRedirect = await _readIfRedirectLogin.execute();
         final hasRedirect = resultHasRedirect.getOrElse(() => false);
 
         if (hasRedirect) {
-          emit(HomeHasLoginGoogleRedirect());
+          emit(RecentHasLoginGoogleRedirect());
           return;
         }
 
@@ -57,7 +57,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
         final result = await _hasLogin.execute();
 
-        result.fold((l) => {emit(HomeError(l.message))}, (valid) async {
+        result.fold((l) => {emit(RecentError(l.message))}, (valid) async {
           validLogin = valid;
           if (!valid) {
             try {
@@ -75,8 +75,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
               event.searchText,
               event.pageIndex,
               event.pageSize);
-          resultPosts.fold((l) => {emit(HomeError(l.message))}, (r) {
-            emit(HomeLoaded(
+          resultPosts.fold((l) => {emit(RecentError(l.message))}, (r) {
+            emit(RecentLoaded(
                 validLogin,
                 orgaId,
                 userId,
@@ -94,10 +94,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         } else {
           final listroles = await _getSessionRole.execute();
           listroles.fold(
-              (l) => emit(HomeError(l.message)), (r) => {role = r[0]});
+              (l) => emit(RecentError(l.message)), (r) => {role = r[0]});
           if (role == 'user') {
             final session = await _getSession.execute();
-            session.fold((l) => emit(HomeError(l.message)), (r) => {auth = r});
+            session.fold(
+                (l) => emit(RecentError(l.message)), (r) => {auth = r});
 
             final resultPosts = await _getLatestPosts.execute(
                 auth.getOrgaId()!,
@@ -107,8 +108,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 event.searchText,
                 event.pageIndex,
                 event.pageSize);
-            resultPosts.fold((l) => {emit(HomeError(l.message))}, (r) {
-              emit(HomeLoaded(
+            resultPosts.fold((l) => {emit(RecentError(l.message))}, (r) {
+              emit(RecentLoaded(
                   validLogin,
                   auth.getOrgaId()!,
                   auth.getUserId()!,
@@ -124,28 +125,28 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                   r.totalPages ?? 1));
             });
           } else {
-            emit(HomeOnlyUser());
+            emit(RecentOnlyUser());
           }
         }
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
 
-    ///Evento es llamado para reiniciar el Home y haga la consulta de sesión.
-    on<OnHomeStarter>((event, emit) async {
-      emit(HomeStart(event.message));
+    ///Evento es llamado para reiniciar el Recent y haga la consulta de sesión.
+    on<OnRecentStarter>((event, emit) async {
+      emit(RecentStart(event.message));
     });
 
-    on<OnHomeVote>((event, emit) async {
+    on<OnRecentVote>((event, emit) async {
       String flowId = Flows.votationFlowId;
       String stageId = StagesVotationFlow.stageId03Voting;
       var auth = const SessionModel(token: "", username: "", name: "");
       final session = await _getSession.execute();
-      session.fold((l) => emit(HomeError(l.message)), (r) => {auth = r});
+      session.fold((l) => emit(RecentError(l.message)), (r) => {auth = r});
 
       final result = await _votePublication.execute(auth.getOrgaId()!,
           auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);
-      result.fold((l) => emit(HomeError(l.message)), (r) => null);
+      result.fold((l) => emit(RecentError(l.message)), (r) => null);
     });
   }
 

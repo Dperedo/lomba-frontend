@@ -15,7 +15,7 @@ class UsersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey<ScaffoldState> homeScreenKey = GlobalKey<ScaffoldState>();
+    GlobalKey<ScaffoldState> recentScreenKey = GlobalKey<ScaffoldState>();
     return BlocListener<UserBloc, UserState>(
       listener: (context, state) {
         if (state is UserLoaded && state.message != "") {

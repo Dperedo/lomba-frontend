@@ -6,9 +6,9 @@ import '../../presentation/router/pages/router_page.dart';
 class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
     switch (settings.name?.toLowerCase()) {
-      case '/home':
+      case '/recent':
         return MaterialPageRoute(
-          builder: (context) => const RouterPage(naveItem: NavItem.pageHome),
+          builder: (context) => const RouterPage(naveItem: NavItem.pageRecent),
         );
       case '/login':
         return MaterialPageRoute(

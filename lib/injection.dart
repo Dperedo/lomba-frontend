@@ -62,7 +62,7 @@ import 'domain/usecases/stage/get_stage.dart';
 import 'domain/usecases/stage/get_stages.dart';
 import 'presentation/nav/bloc/nav_bloc.dart';
 import 'presentation/demolist/bloc/demolist_bloc.dart';
-import 'presentation/home/bloc/home_bloc.dart';
+import 'presentation/recent/bloc/recent_bloc.dart';
 import 'data/datasources/login_data_source.dart';
 import 'data/repositories/login_repository_impl.dart';
 import 'domain/repositories/login_repository.dart';
@@ -110,7 +110,7 @@ Future<void> init() async {
   // bloc
   locator.registerFactory(
       () => LoginBloc(locator(), locator(), locator(), locator(), locator()));
-  locator.registerFactory(() => HomeBloc(locator(), locator(), locator(),
+  locator.registerFactory(() => RecentBloc(locator(), locator(), locator(),
       locator(), locator(), locator(), locator()));
   locator.registerFactory(() => SideDrawerBloc(
       locator(), locator(), locator(), locator(), locator(), locator()));

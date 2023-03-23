@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/constants.dart';
-import 'package:lomba_frontend/presentation/home/bloc/home_event.dart';
+import 'package:lomba_frontend/presentation/recent/bloc/recent_event.dart';
 import 'package:lomba_frontend/presentation/login/bloc/login_bloc.dart';
 import 'package:lomba_frontend/presentation/login/bloc/login_event.dart';
 import 'package:lomba_frontend/presentation/sidedrawer/bloc/sidedrawer_event.dart';
@@ -10,7 +10,7 @@ import '../../../core/widgets/snackbar_notification.dart';
 import '../../nav/bloc/nav_bloc.dart';
 import '../../nav/bloc/nav_event.dart';
 import '../../nav/bloc/nav_state.dart';
-import '../../home/bloc/home_bloc.dart';
+import '../../recent/bloc/recent_bloc.dart';
 import '../../../domain/entities/orga.dart';
 import '../bloc/sidedrawer_bloc.dart';
 import '../bloc/sidedrawer_state.dart';
@@ -139,12 +139,12 @@ class SideDrawer extends StatelessWidget {
                 }
               }
 
-              if (state.opts.contains(SideDrawerUserOptions.optHome)) {
+              if (state.opts.contains(SideDrawerUserOptions.optRecent)) {
                 childrenOptionsList.add(ListTile(
                   leading: const Icon(Icons.home),
                   title: const Text('Home'),
                   onTap: () {
-                    _handleItemClick(context, NavItem.pageHome);
+                    _handleItemClick(context, NavItem.pageRecent);
                   },
                 ));
               }
@@ -318,11 +318,11 @@ class SideDrawer extends StatelessWidget {
                         .read<SideDrawerBloc>()
                         .add(const OnSideDrawerLogOff());
                     context
-                        .read<HomeBloc>()
-                        .add(const OnHomeStarter(" Sesión Cerrada"));
+                        .read<RecentBloc>()
+                        .add(const OnRecentStarter(" Sesión Cerrada"));
                     context.read<LoginBloc>().add(OnLoginStarter());
 
-                    _handleItemClick(context, NavItem.pageHome);
+                    _handleItemClick(context, NavItem.pageRecent);
                   },
                 ));
               }

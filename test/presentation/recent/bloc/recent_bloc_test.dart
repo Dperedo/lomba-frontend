@@ -15,13 +15,13 @@ import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_has_login.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_role.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
-import 'package:lomba_frontend/presentation/home/bloc/home_bloc.dart';
-import 'package:lomba_frontend/presentation/home/bloc/home_event.dart';
-import 'package:lomba_frontend/presentation/home/bloc/home_state.dart';
+import 'package:lomba_frontend/presentation/recent/bloc/recent_bloc.dart';
+import 'package:lomba_frontend/presentation/recent/bloc/recent_event.dart';
+import 'package:lomba_frontend/presentation/recent/bloc/recent_state.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'home_bloc_test.mocks.dart';
+import 'recent_bloc_test.mocks.dart';
 
 @GenerateMocks([
   GetHasLogIn,
@@ -34,7 +34,7 @@ import 'home_bloc_test.mocks.dart';
 ])
 void main() {
   late MockGetHasLogIn mockGetHasLogIn;
-  late HomeBloc homeBloc;
+  late RecentBloc recentBloc;
   late MockFirebaseAuth mockFirebaseAuthInstance;
   late MockGetLatestPosts mockGetLatestPosts;
   late MockGetSession mockGetSession;
@@ -50,7 +50,7 @@ void main() {
     mockVotePublication = MockVotePublication();
     mockGetSessionRole = MockGetSessionRole();
     mockReadIfRedirectLogin = MockReadIfRedirectLogin();
-    homeBloc = HomeBloc(
+    recentBloc = RecentBloc(
         mockFirebaseAuthInstance,
         mockGetHasLogIn,
         mockGetSession,
@@ -143,14 +143,14 @@ void main() {
       token: SystemKeys.tokenUser012023, username: 'user@mp.com', name: 'User');
 
   test(
-    'debe tener un mensaje inicial en el home',
+    'debe tener un mensaje inicial en el recent',
     () {
-      expect(homeBloc.state, const HomeStart(""));
+      expect(recentBloc.state, const RecentStart(""));
     },
   );
 
-  blocTest<HomeBloc, HomeState>(
-    'debe responder con estado con home cargado con user',
+  blocTest<RecentBloc, RecentState>(
+    'debe responder con estado con recent cargado con user',
     build: () {
       when(mockReadIfRedirectLogin.execute())
           .thenAnswer((_) async => const Right(false));
@@ -173,14 +173,14 @@ void main() {
           .thenAnswer((_) async => const Right(test_Session));
       when(mockGetSessionRole.execute())
           .thenAnswer((_) async => const Right(<String>['user']));
-      return homeBloc;
+      return recentBloc;
     },
     act: (bloc) =>
-        bloc.add(const OnHomeLoading('', <String, int>{'created': 1}, 1, 10)),
+        bloc.add(const OnRecentLoading('', <String, int>{'created': 1}, 1, 10)),
     wait: const Duration(milliseconds: 500),
     expect: () => [
-      HomeLoading(),
-      HomeLoaded(
+      RecentLoading(),
+      RecentLoaded(
           test_validLogin,
           test_orgaId,
           test_userId,
@@ -200,8 +200,8 @@ void main() {
     },
   );
 
-  blocTest<HomeBloc, HomeState>(
-    'debe responder con estado con home onlyUser con admin',
+  blocTest<RecentBloc, RecentState>(
+    'debe responder con estado con recent onlyUser con admin',
     build: () {
       when(mockReadIfRedirectLogin.execute())
           .thenAnswer((_) async => const Right(false));
@@ -213,19 +213,19 @@ void main() {
           .thenAnswer((_) async => const Right(test_Session));
       when(mockGetSessionRole.execute())
           .thenAnswer((_) async => const Right(<String>['admin']));
-      return homeBloc;
+      return recentBloc;
     },
     act: (bloc) =>
-        bloc.add(const OnHomeLoading('', <String, int>{'created': 1}, 1, 10)),
+        bloc.add(const OnRecentLoading('', <String, int>{'created': 1}, 1, 10)),
     wait: const Duration(milliseconds: 500),
-    expect: () => [HomeLoading(), HomeOnlyUser()],
+    expect: () => [RecentLoading(), RecentOnlyUser()],
     verify: (bloc) {
       verify(mockGetHasLogIn.execute());
     },
   );
 
-  blocTest<HomeBloc, HomeState>(
-    'debe responder con estado con home error',
+  blocTest<RecentBloc, RecentState>(
+    'debe responder con estado con recent error',
     build: () {
       when(mockReadIfRedirectLogin.execute())
           .thenAnswer((_) async => const Right(false));
@@ -241,21 +241,21 @@ void main() {
           .thenAnswer((_) async => const Right(test_Session));
       when(mockGetSessionRole.execute())
           .thenAnswer((_) async => const Right(<String>['user']));
-      return homeBloc;
+      return recentBloc;
     },
     act: (bloc) =>
-        bloc.add(const OnHomeLoading('', <String, int>{'created': 1}, 1, 10)),
+        bloc.add(const OnRecentLoading('', <String, int>{'created': 1}, 1, 10)),
     wait: const Duration(milliseconds: 500),
     expect: () => [
-      HomeLoading(),
-      const HomeError(test_connection_failure),
+      RecentLoading(),
+      const RecentError(test_connection_failure),
     ],
     verify: (bloc) {
       verify(mockGetHasLogIn.execute());
     },
   );
 
-  blocTest<HomeBloc, HomeState>(
+  blocTest<RecentBloc, RecentState>(
     'debe responder con estado de login FALSE después de cargar',
     build: () {
       when(mockReadIfRedirectLogin.execute())
@@ -277,14 +277,14 @@ void main() {
               'kind')));
       when(mockGetSession.execute())
           .thenAnswer((_) async => const Right(test_Session));
-      return homeBloc;
+      return recentBloc;
     },
     act: (bloc) =>
-        bloc.add(const OnHomeLoading('', <String, int>{'created': 1}, 1, 10)),
+        bloc.add(const OnRecentLoading('', <String, int>{'created': 1}, 1, 10)),
     wait: const Duration(milliseconds: 500),
     expect: () => [
-      HomeLoading(),
-      HomeLoaded(
+      RecentLoading(),
+      RecentLoaded(
           !test_validLogin,
           test_orgaId,
           test_userId,
@@ -307,8 +307,8 @@ void main() {
     },
   );
 
-  blocTest<HomeBloc, HomeState>(
-    'debe responder con estado de login FALSE y cargar home error',
+  blocTest<RecentBloc, RecentState>(
+    'debe responder con estado de login FALSE y cargar recent error',
     build: () {
       when(mockReadIfRedirectLogin.execute())
           .thenAnswer((_) async => const Right(false));
@@ -322,12 +322,12 @@ void main() {
               const Left(ConnectionFailure(test_connection_failure)));
       when(mockGetSession.execute())
           .thenAnswer((_) async => const Right(test_Session));
-      return homeBloc;
+      return recentBloc;
     },
     act: (bloc) =>
-        bloc.add(const OnHomeLoading('', <String, int>{'created': 1}, 1, 10)),
+        bloc.add(const OnRecentLoading('', <String, int>{'created': 1}, 1, 10)),
     wait: const Duration(milliseconds: 500),
-    expect: () => [HomeLoading(), const HomeError(test_connection_failure)],
+    expect: () => [RecentLoading(), const RecentError(test_connection_failure)],
     verify: (bloc) {
       verify(mockGetHasLogIn.execute());
       verify(mockFirebaseAuthInstance.signInAnonymously());
@@ -336,18 +336,18 @@ void main() {
     },
   );
 
-  blocTest<HomeBloc, HomeState>(
-    'debe responder con estado home star y enviar el mensaje de cierre de sesión',
+  blocTest<RecentBloc, RecentState>(
+    'debe responder con estado recent star y enviar el mensaje de cierre de sesión',
     build: () {
-      return homeBloc;
+      return recentBloc;
     },
-    act: (bloc) => bloc.add(const OnHomeStarter(test_log_off)),
+    act: (bloc) => bloc.add(const OnRecentStarter(test_log_off)),
     wait: const Duration(milliseconds: 500),
-    expect: () => [const HomeStart(test_log_off)],
+    expect: () => [const RecentStart(test_log_off)],
   );
 
-  blocTest<HomeBloc, HomeState>(
-    'debe enviar el voto y responder con el estado home star',
+  blocTest<RecentBloc, RecentState>(
+    'debe enviar el voto y responder con el estado recent star',
     build: () {
       when(mockGetSession.execute())
           .thenAnswer((_) async => const Right(test_Session));
@@ -355,9 +355,9 @@ void main() {
               test_stageId, test_postId, 1))
           .thenAnswer((_) async => const Right(ModelContainer(
               test_listItemsVote, 1, null, null, null, null, null, 'kind')));
-      return homeBloc;
+      return recentBloc;
     },
-    act: (bloc) => bloc.add(const OnHomeVote(test_postId, 1)),
+    act: (bloc) => bloc.add(const OnRecentVote(test_postId, 1)),
     wait: const Duration(milliseconds: 500),
     expect: () => [],
     verify: (bloc) {

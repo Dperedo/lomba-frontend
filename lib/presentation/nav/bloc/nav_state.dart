@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 ///
 ///El [selectedItem] indica cuál es la página donde deberíamos estar parados.
 
-class NavState extends Equatable{
+class NavState extends Equatable {
   final NavItem selectedItem;
   const NavState(this.selectedItem);
 
@@ -19,7 +19,7 @@ class NavState extends Equatable{
 
 ///Enumeración con todas las páginas disponibles o posibles.
 enum NavItem {
-  pageHome,
+  pageRecent,
   pageLogin,
   pageLogOff,
   pageOrgas,

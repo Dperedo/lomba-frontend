@@ -47,7 +47,7 @@ void main() {
 
   setUp(() {
     mockProfileBloc = MockProfileBloc();
-    //mockHomeBloc = MockHomeBloc();
+    //mockRecentBloc = MockRecentBloc();
   });
 
   testWidgets('Mostrar barra mientras carga la pagina',

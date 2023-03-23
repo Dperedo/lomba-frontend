@@ -39,11 +39,11 @@ void main() {
     mockSideDrawerBloc = MockSideDrawerBloc();
   });
 
-  const listAnonymous = <String>["home", "login"];
-  const listUser = <String>["home", "logoff", "profile"];
-  const listAdmin = <String>["home", "logoff", "profile", "users"];
+  const listAnonymous = <String>["recent", "login"];
+  const listUser = <String>["recent", "logoff", "profile"];
+  const listAdmin = <String>["recent", "logoff", "profile", "users"];
   const listSuperAdmin = <String>[
-    "home",
+    "recent",
     "logoff",
     "profile",
     "orgas",

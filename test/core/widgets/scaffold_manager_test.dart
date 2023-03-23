@@ -39,7 +39,7 @@ void main() {
     mockSideDrawerBloc = MockSideDrawerBloc();
   });
 
-  const listUser = <String>["home", "logoff", "profile"];
+  const listUser = <String>["recent", "logoff", "profile"];
   /*testWidgets('entrega mensaje bienvenido usuario logueado',
       (WidgetTester tester) async {
     //arrange

@@ -19,13 +19,13 @@ Future<void> main() async {
 
   test('el estado inicial debe ser Start', () {
     //assert
-    expect(navBloc.state, const NavState(NavItem.pageHome));
+    expect(navBloc.state, const NavState(NavItem.pageRecent));
   });
 /*
   blocTest<NavBloc, NavState>(
     'debe emitir NavState',
     build: () {
-      when(navBloc.state).thenReturn(const NavState(NavItem.pageHome));
+      when(navBloc.state).thenReturn(const NavState(NavItem.pageRecent));
       return navBloc;
     },
     act: (bloc) {

@@ -120,7 +120,7 @@ class LocalRepositoryImpl implements LocalRepository {
     result.fold((l) => {}, (r) => {roles = r});
 
     if (roles.contains(Roles.roleAnonymous)) {
-      opts.add(SideDrawerUserOptions.optHome);
+      opts.add(SideDrawerUserOptions.optRecent);
       opts.add(SideDrawerUserOptions.optLogIn);
       opts.add(SideDrawerUserOptions.optPopular);
     } else {
@@ -143,7 +143,7 @@ class LocalRepositoryImpl implements LocalRepository {
       }
 
       if (roles.contains(Roles.roleUser)) {
-        opts.add(SideDrawerUserOptions.optHome);
+        opts.add(SideDrawerUserOptions.optRecent);
         opts.add(SideDrawerUserOptions.optAddContent);
         opts.add(SideDrawerUserOptions.optViewed);
         opts.add(SideDrawerUserOptions.optPopular);

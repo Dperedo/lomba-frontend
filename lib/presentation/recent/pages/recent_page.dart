@@ -11,29 +11,29 @@ import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/workflow/textcontent.dart';
 import '../../login/bloc/login_event.dart';
 import '../../nav/bloc/nav_event.dart';
-import '../bloc/home_bloc.dart';
-import '../bloc/home_cubit.dart';
-import '../bloc/home_event.dart';
-import '../bloc/home_state.dart';
+import '../bloc/recent_bloc.dart';
+import '../bloc/recent_cubit.dart';
+import '../bloc/recent_event.dart';
+import '../bloc/recent_state.dart';
 
-///HomePage del sistema, en el futuro debe cambiar a página principal
+///RecentPage del sistema, en el futuro debe cambiar a página principal
 ///
 ///Por ahora sólo muestra un mensaje distinto cuando el usuario está o no
 ///logueado.
-class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
+class RecentPage extends StatelessWidget {
+  RecentPage({Key? key}) : super(key: key);
 
-  //static const String route = '/home';
+  //static const String route = '/recent';
   final TextEditingController _searchController = TextEditingController();
   //final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final int _fixPageSize = 10;
   @override
   Widget build(BuildContext context) {
-    return BlocListener<HomeBloc, HomeState>(
+    return BlocListener<RecentBloc, RecentState>(
       listener: (context, state) {
-        if (state is HomeStart && state.message != "") {
+        if (state is RecentStart && state.message != "") {
           snackBarNotify(context, state.message, Icons.exit_to_app);
-        } else if (state is HomeError && state.message != "") {
+        } else if (state is RecentError && state.message != "") {
           snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
@@ -47,7 +47,7 @@ class HomePage extends StatelessWidget {
               children: [
                 BodyFormatter(
                   screenWidth: MediaQuery.of(context).size.width,
-                  child: _bodyHome(context),
+                  child: _bodyRecent(context),
                 )
               ],
             ),
@@ -57,20 +57,20 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _bodyHome(BuildContext context) {
+  Widget _bodyRecent(BuildContext context) {
     const Map<String, String> listFields = <String, String>{
       "Creación": "created"
     };
-    return BlocProvider<HomeLiveCubit>(
-      create: (context) => HomeLiveCubit(),
+    return BlocProvider<RecentLiveCubit>(
+      create: (context) => RecentLiveCubit(),
       child: SizedBox(
         width: 800,
-        child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-          if (state is HomeStart) {
-            context.read<HomeBloc>().add(OnHomeLoading('',
+        child: BlocBuilder<RecentBloc, RecentState>(builder: (context, state) {
+          if (state is RecentStart) {
+            context.read<RecentBloc>().add(OnRecentLoading('',
                 <String, int>{listFields.values.first: -1}, 1, _fixPageSize));
           }
-          if (state is HomeLoading) {
+          if (state is RecentLoading) {
             return SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height / 1.3,
@@ -79,14 +79,14 @@ class HomePage extends StatelessWidget {
               ),
             );
           }
-          if (state is HomeHasLoginGoogleRedirect) {
+          if (state is RecentHasLoginGoogleRedirect) {
             context.read<NavBloc>().add(NavigateTo(NavItem.pageLogin, context));
             context.read<LoginBloc>().add(OnLoginRedirectWithGoogle());
           }
-          if (state is HomeOnlyUser) {
+          if (state is RecentOnlyUser) {
             return const Center(child: Text('Bienvenidos a lomba!!!'));
           }
-          if (state is HomeLoaded) {
+          if (state is RecentLoaded) {
             return Column(
               children: [
                 Container(
@@ -115,7 +115,7 @@ class HomePage extends StatelessWidget {
                           ),
                           IconButton(
                               onPressed: () {
-                                context.read<HomeBloc>().add(OnHomeLoading(
+                                context.read<RecentBloc>().add(OnRecentLoading(
                                     _searchController.text,
                                     <String, int>{
                                       state.fieldsOrder.keys.first: -1
@@ -144,7 +144,7 @@ class HomePage extends StatelessWidget {
                                 ),
                               ),
                               onPageChange: (int index) {
-                                context.read<HomeBloc>().add(OnHomeLoading(
+                                context.read<RecentBloc>().add(OnRecentLoading(
                                     _searchController.text,
                                     <String, int>{
                                       state.fieldsOrder.keys.first: -1
@@ -167,7 +167,7 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                BlocBuilder<HomeLiveCubit, HomeLiveState>(
+                BlocBuilder<RecentLiveCubit, RecentLiveState>(
                   builder: (context, statecubit) {
                     return ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
@@ -231,8 +231,8 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Row? _showVoteButtons(HomeLoaded state, BuildContext context, int index,
-      HomeLiveState statecubit) {
+  Row? _showVoteButtons(RecentLoaded state, BuildContext context, int index,
+      RecentLiveState statecubit) {
     return (state.validLogin)
         ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -258,10 +258,10 @@ class HomePage extends StatelessWidget {
                       : () {
                           state.listItems[index].votes.clear();
                           context
-                              .read<HomeBloc>()
-                              .add(OnHomeVote(state.listItems[index].id, -1));
+                              .read<RecentBloc>()
+                              .add(OnRecentVote(state.listItems[index].id, -1));
                           context
-                              .read<HomeLiveCubit>()
+                              .read<RecentLiveCubit>()
                               .makeVote(state.listItems[index].id, -1);
                         },
                   child: const Icon(Icons.keyboard_arrow_down)),
@@ -286,10 +286,10 @@ class HomePage extends StatelessWidget {
                       : () {
                           state.listItems[index].votes.clear();
                           context
-                              .read<HomeBloc>()
-                              .add(OnHomeVote(state.listItems[index].id, 1));
+                              .read<RecentBloc>()
+                              .add(OnRecentVote(state.listItems[index].id, 1));
                           context
-                              .read<HomeLiveCubit>()
+                              .read<RecentLiveCubit>()
                               .makeVote(state.listItems[index].id, 1);
                         },
                   child: const Icon(Icons.keyboard_arrow_up)),

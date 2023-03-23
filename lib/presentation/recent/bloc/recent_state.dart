@@ -3,16 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../domain/entities/workflow/post.dart';
 
-///Interfaz de los estados de Home.
-abstract class HomeState extends Equatable {
-  const HomeState();
+///Interfaz de los estados de Recent.
+abstract class RecentState extends Equatable {
+  const RecentState();
 
   @override
   List<Object> get props => [];
 }
 
-///Estado de Home que sabe si el usuario está logueado o no.
-class HomeLoaded extends HomeState {
+///Estado de Recent que sabe si el usuario está logueado o no.
+class RecentLoaded extends RecentState {
   final bool validLogin;
   final String orgaId;
   final String userId;
@@ -26,7 +26,7 @@ class HomeLoaded extends HomeState {
   final int itemCount;
   final int totalItems;
   final int totalPages;
-  const HomeLoaded(
+  const RecentLoaded(
       this.validLogin,
       this.orgaId,
       this.userId,
@@ -41,30 +41,30 @@ class HomeLoaded extends HomeState {
       this.totalItems,
       this.totalPages);
 
-  //const HomeLoaded(this.validLogin);
+  //const RecentLoaded(this.validLogin);
 }
 
-///Estado inicial del Home
-class HomeStart extends HomeState {
+///Estado inicial del Recent
+class RecentStart extends RecentState {
   final String message;
-  const HomeStart(this.message);
+  const RecentStart(this.message);
 }
 
 ///Estado que indica que la información se está cargando.
 ///
 ///Este estado sirve para mostrar el spinner (círculo que gira) mientras
 ///el trabajo se está realizando.
-class HomeLoading extends HomeState {}
+class RecentLoading extends RecentState {}
 
-class HomeError extends HomeState {
+class RecentError extends RecentState {
   final String message;
 
-  const HomeError(this.message);
+  const RecentError(this.message);
 
   @override
   List<Object> get props => [message];
 }
 
-class HomeOnlyUser extends HomeState {}
+class RecentOnlyUser extends RecentState {}
 
-class HomeHasLoginGoogleRedirect extends HomeState {}
+class RecentHasLoginGoogleRedirect extends RecentState {}

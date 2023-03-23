@@ -10,8 +10,8 @@ import '../../demolist/bloc/demolist_bloc.dart';
 import '../../demolist/bloc/demolist_event.dart';
 import '../../detailed_list/bloc/detailed_list_event.dart';
 import '../../flow/bloc/flow_bloc.dart';
-import '../../home/bloc/home_bloc.dart';
-import '../../home/bloc/home_event.dart';
+import '../../recent/bloc/recent_bloc.dart';
+import '../../recent/bloc/recent_event.dart';
 import '../../login/bloc/login_bloc.dart';
 import '../../login/bloc/login_event.dart';
 import '../../orgas/bloc/orga_bloc.dart';
@@ -42,7 +42,7 @@ import 'nav_state.dart';
 ///desea navegar, con eso emite un estado con el destino a navegar.
 
 class NavBloc extends Bloc<NavEvent, NavState> {
-  NavBloc() : super(const NavState(NavItem.pageHome)) {
+  NavBloc() : super(const NavState(NavItem.pageRecent)) {
     on<NavigateTo>(
       (event, emit) async {
         if (event.destination != state.selectedItem) {
@@ -52,9 +52,9 @@ class NavBloc extends Bloc<NavEvent, NavState> {
                 event.context.read<VotedBloc>().add(OnVotedStarter());
               }
               break;
-            case NavItem.pageHome:
+            case NavItem.pageRecent:
               {
-                event.context.read<HomeBloc>().add(const OnHomeStarter(''));
+                event.context.read<RecentBloc>().add(const OnRecentStarter(''));
               }
               break;
             case NavItem.pageLogin:
@@ -64,7 +64,7 @@ class NavBloc extends Bloc<NavEvent, NavState> {
               break;
             case NavItem.pageLogOff:
               {
-                event.context.read<HomeBloc>().add(const OnHomeStarter(''));
+                event.context.read<RecentBloc>().add(const OnRecentStarter(''));
               }
               break;
             case NavItem.pageOrgas:

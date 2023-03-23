@@ -198,7 +198,7 @@ void main() {
             .thenAnswer((realInvocation) async => tSessionModel);
 
         const listExpected = <String>[
-          "home",
+          "recent",
           "logoff",
           "profile",
           "orgas",
@@ -226,7 +226,7 @@ void main() {
             (realInvocation) async => tSessionAdminUserReviewerModel);
 
         const listExpected = <String>[
-          "home",
+          "recent",
           "logoff",
           "profile",
           "orgas",
@@ -261,7 +261,7 @@ void main() {
             .thenAnswer((realInvocation) async => tSessionUserAndReviewerModel);
 
         const listExpected = <String>[
-          "home",
+          "recent",
           "logoff",
           "profile",
           "addcontent",
@@ -299,7 +299,7 @@ void main() {
         verify(mockLocalDataSource.getSavedSession()).called(1);
 
         expect(result.length(),
-            equals(const Right(<String>["home", "login"]).length()));
+            equals(const Right(<String>["recent", "login"]).length()));
       },
     );
 

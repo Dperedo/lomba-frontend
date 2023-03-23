@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/presentation/nav/bloc/nav_state.dart';
-import 'package:lomba_frontend/presentation/home/bloc/home_bloc.dart';
-import 'package:lomba_frontend/presentation/home/bloc/home_event.dart';
+import 'package:lomba_frontend/presentation/recent/bloc/recent_bloc.dart';
+import 'package:lomba_frontend/presentation/recent/bloc/recent_event.dart';
 import 'package:lomba_frontend/presentation/login/bloc/login_bloc.dart';
 import 'package:lomba_frontend/presentation/login/bloc/login_event.dart';
 import 'package:lomba_frontend/domain/entities/orga.dart';
@@ -43,7 +43,7 @@ class LoginPage extends StatelessWidget {
             onPressed: () {
               context
                   .read<NavBloc>()
-                  .add(NavigateTo(NavItem.pageHome, context));
+                  .add(NavigateTo(NavItem.pageRecent, context));
             },
           ),
           title: const Text(
@@ -77,11 +77,11 @@ class LoginPage extends StatelessWidget {
                                 .read<SideDrawerBloc>()
                                 .add(const OnSideDrawerLoading());
                             context
-                                .read<HomeBloc>()
-                                .add(const OnHomeStarter(""));
+                                .read<RecentBloc>()
+                                .add(const OnRecentStarter(""));
 
                             BlocProvider.of<NavBloc>(context)
-                                .add(NavigateTo(NavItem.pageHome, context));
+                                .add(NavigateTo(NavItem.pageRecent, context));
                           });
                         } else if (state is LoginError) {
                           return Center(

@@ -54,7 +54,7 @@ void main() {
   });
 
   const userId = '00000002-0002-0002-0002-000000000002';
-  const listAnonymous = <String>["home", "login"];
+  const listAnonymous = <String>["recent", "login"];
   const tSession = SessionModel(
       token: SystemKeys.tokenSuperAdmin2023,
       username: 'rev@mp.com',
@@ -133,7 +133,8 @@ void main() {
     ],
     verify: (bloc) {
       verify(mockGetSession.execute());
-      verify(mockGetOrgasByUser.execute('00000001-0001-0001-0001-000000000001'));
+      verify(
+          mockGetOrgasByUser.execute('00000001-0001-0001-0001-000000000001'));
     },
   );
 }

@@ -28,8 +28,8 @@ import 'presentation/nav/bloc/nav_state.dart';
 import 'presentation/addcontent/pages/addcontent_page.dart';
 import 'presentation/demolist/bloc/demolist_bloc.dart';
 import 'presentation/demolist/pages/demolist_page.dart';
-import 'presentation/home/bloc/home_bloc.dart';
-import 'presentation/home/pages/home_page.dart';
+import 'presentation/recent/bloc/recent_bloc.dart';
+import 'presentation/recent/pages/recent_page.dart';
 import 'presentation/login/bloc/login_bloc.dart';
 import 'presentation/orgas/bloc/orga_bloc.dart';
 import 'presentation/orgas/bloc/orgauser_bloc.dart';
@@ -73,7 +73,7 @@ class _MyApp extends State<MyApp> {
       providers: [
         BlocProvider(create: (_) => di.locator<NavBloc>()),
         BlocProvider(create: (_) => di.locator<SideDrawerBloc>()),
-        BlocProvider(create: (_) => di.locator<HomeBloc>()),
+        BlocProvider(create: (_) => di.locator<RecentBloc>()),
         BlocProvider(create: (_) => di.locator<LoginBloc>()),
         BlocProvider(create: (_) => di.locator<OrgaBloc>()),
         BlocProvider(create: (_) => di.locator<OrgaUserBloc>()),
@@ -116,8 +116,8 @@ class _MyApp extends State<MyApp> {
   }
 
   dynamic _bodyForState(NavState state) {
-    if (state.selectedItem == NavItem.pageHome) {
-      return HomePage();
+    if (state.selectedItem == NavItem.pageRecent) {
+      return RecentPage();
     }
     if (state.selectedItem == NavItem.pageLogin) {
       return LoginPage();

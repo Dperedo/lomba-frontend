@@ -111,7 +111,7 @@ class SystemKeys {
 ///
 ///Todas las nuevas opciones de menú deben se agregadas en este listado.
 class SideDrawerUserOptions {
-  static const String optHome = "home";
+  static const String optRecent = "recent";
   static const String optOrgas = "orgas";
   static const String optUsers = "users";
   static const String optRoles = "roles";

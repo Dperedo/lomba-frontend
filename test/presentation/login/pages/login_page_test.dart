@@ -14,34 +14,34 @@ import 'package:mocktail/mocktail.dart';
 class MockLoginBloc extends MockBloc<LoginEvent, LoginState>
     implements LoginBloc {}
 
-//class MockHomeBloc extends MockBloc<HomeEvent, HomeState> implements HomeBloc {}
+//class MockRecentBloc extends MockBloc<RecentEvent, RecentState> implements RecentBloc {}
 
 class FakeLoginState extends Fake implements LoginState {}
 
 class FakeLoginEvent extends Fake implements LoginEvent {}
 
-//class FakeHomeEvent extends Fake implements HomeEvent {}
+//class FakeRecentEvent extends Fake implements RecentEvent {}
 
-//class FakeHomeState extends Fake implements HomeState {}
+//class FakeRecentState extends Fake implements RecentState {}
 
 void main() {
   late MockLoginBloc mockLoginBloc;
-  //late MockHomeBloc mockHomeBloc;
+  //late MockRecentBloc mockRecentBloc;
 
   setUpAll(() async {
     HttpOverrides.global = null;
     registerFallbackValue(FakeLoginState());
     registerFallbackValue(FakeLoginEvent());
-    //registerFallbackValue(FakeHomeState());
-    //registerFallbackValue(FakeHomeEvent());
+    //registerFallbackValue(FakeRecentState());
+    //registerFallbackValue(FakeRecentEvent());
     final di = GetIt.instance;
     di.registerFactory(() => mockLoginBloc);
-    //di.registerFactory(() => mockHomeBloc);
+    //di.registerFactory(() => mockRecentBloc);
   });
 
   setUp(() {
     mockLoginBloc = MockLoginBloc();
-    //mockHomeBloc = MockHomeBloc();
+    //mockRecentBloc = MockRecentBloc();
   });
 
   //const tT = Token(id: SystemKeys.token2030, username: 'mp@mp.com');
@@ -56,9 +56,9 @@ void main() {
   }
 
 /*
-  Widget makeTestableWidgetHome(Widget body) {
-    return BlocProvider<HomeBloc>.value(
-      value: mockHomeBloc,
+  Widget makeTestableWidgetRecent(Widget body) {
+    return BlocProvider<RecentBloc>.value(
+      value: mockRecentBloc,
       child: MaterialApp(
         home: body,
       ),
@@ -112,18 +112,18 @@ void main() {
       // arrange
 
       when(() => mockLoginBloc.state).thenReturn(const LoginGoted(true));
-      //when(() => mockHomeBloc.state).thenReturn(HomeStart());
+      //when(() => mockRecentBloc.state).thenReturn(RecentStart());
       // act
       await tester
           .pumpWidget(MaterialApp(home: makeTestableWidget(LoginPage())));
 
       //verify(mockObserver.didPush(route, previousRoute));
       //await tester.pumpAndSettle();
-      //await tester.pumpWidget(makeTestableWidgetHome(const HomePage()));
+      //await tester.pumpWidget(makeTestableWidgetRecent(const RecentPage()));
       //await tester.pumpAndSettle();
 
       // assert
-      expect(find.byType(HomePage), equals(findsOneWidget));
+      expect(find.byType(RecentPage), equals(findsOneWidget));
     },
   );
   */

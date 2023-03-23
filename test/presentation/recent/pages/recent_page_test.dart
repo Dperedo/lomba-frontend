@@ -10,31 +10,32 @@ import 'package:lomba_frontend/domain/entities/workflow/post.dart';
 import 'package:lomba_frontend/domain/entities/workflow/postitem.dart';
 import 'package:lomba_frontend/domain/entities/workflow/stage.dart';
 import 'package:lomba_frontend/domain/entities/workflow/textcontent.dart';
-import 'package:lomba_frontend/presentation/home/bloc/home_bloc.dart';
-import 'package:lomba_frontend/presentation/home/bloc/home_event.dart';
-import 'package:lomba_frontend/presentation/home/bloc/home_state.dart';
-import 'package:lomba_frontend/presentation/home/pages/home_page.dart';
+import 'package:lomba_frontend/presentation/recent/bloc/recent_bloc.dart';
+import 'package:lomba_frontend/presentation/recent/bloc/recent_event.dart';
+import 'package:lomba_frontend/presentation/recent/bloc/recent_state.dart';
+import 'package:lomba_frontend/presentation/recent/pages/recent_page.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockHomeBloc extends MockBloc<HomeEvent, HomeState> implements HomeBloc {}
+class MockRecentBloc extends MockBloc<RecentEvent, RecentState>
+    implements RecentBloc {}
 
-class FakeHomeState extends Fake implements HomeState {}
+class FakeRecentState extends Fake implements RecentState {}
 
-class FakeHomeEvent extends Fake implements HomeEvent {}
+class FakeRecentEvent extends Fake implements RecentEvent {}
 
 void main() {
-  late MockHomeBloc mockHomeBloc;
+  late MockRecentBloc mockRecentBloc;
 
   setUpAll(() async {
-    registerFallbackValue(FakeHomeState());
-    registerFallbackValue(FakeHomeEvent());
+    registerFallbackValue(FakeRecentState());
+    registerFallbackValue(FakeRecentEvent());
     final di = GetIt.instance;
-    di.registerFactory(() => mockHomeBloc);
+    di.registerFactory(() => mockRecentBloc);
   });
 
   Widget makeTestableWidget(Widget body) {
-    return BlocProvider<HomeBloc>.value(
-      value: mockHomeBloc,
+    return BlocProvider<RecentBloc>.value(
+      value: mockRecentBloc,
       child: MaterialApp(
         home: body,
       ),
@@ -42,8 +43,8 @@ void main() {
   }
 
   setUp(() {
-    mockHomeBloc = MockHomeBloc();
-    //mockHomeBloc = MockHomeBloc();
+    mockRecentBloc = MockRecentBloc();
+    //mockRecentBloc = MockRecentBloc();
   });
 
   /*
@@ -140,7 +141,7 @@ void main() {
 
   testWidgets('Muestra caja de búsqueda', (WidgetTester tester) async {
     //arrange
-    when(() => mockHomeBloc.state).thenReturn(HomeLoaded(
+    when(() => mockRecentBloc.state).thenReturn(RecentLoaded(
         test_validLogin,
         test_orgaId,
         test_userId,
@@ -156,7 +157,7 @@ void main() {
         test_totalPages));
 
     //act
-    await tester.pumpWidget(makeTestableWidget(HomePage()));
+    await tester.pumpWidget(makeTestableWidget(RecentPage()));
     final searchField = find.byKey(const ValueKey("search_field"));
 
     //assert
@@ -169,7 +170,7 @@ void main() {
   testWidgets('entrega mensaje de usuario anónimo sin loguear',
       (WidgetTester tester) async {
     //arrange
-    when(() => mockHomeBloc.state).thenReturn(HomeLoaded(
+    when(() => mockRecentBloc.state).thenReturn(RecentLoaded(
         test_validLogin,
         test_orgaId,
         test_userId,
@@ -185,7 +186,7 @@ void main() {
         test_totalPages));
 
     //act
-    await tester.pumpWidget(makeTestableWidget(HomePage()));
+    await tester.pumpWidget(makeTestableWidget(RecentPage()));
     final message = find.text("Orden");
 
     //assert
@@ -195,10 +196,10 @@ void main() {
   testWidgets('mostrar circulo de progreso cuando carga información',
       (WidgetTester tester) async {
     //arrange
-    when(() => mockHomeBloc.state).thenReturn(HomeLoading());
+    when(() => mockRecentBloc.state).thenReturn(RecentLoading());
 
     //act
-    await tester.pumpWidget(makeTestableWidget(HomePage()));
+    await tester.pumpWidget(makeTestableWidget(RecentPage()));
     final indicator = find.byType(CircularProgressIndicator);
 
     //assert
@@ -208,27 +209,27 @@ void main() {
   testWidgets('mostrar el texto recientes en el título',
       (WidgetTester tester) async {
     //arrange
-    when(() => mockHomeBloc.state).thenReturn(const HomeStart(''));
+    when(() => mockRecentBloc.state).thenReturn(const RecentStart(''));
 
     //act
-    await tester.pumpWidget(makeTestableWidget(HomePage()));
+    await tester.pumpWidget(makeTestableWidget(RecentPage()));
     final recientes = find.text("Recientes");
 
     //assert
     expect(recientes, findsOneWidget);
   });
 
-  /*testWidgets('debe emitir el evento OnHomeLoading',
+  /*testWidgets('debe emitir el evento OnRecentLoading',
       (WidgetTester tester) async {
     //arrange
-    when(() => mockHomeBloc.state).thenReturn(const HomeStart(''));
+    when(() => mockRecentBloc.state).thenReturn(const RecentStart(''));
 
     //act
-    await tester.pumpWidget(makeTestableWidget(HomePage()));
+    await tester.pumpWidget(makeTestableWidget(RecentPage()));
     Finder title = find.text("");
 
     //assert
-    verify(() => mockHomeBloc.add(OnHomeLoading(
+    verify(() => mockRecentBloc.add(OnRecentLoading(
                 '', test_fieldsOrderLatest, 1, test_pageSize))).called(1);
     expect(title, findsOneWidget);
   });*/
