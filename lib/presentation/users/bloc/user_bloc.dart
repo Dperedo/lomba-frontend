@@ -12,17 +12,18 @@ import '../../../domain/entities/orgauser.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
 import '../../../domain/usecases/login/register_user.dart';
 import '../../../domain/entities/user.dart';
+import '../../../domain/usecases/orgas/add_orgauser.dart';
 import '../../../domain/usecases/orgas/delete_orgauser.dart';
 import '../../../domain/usecases/orgas/get_orgauser.dart';
 import '../../../domain/usecases/orgas/get_orgausers.dart';
 import '../../../domain/usecases/orgas/update_orgauser.dart';
 import '../../../domain/usecases/users/get_users.dart';
+import '../../../domain/usecases/users/get_users_notin_orga.dart';
 import '../../../domain/usecases/users/update_user_password.dart';
 import 'user_event.dart';
 import 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
-  final AddUser _addUser;
   final DeleteUser _deleteUser;
   final EnableUser _enableUser;
   final GetUser _getUser;
@@ -35,9 +36,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final GetOrgaUser _getOrgaUser;
   final UpdateOrgaUser _updateOrgaUser;
   final DeleteOrgaUser _deleteOrgaUser;
+  final GetUsersNotInOrga _getUsersNotInOrga;
+  final AddOrgaUser _addOrgaUser;
 
   UserBloc(
-      this._addUser,
       this._deleteUser,
       this._enableUser,
       this._getUser,
@@ -49,7 +51,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       this._updateUserPassword,
       this._getOrgaUser,
       this._updateOrgaUser,
-      this._deleteOrgaUser)
+      this._deleteOrgaUser,
+      this._getUsersNotInOrga,
+      this._addOrgaUser)
       : super(const UserStart("")) {
     on<OnUserStarter>((event, emit) => emit(const UserStart('')));
 
@@ -219,13 +223,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       //-----------------
       var auth = const SessionModel(token: "", username: "", name: "");
-        final session = await _getSession.execute();
-        session.fold((l) => emit(UserError(l.message)), (r) => {auth = r});
-        final orgaId = auth.getOrgaId();
+      final session = await _getSession.execute();
+      session.fold((l) => emit(UserError(l.message)), (r) => {auth = r});
+      final orgaId = auth.getOrgaId();
 
-        List<OrgaUser> listOrgaUsers = [];
-        final resultOrgaUser = await _getOrgaUser.execute(orgaId!,event.user.id);
-        resultOrgaUser.fold((l) => emit(UserError(l.message)), (r) =>listOrgaUsers = r);
+      List<OrgaUser> listOrgaUsers = [];
+      final resultOrgaUser = await _getOrgaUser.execute(orgaId!,event.user.id);
+      resultOrgaUser.fold((l) => emit(UserError(l.message)), (r) =>listOrgaUsers = r);
       //-----------------
 
       final result =
@@ -284,7 +288,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           email: '',
           enabled: false,
           builtIn: false);
-      final resUser = await _getUser.execute(event.orgaUser.orgaId);
+      final resUser = await _getUser.execute(event.orgaUser.userId);
       resUser.fold((l) => emit(UserError(l.message)), (r) => {user = r});
       //-------------
 
@@ -300,6 +304,50 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           event.orgaUser,
             " El Usuario ${user.name} fue desasociado de la organización"));
       }
+    });
+
+    on<OnUserListNotInOrga>(
+      (event, emit) async {
+        emit(UserLoading());
+
+        //-----------------
+        var auth = const SessionModel(token: "", username: "", name: "");
+        final session = await _getSession.execute();
+        session.fold((l) => emit(UserError(l.message)), (r) => {auth = r});
+        final orgaId = auth.getOrgaId();
+
+        var orgaUser = OrgaUser(
+          orgaId: orgaId!,
+          userId: '',
+          roles: [],
+          enabled: true,
+          builtIn: false);
+        //-----------------
+
+        final result = await _getUsersNotInOrga.execute(
+            orgaId!, event.filter, event.pageNumber, 10);
+
+        result.fold((l) => emit(UserError(l.message)),
+            (r) => {emit(UserListNotInOrgaLoaded(r, orgaUser))});
+      },
+      transformer: debounce(const Duration(milliseconds: 0)),
+    );
+    on<OnUserOrgaAdd>((event, emit) async {
+      emit(UserLoading());
+
+      var name = '';
+      final resUser = await _getUser.execute(event.userId);
+      resUser.fold((l) => emit(UserError(l.message)), (r) => name = r.name);
+
+      final result = await _addOrgaUser.execute(
+          event.orgaId, event.userId, event.roles, event.enabled);
+
+      result.fold(
+          (l) => emit(UserError(l.message)),
+          (r) => {
+                emit(UserStart(
+                    " El usuario $name fue agregado a la organización"))
+              });
     });
   }
 

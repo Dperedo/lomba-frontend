@@ -129,7 +129,6 @@ class LocalRepositoryImpl implements LocalRepository {
 
       if (roles.contains(Roles.roleSuperAdmin)) {
         opts.add(SideDrawerUserOptions.optOrgas);
-        opts.add(SideDrawerUserOptions.optUsers);
         opts.add(SideDrawerUserOptions.optRoles);
         opts.add(SideDrawerUserOptions.optDetailList);
       }

@@ -38,6 +38,14 @@ class UserListLoaded extends UserState {
   List<Object> get props => [users];
 }
 
+class UserListNotInOrgaLoaded extends UserState {
+  final List<User> users;
+  final OrgaUser orgaUser;
+  const UserListNotInOrgaLoaded(this.users, this.orgaUser);
+  @override
+  List<Object> get props => [users, orgaUser];
+}
+
 class UserAdding extends UserState {
   bool existUserName = false;
   bool existEmail = false;
