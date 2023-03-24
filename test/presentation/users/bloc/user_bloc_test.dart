@@ -4,9 +4,15 @@ import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/data/models/session_model.dart';
+import 'package:lomba_frontend/domain/entities/orgauser.dart';
 import 'package:lomba_frontend/domain/entities/user.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
 import 'package:lomba_frontend/domain/usecases/login/register_user.dart';
+import 'package:lomba_frontend/domain/usecases/orgas/add_orgauser.dart';
+import 'package:lomba_frontend/domain/usecases/orgas/delete_orgauser.dart';
+import 'package:lomba_frontend/domain/usecases/orgas/get_orgauser.dart';
+import 'package:lomba_frontend/domain/usecases/orgas/update_orgauser.dart';
+import 'package:lomba_frontend/domain/usecases/users/get_users_notin_orga.dart';
 import 'package:lomba_frontend/domain/usecases/users/add_user.dart';
 import 'package:lomba_frontend/domain/usecases/users/delete_user.dart';
 import 'package:lomba_frontend/domain/usecases/users/enable_user.dart';
@@ -34,9 +40,13 @@ import 'user_bloc_test.mocks.dart';
   MockSpec<GetSession>(),
   MockSpec<ExistsUser>(),
   MockSpec<UpdateUserPassword>(),
+  MockSpec<GetOrgaUser>(),
+  MockSpec<UpdateOrgaUser>(),
+  MockSpec<DeleteOrgaUser>(),
+  MockSpec<GetUsersNotInOrga>(),
+  MockSpec<AddOrgaUser>(),
 ])
 Future<void> main() async {
-  late AddUser mockAddUser;
   late DeleteUser mockDeleteUser;
   late EnableUser mockEnableUser;
   late GetUser mockGetUser;
@@ -46,11 +56,15 @@ Future<void> main() async {
   late GetSession mockGetSession;
   late ExistsUser mockExistsUser;
   late UpdateUserPassword mockUpdateUserPassword;
+  late GetOrgaUser mockGetOrgaUser;
+  late UpdateOrgaUser mockUpdateOrgaUser;
+  late DeleteOrgaUser mockDeleteOrgaUser;
+  late GetUsersNotInOrga mockGetUsersNotInOrga;
+  late AddOrgaUser mockAddOrgaUser;
 
   late UserBloc userBloc;
 
   setUp(() {
-    mockAddUser = MockAddUser();
     mockDeleteUser = MockDeleteUser();
     mockEnableUser = MockEnableUser();
     mockGetUser = MockGetUser();
@@ -60,9 +74,13 @@ Future<void> main() async {
     mockGetSession = MockGetSession();
     mockExistsUser = MockExistsUser();
     mockUpdateUserPassword = MockUpdateUserPassword();
+    mockGetOrgaUser = MockGetOrgaUser();
+    mockUpdateOrgaUser = MockUpdateOrgaUser();
+    mockDeleteOrgaUser = MockDeleteOrgaUser();
+    mockGetUsersNotInOrga = MockGetUsersNotInOrga();
+    mockAddOrgaUser = MockAddOrgaUser();
 
     userBloc = UserBloc(
-        mockAddUser,
         mockDeleteUser,
         mockEnableUser,
         mockGetUser,
@@ -71,19 +89,13 @@ Future<void> main() async {
         mockRegisterUser,
         mockGetSession,
         mockExistsUser,
-        mockUpdateUserPassword);
+        mockUpdateUserPassword,
+        mockGetOrgaUser,
+        mockUpdateOrgaUser,
+        mockDeleteOrgaUser,
+        mockGetUsersNotInOrga,
+        mockAddOrgaUser);
 
-    userBloc = UserBloc(
-        mockAddUser,
-        mockDeleteUser,
-        mockEnableUser,
-        mockGetUser,
-        mockGetUsers,
-        mockUpdateUser,
-        mockRegisterUser,
-        mockGetSession,
-        mockExistsUser,
-        mockUpdateUserPassword);
   });
 
   const testSession = SessionModel(
@@ -100,6 +112,13 @@ Future<void> main() async {
       email: 'te@mp.com',
       enabled: true,
       builtIn: false);
+
+  const tOrgaUser = OrgaUser(
+    userId: '1',
+    orgaId: '1',
+    roles: [],
+    enabled: false,
+    builtIn: false);
 
   test(
     'el estado inicial debe ser Start',
@@ -139,7 +158,7 @@ Future<void> main() async {
       wait: const Duration(milliseconds: 500),
       expect: () => [
         UserLoading(),
-        UserLoaded(tUser, ""),
+        UserLoaded(tUser, tOrgaUser, ""),
       ],
       verify: (bloc) {
         verify(mockGetUser.execute(newUserId));
@@ -212,7 +231,7 @@ Future<void> main() async {
       wait: const Duration(milliseconds: 500),
       expect: () => [
         UserLoading(),
-        UserLoaded(tUser, " El usuario user fue deshabilitado")
+        UserLoaded(tUser, tOrgaUser, " El usuario user fue deshabilitado")
       ],
       verify: (bloc) {
         verify(mockEnableUser.execute(newUserId, false));
@@ -262,7 +281,7 @@ Future<void> main() async {
       act: (bloc) => bloc.add(OnUserSaveNewPassword('1234', tUser)),
       wait: const Duration(milliseconds: 500),
       expect: () =>
-          [UserLoading(), UserLoaded(tUser, " Contraseña Modificada")],
+          [UserLoading(), UserLoaded(tUser, tOrgaUser, " Contraseña Modificada")],
       verify: (bloc) {
         verify(mockUpdateUserPassword.execute(newUserId, '1234'));
       },

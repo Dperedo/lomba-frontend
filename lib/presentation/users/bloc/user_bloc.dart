@@ -325,7 +325,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         //-----------------
 
         final result = await _getUsersNotInOrga.execute(
-            orgaId!, event.filter, event.pageNumber, 10);
+            orgaId, event.filter, event.pageNumber, 10);
 
         result.fold((l) => emit(UserError(l.message)),
             (r) => {emit(UserListNotInOrgaLoaded(r, orgaUser))});
