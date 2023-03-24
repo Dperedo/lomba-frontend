@@ -132,19 +132,13 @@ Future<void> init() async {
       locator(), locator(), locator(), locator()));
 
   locator.registerFactory(() => UserBloc(
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator(),
-      locator(),));
+      locator(),locator(),
+      locator(),locator(),
+      locator(),locator(),
+      locator(),locator(),
+      locator(),locator(),
+      locator(),locator(),
+      locator(),locator(),));
 
   locator.registerFactory(() => ProfileBloc(locator(), locator()));
   locator.registerFactory(() => DemoListBloc());

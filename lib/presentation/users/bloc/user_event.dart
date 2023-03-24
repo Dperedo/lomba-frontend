@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:lomba_frontend/presentation/users/bloc/user_state.dart';
 
+import '../../../data/models/sort_model.dart';
 import '../../../domain/entities/orgauser.dart';
 import '../../../domain/entities/user.dart';
 
@@ -151,6 +152,32 @@ class OnUserOrgaDelete extends UserEvent {
   const OnUserOrgaDelete(this.orgaUser);
   @override
   List<Object> get props => [orgaUser];
+}
+
+//OnUserListNotInOrga
+class OnUserListNotInOrga extends UserEvent {
+  final SortModel filter;
+  final int pageNumber;
+  final int pageSize;
+
+  const OnUserListNotInOrga(
+      this.filter, this.pageNumber, this.pageSize);
+
+  @override
+  List<Object> get props => [filter, pageNumber, pageSize];
+}
+
+//OnUserOrgaAdd
+class OnUserOrgaAdd extends UserEvent {
+  final String orgaId;
+  final String userId;
+  final List<String> roles;
+  final bool enabled;
+
+  const OnUserOrgaAdd(this.orgaId, this.userId, this.roles, this.enabled);
+
+  @override
+  List<Object> get props => [orgaId, userId, roles, enabled];
 }
 
 class OnUserStarter extends UserEvent {}
