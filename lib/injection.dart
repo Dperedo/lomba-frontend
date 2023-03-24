@@ -61,6 +61,9 @@ import 'domain/usecases/orgas/get_orgauser.dart';
 import 'domain/usecases/post/get_detailedlist_posts.dart';
 import 'domain/usecases/stage/get_stage.dart';
 import 'domain/usecases/stage/get_stages.dart';
+import 'domain/usecases/users/exists_profile.dart';
+import 'domain/usecases/users/update_profile.dart';
+import 'domain/usecases/users/update_profile_password.dart';
 import 'presentation/nav/bloc/nav_bloc.dart';
 import 'presentation/demolist/bloc/demolist_bloc.dart';
 import 'presentation/recent/bloc/recent_bloc.dart';
@@ -140,7 +143,11 @@ Future<void> init() async {
       locator(),locator(),
       locator(),locator(),));
 
-  locator.registerFactory(() => ProfileBloc(locator(), locator()));
+  locator.registerFactory(() => ProfileBloc(
+      locator(),
+      locator(),
+      locator(),
+      locator(),));
   locator.registerFactory(() => DemoListBloc());
 
   locator.registerFactory(() =>
@@ -178,6 +185,7 @@ Future<void> init() async {
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));
+  locator.registerLazySingleton(() => UpdateProfilePassword(locator()));
   locator.registerLazySingleton(() => GetAuthenticate(locator()));
   locator.registerLazySingleton(() => GetHasLogIn(locator()));
   locator.registerLazySingleton(() => GetSession(locator()));
@@ -209,6 +217,8 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetUsers(locator()));
   locator.registerLazySingleton(() => UpdateUser(locator()));
   locator.registerLazySingleton(() => ExistsUser(locator()));
+  locator.registerLazySingleton(() => UpdateProfile(locator()));
+  locator.registerLazySingleton(() => ExistsProfile(locator()));
   locator.registerLazySingleton(() => GetUsersNotInOrga(locator()));
 
   locator.registerLazySingleton(() => EnableRole(locator()));

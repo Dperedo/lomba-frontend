@@ -170,10 +170,51 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
+  Future<Either<Failure, User>> updateProfile(String userId, User user) async {
+    try {
+      UserModel userModel = UserModel(
+          id: userId,
+          name: user.name,
+          username: user.username,
+          email: user.email,
+          enabled: user.enabled,
+          builtIn: user.builtIn);
+
+      final result = await remoteDataSource.updateProfile(userId, userModel);
+
+      return Right(result.toEntity());
+    } on ServerException {
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
+    }
+  }
+
+  @override
   Future<Either<Failure, User?>> existsUser(
       String userId, String username, String email) async {
     try {
       final result = await remoteDataSource.existsUser(userId, username, email);
+
+      if (result == null) {
+        return const Right(null);
+      } else {
+        return Right(result.toEntity());
+      }
+    } on ServerException {
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, User?>> existsProfile(
+      String userId, String username, String email) async {
+    try {
+      final result = await remoteDataSource.existsProfile(userId, username, email);
 
       if (result == null) {
         return const Right(null);
@@ -194,6 +235,22 @@ class UserRepositoryImpl implements UserRepository {
     try {
       final result =
           await remoteDataSource.updateUserPassword(userId, password);
+
+      return Right(result);
+    } on ServerException {
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateProfilePassword(
+      String userId, String password) async {
+    try {
+      final result =
+          await remoteDataSource.updateProfilePassword(userId, password);
 
       return Right(result);
     } on ServerException {

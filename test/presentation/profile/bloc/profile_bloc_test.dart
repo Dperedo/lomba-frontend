@@ -41,7 +41,7 @@ void main() async {
     'el estado inicial debe ser Start',
     () {
       //assert
-      expect(profileBloc.state, ProfileStart());
+      expect(profileBloc.state, const ProfileStart(''));
     },
   );
 
