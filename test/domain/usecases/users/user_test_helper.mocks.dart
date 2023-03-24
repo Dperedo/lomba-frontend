@@ -220,6 +220,31 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, _i6.User>>);
   @override
+  _i4.Future<_i2.Either<_i5.Failure, _i6.User>> updateProfile(
+    String? userId,
+    _i6.User? user,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateProfile,
+          [
+            userId,
+            user,
+          ],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.User>>.value(
+            _FakeEither_0<_i5.Failure, _i6.User>(
+          this,
+          Invocation.method(
+            #updateProfile,
+            [
+              userId,
+              user,
+            ],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.User>>);
+  @override
   _i4.Future<_i2.Either<_i5.Failure, _i6.User?>> existsUser(
     String? userId,
     String? username,
@@ -248,6 +273,34 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, _i6.User?>>);
   @override
+  _i4.Future<_i2.Either<_i5.Failure, _i6.User?>> existsProfile(
+    String? userId,
+    String? username,
+    String? email,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #existsProfile,
+          [
+            userId,
+            username,
+            email,
+          ],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.User?>>.value(
+            _FakeEither_0<_i5.Failure, _i6.User?>(
+          this,
+          Invocation.method(
+            #existsProfile,
+            [
+              userId,
+              username,
+              email,
+            ],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.User?>>);
+  @override
   _i4.Future<_i2.Either<_i5.Failure, bool>> updateUserPassword(
     String? userId,
     String? password,
@@ -265,6 +318,31 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
           this,
           Invocation.method(
             #updateUserPassword,
+            [
+              userId,
+              password,
+            ],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, bool>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, bool>> updateProfilePassword(
+    String? userId,
+    String? password,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateProfilePassword,
+          [
+            userId,
+            password,
+          ],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, bool>>.value(
+            _FakeEither_0<_i5.Failure, bool>(
+          this,
+          Invocation.method(
+            #updateProfilePassword,
             [
               userId,
               password,

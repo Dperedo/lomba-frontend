@@ -14,7 +14,13 @@ import 'package:lomba_frontend/domain/repositories/local_repository.dart'
 import 'package:lomba_frontend/domain/repositories/user_repository.dart' as _i2;
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart'
     as _i9;
+import 'package:lomba_frontend/domain/usecases/users/exists_profile.dart'
+    as _i12;
 import 'package:lomba_frontend/domain/usecases/users/get_user.dart' as _i5;
+import 'package:lomba_frontend/domain/usecases/users/update_profile.dart'
+    as _i11;
+import 'package:lomba_frontend/domain/usecases/users/update_profile_password.dart'
+    as _i13;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -127,4 +133,137 @@ class MockGetSession extends _i1.Mock implements _i9.GetSession {
           ),
         )),
       ) as _i6.Future<_i3.Either<_i7.Failure, _i10.SessionModel>>);
+}
+
+/// A class which mocks [UpdateProfile].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUpdateProfile extends _i1.Mock implements _i11.UpdateProfile {
+  MockUpdateProfile() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.UserRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeUserRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.UserRepository);
+  @override
+  _i6.Future<_i3.Either<_i7.Failure, _i8.User>> execute(
+    String? userId,
+    _i8.User? user,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [
+            userId,
+            user,
+          ],
+        ),
+        returnValue: _i6.Future<_i3.Either<_i7.Failure, _i8.User>>.value(
+            _FakeEither_1<_i7.Failure, _i8.User>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              userId,
+              user,
+            ],
+          ),
+        )),
+      ) as _i6.Future<_i3.Either<_i7.Failure, _i8.User>>);
+}
+
+/// A class which mocks [ExistsProfile].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockExistsProfile extends _i1.Mock implements _i12.ExistsProfile {
+  MockExistsProfile() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.UserRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeUserRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.UserRepository);
+  @override
+  _i6.Future<_i3.Either<_i7.Failure, _i8.User?>> execute(
+    String? userId,
+    String? username,
+    String? email,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [
+            userId,
+            username,
+            email,
+          ],
+        ),
+        returnValue: _i6.Future<_i3.Either<_i7.Failure, _i8.User?>>.value(
+            _FakeEither_1<_i7.Failure, _i8.User?>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              userId,
+              username,
+              email,
+            ],
+          ),
+        )),
+      ) as _i6.Future<_i3.Either<_i7.Failure, _i8.User?>>);
+}
+
+/// A class which mocks [UpdateProfilePassword].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUpdateProfilePassword extends _i1.Mock
+    implements _i13.UpdateProfilePassword {
+  MockUpdateProfilePassword() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.UserRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeUserRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.UserRepository);
+  @override
+  _i6.Future<_i3.Either<_i7.Failure, bool>> execute(
+    String? userId,
+    String? password,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [
+            userId,
+            password,
+          ],
+        ),
+        returnValue: _i6.Future<_i3.Either<_i7.Failure, bool>>.value(
+            _FakeEither_1<_i7.Failure, bool>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              userId,
+              password,
+            ],
+          ),
+        )),
+      ) as _i6.Future<_i3.Either<_i7.Failure, bool>>);
 }
