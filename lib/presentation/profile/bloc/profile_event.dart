@@ -50,4 +50,22 @@ class OnProfileValidate extends ProfileEvent {
   List<Object> get props => [username, email];
 }
 
+class OnProfileSaveNewPassword extends ProfileEvent {
+  final String password;
+  final User user;
+
+  const OnProfileSaveNewPassword(this.password, this.user);
+
+  @override
+  List<Object> get props => [password, user];
+}
+
+class OnProfileShowPasswordModifyForm extends ProfileEvent {
+  final User user;
+
+  const OnProfileShowPasswordModifyForm(this.user);
+  @override
+  List<Object> get props => [user];
+}
+
 class OnProfileStarter extends ProfileEvent {}

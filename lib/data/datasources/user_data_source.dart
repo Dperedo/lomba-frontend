@@ -328,7 +328,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<bool> updateProfilePassword(String userId, String password) async {
     final Map<String, dynamic> passData = {'password': password};
-    final url = Uri.parse('${UrlBackend.base}/api/v1/password/$userId');
+    final url = Uri.parse('${UrlBackend.base}/api/v1/password/profile/$userId');
     final session = await localDataSource.getSavedSession();
 
     http.Response resp =

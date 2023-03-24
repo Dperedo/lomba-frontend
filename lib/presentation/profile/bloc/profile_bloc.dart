@@ -10,18 +10,21 @@ import '../../../domain/usecases/users/exists_profile.dart';
 import '../../../domain/usecases/users/exists_user.dart';
 import '../../../domain/usecases/users/get_user.dart';
 import '../../../domain/usecases/users/update_profile.dart';
+import '../../../domain/usecases/users/update_profile_password.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final GetUser _getUser;
   final GetSession _getSession;
   final UpdateProfile _updateProfile;
   final ExistsProfile _existsProfile;
+  final UpdateProfilePassword _updateProfilePassword;
 
   ProfileBloc(
     this._getUser,
     this._getSession,
     this._updateProfile,
     this._existsProfile,
+    this._updateProfilePassword
     ) : super(const ProfileStart('')) {
     on<OnProfileStarter>((event, emit) => emit(const ProfileStart('')));
 
@@ -81,6 +84,20 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           }
         });
       }
+    });
+    on<OnProfileShowPasswordModifyForm>((event, emit) async {
+      emit(ProfileLoading());
+      
+      emit(ProfileUpdatePassword(event.user));
+    });
+    on<OnProfileSaveNewPassword>((event, emit) async {
+      emit(ProfileLoading());
+
+      final result =
+          await _updateProfilePassword.execute(event.user.id, event.password);
+
+      result.fold((l) => emit(ProfileError(l.message)),
+          (r) => {emit(const ProfileStart(" Contraseña Modificada"))});
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {

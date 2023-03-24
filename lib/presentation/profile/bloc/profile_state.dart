@@ -79,3 +79,10 @@ class ProfileEditing extends ProfileState {
   @override
   List<Object> get props => [existUserName, existEmail, user];
 }
+
+class ProfileUpdatePassword extends ProfileState {
+  final User user;
+  const ProfileUpdatePassword(this.user);
+  @override
+  List<Object> get props => [user];
+}
