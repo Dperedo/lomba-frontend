@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/validators.dart';
@@ -64,42 +67,136 @@ class AddContentPage extends StatelessWidget {
             key: key,
             child: BlocBuilder<AddContentBloc, AddContentState>(
               builder: (context, state) {
+                if (state is AddContentFile) {
+                  return Image.memory(
+                    state.file,
+                    fit: BoxFit.cover,
+                  );
+                }
+
                 if (state is AddContentStart) {
-                  return Column(
-                    children: [
-                      TextFormField(
-                        key: const ValueKey('txtTitle'),
-                        maxLength: 150,
-                        controller: titleController,
-                        validator: (value) =>
-                            Validators.validateName(value ?? ""),
-                        decoration: const InputDecoration(
-                            labelText: 'Titulo', icon: Icon(Icons.title)),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        key: const ValueKey('txtContent'),
-                        maxLength: 500,
-                        maxLines: 8,
-                        controller: contentController,
-                        validator: (value) =>
-                            Validators.validateName(value ?? ""),
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Contenido del Post',
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
+                  return BlocBuilder<AddContentLiveCubit, AddContentLiveState>(
+                    builder: (context, statecubit) {
+                      return Column(
                         children: [
-                          const Text('Dejar como borrador'),
-                          BlocBuilder<AddContentLiveCubit, AddContentLiveState>(
-                            builder: (context, statecubit) {
-                              return Checkbox(
+                          TextFormField(
+                            key: const ValueKey('txtTitle'),
+                            maxLength: 150,
+                            controller: titleController,
+                            validator: (value) =>
+                                Validators.validateName(value ?? ""),
+                            decoration: const InputDecoration(
+                                labelText: 'Título', icon: Icon(Icons.title)),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          TextFormField(
+                            key: const ValueKey('txtContent'),
+                            maxLength: 500,
+                            maxLines: 4,
+                            controller: contentController,
+                            validator: (value) =>
+                                Validators.validateName(value ?? ""),
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'Texto',
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: 250,
+                            child: Stack(
+                              children: <Widget>[
+                                statecubit.filename != ""
+                                    ? Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: 250,
+                                        child: Image.memory(
+                                          statecubit.imagefile,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : Container(
+                                        padding: const EdgeInsets.all(5.0),
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                5.0), // Radius of the border
+                                            border: Border.all(
+                                              width: 1,
+                                              color: Colors
+                                                  .grey, // Color of the border
+                                            )),
+                                        child: ElevatedButton.icon(
+                                            onPressed: () async {
+                                              FilePickerResult? result =
+                                                  await FilePicker.platform
+                                                      .pickFiles(
+                                                type: FileType.custom,
+                                                allowedExtensions: [
+                                                  'jpg',
+                                                  'png',
+                                                  'gif',
+                                                  'jpeg'
+                                                ],
+                                              );
+
+                                              if (result != null) {
+                                                PlatformFile file =
+                                                    result.files.first;
+
+                                                print(file.name);
+                                                print(file.size);
+                                                print(file.extension);
+
+                                                if (file.size != 0) {
+                                                  context
+                                                      .read<
+                                                          AddContentLiveCubit>()
+                                                      .showImage(file.name,
+                                                          file.bytes!);
+                                                } else {
+                                                  snackBarNotify(
+                                                      context,
+                                                      "El archivo no puede estar vacío",
+                                                      Icons.error);
+                                                }
+                                              } else {
+                                                // User canceled the picker
+                                              }
+                                            },
+                                            icon: const Icon(Icons.file_open),
+                                            label: const Text("Subir imagen")),
+                                      ),
+                                statecubit.filename != ""
+                                    ? Container(
+                                        alignment: Alignment.topRight,
+                                        child: IconButton(
+                                          alignment: Alignment.topRight,
+                                          icon: const Icon(Icons.cancel),
+                                          onPressed: () {
+                                            context
+                                                .read<AddContentLiveCubit>()
+                                                .removeImage();
+                                          },
+                                        ),
+                                      )
+                                    : const SizedBox(),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              const Text('Dejar como borrador'),
+                              Checkbox(
                                 value: statecubit.checks["keepasdraft"]!,
                                 onChanged: (bool? value) {
                                   context
@@ -107,39 +204,42 @@ class AddContentPage extends StatelessWidget {
                                       .changeValue("keepasdraft",
                                           !statecubit.checks["keepasdraft"]!);
                                 },
-                              );
-                            },
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      SizedBox(
-                        width: 150,
-                        height: 50,
-                        child: ElevatedButton.icon(
-                          icon: const Icon(Icons.publish),
-                          key: const ValueKey("btnSavedUp"),
-                          label: const Text("Subir"),
-                          onPressed: () {
-                            //final AddContentLiveState checkos =
-                            //    context.read<AddContentLiveCubit>().state;
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          SizedBox(
+                            width: 150,
+                            height: 50,
+                            child: ElevatedButton.icon(
+                              icon: const Icon(Icons.publish),
+                              key: const ValueKey("btnSavedUp"),
+                              label: const Text("Subir"),
+                              onPressed: () {
+                                //final AddContentLiveState checkos =
+                                //    context.read<AddContentLiveCubit>().state;
 
-                            if (key.currentState?.validate() == true) {
-                              context.read<AddContentBloc>().add(
-                                  OnAddContentAdd(
-                                      titleController.text,
-                                      contentController.text,
-                                      context
-                                          .read<AddContentLiveCubit>()
-                                          .state
-                                          .checks["keepasdraft"]!));
-                            }
-                          },
-                        ),
-                      ),
-                    ],
+                                if (key.currentState?.validate() == true) {
+                                  context.read<AddContentBloc>().add(
+                                      OnAddContentAdd(
+                                          titleController.text,
+                                          contentController.text,
+                                          context
+                                              .read<AddContentLiveCubit>()
+                                              .state
+                                              .checks["keepasdraft"]!));
+                                }
+                              },
+                            ),
+                          ),
+                          const Divider(
+                            height: 10,
+                          ),
+                        ],
+                      );
+                    },
                   );
                 }
 

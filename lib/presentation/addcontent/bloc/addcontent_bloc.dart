@@ -65,6 +65,13 @@ class AddContentBloc extends Bloc<AddContentEvent, AddContentState> {
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
+
+    on<OnAddContentFile>(
+      (event, emit) {
+        emit(AddContentFile(event.name, event.file));
+      },
+      transformer: debounce(const Duration(milliseconds: 0)),
+    );
   }
 
   //result.fold;

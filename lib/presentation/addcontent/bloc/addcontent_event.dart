@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:equatable/equatable.dart';
 
 abstract class AddContentEvent extends Equatable {
@@ -25,3 +27,13 @@ class OnAddContentUp extends AddContentEvent {
 }
 
 class OnAddContentStarter extends AddContentEvent {}
+
+class OnAddContentFile extends AddContentEvent {
+  final Uint8List file;
+  final String name;
+
+  const OnAddContentFile(this.file, this.name);
+
+  @override
+  List<Object> get props => [file, name];
+}

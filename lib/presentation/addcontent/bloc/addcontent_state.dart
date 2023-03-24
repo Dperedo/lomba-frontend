@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:equatable/equatable.dart';
 
 abstract class AddContentState extends Equatable {
@@ -20,4 +22,14 @@ class AddContentError extends AddContentState {
 
   @override
   List<Object> get props => [message];
+}
+
+class AddContentFile extends AddContentState {
+  final String name;
+  final Uint8List file;
+
+  const AddContentFile(this.name, this.file);
+
+  @override
+  List<Object> get props => [name, file];
 }
