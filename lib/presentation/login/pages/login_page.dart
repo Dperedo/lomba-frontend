@@ -80,8 +80,8 @@ class LoginPage extends StatelessWidget {
                                 .read<RecentBloc>()
                                 .add(const OnRecentStarter(""));
 
-                            BlocProvider.of<NavBloc>(context).add(
-                                NavigateTo(NavItem.pageAddContent, context));
+                            BlocProvider.of<NavBloc>(context)
+                                .add(NavigateTo(NavItem.pageRecent, context));
                           });
                         } else if (state is LoginError) {
                           return Center(

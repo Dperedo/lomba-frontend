@@ -12,6 +12,7 @@ import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_state.dar
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/snackbar_notification.dart';
+import '../../../injection.dart' as di;
 
 ///Página para agregar contenido al sistema.
 ///
@@ -59,7 +60,7 @@ class AddContentPage extends StatelessWidget {
     final TextEditingController contentController = TextEditingController();
 
     return BlocProvider<AddContentLiveCubit>(
-      create: (context) => AddContentLiveCubit(),
+      create: (context) => AddContentLiveCubit(di.locator()),
       child: Padding(
         padding: const EdgeInsets.all(25.0),
         child: SizedBox(
@@ -149,11 +150,6 @@ class AddContentPage extends StatelessWidget {
                                               if (result != null) {
                                                 PlatformFile file =
                                                     result.files.first;
-
-                                                print(file.name);
-                                                print(file.size);
-                                                print(file.extension);
-
                                                 if (file.size != 0) {
                                                   context
                                                       .read<

@@ -21,6 +21,7 @@ import 'package:lomba_frontend/domain/usecases/login/change_orga.dart';
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate.dart';
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate_google.dart';
 import 'package:lomba_frontend/domain/usecases/login/register_user.dart';
+import 'package:lomba_frontend/domain/usecases/storage/upload_file.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart';
 import 'package:lomba_frontend/presentation/approved/bloc/approved_bloc.dart';
 import 'package:lomba_frontend/presentation/detailed_list/bloc/detailed_list_bloc.dart';
@@ -44,14 +45,17 @@ import 'data/datasources/flow_data_source.dart';
 import 'data/datasources/post_data_source.dart';
 import 'data/datasources/local_data_source.dart';
 import 'data/datasources/stage_data_source.dart';
+import 'data/datasources/storage_data_source.dart';
 import 'data/repositories/flow_repository_impl.dart';
 import 'data/repositories/post_repository_impl.dart';
 import 'data/repositories/local_repository_impl.dart';
 import 'data/repositories/stage_repository_impl.dart';
+import 'data/repositories/storage_repository_impl.dart';
 import 'domain/repositories/flow_repository.dart';
 import 'domain/repositories/post_repository.dart';
 import 'domain/repositories/local_repository.dart';
 import 'domain/repositories/stage_repository.dart';
+import 'domain/repositories/storage_repository.dart';
 import 'domain/usecases/flow/get_flow.dart';
 import 'domain/usecases/flow/get_flows.dart';
 import 'domain/usecases/local/get_has_login.dart';
@@ -132,13 +136,21 @@ Future<void> init() async {
       locator(), locator(), locator(), locator()));
 
   locator.registerFactory(() => UserBloc(
-      locator(),locator(),
-      locator(),locator(),
-      locator(),locator(),
-      locator(),locator(),
-      locator(),locator(),
-      locator(),locator(),
-      locator(),locator(),));
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+      ));
 
   locator.registerFactory(() => ProfileBloc(locator(), locator()));
   locator.registerFactory(() => DemoListBloc());
@@ -241,6 +253,8 @@ Future<void> init() async {
   locator.registerLazySingleton(() => ReadIfRedirectLogin(locator()));
   locator.registerLazySingleton(() => StartRedirectLogin(locator()));
 
+  locator.registerLazySingleton(() => UploadFile(locator()));
+
   // repository
   locator.registerLazySingleton<LoginRepository>(
     () => LoginRepositoryImpl(
@@ -268,6 +282,9 @@ Future<void> init() async {
   );
   locator.registerLazySingleton<StageRepository>(
     () => StageRepositoryImpl(remoteDataSource: locator()),
+  );
+  locator.registerLazySingleton<StorageRepository>(
+    () => StorageRepositoryImpl(remoteDataSource: locator()),
   );
 
   // data source
@@ -306,6 +323,10 @@ Future<void> init() async {
   );
   locator.registerLazySingleton<StageRemoteDataSource>(
     () => StageRemoteDataSourceImpl(
+        client: locator(), localDataSource: locator()),
+  );
+  locator.registerLazySingleton<StorageRemoteDataSource>(
+    () => StorageRemoteDataSourceImpl(
         client: locator(), localDataSource: locator()),
   );
 

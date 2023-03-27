@@ -42,7 +42,7 @@ import 'nav_state.dart';
 ///desea navegar, con eso emite un estado con el destino a navegar.
 
 class NavBloc extends Bloc<NavEvent, NavState> {
-  NavBloc() : super(const NavState(NavItem.pageAddContent)) {
+  NavBloc() : super(const NavState(NavItem.pageRecent)) {
     on<NavigateTo>(
       (event, emit) async {
         if (event.destination != state.selectedItem) {

@@ -24,26 +24,44 @@ class StorageRemoteDataSourceImpl implements StorageRemoteDataSource {
     final url = Uri.parse('${UrlBackend.base}/api/v1/storage');
 
     //busca respuesta desde el servidor para la autenticación
-    http.Response resp = await client.post(url, body: "", headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
+/*
+    final fileEncoded = base64Encode(file);
+    final Map<String, dynamic> dataToPost = {
+      'fileEncoded': fileEncoded,
+    };
+*/
+
+    var request = http.MultipartRequest('POST', url);
+
+    request.files
+        .add(http.MultipartFile.fromBytes("file", file, filename: name));
+    request.fields.addAll({'name': name, 'userId': userId, 'orgaId': orgaId});
+
+    request.headers.addAll({
+      "Accept": "*/*",
+      "Content-Type": "multipart/form-data;",
+      "Content-Length": request.contentLength.toString(),
       "Authorization": "Bearer ${session.token}",
-    }).timeout(const Duration(seconds: 10));
+    });
+    http.StreamedResponse resp =
+        await request.send().timeout(const Duration(seconds: 300));
+
+    final respFromStream = await http.Response.fromStream(resp);
 
     if (resp.statusCode == 200) {
-      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+      final Map<dynamic, dynamic> resObj = json.decode(respFromStream.body);
 
       final item = resObj['data']['items'][0];
       return Future.value(FileCloudModel(
-          id: item["id"],
-          name: item["name"],
-          path: item["path"],
-          url: item["url"],
-          size: item["size"],
-          account: item["account"],
-          filetype: item["filetype"],
-          enabled: item["enabled"],
-          builtIn: item["builtIn"],
+          id: item["id"].toString(),
+          name: item["name"].toString(),
+          path: item["path"].toString(),
+          url: item["url"].toString(),
+          size: int.parse(item["size"].toString()),
+          account: item["account"].toString(),
+          filetype: item["filetype"].toString(),
+          enabled: item["enabled"].toString().toLowerCase() == 'true',
+          builtIn: item["builtIn"].toString().toLowerCase() == 'true',
           created: DateTime.parse(item["created"]),
           updated:
               item["updated"] == null ? null : DateTime.parse(item["updated"]),
