@@ -35,6 +35,8 @@ import 'package:lomba_frontend/domain/usecases/users/update_user_password.dart';
 import 'package:lomba_frontend/presentation/popular/bloc/popular_bloc.dart';
 import 'package:lomba_frontend/presentation/rejected/bloc/rejected_bloc.dart';
 import 'package:lomba_frontend/presentation/router/bloc/router_bloc.dart';
+import 'package:lomba_frontend/presentation/setting_admin/bloc/setting_admin_bloc.dart';
+import 'package:lomba_frontend/presentation/setting_super/bloc/setting_super_bloc.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
 import 'package:lomba_frontend/presentation/users/bloc/user_bloc.dart';
@@ -44,16 +46,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'data/datasources/flow_data_source.dart';
 import 'data/datasources/post_data_source.dart';
 import 'data/datasources/local_data_source.dart';
+import 'data/datasources/setting_data_source.dart';
 import 'data/datasources/stage_data_source.dart';
 import 'data/datasources/storage_data_source.dart';
 import 'data/repositories/flow_repository_impl.dart';
 import 'data/repositories/post_repository_impl.dart';
 import 'data/repositories/local_repository_impl.dart';
+import 'data/repositories/setting_repository_impl.dart';
 import 'data/repositories/stage_repository_impl.dart';
 import 'data/repositories/storage_repository_impl.dart';
 import 'domain/repositories/flow_repository.dart';
 import 'domain/repositories/post_repository.dart';
 import 'domain/repositories/local_repository.dart';
+import 'domain/repositories/setting_repository.dart';
 import 'domain/repositories/stage_repository.dart';
 import 'domain/repositories/storage_repository.dart';
 import 'domain/usecases/flow/get_flow.dart';
@@ -63,8 +68,15 @@ import 'domain/usecases/local/get_session_role.dart';
 import 'domain/usecases/local/get_session_status.dart';
 import 'domain/usecases/orgas/get_orgauser.dart';
 import 'domain/usecases/post/get_detailedlist_posts.dart';
+import 'domain/usecases/setting/get_setting_admin.dart';
+import 'domain/usecases/setting/get_setting_super.dart';
+import 'domain/usecases/setting/updated_setting_admin.dart';
+import 'domain/usecases/setting/updated_setting_super.dart';
 import 'domain/usecases/stage/get_stage.dart';
 import 'domain/usecases/stage/get_stages.dart';
+import 'domain/usecases/users/exists_profile.dart';
+import 'domain/usecases/users/update_profile.dart';
+import 'domain/usecases/users/update_profile_password.dart';
 import 'presentation/nav/bloc/nav_bloc.dart';
 import 'presentation/demolist/bloc/demolist_bloc.dart';
 import 'presentation/recent/bloc/recent_bloc.dart';
@@ -152,7 +164,13 @@ Future<void> init() async {
         locator(),
       ));
 
-  locator.registerFactory(() => ProfileBloc(locator(), locator()));
+  locator.registerFactory(() => ProfileBloc(
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+      ));
   locator.registerFactory(() => DemoListBloc());
 
   locator.registerFactory(() =>
@@ -175,6 +193,21 @@ Future<void> init() async {
       () => VotedBloc(locator(), locator(), locator(), locator()));
   locator.registerFactory(() => FlowBloc(locator(), locator()));
   locator.registerFactory(() => StageBloc(locator(), locator()));
+  locator.registerFactory(() => SettingSuperBloc(
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+      ));
+  locator.registerFactory(() => SettingAdminBloc(
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+      ));
   locator.registerFactory(() => DetailedListBloc(
         locator(),
         locator(),
@@ -190,6 +223,7 @@ Future<void> init() async {
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));
+  locator.registerLazySingleton(() => UpdateProfilePassword(locator()));
   locator.registerLazySingleton(() => GetAuthenticate(locator()));
   locator.registerLazySingleton(() => GetHasLogIn(locator()));
   locator.registerLazySingleton(() => GetSession(locator()));
@@ -221,6 +255,8 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetUsers(locator()));
   locator.registerLazySingleton(() => UpdateUser(locator()));
   locator.registerLazySingleton(() => ExistsUser(locator()));
+  locator.registerLazySingleton(() => UpdateProfile(locator()));
+  locator.registerLazySingleton(() => ExistsProfile(locator()));
   locator.registerLazySingleton(() => GetUsersNotInOrga(locator()));
 
   locator.registerLazySingleton(() => EnableRole(locator()));
@@ -249,6 +285,11 @@ Future<void> init() async {
 
   locator.registerLazySingleton(() => GetStage(locator()));
   locator.registerLazySingleton(() => GetStages(locator()));
+
+  locator.registerLazySingleton(() => GetSettingSuper(locator()));
+  locator.registerLazySingleton(() => GetSettingAdmin(locator()));
+  locator.registerLazySingleton(() => UpdatedSettingSuper(locator()));
+  locator.registerLazySingleton(() => UpdatedSettingAdmin(locator()));
 
   locator.registerLazySingleton(() => ReadIfRedirectLogin(locator()));
   locator.registerLazySingleton(() => StartRedirectLogin(locator()));
@@ -284,7 +325,9 @@ Future<void> init() async {
     () => StageRepositoryImpl(remoteDataSource: locator()),
   );
   locator.registerLazySingleton<StorageRepository>(
-    () => StorageRepositoryImpl(remoteDataSource: locator()),
+      () => StorageRepositoryImpl(remoteDataSource: locator()));
+  locator.registerLazySingleton<SettingRepository>(
+    () => SettingRepositoryImpl(remoteDataSource: locator()),
   );
 
   // data source
@@ -321,14 +364,16 @@ Future<void> init() async {
     () =>
         FlowRemoteDataSourceImpl(client: locator(), localDataSource: locator()),
   );
-  locator.registerLazySingleton<StageRemoteDataSource>(
-    () => StageRemoteDataSourceImpl(
-        client: locator(), localDataSource: locator()),
-  );
-  locator.registerLazySingleton<StorageRemoteDataSource>(
-    () => StorageRemoteDataSourceImpl(
-        client: locator(), localDataSource: locator()),
-  );
+  locator.registerLazySingleton<StageRemoteDataSource>(() =>
+      StageRemoteDataSourceImpl(client: locator(), localDataSource: locator()));
+
+  locator.registerLazySingleton<StorageRemoteDataSource>(() =>
+      StorageRemoteDataSourceImpl(
+          client: locator(), localDataSource: locator()));
+
+  locator.registerLazySingleton<SettingRemoteDataSource>(() =>
+      SettingRemoteDataSourceImpl(
+          client: locator(), localDataSource: locator()));
 
   // external
   final sharedPreferences = await SharedPreferences.getInstance();

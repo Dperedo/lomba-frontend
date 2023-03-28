@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/domain/usecases/users/add_user.dart';
 import 'package:lomba_frontend/domain/usecases/users/delete_user.dart';
 import 'package:lomba_frontend/domain/usecases/users/enable_user.dart';
 import 'package:lomba_frontend/domain/usecases/users/exists_user.dart';
@@ -9,13 +8,12 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../data/models/session_model.dart';
 import '../../../domain/entities/orgauser.dart';
+import '../../../domain/entities/user.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
 import '../../../domain/usecases/login/register_user.dart';
-import '../../../domain/entities/user.dart';
 import '../../../domain/usecases/orgas/add_orgauser.dart';
 import '../../../domain/usecases/orgas/delete_orgauser.dart';
 import '../../../domain/usecases/orgas/get_orgauser.dart';
-import '../../../domain/usecases/orgas/get_orgausers.dart';
 import '../../../domain/usecases/orgas/update_orgauser.dart';
 import '../../../domain/usecases/users/get_users.dart';
 import '../../../domain/usecases/users/get_users_notin_orga.dart';

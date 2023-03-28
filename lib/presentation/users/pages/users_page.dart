@@ -90,8 +90,7 @@ class UsersPage extends StatelessWidget {
     final TextEditingController usernameController = TextEditingController();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
-    final TextEditingController repeatPasswordController =
-        TextEditingController();
+    final TextEditingController repeatPasswordController = TextEditingController();
     final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
     if (state is UserStart) {

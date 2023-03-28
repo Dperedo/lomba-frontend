@@ -309,6 +309,26 @@ class SideDrawer extends StatelessWidget {
                 ));
               }
 
+              if (state.opts.contains(SideDrawerUserOptions.optSettingSuper)) {
+                childrenOptionsList.add(ListTile(
+                  leading: const Icon(Icons.settings),
+                  title: const Text('Config Super'),
+                  onTap: () {
+                    _handleItemClick(context, NavItem.pageSettingSuper);
+                  },
+                ));
+              }
+
+              if (state.opts.contains(SideDrawerUserOptions.optSettingAdmin)) {
+                childrenOptionsList.add(ListTile(
+                  leading: const Icon(Icons.settings),
+                  title: const Text('Config Admin'),
+                  onTap: () {
+                    _handleItemClick(context, NavItem.pageSettingAdmin);
+                  },
+                ));
+              }
+
               if (state.opts.contains(SideDrawerUserOptions.optLogOff)) {
                 childrenOptionsList.add(ListTile(
                   leading: const Icon(Icons.logout),

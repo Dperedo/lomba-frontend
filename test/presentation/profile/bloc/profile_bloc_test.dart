@@ -5,6 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/data/models/session_model.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
+import 'package:lomba_frontend/domain/usecases/users/exists_profile.dart';
+import 'package:lomba_frontend/domain/usecases/users/update_profile.dart';
+import 'package:lomba_frontend/domain/usecases/users/update_profile_password.dart';
 import 'package:lomba_frontend/presentation/profile/bloc/profile_bloc.dart';
 import 'package:lomba_frontend/presentation/profile/bloc/profile_event.dart';
 import 'package:lomba_frontend/presentation/profile/bloc/profile_state.dart';
@@ -15,10 +18,18 @@ import 'package:mockito/mockito.dart';
 
 import 'profile_bloc_test.mocks.dart';
 
-@GenerateMocks([GetUser, GetSession])
+@GenerateMocks([
+  GetUser,
+  GetSession,
+  UpdateProfile,
+  ExistsProfile,
+  UpdateProfilePassword,])
 void main() async {
   late MockGetUser mockGetUser;
   late MockGetSession mockGetSession;
+  late MockUpdateProfile mockUpdateProfile;
+  late MockExistsProfile mockExistsProfile;
+  late MockUpdateProfilePassword mockUpdateProfilePassword;
   late ProfileBloc profileBloc;
   const testUserId = '00000001-0001-0001-0001-000000000001';
   final newUserId = Guid.newGuid.toString();
@@ -34,14 +45,22 @@ void main() async {
   setUp(() {
     mockGetUser = MockGetUser();
     mockGetSession = MockGetSession();
-    profileBloc = ProfileBloc(mockGetUser, mockGetSession);
+    mockUpdateProfile = MockUpdateProfile();
+    mockExistsProfile = MockExistsProfile();
+    mockUpdateProfilePassword = MockUpdateProfilePassword();
+    profileBloc = ProfileBloc(
+      mockGetUser,
+      mockGetSession,
+      mockUpdateProfile,
+      mockExistsProfile,
+      mockUpdateProfilePassword,);
   });
 
   test(
     'el estado inicial debe ser Start',
     () {
       //assert
-      expect(profileBloc.state, ProfileStart());
+      expect(profileBloc.state, const ProfileStart(''));
     },
   );
 

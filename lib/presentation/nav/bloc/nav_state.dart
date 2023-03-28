@@ -36,5 +36,7 @@ enum NavItem {
   pageDemoList,
   pageDetailedList,
   pageFlow,
-  pageStage
+  pageStage,
+  pageSettingSuper,
+  pageSettingAdmin,
 }

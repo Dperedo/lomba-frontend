@@ -132,6 +132,7 @@ class LocalRepositoryImpl implements LocalRepository {
         opts.add(SideDrawerUserOptions.optOrgas);
         opts.add(SideDrawerUserOptions.optRoles);
         opts.add(SideDrawerUserOptions.optDetailList);
+        opts.add(SideDrawerUserOptions.optSettingSuper);
       }
 
       if (roles.contains(Roles.roleAdmin)) {
@@ -139,6 +140,7 @@ class LocalRepositoryImpl implements LocalRepository {
         opts.add(SideDrawerUserOptions.optDetailList);
         opts.add(SideDrawerUserOptions.optFlow);
         opts.add(SideDrawerUserOptions.optStage);
+        opts.add(SideDrawerUserOptions.optSettingAdmin);
       }
 
       if (roles.contains(Roles.roleUser)) {

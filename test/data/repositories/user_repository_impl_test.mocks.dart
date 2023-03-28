@@ -136,6 +136,30 @@ class MockUserRemoteDataSource extends _i1.Mock
         )),
       ) as _i4.Future<_i2.UserModel>);
   @override
+  _i4.Future<_i2.UserModel> updateProfile(
+    String? userId,
+    _i2.UserModel? user,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateProfile,
+          [
+            userId,
+            user,
+          ],
+        ),
+        returnValue: _i4.Future<_i2.UserModel>.value(_FakeUserModel_0(
+          this,
+          Invocation.method(
+            #updateProfile,
+            [
+              userId,
+              user,
+            ],
+          ),
+        )),
+      ) as _i4.Future<_i2.UserModel>);
+  @override
   _i4.Future<_i2.UserModel?> existsUser(
     String? userId,
     String? username,
@@ -144,6 +168,23 @@ class MockUserRemoteDataSource extends _i1.Mock
       (super.noSuchMethod(
         Invocation.method(
           #existsUser,
+          [
+            userId,
+            username,
+            email,
+          ],
+        ),
+        returnValue: _i4.Future<_i2.UserModel?>.value(),
+      ) as _i4.Future<_i2.UserModel?>);
+  @override
+  _i4.Future<_i2.UserModel?> existsProfile(
+    String? userId,
+    String? username,
+    String? email,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #existsProfile,
           [
             userId,
             username,
@@ -179,6 +220,21 @@ class MockUserRemoteDataSource extends _i1.Mock
       (super.noSuchMethod(
         Invocation.method(
           #updateUserPassword,
+          [
+            userId,
+            password,
+          ],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
+  @override
+  _i4.Future<bool> updateProfilePassword(
+    String? userId,
+    String? password,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateProfilePassword,
           [
             userId,
             password,

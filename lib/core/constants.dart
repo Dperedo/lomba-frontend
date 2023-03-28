@@ -129,6 +129,15 @@ class SideDrawerUserOptions {
   static const String optDetailList = "detaillist";
   static const String optFlow = "flow";
   static const String optStage = "stage";
+  static const String optSettingSuper = "settingsuper";
+  static const String optSettingAdmin = "settingadmin";
+}
+
+class SettingCodes {
+  static const String defaultOrgaForUserRegister = "defaultOrgaForUserRegister";
+  static const String defaultRoleForUserRegister = "defaultRoleForUserRegister";
+  static const String orgaForAnonymousUser = "orgaForAnonymousUser";
+  static const String defaultFlow = "defaultFlow";
 }
 
 ///Listado de los roles del sistema. Por ahora pueden seguir en esta opción.
