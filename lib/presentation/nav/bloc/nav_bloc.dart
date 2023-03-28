@@ -24,6 +24,10 @@ import '../../rejected/bloc/rejected_bloc.dart';
 import '../../rejected/bloc/rejected_event.dart';
 import '../../roles/bloc/role_bloc.dart';
 import '../../roles/bloc/role_event.dart';
+import '../../setting_admin/bloc/setting_admin_bloc.dart';
+import '../../setting_admin/bloc/setting_admin_event.dart';
+import '../../setting_super/bloc/setting_super_bloc.dart';
+import '../../setting_super/bloc/setting_super_event.dart';
 import '../../stage/bloc/stage_bloc.dart';
 import '../../tobeapproved/bloc/tobeapproved_bloc.dart';
 import '../../tobeapproved/bloc/tobeapproved_event.dart';
@@ -139,6 +143,16 @@ class NavBloc extends Bloc<NavEvent, NavState> {
             case NavItem.pageStage:
               {
                 event.context.read<StageBloc>().add(const OnStageListStarter());
+              }
+              break;
+            case NavItem.pageSettingSuper:
+              {
+                event.context.read<SettingSuperBloc>().add(OnSettingSuperStarter());
+              }
+              break;
+            case NavItem.pageSettingAdmin:
+              {
+                event.context.read<SettingAdminBloc>().add(OnSettingAdminStarter());
               }
               break;
           }
