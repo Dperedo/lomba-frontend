@@ -15,13 +15,8 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
   }
 
   void showImage(String name, Uint8List image) async {
-    emit(state.copyWithImage(name: name, image: image));
     await uploadFile.execute(image, name, "1", "1");
-    //.then((value) => value.fold((l) {
-    //            emit(state.copyWithImage(name: name, image: image));
-    //        }, (r) {
-    //        emit(state.copyWithImage(name: name, image: image));
-    //    }));
+    emit(state.copyWithImage(name: name, image: image));
   }
 
   void removeImage() {
