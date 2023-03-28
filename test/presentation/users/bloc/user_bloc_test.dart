@@ -105,8 +105,8 @@ Future<void> main() async {
 
   final newUserId = Guid.newGuid.toString();
 
-  final tUser = User(
-      id: newUserId,
+  const tUser = User(
+      id: '1',
       name: 'Test User',
       username: 'test',
       email: 'te@mp.com',
@@ -133,14 +133,14 @@ Future<void> main() async {
       'debe lanzar el spinner y devolver estado con listado',
       build: () {
         when(mockGetUsers.execute("", "", "", 1, 10))
-            .thenAnswer((_) async => Right(<User>[tUser]));
+            .thenAnswer((_) async => const Right(<User>[tUser]));
         return userBloc;
       },
       act: (bloc) => bloc.add(const OnUserListLoad("", "", "", 1)),
       wait: const Duration(milliseconds: 500),
       expect: () => [
         UserLoading(),
-        UserListLoaded(<User>[tUser]),
+        const UserListLoaded(<User>[tUser]),
       ],
       verify: (bloc) {
         verify(mockGetUsers.execute("", "", "", 1, 10));
@@ -151,14 +151,18 @@ Future<void> main() async {
       'debe lanzar el spinner y devolver estado con la user',
       build: () {
         when(mockGetUser.execute(newUserId))
-            .thenAnswer((_) async => Right(tUser));
+            .thenAnswer((_) async => const Right(tUser));
+        when(mockGetSession.execute())
+            .thenAnswer((_) async => const Right(testSession));
+        when(mockGetOrgaUser.execute('1','1'))
+            .thenAnswer((_) async => const Right(<OrgaUser>[tOrgaUser]));
         return userBloc;
       },
       act: (bloc) => bloc.add(OnUserLoad(newUserId)),
       wait: const Duration(milliseconds: 500),
       expect: () => [
         UserLoading(),
-        UserLoaded(tUser, tOrgaUser, ""),
+        const UserLoaded(tUser, tOrgaUser, ''),
       ],
       verify: (bloc) {
         verify(mockGetUser.execute(newUserId));

@@ -14,6 +14,10 @@ import 'package:lomba_frontend/presentation/orgas/pages/orgas_page.dart';
 import 'package:lomba_frontend/presentation/popular/bloc/popular_bloc.dart';
 import 'package:lomba_frontend/presentation/popular/pages/popular_page.dart';
 import 'package:lomba_frontend/presentation/router/bloc/router_bloc.dart';
+import 'package:lomba_frontend/presentation/setting_admin/bloc/setting_admin_bloc.dart';
+import 'package:lomba_frontend/presentation/setting_admin/page/setting_admin_page.dart';
+import 'package:lomba_frontend/presentation/setting_super/bloc/setting_super_bloc.dart';
+import 'package:lomba_frontend/presentation/setting_super/page/setting_super_page.dart';
 import 'package:lomba_frontend/presentation/stage/page/stage_page.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_bloc.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/pages/tobeapproved_page.dart';
@@ -92,6 +96,8 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<FlowBloc>()),
         BlocProvider(create: (_) => di.locator<StageBloc>()),
         BlocProvider(create: (_) => di.locator<DetailedListBloc>()),
+        BlocProvider(create: (_) => di.locator<SettingSuperBloc>()),
+        BlocProvider(create: (_) => di.locator<SettingAdminBloc>()),
       ],
       child: MaterialApp(
         title: 'App Demo',
@@ -172,6 +178,12 @@ class _MyApp extends State<MyApp> {
     }
     if (state.selectedItem == NavItem.pageStage) {
       return const StagePage();
+    }
+    if (state.selectedItem == NavItem.pageSettingSuper) {
+      return const SettingSuperPage();
+    }
+    if (state.selectedItem == NavItem.pageSettingAdmin) {
+      return const SettingAdminPage();
     }
   }
 }
