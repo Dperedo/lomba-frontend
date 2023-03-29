@@ -3,11 +3,11 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import '../../core/constants.dart';
 import '../../core/exceptions.dart';
-import '../models/storage/filecloud_model.dart';
+import '../models/storage/cloudfile_model.dart';
 import 'local_data_source.dart';
 
 abstract class StorageRemoteDataSource {
-  Future<FileCloudModel> uploadFile(
+  Future<CloudFileModel> uploadFile(
       Uint8List file, String name, String userId, String orgaId);
 }
 
@@ -18,7 +18,7 @@ class StorageRemoteDataSourceImpl implements StorageRemoteDataSource {
       {required this.client, required this.localDataSource});
 
   @override
-  Future<FileCloudModel> uploadFile(
+  Future<CloudFileModel> uploadFile(
       Uint8List file, String name, String userId, String orgaId) async {
     final session = await localDataSource.getSavedSession();
     final url = Uri.parse('${UrlBackend.base}/api/v1/storage');
@@ -52,14 +52,18 @@ class StorageRemoteDataSourceImpl implements StorageRemoteDataSource {
       final Map<dynamic, dynamic> resObj = json.decode(respFromStream.body);
 
       final item = resObj['data']['items'][0];
-      return Future.value(FileCloudModel(
+      return Future.value(CloudFileModel(
           id: item["id"].toString(),
           name: item["name"].toString(),
           path: item["path"].toString(),
+          host: item["host"].toString(),
           url: item["url"].toString(),
           size: int.parse(item["size"].toString()),
           account: item["account"].toString(),
           filetype: item["filetype"].toString(),
+          orgaId: item["orgaId"].toString(),
+          userId: item["userId"].toString(),
+          associated: item["associated"].toString().toLowerCase() == 'true',
           enabled: item["enabled"].toString().toLowerCase() == 'true',
           builtIn: item["builtIn"].toString().toLowerCase() == 'true',
           created: DateTime.parse(item["created"]),

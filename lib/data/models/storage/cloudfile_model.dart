@@ -1,14 +1,18 @@
-import 'package:lomba_frontend/domain/entities/storage/filecloud.dart';
+import 'package:lomba_frontend/domain/entities/storage/cloudfile.dart';
 
-class FileCloudModel extends FileCloud {
-  const FileCloudModel(
+class CloudFileModel extends CloudFile {
+  const CloudFileModel(
       {required id,
       required name,
       required path,
+      required host,
       required url,
       required size,
       required account,
       required filetype,
+      required orgaId,
+      required userId,
+      required associated,
       required enabled,
       required builtIn,
       required created,
@@ -19,10 +23,14 @@ class FileCloudModel extends FileCloud {
             id: id,
             name: name,
             path: path,
+            host: host,
             url: url,
             size: size,
             account: account,
             filetype: filetype,
+            orgaId: orgaId,
+            userId: userId,
+            associated: associated,
             enabled: enabled,
             builtIn: builtIn,
             created: created,
@@ -30,15 +38,19 @@ class FileCloudModel extends FileCloud {
             deleted: deleted,
             expires: expires);
 
-  factory FileCloudModel.fromJson(Map<String, dynamic> json) {
-    return FileCloudModel(
+  factory CloudFileModel.fromJson(Map<String, dynamic> json) {
+    return CloudFileModel(
         id: json["id"],
         name: json["name"],
         path: json["path"],
+        host: json["host"],
         url: json["url"],
-        size: json["size"],
+        size: int.parse(json["size"].toString()),
         account: json["account"],
         filetype: json["filetype"],
+        orgaId: json["orgaId"],
+        userId: json["userId"],
+        associated: json["associated"].toString().toLowerCase() == "true",
         enabled: json["enabled"],
         builtIn: json["builtIn"],
         created: DateTime.parse(json["created"]),
@@ -55,10 +67,14 @@ class FileCloudModel extends FileCloud {
       'id': id,
       'name': name,
       'path': path,
+      'host': host,
       'url': url,
       'size': size,
       'account': account,
       'filetype': filetype,
+      'orgaId': orgaId,
+      'userId': userId,
+      'associated': associated,
       'enabled': enabled,
       'builtIn': builtIn,
       'created': created.toIso8601String(),
@@ -68,14 +84,18 @@ class FileCloudModel extends FileCloud {
     };
   }
 
-  FileCloud toEntity() => FileCloud(
+  CloudFile toEntity() => CloudFile(
       id: id,
       name: name,
       path: path,
+      host: host,
       url: url,
       size: size,
       account: account,
       filetype: filetype,
+      orgaId: orgaId,
+      userId: userId,
+      associated: associated,
       enabled: enabled,
       builtIn: builtIn,
       created: created,
@@ -84,6 +104,20 @@ class FileCloudModel extends FileCloud {
       expires: expires);
 
   @override
-  List<Object> get props =>
-      [id, name, url, size, account, filetype, enabled, builtIn, created];
+  List<Object> get props => [
+        id,
+        name,
+        path,
+        host,
+        url,
+        size,
+        account,
+        filetype,
+        orgaId,
+        userId,
+        associated,
+        enabled,
+        builtIn,
+        created
+      ];
 }
