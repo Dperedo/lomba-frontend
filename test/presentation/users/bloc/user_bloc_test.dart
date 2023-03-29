@@ -150,22 +150,22 @@ Future<void> main() async {
     blocTest<UserBloc, UserState>(
       'debe lanzar el spinner y devolver estado con la user',
       build: () {
-        when(mockGetUser.execute(newUserId))
+        when(mockGetUser.execute('1'))
             .thenAnswer((_) async => const Right(tUser));
         when(mockGetSession.execute())
             .thenAnswer((_) async => const Right(testSession));
-        when(mockGetOrgaUser.execute('1','1'))
+        when(mockGetOrgaUser.execute('00000100-0100-0100-0100-000000000100','1'))
             .thenAnswer((_) async => const Right(<OrgaUser>[tOrgaUser]));
         return userBloc;
       },
-      act: (bloc) => bloc.add(OnUserLoad(newUserId)),
+      act: (bloc) => bloc.add(const OnUserLoad('1')),
       wait: const Duration(milliseconds: 500),
       expect: () => [
         UserLoading(),
         const UserLoaded(tUser, tOrgaUser, ''),
       ],
       verify: (bloc) {
-        verify(mockGetUser.execute(newUserId));
+        verify(mockGetUser.execute('1'));
       },
     );
   });
@@ -227,18 +227,22 @@ Future<void> main() async {
     blocTest<UserBloc, UserState>(
       'debe deshabilitar un user',
       build: () {
-        when(mockEnableUser.execute(newUserId, false))
-            .thenAnswer((_) async => Right(tUser));
+        when(mockGetSession.execute())
+            .thenAnswer((_) async => const Right(testSession));
+        when(mockGetOrgaUser.execute('00000100-0100-0100-0100-000000000100','1'))
+            .thenAnswer((_) async => const Right(<OrgaUser>[tOrgaUser]));
+        when(mockEnableUser.execute('1', false))
+            .thenAnswer((_) async => const Right(tUser));
         return userBloc;
       },
-      act: (bloc) => bloc.add(OnUserEnable(newUserId, false, 'user')),
+      act: (bloc) => bloc.add(const OnUserEnable('1', false, 'user')),
       wait: const Duration(milliseconds: 500),
       expect: () => [
         UserLoading(),
-        UserLoaded(tUser, tOrgaUser, " El usuario user fue deshabilitado")
+        const UserLoaded(tUser, tOrgaUser, " El usuario user fue deshabilitado")
       ],
       verify: (bloc) {
-        verify(mockEnableUser.execute(newUserId, false));
+        verify(mockEnableUser.execute('1', false));
       },
     );
   });
@@ -246,19 +250,19 @@ Future<void> main() async {
     blocTest<UserBloc, UserState>(
       'debe actualizar un user',
       build: () {
-        when(mockUpdateUser.execute(newUserId, tUser))
+        when(mockUpdateUser.execute('1', tUser))
             .thenAnswer((_) async => Right(tUser));
         return userBloc;
       },
       act: (bloc) => bloc.add(OnUserEdit(
-          newUserId, tUser.name, tUser.username, tUser.email, tUser.enabled)),
+          '1', tUser.name, tUser.username, tUser.email, tUser.enabled)),
       wait: const Duration(milliseconds: 500),
       expect: () => [
         UserLoading(),
         UserStart(" El usuario ${tUser.username} fue actualizado")
       ],
       verify: (bloc) {
-        verify(mockUpdateUser.execute(newUserId, tUser));
+        verify(mockUpdateUser.execute('1', tUser));
       },
     );
 
@@ -278,16 +282,20 @@ Future<void> main() async {
     blocTest<UserBloc, UserState>(
       'debe actualizar una password',
       build: () {
-        when(mockUpdateUserPassword.execute(newUserId, '1234'))
+        when(mockGetSession.execute())
+            .thenAnswer((_) async => const Right(testSession));
+        when(mockGetOrgaUser.execute('00000100-0100-0100-0100-000000000100','1'))
+            .thenAnswer((_) async => const Right(<OrgaUser>[tOrgaUser]));
+        when(mockUpdateUserPassword.execute('1', '1234'))
             .thenAnswer((_) async => const Right(true));
         return userBloc;
       },
-      act: (bloc) => bloc.add(OnUserSaveNewPassword('1234', tUser)),
+      act: (bloc) => bloc.add(const OnUserSaveNewPassword('1234', tUser)),
       wait: const Duration(milliseconds: 500),
       expect: () =>
-          [UserLoading(), UserLoaded(tUser, tOrgaUser, " Contraseña Modificada")],
+          [UserLoading(), const UserLoaded(tUser, tOrgaUser, " Contraseña Modificada")],
       verify: (bloc) {
-        verify(mockUpdateUserPassword.execute(newUserId, '1234'));
+        verify(mockUpdateUserPassword.execute('1', '1234'));
       },
     );
   });
