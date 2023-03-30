@@ -477,6 +477,8 @@ class UsersPage extends StatelessWidget {
               controller: _passwordController,
               key: const ValueKey("password"),
               validator: (value) => Validators.validatePassword(value ?? ""),
+              obscureText: true,
+              obscuringCharacter: '*',
               decoration: const InputDecoration(
                 labelText: 'Contraseña',
                 hintText: 'Ingrese nueva contraseña',
@@ -488,6 +490,8 @@ class UsersPage extends StatelessWidget {
               key: const ValueKey("repeatPassword"),
               validator: (value) => Validators.validatePasswordEqual(
                   value ?? "", _passwordController.text),
+              obscureText: true,
+              obscuringCharacter: '*',
               decoration: const InputDecoration(
                 labelText: 'Repetir Contraseña',
                 hintText: 'Repita nueva contraseña',
