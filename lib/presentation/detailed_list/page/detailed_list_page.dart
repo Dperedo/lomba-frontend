@@ -399,9 +399,14 @@ class DetailedListPage extends StatelessWidget {
                               children: [
                                 Expanded(
                                     child: Text(
-                                        "Votos: ${state.listItems[index].votes.length} ")),
+                                        "Votos: ${state.listItems[index].totals.fold(0, (previousValue, element) => int.parse((previousValue ?? 0).toString()) + element.totalcount)} ")),
                                 Text(
                                     "Fecha: ${DateFormat('dd/MM/yyyy HH:mm:ss').format(state.listItems[index].created)} "),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text("Estado: ${state.listItems[index].stages.last.name}"),
                               ],
                             ),
                             const Divider(),
