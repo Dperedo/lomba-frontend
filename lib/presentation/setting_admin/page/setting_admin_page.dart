@@ -32,7 +32,9 @@ class SettingAdminPage extends StatelessWidget {
           }
         },
         child: ScaffoldManager(
-          title: AppBar(),//_variableAppBar(context, state),
+          title: AppBar(
+            title: const Text("Configuración de Admin"),
+          ),
           child: SingleChildScrollView(
               child: Center(
                   child: BodyFormatter(
