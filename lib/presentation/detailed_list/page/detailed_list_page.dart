@@ -227,7 +227,7 @@ class DetailedListPage extends StatelessWidget {
                                         state.searchText,
                                         value.toString(),
                                         state.stageId,
-                                        const <String, int>{'latest': 1},
+                                        <String, int>{state.fieldsOrder.keys.first: -1},
                                         1,
                                         _fixPageSize,
                                         context
@@ -265,7 +265,7 @@ class DetailedListPage extends StatelessWidget {
                                         state.searchText,
                                         state.flowId,
                                         value.toString(),
-                                        const <String, int>{'latest': 1},
+                                        <String, int>{state.fieldsOrder.keys.first: -1},
                                         1,
                                         _fixPageSize,
                                         context
@@ -399,7 +399,7 @@ class DetailedListPage extends StatelessWidget {
                               children: [
                                 Expanded(
                                     child: Text(
-                                        "Votos: ${state.listItems[index].votes.length.toString()} ")),
+                                        "Votos: ${state.listItems[index].votes.length} ")),
                                 Text(
                                     "Fecha: ${DateFormat('dd/MM/yyyy HH:mm:ss').format(state.listItems[index].created)} "),
                               ],
@@ -535,9 +535,44 @@ class DetailedListPage extends StatelessWidget {
                       }).toList(),
                       onChanged: (value) {
                         if (value.toString() != state.post.stageId) {
-                          context.read<DetailedListBloc>().add(
+                          /*context.read<DetailedListBloc>().add(
                               OnDetailedListChangeStage(state.post,
-                                  value.toString(), state.liststage));
+                                  value.toString(), state.liststage));*/
+                          final newStageId = value.toString();
+                          showDialog(
+                            context: context,
+                            builder: (context) => GestureDetector(
+                                  onTap: () => Navigator.pop(context),
+                                  child: AlertDialog(
+                                    title: const Text(
+                                        '¿Desea cambiar el estado de la publicación?'),
+                                    content: const Text(
+                                        'Puede cambiar después su elección'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        key: const ValueKey("btnConfirmEnable"),
+                                        child: const Text('Cambiar'),
+                                        onPressed: () {
+                                          Navigator.pop(context, true);
+                                        },
+                                      ),
+                                      TextButton(
+                                        key: const ValueKey("btnCancelEnable"),
+                                        child: const Text('Cancelar'),
+                                        onPressed: () {
+                                          Navigator.pop(context, false);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                )).then((value) => {
+                              if (value)
+                                {
+                                  context.read<DetailedListBloc>().add(
+                                    OnDetailedListChangeStage(state.post,
+                                        newStageId, state.liststage))
+                                }
+                            });
                         }
                       },
                     ),

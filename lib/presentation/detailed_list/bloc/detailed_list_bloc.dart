@@ -71,7 +71,7 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
         List<Stage> listStages = [
           Stage(
             id: '',
-            name: 'Todos los estados',
+            name: 'Todas las Etapas',
             order: 2,
             queryOut: null,
             enabled: true,
@@ -110,7 +110,7 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
             auth.getOrgaId()!,
             auth.getUserId()!,
             flowId,
-            stageId,
+            event.stageId,
             event.searchText,
             event.fieldsOrder,
             event.pageIndex,
@@ -123,7 +123,7 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
                 auth.getOrgaId()!,
                 auth.getUserId()!,
                 flowId,
-                stageId,
+                event.stageId,
                 event.searchText,
                 event.fieldsOrder,
                 event.pageIndex,
@@ -219,7 +219,14 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
       });
 
       final editStage = await _enablePost.execute(post.id, !post.enabled);
-      editStage.fold((l) => emit(DetailedListError(l.message)),
+      editStage.fold((l) {
+        if (l.message == 'No fue posible realizar la acción') {
+          emit(DetailedListError(l.message));
+          emit(DetailedListEdit(post, event.listStage, name, username));
+        } else {
+          emit(DetailedListError(l.message));
+        }
+        },
           (r) => emit(DetailedListEdit(r, event.listStage, name, username)));
     });
 
