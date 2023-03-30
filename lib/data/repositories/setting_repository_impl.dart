@@ -55,10 +55,10 @@ class SettingRepositoryImpl implements SettingRepository {
 
   @override
   Future<Either<Failure, bool>> updatedSettingSuper(
-      String id,String value) async {
+      List<Map<String, dynamic>> settingList) async {
     try {
       final result =
-          await remoteDataSource.updatedSettingSuper(id, value);
+          await remoteDataSource.updatedSettingSuper(settingList);
 
       return Right(result);
     } on ServerException {
@@ -71,10 +71,10 @@ class SettingRepositoryImpl implements SettingRepository {
 
   @override
   Future<Either<Failure, bool>> updatedSettingAdmin(
-      String id,String value,String orgaId) async {
+      List<Map<String, dynamic>> settingList,String orgaId) async {
     try {
       final result =
-          await remoteDataSource.updatedSettingAdmin(id, value, orgaId);
+          await remoteDataSource.updatedSettingAdmin(settingList, orgaId);
 
       return Right(result);
     } on ServerException {

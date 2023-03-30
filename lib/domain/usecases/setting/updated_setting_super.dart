@@ -6,7 +6,7 @@ import '../../repositories/setting_repository.dart';
 class UpdatedSettingSuper {
   final SettingRepository repository;
   UpdatedSettingSuper(this.repository);
-  Future<Either<Failure, bool>> execute(String id,String value) async {
-    return await repository.updatedSettingSuper(id, value);
+  Future<Either<Failure, bool>> execute(List<Map<String, dynamic>> settingList) async {
+    return await repository.updatedSettingSuper(settingList);
   }
 }

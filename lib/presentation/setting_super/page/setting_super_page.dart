@@ -46,21 +46,6 @@ class SettingSuperPage extends StatelessWidget {
     });
   }
 
-  /*AppBar _variableAppBar(BuildContext context, SettingSuperState state) {
-    if (state is SettingSuperEditing) {
-      return AppBar(
-          title: const Text("Editando Perfil"),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              context.read<SettingSuperBloc>().add(OnSettingSuperStarter());
-            },
-          ));
-    }
-
-    return AppBar(title: const Text("Perfil"));
-  }*/
-
   Widget _bodySettingSuper(BuildContext context, SettingSuperState state) {
 
     if (state is SettingSuperStart) {
@@ -100,9 +85,11 @@ class SettingSuperPage extends StatelessWidget {
                         onChanged: (value) {
                           if(value.toString() != state.orgaId) {
                           context.read<SettingSuperBloc>().add(
-                              OnSettingSuperEdit(
+                              OnSettingSuperSave(
                                   value.toString(),
-                                  SettingCodes.defaultOrgaForUserRegister));
+                                  state.flowId,
+                                  state.roleName,
+                                  state.orgaIdForAnonymous,));
                           }
                         }
                       )
@@ -135,9 +122,11 @@ class SettingSuperPage extends StatelessWidget {
                         onChanged: (value) {
                           if(value.toString() != state.flowId) {
                           context.read<SettingSuperBloc>().add(
-                              OnSettingSuperEdit(
+                              OnSettingSuperSave(
+                                  state.orgaId,
                                   value.toString(),
-                                  SettingCodes.defaultFlow));
+                                  state.roleName,
+                                  state.orgaIdForAnonymous,));
                           }
                         }
                       )
@@ -170,9 +159,11 @@ class SettingSuperPage extends StatelessWidget {
                         onChanged: (value) {
                           if(value.toString() != state.roleName) {
                           context.read<SettingSuperBloc>().add(
-                              OnSettingSuperEdit(
+                              OnSettingSuperSave(
+                                  state.orgaId,
+                                  state.flowId,
                                   value.toString(),
-                                  SettingCodes.defaultRoleForUserRegister));
+                                  state.orgaIdForAnonymous,));
                           }
                         }
                       )
@@ -194,20 +185,22 @@ class SettingSuperPage extends StatelessWidget {
                       const Text("Organización para anónimos:"),
                       const VerticalDivider(),
                       DropdownButton(
-                        value: state.listOrgas.firstWhere((e) => e.id == state.orgaIdForAnonymous).id,
+                        value: state.listOrgasAnony.firstWhere((e) => e.id == state.orgaIdForAnonymous).id,
                         hint: const Text('Seleccionar'),
-                        items: state.listOrgas.map<DropdownMenuItem<String>>((Orga orga) {
+                        items: state.listOrgasAnony.map<DropdownMenuItem<String>>((Orga orga) {
                           return DropdownMenuItem<String>(
                             value: orga.id,
                             child: Text(orga.name),
                           );
                         }).toList(),
                         onChanged: (value) {
-                          if(value.toString() != state.orgaId) {
+                          if(value.toString() != state.orgaIdForAnonymous) {
                           context.read<SettingSuperBloc>().add(
-                              OnSettingSuperEdit(
-                                  value.toString(),
-                                  SettingCodes.orgaForAnonymousUser));
+                              OnSettingSuperSave(
+                                  state.orgaId,
+                                  state.flowId,
+                                  state.roleName,
+                                  value.toString(),));
                           }
                         }
                       )
@@ -216,6 +209,54 @@ class SettingSuperPage extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(
+              height: 15,
+            ),
+            ElevatedButton.icon(
+                  icon: const Icon(Icons.save),
+                  key: const ValueKey("btnViewSaveChanges"),
+                  label: const Text("Guardar cambios"),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: AlertDialog(
+                              title: const Text(
+                                  '¿Desea guardar los cambios?'),
+                              content: const Text(
+                                  'Puede cambiar después su elección'),
+                              actions: <Widget>[
+                                TextButton(
+                                  key: const ValueKey("btnConfirmEnable"),
+                                  child: const Text(("Guardar")),
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                  },
+                                ),
+                                TextButton(
+                                  key: const ValueKey("btnCancelEnable"),
+                                  child: const Text('Cancelar'),
+                                  onPressed: () {
+                                    Navigator.pop(context, false);
+                                  },
+                                ),
+                              ],
+                            ),
+                          )).then((value) => {
+                        if (value)
+                          {
+                            context.read<SettingSuperBloc>().add(
+                                OnSettingSuperEdit(
+                                  state.orgaId,
+                                  state.flowId,
+                                  state.roleName,
+                                  state.orgaIdForAnonymous,))
+                          }
+                      }
+                    );
+                  },
+                ),
           ],
         ),
       );

@@ -206,7 +206,6 @@ Future<void> init() async {
         locator(),
         locator(),
         locator(),
-        locator(),
       ));
   locator.registerFactory(() => DetailedListBloc(
         locator(),
@@ -325,7 +324,8 @@ Future<void> init() async {
     () => StageRepositoryImpl(remoteDataSource: locator()),
   );
   locator.registerLazySingleton<StorageRepository>(
-      () => StorageRepositoryImpl(remoteDataSource: locator()));
+    () => StorageRepositoryImpl(remoteDataSource: locator())
+  );
   locator.registerLazySingleton<SettingRepository>(
     () => SettingRepositoryImpl(remoteDataSource: locator()),
   );

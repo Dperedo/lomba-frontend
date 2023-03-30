@@ -14,13 +14,26 @@ class OnSettingSuperLoad extends SettingSuperEvent {
   List<Object> get props => [];
 }
 
-class OnSettingSuperEdit extends SettingSuperEvent {
-  final String id;
-  final String code;
-  const OnSettingSuperEdit(this.id, this.code);
+class OnSettingSuperSave extends SettingSuperEvent {
+  final String orgaId;
+  final String flowId;
+  final String roleName;
+  final String orgaIdAnony;
+  const OnSettingSuperSave(this.orgaId, this.flowId, this.roleName, this.orgaIdAnony);
 
   @override
-  List<Object> get props => [id, code];
+  List<Object> get props => [orgaId, flowId, roleName, orgaIdAnony];
+}
+
+class OnSettingSuperEdit extends SettingSuperEvent {
+  final String orgaId;
+  final String flowId;
+  final String roleName;
+  final String orgaIdAnony;
+  const OnSettingSuperEdit(this.orgaId, this.flowId, this.roleName, this.orgaIdAnony);
+
+  @override
+  List<Object> get props => [orgaId, flowId, roleName, orgaIdAnony];
 }
 
 class OnSettingSuperStarter extends SettingSuperEvent {}
