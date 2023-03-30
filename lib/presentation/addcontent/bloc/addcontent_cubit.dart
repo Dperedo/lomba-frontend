@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/domain/usecases/storage/upload_file.dart';
+import 'package:lomba_frontend/domain/usecases/storage/upload_cloudfile.dart';
 
 class AddContentLiveCubit extends Cubit<AddContentLiveState> {
   final UploadFile uploadFile;
@@ -15,13 +15,8 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
   }
 
   void showImage(String name, Uint8List image) async {
-    emit(state.copyWithImage(name: name, image: image));
     await uploadFile.execute(image, name, "1", "1");
-    //.then((value) => value.fold((l) {
-    //            emit(state.copyWithImage(name: name, image: image));
-    //        }, (r) {
-    //        emit(state.copyWithImage(name: name, image: image));
-    //    }));
+    emit(state.copyWithImage(name: name, image: image));
   }
 
   void removeImage() {

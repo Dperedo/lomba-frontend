@@ -1,4 +1,4 @@
-import 'package:lomba_frontend/domain/entities/storage/filecloud.dart';
+import 'package:lomba_frontend/domain/entities/storage/cloudfile.dart';
 
 import 'package:lomba_frontend/core/failures.dart';
 
@@ -16,7 +16,7 @@ class StorageRepositoryImpl implements StorageRepository {
   StorageRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, FileCloud>> uploadFile(
+  Future<Either<Failure, CloudFile>> uploadFile(
       Uint8List file, String name, String userId, String orgaId) async {
     try {
       final result =
