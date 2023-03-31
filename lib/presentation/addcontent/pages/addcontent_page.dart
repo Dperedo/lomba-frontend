@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,6 +56,14 @@ class AddContentPage extends StatelessWidget {
   Widget _bodyAddContent(BuildContext context, GlobalKey<FormState> key) {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController contentController = TextEditingController();
+    final TextEditingController contentControllerImagen = TextEditingController();
+
+    String? _validateFields(String value) {
+      if (value.isEmpty && contentControllerImagen.text.isEmpty) {
+        return 'Por favor, complete al menos uno de los campos';
+      }
+      return null;
+    }
 
     return BlocProvider<AddContentLiveCubit>(
       create: (context) => AddContentLiveCubit(di.locator()),
@@ -98,7 +104,7 @@ class AddContentPage extends StatelessWidget {
                             maxLines: 4,
                             controller: contentController,
                             validator: (value) =>
-                                Validators.validateName(value ?? ""),
+                                _validateFields(value ?? ""),
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                               hintText: 'Texto',
@@ -151,6 +157,7 @@ class AddContentPage extends StatelessWidget {
                                                 PlatformFile file =
                                                     result.files.first;
                                                 if (file.size != 0) {
+                                                  contentControllerImagen.text = file.name;
                                                   context
                                                       .read<
                                                           AddContentLiveCubit>()

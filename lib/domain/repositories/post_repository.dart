@@ -3,12 +3,16 @@ import 'package:lomba_frontend/core/model_container.dart';
 import 'package:lomba_frontend/domain/entities/workflow/textcontent.dart';
 
 import '../../core/failures.dart';
+import '../entities/workflow/imagecontent.dart';
 import '../entities/workflow/post.dart';
+import '../entities/workflow/videocontent.dart';
 import '../entities/workflow/vote.dart';
 
 abstract class PostRepository {
   Future<Either<Failure, Post>> addTextPost(String orgaId, String userId,
       TextContent text, String title, String flowId, bool isDraft);
+  Future<Either<Failure, Post>> addMultiPost(String orgaId, String userId, TextContent text,
+      ImageContent image, VideoContent video, String title, String flowId, bool isDraft);
   Future<Either<Failure, Post>> updatePost(String postId, String userId,
       TextContent text, String title);
   Future<Either<Failure, Post>> changeStagePost(String postId, String flowId, String stageId);

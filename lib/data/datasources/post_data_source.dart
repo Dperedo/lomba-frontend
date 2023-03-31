@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:lomba_frontend/domain/entities/workflow/imagecontent.dart';
 import 'package:lomba_frontend/domain/entities/workflow/textcontent.dart';
+import 'package:lomba_frontend/domain/entities/workflow/videocontent.dart';
 
 import '../../core/constants.dart';
 import '../../core/exceptions.dart';
@@ -17,6 +19,8 @@ import 'local_data_source.dart';
 abstract class PostRemoteDataSource {
   Future<PostModel> addTextPost(String orgaId, String userId, TextContent text,
       String title, String flowId, bool isDraft);
+  Future<PostModel> addMultiPost(String orgaId, String userId, TextContent text,
+      ImageContent image, VideoContent video, String title, String flowId, bool isDraft);
   Future<PostModel> updatePost(
       String postId, String userId, TextContent text, String title);
   Future<PostModel> deletePost(String postId, String userId);
@@ -80,6 +84,179 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
     http.Response resp =
         await client.post(url, body: json.encode(newTextPost), headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      final item = resObj['data']['items'][0];
+
+      List<Stage> listStage = (item['stages'] as List)
+          .map((e) => Stage(
+              id: e['id'].toString(),
+              name: e['name'].toString(),
+              order: int.parse(e['order'].toString()),
+              queryOut: e['queryOut'],
+              enabled: e['enabled'].toString().toLowerCase() == 'true',
+              builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+              created: DateTime.parse(e['created'].toString()),
+              updated: e['updated'] != null
+                  ? DateTime.parse(e['updated'].toString())
+                  : null,
+              deleted: e['deleted'] != null
+                  ? DateTime.parse(e['deleted'].toString())
+                  : null,
+              expires: e['expires'] != null
+                  ? DateTime.parse(e['expires'].toString())
+                  : null))
+          .toList();
+
+      //completar con lógica
+      List<PostItem> listPostItems = (item['postitems'] as List)
+          .map((e) => PostItem(
+              content: TextContent(text: e['content']['text'].toString()),
+              type: e['type'].toString(),
+              order: int.parse(e['order'].toString()),
+              format: e['format'].toString(),
+              builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+              created: DateTime.parse(e['created'].toString()),
+              deleted: e['deleted'] != null
+                  ? DateTime.parse(e['deleted'].toString())
+                  : null,
+              expires: e['expires'] != null
+                  ? DateTime.parse(e['expires'].toString())
+                  : null,
+              updated: e['updated'] != null
+                  ? DateTime.parse(e['updated'].toString())
+                  : null))
+          .toList();
+
+      List<Total> listTotals = (item['totals'] as List)
+          .map((e) => Total(
+                flowId: e['flowId'].toString(),
+                stageId: e['stageId'].toString(),
+                totalcount: int.parse(e['totalcount'].toString()),
+                totalnegative: int.parse(e['totalnegative'].toString()),
+                totalpositive: int.parse(e['totalpositive'].toString()),
+              ))
+          .toList();
+
+      List<Track> listTracks = (item['tracks'] as List)
+          .map((e) => Track(
+              name: e['name'].toString(),
+              description: e['description'].toString(),
+              userId: e['userId'].toString(),
+              flowId: e['flowId'].toString(),
+              stageIdOld: e['stageIdOld'].toString(),
+              stageIdNew: e['stageIdNew'].toString(),
+              change: e['change'].toString(),
+              created: DateTime.parse(e['created'].toString()),
+              deleted: e['deleted'] != null
+                  ? DateTime.parse(e['deleted'].toString())
+                  : null,
+              expires: e['expires'] != null
+                  ? DateTime.parse(e['expires'].toString())
+                  : null,
+              updated: e['updated'] != null
+                  ? DateTime.parse(e['updated'].toString())
+                  : null))
+          .toList();
+
+      List<Vote> listVotes = item['votes'] != null
+          ? (item['votes'] as List)
+              .map((e) => Vote(
+                    userId: e['userId'].toString(),
+                    flowId: e['flowId'].toString(),
+                    stageId: e['stageId'].toString(),
+                    created: DateTime.parse(e['created'].toString()),
+                    updated: e['updated'] != null
+                        ? DateTime.parse(e['updated'].toString())
+                        : null,
+                    deleted: e['deleted'] != null
+                        ? DateTime.parse(e['deleted'].toString())
+                        : null,
+                    expires: e['expires'] != null
+                        ? DateTime.parse(e['expires'].toString())
+                        : null,
+                    value: int.parse(e['value'].toString()),
+                  ))
+              .toList()
+          : [];
+
+      return Future.value(PostModel(
+        id: item['id'].toString(),
+        enabled: item['enabled'].toString().toLowerCase() == 'true',
+        builtIn: item['builtIn'].toString().toLowerCase() == 'true',
+        title: item['title'].toString(),
+        orgaId: item['orgaId'].toString(),
+        userId: item['userId'].toString(),
+        flowId: item['flowId'].toString(),
+        stageId: item['stageId'].toString(),
+        created: DateTime.parse(item['created'].toString()),
+        updated: item['updated'] != null
+            ? DateTime.parse(item['updated'].toString())
+            : null,
+        deleted: item['deleted'] != null
+            ? DateTime.parse(item['deleted'].toString())
+            : null,
+        expires: item['expires'] != null
+            ? DateTime.parse(item['expires'].toString())
+            : null,
+        stages: listStage,
+        postitems: listPostItems,
+        totals: listTotals,
+        tracks: listTracks,
+        votes: listVotes,
+      ));
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<PostModel> addMultiPost(String orgaId, String userId, TextContent text,
+      ImageContent image, VideoContent video, String title, String flowId, bool isDraft)
+      async {
+    final Map<String, dynamic> newMultiPost = {
+      'userId': userId,
+      'orgaId': orgaId,
+      'flowId': flowId,
+      'title': title,
+      'isdraft': isDraft,
+      'textContent': {
+        'text': text.text
+        },
+      'imageContent': {
+        'url': image.url,
+        'size': image.size,
+        'filetype': image.filetype,
+        'cloudFileId': image.cloudFileId,
+        'width': image.width,
+        'height': image.height,
+        'description': image.description,
+        },
+      'videoContent': {
+        'url': video.url,
+        'size': video.size,
+        'filetype': video.filetype,
+        'cloudFileId': video.cloudFileId,
+        'width': video.width,
+        'height': video.height,
+        'description': video.description,
+        'thumbnailUrl': video.thumbnailUrl,
+        'thumbnailSize': video.thumbnailSize,
+        'thumbnailCloudFileId': video.thumbnailCloudFileId,
+        }
+    };
+
+    final session = await localDataSource.getSavedSession();
+    final url = Uri.parse('${UrlBackend.base}/api/v1/post/multi');
+
+    http.Response resp =
+        await client.post(url, body: json.encode(newMultiPost), headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",

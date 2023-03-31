@@ -7,6 +7,8 @@ import 'package:lomba_frontend/domain/repositories/post_repository.dart';
 
 import '../../core/constants.dart';
 import '../../core/exceptions.dart';
+import '../../domain/entities/workflow/imagecontent.dart';
+import '../../domain/entities/workflow/videocontent.dart';
 import '../../domain/entities/workflow/vote.dart';
 import '../datasources/post_data_source.dart';
 
@@ -21,6 +23,21 @@ class PostRepositoryImpl implements PostRepository {
     try {
       final result = await remoteDataSource.addTextPost(
           orgaId, userId, text, title, flowId, isDraft);
+
+      return (Right(result.toEntity()));
+    } on ServerException {
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Post>> addMultiPost(String orgaId, String userId, TextContent text,
+      ImageContent image, VideoContent video, String title, String flowId, bool isDraft) async {
+    try {
+      final result = await remoteDataSource.addMultiPost(
+          orgaId, userId, text, image, video, title, flowId, isDraft);
 
       return (Right(result.toEntity()));
     } on ServerException {
