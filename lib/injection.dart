@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/domain/usecases/login/readif_redirect_login.dart';
 import 'package:lomba_frontend/domain/usecases/login/start_redirect_login.dart';
+import 'package:lomba_frontend/domain/usecases/post/add_multi_post.dart';
 import 'package:lomba_frontend/domain/usecases/post/add_text_post.dart';
 import 'package:lomba_frontend/domain/usecases/post/change_stage_post.dart';
 import 'package:lomba_frontend/domain/usecases/post/delete_post.dart';
@@ -21,6 +22,8 @@ import 'package:lomba_frontend/domain/usecases/login/change_orga.dart';
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate.dart';
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate_google.dart';
 import 'package:lomba_frontend/domain/usecases/login/register_user.dart';
+import 'package:lomba_frontend/domain/usecases/storage/get_cloudfile.dart';
+import 'package:lomba_frontend/domain/usecases/storage/register_cloudfile.dart';
 import 'package:lomba_frontend/domain/usecases/storage/upload_cloudfile.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart';
 import 'package:lomba_frontend/presentation/approved/bloc/approved_bloc.dart';
@@ -264,6 +267,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetAuthenticateGoogle(locator()));
 
   locator.registerLazySingleton(() => AddTextPost(locator()));
+  locator.registerLazySingleton(() => AddMultiPost(locator()));
   locator.registerLazySingleton(() => GetApprovedPosts(locator()));
   locator.registerLazySingleton(() => GetForApprovePosts(locator()));
   locator.registerLazySingleton(() => GetLatestPosts(locator()));
@@ -294,6 +298,8 @@ Future<void> init() async {
   locator.registerLazySingleton(() => StartRedirectLogin(locator()));
 
   locator.registerLazySingleton(() => UploadFile(locator()));
+  locator.registerLazySingleton(() => GetCloudFile(locator()));
+  locator.registerLazySingleton(() => RegisterCloudFile(locator()));
 
   // repository
   locator.registerLazySingleton<LoginRepository>(

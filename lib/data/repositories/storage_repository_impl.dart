@@ -17,10 +17,10 @@ class StorageRepositoryImpl implements StorageRepository {
 
   @override
   Future<Either<Failure, CloudFile>> uploadFile(
-      Uint8List file, String name, String userId, String orgaId) async {
+      Uint8List file, String cloudFileId) async {
     try {
       final result =
-          await remoteDataSource.uploadFile(file, name, userId, orgaId);
+          await remoteDataSource.uploadFile(file, cloudFileId);
 
       return Right(result.toEntity());
     } on ServerException {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
+import 'package:lomba_frontend/domain/entities/storage/cloudfile.dart';
 import '../../core/constants.dart';
 import '../../core/exceptions.dart';
 import '../models/storage/cloudfile_model.dart';
@@ -8,7 +9,7 @@ import 'local_data_source.dart';
 
 abstract class StorageRemoteDataSource {
   Future<CloudFileModel> uploadFile(
-      Uint8List file, String name, String userId, String orgaId);
+      Uint8List file, String cloudFileId);
   Future<CloudFileModel> registerCloudFile(String userId, String orgaId);
   Future<CloudFileModel> getCloudFile(String cloudFileId);
 }
@@ -21,7 +22,7 @@ class StorageRemoteDataSourceImpl implements StorageRemoteDataSource {
 
   @override
   Future<CloudFileModel> uploadFile(
-      Uint8List file, String name, String userId, String orgaId) async {
+      Uint8List file, String cloudFileId) async {
     final session = await localDataSource.getSavedSession();
     final url = Uri.parse('${UrlBackend.base}/api/v1/storage');
 
@@ -33,11 +34,11 @@ class StorageRemoteDataSourceImpl implements StorageRemoteDataSource {
     };
     */
 
-    var request = http.MultipartRequest('POST', url);
+    var request = http.MultipartRequest('PUT', url);
 
     request.files
-        .add(http.MultipartFile.fromBytes("file", file, filename: name));
-    request.fields.addAll({'name': name, 'userId': userId, 'orgaId': orgaId});
+        .add(http.MultipartFile.fromBytes("file", file, filename: cloudFileId+".jpg"));
+    request.fields.addAll({'cloudFileId': cloudFileId});
 
     request.headers.addAll({
       "Accept": "*/*",
@@ -87,7 +88,7 @@ class StorageRemoteDataSourceImpl implements StorageRemoteDataSource {
       'orgaId': orgaId,
       'userId': userId
       };
-    final url = Uri.parse('${UrlBackend.base}/api/v1/storage/$userId');
+    final url = Uri.parse('${UrlBackend.base}/api/v1/storage/');
     final session = await localDataSource.getSavedSession();
 
     http.Response resp =
@@ -129,6 +130,7 @@ class StorageRemoteDataSourceImpl implements StorageRemoteDataSource {
     }
   }
 
+  @override
   Future<CloudFileModel> getCloudFile(String cloudFileId) async {
 
     final url = Uri.parse('${UrlBackend.base}/api/v1/storage/$cloudFileId');

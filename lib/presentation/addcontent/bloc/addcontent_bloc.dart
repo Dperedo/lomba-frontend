@@ -60,8 +60,21 @@ class AddContentBloc extends Bloc<AddContentEvent, AddContentState> {
     );
 
     on<OnAddContentUp>(
-      (event, emit) {
-        emit(AddContentStart());
+      (event, emit) async {
+        //-------------------
+        SessionModel? session;
+        final resultSession = await _getSession.execute();
+          resultSession.fold(
+              (l) => emit(AddContentError(l.message)),
+              (r) => {
+                    session = SessionModel(
+                        token: r.token, username: r.username, name: r.name)
+                  });
+
+          final userId = session?.getUserId();
+          final orgaId = session?.getOrgaId();
+        //-------------------
+        emit(AddContentEdit(userId!, orgaId!));
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
