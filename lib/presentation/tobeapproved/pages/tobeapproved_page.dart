@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:number_paginator/number_paginator.dart';
+import 'package:image_network/image_network.dart';
 
 import '../../../core/widgets/snackbar_notification.dart';
+import '../../../domain/entities/workflow/imagecontent.dart';
 import '../../../domain/entities/workflow/textcontent.dart';
 import '../bloc/tobeapproved_bloc.dart';
 import '../bloc/tobeapproved_cubit.dart';
@@ -163,60 +165,7 @@ class ToBeApprovedPage extends StatelessWidget {
                       ),
                       BlocBuilder<ToBeApprovedLiveCubit, ToBeApprovedLiveState>(
                           builder: (context, statecubit) {
-                        return ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: state.listItems.length,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          children: [
-                                            ListTile(
-                                              leading: const Icon(Icons.person),
-                                              title: Text(
-                                                  state.listItems[index].title),
-                                            ),
-                                            ListTile(
-                                              shape:
-                                                  const RoundedRectangleBorder(
-                                                      side: BorderSide(
-                                                          color: Colors.grey,
-                                                          width: 2),
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  2))),
-                                              // tileColor: Colors.grey,
-                                              title: Text(
-                                                  (state
-                                                              .listItems[index]
-                                                              .postitems[0]
-                                                              .content
-                                                          as TextContent)
-                                                      .text,
-                                                  textAlign: TextAlign.center),
-                                              contentPadding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 100,
-                                                      vertical: 100),
-                                            ),
-                                            const SizedBox(height: 10),
-                                            _showVoteButtons(context, state,
-                                                index, statecubit),
-                                            const SizedBox(height: 15),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  // const Divider()
-                                ],
-                              );
-                            });
+                        return showPosts(state, statecubit);
                       })
                     ],
                   );
@@ -224,6 +173,92 @@ class ToBeApprovedPage extends StatelessWidget {
                 return const SizedBox();
               })),
         ));
+  }
+
+  ListView showPosts(ToBeApprovedLoaded state, ToBeApprovedLiveState statecubit) {
+    return ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: state.listItems.length,
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        ListTile(
+                          leading: const Icon(Icons.person),
+                          title: Text(
+                              state.listItems[index].title),
+                        ),
+                        ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: state.listItems[index]
+                                          .postitems.length,
+                          itemBuilder: (context, i) {
+                          if (state.listItems[index].postitems[i].type=='text'){
+                            return ListTile(
+                              shape:
+                                  const RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: Colors.grey,
+                                          width: 2),
+                                      borderRadius:
+                                          BorderRadius.all(
+                                              Radius.circular(
+                                                  2))),
+                              title: Text(
+                                  (state.listItems[index]
+                                      .postitems[i].content
+                                          as TextContent).text,
+                                textAlign: TextAlign.center),
+                              contentPadding:
+                                  const EdgeInsets.symmetric(
+                                      horizontal: 100,
+                                      vertical: 100),
+                            );
+                          }
+                          else if(state.listItems[index].postitems[i].type=='image'){
+                            
+                            final imagen = state.listItems[index]
+                                  .postitems[i].content as ImageContent;
+                            return Container(
+                              padding: const EdgeInsets.all(5.0),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all(
+                                  width: 1,
+                                  color: Colors.grey,
+                                )
+                              ),
+                              child: ImageNetwork(
+                                image: imagen.url,
+                                height: double.parse((imagen.height).toString()),
+                                width: double.parse((imagen.width).toString()),
+                              )
+                              //Image.network(imagen.url),
+                            );
+                          }
+                            else {return null;}
+                          }
+                        ),
+                        const SizedBox(height: 10),
+                        _showVoteButtons(context, state,
+                            index, statecubit),
+                        const SizedBox(height: 15),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              // const Divider()
+            ],
+          );
+        });
   }
 
   DropdownButton<String> _sortDropdownButton(ToBeApprovedLoaded state,

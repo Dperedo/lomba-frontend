@@ -19,8 +19,8 @@ import 'local_data_source.dart';
 abstract class PostRemoteDataSource {
   Future<PostModel> addTextPost(String orgaId, String userId, TextContent text,
       String title, String flowId, bool isDraft);
-  Future<PostModel> addMultiPost(String orgaId, String userId, TextContent text,
-      ImageContent image, VideoContent video, String title, String flowId, bool isDraft);
+  Future<PostModel> addMultiPost(String orgaId, String userId, TextContent? text,
+      ImageContent? image, VideoContent? video, String title, String flowId, bool isDraft);
   Future<PostModel> updatePost(
       String postId, String userId, TextContent text, String title);
   Future<PostModel> deletePost(String postId, String userId);
@@ -217,8 +217,8 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
   }
 
   @override
-  Future<PostModel> addMultiPost(String orgaId, String userId, TextContent text,
-      ImageContent image, VideoContent video, String title, String flowId, bool isDraft)
+  Future<PostModel> addMultiPost(String orgaId, String userId, TextContent? text,
+      ImageContent? image, VideoContent? video, String title, String flowId, bool isDraft)
       async {
     final Map<String, dynamic> newMultiPost = {
       'userId': userId,
@@ -226,10 +226,10 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
       'flowId': flowId,
       'title': title,
       'isdraft': isDraft,
-      'textContent': {
+      'textContent': text==null?null:{
         'text': text.text
         },
-      'imageContent': {
+      'imageContent': image==null?null:{
         'url': image.url,
         'size': image.size,
         'filetype': image.filetype,
@@ -238,7 +238,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
         'height': image.height,
         'description': image.description,
         },
-      'videoContent': {
+      'videoContent': video==null?null:{
         'url': video.url,
         'size': video.size,
         'filetype': video.filetype,
@@ -586,7 +586,9 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
         //completar con lógica
         List<PostItem> listPostItems = (item['postitems'] as List)
-            .map((e) => PostItem(
+            .map((e) {
+              if (e['type'].toString()=='text') {
+              return PostItem(
                 content: TextContent(text: e['content']['text'].toString()),
                 type: e['type'].toString(),
                 order: int.parse(e['order'].toString()),
@@ -601,7 +603,35 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                     : null,
                 updated: e['updated'] != null
                     ? DateTime.parse(e['updated'].toString())
-                    : null))
+                    : null);
+                } else {
+                  return PostItem(
+                content: ImageContent(
+                  url: e['content']['url'].toString(),
+                  size: int.parse(e['content']['size'].toString()),
+                  filetype: e['content']['filetype'].toString(),
+                  cloudFileId: e['content']['cloudFileId'].toString(),
+                  width: int.parse(e['content']['width'].toString()),
+                  height: int.parse(e['content']['height'].toString()),
+                  description: e['content']['description'].toString()
+                ),
+                type: e['type'].toString(),
+                order: int.parse(e['order'].toString()),
+                format: e['format'].toString(),
+                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null);
+                }
+              }
+            )
             .toList();
 
         List<Total> listTotals = (item['totals'] as List)

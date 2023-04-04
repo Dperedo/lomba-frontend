@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
+import 'package:lomba_frontend/domain/entities/storage/cloudfile.dart';
 
 abstract class AddContentEvent extends Equatable {
   const AddContentEvent();
@@ -12,12 +13,22 @@ abstract class AddContentEvent extends Equatable {
 class OnAddContentAdd extends AddContentEvent {
   final String title;
   final String text;
+  final CloudFile? cloudFile;
   final bool isDraft;
+  final int imageHeight;
+  final int imageWidth;
 
-  const OnAddContentAdd(this.title, this.text, this.isDraft);
+  const OnAddContentAdd(
+    this.title,
+    this.text,
+    this.cloudFile,
+    this.isDraft,
+    this.imageHeight,
+    this.imageWidth,
+  );
 
   @override
-  List<Object> get props => [title, text, isDraft];
+  List<Object> get props => [title, isDraft, imageHeight, imageHeight];
 }
 
 class OnAddContentUp extends AddContentEvent {

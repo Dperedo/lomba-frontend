@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/domain/entities/workflow/imagecontent.dart';
 import 'package:lomba_frontend/domain/entities/workflow/textcontent.dart';
 import 'package:lomba_frontend/domain/usecases/post/add_text_post.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_has_login.dart';
@@ -7,16 +8,17 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
+import '../../../domain/usecases/post/add_multi_post.dart';
 import 'addcontent_event.dart';
 import 'addcontent_state.dart';
 
 class AddContentBloc extends Bloc<AddContentEvent, AddContentState> {
-  final AddTextPost _addTextPost;
+  final AddMultiPost _addMultiPost;
   final GetHasLogIn _hasLogIn;
   final GetSession _getSession;
 
   AddContentBloc(
-    this._addTextPost,
+    this._addMultiPost,
     this._hasLogIn,
     this._getSession,
   ) : super(AddContentStart()) {
@@ -25,6 +27,7 @@ class AddContentBloc extends Bloc<AddContentEvent, AddContentState> {
     on<OnAddContentAdd>(
       (event, emit) async {
         emit(AddContentLoading());
+
         SessionModel? session;
         bool login = false;
         const String flowId = Flows.votationFlowId;
@@ -44,10 +47,21 @@ class AddContentBloc extends Bloc<AddContentEvent, AddContentState> {
           final userId = session?.getUserId();
           final orgaId = session?.getOrgaId();
 
-          final result = await _addTextPost.execute(
+          final result = await _addMultiPost.execute(
               orgaId!,
               userId!,
-              TextContent(text: event.text),
+              event.text==''? null:TextContent(text: event.text),
+              event.cloudFile==null? null:
+              ImageContent(
+                url: event.cloudFile!.url,
+                size: event.cloudFile!.size,
+                filetype: event.cloudFile!.filetype,
+                cloudFileId: event.cloudFile!.id,
+                width: event.imageHeight,
+                height: event.imageWidth,
+                description: ''
+              ),
+              null,
               event.title,
               flowId,
               event.isDraft);

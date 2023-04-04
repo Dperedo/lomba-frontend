@@ -233,10 +233,19 @@ class AddContentPage extends StatelessWidget {
                                       OnAddContentAdd(
                                           titleController.text,
                                           contentController.text,
+                                          context.read<AddContentLiveCubit>()
+                                              .state
+                                              .cloudFile,
                                           context
                                               .read<AddContentLiveCubit>()
                                               .state
-                                              .checks["keepasdraft"]!));
+                                              .checks["keepasdraft"]!,
+                                          context.read<AddContentLiveCubit>()
+                                              .state
+                                              .imageHeight,
+                                          context.read<AddContentLiveCubit>()
+                                              .state
+                                              .imageWidth,));
                                 }
                               },
                             ),
@@ -268,6 +277,7 @@ class AddContentPage extends StatelessWidget {
                               context
                                   .read<AddContentBloc>()
                                   .add(const OnAddContentUp());
+                              context.read<AddContentLiveCubit>().removeImage();
                             })
                       ],
                     ),

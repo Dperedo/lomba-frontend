@@ -33,8 +33,8 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, Post>> addMultiPost(String orgaId, String userId, TextContent text,
-      ImageContent image, VideoContent video, String title, String flowId, bool isDraft) async {
+  Future<Either<Failure, Post>> addMultiPost(String orgaId, String userId, TextContent? text,
+      ImageContent? image, VideoContent? video, String title, String flowId, bool isDraft) async {
     try {
       final result = await remoteDataSource.addMultiPost(
           orgaId, userId, text, image, video, title, flowId, isDraft);
