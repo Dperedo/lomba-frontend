@@ -5,9 +5,9 @@ import 'package:lomba_frontend/data/models/user_model.dart';
 
 import '../../core/exceptions.dart';
 import '../../core/failures.dart';
+import '../../core/model_container.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/user_repository.dart';
-import '../models/sort_model.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final UserRemoteDataSource remoteDataSource;
@@ -15,25 +15,21 @@ class UserRepositoryImpl implements UserRepository {
   UserRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, List<User>>> getUsers(String orgaId, String filter,
-      String fieldOrder, double pageNumber, int pageSize) async {
+  Future<Either<Failure, ModelContainer<User>>> getUsers(
+      String searchText,
+      String orgaId,
+      Map<String, int> fieldsOrder,
+      int pageIndex,
+      int pageSize) async {
     try {
-      if (orgaId == "") {
-        orgaId = '00000200-0200-0200-0200-000000000200';
-      } // DEFAULT
-
+      List<dynamic> order = [];
+      fieldsOrder.forEach((key, value) {
+        order.add([key, value == 1 ? value : -1]);
+      });
       final result = await remoteDataSource.getUsers(
-          orgaId, filter, fieldOrder, pageNumber, pageSize);
+          searchText, orgaId, order, pageIndex, pageSize);
 
-      List<User> list = [];
-
-      if (result.isNotEmpty) {
-        for (var element in result) {
-          list.add(element.toEntity());
-        }
-      }
-
-      return Right(list);
+      return Right(result);
     } on ServerException {
       return const Left(
           ServerFailure('Ocurrió un error al procesar la solicitud.'));
@@ -43,32 +39,22 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<Failure, List<User>>> getUsersNotInOrga(
-      String orgaId, SortModel sortFields, int pageNumber, int pageSize) async {
+  Future<Either<Failure, ModelContainer<User>>> getUsersNotInOrga(
+      String searchText,
+      String orgaId,
+      Map<String, int> fieldsOrder,
+      int pageIndex,
+      int pageSize) async {
     try {
-      if (orgaId == "") {
-        orgaId = '00000200-0200-0200-0200-000000000200';
-      } // DEFAULT
-
       List<dynamic> order = [];
-      if (sortFields.fieldsOrder != null) {
-        sortFields.fieldsOrder?.forEach((key, value) {
-          order.add([key, value == 1 ? value : -1]);
-        });
-      }
+      fieldsOrder.forEach((key, value) {
+        order.add([key, value == 1 ? value : -1]);
+      });
 
       final result = await remoteDataSource.getUsersNotInOrga(
-          orgaId, order, pageNumber, pageSize);
+          searchText, orgaId, order, pageIndex, pageSize);
 
-      List<User> list = [];
-
-      if (result.isNotEmpty) {
-        for (var element in result) {
-          list.add(element.toEntity());
-        }
-      }
-
-      return Right(list);
+      return Right(result);
     } on ServerException {
       return const Left(
           ServerFailure('Ocurrió un error al procesar la solicitud.'));
@@ -214,7 +200,8 @@ class UserRepositoryImpl implements UserRepository {
   Future<Either<Failure, User?>> existsProfile(
       String userId, String username, String email) async {
     try {
-      final result = await remoteDataSource.existsProfile(userId, username, email);
+      final result =
+          await remoteDataSource.existsProfile(userId, username, email);
 
       if (result == null) {
         return const Right(null);

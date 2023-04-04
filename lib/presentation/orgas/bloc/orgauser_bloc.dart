@@ -35,19 +35,28 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
       : super(const OrgaUserStart("")) {
     on<OnOrgaUserListLoad>((event, emit) async {
       emit(OrgaUserLoading());
-      final result = await _getUsers.execute(event.id, '', '', 1, 10);
+      final result = await _getUsers.execute(event.searchText, event.orgaId,
+          event.fieldsOrder, event.pageIndex, event.pageSize);
 
-      final resultOU = await _getOrgaUsers.execute(event.id);
-
-      List<User> listUsers = [];
-      result.fold(
-          (l) => emit(OrgaUserError(l.message)), (r) => {listUsers = r});
+      final resultOU = await _getOrgaUsers.execute(event.orgaId);
 
       List<OrgaUser> listOrgaUsers = [];
       resultOU.fold(
           (l) => emit(OrgaUserError(l.message)), (r) => {listOrgaUsers = r});
 
-      emit(OrgaUserListLoaded(event.id, listUsers, listOrgaUsers));
+      result.fold((l) => emit(OrgaUserError(l.message)), (r) {
+        emit(OrgaUserListLoaded(
+            event.orgaId,
+            r.items,
+            listOrgaUsers,
+            event.searchText,
+            event.fieldsOrder,
+            event.pageIndex,
+            event.pageSize,
+            r.currentItemCount,
+            r.totalItems ?? 0,
+            r.totalPages ?? 1));
+      });
     });
     on<OnOrgaUserAdd>((event, emit) async {
       emit(OrgaUserLoading());
@@ -80,19 +89,27 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
           (l) => emit(OrgaUserError(l.message)), (r) => {isUpdated = true});
 
       if (isUpdated) {
-        final resUsers = await _getUsers.execute(event.orgaId, '', '', 1, 10);
-
         final resultOU = await _getOrgaUsers.execute(event.orgaId);
-
-        List<User> listUsers = [];
-        resUsers.fold(
-            (l) => emit(OrgaUserError(l.message)), (r) => {listUsers = r});
+        final resUsers = await _getUsers.execute(
+            '', event.orgaId, const <String, int>{"email": 1}, 1, 10);
 
         List<OrgaUser> listOrgaUsers = [];
         resultOU.fold(
             (l) => emit(OrgaUserError(l.message)), (r) => {listOrgaUsers = r});
 
-        emit(OrgaUserListLoaded(event.orgaId, listUsers, listOrgaUsers));
+        resUsers.fold((l) => emit(OrgaUserError(l.message)), (r) {
+          emit(OrgaUserListLoaded(
+              event.orgaId,
+              r.items,
+              listOrgaUsers,
+              '',
+              const <String, int>{"email": 1},
+              1,
+              10,
+              r.currentItemCount,
+              r.totalItems ?? 0,
+              r.totalPages ?? 1));
+        });
       }
     });
     on<OnOrgaUserEnable>((event, emit) async {
@@ -120,16 +137,23 @@ class OrgaUserBloc extends Bloc<OrgaUserEvent, OrgaUserState> {
     on<OnOrgaUserListUserNotInOrgaForAdd>((event, emit) async {
       emit(OrgaUserLoading());
 
-      final result = await _getUsersNotInOrga.execute(
-          event.orgaId, event.sortFields, event.pageNumber, event.pageSize);
+      final result = await _getUsersNotInOrga.execute(event.searchText,
+          event.orgaId, event.fieldsOrder, event.pageIndex, event.pageSize);
 
-      List<User> listUsers = [];
-      result.fold(
-          (l) => emit(OrgaUserError(l.message)), (r) => {listUsers = r});
-
-      emit(OrgaUserListUserNotInOrgaLoaded(event.orgaId, listUsers));
+      result.fold((l) => emit(OrgaUserError(l.message)), (r) {
+        emit(OrgaUserListUserNotInOrgaLoaded(
+            event.orgaId,
+            r.items,
+            event.searchText,
+            event.fieldsOrder,
+            event.pageIndex,
+            event.pageSize,
+            r.currentItemCount,
+            r.totalItems ?? 0,
+            r.totalPages ?? 1));
+      });
     });
-    on<OnOrgaUserStarter>(((event, emit) async => emit(const OrgaUserStart(""))));
+    on<OnOrgaUserStarter>(
+        ((event, emit) async => emit(const OrgaUserStart(""))));
   }
-
 }

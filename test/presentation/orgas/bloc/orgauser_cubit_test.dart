@@ -1,12 +1,14 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/domain/entities/orgauser.dart';
-import 'package:lomba_frontend/presentation/orgas/bloc/orgauser_dialog_edit_cubit.dart';
+import 'package:lomba_frontend/presentation/orgas/bloc/orgauser_cubit.dart';
 
 main() {
-  const tOrgaUser = OrgaUser(userId: '', orgaId: '', roles: [], enabled: false, builtIn: false);
+  const tOrgaUser = OrgaUser(
+      userId: '', orgaId: '', roles: [], enabled: false, builtIn: false);
 
-  late OrgaUserDialogEditState testStateChangeValue = OrgaUserDialogEditState('clave', true);
+  late OrgaUserDialogEditState testStateChangeValue =
+      OrgaUserDialogEditState('clave', true);
   setUp(() {
     testStateChangeValue.checks
         .addEntries(<String, bool>{"clave": true}.entries);
@@ -19,5 +21,4 @@ main() {
     wait: const Duration(milliseconds: 500),
     expect: () => [testStateChangeValue],
   );
-
 }

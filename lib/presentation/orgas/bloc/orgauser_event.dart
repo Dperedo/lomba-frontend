@@ -16,12 +16,18 @@ class OnOrgaUserStarter extends OrgaUserEvent {
 
 ///Evento para obtener la lista de relaciones de orga-user
 class OnOrgaUserListLoad extends OrgaUserEvent {
-  final String id;
+  final String searchText;
+  final String orgaId;
+  final Map<String, int> fieldsOrder;
+  final int pageIndex;
+  final int pageSize;
 
-  const OnOrgaUserListLoad(this.id);
+  const OnOrgaUserListLoad(this.searchText, this.orgaId, this.fieldsOrder,
+      this.pageIndex, this.pageSize);
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props =>
+      [searchText, orgaId, fieldsOrder, pageIndex, pageSize];
 }
 
 ///Evento para guardar una nueva relación orga-user
@@ -54,16 +60,18 @@ class OnOrgaUserEdit extends OrgaUserEvent {
 
 ///Evento para mostrar lista de usuarios que no están en la organización
 class OnOrgaUserListUserNotInOrgaForAdd extends OrgaUserEvent {
+  final String searchText;
   final String orgaId;
-  final SortModel sortFields;
-  final int pageNumber;
+  final Map<String, int> fieldsOrder;
+  final int pageIndex;
   final int pageSize;
 
-  const OnOrgaUserListUserNotInOrgaForAdd(
-      this.orgaId, this.sortFields, this.pageNumber, this.pageSize);
+  const OnOrgaUserListUserNotInOrgaForAdd(this.searchText, this.orgaId,
+      this.fieldsOrder, this.pageIndex, this.pageSize);
 
   @override
-  List<Object> get props => [orgaId, sortFields, pageNumber, pageSize];
+  List<Object> get props =>
+      [searchText, orgaId, fieldsOrder, pageIndex, pageSize];
 }
 
 ///Evento que procede a habilitar o deshabilitar una relación orga-user

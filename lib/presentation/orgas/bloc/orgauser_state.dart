@@ -25,18 +25,72 @@ class OrgaUserListLoaded extends OrgaUserState {
   final List<User> users;
   final List<OrgaUser> orgaUsers;
   final String orgaId;
-  const OrgaUserListLoaded(this.orgaId, this.users, this.orgaUsers);
+  final String searchText;
+  final Map<String, int> fieldsOrder;
+  final int pageIndex;
+  final int pageSize;
+  final int itemCount;
+  final int totalItems;
+  final int totalPages;
+  const OrgaUserListLoaded(
+      this.orgaId,
+      this.users,
+      this.orgaUsers,
+      this.searchText,
+      this.fieldsOrder,
+      this.pageIndex,
+      this.pageSize,
+      this.itemCount,
+      this.totalItems,
+      this.totalPages);
   @override
-  List<Object> get props => [users, orgaId, orgaUsers];
+  List<Object> get props => [
+        users,
+        orgaId,
+        orgaUsers,
+        searchText,
+        fieldsOrder,
+        pageIndex,
+        pageSize,
+        itemCount,
+        totalItems,
+        totalPages
+      ];
 }
 
 ///Estado con la lista de orga-users cargada
 class OrgaUserListUserNotInOrgaLoaded extends OrgaUserState {
   final List<User> users;
   final String orgaId;
-  const OrgaUserListUserNotInOrgaLoaded(this.orgaId, this.users);
+  final String searchText;
+  final Map<String, int> fieldsOrder;
+  final int pageIndex;
+  final int pageSize;
+  final int itemCount;
+  final int totalItems;
+  final int totalPages;
+  const OrgaUserListUserNotInOrgaLoaded(
+      this.orgaId,
+      this.users,
+      this.searchText,
+      this.fieldsOrder,
+      this.pageIndex,
+      this.pageSize,
+      this.itemCount,
+      this.totalItems,
+      this.totalPages);
   @override
-  List<Object> get props => [users, orgaId];
+  List<Object> get props => [
+        users,
+        orgaId,
+        searchText,
+        fieldsOrder,
+        pageIndex,
+        pageSize,
+        itemCount,
+        totalItems,
+        totalPages
+      ];
 }
 
 ///Estado para mostrar las opciones que permiten agregar una nueva relación

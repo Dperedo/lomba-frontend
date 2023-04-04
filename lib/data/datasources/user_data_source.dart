@@ -6,11 +6,12 @@ import 'package:lomba_frontend/core/fakedata.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/exceptions.dart';
+import '../../core/model_container.dart';
 import '../models/user_model.dart';
 
 abstract class UserRemoteDataSource {
-  Future<List<UserModel>> getUsers(String orgaId, String filter,
-      String fieldOrder, double pageNumber, int pageSize);
+  Future<ModelContainer<UserModel>> getUsers(String searchText, String orgaId,
+      List<dynamic> order, int pageIndex, int pageSize);
   Future<UserModel> getUser(String userId);
 
   Future<UserModel> addUser(UserModel user);
@@ -25,10 +26,11 @@ abstract class UserRemoteDataSource {
 
   Future<UserModel?> existsUser(String userId, String username, String email);
 
-  Future<UserModel?> existsProfile(String userId, String username, String email);
+  Future<UserModel?> existsProfile(
+      String userId, String username, String email);
 
-  Future<List<UserModel>> getUsersNotInOrga(
-      String orgaId, List<dynamic> order, int pageNumber, int pageSize);
+  Future<ModelContainer<UserModel>> getUsersNotInOrga(String searchText,
+      String orgaId, List<dynamic> order, int pageIndex, int pageSize);
 
   Future<bool> updateUserPassword(String userId, String password);
 
@@ -42,11 +44,12 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       {required this.client, required this.localDataSource});
 
   @override
-  Future<List<UserModel>> getUsers(String orgaId, String filter,
-      String fieldOrder, double pageNumber, int pageSize) async {
+  Future<ModelContainer<UserModel>> getUsers(String searchText, String orgaId,
+      List<dynamic> order, int pageIndex, int pageSize) async {
     //parsea URL
 
-    final url = Uri.parse('${UrlBackend.base}/api/v1/user/byorga/$orgaId');
+    final url = Uri.parse(
+        '${UrlBackend.base}/api/v1/user/byorga/$orgaId?sort=${json.encode(order)}&searchtext=$searchText&pageindex=$pageIndex&pagesize=$pageSize');
     final session = await localDataSource.getSavedSession();
 
     http.Response resp = await client.get(url, headers: {
@@ -70,7 +73,25 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
             builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
       }
 
-      return Future.value(users);
+      return Future.value(ModelContainer<UserModel>(
+          users,
+          int.parse(resObj['data']['currentItemCount'].toString()),
+          resObj['data']['itemsPerPage'] != null
+              ? int.parse(resObj['data']['itemsPerPage'].toString())
+              : null,
+          resObj['data']['startIndex'] != null
+              ? int.parse(resObj['data']['startIndex'].toString())
+              : null,
+          resObj['data']['totalItems'] != null
+              ? int.parse(resObj['data']['totalItems'].toString())
+              : null,
+          resObj['data']['pageIndex'] != null
+              ? int.parse(resObj['data']['pageIndex'].toString())
+              : null,
+          resObj['data']['totalPages'] != null
+              ? int.parse(resObj['data']['totalPages'].toString())
+              : null,
+          resObj['data']['kind'].toString()));
     } else {
       throw ServerException();
     }
@@ -273,11 +294,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   }
 
   @override
-  Future<List<UserModel>> getUsersNotInOrga(
-      String orgaId, List<dynamic> order, int pageNumber, int pageSize) async {
+  Future<ModelContainer<UserModel>> getUsersNotInOrga(String searchText,
+      String orgaId, List<dynamic> order, int pageIndex, int pageSize) async {
     //parsea URL
     final url = Uri.parse(
-        '${UrlBackend.base}/api/v1/user/notinorga/$orgaId?sort=${json.encode(order)}&pageIndex=$pageNumber&itemsPerPage=$pageSize');
+        '${UrlBackend.base}/api/v1/user/notinorga/$orgaId?sort=${json.encode(order)}&searchtext=$searchText&pageindex=$pageIndex&pagesize=$pageSize');
     final session = await localDataSource.getSavedSession();
     http.Response resp = await client.get(url, headers: {
       "Accept": "application/json",
@@ -296,7 +317,25 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
             enabled: item["enabled"].toString().toLowerCase() == 'true',
             builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
       }
-      return Future.value(users);
+      return Future.value(ModelContainer<UserModel>(
+          users,
+          int.parse(resObj['data']['currentItemCount'].toString()),
+          resObj['data']['itemsPerPage'] != null
+              ? int.parse(resObj['data']['itemsPerPage'].toString())
+              : null,
+          resObj['data']['startIndex'] != null
+              ? int.parse(resObj['data']['startIndex'].toString())
+              : null,
+          resObj['data']['totalItems'] != null
+              ? int.parse(resObj['data']['totalItems'].toString())
+              : null,
+          resObj['data']['pageIndex'] != null
+              ? int.parse(resObj['data']['pageIndex'].toString())
+              : null,
+          resObj['data']['totalPages'] != null
+              ? int.parse(resObj['data']['totalPages'].toString())
+              : null,
+          resObj['data']['kind'].toString()));
     } else {
       throw ServerException();
     }
