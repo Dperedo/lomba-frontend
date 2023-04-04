@@ -3,9 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 
-import '../../../core/constants.dart';
 import '../../../core/widgets/snackbar_notification.dart';
-import '../../../domain/entities/orga.dart';
 import '../../../domain/entities/role.dart';
 import '../../../domain/entities/workflow/flow.dart' as flw;
 import '../bloc/setting_admin_bloc.dart';
@@ -32,7 +30,9 @@ class SettingAdminPage extends StatelessWidget {
           }
         },
         child: ScaffoldManager(
-          title: AppBar(),//_variableAppBar(context, state),
+          title: AppBar(
+            title: const Text("Configuración de Admin"),
+          ),
           child: SingleChildScrollView(
               child: Center(
                   child: BodyFormatter(
@@ -43,21 +43,6 @@ class SettingAdminPage extends StatelessWidget {
       );
     });
   }
-
-  /*AppBar _variableAppBar(BuildContext context, SettingAdminState state) {
-    if (state is SettingAdminEditing) {
-      return AppBar(
-          title: const Text("Editando Perfil"),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              context.read<SettingAdminBloc>().add(OnSettingAdminStarter());
-            },
-          ));
-    }
-
-    return AppBar(title: const Text("Perfil"));
-  }*/
 
   Widget _bodySettingAdmin(BuildContext context, SettingAdminState state) {
 
@@ -101,10 +86,10 @@ class SettingAdminPage extends StatelessWidget {
                         onChanged: (value) {
                           if(value.toString() != state.flowId) {
                           context.read<SettingAdminBloc>().add(
-                              OnSettingAdminEdit(
+                              OnSettingAdminSave(
+                                  state.orgaId,
                                   value.toString(),
-                                  SettingCodes.defaultFlow,
-                                  state.orgaId));
+                                  state.roleName));
                           }
                         }
                       )
@@ -137,10 +122,10 @@ class SettingAdminPage extends StatelessWidget {
                         onChanged: (value) {
                           if(value.toString() != state.roleName) {
                           context.read<SettingAdminBloc>().add(
-                              OnSettingAdminEdit(
-                                  value.toString(),
-                                  SettingCodes.defaultRoleForUserRegister,
-                                  state.orgaId));
+                              OnSettingAdminSave(
+                                  state.orgaId,
+                                  state.flowId,
+                                  value.toString(),));
                           }
                         }
                       )
@@ -152,6 +137,50 @@ class SettingAdminPage extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
+            ElevatedButton.icon(
+                  icon: const Icon(Icons.save),
+                  key: const ValueKey("btnViewSaveChanges"),
+                  label: const Text("Guardar cambios"),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: AlertDialog(
+                              title: const Text(
+                                  '¿Desea guardar los cambios?'),
+                              content: const Text(
+                                  'Puede cambiar después su elección'),
+                              actions: <Widget>[
+                                TextButton(
+                                  key: const ValueKey("btnConfirmEnable"),
+                                  child: const Text(("Guardar")),
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                  },
+                                ),
+                                TextButton(
+                                  key: const ValueKey("btnCancelEnable"),
+                                  child: const Text('Cancelar'),
+                                  onPressed: () {
+                                    Navigator.pop(context, false);
+                                  },
+                                ),
+                              ],
+                            ),
+                          )).then((value) => {
+                        if (value)
+                          {
+                            context.read<SettingAdminBloc>().add(
+                                OnSettingAdminEdit(
+                                  state.orgaId,
+                                  state.flowId,
+                                  state.roleName,))
+                          }
+                      }
+                    );
+                  },
+                ),
           ],
         ),
       );

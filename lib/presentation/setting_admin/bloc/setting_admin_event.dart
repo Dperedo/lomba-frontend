@@ -14,14 +14,24 @@ class OnSettingAdminLoad extends SettingAdminEvent {
   List<Object> get props => [];
 }
 
-class OnSettingAdminEdit extends SettingAdminEvent {
-  final String id;
-  final String code;
+class OnSettingAdminSave extends SettingAdminEvent {
   final String orgaId;
-  const OnSettingAdminEdit(this.id, this.code, this.orgaId);
+  final String flowId;
+  final String roleName;
+  const OnSettingAdminSave(this.orgaId,this.flowId, this.roleName);
 
   @override
-  List<Object> get props => [id, code, orgaId];
+  List<Object> get props => [orgaId, flowId, roleName];
+}
+
+class OnSettingAdminEdit extends SettingAdminEvent {
+  final String orgaId;
+  final String flowId;
+  final String roleName;
+  const OnSettingAdminEdit(this.orgaId, this.flowId, this.roleName);
+
+  @override
+  List<Object> get props => [orgaId, flowId, roleName];
 }
 
 class OnSettingAdminStarter extends SettingAdminEvent {}

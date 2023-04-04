@@ -48,9 +48,14 @@ class SettingSuperBloc extends Bloc<SettingSuperEvent, SettingSuperState> {
         });
 
         List<Orga> listOrgas = [];
+        List<Orga> listOrgasAnony = [];
         final resultOrgas = await _getOrgas.execute('', '', 1, 50);
         resultOrgas.fold((l) => emit(SettingSuperError(l.message)),
-        (r) => listOrgas = r);
+        (r) {
+          listOrgas = r;
+          listOrgasAnony = r;
+          }
+        );
 
         List<Flow> listFlows = [];
         final resultFlows = await _getFlows.execute();
@@ -62,7 +67,36 @@ class SettingSuperBloc extends Bloc<SettingSuperEvent, SettingSuperState> {
         resultRoles.fold((l) => emit(SettingSuperError(l.message)),
         (r) => listRoles = r);
 
-        emit(SettingSuperLoaded(orgaId,flowId,roleName,orgaIdForAnonymous,listOrgas,listFlows,listRoles));
+        emit(SettingSuperLoaded(orgaId,flowId,roleName,orgaIdForAnonymous,listOrgas,listFlows,listRoles,listOrgasAnony));
+
+      },
+      transformer: debounce(const Duration(milliseconds: 0)),
+    );
+
+    on<OnSettingSuperSave>(
+      (event, emit) async {
+
+        List<Orga> listOrgas = [];
+        List<Orga> listOrgasAnony = [];
+        final resultOrgas = await _getOrgas.execute('', '', 1, 50);
+        resultOrgas.fold((l) => emit(SettingSuperError(l.message)),
+        (r) {
+          listOrgas = r;
+          listOrgasAnony = r;
+          }
+        );
+
+        List<Flow> listFlows = [];
+        final resultFlows = await _getFlows.execute();
+        resultFlows.fold((l) => emit(SettingSuperError(l.message)),
+        (r) => listFlows = r);
+
+        List<Role> listRoles = [];
+        final resultRoles = await _getRoles.execute();
+        resultRoles.fold((l) => emit(SettingSuperError(l.message)),
+        (r) => listRoles = r);
+
+        emit(SettingSuperLoaded(event.orgaId,event.flowId,event.roleName,event.orgaIdAnony,listOrgas,listFlows,listRoles,listOrgasAnony));
 
       },
       transformer: debounce(const Duration(milliseconds: 0)),
@@ -72,16 +106,41 @@ class SettingSuperBloc extends Bloc<SettingSuperEvent, SettingSuperState> {
       (event, emit) async {
         emit(SettingSuperLoading());
 
-        var settingId = '';
+        var settingOrgaId = '';
+        var settingFlowId = '';
+        var settingRoleName = '';
+        var settingOrgaIdAnony = '';
         final resultSetting = await _getSettingSuper.execute();
         resultSetting.fold((l) => emit(SettingSuperError(l.message)),
         (r) {
-          settingId = r.firstWhere((e) => e.code == event.code).id;
+          settingOrgaId = r.firstWhere((e) => e.code == SettingCodes.defaultOrgaForUserRegister).id;
+          settingFlowId = r.firstWhere((e) => e.code == SettingCodes.defaultFlow).id;
+          settingRoleName = r.firstWhere((e) => e.code == SettingCodes.defaultRoleForUserRegister).id;
+          settingOrgaIdAnony = r.firstWhere((e) => e.code == SettingCodes.orgaForAnonymousUser).id;
         });
 
-        final resultUpdate = await _updatedSettingSuper.execute(settingId, event.id);
+        List<Map<String, dynamic>> settingList = [
+          {
+          'id': settingOrgaId,
+          'value': event.orgaId,
+          },
+          {
+          'id': settingFlowId,
+          'value': event.flowId,
+          },
+          {
+          'id': settingRoleName,
+          'value': event.roleName,
+          },
+          {
+          'id': settingOrgaIdAnony,
+          'value': event.orgaIdAnony,
+          },
+        ];
+
+        final resultUpdate = await _updatedSettingSuper.execute(settingList);
         resultUpdate.fold((l) => emit(SettingSuperError(l.message)), 
-        (r) => emit(const SettingSuperStart('')));
+        (r) => emit(const SettingSuperStart('Se actualizaron los campos')));
 
       },
       transformer: debounce(const Duration(milliseconds: 0)),

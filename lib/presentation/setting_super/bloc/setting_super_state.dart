@@ -31,6 +31,7 @@ class SettingSuperLoaded extends SettingSuperState {
   final List<Orga> listOrgas;
   final List<Flow> listFlows;
   final List<Role> listRoles;
+  final List<Orga> listOrgasAnony;
 
   const SettingSuperLoaded(
     this.orgaId,
@@ -40,6 +41,7 @@ class SettingSuperLoaded extends SettingSuperState {
     this.listOrgas,
     this.listFlows,
     this.listRoles,
+    this.listOrgasAnony,
     );
 
   @override
@@ -51,6 +53,7 @@ class SettingSuperLoaded extends SettingSuperState {
       listOrgas,
       listFlows,
       listRoles,
+      listOrgasAnony,
     ];
 }
 

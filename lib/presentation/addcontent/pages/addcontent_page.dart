@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,9 +56,17 @@ class AddContentPage extends StatelessWidget {
   Widget _bodyAddContent(BuildContext context, GlobalKey<FormState> key) {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController contentController = TextEditingController();
+    final TextEditingController contentControllerImagen = TextEditingController();
+
+    String? _validateFields(String value) {
+      if (value.isEmpty && contentControllerImagen.text.isEmpty) {
+        return 'Por favor, complete al menos uno de los campos';
+      }
+      return null;
+    }
 
     return BlocProvider<AddContentLiveCubit>(
-      create: (context) => AddContentLiveCubit(di.locator()),
+      create: (context) => AddContentLiveCubit(di.locator(),di.locator(),di.locator()),
       child: Padding(
         padding: const EdgeInsets.all(25.0),
         child: SizedBox(
@@ -68,14 +74,16 @@ class AddContentPage extends StatelessWidget {
             key: key,
             child: BlocBuilder<AddContentBloc, AddContentState>(
               builder: (context, state) {
+                if (state is AddContentStart) {
+                  context.read<AddContentBloc>().add(const OnAddContentUp());
+                }
                 if (state is AddContentFile) {
                   return Image.memory(
                     state.file,
                     fit: BoxFit.cover,
                   );
                 }
-
-                if (state is AddContentStart) {
+                if (state is AddContentEdit) {
                   return BlocBuilder<AddContentLiveCubit, AddContentLiveState>(
                     builder: (context, statecubit) {
                       return Column(
@@ -98,7 +106,7 @@ class AddContentPage extends StatelessWidget {
                             maxLines: 4,
                             controller: contentController,
                             validator: (value) =>
-                                Validators.validateName(value ?? ""),
+                                _validateFields(value ?? ""),
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                               hintText: 'Texto',
@@ -114,8 +122,7 @@ class AddContentPage extends StatelessWidget {
                               children: <Widget>[
                                 statecubit.filename != ""
                                     ? Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
+                                        width: MediaQuery.of(context).size.width,
                                         height: 250,
                                         child: Image.memory(
                                           statecubit.imagefile,
@@ -133,7 +140,9 @@ class AddContentPage extends StatelessWidget {
                                               color: Colors
                                                   .grey, // Color of the border
                                             )),
-                                        child: ElevatedButton.icon(
+                                        child: statecubit.showLocalProgress ?
+                                        const CircularProgressIndicator() :
+                                        ElevatedButton.icon(
                                             onPressed: () async {
                                               FilePickerResult? result =
                                                   await FilePicker.platform
@@ -146,19 +155,19 @@ class AddContentPage extends StatelessWidget {
                                                   'jpeg'
                                                 ],
                                               );
-
                                               if (result != null) {
+                                                context.read<AddContentLiveCubit>().startProgressIndicators();
                                                 PlatformFile file =
                                                     result.files.first;
                                                 if (file.size != 0) {
-                                                  context
-                                                      .read<
-                                                          AddContentLiveCubit>()
-                                                      .showImage(file.name,
-                                                          file.bytes!);
+                                                  contentControllerImagen.text = file.name;
+                                                  context.read<AddContentLiveCubit>()
+                                                      .showImage(
+                                                          file.bytes!,
+                                                          state.userId,
+                                                          state.orgaId);
                                                 } else {
-                                                  snackBarNotify(
-                                                      context,
+                                                  snackBarNotify(context,
                                                       "El archivo no puede estar vacío",
                                                       Icons.error);
                                                 }
@@ -176,9 +185,8 @@ class AddContentPage extends StatelessWidget {
                                           alignment: Alignment.topRight,
                                           icon: const Icon(Icons.cancel),
                                           onPressed: () {
-                                            context
-                                                .read<AddContentLiveCubit>()
-                                                .removeImage();
+                                            context.read<AddContentLiveCubit>().stopRemoteProgressIndicators();
+                                            context.read<AddContentLiveCubit>().removeImage();
                                           },
                                         ),
                                       )
@@ -192,15 +200,20 @@ class AddContentPage extends StatelessWidget {
                           Row(
                             children: [
                               const Text('Dejar como borrador'),
-                              Checkbox(
-                                value: statecubit.checks["keepasdraft"]!,
-                                onChanged: (bool? value) {
-                                  context
-                                      .read<AddContentLiveCubit>()
-                                      .changeValue("keepasdraft",
-                                          !statecubit.checks["keepasdraft"]!);
-                                },
-                              )
+                              Expanded(
+                                child: Checkbox(
+                                  value: statecubit.checks["keepasdraft"]!,
+                                  onChanged: (bool? value) {
+                                    context
+                                        .read<AddContentLiveCubit>()
+                                        .changeValue("keepasdraft",
+                                            !statecubit.checks["keepasdraft"]!);
+                                  },
+                                ),
+                              ),
+                              statecubit.showRemoteProgress ?
+                              const CircularProgressIndicator() : 
+                              const SizedBox()
                             ],
                           ),
                           const SizedBox(
@@ -213,10 +226,8 @@ class AddContentPage extends StatelessWidget {
                               icon: const Icon(Icons.publish),
                               key: const ValueKey("btnSavedUp"),
                               label: const Text("Subir"),
-                              onPressed: () {
-                                //final AddContentLiveState checkos =
-                                //    context.read<AddContentLiveCubit>().state;
-
+                              onPressed: statecubit.showRemoteProgress ? null :
+                              () {
                                 if (key.currentState?.validate() == true) {
                                   context.read<AddContentBloc>().add(
                                       OnAddContentAdd(

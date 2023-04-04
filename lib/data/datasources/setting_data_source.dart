@@ -10,8 +10,8 @@ import 'local_data_source.dart';
 abstract class SettingRemoteDataSource {
   Future<List<SettingModel>> getSettingSuper();
   Future<List<SettingModel>> getSettingAdmin(String orgaId);
-  Future<bool> updatedSettingSuper(String id,String value);
-  Future<bool> updatedSettingAdmin(String id,String value,String orgaId);
+  Future<bool> updatedSettingSuper(List<Map<String, dynamic>> settingList);
+  Future<bool> updatedSettingAdmin(List<Map<String, dynamic>> settingList,String orgaId);
 }
 
 class SettingRemoteDataSourceImpl implements SettingRemoteDataSource {
@@ -91,16 +91,13 @@ class SettingRemoteDataSourceImpl implements SettingRemoteDataSource {
   }
 
   @override
-  Future<bool> updatedSettingSuper(String id,String value) async {
-    final Map<String, dynamic> newSetting = {
-      'id': id,
-      'value': value,
-      };
+  Future<bool> updatedSettingSuper(List<Map<String, dynamic>> settingList) async {
+    
     final url = Uri.parse('${UrlBackend.base}/api/v1/setting/');
     final session = await localDataSource.getSavedSession();
 
     http.Response resp =
-        await client.put(url, body: json.encode(newSetting), headers: {
+        await client.put(url, body: json.encode(settingList), headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",
@@ -117,16 +114,13 @@ class SettingRemoteDataSourceImpl implements SettingRemoteDataSource {
   }
 
   @override
-  Future<bool> updatedSettingAdmin(String id,String value,String orgaId) async {
-    final Map<String, dynamic> newSetting = {
-      'id': id,
-      'value': value,
-      };
+  Future<bool> updatedSettingAdmin(List<Map<String, dynamic>> settingList,String orgaId) async {
+
     final url = Uri.parse('${UrlBackend.base}/api/v1/setting/byorga/$orgaId');
     final session = await localDataSource.getSavedSession();
 
     http.Response resp =
-        await client.put(url, body: json.encode(newSetting), headers: {
+        await client.put(url, body: json.encode(settingList), headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",

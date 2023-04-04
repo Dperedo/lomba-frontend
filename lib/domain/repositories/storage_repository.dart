@@ -7,5 +7,7 @@ import '../entities/storage/cloudfile.dart';
 
 abstract class StorageRepository {
   Future<Either<Failure, CloudFile>> uploadFile(
-      Uint8List file, String name, String userId, String orgaId);
+      Uint8List file, String cloudFileId);
+  Future<Either<Failure, CloudFile>> registerCloudFile(String userId, String orgaId);
+  Future<Either<Failure, CloudFile>> getCloudFile(String cloudFileId);
 }

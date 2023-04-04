@@ -17,10 +17,38 @@ class StorageRepositoryImpl implements StorageRepository {
 
   @override
   Future<Either<Failure, CloudFile>> uploadFile(
-      Uint8List file, String name, String userId, String orgaId) async {
+      Uint8List file, String cloudFileId) async {
     try {
       final result =
-          await remoteDataSource.uploadFile(file, name, userId, orgaId);
+          await remoteDataSource.uploadFile(file, cloudFileId);
+
+      return Right(result.toEntity());
+    } on ServerException {
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CloudFile>> registerCloudFile(String userId, String orgaId) async {
+    try {
+      final result = await remoteDataSource.registerCloudFile(userId, orgaId);
+
+      return Right(result.toEntity());
+    } on ServerException {
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CloudFile>> getCloudFile(String cloudFileId) async {
+    try {
+      final result = await remoteDataSource.getCloudFile(cloudFileId);
 
       return Right(result.toEntity());
     } on ServerException {

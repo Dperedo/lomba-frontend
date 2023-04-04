@@ -10,7 +10,7 @@ class UploadFile {
   final StorageRepository repository;
   UploadFile(this.repository);
   Future<Either<Failure, CloudFile>> execute(
-      Uint8List file, String name, String userId, String orgaId) async {
-    return await repository.uploadFile(file, name, userId, orgaId);
+      Uint8List file, String cloudFileId) async {
+    return await repository.uploadFile(file, cloudFileId);
   }
 }

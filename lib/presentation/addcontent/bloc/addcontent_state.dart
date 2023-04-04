@@ -15,6 +15,15 @@ class AddContentLoading extends AddContentState {}
 
 class AddContentUp extends AddContentState {}
 
+class AddContentEdit extends AddContentState {
+  final String userId;
+  final String orgaId;
+  const AddContentEdit(this.userId, this.orgaId);
+
+  @override
+  List<Object> get props => [userId, orgaId];
+}
+
 class AddContentError extends AddContentState {
   final String message;
 
