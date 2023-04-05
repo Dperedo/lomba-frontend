@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
+import 'package:lomba_frontend/core/widgets/show_posts.dart';
+import 'package:lomba_frontend/domain/entities/workflow/post.dart';
 import 'package:number_paginator/number_paginator.dart';
 import 'package:image_network/image_network.dart';
 
@@ -164,8 +166,16 @@ class ToBeApprovedPage extends StatelessWidget {
                         ),
                       ),
                       BlocBuilder<ToBeApprovedLiveCubit, ToBeApprovedLiveState>(
-                          builder: (context, statecubit) {
-                        return showPosts(state, statecubit);
+                        builder: (context, statecubit) {
+                          return ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: state.listItems.length,
+                            itemBuilder: (context, index) {
+                              return ShowPosts(post: state.listItems[index], child: _showVoteButtons(context, state.listItems[index], statecubit));
+                            });
+                        //return ShowPosts(listPost: state.listItems, child: _showVoteButtons(context, state.listItems[index], statecubit));
+                        //showPosts(state, statecubit);_showVoteButtons
                       })
                     ],
                   );
@@ -175,91 +185,7 @@ class ToBeApprovedPage extends StatelessWidget {
         ));
   }
 
-  ListView showPosts(ToBeApprovedLoaded state, ToBeApprovedLiveState statecubit) {
-    return ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: state.listItems.length,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        ListTile(
-                          leading: const Icon(Icons.person),
-                          title: Text(
-                              state.listItems[index].title),
-                        ),
-                        ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: state.listItems[index]
-                                          .postitems.length,
-                          itemBuilder: (context, i) {
-                          if (state.listItems[index].postitems[i].type=='text'){
-                            return ListTile(
-                              shape:
-                                  const RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Colors.grey,
-                                          width: 2),
-                                      borderRadius:
-                                          BorderRadius.all(
-                                              Radius.circular(
-                                                  2))),
-                              title: Text(
-                                  (state.listItems[index]
-                                      .postitems[i].content
-                                          as TextContent).text,
-                                textAlign: TextAlign.center),
-                              contentPadding:
-                                  const EdgeInsets.symmetric(
-                                      horizontal: 100,
-                                      vertical: 100),
-                            );
-                          }
-                          else if(state.listItems[index].postitems[i].type=='image'){
-                            
-                            final imagen = state.listItems[index]
-                                  .postitems[i].content as ImageContent;
-                            return Container(
-                              padding: const EdgeInsets.all(5.0),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.0),
-                                border: Border.all(
-                                  width: 1,
-                                  color: Colors.grey,
-                                )
-                              ),
-                              child: ImageNetwork(
-                                image: imagen.url,
-                                height: double.parse((imagen.height).toString()),
-                                width: double.parse((imagen.width).toString()),
-                              )
-                              //Image.network(imagen.url),
-                            );
-                          }
-                            else {return null;}
-                          }
-                        ),
-                        const SizedBox(height: 10),
-                        _showVoteButtons(context, state,
-                            index, statecubit),
-                        const SizedBox(height: 15),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              // const Divider()
-            ],
-          );
-        });
-  }
+  
 
   DropdownButton<String> _sortDropdownButton(ToBeApprovedLoaded state,
       Map<String, String> listFields, BuildContext context) {
@@ -282,7 +208,7 @@ class ToBeApprovedPage extends StatelessWidget {
     );
   }
 
-  Row _showVoteButtons(BuildContext context, ToBeApprovedLoaded state,
+  Row _showVoteButton(BuildContext context, ToBeApprovedLoaded state,
       int index, ToBeApprovedLiveState statecubit) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -339,6 +265,68 @@ class ToBeApprovedPage extends StatelessWidget {
                     context
                         .read<ToBeApprovedLiveCubit>()
                         .makeVote(state.listItems[index].id, 1);
+                  },
+            child: const Icon(Icons.check)),
+      ],
+    );
+  }
+
+  Row _showVoteButtons(BuildContext context, Post post, ToBeApprovedLiveState statecubit) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ElevatedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.resolveWith(
+                (states) => RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(
+                    color: Theme.of(context).secondaryHeaderColor,
+                    width: 2,
+                  ),
+                ),
+              ),
+            ),
+            onPressed: post.votes
+                        .any((element) => element.value == -1) ||
+                    (statecubit.votes.containsKey(post.id) &&
+                        statecubit.votes[post.id] == -1)
+                ? null
+                : () {
+                    post.votes.clear();
+                    context
+                        .read<ToBeApprovedBloc>()
+                        .add(OnToBeApprovedVote(post.id, -1));
+                    context
+                        .read<ToBeApprovedLiveCubit>()
+                        .makeVote(post.id, -1);
+                  },
+            child: const Icon(Icons.close)),
+        ElevatedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.resolveWith(
+                (states) => RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  side: BorderSide(
+                    color: Theme.of(context).secondaryHeaderColor,
+                    width: 2,
+                  ),
+                ),
+              ),
+            ),
+            onPressed: post.votes
+                        .any((element) => element.value == 1) ||
+                    (statecubit.votes.containsKey(post.id) &&
+                        statecubit.votes[post.id] == 1)
+                ? null
+                : () {
+                    post.votes.clear();
+                    context
+                        .read<ToBeApprovedBloc>()
+                        .add(OnToBeApprovedVote(post.id, 1));
+                    context
+                        .read<ToBeApprovedLiveCubit>()
+                        .makeVote(post.id, 1);
                   },
             child: const Icon(Icons.check)),
       ],

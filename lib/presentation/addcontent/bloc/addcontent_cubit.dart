@@ -30,6 +30,8 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
     var cloudFileId = '';
     secondsPassed = 0;
     var decodedImage = await decodeImageFromList(image);
+    final imageHeight = decodedImage.height;
+    final imageWidth = decodedImage.width;
     final resultRegister = await _registerCloudFile.execute(userId, orgaId);
     resultRegister.fold((l) => null, (r) => cloudFileId = r.id);
     await uploadFile.execute(image, cloudFileId);
@@ -41,10 +43,9 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
       resultCloudFile.fold((l) => null, (r) {
         if(r.size != 0) {
           timer.cancel();
-          emit(state.copyWithProgressIndicator(localProgress: false, remoteProgress: false));
-          emit(state.copyWithCloudFile(cloudFile: r, imageHeight:decodedImage.height, imageWidth:decodedImage.width));
+          emit(state.copyWithCloudFile(cloudFile: r, imageHeight:imageHeight, imageWidth:imageWidth));
         }
-        if (secondsPassed >= 5) {
+        else if (secondsPassed >= 10) {
           timer.cancel();
           emit(state.copyWithProgressIndicator(localProgress: false, remoteProgress: false));
         }
@@ -115,7 +116,7 @@ class AddContentLiveState extends Equatable {
 
   AddContentLiveState copyWithImage(
       {required String name, required Uint8List image}) {
-    final ous = AddContentLiveState(checks, name, image, "Subiendo...",false, false, null,0,0);
+    final ous = AddContentLiveState(checks, name, image, "Subiendo...",true, true, null,0,0);
     return ous;
   }
 
@@ -126,7 +127,7 @@ class AddContentLiveState extends Equatable {
   }
 
   AddContentLiveState copyWithCloudFile(
-      {required CloudFile cloudFile, required int imageHeight, required int imageWidth}) {
+      {required CloudFile cloudFile, required int imageHeight, required int imageWidth, }) {
     final ous = AddContentLiveState(checks, filename, imagefile, "", false, false, cloudFile, imageHeight, imageWidth);
     return ous;
   }

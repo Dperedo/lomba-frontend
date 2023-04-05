@@ -28,7 +28,7 @@ class OnAddContentAdd extends AddContentEvent {
   );
 
   @override
-  List<Object> get props => [title, isDraft, imageHeight, imageHeight];
+  List<Object> get props => [title, isDraft, imageHeight, imageWidth];
 }
 
 class OnAddContentUp extends AddContentEvent {

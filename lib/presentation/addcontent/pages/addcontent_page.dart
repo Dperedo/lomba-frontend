@@ -226,26 +226,18 @@ class AddContentPage extends StatelessWidget {
                               icon: const Icon(Icons.publish),
                               key: const ValueKey("btnSavedUp"),
                               label: const Text("Subir"),
-                              onPressed: statecubit.showRemoteProgress ? null :
+                              onPressed: statecubit.showRemoteProgress || statecubit
+                                              .cloudFile == null ? null :
                               () {
                                 if (key.currentState?.validate() == true) {
                                   context.read<AddContentBloc>().add(
                                       OnAddContentAdd(
                                           titleController.text,
                                           contentController.text,
-                                          context.read<AddContentLiveCubit>()
-                                              .state
-                                              .cloudFile,
-                                          context
-                                              .read<AddContentLiveCubit>()
-                                              .state
-                                              .checks["keepasdraft"]!,
-                                          context.read<AddContentLiveCubit>()
-                                              .state
-                                              .imageHeight,
-                                          context.read<AddContentLiveCubit>()
-                                              .state
-                                              .imageWidth,));
+                                          statecubit.cloudFile,
+                                          statecubit.checks["keepasdraft"]!,
+                                          statecubit.imageHeight,
+                                          statecubit.imageWidth,));
                                 }
                               },
                             ),
