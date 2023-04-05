@@ -4,7 +4,9 @@ import 'package:number_paginator/number_paginator.dart';
 
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
+import '../../../core/widgets/show_posts.dart';
 import '../../../core/widgets/snackbar_notification.dart';
+import '../../../domain/entities/workflow/post.dart';
 import '../../../domain/entities/workflow/textcontent.dart';
 import '../bloc/popular_bloc.dart';
 import '../bloc/popular_cubit.dart';
@@ -161,47 +163,7 @@ class PopularPage extends StatelessWidget {
                       shrinkWrap: true,
                       itemCount: state.listItems.length,
                       itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      ListTile(
-                                        leading: const Icon(Icons.person),
-                                        title:
-                                            Text(state.listItems[index].title),
-                                      ),
-                                      ListTile(
-                                        shape: const RoundedRectangleBorder(
-                                            side: BorderSide(
-                                                color: Colors.grey, width: 2),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(2))),
-                                        // tileColor: Colors.grey,
-                                        title: Text(
-                                            (state.listItems[index].postitems[0]
-                                                    .content as TextContent)
-                                                .text,
-                                            textAlign: TextAlign.center),
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                horizontal: 100, vertical: 100),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      SizedBox(
-                                          child: _showVoteButtons(state,
-                                              context, index, statecubit)),
-                                      const SizedBox(height: 15),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            // const Divider()
-                          ],
-                        );
+                        return ShowPosts(post: state.listItems[index], child: _showVoteButtons(context, state.listItems[index], state.validLogin, statecubit));
                       });
                 }),
               ],
@@ -213,9 +175,9 @@ class PopularPage extends StatelessWidget {
     );
   }
 
-  Row? _showVoteButtons(PopularLoaded state, BuildContext context, int index,
+  Row _showVoteButtons(BuildContext context, Post post, bool validLogin,
       PopularLiveState statecubit) {
-    return (state.validLogin)
+    return (validLogin)
         ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -231,19 +193,19 @@ class PopularPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  onPressed: state.listItems[index].votes
+                  onPressed: post.votes
                               .any((element) => element.value == -1) ||
                           (statecubit.votes
-                                  .containsKey(state.listItems[index].id) &&
-                              statecubit.votes[state.listItems[index].id] == -1)
+                                  .containsKey(post.id) &&
+                              statecubit.votes[post.id] == -1)
                       ? null
                       : () {
-                          state.listItems[index].votes.clear();
+                          post.votes.clear();
                           context.read<PopularBloc>().add(
-                              OnPopularVote(state.listItems[index].id, -1));
+                              OnPopularVote(post.id, -1));
                           context
                               .read<PopularLiveCubit>()
-                              .makeVote(state.listItems[index].id, -1);
+                              .makeVote(post.id, -1);
                         },
                   child: const Icon(Icons.keyboard_arrow_down)),
               ElevatedButton(
@@ -258,24 +220,24 @@ class PopularPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  onPressed: state.listItems[index].votes
+                  onPressed: post.votes
                               .any((element) => element.value == 1) ||
                           (statecubit.votes
-                                  .containsKey(state.listItems[index].id) &&
-                              statecubit.votes[state.listItems[index].id] == 1)
+                                  .containsKey(post.id) &&
+                              statecubit.votes[post.id] == 1)
                       ? null
                       : () {
-                          state.listItems[index].votes.clear();
+                          post.votes.clear();
                           context
                               .read<PopularBloc>()
-                              .add(OnPopularVote(state.listItems[index].id, 1));
+                              .add(OnPopularVote(post.id, 1));
                           context
                               .read<PopularLiveCubit>()
-                              .makeVote(state.listItems[index].id, 1);
+                              .makeVote(post.id, 1);
                         },
                   child: const Icon(Icons.keyboard_arrow_up)),
             ],
           )
-        : null;
+        : Row();
   }
 }

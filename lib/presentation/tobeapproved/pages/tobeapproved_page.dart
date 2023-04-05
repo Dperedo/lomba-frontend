@@ -174,8 +174,6 @@ class ToBeApprovedPage extends StatelessWidget {
                             itemBuilder: (context, index) {
                               return ShowPosts(post: state.listItems[index], child: _showVoteButtons(context, state.listItems[index], statecubit));
                             });
-                        //return ShowPosts(listPost: state.listItems, child: _showVoteButtons(context, state.listItems[index], statecubit));
-                        //showPosts(state, statecubit);_showVoteButtons
                       })
                     ],
                   );

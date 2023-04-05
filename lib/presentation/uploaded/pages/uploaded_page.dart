@@ -7,7 +7,9 @@ import 'package:number_paginator/number_paginator.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/validators.dart';
+import '../../../core/widgets/show_posts.dart';
 import '../../../core/widgets/snackbar_notification.dart';
+import '../../../domain/entities/workflow/post.dart';
 import '../../../domain/entities/workflow/textcontent.dart';
 import '../bloc/uploaded_bloc.dart';
 import '../bloc/uploaded_event.dart';
@@ -269,48 +271,7 @@ class UploadedPage extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: state.listItems.length,
                 itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              children: [
-                                ListTile(
-                                  leading: const Icon(Icons.person),
-                                  title: Text(state.listItems[index].title),
-                                ),
-                                ListTile(
-                                  shape: const RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Colors.grey, width: 2),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(2))),
-                                  // tileColor: Colors.grey,
-                                  title: Text(
-                                      (state.listItems[index].postitems[0]
-                                              .content as TextContent)
-                                          .text,
-                                      textAlign: TextAlign.center),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 100, vertical: 100),
-                                ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: showButtonPublish(
-                                      state, index, statecubit, context),
-                                ),
-                                const SizedBox(height: 15),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      // const Divider()
-                    ],
-                  );
+                  return ShowPosts(post: state.listItems[index], child: showButtonPublish(context, state.listItems[index], statecubit));
                 });
           },
         ),
@@ -340,22 +301,25 @@ class UploadedPage extends StatelessWidget {
     );
   }
 
-  List<Widget> showButtonPublish(UploadedLoaded state, int index,
-      UploadedLiveState statecubit, BuildContext context) {
-    return [
-      state.listItems[index].votes.any((element) => element.value == 1) ||
-              (statecubit.votes.containsKey(state.listItems[index].id) &&
-                  statecubit.votes[state.listItems[index].id] == 1)
+  Row showButtonPublish(BuildContext context, Post post,
+      UploadedLiveState statecubit) {
+    return Row(
+      mainAxisAlignment:
+          MainAxisAlignment.spaceBetween,
+      children:[
+      post.votes.any((element) => element.value == 1) ||
+              (statecubit.votes.containsKey(post.id) &&
+                  statecubit.votes[post.id] == 1)
           ? const Text('Publicado')
           : ElevatedButton(
               onPressed: () {
                 if (_key.currentState?.validate() == true) {
                   context
                       .read<UploadedBloc>()
-                      .add(OnUploadedVote(state.listItems[index].id, 1));
+                      .add(OnUploadedVote(post.id, 1));
                   context
                       .read<UploadedLiveCubit>()
-                      .makeVote(state.listItems[index].id, 1);
+                      .makeVote(post.id, 1);
                 }
               },
               child: const Text('Publicar')),
@@ -373,7 +337,7 @@ class UploadedPage extends StatelessWidget {
                   ),
                 ),
               ),
-              onPressed: state.listItems[index].stageId ==
+              onPressed: post.stageId ==
                       StagesVotationFlow.stageId01Load
                   ? () {
                       showDialog(
@@ -405,7 +369,7 @@ class UploadedPage extends StatelessWidget {
                             if (value)
                               {
                                 context.read<UploadedBloc>().add(
-                                    OnUploadedDelete(state.listItems[index].id))
+                                    OnUploadedDelete(post.id))
                               }
                           });
                     }
@@ -423,13 +387,13 @@ class UploadedPage extends StatelessWidget {
                   ),
                 ),
               ),
-              onPressed: state.listItems[index].stageId ==
+              onPressed: post.stageId ==
                       StagesVotationFlow.stageId01Load
                   ? () {
                       context.read<UploadedBloc>().add(OnUploadedPrepareForEdit(
-                          state.listItems[index].id,
-                          state.listItems[index].title,
-                          (state.listItems[index].postitems[0].content
+                          post.id,
+                          post.title,
+                          (post.postitems[0].content
                                   as TextContent)
                               .text));
                     }
@@ -437,6 +401,7 @@ class UploadedPage extends StatelessWidget {
               child: const Icon(Icons.edit)),
         ],
       ),
-    ];
+    ]
+    );
   }
 }
