@@ -4,6 +4,7 @@ import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:lomba_frontend/core/constants.dart';
+import 'package:lomba_frontend/core/model_container.dart';
 import 'package:lomba_frontend/data/datasources/local_data_source.dart';
 import 'package:lomba_frontend/data/models/session_model.dart';
 import 'package:lomba_frontend/core/exceptions.dart';
@@ -87,10 +88,10 @@ void main() {
       when(mockLocalDataSource.getSavedSession())
           .thenAnswer((realInvocation) async => testSession);
       //act
-      final result = await dataSource.getUsers("", "", "", 1, 10);
+      final result = await dataSource.getUsers("", "", [], 1, 10);
 
       //assert
-      expect(result, equals(<UserModel>[testUserModel]));
+      expect(result, equals(ModelContainer.fromItem(testUserModel)));
     });
     test('obtener lista de usuarios filtrada', () async {
       //arrange
@@ -100,10 +101,10 @@ void main() {
           .thenAnswer((realInvocation) async => testSession);
 
       //act
-      final result = await dataSource.getUsers("", "Súper", "", 1, 10);
+      final result = await dataSource.getUsers("", "Súper", [], 1, 10);
 
       //assert
-      expect(result, equals(<UserModel>[testUserModel]));
+      expect(result, equals(ModelContainer.fromItem(testUserModel)));
     });
 
     test(
@@ -121,7 +122,7 @@ void main() {
 
         // act
         final call1 = dataSource.getUser(userId);
-        final call2 = dataSource.getUsers("", "", "", 1, 10);
+        final call2 = dataSource.getUsers("", "", [], 1, 10);
 
         // assert
         expect(() => call1, throwsA(isA<ServerException>()));
@@ -326,10 +327,11 @@ void main() {
       when(mockLocalDataSource.getSavedSession())
           .thenAnswer((realInvocation) async => testSession);
       //act
-      final result = await dataSource.getUsersNotInOrga('orgaId', [], 1, 10);
+      final result =
+          await dataSource.getUsersNotInOrga('', 'orgaId', [], 1, 10);
 
       //assert
-      expect(result, equals(<UserModel>[testUserModel]));
+      expect(result, equals(ModelContainer.fromItem(testUserModel)));
     });
 
     test('error al traer lista de usuarios que no estén en orga', () async {
@@ -339,7 +341,7 @@ void main() {
       when(mockLocalDataSource.getSavedSession())
           .thenAnswer((realInvocation) async => testSession);
       //act
-      final call = dataSource.getUsersNotInOrga('orgaId', [], 1, 10);
+      final call = dataSource.getUsersNotInOrga('', 'orgaId', [], 1, 10);
 
       //assert
       expect(() => call, throwsA(isA<ServerException>()));

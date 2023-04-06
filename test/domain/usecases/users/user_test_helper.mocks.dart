@@ -7,8 +7,8 @@ import 'dart:async' as _i4;
 
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:lomba_frontend/core/failures.dart' as _i5;
-import 'package:lomba_frontend/data/models/sort_model.dart' as _i7;
-import 'package:lomba_frontend/domain/entities/user.dart' as _i6;
+import 'package:lomba_frontend/core/model_container.dart' as _i6;
+import 'package:lomba_frontend/domain/entities/user.dart' as _i7;
 import 'package:lomba_frontend/domain/repositories/user_repository.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -42,88 +42,94 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, List<_i6.User>>> getUsers(
+  _i4.Future<_i2.Either<_i5.Failure, _i6.ModelContainer<_i7.User>>> getUsers(
+    String? searchText,
     String? orgaId,
-    String? filter,
-    String? fieldOrder,
-    double? pageNumber,
+    Map<String, int>? fieldsOrder,
+    int? pageIndex,
     int? pageSize,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
           #getUsers,
           [
+            searchText,
             orgaId,
-            filter,
-            fieldOrder,
-            pageNumber,
+            fieldsOrder,
+            pageIndex,
             pageSize,
           ],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, List<_i6.User>>>.value(
-            _FakeEither_0<_i5.Failure, List<_i6.User>>(
+        returnValue: _i4.Future<
+                _i2.Either<_i5.Failure, _i6.ModelContainer<_i7.User>>>.value(
+            _FakeEither_0<_i5.Failure, _i6.ModelContainer<_i7.User>>(
           this,
           Invocation.method(
             #getUsers,
             [
+              searchText,
               orgaId,
-              filter,
-              fieldOrder,
-              pageNumber,
+              fieldsOrder,
+              pageIndex,
               pageSize,
             ],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.User>>>);
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.ModelContainer<_i7.User>>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, List<_i6.User>>> getUsersNotInOrga(
+  _i4.Future<
+      _i2.Either<_i5.Failure, _i6.ModelContainer<_i7.User>>> getUsersNotInOrga(
+    String? searchText,
     String? orgaId,
-    _i7.SortModel? sortFields,
-    int? pageNumber,
+    Map<String, int>? fieldsOrder,
+    int? pageIndex,
     int? pageSize,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
           #getUsersNotInOrga,
           [
+            searchText,
             orgaId,
-            sortFields,
-            pageNumber,
+            fieldsOrder,
+            pageIndex,
             pageSize,
           ],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, List<_i6.User>>>.value(
-            _FakeEither_0<_i5.Failure, List<_i6.User>>(
+        returnValue: _i4.Future<
+                _i2.Either<_i5.Failure, _i6.ModelContainer<_i7.User>>>.value(
+            _FakeEither_0<_i5.Failure, _i6.ModelContainer<_i7.User>>(
           this,
           Invocation.method(
             #getUsersNotInOrga,
             [
+              searchText,
               orgaId,
-              sortFields,
-              pageNumber,
+              fieldsOrder,
+              pageIndex,
               pageSize,
             ],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.User>>>);
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.ModelContainer<_i7.User>>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, _i6.User>> getUser(String? userId) =>
+  _i4.Future<_i2.Either<_i5.Failure, _i7.User>> getUser(String? userId) =>
       (super.noSuchMethod(
         Invocation.method(
           #getUser,
           [userId],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.User>>.value(
-            _FakeEither_0<_i5.Failure, _i6.User>(
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i7.User>>.value(
+            _FakeEither_0<_i5.Failure, _i7.User>(
           this,
           Invocation.method(
             #getUser,
             [userId],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.User>>);
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i7.User>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, _i6.User>> addUser(
+  _i4.Future<_i2.Either<_i5.Failure, _i7.User>> addUser(
     String? name,
     String? username,
     String? email,
@@ -139,8 +145,8 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
             enabled,
           ],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.User>>.value(
-            _FakeEither_0<_i5.Failure, _i6.User>(
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i7.User>>.value(
+            _FakeEither_0<_i5.Failure, _i7.User>(
           this,
           Invocation.method(
             #addUser,
@@ -152,7 +158,7 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
             ],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.User>>);
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i7.User>>);
   @override
   _i4.Future<_i2.Either<_i5.Failure, bool>> deleteUser(String? userId) =>
       (super.noSuchMethod(
@@ -170,7 +176,7 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, bool>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, _i6.User>> enableUser(
+  _i4.Future<_i2.Either<_i5.Failure, _i7.User>> enableUser(
     String? userId,
     bool? enableOrDisable,
   ) =>
@@ -182,8 +188,8 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
             enableOrDisable,
           ],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.User>>.value(
-            _FakeEither_0<_i5.Failure, _i6.User>(
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i7.User>>.value(
+            _FakeEither_0<_i5.Failure, _i7.User>(
           this,
           Invocation.method(
             #enableUser,
@@ -193,11 +199,11 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
             ],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.User>>);
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i7.User>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, _i6.User>> updateUser(
+  _i4.Future<_i2.Either<_i5.Failure, _i7.User>> updateUser(
     String? userId,
-    _i6.User? user,
+    _i7.User? user,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -207,8 +213,8 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
             user,
           ],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.User>>.value(
-            _FakeEither_0<_i5.Failure, _i6.User>(
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i7.User>>.value(
+            _FakeEither_0<_i5.Failure, _i7.User>(
           this,
           Invocation.method(
             #updateUser,
@@ -218,11 +224,11 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
             ],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.User>>);
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i7.User>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, _i6.User>> updateProfile(
+  _i4.Future<_i2.Either<_i5.Failure, _i7.User>> updateProfile(
     String? userId,
-    _i6.User? user,
+    _i7.User? user,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -232,8 +238,8 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
             user,
           ],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.User>>.value(
-            _FakeEither_0<_i5.Failure, _i6.User>(
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i7.User>>.value(
+            _FakeEither_0<_i5.Failure, _i7.User>(
           this,
           Invocation.method(
             #updateProfile,
@@ -243,9 +249,9 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
             ],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.User>>);
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i7.User>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, _i6.User?>> existsUser(
+  _i4.Future<_i2.Either<_i5.Failure, _i7.User?>> existsUser(
     String? userId,
     String? username,
     String? email,
@@ -259,8 +265,8 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
             email,
           ],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.User?>>.value(
-            _FakeEither_0<_i5.Failure, _i6.User?>(
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i7.User?>>.value(
+            _FakeEither_0<_i5.Failure, _i7.User?>(
           this,
           Invocation.method(
             #existsUser,
@@ -271,9 +277,9 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
             ],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.User?>>);
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i7.User?>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, _i6.User?>> existsProfile(
+  _i4.Future<_i2.Either<_i5.Failure, _i7.User?>> existsProfile(
     String? userId,
     String? username,
     String? email,
@@ -287,8 +293,8 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
             email,
           ],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.User?>>.value(
-            _FakeEither_0<_i5.Failure, _i6.User?>(
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i7.User?>>.value(
+            _FakeEither_0<_i5.Failure, _i7.User?>(
           this,
           Invocation.method(
             #existsProfile,
@@ -299,7 +305,7 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
             ],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.User?>>);
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i7.User?>>);
   @override
   _i4.Future<_i2.Either<_i5.Failure, bool>> updateUserPassword(
     String? userId,

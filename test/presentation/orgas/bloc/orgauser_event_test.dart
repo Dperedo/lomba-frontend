@@ -3,21 +3,24 @@ import 'package:lomba_frontend/data/models/sort_model.dart';
 import 'package:lomba_frontend/presentation/orgas/bloc/orgauser_event.dart';
 
 void main() {
-  
   const tOnOrgaUserStarter = OnOrgaUserStarter();
   const t_OnOrgaUserStarter = OnOrgaUserStarter();
-  const tOnOrgaUserListLoad = OnOrgaUserListLoad('');
-  const t_OnOrgaUserListLoad = OnOrgaUserListLoad('');
-  const tOnOrgaUserAdd = OnOrgaUserAdd('','',[],true,'');
-  const t_OnOrgaUserAdd = OnOrgaUserAdd('','',[],true,'');
-  const tOnOrgaUserEdit = OnOrgaUserEdit('','',[],true);
-  const t_OnOrgaUserEdit = OnOrgaUserEdit('','',[],true);
-  const tOnOrgaUserListUserNotInOrgaForAdd = OnOrgaUserListUserNotInOrgaForAdd('',SortModel(<String, int>{'created': 1}),1,10);
-  const t_OnOrgaUserListUserNotInOrgaForAdd = OnOrgaUserListUserNotInOrgaForAdd('',SortModel(<String, int>{'created': 1}),1,10);
-  const tOnOrgaUserEnable = OnOrgaUserEnable('','',false);
-  const t_OnOrgaUserEnable = OnOrgaUserEnable('','',false);
-  const tOnOrgaUserDelete = OnOrgaUserDelete('','','');
-  const t_OnOrgaUserDelete = OnOrgaUserDelete('','','');
+  const tOnOrgaUserListLoad =
+      OnOrgaUserListLoad('', '', <String, int>{}, 1, 10);
+  const t_OnOrgaUserListLoad =
+      OnOrgaUserListLoad('', '', <String, int>{}, 1, 10);
+  const tOnOrgaUserAdd = OnOrgaUserAdd('', '', [], true, '');
+  const t_OnOrgaUserAdd = OnOrgaUserAdd('', '', [], true, '');
+  const tOnOrgaUserEdit = OnOrgaUserEdit('', '', [], true);
+  const t_OnOrgaUserEdit = OnOrgaUserEdit('', '', [], true);
+  const tOnOrgaUserListUserNotInOrgaForAdd = OnOrgaUserListUserNotInOrgaForAdd(
+      '', '', <String, int>{'created': 1}, 1, 10);
+  const t_OnOrgaUserListUserNotInOrgaForAdd = OnOrgaUserListUserNotInOrgaForAdd(
+      '', '', <String, int>{'created': 1}, 1, 10);
+  const tOnOrgaUserEnable = OnOrgaUserEnable('', '', false);
+  const t_OnOrgaUserEnable = OnOrgaUserEnable('', '', false);
+  const tOnOrgaUserDelete = OnOrgaUserDelete('', '', '');
+  const t_OnOrgaUserDelete = OnOrgaUserDelete('', '', '');
 
   group('orga user event', () {
     test('On Orga User Starter', () {
