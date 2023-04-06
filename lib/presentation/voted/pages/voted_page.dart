@@ -3,8 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:number_paginator/number_paginator.dart';
 
 import '../../../core/widgets/body_formatter.dart';
+import '../../../core/widgets/keypad_stage_vote.dart';
 import '../../../core/widgets/scaffold_manager.dart';
+import '../../../core/widgets/show_posts.dart';
 import '../../../core/widgets/snackbar_notification.dart';
+import '../../../domain/entities/workflow/post.dart';
 import '../../../domain/entities/workflow/textcontent.dart';
 import '../bloc/voted_bloc.dart';
 import '../bloc/voted_cubit.dart';
@@ -200,58 +203,16 @@ class VotedPage extends StatelessWidget {
                                   shrinkWrap: true,
                                   itemCount: state.listItems.length,
                                   itemBuilder: (context, index) {
-                                    return Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Column(
-                                                children: [
-                                                  ListTile(
-                                                    leading: const Icon(
-                                                        Icons.person),
-                                                    title: Text(state
-                                                        .listItems[index]
-                                                        .title),
-                                                  ),
-                                                  ListTile(
-                                                    shape: const RoundedRectangleBorder(
-                                                        side: BorderSide(
-                                                            color: Colors.grey,
-                                                            width: 2),
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    2))),
-                                                    // tileColor: Colors.grey,
-                                                    title: Text(
-                                                        (state
-                                                                    .listItems[
-                                                                        index]
-                                                                    .postitems[0]
-                                                                    .content
-                                                                as TextContent)
-                                                            .text,
-                                                        textAlign:
-                                                            TextAlign.center),
-                                                    contentPadding:
-                                                        const EdgeInsets
-                                                                .symmetric(
-                                                            horizontal: 100,
-                                                            vertical: 100),
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  _showVoteButtons(context,
-                                                      state, index, statecubit),
-                                                  const SizedBox(height: 15),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        // const Divider()
-                                      ],
+                                    return ShowPosts(
+                                      post: state.listItems[index],
+                                      child: KeypadVoteVoted(
+                                        context: context,
+                                        post: state.listItems[index],
+                                        statecubit: statecubit,
+                                        keyValidate: _key,
+                                      )
                                     );
+                                    //return ShowPosts(post: state.listItems[index], child: _showVoteButtons(context, state.listItems[index], statecubit));
                                   });
                             },
                           )
@@ -324,7 +285,7 @@ class VotedPage extends StatelessWidget {
     );
   }
 
-  Row _showVoteButtons(BuildContext context, VotedLoaded state, int index,
+  Row _showVoteButtons(BuildContext context, Post post,
       VotedLiveState statecubit) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -341,19 +302,19 @@ class VotedPage extends StatelessWidget {
                 ),
               ),
             ),
-            onPressed: state.listItems[index].votes
+            onPressed: post.votes
                         .any((element) => element.value == -1) ||
-                    (statecubit.votes.containsKey(state.listItems[index].id) &&
-                        statecubit.votes[state.listItems[index].id] == -1)
+                    (statecubit.votes.containsKey(post.id) &&
+                        statecubit.votes[post.id] == -1)
                 ? null
                 : () {
-                    state.listItems[index].votes.clear();
+                    post.votes.clear();
                     context
                         .read<VotedBloc>()
-                        .add(OnVotedAddVote(state.listItems[index].id, -1));
+                        .add(OnVotedAddVote(post.id, -1));
                     context
                         .read<VotedLiveCubit>()
-                        .makeVote(state.listItems[index].id, -1);
+                        .makeVote(post.id, -1);
                   },
             child: const Icon(Icons.keyboard_arrow_down)),
         ElevatedButton(
@@ -368,19 +329,19 @@ class VotedPage extends StatelessWidget {
                 ),
               ),
             ),
-            onPressed: state.listItems[index].votes
+            onPressed: post.votes
                         .any((element) => element.value == 1) ||
-                    (statecubit.votes.containsKey(state.listItems[index].id) &&
-                        statecubit.votes[state.listItems[index].id] == 1)
+                    (statecubit.votes.containsKey(post.id) &&
+                        statecubit.votes[post.id] == 1)
                 ? null
                 : () {
-                    state.listItems[index].votes.clear();
+                    post.votes.clear();
                     context
                         .read<VotedBloc>()
-                        .add(OnVotedAddVote(state.listItems[index].id, 1));
+                        .add(OnVotedAddVote(post.id, 1));
                     context
                         .read<VotedLiveCubit>()
-                        .makeVote(state.listItems[index].id, 1);
+                        .makeVote(post.id, 1);
                   },
             child: const Icon(Icons.keyboard_arrow_up)),
       ],

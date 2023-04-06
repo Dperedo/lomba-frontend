@@ -10,8 +10,8 @@ import '../../repositories/post_repository.dart';
 class AddMultiPost {
   final PostRepository repository;
   AddMultiPost(this.repository);
-  Future<Either<Failure, Post>> execute(String orgaId, String userId, TextContent text,
-      ImageContent image, VideoContent video, String title, String flowId, bool isDraft)
+  Future<Either<Failure, Post>> execute(String orgaId, String userId, TextContent? text,
+      ImageContent? image, VideoContent? video, String title, String flowId, bool isDraft)
     async{
     return await repository.addMultiPost(orgaId, userId, text,
       image, video, title, flowId, isDraft);

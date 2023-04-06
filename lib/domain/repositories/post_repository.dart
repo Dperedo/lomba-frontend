@@ -11,8 +11,8 @@ import '../entities/workflow/vote.dart';
 abstract class PostRepository {
   Future<Either<Failure, Post>> addTextPost(String orgaId, String userId,
       TextContent text, String title, String flowId, bool isDraft);
-  Future<Either<Failure, Post>> addMultiPost(String orgaId, String userId, TextContent text,
-      ImageContent image, VideoContent video, String title, String flowId, bool isDraft);
+  Future<Either<Failure, Post>> addMultiPost(String orgaId, String userId, TextContent? text,
+      ImageContent? image, VideoContent? video, String title, String flowId, bool isDraft);
   Future<Either<Failure, Post>> updatePost(String postId, String userId,
       TextContent text, String title);
   Future<Either<Failure, Post>> changeStagePost(String postId, String flowId, String stageId);
