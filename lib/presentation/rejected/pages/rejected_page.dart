@@ -4,6 +4,7 @@ import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:number_paginator/number_paginator.dart';
 
+import '../../../core/widgets/keypad_stage_approval.dart';
 import '../../../core/widgets/show_posts.dart';
 import '../../../domain/entities/workflow/post.dart';
 import '../../../domain/entities/workflow/textcontent.dart';
@@ -175,7 +176,16 @@ class RejectedPage extends StatelessWidget {
                           shrinkWrap: true,
                           itemCount: state.listItems.length,
                           itemBuilder: (context, index) {
-                            return ShowPosts(post: state.listItems[index], child: _showVoteButtons(context, state.listItems[index], statecubit));
+                            return ShowPosts(
+                              post: state.listItems[index],
+                              child: KeypadApprovalRejected(
+                                context: context,
+                                post: state.listItems[index],
+                                statecubit: statecubit,
+                                keyValidate: _key,
+                              )
+                            );
+                            //return ShowPosts(post: state.listItems[index], child: _showVoteButtons(context, state.listItems[index], statecubit));
                           });
                     }),
                   ],

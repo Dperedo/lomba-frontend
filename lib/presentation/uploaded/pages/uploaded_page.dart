@@ -7,6 +7,7 @@ import 'package:number_paginator/number_paginator.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/validators.dart';
+import '../../../core/widgets/keypad_stage_load.dart';
 import '../../../core/widgets/show_posts.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/workflow/post.dart';
@@ -270,8 +271,17 @@ class UploadedPage extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: state.listItems.length,
-                itemBuilder: (context, index) {
-                  return ShowPosts(post: state.listItems[index], child: showButtonPublish(context, state.listItems[index], statecubit));
+                itemBuilder: (context, index) {//KeypadLoad
+                  return ShowPosts(
+                    post: state.listItems[index],
+                    child: KeypadLoad(
+                      context: context,
+                      post: state.listItems[index],
+                      statecubit: statecubit,
+                      keyValidate: _key,
+                    )
+                  );
+                  //return ShowPosts(post: state.listItems[index], child: showButtonPublish(context, state.listItems[index], statecubit));
                 });
           },
         ),

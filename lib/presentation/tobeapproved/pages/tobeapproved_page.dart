@@ -7,6 +7,7 @@ import 'package:lomba_frontend/domain/entities/workflow/post.dart';
 import 'package:number_paginator/number_paginator.dart';
 import 'package:image_network/image_network.dart';
 
+import '../../../core/widgets/keypad_stage_approval.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/workflow/imagecontent.dart';
 import '../../../domain/entities/workflow/textcontent.dart';
@@ -172,7 +173,16 @@ class ToBeApprovedPage extends StatelessWidget {
                             shrinkWrap: true,
                             itemCount: state.listItems.length,
                             itemBuilder: (context, index) {
-                              return ShowPosts(post: state.listItems[index], child: _showVoteButtons(context, state.listItems[index], statecubit));
+                              return ShowPosts(
+                                post: state.listItems[index],
+                                child: KeypadApprovalToBeApproved(
+                                  context: context,
+                                  post: state.listItems[index],
+                                  statecubit: statecubit,
+                                  keyValidate: _key,
+                                )
+                              );
+                              //return ShowPosts(post: state.listItems[index], child: _showVoteButtons(context, state.listItems[index], statecubit));
                             });
                       })
                     ],
@@ -203,69 +213,6 @@ class ToBeApprovedPage extends StatelessWidget {
             state.pageIndex,
             _fixPageSize));
       },
-    );
-  }
-
-  Row _showVoteButton(BuildContext context, ToBeApprovedLoaded state,
-      int index, ToBeApprovedLiveState statecubit) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        ElevatedButton(
-            style: ButtonStyle(
-              shape: MaterialStateProperty.resolveWith(
-                (states) => RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  side: BorderSide(
-                    color: Theme.of(context).secondaryHeaderColor,
-                    width: 2,
-                  ),
-                ),
-              ),
-            ),
-            onPressed: state.listItems[index].votes
-                        .any((element) => element.value == -1) ||
-                    (statecubit.votes.containsKey(state.listItems[index].id) &&
-                        statecubit.votes[state.listItems[index].id] == -1)
-                ? null
-                : () {
-                    state.listItems[index].votes.clear();
-                    context
-                        .read<ToBeApprovedBloc>()
-                        .add(OnToBeApprovedVote(state.listItems[index].id, -1));
-                    context
-                        .read<ToBeApprovedLiveCubit>()
-                        .makeVote(state.listItems[index].id, -1);
-                  },
-            child: const Icon(Icons.close)),
-        ElevatedButton(
-            style: ButtonStyle(
-              shape: MaterialStateProperty.resolveWith(
-                (states) => RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  side: BorderSide(
-                    color: Theme.of(context).secondaryHeaderColor,
-                    width: 2,
-                  ),
-                ),
-              ),
-            ),
-            onPressed: state.listItems[index].votes
-                        .any((element) => element.value == 1) ||
-                    (statecubit.votes.containsKey(state.listItems[index].id) &&
-                        statecubit.votes[state.listItems[index].id] == 1)
-                ? null
-                : () {
-                    state.listItems[index].votes.clear();
-                    context
-                        .read<ToBeApprovedBloc>()
-                        .add(OnToBeApprovedVote(state.listItems[index].id, 1));
-                    context
-                        .read<ToBeApprovedLiveCubit>()
-                        .makeVote(state.listItems[index].id, 1);
-                  },
-            child: const Icon(Icons.check)),
-      ],
     );
   }
 

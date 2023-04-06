@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:number_paginator/number_paginator.dart';
 
 import '../../../core/widgets/body_formatter.dart';
+import '../../../core/widgets/keypad_stage_vote.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/show_posts.dart';
 import '../../../core/widgets/snackbar_notification.dart';
@@ -163,7 +164,16 @@ class PopularPage extends StatelessWidget {
                       shrinkWrap: true,
                       itemCount: state.listItems.length,
                       itemBuilder: (context, index) {
-                        return ShowPosts(post: state.listItems[index], child: _showVoteButtons(context, state.listItems[index], state.validLogin, statecubit));
+                        return ShowPosts(
+                          post: state.listItems[index],
+                          child: KeypadVotePopular(
+                            context: context,
+                            post: state.listItems[index],
+                            statecubit: statecubit,
+                            validLogin: state.validLogin,
+                          )
+                        );
+                        //return ShowPosts(post: state.listItems[index], child: _showVoteButtons(context, state.listItems[index], state.validLogin, statecubit));
                       });
                 }),
               ],
