@@ -6,6 +6,7 @@ import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_cubit.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_event.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_state.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
@@ -57,9 +58,10 @@ class AddContentPage extends StatelessWidget {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController contentController = TextEditingController();
     final TextEditingController contentControllerImagen = TextEditingController();
+    final TextEditingController contentControllerVideo = TextEditingController();
 
     String? _validateFields(String value) {
-      if (value.isEmpty && contentControllerImagen.text.isEmpty) {
+      if (value.isEmpty && contentControllerImagen.text.isEmpty && contentControllerVideo.text.isEmpty) {
         return 'Por favor, complete al menos uno de los campos';
       }
       return null;
@@ -193,6 +195,89 @@ class AddContentPage extends StatelessWidget {
                                     : const SizedBox(),
                               ],
                             ),
+                          ),const SizedBox(
+                            height: 10,
+                          ),
+                          //-------------------------------------------------------------------
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: 250,
+                            child: Stack(
+                              children: <Widget>[
+                                statecubit.filenameVideo != ""
+                                    ? Container(
+                                        width: MediaQuery.of(context).size.width,
+                                        height: 250,
+                                        child: //VideoPlayerController.memory(statecubit.videofile)
+                                        Image.memory(
+                                          statecubit.videofile,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : Container(
+                                        padding: const EdgeInsets.all(5.0),
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                5.0), // Radius of the border
+                                            border: Border.all(
+                                              width: 1,
+                                              color: Colors
+                                                  .grey, // Color of the border
+                                            )),
+                                        child: statecubit.showLocalProgress ?
+                                        const CircularProgressIndicator() :
+                                        ElevatedButton.icon(
+                                            onPressed: () async {
+                                              FilePickerResult? result =
+                                                  await FilePicker.platform
+                                                      .pickFiles(
+                                                type: FileType.custom,
+                                                allowedExtensions: [
+                                                  'mp4',
+                                                  'mov',
+                                                  'wmv',
+                                                  'avi'
+                                                ],
+                                              );
+                                              if (result != null) {
+                                                context.read<AddContentLiveCubit>().startProgressIndicators();
+                                                PlatformFile file =
+                                                    result.files.first;
+                                                if (file.size != 0) {
+                                                  contentControllerVideo.text = file.name;
+                                                  context.read<AddContentLiveCubit>()
+                                                      .showVideo(
+                                                          file.bytes!,
+                                                          state.userId,
+                                                          state.orgaId);
+                                                } else {
+                                                  snackBarNotify(context,
+                                                      "El archivo no puede estar vacío",
+                                                      Icons.error);
+                                                }
+                                              } else {
+                                                // User canceled the picker
+                                              }
+                                            },
+                                            icon: const Icon(Icons.file_open),
+                                            label: const Text("Subir video")),
+                                      ),
+                                statecubit.filenameVideo != ""
+                                    ? Container(
+                                        alignment: Alignment.topRight,
+                                        child: IconButton(
+                                          alignment: Alignment.topRight,
+                                          icon: const Icon(Icons.cancel),
+                                          onPressed: () {
+                                            context.read<AddContentLiveCubit>().stopRemoteProgressIndicators();
+                                            context.read<AddContentLiveCubit>().removeVideo();
+                                          },
+                                        ),
+                                      )
+                                    : const SizedBox(),
+                              ],
+                            )
                           ),
                           const SizedBox(
                             height: 20,
