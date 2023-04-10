@@ -162,7 +162,11 @@ class AddContentPage extends StatelessWidget {
                                                       'jpg',
                                                       'png',
                                                       'gif',
-                                                      'jpeg'
+                                                      'jpeg',
+                                                      'mp4',
+                                                      'mov',
+                                                      'wmv',
+                                                      'avi'
                                                     ],
                                                   );
                                                   if (result != null) {
@@ -195,8 +199,8 @@ class AddContentPage extends StatelessWidget {
                                                 },
                                                 icon:
                                                     const Icon(Icons.file_open),
-                                                label:
-                                                    const Text("Subir imagen")),
+                                                label: const Text(
+                                                    "Subir imagen o video")),
                                       ),
                                 statecubit.filename != ""
                                     ? Container(
