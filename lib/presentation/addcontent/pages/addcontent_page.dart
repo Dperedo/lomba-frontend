@@ -24,7 +24,7 @@ class AddContentPage extends StatelessWidget {
   AddContentPage({Key? key}) : super(key: key);
 
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
-
+  late VideoPlayerController _videoPlayerController;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddContentBloc, AddContentState>(
@@ -232,9 +232,9 @@ class AddContentPage extends StatelessWidget {
                                           width:
                                               MediaQuery.of(context).size.width,
                                           height: 250,
-                                          child: showVideoPlayer(statecubit
-                                                          .cloudFile?.url ??
-                                                      ""),
+                                          child: showVideoPlayer(
+                                              statecubit.cloudFileVideo?.url ??
+                                                  ""),
                                         )
                                       : Container(
                                           padding: const EdgeInsets.all(5.0),
@@ -434,15 +434,13 @@ class AddContentPage extends StatelessWidget {
   }
 
   VideoPlayer showVideoPlayer(String videoUrl) {
-    VideoPlayerController videoPlayerController =
-        VideoPlayerController.network(videoUrl);
+    _videoPlayerController = VideoPlayerController.network(videoUrl);
 
-    videoPlayerController.initialize().then((_) {
-      videoPlayerController.play();
+    _videoPlayerController.initialize().then((_) {
+      _videoPlayerController.play();
     });
-
     return VideoPlayer(
-      videoPlayerController,
+      _videoPlayerController,
     );
   }
 }
