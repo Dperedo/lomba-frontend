@@ -233,7 +233,7 @@ class AddContentPage extends StatelessWidget {
                                               MediaQuery.of(context).size.width,
                                           height: 250,
                                           child: showVideoPlayer(statecubit
-                                                          .cloudFile?.url ??
+                                                          .cloudFileVideo?.url ??
                                                       ""),
                                         )
                                       : Container(
@@ -349,7 +349,8 @@ class AddContentPage extends StatelessWidget {
                               key: const ValueKey("btnSavedUp"),
                               label: const Text("Subir"),
                               onPressed: statecubit.showRemoteProgress ||
-                                      statecubit.cloudFile == null
+                                      statecubit.cloudFile == null ||
+                                      statecubit.cloudFileVideo == null
                                   ? null
                                   : () {
                                       if (key.currentState?.validate() ==
