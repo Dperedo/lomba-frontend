@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
@@ -21,7 +22,7 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
     this._getCloudFile,
     this._registerCloudFile,)
       : super(AddContentLiveState(
-            const <String, bool>{"keepasdraft": false}, "", Uint8List(0), "", Uint8List(0), "", false, false, null, 0, 0));
+            const <String, bool>{"keepasdraft": false}, "", Uint8List(0), "", Uint8List(0), "", false, false,false, false, null, null, 0, 0, 0, 0));
 
   void changeValue(String name, bool value) {
     emit(state.copyWithChangeCheck(name: name, changeState: value));
@@ -54,33 +55,47 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
     });
   }
 
-  void showVideo(Uint8List video, String userId, String orgaId) async {
+  void showVideo(Uint8List videoByte, String userId, String orgaId) async {
     var cloudFileId = '';
     secondsPassed = 0;
-    VideoPlayerController controller = VideoPlayerController.memory(video);
-    await controller.initialize();
-    final imageHeight = controller.value.size.height.toInt();
-    final imageWidth = controller.value.size.width.toInt();
+    //VideoPlayerController controller = videoPlayer(videoByte);
+    /*final File videoFile = File.fromRawPath(videoByte);
+    final controller = VideoPlayerController.file(videoFile);
+
+    //await controller.initialize();
+    final videoHeight = controller.value.size.height.toInt();
+    final videoWidth = controller.value.size.width.toInt();*/
+
+
     final resultRegister = await _registerCloudFile.execute(userId, orgaId);
     resultRegister.fold((l) => null, (r) => cloudFileId = r.id);
-    await uploadFile.execute(video, cloudFileId);
-    emit(state.copyWithVideo(nameVideo: cloudFileId, video: video));
+
+    await uploadFile.execute(videoByte, cloudFileId);
+    emit(state.copyWithVideo(nameVideo: cloudFileId, video: videoByte));
+
     Timer.periodic(const Duration(seconds: 2), (timer) async {
       secondsPassed++;
       print(secondsPassed);
+
       final resultCloudFile = await _getCloudFile.execute(cloudFileId);
       resultCloudFile.fold((l) => null, (r) {
         if(r.size != 0) {
           timer.cancel();
-          emit(state.copyWithCloudFile(cloudFile: r, imageHeight:imageHeight, imageWidth:imageWidth));
+          emit(state.copyWithCloudFileVideo(cloudFileVideo: r, videoHeight:200, videoWidth:200));
         }
         else if (secondsPassed >= 10) {
           timer.cancel();
-          emit(state.copyWithProgressIndicator(localProgress: false, remoteProgress: false));
+          emit(state.copyWithProgressIndicatorVideo(localProgressVideo: false, remoteProgressVideo: false));
         }
       });
     });
   }
+
+  /*VideoPlayerController videoPlayer(Uint8List video) {
+    final File videoFile = File.fromRawPath(video);
+    final controller = VideoPlayerController.file(videoFile);
+    return controller;
+  }*/
 
   void removeImage() {
     emit(state.copyWithImage(name: "", image: Uint8List(0)));
@@ -94,12 +109,16 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
     emit(state.copyWithProgressIndicator(localProgress: true, remoteProgress: true));
   }
 
-  void stopLocalProgressIndicators() {
-    emit(state.copyWithProgressIndicator(localProgress: false, remoteProgress: true));
+  void startProgressIndicatorsVideo() {
+    emit(state.copyWithProgressIndicatorVideo(localProgressVideo: true, remoteProgressVideo: true));
   }
 
   void stopRemoteProgressIndicators() {
     emit(state.copyWithProgressIndicator(localProgress: false, remoteProgress: false));
+  }
+
+  void stopRemoteProgressIndicatorsVideo() {
+    emit(state.copyWithProgressIndicatorVideo(localProgressVideo: false, remoteProgressVideo: false));
   }
 }
 
@@ -112,9 +131,14 @@ class AddContentLiveState extends Equatable {
   final String message;
   final bool showLocalProgress;
   final bool showRemoteProgress;
+  final bool showLocalProgressVideo;
+  final bool showRemoteProgressVideo;
   final CloudFile? cloudFile;
+  final CloudFile? cloudFileVideo;
   final int imageHeight;
   final int imageWidth;
+  final int videoHeight;
+  final int videoWidth;
   @override
   List<Object?> get props => [
     checks,
@@ -125,9 +149,14 @@ class AddContentLiveState extends Equatable {
     message,
     showLocalProgress,
     showRemoteProgress,
+    showLocalProgressVideo,
+    showRemoteProgressVideo,
     cloudFile,
+    cloudFileVideo,
     imageHeight,
-    imageWidth
+    imageWidth,
+    videoHeight,
+    videoWidth,
   ];
 
   const AddContentLiveState(
@@ -139,9 +168,14 @@ class AddContentLiveState extends Equatable {
       this.message,
       this.showLocalProgress,
       this.showRemoteProgress,
+      this.showLocalProgressVideo,
+      this.showRemoteProgressVideo,
       this.cloudFile,
+      this.cloudFileVideo,
       this.imageHeight,
-      this.imageWidth
+      this.imageWidth,
+      this.videoHeight,
+      this.videoWidth,
     );
 
   AddContentLiveState copyWithChangeCheck(
@@ -149,31 +183,43 @@ class AddContentLiveState extends Equatable {
     Map<String, bool> nchecks = <String, bool>{};
     nchecks.addAll(checks);
     nchecks[name] = changeState;
-    final ous = AddContentLiveState(nchecks, filename, imagefile, filenameVideo, videofile, "",showLocalProgress, showRemoteProgress, null,0,0);
+    final ous = AddContentLiveState(nchecks, filename, imagefile, filenameVideo, videofile, "",showLocalProgress, showRemoteProgress, showLocalProgressVideo, showRemoteProgressVideo, null, null,0,0,0,0);
     return ous;
   }
 
   AddContentLiveState copyWithImage(
       {required String name, required Uint8List image}) {
-    final ous = AddContentLiveState(checks, name, image, filenameVideo, videofile, "Subiendo...",true, true, null,0,0);
+    final ous = AddContentLiveState(checks, name, image, filenameVideo, videofile, "Subiendo...",true, true, showLocalProgressVideo, showRemoteProgressVideo, null, null,0,0,0,0);
     return ous;
   }
 
   AddContentLiveState copyWithVideo(
       {required String nameVideo, required Uint8List video}) {
-    final ous = AddContentLiveState(checks, filename, imagefile, nameVideo, video, "Subiendo...",true, true, null,0,0);
+    final ous = AddContentLiveState(checks, filename, imagefile, nameVideo, video, "Subiendo...",showLocalProgress, showRemoteProgress,true, true, null, null,0,0,0,0);
     return ous;
   }
 
   AddContentLiveState copyWithProgressIndicator(
       {required bool localProgress, required bool remoteProgress}) {
-    final ous = AddContentLiveState(checks, filename, imagefile, filenameVideo, videofile, "", localProgress, remoteProgress, null,0,0);
+    final ous = AddContentLiveState(checks, filename, imagefile, filenameVideo, videofile, "", localProgress, remoteProgress,showLocalProgressVideo, showRemoteProgressVideo, null, null,0,0,0,0);
+    return ous;
+  }
+
+  AddContentLiveState copyWithProgressIndicatorVideo(
+      {required bool localProgressVideo, required bool remoteProgressVideo}) {
+    final ous = AddContentLiveState(checks, filename, imagefile, filenameVideo, videofile, "", showLocalProgress, showRemoteProgress,localProgressVideo, remoteProgressVideo, null, null,0,0,0,0);
     return ous;
   }
 
   AddContentLiveState copyWithCloudFile(
       {required CloudFile cloudFile, required int imageHeight, required int imageWidth, }) {
-    final ous = AddContentLiveState(checks, filename, imagefile, filenameVideo, videofile, "", false, false, cloudFile, imageHeight, imageWidth);
+    final ous = AddContentLiveState(checks, filename, imagefile, filenameVideo, videofile, "", false, false, showLocalProgressVideo, showRemoteProgressVideo,cloudFile, cloudFileVideo,imageHeight, imageWidth,videoHeight, videoWidth);
+    return ous;
+  }
+
+  AddContentLiveState copyWithCloudFileVideo(
+      {required CloudFile cloudFileVideo, required int videoHeight, required int videoWidth, }) {
+    final ous = AddContentLiveState(checks, filename, imagefile, filenameVideo, videofile, "",showLocalProgress, showRemoteProgress, false, false, cloudFile, cloudFileVideo,imageHeight, imageWidth,videoHeight, videoWidth);
     return ous;
   }
 }

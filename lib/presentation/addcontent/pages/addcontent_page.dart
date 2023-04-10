@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,18 +60,23 @@ class AddContentPage extends StatelessWidget {
   Widget _bodyAddContent(BuildContext context, GlobalKey<FormState> key) {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController contentController = TextEditingController();
-    final TextEditingController contentControllerImagen = TextEditingController();
-    final TextEditingController contentControllerVideo = TextEditingController();
+    final TextEditingController contentControllerImagen =
+        TextEditingController();
+    final TextEditingController contentControllerVideo =
+        TextEditingController();
 
     String? _validateFields(String value) {
-      if (value.isEmpty && contentControllerImagen.text.isEmpty && contentControllerVideo.text.isEmpty) {
+      if (value.isEmpty &&
+          contentControllerImagen.text.isEmpty &&
+          contentControllerVideo.text.isEmpty) {
         return 'Por favor, complete al menos uno de los campos';
       }
       return null;
     }
 
     return BlocProvider<AddContentLiveCubit>(
-      create: (context) => AddContentLiveCubit(di.locator(),di.locator(),di.locator()),
+      create: (context) =>
+          AddContentLiveCubit(di.locator(), di.locator(), di.locator()),
       child: Padding(
         padding: const EdgeInsets.all(25.0),
         child: SizedBox(
@@ -107,8 +115,7 @@ class AddContentPage extends StatelessWidget {
                             maxLength: 500,
                             maxLines: 4,
                             controller: contentController,
-                            validator: (value) =>
-                                _validateFields(value ?? ""),
+                            validator: (value) => _validateFields(value ?? ""),
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                               hintText: 'Texto',
@@ -124,7 +131,8 @@ class AddContentPage extends StatelessWidget {
                               children: <Widget>[
                                 statecubit.filename != ""
                                     ? Container(
-                                        width: MediaQuery.of(context).size.width,
+                                        width:
+                                            MediaQuery.of(context).size.width,
                                         height: 250,
                                         child: Image.memory(
                                           statecubit.imagefile,
@@ -142,43 +150,53 @@ class AddContentPage extends StatelessWidget {
                                               color: Colors
                                                   .grey, // Color of the border
                                             )),
-                                        child: statecubit.showLocalProgress ?
-                                        const CircularProgressIndicator() :
-                                        ElevatedButton.icon(
-                                            onPressed: () async {
-                                              FilePickerResult? result =
-                                                  await FilePicker.platform
-                                                      .pickFiles(
-                                                type: FileType.custom,
-                                                allowedExtensions: [
-                                                  'jpg',
-                                                  'png',
-                                                  'gif',
-                                                  'jpeg'
-                                                ],
-                                              );
-                                              if (result != null) {
-                                                context.read<AddContentLiveCubit>().startProgressIndicators();
-                                                PlatformFile file =
-                                                    result.files.first;
-                                                if (file.size != 0) {
-                                                  contentControllerImagen.text = file.name;
-                                                  context.read<AddContentLiveCubit>()
-                                                      .showImage(
-                                                          file.bytes!,
-                                                          state.userId,
-                                                          state.orgaId);
-                                                } else {
-                                                  snackBarNotify(context,
-                                                      "El archivo no puede estar vacío",
-                                                      Icons.error);
-                                                }
-                                              } else {
-                                                // User canceled the picker
-                                              }
-                                            },
-                                            icon: const Icon(Icons.file_open),
-                                            label: const Text("Subir imagen")),
+                                        child: statecubit.showLocalProgress
+                                            ? const CircularProgressIndicator()
+                                            : ElevatedButton.icon(
+                                                onPressed: () async {
+                                                  FilePickerResult? result =
+                                                      await FilePicker.platform
+                                                          .pickFiles(
+                                                    type: FileType.custom,
+                                                    allowedExtensions: [
+                                                      'jpg',
+                                                      'png',
+                                                      'gif',
+                                                      'jpeg'
+                                                    ],
+                                                  );
+                                                  if (result != null) {
+                                                    context
+                                                        .read<
+                                                            AddContentLiveCubit>()
+                                                        .startProgressIndicators();
+                                                    PlatformFile file =
+                                                        result.files.first;
+                                                    if (file.size != 0) {
+                                                      contentControllerImagen
+                                                          .text = file.name;
+                                                      context
+                                                          .read<
+                                                              AddContentLiveCubit>()
+                                                          .showImage(
+                                                            file.bytes!,
+                                                            state.userId,
+                                                            state.orgaId,
+                                                          );
+                                                    } else {
+                                                      snackBarNotify(
+                                                          context,
+                                                          "El archivo no puede estar vacío",
+                                                          Icons.error);
+                                                    }
+                                                  } else {
+                                                    // User canceled the picker
+                                                  }
+                                                },
+                                                icon:
+                                                    const Icon(Icons.file_open),
+                                                label:
+                                                    const Text("Subir imagen")),
                                       ),
                                 statecubit.filename != ""
                                     ? Container(
@@ -187,98 +205,117 @@ class AddContentPage extends StatelessWidget {
                                           alignment: Alignment.topRight,
                                           icon: const Icon(Icons.cancel),
                                           onPressed: () {
-                                            context.read<AddContentLiveCubit>().stopRemoteProgressIndicators();
-                                            context.read<AddContentLiveCubit>().removeImage();
+                                            context
+                                                .read<AddContentLiveCubit>()
+                                                .stopRemoteProgressIndicators();
+                                            context
+                                                .read<AddContentLiveCubit>()
+                                                .removeImage();
                                           },
                                         ),
                                       )
                                     : const SizedBox(),
                               ],
                             ),
-                          ),const SizedBox(
+                          ),
+                          const SizedBox(
                             height: 10,
                           ),
                           //-------------------------------------------------------------------
                           SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: 250,
-                            child: Stack(
-                              children: <Widget>[
-                                statecubit.filenameVideo != ""
-                                    ? Container(
-                                        width: MediaQuery.of(context).size.width,
-                                        height: 250,
-                                        child: //VideoPlayerController.memory(statecubit.videofile)
-                                        Image.memory(
-                                          statecubit.videofile,
-                                          fit: BoxFit.cover,
+                              width: MediaQuery.of(context).size.width,
+                              height: 250,
+                              child: Stack(
+                                children: <Widget>[
+                                  statecubit.cloudFileVideo != null
+                                      ? Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: 250,
+                                          child: showVideoPlayer(statecubit
+                                                          .cloudFile?.url ??
+                                                      ""),
+                                        )
+                                      : Container(
+                                          padding: const EdgeInsets.all(5.0),
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(
+                                                  5.0), // Radius of the border
+                                              border: Border.all(
+                                                width: 1,
+                                                color: Colors
+                                                    .grey, // Color of the border
+                                              )),
+                                          child: statecubit
+                                                  .showLocalProgressVideo
+                                              ? const CircularProgressIndicator()
+                                              : ElevatedButton.icon(
+                                                  onPressed: () async {
+                                                    FilePickerResult? result =
+                                                        await FilePicker
+                                                            .platform
+                                                            .pickFiles(
+                                                      type: FileType.custom,
+                                                      allowedExtensions: [
+                                                        'mp4',
+                                                        'mov',
+                                                        'wmv',
+                                                        'avi'
+                                                      ],
+                                                    );
+                                                    if (result != null) {
+                                                      context
+                                                          .read<
+                                                              AddContentLiveCubit>()
+                                                          .startProgressIndicatorsVideo();
+                                                      PlatformFile file =
+                                                          result.files.first;
+                                                      if (file.size != 0) {
+                                                        contentControllerVideo
+                                                            .text = file.name;
+                                                        context
+                                                            .read<
+                                                                AddContentLiveCubit>()
+                                                            .showVideo(
+                                                              file.bytes!,
+                                                              state.userId,
+                                                              state.orgaId,
+                                                            );
+                                                      } else {
+                                                        snackBarNotify(
+                                                            context,
+                                                            "El archivo no puede estar vacío",
+                                                            Icons.error);
+                                                      }
+                                                    } else {
+                                                      // User canceled the picker
+                                                    }
+                                                  },
+                                                  icon: const Icon(
+                                                      Icons.file_open),
+                                                  label: const Text(
+                                                      "Subir video")),
                                         ),
-                                      )
-                                    : Container(
-                                        padding: const EdgeInsets.all(5.0),
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                                5.0), // Radius of the border
-                                            border: Border.all(
-                                              width: 1,
-                                              color: Colors
-                                                  .grey, // Color of the border
-                                            )),
-                                        child: statecubit.showLocalProgress ?
-                                        const CircularProgressIndicator() :
-                                        ElevatedButton.icon(
-                                            onPressed: () async {
-                                              FilePickerResult? result =
-                                                  await FilePicker.platform
-                                                      .pickFiles(
-                                                type: FileType.custom,
-                                                allowedExtensions: [
-                                                  'mp4',
-                                                  'mov',
-                                                  'wmv',
-                                                  'avi'
-                                                ],
-                                              );
-                                              if (result != null) {
-                                                context.read<AddContentLiveCubit>().startProgressIndicators();
-                                                PlatformFile file =
-                                                    result.files.first;
-                                                if (file.size != 0) {
-                                                  contentControllerVideo.text = file.name;
-                                                  context.read<AddContentLiveCubit>()
-                                                      .showVideo(
-                                                          file.bytes!,
-                                                          state.userId,
-                                                          state.orgaId);
-                                                } else {
-                                                  snackBarNotify(context,
-                                                      "El archivo no puede estar vacío",
-                                                      Icons.error);
-                                                }
-                                              } else {
-                                                // User canceled the picker
-                                              }
-                                            },
-                                            icon: const Icon(Icons.file_open),
-                                            label: const Text("Subir video")),
-                                      ),
-                                statecubit.filenameVideo != ""
-                                    ? Container(
-                                        alignment: Alignment.topRight,
-                                        child: IconButton(
+                                  statecubit.cloudFileVideo != null
+                                      ? Container(
                                           alignment: Alignment.topRight,
-                                          icon: const Icon(Icons.cancel),
-                                          onPressed: () {
-                                            context.read<AddContentLiveCubit>().stopRemoteProgressIndicators();
-                                            context.read<AddContentLiveCubit>().removeVideo();
-                                          },
-                                        ),
-                                      )
-                                    : const SizedBox(),
-                              ],
-                            )
-                          ),
+                                          child: IconButton(
+                                            alignment: Alignment.topRight,
+                                            icon: const Icon(Icons.cancel),
+                                            onPressed: () {
+                                              context
+                                                  .read<AddContentLiveCubit>()
+                                                  .stopRemoteProgressIndicatorsVideo();
+                                              context
+                                                  .read<AddContentLiveCubit>()
+                                                  .removeVideo();
+                                            },
+                                          ),
+                                        )
+                                      : const SizedBox(),
+                                ],
+                              )),
                           const SizedBox(
                             height: 20,
                           ),
@@ -296,9 +333,9 @@ class AddContentPage extends StatelessWidget {
                                   },
                                 ),
                               ),
-                              statecubit.showRemoteProgress ?
-                              const CircularProgressIndicator() : 
-                              const SizedBox()
+                              statecubit.showRemoteProgress
+                                  ? const CircularProgressIndicator()
+                                  : const SizedBox()
                             ],
                           ),
                           const SizedBox(
@@ -311,20 +348,24 @@ class AddContentPage extends StatelessWidget {
                               icon: const Icon(Icons.publish),
                               key: const ValueKey("btnSavedUp"),
                               label: const Text("Subir"),
-                              onPressed: statecubit.showRemoteProgress || statecubit
-                                              .cloudFile == null ? null :
-                              () {
-                                if (key.currentState?.validate() == true) {
-                                  context.read<AddContentBloc>().add(
-                                      OnAddContentAdd(
-                                          titleController.text,
-                                          contentController.text,
-                                          statecubit.cloudFile,
-                                          statecubit.checks["keepasdraft"]!,
-                                          statecubit.imageHeight,
-                                          statecubit.imageWidth,));
-                                }
-                              },
+                              onPressed: statecubit.showRemoteProgress ||
+                                      statecubit.cloudFile == null
+                                  ? null
+                                  : () {
+                                      if (key.currentState?.validate() ==
+                                          true) {
+                                        context
+                                            .read<AddContentBloc>()
+                                            .add(OnAddContentAdd(
+                                              titleController.text,
+                                              contentController.text,
+                                              statecubit.cloudFile,
+                                              statecubit.checks["keepasdraft"]!,
+                                              statecubit.imageHeight,
+                                              statecubit.imageWidth,
+                                            ));
+                                      }
+                                    },
                             ),
                           ),
                           const Divider(
@@ -383,6 +424,25 @@ class AddContentPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  VideoPlayerController videoPlayerController(Uint8List videoByte) {
+    final File videoFile = File.fromRawPath(videoByte);
+    final video = VideoPlayerController.file(videoFile);
+    return video;
+  }
+
+  VideoPlayer showVideoPlayer(String videoUrl) {
+    VideoPlayerController videoPlayerController =
+        VideoPlayerController.network(videoUrl);
+
+    videoPlayerController.initialize().then((_) {
+      videoPlayerController.play();
+    });
+
+    return VideoPlayer(
+      videoPlayerController,
     );
   }
 }
