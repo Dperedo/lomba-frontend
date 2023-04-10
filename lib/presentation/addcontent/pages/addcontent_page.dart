@@ -24,7 +24,7 @@ class AddContentPage extends StatelessWidget {
   AddContentPage({Key? key}) : super(key: key);
 
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
-
+  late VideoPlayerController _videoPlayerController;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddContentBloc, AddContentState>(
@@ -435,15 +435,13 @@ class AddContentPage extends StatelessWidget {
   }
 
   VideoPlayer showVideoPlayer(String videoUrl) {
-    VideoPlayerController videoPlayerController =
-        VideoPlayerController.network(videoUrl);
+    _videoPlayerController = VideoPlayerController.network(videoUrl);
 
-    videoPlayerController.initialize().then((_) {
-      videoPlayerController.play();
+    _videoPlayerController.initialize().then((_) {
+      _videoPlayerController.play();
     });
-
     return VideoPlayer(
-      videoPlayerController,
+      _videoPlayerController,
     );
   }
 }
