@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +9,7 @@ import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_cubit.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_event.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_state.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
@@ -20,7 +24,7 @@ class AddContentPage extends StatelessWidget {
   AddContentPage({Key? key}) : super(key: key);
 
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
-
+  late VideoPlayerController _videoPlayerController;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddContentBloc, AddContentState>(
@@ -56,17 +60,19 @@ class AddContentPage extends StatelessWidget {
   Widget _bodyAddContent(BuildContext context, GlobalKey<FormState> key) {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController contentController = TextEditingController();
-    final TextEditingController contentControllerImagen = TextEditingController();
+    final TextEditingController contentControllerMedia = TextEditingController();
 
     String? _validateFields(String value) {
-      if (value.isEmpty && contentControllerImagen.text.isEmpty) {
+      if (value.isEmpty &&
+          contentControllerMedia.text.isEmpty) {
         return 'Por favor, complete al menos uno de los campos';
       }
       return null;
     }
 
     return BlocProvider<AddContentLiveCubit>(
-      create: (context) => AddContentLiveCubit(di.locator(),di.locator(),di.locator()),
+      create: (context) =>
+          AddContentLiveCubit(di.locator(), di.locator(), di.locator()),
       child: Padding(
         padding: const EdgeInsets.all(25.0),
         child: SizedBox(
@@ -105,8 +111,7 @@ class AddContentPage extends StatelessWidget {
                             maxLength: 500,
                             maxLines: 4,
                             controller: contentController,
-                            validator: (value) =>
-                                _validateFields(value ?? ""),
+                            validator: (value) => _validateFields(value ?? ""),
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                               hintText: 'Texto',
@@ -120,14 +125,11 @@ class AddContentPage extends StatelessWidget {
                             height: 250,
                             child: Stack(
                               children: <Widget>[
-                                statecubit.filename != ""
+                                statecubit.fileId != ""
                                     ? Container(
                                         width: MediaQuery.of(context).size.width,
                                         height: 250,
-                                        child: Image.memory(
-                                          statecubit.imagefile,
-                                          fit: BoxFit.cover,
-                                        ),
+                                        child: widgetImagenOrVideo(statecubit.filename,statecubit),//statecubit.filename.endsWith(".jpg"),
                                       )
                                     : Container(
                                         padding: const EdgeInsets.all(5.0),
@@ -140,59 +142,81 @@ class AddContentPage extends StatelessWidget {
                                               color: Colors
                                                   .grey, // Color of the border
                                             )),
-                                        child: statecubit.showLocalProgress ?
-                                        const CircularProgressIndicator() :
-                                        ElevatedButton.icon(
-                                            onPressed: () async {
-                                              FilePickerResult? result =
-                                                  await FilePicker.platform
-                                                      .pickFiles(
-                                                type: FileType.custom,
-                                                allowedExtensions: [
-                                                  'jpg',
-                                                  'png',
-                                                  'gif',
-                                                  'jpeg'
-                                                ],
-                                              );
-                                              if (result != null) {
-                                                context.read<AddContentLiveCubit>().startProgressIndicators();
-                                                PlatformFile file =
-                                                    result.files.first;
-                                                if (file.size != 0) {
-                                                  contentControllerImagen.text = file.name;
-                                                  context.read<AddContentLiveCubit>()
-                                                      .showImage(
-                                                          file.bytes!,
-                                                          state.userId,
-                                                          state.orgaId);
-                                                } else {
-                                                  snackBarNotify(context,
-                                                      "El archivo no puede estar vacío",
-                                                      Icons.error);
-                                                }
-                                              } else {
-                                                // User canceled the picker
-                                              }
-                                            },
-                                            icon: const Icon(Icons.file_open),
-                                            label: const Text("Subir imagen")),
+                                        child: statecubit.showLocalProgress
+                                            ? const CircularProgressIndicator()
+                                            : ElevatedButton.icon(
+                                                onPressed: () async {
+                                                  FilePickerResult? result =
+                                                      await FilePicker.platform
+                                                          .pickFiles(
+                                                    type: FileType.custom,
+                                                    allowedExtensions: [
+                                                      'jpg',
+                                                      'png',
+                                                      'gif',
+                                                      'jpeg',
+                                                      'mp4',
+                                                      'mov',
+                                                      'wmv',
+                                                      'avi'
+                                                    ],
+                                                  );
+                                                  if (result != null) {
+                                                    context
+                                                        .read<
+                                                            AddContentLiveCubit>()
+                                                        .startProgressIndicators();
+                                                    PlatformFile file =
+                                                        result.files.first;
+                                                    if (file.size != 0) {
+                                                      contentControllerMedia
+                                                          .text = file.name;
+                                                      context
+                                                          .read<
+                                                              AddContentLiveCubit>()
+                                                          .showImageOrVideo(
+                                                            file.bytes!,
+                                                            file.name,
+                                                            state.userId,
+                                                            state.orgaId,
+                                                          );
+                                                    } else {
+                                                      snackBarNotify(
+                                                          context,
+                                                          "El archivo no puede estar vacío",
+                                                          Icons.error);
+                                                    }
+                                                  } else {
+                                                    // User canceled the picker
+                                                  }
+                                                },
+                                                icon:
+                                                    const Icon(Icons.file_open),
+                                                label: const Text(
+                                                    "Subir imagen o video")),
                                       ),
-                                statecubit.filename != ""
+                                statecubit.fileId != ""
                                     ? Container(
                                         alignment: Alignment.topRight,
                                         child: IconButton(
                                           alignment: Alignment.topRight,
                                           icon: const Icon(Icons.cancel),
                                           onPressed: () {
-                                            context.read<AddContentLiveCubit>().stopRemoteProgressIndicators();
-                                            context.read<AddContentLiveCubit>().removeImage();
+                                            context
+                                                .read<AddContentLiveCubit>()
+                                                .stopRemoteProgressIndicators();
+                                            context
+                                                .read<AddContentLiveCubit>()
+                                                .removeMedia();
                                           },
                                         ),
                                       )
                                     : const SizedBox(),
                               ],
                             ),
+                          ),
+                          const SizedBox(
+                            height: 10,
                           ),
                           const SizedBox(
                             height: 20,
@@ -211,9 +235,9 @@ class AddContentPage extends StatelessWidget {
                                   },
                                 ),
                               ),
-                              statecubit.showRemoteProgress ?
-                              const CircularProgressIndicator() : 
-                              const SizedBox()
+                              statecubit.showRemoteProgress
+                                  ? const CircularProgressIndicator()
+                                  : const SizedBox()
                             ],
                           ),
                           const SizedBox(
@@ -226,20 +250,24 @@ class AddContentPage extends StatelessWidget {
                               icon: const Icon(Icons.publish),
                               key: const ValueKey("btnSavedUp"),
                               label: const Text("Subir"),
-                              onPressed: statecubit.showRemoteProgress || statecubit
-                                              .cloudFile == null ? null :
-                              () {
-                                if (key.currentState?.validate() == true) {
-                                  context.read<AddContentBloc>().add(
-                                      OnAddContentAdd(
-                                          titleController.text,
-                                          contentController.text,
-                                          statecubit.cloudFile,
-                                          statecubit.checks["keepasdraft"]!,
-                                          statecubit.imageHeight,
-                                          statecubit.imageWidth,));
-                                }
-                              },
+                              onPressed: statecubit.showRemoteProgress ||
+                                      statecubit.cloudFile == null
+                                  ? null
+                                  : () {
+                                      if (key.currentState?.validate() ==
+                                          true) {
+                                        context
+                                            .read<AddContentBloc>()
+                                            .add(OnAddContentAdd(
+                                              titleController.text,
+                                              contentController.text,
+                                              statecubit.cloudFile,
+                                              statecubit.checks["keepasdraft"]!,
+                                              statecubit.mediaHeight,
+                                              statecubit.mediaWidth,
+                                            ));
+                                      }
+                                    },
                             ),
                           ),
                           const Divider(
@@ -269,7 +297,7 @@ class AddContentPage extends StatelessWidget {
                               context
                                   .read<AddContentBloc>()
                                   .add(const OnAddContentUp());
-                              context.read<AddContentLiveCubit>().removeImage();
+                              context.read<AddContentLiveCubit>().removeMedia();
                             })
                       ],
                     ),
@@ -299,5 +327,38 @@ class AddContentPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  VideoPlayerController videoPlayerController(Uint8List videoByte) {
+    final File videoFile = File.fromRawPath(videoByte);
+    final video = VideoPlayerController.file(videoFile);
+    return video;
+  }
+
+  VideoPlayer showVideoPlayer(String videoUrl) {
+    _videoPlayerController = VideoPlayerController.network(videoUrl);
+
+    _videoPlayerController.initialize().then((_) {
+      _videoPlayerController.play();
+    });
+    return VideoPlayer(
+      _videoPlayerController,
+    );
+  }
+
+  Widget widgetImagenOrVideo(String filename, AddContentLiveState statecubit) {
+    if (filename.endsWith(".jpg") ||
+        filename.endsWith(".jpeg") ||
+        filename.endsWith(".gif") ||
+        filename.endsWith(".png")) {
+      return Image.memory(statecubit.mediafile,
+                              fit: BoxFit.cover,);
+    } else if (filename.endsWith(".mp4") ||
+        filename.endsWith(".mov") ||
+        filename.endsWith(".wmv") ||
+        filename.endsWith(".avi")) {
+      return showVideoPlayer(statecubit.cloudFile?.url ?? "");
+    }
+    return Container();
   }
 }
