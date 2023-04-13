@@ -50,6 +50,7 @@ dependencies:
   file_picker: ^5.2.6
   image_network: ^2.5.1
   video_player: ^2.6.1
+  better_player: ^0.0.83
 
 
 dev_dependencies:

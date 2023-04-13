@@ -13,6 +13,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
+import '../../../core/widgets/show_video_player.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../injection.dart' as di;
 
@@ -357,7 +358,7 @@ class AddContentPage extends StatelessWidget {
         filename.endsWith(".mov") && statecubit.cloudFile!=null ||
         filename.endsWith(".wmv") && statecubit.cloudFile!=null ||
         filename.endsWith(".avi") && statecubit.cloudFile!=null) {
-      return showVideoPlayer(statecubit.cloudFile?.url ?? "");
+      return ShowVideoPlayer(videoUrl: statecubit.cloudFile?.url ?? "");//showVideoPlayer(statecubit.cloudFile?.url ?? "")
     }
     return Container(
       padding: const EdgeInsets.all(5.0),

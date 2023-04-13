@@ -6,6 +6,7 @@ import '../../../core/timezone.dart';
 import '../../../core/validators.dart';
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
+import '../../../core/widgets/show_posts.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/workflow/flow.dart' as flw;
 import '../../../domain/entities/workflow/stage.dart';
@@ -488,20 +489,7 @@ class DetailedListPage extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                ListTile(
-                  leading: const Icon(Icons.person),
-                  title: Text(state.post.title),
-                ),
-                ListTile(
-                  shape: const RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.grey, width: 2),
-                      borderRadius: BorderRadius.all(Radius.circular(2))),
-                  title: Text(
-                      (state.post.postitems[0].content as TextContent).text,
-                      textAlign: TextAlign.center),
-                  contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 100, vertical: 100),
-                ),
+                ShowPosts(post: state.post, child: null),
                 ElevatedButton(
                     style: ButtonStyle(
                       shape: MaterialStateProperty.resolveWith(

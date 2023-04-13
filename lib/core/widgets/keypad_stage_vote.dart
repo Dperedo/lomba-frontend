@@ -307,6 +307,7 @@ class KeypadVoteRecent extends StatelessWidget {
                           size: 35,
                           color: Colors.blue,)
                   ),
+                  const SizedBox(width: 5,),
                   OutlinedButton(
                     style: ButtonStyle(
                       shape: MaterialStateProperty.resolveWith(
