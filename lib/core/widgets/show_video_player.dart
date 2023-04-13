@@ -40,14 +40,13 @@ class _ShowVideoPlayerState extends State<ShowVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return SizedBox(
       child: AspectRatio(
-        aspectRatio: 16 / 9,
+        aspectRatio: _controller.value.aspectRatio,
         child: _controller.value.isInitialized ?
         Stack(
           children: [
             SizedBox(
-              height: 240,
               child: VideoPlayer(_controller),
             ),
             Center(

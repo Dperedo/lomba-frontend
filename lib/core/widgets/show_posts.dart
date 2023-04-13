@@ -75,6 +75,8 @@ class ShowPosts extends StatelessWidget {
                           image: imagen.url,
                           height: double.parse((imagen.height).toString()),
                           width: double.parse((imagen.width).toString()),
+                          fitWeb: BoxFitWeb.cover,
+                          fitAndroidIos: BoxFit.cover,
                         )
                       );
                     }
@@ -85,8 +87,8 @@ class ShowPosts extends StatelessWidget {
                       return Container(
                         padding: const EdgeInsets.all(5.0),
                         alignment: Alignment.center,
-                        height: 400,
-                        width: 300,
+                        //height: 400,
+                        //width: 300,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5.0),
                           border: Border.all(
@@ -94,10 +96,11 @@ class ShowPosts extends StatelessWidget {
                             color: Colors.grey,
                           )
                         ),
-                        child: AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: ShowVideoPlayer(videoUrl: video.url,)
-                        ),
+                        child: ShowVideoPlayer(videoUrl: video.url,)
+                          //AspectRatio(
+                          //aspectRatio: 16 / 9,
+                          //child: ShowVideoPlayer(videoUrl: video.url,)
+                        //),
                       );
                     }
                       else {return null;}

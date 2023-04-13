@@ -121,16 +121,14 @@ class AddContentPage extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: 250,
+                          Container(
+                            width: double.infinity,
+                            //width: MediaQuery.of(context).size.width,
                             child: Stack(
                               children: <Widget>[
                                 statecubit.fileId != ""
                                     ? Container(
-                                        width: MediaQuery.of(context).size.width,
-                                        height: 250,
-                                        child: widgetImagenOrVideo(statecubit.filename,statecubit),//statecubit.filename.endsWith(".jpg"),
+                                        child: widgetImagenOrVideo(statecubit.filename,statecubit),
                                       )
                                     : Container(
                                         padding: const EdgeInsets.all(5.0),
@@ -353,12 +351,12 @@ class AddContentPage extends StatelessWidget {
         filename.endsWith(".gif") ||
         filename.endsWith(".png")) {
       return Image.memory(statecubit.mediafile,
-                              fit: BoxFit.cover,);
+                              fit: BoxFit.fitWidth,);
     } else if (filename.endsWith(".mp4") && statecubit.cloudFile!=null ||
         filename.endsWith(".mov") && statecubit.cloudFile!=null ||
         filename.endsWith(".wmv") && statecubit.cloudFile!=null ||
         filename.endsWith(".avi") && statecubit.cloudFile!=null) {
-      return ShowVideoPlayer(videoUrl: statecubit.cloudFile?.url ?? "");//showVideoPlayer(statecubit.cloudFile?.url ?? "")
+      return ShowVideoPlayer(videoUrl: statecubit.cloudFile?.url ?? "");
     }
     return Container(
       padding: const EdgeInsets.all(5.0),
