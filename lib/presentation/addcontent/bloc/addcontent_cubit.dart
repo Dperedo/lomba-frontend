@@ -39,6 +39,7 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
 
   void showImageOrVideo(
       Uint8List mediaFile, String localFileName, String userId, String orgaId) {
+    emit(state.copyWithName(name: localFileName));
     if (localFileName.endsWith(".jpg") ||
         localFileName.endsWith(".jpeg") ||
         localFileName.endsWith(".gif") ||
@@ -254,11 +255,28 @@ class AddContentLiveState extends Equatable {
     final ous = AddContentLiveState(
         checks,
         fileId,
-        cloudFile.name,
+        filename,
         mediafile,
         "",
         false,
         false,
+        cloudFile,
+        mediaHeight,
+        mediaWidth,);
+    return ous;
+  }
+
+  AddContentLiveState copyWithName({
+    required String name,
+  }) {
+    final ous = AddContentLiveState(
+        checks,
+        fileId,
+        name,
+        mediafile,
+        message,
+        showLocalProgress,
+        showRemoteProgress,
         cloudFile,
         mediaHeight,
         mediaWidth,);

@@ -353,12 +353,22 @@ class AddContentPage extends StatelessWidget {
         filename.endsWith(".png")) {
       return Image.memory(statecubit.mediafile,
                               fit: BoxFit.cover,);
-    } else if (filename.endsWith(".mp4") ||
-        filename.endsWith(".mov") ||
-        filename.endsWith(".wmv") ||
-        filename.endsWith(".avi")) {
+    } else if (filename.endsWith(".mp4") && statecubit.cloudFile!=null ||
+        filename.endsWith(".mov") && statecubit.cloudFile!=null ||
+        filename.endsWith(".wmv") && statecubit.cloudFile!=null ||
+        filename.endsWith(".avi") && statecubit.cloudFile!=null) {
       return showVideoPlayer(statecubit.cloudFile?.url ?? "");
     }
-    return Container();
+    return Container(
+      padding: const EdgeInsets.all(5.0),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.0), // Radius of the border
+          border: Border.all(
+            width: 1,
+            color: Colors.grey, // Color of the border
+          )
+      ),
+      child: const CircularProgressIndicator());
   }
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:image_network/image_network.dart';
 import 'package:lomba_frontend/domain/entities/workflow/post.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../domain/entities/workflow/imagecontent.dart';
 import '../../domain/entities/workflow/textcontent.dart';
+import '../../domain/entities/workflow/videocontent.dart';
 import '../constants.dart';
 
 // Cambia el body dependiendo del tamaño de la pantalla
@@ -76,6 +78,28 @@ class ShowPosts extends StatelessWidget {
                         )
                       );
                     }
+                    else if(post.postitems[i].type=='video'){
+                      
+                      final video = post
+                            .postitems[i].content as VideoContent;
+                      return Container(
+                        padding: const EdgeInsets.all(5.0),
+                        alignment: Alignment.center,
+                        height: 300,
+                        width: 300,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.grey,
+                          )
+                        ),
+                        child: showVideoPlayer(video.url)
+                          //image: video.url,
+                          //height: double.parse((video.height).toString()),
+                          //width: double.parse((video.width).toString()),
+                      );
+                    }
                       else {return null;}
                     }
                   ),
@@ -89,6 +113,18 @@ class ShowPosts extends StatelessWidget {
         ),
         // const Divider()
       ],
+    );
+  }
+
+  VideoPlayer showVideoPlayer(String videoUrl) {
+  late VideoPlayerController _videoPlayerController;
+    _videoPlayerController = VideoPlayerController.network(videoUrl);
+
+    _videoPlayerController.initialize().then((_) {
+      _videoPlayerController.play();
+    });
+    return VideoPlayer(
+      _videoPlayerController,
     );
   }
 }
