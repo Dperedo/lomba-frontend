@@ -6,14 +6,14 @@ import 'package:video_player/video_player.dart';
 import '../../domain/entities/workflow/imagecontent.dart';
 import '../../domain/entities/workflow/textcontent.dart';
 import '../../domain/entities/workflow/videocontent.dart';
-import '../constants.dart';
+import 'show_video_player.dart';
 
 // Cambia el body dependiendo del tamaño de la pantalla
 class ShowPosts extends StatelessWidget {
   const ShowPosts(
       {super.key, required this.post, required this.child});
   final Post post;
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +75,8 @@ class ShowPosts extends StatelessWidget {
                           image: imagen.url,
                           height: double.parse((imagen.height).toString()),
                           width: double.parse((imagen.width).toString()),
+                          fitWeb: BoxFitWeb.cover,
+                          fitAndroidIos: BoxFit.cover,
                         )
                       );
                     }
@@ -85,8 +87,8 @@ class ShowPosts extends StatelessWidget {
                       return Container(
                         padding: const EdgeInsets.all(5.0),
                         alignment: Alignment.center,
-                        height: 300,
-                        width: 300,
+                        //height: 400,
+                        //width: 300,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5.0),
                           border: Border.all(
@@ -94,17 +96,18 @@ class ShowPosts extends StatelessWidget {
                             color: Colors.grey,
                           )
                         ),
-                        child: showVideoPlayer(video.url)
-                          //image: video.url,
-                          //height: double.parse((video.height).toString()),
-                          //width: double.parse((video.width).toString()),
+                        child: ShowVideoPlayer(videoUrl: video.url,)
+                          //AspectRatio(
+                          //aspectRatio: 16 / 9,
+                          //child: ShowVideoPlayer(videoUrl: video.url,)
+                        //),
                       );
                     }
                       else {return null;}
                     }
                   ),
                   const SizedBox(height: 10),
-                  child,
+                  child ?? const SizedBox(),
                   const SizedBox(height: 15),
                 ],
               ),

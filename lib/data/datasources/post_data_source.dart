@@ -604,7 +604,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                 updated: e['updated'] != null
                     ? DateTime.parse(e['updated'].toString())
                     : null);
-                } else if (e['type'].toString()=='image') { //if (e['type'].toString()=='image')
+                } else if (e['type'].toString()=='image') {
                   return PostItem(
                 content: ImageContent(
                   url: e['content']['url'].toString(),
@@ -629,7 +629,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                 updated: e['updated'] != null
                     ? DateTime.parse(e['updated'].toString())
                     : null);
-                } else { //if (e['type'].toString()=='image')
+                } else {
                   return PostItem(
                 content: VideoContent(
                   url: e['content']['url'].toString(),
@@ -1422,7 +1422,9 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
         //completar con lógica
         List<PostItem> listPostItems = (item['postitems'] as List)
-            .map((e) => PostItem(
+            .map((e) {
+              if (e['type'].toString()=='text') {
+              return PostItem(
                 content: TextContent(text: e['content']['text'].toString()),
                 type: e['type'].toString(),
                 order: int.parse(e['order'].toString()),
@@ -1437,7 +1439,63 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                     : null,
                 updated: e['updated'] != null
                     ? DateTime.parse(e['updated'].toString())
-                    : null))
+                    : null);
+                } else if (e['type'].toString()=='image') {
+                  return PostItem(
+                content: ImageContent(
+                  url: e['content']['url'].toString(),
+                  size: int.parse(e['content']['size'].toString()),
+                  filetype: e['content']['filetype'].toString(),
+                  cloudFileId: e['content']['cloudFileId'].toString(),
+                  width: int.parse(e['content']['width'].toString()),
+                  height: int.parse(e['content']['height'].toString()),
+                  description: e['content']['description'].toString()
+                ),
+                type: e['type'].toString(),
+                order: int.parse(e['order'].toString()),
+                format: e['format'].toString(),
+                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null);
+                } else {
+                  return PostItem(
+                content: VideoContent(
+                  url: e['content']['url'].toString(),
+                  size: int.parse(e['content']['size'].toString()),
+                  filetype: e['content']['filetype'].toString(),
+                  cloudFileId: e['content']['cloudFileId'].toString(),
+                  width: int.parse(e['content']['width'].toString()),
+                  height: int.parse(e['content']['height'].toString()),
+                  description: e['content']['description'].toString(),
+                  thumbnailUrl: e['content']['thumbnailUrl'].toString(),
+                  thumbnailSize: int.parse(e['content']['thumbnailSize'].toString()),
+                  thumbnailCloudFileId: e['content']['thumbnailCloudFileId'].toString(),
+                ),
+                type: e['type'].toString(),
+                order: int.parse(e['order'].toString()),
+                format: e['format'].toString(),
+                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null);
+                }
+              }
+            )
             .toList();
 
         List<Total> listTotals = (item['totals'] as List)

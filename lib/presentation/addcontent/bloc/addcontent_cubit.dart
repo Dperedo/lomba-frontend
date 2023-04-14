@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/domain/usecases/storage/get_cloudfile.dart';
 import 'package:lomba_frontend/domain/usecases/storage/register_cloudfile.dart';
 import 'package:lomba_frontend/domain/usecases/storage/upload_cloudfile.dart';
-import 'package:video_player/video_player.dart';
+import 'package:flutter_video_info/flutter_video_info.dart';
 
 import '../../../domain/entities/storage/cloudfile.dart';
 
@@ -57,12 +57,17 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
     var cloudFileId = '';
     secondsPassed = 0;
     var decodedImage = await decodeImageFromList(image);
-    final imageHeight = decodedImage.height;
-    final imageWidth = decodedImage.width;
+
+    final imageDoubleHeight = (decodedImage.height * 450)/decodedImage.width;
+    final imageHeight = imageDoubleHeight.toInt();
+    const imageWidth = 450;
+
     final resultRegister = await _registerCloudFile.execute(userId, orgaId);
     resultRegister.fold((l) => null, (r) => cloudFileId = r.id);
+
     await uploadFile.execute(image, cloudFileId);
-    emit(state.copyWithMedia(id: cloudFileId, media: image));
+
+    emit(state.copyWithMedia(id: cloudFileId, media: image, mediaHeight: imageHeight, mediaWidth: imageWidth));
     Timer.periodic(const Duration(seconds: 2), (timer) async {
       secondsPassed++;
       print(secondsPassed);
@@ -71,7 +76,7 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
         if (r.size != 0) {
           timer.cancel();
           emit(state.copyWithCloudFile(
-              cloudFile: r, mediaHeight: imageHeight, mediaWidth: imageWidth));
+              cloudFile: r));
         } else if (secondsPassed >= 10) {
           timer.cancel();
           emit(state.copyWithProgressIndicator(
@@ -84,30 +89,31 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
   void showVideo(Uint8List videoByte, String userId, String orgaId) async {
     var cloudFileId = '';
     secondsPassed = 0;
-    //VideoPlayerController controller = videoPlayer(videoByte);
-    /*final File videoFile = File.fromRawPath(videoByte);
-    final controller = VideoPlayerController.file(videoFile);
-
-    //await controller.initialize();
-    final videoHeight = controller.value.size.height.toInt();
-    final videoWidth = controller.value.size.width.toInt();*/
 
     final resultRegister = await _registerCloudFile.execute(userId, orgaId);
     resultRegister.fold((l) => null, (r) => cloudFileId = r.id);
 
     await uploadFile.execute(videoByte, cloudFileId);
-    emit(state.copyWithMedia(id: cloudFileId, media: videoByte));
+    //emit(state.copyWithMedia(id: cloudFileId, media: videoByte, mediaHeight: 200, mediaWidth: 200));
 
     Timer.periodic(const Duration(seconds: 2), (timer) async {
       secondsPassed++;
       print(secondsPassed);
 
       final resultCloudFile = await _getCloudFile.execute(cloudFileId);
-      resultCloudFile.fold((l) => null, (r) {
+      resultCloudFile.fold((l) => null, (r) async {
         if (r.size != 0) {
           timer.cancel();
+          //final videoInfo = await FlutterVideoInfo().getVideoInfo(r.url);
+          
+          emit(state.copyWithMedia(
+            id: cloudFileId,
+            media: videoByte,
+            mediaHeight: 0,
+            mediaWidth: 0
+          ));
           emit(state.copyWithCloudFile(
-              cloudFile: r, mediaHeight: 200, mediaWidth: 200));
+              cloudFile: r,));
         } else if (secondsPassed >= 10) {
           timer.cancel();
           emit(state.copyWithProgressIndicator(
@@ -116,12 +122,6 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
       });
     });
   }
-
-  /*VideoPlayerController videoPlayer(Uint8List video) {
-    final File videoFile = File.fromRawPath(video);
-    final controller = VideoPlayerController.file(videoFile);
-    return controller;
-  }*/
 
   void removeMedia() {
     emit(state.copyWithRemove(id: "", media: Uint8List(0)));
@@ -200,7 +200,10 @@ class AddContentLiveState extends Equatable {
   }
 
   AddContentLiveState copyWithMedia(
-      {required String id, required Uint8List media}) {
+      {required String id,
+      required Uint8List media,
+      required int mediaHeight,
+      required int mediaWidth,}) {
     final ous = AddContentLiveState(
         checks,
         id,
@@ -210,8 +213,8 @@ class AddContentLiveState extends Equatable {
         true,
         true,
         null,
-        0,
-        0);
+        mediaHeight,
+        mediaWidth,);
     return ous;
   }
 
@@ -249,8 +252,6 @@ class AddContentLiveState extends Equatable {
 
   AddContentLiveState copyWithCloudFile({
     required CloudFile cloudFile,
-    required int mediaHeight,
-    required int mediaWidth,
   }) {
     final ous = AddContentLiveState(
         checks,
