@@ -431,12 +431,11 @@ void main() {
             find.byKey(ValueKey("btnTxtUser${fakeListUsers[0].id}"));
 
         //await tester.tap(userButton);
-        await tester.press(userButton);
-        await tester.pumpAndSettle(const Duration(milliseconds: 500));
-
-        Finder deleteButton =
-            find.byKey(const ValueKey('btnEliminarAsociacion'));
-        await tester.tap(deleteButton);
+        await tester.tap(userButton);
+        await tester.pumpAndSettle(const Duration(milliseconds: 2000));
+        
+        Finder deleteButton = find.byKey(const ValueKey("btnEliminarAsociacion"));
+        await tester.press(deleteButton);
         await tester.pumpAndSettle(const Duration(milliseconds: 600));
 
         //assert
