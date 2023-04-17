@@ -43,7 +43,7 @@ class LoginPage extends StatelessWidget {
             onPressed: () {
               context
                   .read<NavBloc>()
-                  .add(NavigateTo(NavItem.pageRecent, context));
+                  .add(NavigateTo(NavItem.pageRecent, context, null));
             },
           ),
           title: const Text(
@@ -81,7 +81,7 @@ class LoginPage extends StatelessWidget {
                                 .add(const OnRecentStarter(""));
 
                             BlocProvider.of<NavBloc>(context)
-                                .add(NavigateTo(NavItem.pageRecent, context));
+                                .add(NavigateTo(NavItem.pageRecent, context, null));
                           });
                         } else if (state is LoginError) {
                           return Center(

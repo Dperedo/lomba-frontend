@@ -21,7 +21,7 @@ class SideDrawer extends StatelessWidget {
   }) : super(key: key);
 
   void _handleItemClick(BuildContext context, NavItem item) {
-    BlocProvider.of<NavBloc>(context).add(NavigateTo(item, context));
+    BlocProvider.of<NavBloc>(context).add(NavigateTo(item, context, null));
     final screenWidth = MediaQuery.of(context).size.width;
     if (screenWidth < ScreenSize.maxScreen) {
       Navigator.pop(context);

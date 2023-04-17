@@ -83,7 +83,7 @@ class RecentPage extends StatelessWidget {
             );
           }
           if (state is RecentHasLoginGoogleRedirect) {
-            context.read<NavBloc>().add(NavigateTo(NavItem.pageLogin, context));
+            context.read<NavBloc>().add(NavigateTo(NavItem.pageLogin, context, null));
             context.read<LoginBloc>().add(OnLoginRedirectWithGoogle());
           }
           if (state is RecentOnlyUser) {

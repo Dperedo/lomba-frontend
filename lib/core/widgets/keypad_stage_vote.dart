@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/entities/workflow/post.dart';
+import '../../presentation/nav/bloc/nav_bloc.dart';
+import '../../presentation/nav/bloc/nav_event.dart';
+import '../../presentation/nav/bloc/nav_state.dart';
 import '../../presentation/popular/bloc/popular_bloc.dart';
 import '../../presentation/popular/bloc/popular_cubit.dart';
 import '../../presentation/popular/bloc/popular_event.dart';
@@ -261,7 +264,11 @@ class KeypadVotePopular extends StatelessWidget {
 
 class KeypadVoteRecent extends StatelessWidget {
   const KeypadVoteRecent(
-      {super.key, required this.context, required this.post, required this.statecubit, required this.validLogin});
+      {super.key,
+      required this.context,
+      required this.post,
+      required this.statecubit,
+      required this.validLogin});
   final BuildContext context;
   final Post post;
   final RecentLiveState statecubit;
@@ -375,7 +382,19 @@ class KeypadVoteRecent extends StatelessWidget {
                         ),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      BlocProvider.of<NavBloc>(context).add(NavigateTo(NavItem.pagePost, context, post.id));
+                      //context.read<NavBloc>()
+                        //.add(NavigateTo(NavItem.pagePost, context, post.id));
+                      /*Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CommentPage(
+                            post: post,
+                          ),
+                        ),
+                      );*/
+                    },
                     child: const Icon(
                       Icons.comment,
                       size: 35,

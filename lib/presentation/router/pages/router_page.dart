@@ -17,7 +17,7 @@ class RouterPage extends StatelessWidget {
   }) : super(key: key);
 
   void _handleItemRoute(BuildContext context, NavItem item) {
-    BlocProvider.of<NavBloc>(context).add(NavigateTo(item, context));
+    BlocProvider.of<NavBloc>(context).add(NavigateTo(item, context, null));
     Navigator.pop(context);
   }
 

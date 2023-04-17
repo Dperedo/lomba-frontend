@@ -46,8 +46,7 @@ class ShowPosts extends StatelessWidget {
                                     BorderRadius.all(
                                         Radius.circular(
                                             2))),
-                        title: Text(
-                            (post
+                        title: Text((post
                                 .postitems[i].content
                                     as TextContent).text,
                           textAlign: TextAlign.center),

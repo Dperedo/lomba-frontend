@@ -7,7 +7,6 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../domain/entities/user.dart';
 import '../../../domain/usecases/users/exists_profile.dart';
-import '../../../domain/usecases/users/exists_user.dart';
 import '../../../domain/usecases/users/get_user.dart';
 import '../../../domain/usecases/users/update_profile.dart';
 import '../../../domain/usecases/users/update_profile_password.dart';

@@ -21,5 +21,6 @@ abstract class NavEvent {
 class NavigateTo extends NavEvent {
   final NavItem destination;
   final BuildContext context;
-  const NavigateTo(this.destination, this.context);
+  final String? id;
+  const NavigateTo(this.destination, this.context, this.id);
 }

@@ -158,8 +158,8 @@ class PopularPage extends StatelessWidget {
                   ),
                 ),
                 BlocBuilder<PopularLiveCubit, PopularLiveState>(
-                    builder: (context, statecubit) {
-                  return ListView.builder(
+                  builder: (context, statecubit) {
+                    return ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: state.listItems.length,
@@ -173,9 +173,10 @@ class PopularPage extends StatelessWidget {
                             validLogin: state.validLogin,
                           )
                         );
-                        //return ShowPosts(post: state.listItems[index], child: _showVoteButtons(context, state.listItems[index], state.validLogin, statecubit));
-                      });
-                }),
+                      }
+                    );
+                  }
+                ),
               ],
             );
           }

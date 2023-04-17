@@ -10,6 +10,8 @@ import '../../demolist/bloc/demolist_bloc.dart';
 import '../../demolist/bloc/demolist_event.dart';
 import '../../detailed_list/bloc/detailed_list_event.dart';
 import '../../flow/bloc/flow_bloc.dart';
+import '../../post/bloc/post_bloc.dart';
+import '../../post/bloc/post_event.dart';
 import '../../recent/bloc/recent_bloc.dart';
 import '../../recent/bloc/recent_event.dart';
 import '../../login/bloc/login_bloc.dart';
@@ -153,6 +155,11 @@ class NavBloc extends Bloc<NavEvent, NavState> {
             case NavItem.pageSettingAdmin:
               {
                 event.context.read<SettingAdminBloc>().add(OnSettingAdminStarter());
+              }
+              break;
+            case NavItem.pagePost:
+              {
+                event.context.read<PostBloc>().add(OnPostLoad(event.id!));
               }
               break;
           }

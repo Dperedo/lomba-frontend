@@ -13,6 +13,8 @@ import 'package:lomba_frontend/presentation/login/pages/login_page.dart';
 import 'package:lomba_frontend/presentation/orgas/pages/orgas_page.dart';
 import 'package:lomba_frontend/presentation/popular/bloc/popular_bloc.dart';
 import 'package:lomba_frontend/presentation/popular/pages/popular_page.dart';
+import 'package:lomba_frontend/presentation/post/bloc/post_bloc.dart';
+import 'package:lomba_frontend/presentation/post/pages/post_page.dart';
 import 'package:lomba_frontend/presentation/router/bloc/router_bloc.dart';
 import 'package:lomba_frontend/presentation/setting_admin/bloc/setting_admin_bloc.dart';
 import 'package:lomba_frontend/presentation/setting_admin/page/setting_admin_page.dart';
@@ -98,6 +100,7 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<DetailedListBloc>()),
         BlocProvider(create: (_) => di.locator<SettingSuperBloc>()),
         BlocProvider(create: (_) => di.locator<SettingAdminBloc>()),
+        BlocProvider(create: (_) => di.locator<PostBloc>()),
       ],
       child: MaterialApp(
         title: 'App Demo',
@@ -184,6 +187,9 @@ class _MyApp extends State<MyApp> {
     }
     if (state.selectedItem == NavItem.pageSettingAdmin) {
       return const SettingAdminPage();
+    }
+    if (state.selectedItem == NavItem.pagePost) {
+      return const PostPage();
     }
   }
 }

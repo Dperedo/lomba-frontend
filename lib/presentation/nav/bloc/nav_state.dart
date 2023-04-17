@@ -39,4 +39,5 @@ enum NavItem {
   pageStage,
   pageSettingSuper,
   pageSettingAdmin,
+  pagePost,
 }
