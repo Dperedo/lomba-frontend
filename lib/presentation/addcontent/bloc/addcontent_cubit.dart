@@ -21,17 +21,8 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
     this.uploadFile,
     this._getCloudFile,
     this._registerCloudFile,
-  ) : super(AddContentLiveState(
-            const <String, bool>{"keepasdraft": false},
-            "",
-            "",
-            Uint8List(0),
-            "",
-            false,
-            false,
-            null,
-            0,
-            0));
+  ) : super(AddContentLiveState(const <String, bool>{"keepasdraft": false}, "",
+            "", Uint8List(0), "", false, false, null, 0, 0));
 
   void changeValue(String name, bool value) {
     emit(state.copyWithChangeCheck(name: name, changeState: value));
@@ -58,7 +49,7 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
     secondsPassed = 0;
     var decodedImage = await decodeImageFromList(image);
 
-    final imageDoubleHeight = (decodedImage.height * 450)/decodedImage.width;
+    final imageDoubleHeight = (decodedImage.height * 450) / decodedImage.width;
     final imageHeight = imageDoubleHeight.toInt();
     const imageWidth = 450;
 
@@ -67,7 +58,11 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
 
     await uploadFile.execute(image, cloudFileId);
 
-    emit(state.copyWithMedia(id: cloudFileId, media: image, mediaHeight: imageHeight, mediaWidth: imageWidth));
+    emit(state.copyWithMedia(
+        id: cloudFileId,
+        media: image,
+        mediaHeight: imageHeight,
+        mediaWidth: imageWidth));
     Timer.periodic(const Duration(seconds: 2), (timer) async {
       secondsPassed++;
       print(secondsPassed);
@@ -75,8 +70,7 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
       resultCloudFile.fold((l) => null, (r) {
         if (r.size != 0) {
           timer.cancel();
-          emit(state.copyWithCloudFile(
-              cloudFile: r));
+          emit(state.copyWithCloudFile(cloudFile: r));
         } else if (secondsPassed >= 10) {
           timer.cancel();
           emit(state.copyWithProgressIndicator(
@@ -105,15 +99,15 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
         if (r.size != 0) {
           timer.cancel();
           //final videoInfo = await FlutterVideoInfo().getVideoInfo(r.url);
-          
+
           emit(state.copyWithMedia(
-            id: cloudFileId,
-            media: videoByte,
-            mediaHeight: 0,
-            mediaWidth: 0
-          ));
+              id: cloudFileId,
+              media: videoByte,
+              mediaHeight: 0,
+              mediaWidth: 0));
           emit(state.copyWithCloudFile(
-              cloudFile: r,));
+            cloudFile: r,
+          ));
         } else if (secondsPassed >= 10) {
           timer.cancel();
           emit(state.copyWithProgressIndicator(
@@ -136,7 +130,6 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
     emit(state.copyWithProgressIndicator(
         localProgress: false, remoteProgress: false));
   }
-
 }
 
 class AddContentLiveState extends Equatable {
@@ -193,60 +186,44 @@ class AddContentLiveState extends Equatable {
         "",
         showLocalProgress,
         showRemoteProgress,
-        null,
-        0,
-        0);
+        cloudFile,
+        mediaHeight,
+        mediaWidth);
     return ous;
   }
 
-  AddContentLiveState copyWithMedia(
-      {required String id,
-      required Uint8List media,
-      required int mediaHeight,
-      required int mediaWidth,}) {
+  AddContentLiveState copyWithMedia({
+    required String id,
+    required Uint8List media,
+    required int mediaHeight,
+    required int mediaWidth,
+  }) {
     final ous = AddContentLiveState(
-        checks,
-        id,
-        filename,
-        media,
-        "Subiendo...",
-        true,
-        true,
-        null,
-        mediaHeight,
-        mediaWidth,);
+      checks,
+      id,
+      filename,
+      media,
+      "Subiendo...",
+      true,
+      true,
+      null,
+      mediaHeight,
+      mediaWidth,
+    );
     return ous;
   }
 
   AddContentLiveState copyWithRemove(
       {required String id, required Uint8List media}) {
     final ous = AddContentLiveState(
-        checks,
-        id,
-        "",
-        media,
-        "Subiendo...",
-        false,
-        false,
-        null,
-        0,
-        0);
+        checks, id, "", media, "Subiendo...", false, false, null, 0, 0);
     return ous;
   }
 
   AddContentLiveState copyWithProgressIndicator(
       {required bool localProgress, required bool remoteProgress}) {
-    final ous = AddContentLiveState(
-        checks,
-        fileId,
-        filename,
-        mediafile,
-        "",
-        localProgress,
-        remoteProgress,
-        null,
-        0,
-        0);
+    final ous = AddContentLiveState(checks, fileId, filename, mediafile, "",
+        localProgress, remoteProgress, null, 0, 0);
     return ous;
   }
 
@@ -254,16 +231,17 @@ class AddContentLiveState extends Equatable {
     required CloudFile cloudFile,
   }) {
     final ous = AddContentLiveState(
-        checks,
-        fileId,
-        filename,
-        mediafile,
-        "",
-        false,
-        false,
-        cloudFile,
-        mediaHeight,
-        mediaWidth,);
+      checks,
+      fileId,
+      filename,
+      mediafile,
+      "",
+      false,
+      false,
+      cloudFile,
+      mediaHeight,
+      mediaWidth,
+    );
     return ous;
   }
 
@@ -271,17 +249,17 @@ class AddContentLiveState extends Equatable {
     required String name,
   }) {
     final ous = AddContentLiveState(
-        checks,
-        fileId,
-        name,
-        mediafile,
-        message,
-        showLocalProgress,
-        showRemoteProgress,
-        cloudFile,
-        mediaHeight,
-        mediaWidth,);
+      checks,
+      fileId,
+      name,
+      mediafile,
+      message,
+      showLocalProgress,
+      showRemoteProgress,
+      cloudFile,
+      mediaHeight,
+      mediaWidth,
+    );
     return ous;
   }
-
 }
