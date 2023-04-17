@@ -33,17 +33,73 @@ class UserLoaded extends UserState {
 
 class UserListLoaded extends UserState {
   final List<User> users;
-  const UserListLoaded(this.users);
+  final String orgaId;
+  final String searchText;
+  final Map<String, int> fieldsOrder;
+  final int pageIndex;
+  final int pageSize;
+  final int itemCount;
+  final int totalItems;
+  final int totalPages;
+  const UserListLoaded(
+      this.users,
+      this.orgaId,
+      this.searchText,
+      this.fieldsOrder,
+      this.pageIndex,
+      this.pageSize,
+      this.itemCount,
+      this.totalItems,
+      this.totalPages);
   @override
-  List<Object> get props => [users];
+  List<Object> get props => [
+        users,
+        orgaId,
+        searchText,
+        fieldsOrder,
+        pageIndex,
+        pageSize,
+        itemCount,
+        totalItems,
+        totalPages
+      ];
 }
 
 class UserListNotInOrgaLoaded extends UserState {
   final List<User> users;
   final OrgaUser orgaUser;
-  const UserListNotInOrgaLoaded(this.users, this.orgaUser);
+  final String orgaId;
+  final String searchText;
+  final Map<String, int> fieldsOrder;
+  final int pageIndex;
+  final int pageSize;
+  final int itemCount;
+  final int totalItems;
+  final int totalPages;
+  const UserListNotInOrgaLoaded(
+      this.users,
+      this.orgaUser,
+      this.orgaId,
+      this.searchText,
+      this.fieldsOrder,
+      this.pageIndex,
+      this.pageSize,
+      this.itemCount,
+      this.totalItems,
+      this.totalPages);
   @override
-  List<Object> get props => [users, orgaUser];
+  List<Object> get props => [
+        users,
+        orgaUser,
+        orgaId,
+        searchText,
+        fieldsOrder,
+        pageIndex,
+        pageSize,
+        itemCount,
+        totalItems,
+        totalPages
+      ];
 }
 
 class UserAdding extends UserState {

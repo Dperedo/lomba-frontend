@@ -8,15 +8,16 @@ abstract class ApprovedState extends Equatable {
   @override
   List<Object> get props => [];
 }
+
 class ApprovedStart extends ApprovedState {}
 
 class ApprovedLoading extends ApprovedState {}
 
-class ApprovedLoaded extends ApprovedState{
+class ApprovedLoaded extends ApprovedState {
   final String orgaId;
   final String userId;
   final String flowId;
-  final String stageId;  
+  final String stageId;
   final String searchText;
   final Map<String, int> fieldsOrder;
   final int pageIndex;
@@ -25,21 +26,36 @@ class ApprovedLoaded extends ApprovedState{
   final int itemCount;
   final int totalItems;
   final int totalPages;
-  
+
   const ApprovedLoaded(
-      this.orgaId,
-      this.userId,
-      this.flowId,
-      this.stageId,      
-      this.searchText,
-      this.fieldsOrder,
-      this.pageIndex,
-      this.pageSize,
-      this.listItems,
-      this.itemCount,
-      this.totalItems,
-      this.totalPages,
-      );
+    this.orgaId,
+    this.userId,
+    this.flowId,
+    this.stageId,
+    this.searchText,
+    this.fieldsOrder,
+    this.pageIndex,
+    this.pageSize,
+    this.listItems,
+    this.itemCount,
+    this.totalItems,
+    this.totalPages,
+  );
+  @override
+  List<Object> get props => [
+        orgaId,
+        userId,
+        flowId,
+        stageId,
+        searchText,
+        fieldsOrder,
+        pageIndex,
+        pageSize,
+        listItems,
+        itemCount,
+        totalItems,
+        totalPages,
+      ];
 }
 
 class ApprovedError extends ApprovedState {

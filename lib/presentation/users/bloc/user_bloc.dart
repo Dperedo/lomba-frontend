@@ -60,27 +60,27 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         emit(UserLoading());
 
         var user = const User(
-          id: '',
-          name: '',
-          username: '',
-          email: '',
-          enabled: true,
-          builtIn: true);
+            id: '',
+            name: '',
+            username: '',
+            email: '',
+            enabled: true,
+            builtIn: true);
         final result = await _getUser.execute(event.userId);
-        result.fold((l) => emit(UserError(l.message)),
-            (r) => user = r);
+        result.fold((l) => emit(UserError(l.message)), (r) => user = r);
 
-        
         var auth = const SessionModel(token: "", username: "", name: "");
         final session = await _getSession.execute();
         session.fold((l) => emit(UserError(l.message)), (r) => {auth = r});
         final orgaId = auth.getOrgaId();
 
         List<OrgaUser> listOrgaUsers = [];
-        final resultOrgaUser = await _getOrgaUser.execute(orgaId!,event.userId);
+        final resultOrgaUser =
+            await _getOrgaUser.execute(orgaId!, event.userId);
         resultOrgaUser.fold((l) => emit(UserError(l.message)), (r) {
           listOrgaUsers = r;
-          emit(UserLoaded(user, listOrgaUsers[0], ''));});
+          emit(UserLoaded(user, listOrgaUsers[0], ''));
+        });
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
@@ -88,11 +88,27 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<OnUserListLoad>(
       (event, emit) async {
         emit(UserLoading());
-        final result = await _getUsers.execute(
-            event.orgaId, event.filter, event.fieldOrder, event.pageNumber, 10);
 
-        result.fold((l) => emit(UserError(l.message)),
-            (r) => {emit(UserListLoaded(r))});
+        var auth = const SessionModel(token: "", username: "", name: "");
+        final session = await _getSession.execute();
+        session.fold((l) => emit(UserError(l.message)), (r) => {auth = r});
+        final orgaId = auth.getOrgaId();
+
+        final result = await _getUsers.execute(event.searchText, orgaId ?? '',
+            event.fieldsOrder, event.pageIndex, event.pageSize);
+
+        result.fold((l) => emit(UserError(l.message)), (r) {
+          emit(UserListLoaded(
+              r.items,
+              event.orgaId,
+              event.searchText,
+              event.fieldsOrder,
+              event.pageIndex,
+              event.pageSize,
+              r.currentItemCount,
+              r.totalItems ?? 0,
+              r.totalPages ?? 1));
+        });
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
@@ -181,13 +197,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       //-----------------
       var auth = const SessionModel(token: "", username: "", name: "");
-        final session = await _getSession.execute();
-        session.fold((l) => emit(UserError(l.message)), (r) => {auth = r});
-        final orgaId = auth.getOrgaId();
+      final session = await _getSession.execute();
+      session.fold((l) => emit(UserError(l.message)), (r) => {auth = r});
+      final orgaId = auth.getOrgaId();
 
-        List<OrgaUser> listOrgaUsers = [];
-        final resultOrgaUser = await _getOrgaUser.execute(orgaId!,event.id);
-        resultOrgaUser.fold((l) => emit(UserError(l.message)), (r) =>listOrgaUsers = r);
+      List<OrgaUser> listOrgaUsers = [];
+      final resultOrgaUser = await _getOrgaUser.execute(orgaId!, event.id);
+      resultOrgaUser.fold(
+          (l) => emit(UserError(l.message)), (r) => listOrgaUsers = r);
       //-----------------
 
       final result = await _enableUser.execute(event.id, event.enabled);
@@ -226,15 +243,20 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       final orgaId = auth.getOrgaId();
 
       List<OrgaUser> listOrgaUsers = [];
-      final resultOrgaUser = await _getOrgaUser.execute(orgaId!,event.user.id);
-      resultOrgaUser.fold((l) => emit(UserError(l.message)), (r) =>listOrgaUsers = r);
+      final resultOrgaUser = await _getOrgaUser.execute(orgaId!, event.user.id);
+      resultOrgaUser.fold(
+          (l) => emit(UserError(l.message)), (r) => listOrgaUsers = r);
       //-----------------
 
       final result =
           await _updateUserPassword.execute(event.user.id, event.password);
 
-      result.fold((l) => emit(UserError(l.message)),
-          (r) => {emit(UserLoaded(event.user, listOrgaUsers[0], " Contraseña Modificada"))});
+      result.fold(
+          (l) => emit(UserError(l.message)),
+          (r) => {
+                emit(UserLoaded(
+                    event.user, listOrgaUsers[0], " Contraseña Modificada"))
+              });
     });
     on<OnUserOrgaEdit>((event, emit) async {
       emit(UserLoading());
@@ -248,25 +270,24 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       bool isUpdated = false;
 
-      final result =
-          await _updateOrgaUser.execute(event.orgaUser.orgaId, event.orgaUser.userId, orgaUser);
-      result.fold(
-          (l) => emit(UserError(l.message)), (r) => {isUpdated = true});
+      final result = await _updateOrgaUser.execute(
+          event.orgaUser.orgaId, event.orgaUser.userId, orgaUser);
+      result.fold((l) => emit(UserError(l.message)), (r) => {isUpdated = true});
 
       if (isUpdated) {
         final resUser = await _getUser.execute(event.orgaUser.userId);
 
-        final resultOU = await _getOrgaUser.execute(event.orgaUser.orgaId, event.orgaUser.userId);
+        final resultOU = await _getOrgaUser.execute(
+            event.orgaUser.orgaId, event.orgaUser.userId);
 
         var user = const User(
-          id: '',
-          name: '',
-          username: '',
-          email: '',
-          enabled: false,
-          builtIn: false);
-        resUser.fold(
-            (l) => emit(UserError(l.message)), (r) => {user = r});
+            id: '',
+            name: '',
+            username: '',
+            email: '',
+            enabled: false,
+            builtIn: false);
+        resUser.fold((l) => emit(UserError(l.message)), (r) => {user = r});
 
         List<OrgaUser> listOrgaUsers = [];
         resultOU.fold(
@@ -292,14 +313,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       bool isDeleted = false;
 
-      final result = await _deleteOrgaUser.execute(event.orgaUser.orgaId, event.orgaUser.userId);
-      result.fold(
-          (l) => emit(UserError(l.message)), (r) => {isDeleted = r});
+      final result = await _deleteOrgaUser.execute(
+          event.orgaUser.orgaId, event.orgaUser.userId);
+      result.fold((l) => emit(UserError(l.message)), (r) => {isDeleted = r});
 
       if (isDeleted) {
-        emit(UserLoaded(
-          user,
-          event.orgaUser,
+        emit(UserLoaded(user, event.orgaUser,
             " El Usuario ${user.name} fue desasociado de la organización"));
       }
     });
@@ -315,18 +334,29 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         final orgaId = auth.getOrgaId();
 
         var orgaUser = OrgaUser(
-          orgaId: orgaId!,
-          userId: '',
-          roles: [],
-          enabled: true,
-          builtIn: false);
+            orgaId: orgaId!,
+            userId: '',
+            roles: [],
+            enabled: true,
+            builtIn: false);
         //-----------------
 
-        final result = await _getUsersNotInOrga.execute(
-            orgaId, event.filter, event.pageNumber, 10);
+        final result = await _getUsersNotInOrga.execute(event.searchText,
+            orgaId, event.fieldsOrder, event.pageIndex, event.pageSize);
 
-        result.fold((l) => emit(UserError(l.message)),
-            (r) => {emit(UserListNotInOrgaLoaded(r, orgaUser))});
+        result.fold((l) => emit(UserError(l.message)), (r) {
+          emit(UserListNotInOrgaLoaded(
+              r.items,
+              orgaUser,
+              orgaId,
+              event.searchText,
+              event.fieldsOrder,
+              event.pageIndex,
+              event.pageSize,
+              r.currentItemCount,
+              r.totalItems ?? 0,
+              r.totalPages ?? 1));
+        });
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );

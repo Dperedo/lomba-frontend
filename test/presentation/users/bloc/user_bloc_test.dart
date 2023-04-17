@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
+import 'package:lomba_frontend/core/model_container.dart';
 import 'package:lomba_frontend/data/models/session_model.dart';
 import 'package:lomba_frontend/domain/entities/orgauser.dart';
 import 'package:lomba_frontend/domain/entities/user.dart';
@@ -95,7 +96,6 @@ Future<void> main() async {
         mockDeleteOrgaUser,
         mockGetUsersNotInOrga,
         mockAddOrgaUser);
-
   });
 
   const testSession = SessionModel(
@@ -114,11 +114,7 @@ Future<void> main() async {
       builtIn: false);
 
   const tOrgaUser = OrgaUser(
-    userId: '1',
-    orgaId: '1',
-    roles: [],
-    enabled: false,
-    builtIn: false);
+      userId: '1', orgaId: '1', roles: [], enabled: false, builtIn: false);
 
   test(
     'el estado inicial debe ser Start',
@@ -132,18 +128,32 @@ Future<void> main() async {
     blocTest<UserBloc, UserState>(
       'debe lanzar el spinner y devolver estado con listado',
       build: () {
-        when(mockGetUsers.execute("", "", "", 1, 10))
-            .thenAnswer((_) async => const Right(<User>[tUser]));
+        when(mockGetSession.execute())
+            .thenAnswer((_) async => const Right(testSession));
+        when(mockGetUsers.execute("", "00000100-0100-0100-0100-000000000100",
+                <String, int>{}, 1, 10))
+            .thenAnswer((_) async => Right(ModelContainer.fromItem(tUser)));
         return userBloc;
       },
-      act: (bloc) => bloc.add(const OnUserListLoad("", "", "", 1)),
+      act: (bloc) => bloc.add(const OnUserListLoad(
+          "00000100-0100-0100-0100-000000000100", "", <String, int>{}, 1, 10)),
       wait: const Duration(milliseconds: 500),
       expect: () => [
         UserLoading(),
-        const UserListLoaded(<User>[tUser]),
+        const UserListLoaded(
+            <User>[tUser],
+            "00000100-0100-0100-0100-000000000100",
+            "",
+            <String, int>{},
+            1,
+            10,
+            1,
+            0,
+            1),
       ],
       verify: (bloc) {
-        verify(mockGetUsers.execute("", "", "", 1, 10));
+        verify(mockGetUsers.execute("", "00000100-0100-0100-0100-000000000100",
+            <String, int>{}, 1, 10));
       },
     );
 
@@ -154,7 +164,8 @@ Future<void> main() async {
             .thenAnswer((_) async => const Right(tUser));
         when(mockGetSession.execute())
             .thenAnswer((_) async => const Right(testSession));
-        when(mockGetOrgaUser.execute('00000100-0100-0100-0100-000000000100','1'))
+        when(mockGetOrgaUser.execute(
+                '00000100-0100-0100-0100-000000000100', '1'))
             .thenAnswer((_) async => const Right(<OrgaUser>[tOrgaUser]));
         return userBloc;
       },
@@ -229,7 +240,8 @@ Future<void> main() async {
       build: () {
         when(mockGetSession.execute())
             .thenAnswer((_) async => const Right(testSession));
-        when(mockGetOrgaUser.execute('00000100-0100-0100-0100-000000000100','1'))
+        when(mockGetOrgaUser.execute(
+                '00000100-0100-0100-0100-000000000100', '1'))
             .thenAnswer((_) async => const Right(<OrgaUser>[tOrgaUser]));
         when(mockEnableUser.execute('1', false))
             .thenAnswer((_) async => const Right(tUser));
@@ -284,7 +296,8 @@ Future<void> main() async {
       build: () {
         when(mockGetSession.execute())
             .thenAnswer((_) async => const Right(testSession));
-        when(mockGetOrgaUser.execute('00000100-0100-0100-0100-000000000100','1'))
+        when(mockGetOrgaUser.execute(
+                '00000100-0100-0100-0100-000000000100', '1'))
             .thenAnswer((_) async => const Right(<OrgaUser>[tOrgaUser]));
         when(mockUpdateUserPassword.execute('1', '1234'))
             .thenAnswer((_) async => const Right(true));
@@ -292,8 +305,10 @@ Future<void> main() async {
       },
       act: (bloc) => bloc.add(const OnUserSaveNewPassword('1234', tUser)),
       wait: const Duration(milliseconds: 500),
-      expect: () =>
-          [UserLoading(), const UserLoaded(tUser, tOrgaUser, " Contraseña Modificada")],
+      expect: () => [
+        UserLoading(),
+        const UserLoaded(tUser, tOrgaUser, " Contraseña Modificada")
+      ],
       verify: (bloc) {
         verify(mockUpdateUserPassword.execute('1', '1234'));
       },

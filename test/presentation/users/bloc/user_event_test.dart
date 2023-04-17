@@ -11,31 +11,33 @@ void main() {
       email: 'te@mp.com',
       enabled: true,
       builtIn: false);
-  
+
   const tOnUserLoad = OnUserLoad('');
   const t_OnUserLoad = OnUserLoad('');
-  const tOnUserListLoad = OnUserListLoad('','','',1.0);
-  const t_OnUserListLoad = OnUserListLoad('','','',1.0);
-  const tOnUserAdd = OnUserAdd('','','','');
-  const t_OnUserAdd = OnUserAdd('','','','');
+  const tOnUserListLoad = OnUserListLoad('', '', <String, int>{}, 1, 10);
+  const t_OnUserListLoad = OnUserListLoad('', '', <String, int>{}, 1, 10);
+  const tOnUserAdd = OnUserAdd('', '', '', '');
+  const t_OnUserAdd = OnUserAdd('', '', '', '');
   const tOnUserPrepareForAdd = OnUserPrepareForAdd();
   const t_OnUserPrepareForAdd = OnUserPrepareForAdd();
   const tOnUserPrepareForEdit = OnUserPrepareForEdit(tUser);
   const t_OnUserPrepareForEdit = OnUserPrepareForEdit(tUser);
-  final tOnUserValidate = OnUserValidate('','',UserAdding(true,true));
-  final t_OnUserValidate = OnUserValidate('','',UserAdding(true,true));
-  final tOnUserValidateEdit = OnUserValidateEdit('','','',UserEditing(true,true,tUser));
-  final t_OnUserValidateEdit = OnUserValidateEdit('','','',UserEditing(true,true,tUser));
-  const tOnUserEdit = OnUserEdit('','','','',true);
-  const t_OnUserEdit = OnUserEdit('','','','',true);
-  const tOnUserEnable = OnUserEnable('',true,'');
-  const t_OnUserEnable = OnUserEnable('',true,'');
-  const tOnUserDelete = OnUserDelete('','');
-  const t_OnUserDelete = OnUserDelete('','');
+  final tOnUserValidate = OnUserValidate('', '', UserAdding(true, true));
+  final t_OnUserValidate = OnUserValidate('', '', UserAdding(true, true));
+  final tOnUserValidateEdit =
+      OnUserValidateEdit('', '', '', UserEditing(true, true, tUser));
+  final t_OnUserValidateEdit =
+      OnUserValidateEdit('', '', '', UserEditing(true, true, tUser));
+  const tOnUserEdit = OnUserEdit('', '', '', '', true);
+  const t_OnUserEdit = OnUserEdit('', '', '', '', true);
+  const tOnUserEnable = OnUserEnable('', true, '');
+  const t_OnUserEnable = OnUserEnable('', true, '');
+  const tOnUserDelete = OnUserDelete('', '');
+  const t_OnUserDelete = OnUserDelete('', '');
   const tOnUserShowPasswordModifyForm = OnUserShowPasswordModifyForm(tUser);
   const t_OnUserShowPasswordModifyForm = OnUserShowPasswordModifyForm(tUser);
-  const tOnUserSaveNewPassword = OnUserSaveNewPassword('',tUser);
-  const t_OnUserSaveNewPassword = OnUserSaveNewPassword('',tUser);
+  const tOnUserSaveNewPassword = OnUserSaveNewPassword('', tUser);
+  const t_OnUserSaveNewPassword = OnUserSaveNewPassword('', tUser);
 
   group('user event', () {
     test('On User Load', () {

@@ -3,10 +3,11 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i5;
 
-import 'package:lomba_frontend/data/datasources/user_data_source.dart' as _i3;
-import 'package:lomba_frontend/data/models/user_model.dart' as _i2;
+import 'package:lomba_frontend/core/model_container.dart' as _i2;
+import 'package:lomba_frontend/data/datasources/user_data_source.dart' as _i4;
+import 'package:lomba_frontend/data/models/user_model.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -20,8 +21,19 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeUserModel_0 extends _i1.SmartFake implements _i2.UserModel {
-  _FakeUserModel_0(
+class _FakeModelContainer_0<T> extends _i1.SmartFake
+    implements _i2.ModelContainer<T> {
+  _FakeModelContainer_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeUserModel_1 extends _i1.SmartFake implements _i3.UserModel {
+  _FakeUserModel_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -34,70 +46,83 @@ class _FakeUserModel_0 extends _i1.SmartFake implements _i2.UserModel {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUserRemoteDataSource extends _i1.Mock
-    implements _i3.UserRemoteDataSource {
+    implements _i4.UserRemoteDataSource {
   MockUserRemoteDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<List<_i2.UserModel>> getUsers(
+  _i5.Future<_i2.ModelContainer<_i3.UserModel>> getUsers(
+    String? searchText,
     String? orgaId,
-    String? filter,
-    String? fieldOrder,
-    double? pageNumber,
+    List<dynamic>? order,
+    int? pageIndex,
     int? pageSize,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
           #getUsers,
           [
+            searchText,
             orgaId,
-            filter,
-            fieldOrder,
-            pageNumber,
+            order,
+            pageIndex,
             pageSize,
           ],
         ),
-        returnValue: _i4.Future<List<_i2.UserModel>>.value(<_i2.UserModel>[]),
-      ) as _i4.Future<List<_i2.UserModel>>);
+        returnValue: _i5.Future<_i2.ModelContainer<_i3.UserModel>>.value(
+            _FakeModelContainer_0<_i3.UserModel>(
+          this,
+          Invocation.method(
+            #getUsers,
+            [
+              searchText,
+              orgaId,
+              order,
+              pageIndex,
+              pageSize,
+            ],
+          ),
+        )),
+      ) as _i5.Future<_i2.ModelContainer<_i3.UserModel>>);
   @override
-  _i4.Future<_i2.UserModel> getUser(String? userId) => (super.noSuchMethod(
+  _i5.Future<_i3.UserModel> getUser(String? userId) => (super.noSuchMethod(
         Invocation.method(
           #getUser,
           [userId],
         ),
-        returnValue: _i4.Future<_i2.UserModel>.value(_FakeUserModel_0(
+        returnValue: _i5.Future<_i3.UserModel>.value(_FakeUserModel_1(
           this,
           Invocation.method(
             #getUser,
             [userId],
           ),
         )),
-      ) as _i4.Future<_i2.UserModel>);
+      ) as _i5.Future<_i3.UserModel>);
   @override
-  _i4.Future<_i2.UserModel> addUser(_i2.UserModel? user) => (super.noSuchMethod(
+  _i5.Future<_i3.UserModel> addUser(_i3.UserModel? user) => (super.noSuchMethod(
         Invocation.method(
           #addUser,
           [user],
         ),
-        returnValue: _i4.Future<_i2.UserModel>.value(_FakeUserModel_0(
+        returnValue: _i5.Future<_i3.UserModel>.value(_FakeUserModel_1(
           this,
           Invocation.method(
             #addUser,
             [user],
           ),
         )),
-      ) as _i4.Future<_i2.UserModel>);
+      ) as _i5.Future<_i3.UserModel>);
   @override
-  _i4.Future<bool> deleteUser(String? userId) => (super.noSuchMethod(
+  _i5.Future<bool> deleteUser(String? userId) => (super.noSuchMethod(
         Invocation.method(
           #deleteUser,
           [userId],
         ),
-        returnValue: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
   @override
-  _i4.Future<bool> enableUser(
+  _i5.Future<bool> enableUser(
     String? userId,
     bool? enableOrDisable,
   ) =>
@@ -109,12 +134,12 @@ class MockUserRemoteDataSource extends _i1.Mock
             enableOrDisable,
           ],
         ),
-        returnValue: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
   @override
-  _i4.Future<_i2.UserModel> updateUser(
+  _i5.Future<_i3.UserModel> updateUser(
     String? userId,
-    _i2.UserModel? user,
+    _i3.UserModel? user,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -124,7 +149,7 @@ class MockUserRemoteDataSource extends _i1.Mock
             user,
           ],
         ),
-        returnValue: _i4.Future<_i2.UserModel>.value(_FakeUserModel_0(
+        returnValue: _i5.Future<_i3.UserModel>.value(_FakeUserModel_1(
           this,
           Invocation.method(
             #updateUser,
@@ -134,11 +159,11 @@ class MockUserRemoteDataSource extends _i1.Mock
             ],
           ),
         )),
-      ) as _i4.Future<_i2.UserModel>);
+      ) as _i5.Future<_i3.UserModel>);
   @override
-  _i4.Future<_i2.UserModel> updateProfile(
+  _i5.Future<_i3.UserModel> updateProfile(
     String? userId,
-    _i2.UserModel? user,
+    _i3.UserModel? user,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -148,7 +173,7 @@ class MockUserRemoteDataSource extends _i1.Mock
             user,
           ],
         ),
-        returnValue: _i4.Future<_i2.UserModel>.value(_FakeUserModel_0(
+        returnValue: _i5.Future<_i3.UserModel>.value(_FakeUserModel_1(
           this,
           Invocation.method(
             #updateProfile,
@@ -158,9 +183,9 @@ class MockUserRemoteDataSource extends _i1.Mock
             ],
           ),
         )),
-      ) as _i4.Future<_i2.UserModel>);
+      ) as _i5.Future<_i3.UserModel>);
   @override
-  _i4.Future<_i2.UserModel?> existsUser(
+  _i5.Future<_i3.UserModel?> existsUser(
     String? userId,
     String? username,
     String? email,
@@ -174,10 +199,10 @@ class MockUserRemoteDataSource extends _i1.Mock
             email,
           ],
         ),
-        returnValue: _i4.Future<_i2.UserModel?>.value(),
-      ) as _i4.Future<_i2.UserModel?>);
+        returnValue: _i5.Future<_i3.UserModel?>.value(),
+      ) as _i5.Future<_i3.UserModel?>);
   @override
-  _i4.Future<_i2.UserModel?> existsProfile(
+  _i5.Future<_i3.UserModel?> existsProfile(
     String? userId,
     String? username,
     String? email,
@@ -191,29 +216,44 @@ class MockUserRemoteDataSource extends _i1.Mock
             email,
           ],
         ),
-        returnValue: _i4.Future<_i2.UserModel?>.value(),
-      ) as _i4.Future<_i2.UserModel?>);
+        returnValue: _i5.Future<_i3.UserModel?>.value(),
+      ) as _i5.Future<_i3.UserModel?>);
   @override
-  _i4.Future<List<_i2.UserModel>> getUsersNotInOrga(
+  _i5.Future<_i2.ModelContainer<_i3.UserModel>> getUsersNotInOrga(
+    String? searchText,
     String? orgaId,
     List<dynamic>? order,
-    int? pageNumber,
+    int? pageIndex,
     int? pageSize,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
           #getUsersNotInOrga,
           [
+            searchText,
             orgaId,
             order,
-            pageNumber,
+            pageIndex,
             pageSize,
           ],
         ),
-        returnValue: _i4.Future<List<_i2.UserModel>>.value(<_i2.UserModel>[]),
-      ) as _i4.Future<List<_i2.UserModel>>);
+        returnValue: _i5.Future<_i2.ModelContainer<_i3.UserModel>>.value(
+            _FakeModelContainer_0<_i3.UserModel>(
+          this,
+          Invocation.method(
+            #getUsersNotInOrga,
+            [
+              searchText,
+              orgaId,
+              order,
+              pageIndex,
+              pageSize,
+            ],
+          ),
+        )),
+      ) as _i5.Future<_i2.ModelContainer<_i3.UserModel>>);
   @override
-  _i4.Future<bool> updateUserPassword(
+  _i5.Future<bool> updateUserPassword(
     String? userId,
     String? password,
   ) =>
@@ -225,10 +265,10 @@ class MockUserRemoteDataSource extends _i1.Mock
             password,
           ],
         ),
-        returnValue: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
   @override
-  _i4.Future<bool> updateProfilePassword(
+  _i5.Future<bool> updateProfilePassword(
     String? userId,
     String? password,
   ) =>
@@ -240,6 +280,6 @@ class MockUserRemoteDataSource extends _i1.Mock
             password,
           ],
         ),
-        returnValue: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
 }

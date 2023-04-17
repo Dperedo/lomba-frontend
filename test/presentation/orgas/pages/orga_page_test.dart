@@ -78,8 +78,11 @@ void main() {
     );
   }
 */
+  final tOrga = fakeListOrgas[1].toEntity();
   final tUser2 = fakeListUsers[1].toEntity();
   final tOrga2 = fakeListOrgas[1].toEntity();
+  final tOrga1 = fakeListOrgas[0].toEntity();
+
   final tListOrgaUser = fakeListOrgaUsers
       .where(
         (element) => element.orgaId == tOrga2.id,
@@ -219,8 +222,17 @@ void main() {
     testWidgets('mostrar lista de usuarios al clic del botón',
         (WidgetTester tester) async {
       when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2, ""));
-      when(() => mockOrgaUserBloc.state).thenReturn(
-          OrgaUserListLoaded(tOrga2.id, <User>[tUser2], tListOrgaUser));
+      when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserListLoaded(
+          tOrga2.id,
+          <User>[tUser2],
+          tListOrgaUser,
+          '',
+          const <String, int>{"email": 1},
+          1,
+          10,
+          1,
+          1,
+          1));
       await tester.pumpWidget(makeTestableWidget(OrgasPage()));
       Finder listItemFirstUser =
           find.text(tUser2.name); //por ahora sólo tenemos el ID
@@ -233,7 +245,6 @@ void main() {
       expect(verUsuariosButton, equals(findsOneWidget));
     });
   });
-  final tOrga = fakeListOrgas[1].toEntity();
 
   group('mostrar modificar organizacion', () {
     testWidgets('mostrar campo para modificar orga',
@@ -401,16 +412,26 @@ void main() {
       'Mostrar boton de eliminar asociacion',
       (WidgetTester tester) async {
         //arrange
-        when(() => mockOrgaUserBloc.state).thenReturn(
-            OrgaUserListLoaded(tOrga2.id, fakeListUsers, fakeListOrgaUsers));
-        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga, ""));
+        when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserListLoaded(
+            tOrga2.id,
+            fakeListUsers,
+            fakeListOrgaUsers,
+            '',
+            const <String, int>{"email": 1},
+            1,
+            10,
+            0,
+            0,
+            1));
+        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2, ""));
         //act
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
 
         Finder userButton =
             find.byKey(ValueKey("btnTxtUser${fakeListUsers[0].id}"));
 
-        await tester.tap(userButton);
+        //await tester.tap(userButton);
+        await tester.press(userButton);
         await tester.pumpAndSettle(const Duration(milliseconds: 500));
 
         Finder deleteButton =
@@ -426,9 +447,18 @@ void main() {
       'Mostrar boton de guardar',
       (WidgetTester tester) async {
         //arrange
-        when(() => mockOrgaUserBloc.state).thenReturn(
-            OrgaUserListLoaded(tOrga2.id, fakeListUsers, fakeListOrgaUsers));
-        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga, ""));
+        when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserListLoaded(
+            tOrga2.id,
+            fakeListUsers,
+            fakeListOrgaUsers,
+            '',
+            const <String, int>{"email": 1},
+            1,
+            10,
+            1,
+            1,
+            1));
+        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2, ""));
         //act
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
 
@@ -450,9 +480,18 @@ void main() {
       'Mostrar boton de cancelar',
       (WidgetTester tester) async {
         //arrange
-        when(() => mockOrgaUserBloc.state).thenReturn(
-            OrgaUserListLoaded(tOrga2.id, fakeListUsers, fakeListOrgaUsers));
-        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga, ""));
+        when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserListLoaded(
+            tOrga2.id,
+            fakeListUsers,
+            fakeListOrgaUsers,
+            '',
+            const <String, int>{"email": 1},
+            1,
+            10,
+            1,
+            1,
+            1));
+        when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2, ""));
         //act
 
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
@@ -477,7 +516,8 @@ void main() {
       'mostrar usuarios disponibles',
       (WidgetTester tester) async {
         when(() => mockOrgaUserBloc.state).thenReturn(
-            OrgaUserListUserNotInOrgaLoaded(tOrga.id, fakeListUsers));
+            OrgaUserListUserNotInOrgaLoaded(tOrga.id, fakeListUsers, '',
+                const <String, int>{"email": 1}, 1, 10, 1, 1, 1));
         when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga, ""));
         await tester.pumpWidget(makeTestableWidget(OrgasPage()));
         Finder usuariosDispoText = find.text('Usuarios disponibles');
@@ -502,8 +542,17 @@ void main() {
   testWidgets(
     'Muestra la organización y la lista de usuarios',
     (WidgetTester tester) async {
-      when(() => mockOrgaUserBloc.state).thenReturn(
-          OrgaUserListLoaded(tOrga2.id, fakeListUsers, fakeListOrgaUsers));
+      when(() => mockOrgaUserBloc.state).thenReturn(OrgaUserListLoaded(
+          tOrga1.id,
+          fakeListUsers,
+          fakeListOrgaUsers,
+          '',
+          const <String, int>{"email": 1},
+          1,
+          10,
+          1,
+          0,
+          1));
       when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga, ""));
       await tester.pumpWidget(makeTestableWidget(OrgasPage()));
       Finder textButton = find.text('Súper Administrador');

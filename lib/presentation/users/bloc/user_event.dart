@@ -22,16 +22,18 @@ class OnUserLoad extends UserEvent {
 }
 
 class OnUserListLoad extends UserEvent {
+  final String searchText;
   final String orgaId;
-  final String filter;
-  final String fieldOrder;
-  final double pageNumber;
+  final Map<String, int> fieldsOrder;
+  final int pageIndex;
+  final int pageSize;
 
-  const OnUserListLoad(
-      this.orgaId, this.filter, this.fieldOrder, this.pageNumber);
+  const OnUserListLoad(this.orgaId, this.searchText, this.fieldsOrder,
+      this.pageIndex, this.pageSize);
 
   @override
-  List<Object> get props => [orgaId, filter, fieldOrder, pageNumber];
+  List<Object> get props =>
+      [orgaId, searchText, fieldsOrder, pageIndex, pageSize];
 }
 
 class OnUserAdd extends UserEvent {
@@ -156,15 +158,18 @@ class OnUserOrgaDelete extends UserEvent {
 
 //OnUserListNotInOrga
 class OnUserListNotInOrga extends UserEvent {
-  final SortModel filter;
-  final int pageNumber;
+  final String searchText;
+  final String orgaId;
+  final Map<String, int> fieldsOrder;
+  final int pageIndex;
   final int pageSize;
 
-  const OnUserListNotInOrga(
-      this.filter, this.pageNumber, this.pageSize);
+  const OnUserListNotInOrga(this.orgaId, this.searchText, this.fieldsOrder,
+      this.pageIndex, this.pageSize);
 
   @override
-  List<Object> get props => [filter, pageNumber, pageSize];
+  List<Object> get props =>
+      [orgaId, searchText, fieldsOrder, pageIndex, pageSize];
 }
 
 //OnUserOrgaAdd

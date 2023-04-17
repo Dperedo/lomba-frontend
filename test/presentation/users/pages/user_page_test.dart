@@ -76,7 +76,8 @@ void main() {
         //await tester.pumpAndSettle(const Duration(seconds: 1));
 
         // assert
-        verify(() => mockUserBloc.add(const OnUserListLoad("", "", "", 1)))
+        verify(() => mockUserBloc.add(
+                const OnUserListLoad("", "", <String, int>{"email": 1}, 1, 10)))
             .called(1);
 
         expect(titulo, equals(findsOneWidget));

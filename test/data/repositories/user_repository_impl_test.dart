@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/exceptions.dart';
 import 'package:lomba_frontend/core/failures.dart';
 import 'package:lomba_frontend/core/fakedata.dart';
+import 'package:lomba_frontend/core/model_container.dart';
 import 'package:lomba_frontend/data/datasources/user_data_source.dart';
 import 'package:lomba_frontend/data/models/user_model.dart';
 import 'package:lomba_frontend/data/repositories/user_repository_impl.dart';
@@ -70,17 +71,18 @@ void main() {
       () async {
         // arrange
         when(mockRemoteDataSource.getUsers(any, any, any, any, any))
-            .thenAnswer((_) async => <UserModel>[tUserModel]);
+            .thenAnswer((_) async => ModelContainer.fromItem(tUserModel));
 
         // act
-        final result = await repository.getUsers("", "", "", 1, 10);
-        List<User> list = [];
+        final result =
+            await repository.getUsers("", "", <String, int>{}, 1, 10);
+        ModelContainer<User> list = ModelContainer.empty();
         result.fold((l) => {}, ((r) => {list = r}));
 
         // assert
         verify(mockRemoteDataSource.getUsers(any, any, any, any, any));
         expect(result.isRight(), true);
-        expect(list, (<User>[tUser]));
+        expect(list, (ModelContainer.fromItem(tUserModel)));
       },
     );
 

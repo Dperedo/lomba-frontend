@@ -7,9 +7,9 @@ import 'dart:async' as _i6;
 
 import 'package:dartz/dartz.dart' as _i3;
 import 'package:lomba_frontend/core/failures.dart' as _i7;
-import 'package:lomba_frontend/data/models/sort_model.dart' as _i16;
+import 'package:lomba_frontend/core/model_container.dart' as _i14;
 import 'package:lomba_frontend/domain/entities/orgauser.dart' as _i8;
-import 'package:lomba_frontend/domain/entities/user.dart' as _i14;
+import 'package:lomba_frontend/domain/entities/user.dart' as _i15;
 import 'package:lomba_frontend/domain/repositories/orga_repository.dart' as _i2;
 import 'package:lomba_frontend/domain/repositories/user_repository.dart' as _i4;
 import 'package:lomba_frontend/domain/usecases/orgas/add_orgauser.dart' as _i5;
@@ -23,7 +23,7 @@ import 'package:lomba_frontend/domain/usecases/orgas/update_orgauser.dart'
     as _i12;
 import 'package:lomba_frontend/domain/usecases/users/get_users.dart' as _i13;
 import 'package:lomba_frontend/domain/usecases/users/get_users_notin_orga.dart'
-    as _i15;
+    as _i16;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -367,60 +367,61 @@ class MockGetUsers extends _i1.Mock implements _i13.GetUsers {
         ),
       ) as _i4.UserRepository);
   @override
-  _i6.Future<_i3.Either<_i7.Failure, List<_i14.User>>> execute(
+  _i6.Future<_i3.Either<_i7.Failure, _i14.ModelContainer<_i15.User>>> execute(
+    String? searchText,
     String? orgaId,
-    String? filter,
-    String? fieldOrder,
-    double? pageNumber,
+    Map<String, int>? fieldsOrder,
+    int? pageIndex,
     int? pageSize,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
           #execute,
           [
+            searchText,
             orgaId,
-            filter,
-            fieldOrder,
-            pageNumber,
+            fieldsOrder,
+            pageIndex,
             pageSize,
           ],
         ),
-        returnValue: _i6.Future<_i3.Either<_i7.Failure, List<_i14.User>>>.value(
-            _FakeEither_1<_i7.Failure, List<_i14.User>>(
+        returnValue: _i6.Future<
+                _i3.Either<_i7.Failure, _i14.ModelContainer<_i15.User>>>.value(
+            _FakeEither_1<_i7.Failure, _i14.ModelContainer<_i15.User>>(
           this,
           Invocation.method(
             #execute,
             [
+              searchText,
               orgaId,
-              filter,
-              fieldOrder,
-              pageNumber,
+              fieldsOrder,
+              pageIndex,
               pageSize,
             ],
           ),
         )),
-        returnValueForMissingStub:
-            _i6.Future<_i3.Either<_i7.Failure, List<_i14.User>>>.value(
-                _FakeEither_1<_i7.Failure, List<_i14.User>>(
+        returnValueForMissingStub: _i6.Future<
+                _i3.Either<_i7.Failure, _i14.ModelContainer<_i15.User>>>.value(
+            _FakeEither_1<_i7.Failure, _i14.ModelContainer<_i15.User>>(
           this,
           Invocation.method(
             #execute,
             [
+              searchText,
               orgaId,
-              filter,
-              fieldOrder,
-              pageNumber,
+              fieldsOrder,
+              pageIndex,
               pageSize,
             ],
           ),
         )),
-      ) as _i6.Future<_i3.Either<_i7.Failure, List<_i14.User>>>);
+      ) as _i6.Future<_i3.Either<_i7.Failure, _i14.ModelContainer<_i15.User>>>);
 }
 
 /// A class which mocks [GetUsersNotInOrga].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetUsersNotInOrga extends _i1.Mock implements _i15.GetUsersNotInOrga {
+class MockGetUsersNotInOrga extends _i1.Mock implements _i16.GetUsersNotInOrga {
   @override
   _i4.UserRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
@@ -434,48 +435,53 @@ class MockGetUsersNotInOrga extends _i1.Mock implements _i15.GetUsersNotInOrga {
         ),
       ) as _i4.UserRepository);
   @override
-  _i6.Future<_i3.Either<_i7.Failure, List<_i14.User>>> execute(
+  _i6.Future<_i3.Either<_i7.Failure, _i14.ModelContainer<_i15.User>>> execute(
+    String? searchText,
     String? orgaId,
-    _i16.SortModel? sortFields,
-    int? pageNumber,
+    Map<String, int>? fieldsOrder,
+    int? pageIndex,
     int? pageSize,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
           #execute,
           [
+            searchText,
             orgaId,
-            sortFields,
-            pageNumber,
+            fieldsOrder,
+            pageIndex,
             pageSize,
           ],
         ),
-        returnValue: _i6.Future<_i3.Either<_i7.Failure, List<_i14.User>>>.value(
-            _FakeEither_1<_i7.Failure, List<_i14.User>>(
+        returnValue: _i6.Future<
+                _i3.Either<_i7.Failure, _i14.ModelContainer<_i15.User>>>.value(
+            _FakeEither_1<_i7.Failure, _i14.ModelContainer<_i15.User>>(
           this,
           Invocation.method(
             #execute,
             [
+              searchText,
               orgaId,
-              sortFields,
-              pageNumber,
+              fieldsOrder,
+              pageIndex,
               pageSize,
             ],
           ),
         )),
-        returnValueForMissingStub:
-            _i6.Future<_i3.Either<_i7.Failure, List<_i14.User>>>.value(
-                _FakeEither_1<_i7.Failure, List<_i14.User>>(
+        returnValueForMissingStub: _i6.Future<
+                _i3.Either<_i7.Failure, _i14.ModelContainer<_i15.User>>>.value(
+            _FakeEither_1<_i7.Failure, _i14.ModelContainer<_i15.User>>(
           this,
           Invocation.method(
             #execute,
             [
+              searchText,
               orgaId,
-              sortFields,
-              pageNumber,
+              fieldsOrder,
+              pageIndex,
               pageSize,
             ],
           ),
         )),
-      ) as _i6.Future<_i3.Either<_i7.Failure, List<_i14.User>>>);
+      ) as _i6.Future<_i3.Either<_i7.Failure, _i14.ModelContainer<_i15.User>>>);
 }

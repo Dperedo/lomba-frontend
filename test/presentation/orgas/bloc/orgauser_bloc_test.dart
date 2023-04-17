@@ -4,6 +4,7 @@ import 'package:flutter_guid/flutter_guid.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/failures.dart';
+import 'package:lomba_frontend/core/model_container.dart';
 import 'package:lomba_frontend/data/models/sort_model.dart';
 import 'package:lomba_frontend/domain/entities/orgauser.dart';
 import 'package:lomba_frontend/domain/usecases/orgas/add_orgauser.dart';
@@ -64,7 +65,6 @@ Future<void> main() async {
   final newOrgaId = Guid.newGuid.toString();
   final newUserId = Guid.newGuid.toString();
 
-
   const List<User> test_listUser = [];
   const String test_orgaId = "00000200-0200-0200-0200-000000000200";
   const int test_pageIndex = 1;
@@ -99,15 +99,19 @@ Future<void> main() async {
         when(mockGetOrgaUsers.execute(newOrgaId))
             .thenAnswer((_) async => Right(<OrgaUser>[tOrgaUser]));
 
-        when(mockGetUsers.execute(newOrgaId, "", "", 1, 10))
-            .thenAnswer((realInvocation) async => Right(<User>[tUser]));
+        when(mockGetUsers.execute(
+                "", newOrgaId, <String, int>{"email": 1}, 1, 10))
+            .thenAnswer((realInvocation) async =>
+                Right(ModelContainer.fromItem(tUser)));
         return orgaUserBloc;
       },
-      act: (bloc) => bloc.add(OnOrgaUserListLoad(newOrgaId)),
+      act: (bloc) => bloc.add(OnOrgaUserListLoad(
+          '', newOrgaId, const <String, int>{"email": 1}, 1, 10)),
       wait: const Duration(milliseconds: 500),
       expect: () => [
         OrgaUserLoading(),
-        OrgaUserListLoaded(newOrgaId, <User>[tUser], <OrgaUser>[tOrgaUser]),
+        OrgaUserListLoaded(newOrgaId, <User>[tUser], <OrgaUser>[tOrgaUser], '',
+            const <String, int>{"email": 1}, 1, 10, 1, 0, 1),
       ],
       verify: (bloc) {
         verify(mockGetOrgaUsers.execute(newOrgaId));
@@ -148,10 +152,7 @@ Future<void> main() async {
       act: (bloc) => bloc.add(OnOrgaUserAdd(tOrgaUser.orgaId, tOrgaUser.userId,
           tOrgaUser.roles, tOrgaUser.enabled, 'user')),
       wait: const Duration(milliseconds: 500),
-      expect: () => [
-        OrgaUserLoading(),
-        const OrgaUserError('error')
-      ],
+      expect: () => [OrgaUserLoading(), const OrgaUserError('error')],
       verify: (bloc) {
         verify(mockAddOrgaUser.execute(tOrgaUser.orgaId, tOrgaUser.userId,
             tOrgaUser.roles, tOrgaUser.enabled));
@@ -202,8 +203,10 @@ Future<void> main() async {
         when(mockUpdateOrgaUser.execute(
                 tOrgaUser.orgaId, tOrgaUser.userId, tOrgaUser))
             .thenAnswer((_) async => Right(tOrgaUser));
-        when(mockGetUsers.execute(newOrgaId, "", "", 1, 10))
-            .thenAnswer((realInvocation) async => Right(<User>[tUser]));
+        when(mockGetUsers.execute(
+                "", newOrgaId, <String, int>{"email": 1}, 1, 10))
+            .thenAnswer((realInvocation) async =>
+                Right(ModelContainer.fromItem(tUser)));
         when(mockGetOrgaUsers.execute(newOrgaId))
             .thenAnswer((realInvocation) async => Right(<OrgaUser>[tOrgaUser]));
         return orgaUserBloc;
@@ -213,7 +216,8 @@ Future<void> main() async {
       wait: const Duration(milliseconds: 500),
       expect: () => [
         OrgaUserLoading(),
-        OrgaUserListLoaded(newOrgaId, <User>[tUser], <OrgaUser>[tOrgaUser])
+        OrgaUserListLoaded(newOrgaId, <User>[tUser], <OrgaUser>[tOrgaUser], '',
+            const <String, int>{"email": 1}, 1, 10, 1, 0, 1),
       ],
       verify: (bloc) {
         verify(mockUpdateOrgaUser.execute(
@@ -226,19 +230,27 @@ Future<void> main() async {
     blocTest<OrgaUserBloc, OrgaUserState>(
       'debe mostrar lista de user que no pertenezcan al orga',
       build: () {
-        when(mockOrgaUsersNotInOrga.execute(test_orgaId, const SortModel(null), test_pageIndex, test_pageSize))
-            .thenAnswer((realInvocation) async => const Right(test_listUser));
+        when(mockOrgaUsersNotInOrga.execute('', test_orgaId,
+                <String, int>{"email": 1}, test_pageIndex, test_pageSize))
+            .thenAnswer((realInvocation) async =>
+                Right(ModelContainer.fromItems(test_listUser)));
         return orgaUserBloc;
       },
-      act: (bloc) => bloc.add(const OnOrgaUserListUserNotInOrgaForAdd(test_orgaId, SortModel(null), test_pageIndex, test_pageSize)),
+      act: (bloc) => bloc.add(const OnOrgaUserListUserNotInOrgaForAdd(
+          '',
+          test_orgaId,
+          <String, int>{"email": 1},
+          test_pageIndex,
+          test_pageSize)),
       wait: const Duration(milliseconds: 500),
       expect: () => [
         OrgaUserLoading(),
-        const OrgaUserListUserNotInOrgaLoaded(test_orgaId, test_listUser)
+        const OrgaUserListUserNotInOrgaLoaded(test_orgaId, test_listUser, '',
+            <String, int>{"email": 1}, test_pageIndex, test_pageSize, 0, 0, 1)
       ],
       verify: (bloc) {
-        verify(mockOrgaUsersNotInOrga.execute(
-            test_orgaId, const SortModel(null), test_pageIndex, test_pageSize));
+        verify(mockOrgaUsersNotInOrga.execute('', test_orgaId,
+            <String, int>{"email": 1}, test_pageIndex, test_pageSize));
       },
     );
   });

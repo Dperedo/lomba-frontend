@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/constants.dart';
 import 'package:lomba_frontend/core/validators.dart';
 import 'package:lomba_frontend/data/models/orgauser_model.dart';
-import 'package:lomba_frontend/data/models/sort_model.dart';
 import 'package:lomba_frontend/presentation/orgas/bloc/orga_event.dart';
 import 'package:lomba_frontend/presentation/orgas/bloc/orgauser_event.dart';
+import 'package:number_paginator/number_paginator.dart';
 
 import '../../../core/fakedata.dart';
 import '../../../core/widgets/body_formatter.dart';
@@ -16,7 +16,7 @@ import '../../../domain/entities/user.dart';
 import '../bloc/orga_bloc.dart';
 import '../bloc/orga_state.dart';
 import '../bloc/orgauser_bloc.dart';
-import '../bloc/orgauser_dialog_edit_cubit.dart';
+import '../bloc/orgauser_cubit.dart';
 import '../bloc/orgauser_state.dart';
 
 ///Página de organizaciones que inicia con la lista de organizaciones
@@ -26,7 +26,16 @@ import '../bloc/orgauser_state.dart';
 class OrgasPage extends StatelessWidget {
   OrgasPage({Key? key}) : super(key: key);
 
+  final TextEditingController _searchController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final int _fixPageSize = 10;
+
+//Ordenamiento
+  final Map<String, String> listFields = <String, String>{
+    "Email": "email",
+    "Nombre": "name",
+    "Usuario": "username"
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -254,8 +263,12 @@ class OrgasPage extends StatelessWidget {
                   key: const ValueKey("btnViewUsersOption"),
                   label: const Text("Ver usuarios"),
                   onPressed: () {
-                    context.read<OrgaUserBloc>()
-                      .add(OnOrgaUserListLoad(state.orga.id));
+                    context.read<OrgaUserBloc>().add(OnOrgaUserListLoad(
+                        '',
+                        state.orga.id,
+                        <String, int>{listFields.values.first: 1},
+                        1,
+                        10));
                   },
                 ),
               ],
@@ -270,8 +283,8 @@ class OrgasPage extends StatelessWidget {
                   label: const Text("Asociar usuario"),
                   onPressed: () {
                     context.read<OrgaUserBloc>().add(
-                        OnOrgaUserListUserNotInOrgaForAdd(
-                            state.orga.id, const SortModel(null), 1, 10));
+                        OnOrgaUserListUserNotInOrgaForAdd('', state.orga.id,
+                            <String, int>{listFields.values.first: 1}, 1, 10));
                   },
                 ),
                 const VerticalDivider(),
@@ -721,6 +734,93 @@ class OrgasPage extends StatelessWidget {
           if (state is OrgaUserListLoaded) {
             return Column(
               children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: TextFormField(
+                              controller: _searchController,
+                              cursorColor: Colors.grey,
+                              decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                filled: true,
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide.none),
+                                hintText: 'Buscar usuarios',
+                                hintStyle: const TextStyle(
+                                    color: Colors.grey, fontSize: 18),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                context.read<OrgaUserBloc>().add(
+                                    OnOrgaUserListLoad(
+                                        _searchController.text,
+                                        state.orgaId,
+                                        <String, int>{
+                                          listFields.values.first: 1
+                                        },
+                                        1,
+                                        10));
+                              },
+                              icon: const Icon(Icons.search)),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 200,
+                            child: NumberPaginator(
+                              initialPage: state.pageIndex - 1,
+                              numberPages: state.totalPages,
+                              contentBuilder: (index) => Expanded(
+                                child: Center(
+                                  child: Text(
+                                      "Página: ${index + 1} de ${state.totalPages}"),
+                                ),
+                              ),
+                              onPageChange: (int index) {
+                                context.read<OrgaUserBloc>().add(
+                                    OnOrgaUserListLoad(
+                                        _searchController.text,
+                                        state.orgaId,
+                                        <String, int>{
+                                          state.fieldsOrder.keys.first: 1
+                                        },
+                                        index + 1,
+                                        _fixPageSize));
+                              },
+                            ),
+                          ),
+                          const VerticalDivider(),
+                          const Text("Orden:"),
+                          const VerticalDivider(),
+                          _sortDropdownButtonUsersInOrga(
+                              state, listFields, context)
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                          "${(state.searchText != "" ? "Buscando por \"${state.searchText}\", mostrando " : "Mostrando ")}${state.itemCount} registros de ${state.totalItems}."),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(),
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -836,6 +936,92 @@ class OrgasPage extends StatelessWidget {
             return Column(
               children: [
                 const Text("Usuarios disponibles"),
+                Container(
+                  margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: TextFormField(
+                              controller: _searchController,
+                              cursorColor: Colors.grey,
+                              decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                filled: true,
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide.none),
+                                hintText: 'Buscar usuarios',
+                                hintStyle: const TextStyle(
+                                    color: Colors.grey, fontSize: 18),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                context.read<OrgaUserBloc>().add(
+                                    OnOrgaUserListUserNotInOrgaForAdd(
+                                        _searchController.text,
+                                        state.orgaId,
+                                        <String, int>{
+                                          state.fieldsOrder.keys.first: 1
+                                        },
+                                        1,
+                                        _fixPageSize));
+                              },
+                              icon: const Icon(Icons.search)),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 200,
+                            child: NumberPaginator(
+                              initialPage: state.pageIndex - 1,
+                              numberPages: state.totalPages,
+                              contentBuilder: (index) => Expanded(
+                                child: Center(
+                                  child: Text(
+                                      "Página: ${index + 1} de ${state.totalPages}"),
+                                ),
+                              ),
+                              onPageChange: (int index) {
+                                context.read<OrgaUserBloc>().add(
+                                    OnOrgaUserListUserNotInOrgaForAdd(
+                                        _searchController.text,
+                                        state.orgaId,
+                                        <String, int>{
+                                          state.fieldsOrder.keys.first: 1
+                                        },
+                                        index + 1,
+                                        _fixPageSize));
+                              },
+                            ),
+                          ),
+                          const VerticalDivider(),
+                          const Text("Orden:"),
+                          const VerticalDivider(),
+                          _sortDropdownButtonUsersNotInOrga(
+                              state, listFields, context)
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                          "${(state.searchText != "" ? "Buscando por \"${state.searchText}\", mostrando " : "Mostrando ")}${state.itemCount} registros de ${state.totalItems}."),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+                ),
                 const Divider(),
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
@@ -917,6 +1103,54 @@ class OrgasPage extends StatelessWidget {
           return const SizedBox();
         },
       ),
+    );
+  }
+
+  DropdownButton<String> _sortDropdownButtonUsersNotInOrga(
+      OrgaUserListUserNotInOrgaLoaded state,
+      Map<String, String> listFields,
+      BuildContext context) {
+    return DropdownButton(
+      style: const TextStyle(fontSize: 14, color: Colors.black),
+      value: state.fieldsOrder.keys.first,
+      items: listFields.entries.map<DropdownMenuItem<String>>((field) {
+        return DropdownMenuItem<String>(
+          value: field.value,
+          child: Text(field.key),
+        );
+      }).toList(),
+      onChanged: (String? value) {
+        context.read<OrgaUserBloc>().add(OnOrgaUserListUserNotInOrgaForAdd(
+            state.searchText,
+            state.orgaId,
+            <String, int>{value!: 1},
+            state.pageIndex,
+            _fixPageSize));
+      },
+    );
+  }
+
+  DropdownButton<String> _sortDropdownButtonUsersInOrga(
+      OrgaUserListLoaded state,
+      Map<String, String> listFields,
+      BuildContext context) {
+    return DropdownButton(
+      style: const TextStyle(fontSize: 14, color: Colors.black),
+      value: state.fieldsOrder.keys.first,
+      items: listFields.entries.map<DropdownMenuItem<String>>((field) {
+        return DropdownMenuItem<String>(
+          value: field.value,
+          child: Text(field.key),
+        );
+      }).toList(),
+      onChanged: (String? value) {
+        context.read<OrgaUserBloc>().add(OnOrgaUserListLoad(
+            state.searchText,
+            state.orgaId,
+            <String, int>{value!: 1},
+            state.pageIndex,
+            _fixPageSize));
+      },
     );
   }
 }

@@ -5,19 +5,27 @@ import 'package:lomba_frontend/core/validators.dart';
 import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/users/bloc/user_event.dart';
+import 'package:number_paginator/number_paginator.dart';
 
 import '../../../core/fakedata.dart';
 import '../../../core/widgets/snackbar_notification.dart';
-import '../../../data/models/sort_model.dart';
 import '../../../domain/entities/orgauser.dart';
 import '../../../domain/entities/user.dart';
-import '../../orgas/bloc/orgauser_dialog_edit_cubit.dart';
 import '../bloc/user_bloc.dart';
+import '../bloc/user_cubit.dart';
 import '../bloc/user_state.dart';
-import '../bloc/userorga_dialog_edit_cubit.dart';
 
 class UsersPage extends StatelessWidget {
   UsersPage({Key? key}) : super(key: key);
+  final TextEditingController _searchController = TextEditingController();
+  final int _fixPageSize = 10;
+
+//Ordenamiento
+  final Map<String, String> listFields = <String, String>{
+    "Email": "email",
+    "Nombre": "name",
+    "Usuario": "username"
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -36,35 +44,44 @@ class UsersPage extends StatelessWidget {
         builder: (context, state) {
           return ScaffoldManager(
             title: _variableAppBar(context, state),
-            floatingActionButton:
-                (state is UserListLoaded || state is UserStart)?
-                    Row(
-                      children: [
-                        const SizedBox(
-                          width: 30,
-                        ),
-                        FloatingActionButton(
+            floatingActionButton: (state is UserListLoaded ||
+                    state is UserStart)
+                ? Row(
+                    children: [
+                      const SizedBox(
+                        width: 30,
+                      ),
+                      FloatingActionButton(
                           key: const ValueKey("btnAddOptionNotInOrga"),
                           tooltip: 'Asociar usuario',
                           onPressed: () {
-                            context.read<UserBloc>().add(const OnUserListNotInOrga(SortModel(null), 1, 10));
+                            if (state is UserListLoaded) {
+                              context.read<UserBloc>().add(OnUserListNotInOrga(
+                                  _searchController.text,
+                                  state.orgaId,
+                                  <String, int>{listFields.values.first: 1},
+                                  1,
+                                  _fixPageSize));
+                            }
                           },
-                          child: const Icon(Icons.group_add)
-                        ),
-                        const Expanded(
-                          child: SizedBox(width: 18,)
-                        ),
-                        FloatingActionButton(
-                          key: const ValueKey("btnAddOption"),
-                          tooltip: 'Agregar usuario',
-                          onPressed: () {
-                            context.read<UserBloc>().add(const OnUserPrepareForAdd());
-                          },
-                          child: const Icon(Icons.person_add),
-                        ),
-                      ],
-                    )
-                    : null,
+                          child: const Icon(Icons.group_add)),
+                      const Expanded(
+                          child: SizedBox(
+                        width: 18,
+                      )),
+                      FloatingActionButton(
+                        key: const ValueKey("btnAddOption"),
+                        tooltip: 'Agregar usuario',
+                        onPressed: () {
+                          context
+                              .read<UserBloc>()
+                              .add(const OnUserPrepareForAdd());
+                        },
+                        child: const Icon(Icons.person_add),
+                      ),
+                    ],
+                  )
+                : null,
             child: SingleChildScrollView(
                 child: Center(
               child: Column(
@@ -90,11 +107,13 @@ class UsersPage extends StatelessWidget {
     final TextEditingController usernameController = TextEditingController();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
-    final TextEditingController repeatPasswordController = TextEditingController();
+    final TextEditingController repeatPasswordController =
+        TextEditingController();
     final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
     if (state is UserStart) {
-      context.read<UserBloc>().add(const OnUserListLoad("", "", "", 1));
+      context.read<UserBloc>().add(OnUserListLoad(
+          "", "", <String, int>{listFields.values.first: 1}, 1, 10));
     }
     if (state is UserLoading) {
       return SizedBox(
@@ -110,6 +129,86 @@ class UsersPage extends StatelessWidget {
     }
     if (state is UserListLoaded) {
       return Column(children: [
+        Container(
+          margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: TextFormField(
+                      controller: _searchController,
+                      cursorColor: Colors.grey,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none),
+                        hintText: 'Buscar usuarios',
+                        hintStyle:
+                            const TextStyle(color: Colors.grey, fontSize: 18),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        context.read<UserBloc>().add(OnUserListLoad(
+                            state.orgaId,
+                            _searchController.text,
+                            <String, int>{listFields.values.first: 1},
+                            1,
+                            10));
+                      },
+                      icon: const Icon(Icons.search)),
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 200,
+                    child: NumberPaginator(
+                      initialPage: state.pageIndex - 1,
+                      numberPages: state.totalPages,
+                      contentBuilder: (index) => Expanded(
+                        child: Center(
+                          child: Text(
+                              "Página: ${index + 1} de ${state.totalPages}"),
+                        ),
+                      ),
+                      onPageChange: (int index) {
+                        context.read<UserBloc>().add(OnUserListLoad(
+                            state.orgaId,
+                            _searchController.text,
+                            <String, int>{state.fieldsOrder.keys.first: 1},
+                            index + 1,
+                            _fixPageSize));
+                      },
+                    ),
+                  ),
+                  const VerticalDivider(),
+                  const Text("Orden:"),
+                  const VerticalDivider(),
+                  _sortDropdownButtonUsersInOrga(state, listFields, context)
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Text(
+                  "${(state.searchText != "" ? "Buscando por \"${state.searchText}\", mostrando " : "Mostrando ")}${state.itemCount} registros de ${state.totalItems}."),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
+          ),
+        ),
+        const Divider(),
         ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
@@ -158,6 +257,86 @@ class UsersPage extends StatelessWidget {
 
     if (state is UserListNotInOrgaLoaded) {
       return Column(children: [
+        Container(
+          margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: TextFormField(
+                      controller: _searchController,
+                      cursorColor: Colors.grey,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none),
+                        hintText: 'Buscar usuarios',
+                        hintStyle:
+                            const TextStyle(color: Colors.grey, fontSize: 18),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        context.read<UserBloc>().add(OnUserListNotInOrga(
+                            state.orgaId,
+                            _searchController.text,
+                            <String, int>{listFields.values.first: 1},
+                            1,
+                            _fixPageSize));
+                      },
+                      icon: const Icon(Icons.search)),
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 200,
+                    child: NumberPaginator(
+                      initialPage: state.pageIndex - 1,
+                      numberPages: state.totalPages,
+                      contentBuilder: (index) => Expanded(
+                        child: Center(
+                          child: Text(
+                              "Página: ${index + 1} de ${state.totalPages}"),
+                        ),
+                      ),
+                      onPageChange: (int index) {
+                        context.read<UserBloc>().add(OnUserListNotInOrga(
+                            state.orgaId,
+                            _searchController.text,
+                            <String, int>{state.fieldsOrder.keys.first: 1},
+                            index + 1,
+                            _fixPageSize));
+                      },
+                    ),
+                  ),
+                  const VerticalDivider(),
+                  const Text("Orden:"),
+                  const VerticalDivider(),
+                  _sortDropdownButtonUsersNotInOrga(state, listFields, context)
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Text(
+                  "${(state.searchText != "" ? "Buscando por \"${state.searchText}\", mostrando " : "Mostrando ")}${state.itemCount} registros de ${state.totalItems}."),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
+          ),
+        ),
+        const Divider(),
         ListView.builder(
           shrinkWrap: true,
           itemCount: state.users.length,
@@ -168,66 +347,60 @@ class UsersPage extends StatelessWidget {
                   children: [
                     Expanded(
                         child: TextButton(
-                            child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Column(
-                                  children: [
-                                    ListTile(
-                                      leading: const Icon(Icons.switch_account),
-                                      title: Text(
-                                        state.users[index].name,
-                                        style: const TextStyle(fontSize: 18),
-                                      ),
-                                      subtitle: Text(
-                                          '${state.users[index].username} / ${state.users[index].email}',
-                                          style: const TextStyle(fontSize: 12)),
-                                    ),
-                                  ],
-                                )),
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => GestureDetector(
-                                      onTap: () =>
-                                          Navigator.pop(context),
-                                      child: _showEditingOrgaUserDialog(
-                                          context,
-                                          state.orgaUser,
-                                          state.users[index]))).then(
-                                (value) {
-                                  if (value != null) {
-                                    if ((value! as UserOrgaDialogEditState).deleted) {
-                                      //eliminar
+                      child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            children: [
+                              ListTile(
+                                leading: const Icon(Icons.switch_account),
+                                title: Text(
+                                  state.users[index].name,
+                                  style: const TextStyle(fontSize: 18),
+                                ),
+                                subtitle: Text(
+                                    '${state.users[index].username} / ${state.users[index].email}',
+                                    style: const TextStyle(fontSize: 12)),
+                              ),
+                            ],
+                          )),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => GestureDetector(
+                                onTap: () => Navigator.pop(context),
+                                child: _showEditingOrgaUserDialog(context,
+                                    state.orgaUser, state.users[index]))).then(
+                          (value) {
+                            if (value != null) {
+                              if ((value! as UserOrgaDialogEditState).deleted) {
+                                //eliminar
 
-                                      context.read<UserBloc>().add(
-                                          OnUserOrgaDelete(
-                                              state.orgaUser));
-                                    } else {
-                                      //actualizar
-                                      List<String> roles = [];
-                                      bool enabled = (value!
-                                              as UserOrgaDialogEditState)
-                                          .checks["enabled"]!;
-                                      Roles.toList().forEach((element) {
-                                        if ((value!
-                                                as UserOrgaDialogEditState)
-                                            .checks[element]!) {
-                                          roles.add(element);
-                                        }
-                                      });
-                                      context.read<UserBloc>().add(
-                                          OnUserOrgaAdd(
-                                              state.orgaUser.orgaId,
-                                              state.users[index].id,
-                                              roles,
-                                              enabled));
-                                    }
+                                context
+                                    .read<UserBloc>()
+                                    .add(OnUserOrgaDelete(state.orgaUser));
+                              } else {
+                                //actualizar
+                                List<String> roles = [];
+                                bool enabled =
+                                    (value! as UserOrgaDialogEditState)
+                                        .checks["enabled"]!;
+                                Roles.toList().forEach((element) {
+                                  if ((value! as UserOrgaDialogEditState)
+                                      .checks[element]!) {
+                                    roles.add(element);
                                   }
-                                },
-                              );
-                            },
-                          )
-                        ),
+                                });
+                                context.read<UserBloc>().add(OnUserOrgaAdd(
+                                    state.orgaUser.orgaId,
+                                    state.users[index].id,
+                                    roles,
+                                    enabled));
+                              }
+                            }
+                          },
+                        );
+                      },
+                    )),
                     Icon(
                         state.users[index].enabled
                             ? Icons.toggle_on
@@ -399,40 +572,30 @@ class UsersPage extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (context) => GestureDetector(
-                            onTap: () =>
-                                Navigator.pop(context),
+                            onTap: () => Navigator.pop(context),
                             child: _showEditingOrgaUserDialog(
-                                context,
-                                state.orgaUser,
-                                state.user))).then(
+                                context, state.orgaUser, state.user))).then(
                       (value) {
                         if (value != null) {
-                          if ((value!
-                                  as UserOrgaDialogEditState)
-                              .deleted) {
+                          if ((value! as UserOrgaDialogEditState).deleted) {
                             //eliminar
 
-                            context.read<UserBloc>().add(
-                                OnUserOrgaDelete(
-                                    state.orgaUser));
+                            context
+                                .read<UserBloc>()
+                                .add(OnUserOrgaDelete(state.orgaUser));
                           } else {
                             //actualizar
                             List<String> roles = [];
-                            bool enabled = (value!
-                                    as UserOrgaDialogEditState)
+                            bool enabled = (value! as UserOrgaDialogEditState)
                                 .checks["enabled"]!;
                             Roles.toList().forEach((element) {
-                              if ((value!
-                                      as UserOrgaDialogEditState)
+                              if ((value! as UserOrgaDialogEditState)
                                   .checks[element]!) {
                                 roles.add(element);
                               }
                             });
                             context.read<UserBloc>().add(
-                                OnUserOrgaEdit(
-                                    state.orgaUser,
-                                    roles,
-                                    enabled));
+                                OnUserOrgaEdit(state.orgaUser, roles, enabled));
                           }
                         }
                       },
@@ -448,9 +611,12 @@ class UsersPage extends StatelessWidget {
                     key: const ValueKey('btnVolver'),
                     icon: const Icon(Icons.arrow_back),
                     onPressed: () {
-                      context
-                          .read<UserBloc>()
-                          .add(const OnUserListLoad("", "", "", 1));
+                      context.read<UserBloc>().add(OnUserListLoad(
+                          "",
+                          _searchController.text,
+                          <String, int>{listFields.values.first: 1},
+                          1,
+                          10));
                     },
                     label: const Text("Volver")),
               ],
@@ -613,9 +779,12 @@ class UsersPage extends StatelessWidget {
                       padding: const EdgeInsets.all(15.0),
                       child: ElevatedButton.icon(
                           onPressed: () {
-                            context
-                                .read<UserBloc>()
-                                .add(const OnUserListLoad("", "", "", 1));
+                            context.read<UserBloc>().add(OnUserListLoad(
+                                "",
+                                _searchController.text,
+                                <String, int>{listFields.values.first: 1},
+                                1,
+                                10));
                           },
                           icon: const Icon(Icons.cancel),
                           label: const Text('Cancel')),
@@ -737,7 +906,12 @@ class UsersPage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              context.read<UserBloc>().add(const OnUserListLoad("", "", "", 1));
+              context.read<UserBloc>().add(OnUserListLoad(
+                  "",
+                  _searchController.text,
+                  <String, int>{listFields.values.first: 1},
+                  1,
+                  10));
             },
           ));
     } else if (state is UserListNotInOrgaLoaded) {
@@ -746,7 +920,12 @@ class UsersPage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              context.read<UserBloc>().add(const OnUserListLoad("", "", "", 1));
+              context.read<UserBloc>().add(OnUserListLoad(
+                  "",
+                  _searchController.text,
+                  <String, int>{listFields.values.first: 1},
+                  1,
+                  10));
             },
           ));
     }
@@ -788,51 +967,52 @@ class UsersPage extends StatelessWidget {
                                       .read<UserOrgaDialogEditCubit>()
                                       .changeValue("enabled", value!)
                                 })),
-                        (orgaUser.userId != '')?
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) => GestureDetector(
-                                      onTap: () => Navigator.pop(context),
-                                      child: AlertDialog(
-                                        title: const Text(
-                                            '¿Desea eliminar la asociación?'),
-                                        content: const Text(
-                                            'Esta acción afecta el acceso de los usuarios al sistema'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            key: const ValueKey(
-                                                "btnConfirmDeleteOrgaUser"),
-                                            child: const Text("Eliminar"),
-                                            onPressed: () {
-                                              Navigator.pop(context, true);
-                                            },
-                                          ),
-                                          TextButton(
-                                            key: const ValueKey(
-                                                "btnCancelDeleteOrgaUser"),
-                                            child: const Text('Cancelar'),
-                                            onPressed: () {
-                                              Navigator.pop(context, false);
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    )).then((value) {
-                              if (value) {
-                                state.deleted = true;
-                                Navigator.pop(context, state);
-                              }
-                            });
-                          },
-                          key: const ValueKey("btnEliminarAsociacion"),
-                          icon: const Icon(Icons.delete),
-                          label: const Text("Eliminar asociación")
-                        )
-                        : const SizedBox(
-                          width: 1,
-                        ),
+                        (orgaUser.userId != '')
+                            ? ElevatedButton.icon(
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => GestureDetector(
+                                            onTap: () => Navigator.pop(context),
+                                            child: AlertDialog(
+                                              title: const Text(
+                                                  '¿Desea eliminar la asociación?'),
+                                              content: const Text(
+                                                  'Esta acción afecta el acceso de los usuarios al sistema'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  key: const ValueKey(
+                                                      "btnConfirmDeleteOrgaUser"),
+                                                  child: const Text("Eliminar"),
+                                                  onPressed: () {
+                                                    Navigator.pop(
+                                                        context, true);
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  key: const ValueKey(
+                                                      "btnCancelDeleteOrgaUser"),
+                                                  child: const Text('Cancelar'),
+                                                  onPressed: () {
+                                                    Navigator.pop(
+                                                        context, false);
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          )).then((value) {
+                                    if (value) {
+                                      state.deleted = true;
+                                      Navigator.pop(context, state);
+                                    }
+                                  });
+                                },
+                                key: const ValueKey("btnEliminarAsociacion"),
+                                icon: const Icon(Icons.delete),
+                                label: const Text("Eliminar asociación"))
+                            : const SizedBox(
+                                width: 1,
+                              ),
                       ],
                     ),
                     const VerticalDivider(),
@@ -894,4 +1074,49 @@ class UsersPage extends StatelessWidget {
     );
   }
 
+  DropdownButton<String> _sortDropdownButtonUsersInOrga(UserListLoaded state,
+      Map<String, String> listFields, BuildContext context) {
+    return DropdownButton(
+      style: const TextStyle(fontSize: 14, color: Colors.black),
+      value: state.fieldsOrder.keys.first,
+      items: listFields.entries.map<DropdownMenuItem<String>>((field) {
+        return DropdownMenuItem<String>(
+          value: field.value,
+          child: Text(field.key),
+        );
+      }).toList(),
+      onChanged: (String? value) {
+        context.read<UserBloc>().add(OnUserListLoad(
+            state.orgaId,
+            state.searchText,
+            <String, int>{value!: 1},
+            state.pageIndex,
+            _fixPageSize));
+      },
+    );
+  }
+
+  DropdownButton<String> _sortDropdownButtonUsersNotInOrga(
+      UserListNotInOrgaLoaded state,
+      Map<String, String> listFields,
+      BuildContext context) {
+    return DropdownButton(
+      style: const TextStyle(fontSize: 14, color: Colors.black),
+      value: state.fieldsOrder.keys.first,
+      items: listFields.entries.map<DropdownMenuItem<String>>((field) {
+        return DropdownMenuItem<String>(
+          value: field.value,
+          child: Text(field.key),
+        );
+      }).toList(),
+      onChanged: (String? value) {
+        context.read<UserBloc>().add(OnUserListNotInOrga(
+            state.orgaId,
+            state.searchText,
+            <String, int>{value!: 1},
+            state.pageIndex,
+            _fixPageSize));
+      },
+    );
+  }
 }
