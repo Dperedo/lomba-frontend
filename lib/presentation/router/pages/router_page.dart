@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/presentation/nav/bloc/nav_state.dart';
@@ -10,14 +12,15 @@ import '../../nav/bloc/nav_event.dart';
 
 class RouterPage extends StatelessWidget {
   final NavItem naveItem;
-
+  final Map<String, dynamic>? args;
   const RouterPage({
     Key? key,
     required this.naveItem,
+    this.args,
   }) : super(key: key);
 
   void _handleItemRoute(BuildContext context, NavItem item) {
-    BlocProvider.of<NavBloc>(context).add(NavigateTo(item, context, null));
+    BlocProvider.of<NavBloc>(context).add(NavigateTo(item, context, args));
     Navigator.pop(context);
   }
 
