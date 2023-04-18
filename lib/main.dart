@@ -189,7 +189,7 @@ class _MyApp extends State<MyApp> {
       return const SettingAdminPage();
     }
     if (state.selectedItem == NavItem.pagePost) {
-      return const PostPage();
+      return PostPage(postId: state.args!["id"].toString());
     }
   }
 }

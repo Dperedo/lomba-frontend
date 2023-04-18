@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lomba_frontend/core/fakedata.dart';
+import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/orgas/bloc/orga_bloc.dart';
 import 'package:lomba_frontend/presentation/orgas/bloc/orga_event.dart';
 import 'package:lomba_frontend/presentation/orgas/bloc/orga_state.dart';
@@ -68,16 +69,21 @@ void main() {
     );
   }
 
-/*
-  Widget makeTestableWidget(Widget body) {
-    return BlocProvider<OrgaBloc>.value(
-      value: mockOrgaBloc,
-      child: MaterialApp(
-        home: body,
-      ),
+  Widget makeTestableWidgetWithScreen(Widget body) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<OrgaUserBloc>.value(
+          value: mockOrgaUserBloc,
+        ),
+        BlocProvider<OrgaBloc>.value(
+          value: mockOrgaBloc,
+        ),
+      ],
+      child:
+          MaterialApp(home: SizedBox(width: 2400, height: 1600, child: body)),
     );
   }
-*/
+
   final tOrga = fakeListOrgas[1].toEntity();
   final tUser2 = fakeListUsers[1].toEntity();
   final tOrga2 = fakeListOrgas[1].toEntity();
@@ -425,7 +431,8 @@ void main() {
             1));
         when(() => mockOrgaBloc.state).thenReturn(OrgaLoaded(tOrga2, ""));
         //act
-        await tester.pumpWidget(makeTestableWidget(OrgasPage()));
+
+        await tester.pumpWidget(makeTestableWidgetWithScreen(OrgasPage()));
 
         Finder userButton =
             find.byKey(ValueKey("btnTxtUser${fakeListUsers[0].id}"));
