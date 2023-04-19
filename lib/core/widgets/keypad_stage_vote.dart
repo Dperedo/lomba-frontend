@@ -6,6 +6,9 @@ import '../../domain/entities/workflow/imagecontent.dart';
 import '../../domain/entities/workflow/post.dart';
 import '../../domain/entities/workflow/videocontent.dart';
 import '../../domain/entities/workflow/vote.dart';
+import '../../presentation/nav/bloc/nav_bloc.dart';
+import '../../presentation/nav/bloc/nav_event.dart';
+import '../../presentation/nav/bloc/nav_state.dart';
 import '../../presentation/popular/bloc/popular_bloc.dart';
 import '../../presentation/popular/bloc/popular_cubit.dart';
 import '../../presentation/popular/bloc/popular_event.dart';
@@ -58,7 +61,10 @@ class KeypadVoteVoted extends StatelessWidget {
             const SizedBox(
               width: 5,
             ),
-            showCommentsButton(context, () {}),
+            showCommentsButton(context, () {
+              BlocProvider.of<NavBloc>(context).add(NavigateTo(
+                  NavItem.pagePost, context, <String, dynamic>{"id": post.id}));
+            }),
             const SizedBox(
               width: 5,
             ),
@@ -117,7 +123,12 @@ class KeypadVotePopular extends StatelessWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                  showCommentsButton(context, () {}),
+                  showCommentsButton(context, () {
+                    BlocProvider.of<NavBloc>(context).add(NavigateTo(
+                        NavItem.pagePost,
+                        context,
+                        <String, dynamic>{"id": post.id}));
+                  }),
                   const SizedBox(
                     width: 5,
                   ),
@@ -177,7 +188,16 @@ class KeypadVoteRecent extends StatelessWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                  showCommentsButton(context, () {}),
+                  showBookmarkButton(context, () {}),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  showCommentsButton(context, () {
+                    BlocProvider.of<NavBloc>(context).add(NavigateTo(
+                        NavItem.pagePost,
+                        context,
+                        <String, dynamic>{"id": post.id}));
+                  }),
                   const SizedBox(
                     width: 5,
                   ),
@@ -312,6 +332,28 @@ OutlinedButton showFavoriteButton(
         Icons.favorite,
         size: 35,
         color: Colors.black12,
+      ));
+}
+
+OutlinedButton showBookmarkButton(
+    BuildContext context, VoidCallback onPressedFunction) {
+  return OutlinedButton(
+      style: ButtonStyle(
+        shape: MaterialStateProperty.resolveWith(
+          (states) => RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            side: BorderSide(
+              color: Theme.of(context).secondaryHeaderColor,
+              width: 2,
+            ),
+          ),
+        ),
+      ),
+      onPressed: onPressedFunction,
+      child: const Icon(
+        Icons.bookmark_add,
+        size: 35,
+        color: Colors.grey,
       ));
 }
 

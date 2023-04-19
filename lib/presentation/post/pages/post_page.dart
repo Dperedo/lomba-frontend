@@ -14,7 +14,9 @@ import '../bloc/post_event.dart';
 import '../bloc/post_state.dart';
 
 class PostPage extends StatelessWidget {
-  const PostPage({Key? key}) : super(key: key);
+  const PostPage({Key? key, required this.postId}) : super(key: key);
+
+  final String postId;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class PostPage extends StatelessWidget {
           }
         },
         child: ScaffoldManager(
-          title: AppBar(),//_variableAppBar(context, state),
+          title: AppBar(), //_variableAppBar(context, state),
           child: SingleChildScrollView(
               child: Center(
                   child: BodyFormatter(
@@ -59,7 +61,7 @@ class PostPage extends StatelessWidget {
     final TextEditingController contentController = TextEditingController();
 
     if (state is PostStart) {
-      context.read<PostBloc>().add(OnPostLoad(state.postId));
+      context.read<PostBloc>().add(OnPostLoad(postId));
     }
     if (state is PostLoading) {
       return SizedBox(
@@ -72,25 +74,24 @@ class PostPage extends StatelessWidget {
     }
     if (state is PostLoaded) {
       final String content = 'Texto';
-      BlocBuilder<PostLiveCubit, PostLiveState>(
-        builder: (context, statecubit) {
-          return SizedBox(
-            width: 600,
-            child: Column(
-              children: [
-                const SizedBox(height: 40),
-                ShowPosts(
-                  post: state.post,
-                  child: null,
-                  /*KeypadVoteRecent(
+      BlocBuilder<PostLiveCubit, PostLiveState>(builder: (context, statecubit) {
+        return SizedBox(
+          width: 600,
+          child: Column(
+            children: [
+              const SizedBox(height: 40),
+              ShowPosts(
+                post: state.post,
+                child: null,
+                /*KeypadVoteRecent(
                     context: context,
                     post: state.post,
                     statecubit: statecubit,
                     validLogin: state.validLogin,
                   ),*/
-                ),
-                const SizedBox(height: 40),
-                /*ListTile(shape: const RoundedRectangleBorder(
+              ),
+              const SizedBox(height: 40),
+              /*ListTile(shape: const RoundedRectangleBorder(
                     side: BorderSide(
                     color: Colors.grey,
                     width: 2),
@@ -114,11 +115,10 @@ class PostPage extends StatelessWidget {
                     hintText: 'Texto',
                   ),
                 ),*/
-              ],
-            ),
-          );
-        }
-      );
+            ],
+          ),
+        );
+      });
     }
 
     return const SizedBox();

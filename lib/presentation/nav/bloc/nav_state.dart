@@ -8,8 +8,8 @@ import 'package:equatable/equatable.dart';
 
 class NavState extends Equatable {
   final NavItem selectedItem;
-  const NavState(this.selectedItem);
-
+  const NavState(this.selectedItem, this.args);
+  final Map<String, dynamic>? args;
   @override
   List<Object> get props => [selectedItem];
 }

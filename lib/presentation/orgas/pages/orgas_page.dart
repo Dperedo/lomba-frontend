@@ -482,7 +482,7 @@ class OrgasPage extends StatelessWidget {
       create: (context) => OrgaUserDialogEditCubit(orgaUser),
       child: Dialog(
         child: Container(
-          height: 450,
+          height: 600,
           width: 450,
           child: Padding(
             padding: const EdgeInsets.all(10),

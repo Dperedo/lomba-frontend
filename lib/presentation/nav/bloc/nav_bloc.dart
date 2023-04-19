@@ -48,7 +48,7 @@ import 'nav_state.dart';
 ///desea navegar, con eso emite un estado con el destino a navegar.
 
 class NavBloc extends Bloc<NavEvent, NavState> {
-  NavBloc() : super(const NavState(NavItem.pageRecent)) {
+  NavBloc() : super(const NavState(NavItem.pageRecent, null)) {
     on<NavigateTo>(
       (event, emit) async {
         if (event.destination != state.selectedItem) {
@@ -149,21 +149,25 @@ class NavBloc extends Bloc<NavEvent, NavState> {
               break;
             case NavItem.pageSettingSuper:
               {
-                event.context.read<SettingSuperBloc>().add(OnSettingSuperStarter());
+                event.context
+                    .read<SettingSuperBloc>()
+                    .add(OnSettingSuperStarter());
               }
               break;
             case NavItem.pageSettingAdmin:
               {
-                event.context.read<SettingAdminBloc>().add(OnSettingAdminStarter());
+                event.context
+                    .read<SettingAdminBloc>()
+                    .add(OnSettingAdminStarter());
               }
               break;
             case NavItem.pagePost:
               {
-                event.context.read<PostBloc>().add(OnPostLoad(event.id!));
+                event.context.read<PostBloc>().add(const OnPostStarter(''));
               }
               break;
           }
-          emit(NavState(event.destination));
+          emit(NavState(event.destination, event.args));
         }
       },
     );
