@@ -1,12 +1,5 @@
-import 'dart:math';
-
-import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_file_downloader/flutter_file_downloader.dart';
-import 'package:lomba_frontend/domain/entities/workflow/textcontent.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../domain/entities/workflow/imagecontent.dart';
@@ -203,10 +196,8 @@ class KeypadVoteRecent extends StatelessWidget {
 
 Widget showDownloadButton(
     BuildContext context, Post post) {
-  double? _progress;
   
-  return //_progress != null ? const CircularProgressIndicator() : 
-  OutlinedButton(
+  return OutlinedButton(
       style: ButtonStyle(
         shape: MaterialStateProperty.resolveWith(
           (states) => RoundedRectangleBorder(
@@ -221,40 +212,34 @@ Widget showDownloadButton(
       onPressed: () async {
         if (post.postitems.last.type == 'image') {
           final file = post.postitems.last.content as ImageContent;
-          if(await canLaunch(file.url)) {
-            await launch(file.url);
+          if(await canLaunchUrl(Uri.parse(file.url))) {
+            await launchUrl(
+              Uri.parse(file.url),
+              );
           } else {
             throw 'No se pudo lanzar la URL file.url';
           }
 
-          final directory = await getApplicationDocumentsDirectory();
-          final savePath = directory.path + '/imagen';
+          //final directory = await getApplicationDocumentsDirectory();
+          //final savePath = directory.path + '/imagen';
 
-          final taskId = await FlutterDownloader.enqueue(
+          /*final taskId = await FlutterDownloader.enqueue(
             url: file.url,
-            savedDir: directory.path,
+            savedDir: '',//directory.path,
             fileName: 'imagen',
             showNotification: true,
             openFileFromNotification: true,
-          );
+          );*/
         } else if (post.postitems.last.type == 'video') {
           final file = post.postitems.last.content as VideoContent;
-          if(await canLaunch(file.url)) {
-            await launch(file.url);
+          if(await canLaunchUrl(Uri.parse(file.url))) {
+            await launchUrl(
+              Uri.parse(file.url),
+              );
           } else {
             throw 'No se pudo lanzar la URL file.url';
           }
 
-          final directory = await getApplicationDocumentsDirectory();
-          final savePath = directory.path + '/video';
-
-          final taskId = await FlutterDownloader.enqueue(
-            url: file.url,
-            savedDir: directory.path,
-            fileName: 'video',
-            showNotification: true,
-            openFileFromNotification: true,
-          );
         }
       },
       child: const Icon(
