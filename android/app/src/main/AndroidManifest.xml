@@ -2,11 +2,11 @@
     package="com.example.lomba_frontend">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <intent>
+    <!--<intent>
         <action android:name="android.intent.action.VIEW"/>
         <data android:scheme="http" android:host="localhost" android:pathPrefix="/"/>
         <data android:scheme="https" android:host="localhost" android:pathPrefix="/"/>
-    </intent>
+    </intent>-->
    <application
         android:label="lomba_frontend"
         android:name="${applicationName}"
