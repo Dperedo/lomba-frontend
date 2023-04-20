@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/validators.dart';
@@ -61,11 +62,11 @@ class AddContentPage extends StatelessWidget {
   Widget _bodyAddContent(BuildContext context, GlobalKey<FormState> key) {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController contentController = TextEditingController();
-    final TextEditingController contentControllerMedia = TextEditingController();
+    final TextEditingController contentControllerMedia =
+        TextEditingController();
 
     String? _validateFields(String value) {
-      if (value.isEmpty &&
-          contentControllerMedia.text.isEmpty) {
+      if (value.isEmpty && contentControllerMedia.text.isEmpty) {
         return 'Por favor, complete al menos uno de los campos';
       }
       return null;
@@ -128,7 +129,8 @@ class AddContentPage extends StatelessWidget {
                               children: <Widget>[
                                 statecubit.fileId != ""
                                     ? Container(
-                                        child: widgetImagenOrVideo(statecubit.filename,statecubit),
+                                        child: widgetImagenOrVideo(
+                                            statecubit.filename, statecubit),
                                       )
                                     : Container(
                                         padding: const EdgeInsets.all(5.0),
@@ -168,13 +170,21 @@ class AddContentPage extends StatelessWidget {
                                                     PlatformFile file =
                                                         result.files.first;
                                                     if (file.size != 0) {
+                                                      Uint8List? fileBytes;
+                                                      if (!kIsWeb) {
+                                                        fileBytes = File(
+                                                                file.path!)
+                                                            .readAsBytesSync();
+                                                      } else
+                                                        fileBytes = file.bytes;
+
                                                       contentControllerMedia
                                                           .text = file.name;
                                                       context
                                                           .read<
                                                               AddContentLiveCubit>()
                                                           .showImageOrVideo(
-                                                            file.bytes!,
+                                                            fileBytes!,
                                                             file.name,
                                                             state.userId,
                                                             state.orgaId,
@@ -350,24 +360,25 @@ class AddContentPage extends StatelessWidget {
         filename.endsWith(".jpeg") ||
         filename.endsWith(".gif") ||
         filename.endsWith(".png")) {
-      return Image.memory(statecubit.mediafile,
-                              fit: BoxFit.fitWidth,);
-    } else if (filename.endsWith(".mp4") && statecubit.cloudFile!=null ||
-        filename.endsWith(".mov") && statecubit.cloudFile!=null ||
-        filename.endsWith(".wmv") && statecubit.cloudFile!=null ||
-        filename.endsWith(".avi") && statecubit.cloudFile!=null) {
+      return Image.memory(
+        statecubit.mediafile,
+        fit: BoxFit.fitWidth,
+      );
+    } else if (filename.endsWith(".mp4") && statecubit.cloudFile != null ||
+        filename.endsWith(".mov") && statecubit.cloudFile != null ||
+        filename.endsWith(".wmv") && statecubit.cloudFile != null ||
+        filename.endsWith(".avi") && statecubit.cloudFile != null) {
       return ShowVideoPlayer(videoUrl: statecubit.cloudFile?.url ?? "");
     }
     return Container(
-      padding: const EdgeInsets.all(5.0),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5.0), // Radius of the border
-          border: Border.all(
-            width: 1,
-            color: Colors.grey, // Color of the border
-          )
-      ),
-      child: const CircularProgressIndicator());
+        padding: const EdgeInsets.all(5.0),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0), // Radius of the border
+            border: Border.all(
+              width: 1,
+              color: Colors.grey, // Color of the border
+            )),
+        child: const CircularProgressIndicator());
   }
 }
