@@ -22,7 +22,7 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
     this._getCloudFile,
     this._registerCloudFile,
   ) : super(AddContentLiveState(const <String, bool>{"keepasdraft": false}, "",
-            "", Uint8List(0), "", false, false, null, 0, 0));
+            "", Uint8List(0), "", false, false, null, 0, 0, "", ""));
 
   void changeValue(String name, bool value) {
     emit(state.copyWithChangeCheck(name: name, changeState: value));
@@ -130,6 +130,14 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
     emit(state.copyWithProgressIndicator(
         localProgress: false, remoteProgress: false));
   }
+
+  void changeTitle(String title) {
+    emit(state.copyWithTitle(titlePost: title));
+  }
+
+  void changeText(String text) {
+    emit(state.copyWithText(textPost: text));
+  }
 }
 
 class AddContentLiveState extends Equatable {
@@ -146,6 +154,8 @@ class AddContentLiveState extends Equatable {
 
   final int mediaHeight;
   final int mediaWidth;
+  final String title;
+  final String text;
   @override
   List<Object?> get props => [
         checks,
@@ -158,20 +168,23 @@ class AddContentLiveState extends Equatable {
         cloudFile,
         mediaHeight,
         mediaWidth,
+        title,
+        text
       ];
 
   const AddContentLiveState(
-    this.checks,
-    this.fileId,
-    this.filename,
-    this.mediafile,
-    this.message,
-    this.showLocalProgress,
-    this.showRemoteProgress,
-    this.cloudFile,
-    this.mediaHeight,
-    this.mediaWidth,
-  );
+      this.checks,
+      this.fileId,
+      this.filename,
+      this.mediafile,
+      this.message,
+      this.showLocalProgress,
+      this.showRemoteProgress,
+      this.cloudFile,
+      this.mediaHeight,
+      this.mediaWidth,
+      this.title,
+      this.text);
 
   AddContentLiveState copyWithChangeCheck(
       {required String name, required bool changeState}) {
@@ -188,7 +201,9 @@ class AddContentLiveState extends Equatable {
         showRemoteProgress,
         cloudFile,
         mediaHeight,
-        mediaWidth);
+        mediaWidth,
+        title,
+        text);
     return ous;
   }
 
@@ -198,50 +213,30 @@ class AddContentLiveState extends Equatable {
     required int mediaHeight,
     required int mediaWidth,
   }) {
-    final ous = AddContentLiveState(
-      checks,
-      id,
-      filename,
-      media,
-      "Subiendo...",
-      true,
-      true,
-      null,
-      mediaHeight,
-      mediaWidth,
-    );
+    final ous = AddContentLiveState(checks, id, filename, media, "Subiendo...",
+        true, true, null, mediaHeight, mediaWidth, title, text);
     return ous;
   }
 
   AddContentLiveState copyWithRemove(
       {required String id, required Uint8List media}) {
-    final ous = AddContentLiveState(
-        checks, id, "", media, "Subiendo...", false, false, null, 0, 0);
+    final ous = AddContentLiveState(checks, id, "", media, "Subiendo...", false,
+        false, null, 0, 0, title, text);
     return ous;
   }
 
   AddContentLiveState copyWithProgressIndicator(
       {required bool localProgress, required bool remoteProgress}) {
     final ous = AddContentLiveState(checks, fileId, filename, mediafile, "",
-        localProgress, remoteProgress, null, 0, 0);
+        localProgress, remoteProgress, null, 0, 0, title, text);
     return ous;
   }
 
   AddContentLiveState copyWithCloudFile({
     required CloudFile cloudFile,
   }) {
-    final ous = AddContentLiveState(
-      checks,
-      fileId,
-      filename,
-      mediafile,
-      "",
-      false,
-      false,
-      cloudFile,
-      mediaHeight,
-      mediaWidth,
-    );
+    final ous = AddContentLiveState(checks, fileId, filename, mediafile, "",
+        false, false, cloudFile, mediaHeight, mediaWidth, title, text);
     return ous;
   }
 
@@ -249,17 +244,56 @@ class AddContentLiveState extends Equatable {
     required String name,
   }) {
     final ous = AddContentLiveState(
-      checks,
-      fileId,
-      name,
-      mediafile,
-      message,
-      showLocalProgress,
-      showRemoteProgress,
-      cloudFile,
-      mediaHeight,
-      mediaWidth,
-    );
+        checks,
+        fileId,
+        name,
+        mediafile,
+        message,
+        showLocalProgress,
+        showRemoteProgress,
+        cloudFile,
+        mediaHeight,
+        mediaWidth,
+        title,
+        text);
+    return ous;
+  }
+
+  AddContentLiveState copyWithTitle({
+    required String titlePost,
+  }) {
+    final ous = AddContentLiveState(
+        checks,
+        fileId,
+        filename,
+        mediafile,
+        message,
+        showLocalProgress,
+        showRemoteProgress,
+        cloudFile,
+        mediaHeight,
+        mediaWidth,
+        titlePost,
+        text);
+    return ous;
+  }
+
+  AddContentLiveState copyWithText({
+    required String textPost,
+  }) {
+    final ous = AddContentLiveState(
+        checks,
+        fileId,
+        filename,
+        mediafile,
+        message,
+        showLocalProgress,
+        showRemoteProgress,
+        cloudFile,
+        mediaHeight,
+        mediaWidth,
+        title,
+        textPost);
     return ous;
   }
 }

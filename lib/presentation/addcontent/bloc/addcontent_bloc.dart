@@ -48,39 +48,40 @@ class AddContentBloc extends Bloc<AddContentEvent, AddContentState> {
           final userId = session?.getUserId();
           final orgaId = session?.getOrgaId();
 
-          var filetype='';
-          if (event.cloudFile!=null) {}
-
-
-          filetype = event.cloudFile!.filetype;
+          String filetype = '';
+          if (event.cloudFile != null) {
+            filetype = event.cloudFile!.filetype;
+          }
 
           final result = await _addMultiPost.execute(
               orgaId!,
               userId!,
-              event.text==''? null:TextContent(text: event.text),
-              event.cloudFile != null && event.cloudFile!.filetype.startsWith("image")?
-              ImageContent(
-                url: event.cloudFile!.url,
-                size: event.cloudFile!.size,
-                filetype: event.cloudFile!.filetype,
-                cloudFileId: event.cloudFile!.id,
-                height: event.mediaHeight,
-                width: event.mediaWidth,
-                description: ''
-              ):null,
-              event.cloudFile != null && event.cloudFile!.filetype.startsWith("video")?
-              VideoContent(
-                url: event.cloudFile!.url,
-                size: event.cloudFile!.size,
-                filetype: event.cloudFile!.filetype,
-                cloudFileId: event.cloudFile!.id,
-                width: event.mediaWidth,
-                height: event.mediaHeight,
-                description: '',
-                thumbnailUrl: '',
-                thumbnailSize: 0,
-                thumbnailCloudFileId: ''
-              ):null,
+              event.text == '' ? null : TextContent(text: event.text),
+              event.cloudFile != null &&
+                      event.cloudFile!.filetype.startsWith("image")
+                  ? ImageContent(
+                      url: event.cloudFile!.url,
+                      size: event.cloudFile!.size,
+                      filetype: event.cloudFile!.filetype,
+                      cloudFileId: event.cloudFile!.id,
+                      height: event.mediaHeight,
+                      width: event.mediaWidth,
+                      description: '')
+                  : null,
+              event.cloudFile != null &&
+                      event.cloudFile!.filetype.startsWith("video")
+                  ? VideoContent(
+                      url: event.cloudFile!.url,
+                      size: event.cloudFile!.size,
+                      filetype: event.cloudFile!.filetype,
+                      cloudFileId: event.cloudFile!.id,
+                      width: event.mediaWidth,
+                      height: event.mediaHeight,
+                      description: '',
+                      thumbnailUrl: '',
+                      thumbnailSize: 0,
+                      thumbnailCloudFileId: '')
+                  : null,
               event.title,
               flowId,
               event.isDraft);
@@ -97,15 +98,15 @@ class AddContentBloc extends Bloc<AddContentEvent, AddContentState> {
         //-------------------
         SessionModel? session;
         final resultSession = await _getSession.execute();
-          resultSession.fold(
-              (l) => emit(AddContentError(l.message)),
-              (r) => {
-                    session = SessionModel(
-                        token: r.token, username: r.username, name: r.name)
-                  });
+        resultSession.fold(
+            (l) => emit(AddContentError(l.message)),
+            (r) => {
+                  session = SessionModel(
+                      token: r.token, username: r.username, name: r.name)
+                });
 
-          final userId = session?.getUserId();
-          final orgaId = session?.getOrgaId();
+        final userId = session?.getUserId();
+        final orgaId = session?.getOrgaId();
         //-------------------
         emit(AddContentEdit(userId!, orgaId!));
       },

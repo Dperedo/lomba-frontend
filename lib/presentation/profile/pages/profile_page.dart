@@ -5,9 +5,6 @@ import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 
 import '../../../core/validators.dart';
 import '../../../core/widgets/snackbar_notification.dart';
-import '../../users/bloc/user_bloc.dart';
-import '../../users/bloc/user_event.dart';
-import '../../users/bloc/user_state.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_event.dart';
 import '../bloc/profile_state.dart';
@@ -18,30 +15,28 @@ import '../bloc/profile_state.dart';
 ///Se deberían indicar aquí datos personales, contraseña, foto y demás
 ///cosas del usuario.
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
-
+  ProfilePage({Key? key}) : super(key: key);
+  final GlobalKey<FormState> _keyUpdatePassword = GlobalKey<FormState>();
+  final GlobalKey<FormState> _keyProfileEditing = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
-      return BlocListener<ProfileBloc, ProfileState>(
-        listener: (context, state) {
-          if (state is ProfileError && state.message != "") {
-            snackBarNotify(context, state.message, Icons.cancel_outlined);
-          } else if (state is ProfileStart && state.message != "") {
-            snackBarNotify(context, state.message, Icons.account_circle);
-          }
-        },
-        child: ScaffoldManager(
-          title: _variableAppBar(context, state),
-          child: SingleChildScrollView(
-              child: Center(
-                  child: BodyFormatter(
-            screenWidth: MediaQuery.of(context).size.width,
-            child: _bodyProfile(context, state),
-          ))),
-        ),
+    return BlocListener<ProfileBloc, ProfileState>(listener: (context, state) {
+      if (state is ProfileError && state.message != "") {
+        snackBarNotify(context, state.message, Icons.cancel_outlined);
+      } else if (state is ProfileStart && state.message != "") {
+        snackBarNotify(context, state.message, Icons.account_circle);
+      }
+    }, child: BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
+      return ScaffoldManager(
+        title: _variableAppBar(context, state),
+        child: SingleChildScrollView(
+            child: Center(
+                child: BodyFormatter(
+          screenWidth: MediaQuery.of(context).size.width,
+          child: _bodyProfile(context, state),
+        ))),
       );
-    });
+    }));
   }
 
   AppBar _variableAppBar(BuildContext context, ProfileState state) {
@@ -60,12 +55,12 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _bodyProfile(BuildContext context, ProfileState state) {
-    final TextEditingController _repeatPasswordController = TextEditingController();
+    final TextEditingController _repeatPasswordController =
+        TextEditingController();
     final TextEditingController _passwordController = TextEditingController();
     final TextEditingController nameController = TextEditingController();
     final TextEditingController usernameController = TextEditingController();
     final TextEditingController emailController = TextEditingController();
-    final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
     if (state is ProfileStart) {
       context.read<ProfileBloc>().add(const OnProfileLoad(null));
@@ -117,7 +112,9 @@ class ProfilePage extends StatelessWidget {
               height: 30,
               child: ElevatedButton(
                   onPressed: (() {
-                    context.read<ProfileBloc>().add(OnProfileEditPrepare(state.user));
+                    context
+                        .read<ProfileBloc>()
+                        .add(OnProfileEditPrepare(state.user));
                   }),
                   child: const Text('Editar Perfil')),
             ),
@@ -129,7 +126,9 @@ class ProfilePage extends StatelessWidget {
               height: 30,
               child: ElevatedButton(
                   onPressed: (() {
-                    context.read<ProfileBloc>().add(OnProfileShowPasswordModifyForm(state.user));
+                    context
+                        .read<ProfileBloc>()
+                        .add(OnProfileShowPasswordModifyForm(state.user));
                   }),
                   child: const Text('Cambiar contraseña')),
             ),
@@ -139,18 +138,20 @@ class ProfilePage extends StatelessWidget {
     }
 
     if (state is ProfileEditing) {
+      print("ProfileEditing");
       nameController.text = state.user.name;
       usernameController.text = state.user.username;
       emailController.text = state.user.email;
       return Padding(
         padding: const EdgeInsets.all(10),
         child: Form(
-            key: _key,
+            key: _keyProfileEditing,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
                   controller: nameController,
+                  textInputAction: TextInputAction.next,
                   validator: (value) => Validators.validateName(value ?? ""),
                   decoration: const InputDecoration(
                     labelText: 'Nombre',
@@ -159,12 +160,15 @@ class ProfilePage extends StatelessWidget {
                 ),
                 TextFormField(
                   onChanged: (value) {
-                    context.read<ProfileBloc>().add(OnProfileValidate(
-                        state.user.id,
-                        usernameController.text,
-                        emailController.text,
-                        state));
+                    if (value != state.user.username) {
+                      context.read<ProfileBloc>().add(OnProfileValidate(
+                          state.user.id,
+                          usernameController.text,
+                          emailController.text,
+                          state));
+                    }
                   },
+                  textInputAction: TextInputAction.next,
                   controller: usernameController,
                   validator: (value) => state.validateUsername(value ?? ""),
                   decoration: const InputDecoration(
@@ -173,12 +177,15 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 TextFormField(
+                  textInputAction: TextInputAction.none,
                   onChanged: (value) {
-                    context.read<ProfileBloc>().add(OnProfileValidate(
-                        state.user.id,
-                        usernameController.text,
-                        emailController.text,
-                        state));
+                    if (value != state.user.email) {
+                      context.read<ProfileBloc>().add(OnProfileValidate(
+                          state.user.id,
+                          usernameController.text,
+                          emailController.text,
+                          state));
+                    }
                   },
                   controller: emailController,
                   validator: (value) => state.validateEmail(value ?? ""),
@@ -193,9 +200,42 @@ class ProfilePage extends StatelessWidget {
                       padding: const EdgeInsets.all(15.0),
                       child: ElevatedButton.icon(
                           onPressed: () {
-                            context
-                                .read<ProfileBloc>()
-                                .add(OnProfileLoad(state.user.id));
+                            showDialog(
+                                context: context,
+                                builder: (context) => GestureDetector(
+                                      onTap: () => Navigator.pop(context),
+                                      child: AlertDialog(
+                                        title: const Text(
+                                            '¿Desea salir de la edición del usuario?'),
+                                        content: const Text(
+                                            'Los cambios no han sido guardados'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            key: const ValueKey("btnYesExit"),
+                                            child: const Text('Sí, salir'),
+                                            onPressed: () {
+                                              Navigator.pop(context, true);
+                                            },
+                                          ),
+                                          TextButton(
+                                            key: const ValueKey(
+                                                "btnKeepEditing"),
+                                            child:
+                                                const Text('Seguir editando'),
+                                            onPressed: () {
+                                              Navigator.pop(context, false);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    )).then((value) => {
+                                  if (value)
+                                    {
+                                      context
+                                          .read<ProfileBloc>()
+                                          .add(OnProfileLoad(state.user.id))
+                                    }
+                                });
                           },
                           icon: const Icon(Icons.cancel),
                           label: const Text('Cancel')),
@@ -204,7 +244,8 @@ class ProfilePage extends StatelessWidget {
                       padding: const EdgeInsets.all(15.0),
                       child: ElevatedButton.icon(
                           onPressed: () {
-                            if (_key.currentState?.validate() == true) {
+                            if (_keyProfileEditing.currentState?.validate() ==
+                                true) {
                               context.read<ProfileBloc>().add(OnProfileEdit(
                                   state.user.id,
                                   nameController.text,
@@ -225,7 +266,7 @@ class ProfilePage extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.all(10),
         child: Form(
-          key: _key,
+          key: _keyUpdatePassword,
           child: Column(children: [
             ListTile(
               leading: const Icon(Icons.switch_account_rounded),
@@ -268,7 +309,9 @@ class ProfilePage extends StatelessWidget {
                   key: const ValueKey("btnViewCancelarCambios"),
                   label: const Text("Cancelar"),
                   onPressed: () {
-                    context.read<ProfileBloc>().add(OnProfileLoad(state.user.id));
+                    context
+                        .read<ProfileBloc>()
+                        .add(OnProfileLoad(state.user.id));
                   },
                 ),
                 const VerticalDivider(),
@@ -277,7 +320,7 @@ class ProfilePage extends StatelessWidget {
                   key: const ValueKey("btnViewSaveNewPassword"),
                   label: const Text("Guardar cambios"),
                   onPressed: () {
-                    if (_key.currentState?.validate() == true) {
+                    if (_keyUpdatePassword.currentState?.validate() == true) {
                       context.read<ProfileBloc>().add(OnProfileSaveNewPassword(
                           _passwordController.text, state.user));
                       showDialog(

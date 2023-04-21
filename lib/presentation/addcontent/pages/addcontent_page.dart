@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -29,42 +28,37 @@ class AddContentPage extends StatelessWidget {
   late VideoPlayerController _videoPlayerController;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddContentBloc, AddContentState>(
-      builder: (context, state) {
-        return BlocListener<AddContentBloc, AddContentState>(
-          listener: (context, state) {
-            if (state is AddContentError && state.message != "") {
-              snackBarNotify(context, state.message, Icons.exit_to_app);
-            }
-          },
-          child: ScaffoldManager(
-            title: AppBar(
-              title: const Text("Agregar contenido"),
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Center(
-                    child: BodyFormatter(
-                      screenWidth: MediaQuery.of(context).size.width,
-                      child: _bodyAddContent(context, _key),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
+    return BlocListener<AddContentBloc, AddContentState>(
+      listener: (context, state) {
+        if (state is AddContentError && state.message != "") {
+          snackBarNotify(context, state.message, Icons.exit_to_app);
+        }
       },
+      child: ScaffoldManager(
+        title: AppBar(
+          title: const Text("Agregar contenido"),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Center(
+                child: BodyFormatter(
+                  screenWidth: MediaQuery.of(context).size.width,
+                  child: _bodyAddContent(context),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  Widget _bodyAddContent(BuildContext context, GlobalKey<FormState> key) {
+  Widget _bodyAddContent(BuildContext context) {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController contentController = TextEditingController();
     final TextEditingController contentControllerMedia =
         TextEditingController();
-
     String? _validateFields(String value) {
       if (value.isEmpty && contentControllerMedia.text.isEmpty) {
         return 'Por favor, complete al menos uno de los campos';
@@ -78,51 +72,51 @@ class AddContentPage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(25.0),
         child: SizedBox(
-          child: Form(
-            key: key,
-            child: BlocBuilder<AddContentBloc, AddContentState>(
-              builder: (context, state) {
-                if (state is AddContentStart) {
-                  context.read<AddContentBloc>().add(const OnAddContentUp());
-                }
-                if (state is AddContentFile) {
-                  return Image.memory(
-                    state.file,
-                    fit: BoxFit.cover,
-                  );
-                }
-                if (state is AddContentEdit) {
-                  return BlocBuilder<AddContentLiveCubit, AddContentLiveState>(
-                    builder: (context, statecubit) {
-                      return Column(
-                        children: [
-                          TextFormField(
-                            key: const ValueKey('txtTitle'),
-                            maxLength: 150,
-                            controller: titleController,
-                            validator: (value) =>
-                                Validators.validateName(value ?? ""),
-                            decoration: const InputDecoration(
-                                labelText: 'Título', icon: Icon(Icons.title)),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          TextFormField(
-                            key: const ValueKey('txtContent'),
-                            maxLength: 500,
-                            maxLines: 4,
-                            controller: contentController,
-                            validator: (value) => _validateFields(value ?? ""),
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Texto',
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
+          child: BlocBuilder<AddContentBloc, AddContentState>(
+            builder: (context, state) {
+              if (state is AddContentStart) {
+                context.read<AddContentBloc>().add(const OnAddContentUp());
+              }
+              if (state is AddContentFile) {
+                return Image.memory(
+                  state.file,
+                  fit: BoxFit.cover,
+                );
+              }
+              if (state is AddContentEdit) {
+                return Form(
+                  key: _key,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        key: const ValueKey('txtTitle'),
+                        maxLength: 150,
+                        controller: titleController,
+                        validator: (value) =>
+                            Validators.validateName(value ?? ""),
+                        decoration: const InputDecoration(
+                            labelText: 'Título', icon: Icon(Icons.title)),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      TextFormField(
+                        key: const ValueKey('txtContent'),
+                        maxLength: 500,
+                        maxLines: 4,
+                        controller: contentController,
+                        validator: (value) => _validateFields(value ?? ""),
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Texto',
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      BlocBuilder<AddContentLiveCubit, AddContentLiveState>(
+                        builder: (context, statecubit) {
+                          return Container(
                             width: double.infinity,
                             //width: MediaQuery.of(context).size.width,
                             child: Stack(
@@ -223,115 +217,126 @@ class AddContentPage extends StatelessWidget {
                                     : const SizedBox(),
                               ],
                             ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Row(
+                          );
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      BlocBuilder<AddContentLiveCubit, AddContentLiveState>(
+                        builder: (context, statecubit) {
+                          return Column(
                             children: [
-                              const Text('Dejar como borrador'),
-                              Expanded(
-                                child: Checkbox(
-                                  value: statecubit.checks["keepasdraft"]!,
-                                  onChanged: (bool? value) {
-                                    context
-                                        .read<AddContentLiveCubit>()
-                                        .changeValue("keepasdraft",
-                                            !statecubit.checks["keepasdraft"]!);
-                                  },
+                              Row(
+                                children: [
+                                  const Text('Dejar como borrador'),
+                                  Expanded(
+                                    child: Checkbox(
+                                      value: statecubit.checks["keepasdraft"]!,
+                                      onChanged: (bool? value) {
+                                        context
+                                            .read<AddContentLiveCubit>()
+                                            .changeValue(
+                                                "keepasdraft",
+                                                !statecubit
+                                                    .checks["keepasdraft"]!);
+                                      },
+                                    ),
+                                  ),
+                                  statecubit.showRemoteProgress
+                                      ? const CircularProgressIndicator()
+                                      : const SizedBox()
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              SizedBox(
+                                width: 150,
+                                height: 50,
+                                child: ElevatedButton.icon(
+                                  icon: const Icon(Icons.publish),
+                                  key: const ValueKey("btnSavedUp"),
+                                  label: const Text("Subir"),
+                                  onPressed: (statecubit.showRemoteProgress) &&
+                                          contentController.text == ""
+                                      ? null
+                                      : () {
+                                          if (_key.currentState?.validate() ==
+                                              true) {
+                                            context
+                                                .read<AddContentBloc>()
+                                                .add(OnAddContentAdd(
+                                                  titleController.text,
+                                                  contentController.text,
+                                                  statecubit.cloudFile,
+                                                  statecubit
+                                                      .checks["keepasdraft"]!,
+                                                  statecubit.mediaHeight,
+                                                  statecubit.mediaWidth,
+                                                ));
+                                          }
+                                        },
                                 ),
                               ),
-                              statecubit.showRemoteProgress
-                                  ? const CircularProgressIndicator()
-                                  : const SizedBox()
+                              const Divider(
+                                height: 10,
+                              ),
                             ],
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          SizedBox(
-                            width: 150,
-                            height: 50,
-                            child: ElevatedButton.icon(
-                              icon: const Icon(Icons.publish),
-                              key: const ValueKey("btnSavedUp"),
-                              label: const Text("Subir"),
-                              onPressed: statecubit.showRemoteProgress ||
-                                      statecubit.cloudFile == null
-                                  ? null
-                                  : () {
-                                      if (key.currentState?.validate() ==
-                                          true) {
-                                        context
-                                            .read<AddContentBloc>()
-                                            .add(OnAddContentAdd(
-                                              titleController.text,
-                                              contentController.text,
-                                              statecubit.cloudFile,
-                                              statecubit.checks["keepasdraft"]!,
-                                              statecubit.mediaHeight,
-                                              statecubit.mediaWidth,
-                                            ));
-                                      }
-                                    },
-                            ),
-                          ),
-                          const Divider(
-                            height: 10,
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              }
 
-                if (state is AddContentUp) {
-                  return Center(
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 100,
-                        ),
-                        const Text('Agregado!'),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        ElevatedButton.icon(
-                            icon: const Icon(Icons.add),
-                            label: const Text('Subir más contenido'),
-                            onPressed: () {
-                              context
-                                  .read<AddContentBloc>()
-                                  .add(const OnAddContentUp());
-                              context.read<AddContentLiveCubit>().removeMedia();
-                            })
-                      ],
-                    ),
-                  );
-                }
+              if (state is AddContentUp) {
+                return Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 100,
+                      ),
+                      const Text('Agregado!'),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      ElevatedButton.icon(
+                          icon: const Icon(Icons.add),
+                          label: const Text('Subir más contenido'),
+                          onPressed: () {
+                            context
+                                .read<AddContentBloc>()
+                                .add(const OnAddContentUp());
+                            context.read<AddContentLiveCubit>().removeMedia();
+                          })
+                    ],
+                  ),
+                );
+              }
 
-                if (state is AddContentLoading) {
-                  return SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height / 1.3,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
+              if (state is AddContentLoading) {
+                return SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 1.3,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
 
-                if (state is AddContentError) {
-                  return Center(
-                    child: Text(state.message),
-                  );
-                }
+              if (state is AddContentError) {
+                return Center(
+                  child: Text(state.message),
+                );
+              }
 
-                return const SizedBox();
-              },
-            ),
+              return const SizedBox();
+            },
           ),
         ),
       ),
