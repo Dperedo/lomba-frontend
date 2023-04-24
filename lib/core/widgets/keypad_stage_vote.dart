@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/domain/entities/workflow/imagecontent.dart';
 
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../domain/entities/workflow/imagecontent.dart';
 import '../../domain/entities/workflow/post.dart';
 import '../../domain/entities/workflow/postitem.dart';
 import '../../domain/entities/workflow/videocontent.dart';
@@ -214,7 +216,7 @@ class KeypadVoteRecent extends StatelessWidget {
   }
 }
 
-OutlinedButton showDownloadButton(BuildContext context, Post post) {
+Widget showDownloadButton(BuildContext context, Post post) {
   PostItem? postItem = null;
   String elementType = '';
   String elementUrl = '';
@@ -239,9 +241,6 @@ OutlinedButton showDownloadButton(BuildContext context, Post post) {
     }
   }
 
-  print(elementType);
-  print(elementUrl);
-
   return OutlinedButton(
       style: ButtonStyle(
         shape: MaterialStateProperty.resolveWith(
@@ -257,25 +256,13 @@ OutlinedButton showDownloadButton(BuildContext context, Post post) {
       onPressed: postItem == null
           ? null
           : () async {
-              /*if (await canLaunchUrl(Uri.parse(file.url))) {
+              if (await canLaunchUrl(Uri.parse(elementUrl))) {
                 await launchUrl(
-                  Uri.parse(file.url),
+                  Uri.parse(elementUrl),
                 );
               } else {
                 throw 'No se pudo lanzar la URL file.url';
               }
-*/
-              /*
-              FileSaver.instance
-                  .saveFile(
-                      name: "File",
-                      link: elementUrl,
-                      ext: elementExtension,
-                      mimeType: MimeType.other)
-                  .then((value) {
-                print(value);
-              });
-              */
             },
       child: const Icon(
         Icons.download,
