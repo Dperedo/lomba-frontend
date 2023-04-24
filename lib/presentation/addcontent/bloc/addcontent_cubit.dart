@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/domain/usecases/storage/get_cloudfile.dart';
 import 'package:lomba_frontend/domain/usecases/storage/register_cloudfile.dart';
 import 'package:lomba_frontend/domain/usecases/storage/upload_cloudfile.dart';
-import 'package:flutter_video_info/flutter_video_info.dart';
 
 import '../../../domain/entities/storage/cloudfile.dart';
 
