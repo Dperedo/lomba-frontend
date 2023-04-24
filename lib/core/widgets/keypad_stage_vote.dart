@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/domain/entities/workflow/imagecontent.dart';
 
 import '../../domain/entities/workflow/post.dart';
+import '../../domain/entities/workflow/postitem.dart';
+import '../../domain/entities/workflow/videocontent.dart';
 import '../../domain/entities/workflow/vote.dart';
 import '../../presentation/nav/bloc/nav_bloc.dart';
 import '../../presentation/nav/bloc/nav_event.dart';
@@ -69,7 +72,7 @@ class KeypadVoteVoted extends StatelessWidget {
             const SizedBox(
               width: 5,
             ),
-            showDownloadButton(context, () {}),
+            showDownloadButton(context, post),
           ],
         )
       ],
@@ -133,7 +136,7 @@ class KeypadVotePopular extends StatelessWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                  showDownloadButton(context, () {}),
+                  showDownloadButton(context, post),
                 ],
               )
             ],
@@ -202,7 +205,7 @@ class KeypadVoteRecent extends StatelessWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                  showDownloadButton(context, () {}),
+                  showDownloadButton(context, post),
                 ],
               ),
             ],
@@ -211,8 +214,34 @@ class KeypadVoteRecent extends StatelessWidget {
   }
 }
 
-OutlinedButton showDownloadButton(
-    BuildContext context, VoidCallback onPressedFunction) {
+OutlinedButton showDownloadButton(BuildContext context, Post post) {
+  PostItem? postItem = null;
+  String elementType = '';
+  String elementUrl = '';
+  String elementExtension = '';
+  String elementMimeType = '';
+
+  if (post.postitems
+      .any((element) => element.type == "image" || element.type == "video")) {
+    postItem = post.postitems.firstWhere(
+        (element) => element.type == "image" || element.type == "video");
+
+    elementType = postItem.type;
+    if (elementType == 'image') {
+      elementUrl = (postItem.content as ImageContent).url;
+      elementExtension = elementUrl.split('.').last;
+      elementMimeType = (postItem.content as ImageContent).filetype;
+    }
+    if (elementType == 'video') {
+      elementUrl = (postItem.content as VideoContent).url;
+      elementExtension = elementUrl.split('.').last;
+      elementMimeType = (postItem.content as VideoContent).filetype;
+    }
+  }
+
+  print(elementType);
+  print(elementUrl);
+
   return OutlinedButton(
       style: ButtonStyle(
         shape: MaterialStateProperty.resolveWith(
@@ -225,7 +254,29 @@ OutlinedButton showDownloadButton(
           ),
         ),
       ),
-      onPressed: onPressedFunction,
+      onPressed: postItem == null
+          ? null
+          : () async {
+              /*if (await canLaunchUrl(Uri.parse(file.url))) {
+                await launchUrl(
+                  Uri.parse(file.url),
+                );
+              } else {
+                throw 'No se pudo lanzar la URL file.url';
+              }
+*/
+              /*
+              FileSaver.instance
+                  .saveFile(
+                      name: "File",
+                      link: elementUrl,
+                      ext: elementExtension,
+                      mimeType: MimeType.other)
+                  .then((value) {
+                print(value);
+              });
+              */
+            },
       child: const Icon(
         Icons.download,
         size: 35,
