@@ -1,3 +1,4 @@
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -7,60 +8,57 @@ class ShowVideoPlayer extends StatefulWidget {
   const ShowVideoPlayer({Key? key, required this.videoUrl}) : super(key: key);
 
   @override
-  _ShowVideoPlayerState createState() => _ShowVideoPlayerState();
+  ShowVideoPlayerState createState() => ShowVideoPlayerState();
 }
 
-class _ShowVideoPlayerState extends State<ShowVideoPlayer> {
-  late VideoPlayerController _controller;
-
-  void _playVideo({bool init = false}) {
-    if (!init) {
-      _controller.pause();
-    }
-
-    _controller = VideoPlayerController.network(widget.videoUrl)
-      ..addListener(() => setState(() {}))
-      ..setLooping(true)
-      ..initialize().then((value) => null); //_controller.play());
-  }
+class ShowVideoPlayerState extends State<ShowVideoPlayer> {
+  late VideoPlayerController _videoPlayerController;
+  late ChewieController? _chewieController;
+  //bool isFullScreen = false;
 
   @override
   void initState() {
     super.initState();
-    _playVideo(init: true);
+    _initPlayer();
+  }
+
+  void _initPlayer() async {
+    _videoPlayerController = VideoPlayerController.network(widget.videoUrl)
+      ..addListener(() => setState(() {}))
+      ..setLooping(true)
+      ..initialize().then((value) => null);
+
+    _chewieController = ChewieController(
+      videoPlayerController: _videoPlayerController,
+      autoPlay: false,
+      looping: false,
+      showOptions: false,
+    );
+
+    setState(() {});
   }
 
   @override
   void dispose() {
+    _videoPlayerController.dispose();
+    _chewieController!.dispose();
     super.dispose();
-    _controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      child: AspectRatio(
-          aspectRatio: _controller.value.aspectRatio,
-          child: _controller.value.isInitialized
-              ? Stack(
-                  children: [
-                    SizedBox(
-                      child: VideoPlayer(_controller),
-                    ),
-                    Center(
-                      child: IconButton(
-                          onPressed: () => _controller.value.isPlaying
-                              ? _controller.pause()
-                              : _controller.play(),
-                          icon: Icon(_controller.value.isPlaying
-                              ? Icons.pause
-                              : Icons.play_arrow)),
-                    )
-                  ],
-                )
-              : const Center(
-                  child: CircularProgressIndicator(),
-                )),
+      child: _videoPlayerController.value.isInitialized
+          ? AspectRatio(
+              aspectRatio: _videoPlayerController.value.aspectRatio,
+              child: Chewie(
+                controller: _chewieController!,
+              ),
+            )
+          : const Center(
+              child: CircularProgressIndicator(),
+            ),
     );
+      
   }
 }

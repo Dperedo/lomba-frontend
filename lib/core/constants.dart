@@ -131,6 +131,7 @@ class SideDrawerUserOptions {
   static const String optStage = "stage";
   static const String optSettingSuper = "settingsuper";
   static const String optSettingAdmin = "settingadmin";
+  static const String optPost = "post";
 }
 
 class SettingCodes {

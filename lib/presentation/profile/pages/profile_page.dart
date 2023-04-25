@@ -142,6 +142,7 @@ class ProfilePage extends StatelessWidget {
       nameController.text = state.user.name;
       usernameController.text = state.user.username;
       emailController.text = state.user.email;
+      print(nameController);
       return Padding(
         padding: const EdgeInsets.all(10),
         child: Form(
@@ -263,6 +264,7 @@ class ProfilePage extends StatelessWidget {
       );
     }
     if (state is ProfileUpdatePassword) {
+      print(_passwordController);
       return Padding(
         padding: const EdgeInsets.all(10),
         child: Form(
