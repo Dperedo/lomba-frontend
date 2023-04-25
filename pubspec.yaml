@@ -52,6 +52,9 @@ dependencies:
   video_player: ^2.6.1
   better_player: ^0.0.83
   url_launcher: ^6.1.10
+  volume_controller: ^2.0.6
+  chewie: ^1.4.0
+
 
 dev_dependencies:
   flutter_test:

@@ -47,7 +47,7 @@ class AddContentPage extends StatelessWidget {
                   Center(
                     child: BodyFormatter(
                       screenWidth: MediaQuery.of(context).size.width,
-                      child: _bodyAddContent(context, _key),
+                      child: _bodyAddContent(context),
                     ),
                   ),
                 ],
@@ -59,13 +59,18 @@ class AddContentPage extends StatelessWidget {
     );
   }
 
-  Widget _bodyAddContent(BuildContext context, GlobalKey<FormState> key) {
+  Widget _bodyAddContent(BuildContext context) {
+    //final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
     final TextEditingController titleController = TextEditingController();
     final TextEditingController contentController = TextEditingController();
     final TextEditingController contentControllerMedia =
         TextEditingController();
 
-    String? _validateFields(String value) {
+    String? _validateContents(String value) {
+      print('mostrar valor de value');
+      print(value);
+      print('mostrar valor de _key');
+      print(_key);
       if (value.isEmpty && contentControllerMedia.text.isEmpty) {
         return 'Por favor, complete al menos uno de los campos';
       }
@@ -78,30 +83,30 @@ class AddContentPage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(25.0),
         child: SizedBox(
-          child: Form(
-            key: key,
-            child: BlocBuilder<AddContentBloc, AddContentState>(
-              builder: (context, state) {
-                if (state is AddContentStart) {
-                  context.read<AddContentBloc>().add(const OnAddContentUp());
-                }
-                if (state is AddContentFile) {
-                  return Image.memory(
-                    state.file,
-                    fit: BoxFit.cover,
-                  );
-                }
-                if (state is AddContentEdit) {
-                  return BlocBuilder<AddContentLiveCubit, AddContentLiveState>(
-                    builder: (context, statecubit) {
-                      return Column(
+          child: BlocBuilder<AddContentBloc, AddContentState>(
+            builder: (context, state) {
+              if (state is AddContentStart) {
+                context.read<AddContentBloc>().add(const OnAddContentUp());
+              }
+              if (state is AddContentFile) {
+                return Image.memory(
+                  state.file,
+                  fit: BoxFit.cover,
+                );
+              }
+              if (state is AddContentEdit) {
+                return BlocBuilder<AddContentLiveCubit, AddContentLiveState>(
+                  builder: (context, statecubit) {
+                    return Form(
+                      key: _key,
+                      child: Column(
                         children: [
                           TextFormField(
                             key: const ValueKey('txtTitle'),
                             maxLength: 150,
                             controller: titleController,
-                            validator: (value) =>
-                                Validators.validateName(value ?? ""),
+                            validator: (valueTitle) =>
+                                Validators.validateName(valueTitle ?? ""),
                             decoration: const InputDecoration(
                                 labelText: 'Título', icon: Icon(Icons.title)),
                           ),
@@ -113,7 +118,7 @@ class AddContentPage extends StatelessWidget {
                             maxLength: 500,
                             maxLines: 4,
                             controller: contentController,
-                            validator: (value) => _validateFields(value ?? ""),
+                            validator: (value) => _validateContents(value ?? ""),
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                               hintText: 'Texto',
@@ -177,7 +182,7 @@ class AddContentPage extends StatelessWidget {
                                                             .readAsBytesSync();
                                                       } else
                                                         fileBytes = file.bytes;
-
+                    
                                                       contentControllerMedia
                                                           .text = file.name;
                                                       context
@@ -259,11 +264,10 @@ class AddContentPage extends StatelessWidget {
                               icon: const Icon(Icons.publish),
                               key: const ValueKey("btnSavedUp"),
                               label: const Text("Subir"),
-                              onPressed: statecubit.showRemoteProgress ||
-                                      statecubit.cloudFile == null
+                              onPressed: statecubit.showRemoteProgress
                                   ? null
                                   : () {
-                                      if (key.currentState?.validate() ==
+                                      if (_key.currentState?.validate() ==
                                           true) {
                                         context
                                             .read<AddContentBloc>()
@@ -283,55 +287,55 @@ class AddContentPage extends StatelessWidget {
                             height: 10,
                           ),
                         ],
-                      );
-                    },
-                  );
-                }
+                      ),
+                    );
+                  },
+                );
+              }
 
-                if (state is AddContentUp) {
-                  return Center(
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 100,
-                        ),
-                        const Text('Agregado!'),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        ElevatedButton.icon(
-                            icon: const Icon(Icons.add),
-                            label: const Text('Subir más contenido'),
-                            onPressed: () {
-                              context
-                                  .read<AddContentBloc>()
-                                  .add(const OnAddContentUp());
-                              context.read<AddContentLiveCubit>().removeMedia();
-                            })
-                      ],
-                    ),
-                  );
-                }
+              if (state is AddContentUp) {
+                return Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 100,
+                      ),
+                      const Text('Agregado!'),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      ElevatedButton.icon(
+                          icon: const Icon(Icons.add),
+                          label: const Text('Subir más contenido'),
+                          onPressed: () {
+                            context
+                                .read<AddContentBloc>()
+                                .add(const OnAddContentUp());
+                            context.read<AddContentLiveCubit>().removeMedia();
+                          })
+                    ],
+                  ),
+                );
+              }
 
-                if (state is AddContentLoading) {
-                  return SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height / 1.3,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
+              if (state is AddContentLoading) {
+                return SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 1.3,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
 
-                if (state is AddContentError) {
-                  return Center(
-                    child: Text(state.message),
-                  );
-                }
+              if (state is AddContentError) {
+                return Center(
+                  child: Text(state.message),
+                );
+              }
 
-                return const SizedBox();
-              },
-            ),
+              return const SizedBox();
+            },
           ),
         ),
       ),

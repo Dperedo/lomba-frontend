@@ -168,7 +168,7 @@ class _MyApp extends State<MyApp> {
       return VotedPage();
     }
     if (state.selectedItem == NavItem.pageProfile) {
-      return const ProfilePage();
+      return ProfilePage();
     }
     if (state.selectedItem == NavItem.pageDemoList) {
       return DemoListPage();

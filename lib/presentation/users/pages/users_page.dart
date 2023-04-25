@@ -18,6 +18,7 @@ import '../bloc/user_state.dart';
 class UsersPage extends StatelessWidget {
   UsersPage({Key? key}) : super(key: key);
   final TextEditingController _searchController = TextEditingController();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final int _fixPageSize = 10;
 
 //Ordenamiento
@@ -109,7 +110,7 @@ class UsersPage extends StatelessWidget {
     final TextEditingController passwordController = TextEditingController();
     final TextEditingController repeatPasswordController =
         TextEditingController();
-    final GlobalKey<FormState> _key = GlobalKey<FormState>();
+    
 
     if (state is UserStart) {
       context.read<UserBloc>().add(OnUserListLoad(
