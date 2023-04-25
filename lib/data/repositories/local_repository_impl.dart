@@ -123,6 +123,7 @@ class LocalRepositoryImpl implements LocalRepository {
       opts.add(SideDrawerUserOptions.optRecent);
       opts.add(SideDrawerUserOptions.optLogIn);
       opts.add(SideDrawerUserOptions.optPopular);
+      opts.add(SideDrawerUserOptions.optPost);
     } else {
       opts.add(SideDrawerUserOptions.optLogOff);
       opts.add(SideDrawerUserOptions.optProfile);

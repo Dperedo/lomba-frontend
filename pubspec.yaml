@@ -56,6 +56,8 @@ dependencies:
   url_launcher: ^6.1.10
   flutter_downloader: ^1.10.2
   file_saver: ^0.2.1
+  volume_controller: ^2.0.6
+  chewie: ^1.4.0
 
 
 dev_dependencies:

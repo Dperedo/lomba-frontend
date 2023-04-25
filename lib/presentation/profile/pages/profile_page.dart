@@ -5,9 +5,6 @@ import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 
 import '../../../core/validators.dart';
 import '../../../core/widgets/snackbar_notification.dart';
-import '../../users/bloc/user_bloc.dart';
-import '../../users/bloc/user_event.dart';
-import '../../users/bloc/user_state.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_event.dart';
 import '../bloc/profile_state.dart';
@@ -18,11 +15,14 @@ import '../bloc/profile_state.dart';
 ///Se deberían indicar aquí datos personales, contraseña, foto y demás
 ///cosas del usuario.
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  ProfilePage({Key? key}) : super(key: key);
+
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
+      //print('build BlocBuilder');
       return BlocListener<ProfileBloc, ProfileState>(
         listener: (context, state) {
           if (state is ProfileError && state.message != "") {
@@ -37,11 +37,12 @@ class ProfilePage extends StatelessWidget {
               child: Center(
                   child: BodyFormatter(
             screenWidth: MediaQuery.of(context).size.width,
-            child: _bodyProfile(context, state),
+            child: _bodyProfile(context, state)
+              ),
           ))),
-        ),
       );
-    });
+    }
+    );
   }
 
   AppBar _variableAppBar(BuildContext context, ProfileState state) {
@@ -60,12 +61,13 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _bodyProfile(BuildContext context, ProfileState state) {
+    print('holaa');
     final TextEditingController _repeatPasswordController = TextEditingController();
     final TextEditingController _passwordController = TextEditingController();
     final TextEditingController nameController = TextEditingController();
     final TextEditingController usernameController = TextEditingController();
     final TextEditingController emailController = TextEditingController();
-    final GlobalKey<FormState> _key = GlobalKey<FormState>();
+    
 
     if (state is ProfileStart) {
       context.read<ProfileBloc>().add(const OnProfileLoad(null));
@@ -142,86 +144,90 @@ class ProfilePage extends StatelessWidget {
       nameController.text = state.user.name;
       usernameController.text = state.user.username;
       emailController.text = state.user.email;
+      print(nameController);
       return Padding(
         padding: const EdgeInsets.all(10),
         child: Form(
-            key: _key,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: nameController,
-                  validator: (value) => Validators.validateName(value ?? ""),
-                  decoration: const InputDecoration(
-                    labelText: 'Nombre',
-                    icon: Icon(Icons.account_box),
-                  ),
+          key: _key,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                controller: nameController,
+                key: const ValueKey("nombre"),
+                validator: (value) => Validators.validateName(value ?? ""),
+                decoration: const InputDecoration(
+                  labelText: 'Nombre',
+                  icon: Icon(Icons.account_box),
                 ),
-                TextFormField(
-                  onChanged: (value) {
-                    context.read<ProfileBloc>().add(OnProfileValidate(
-                        state.user.id,
-                        usernameController.text,
-                        emailController.text,
-                        state));
-                  },
-                  controller: usernameController,
-                  validator: (value) => state.validateUsername(value ?? ""),
-                  decoration: const InputDecoration(
-                    labelText: 'Username',
-                    icon: Icon(Icons.account_box_outlined),
-                  ),
+              ),
+              TextFormField(
+                onChanged: (value) {
+                  context.read<ProfileBloc>().add(OnProfileValidate(
+                      state.user.id,
+                      usernameController.text,
+                      emailController.text,
+                      state));
+                },
+                controller: usernameController,
+                validator: (value) => state.validateUsername(value ?? ""),
+                decoration: const InputDecoration(
+                  labelText: 'Username',
+                  icon: Icon(Icons.account_box_outlined),
                 ),
-                TextFormField(
-                  onChanged: (value) {
-                    context.read<ProfileBloc>().add(OnProfileValidate(
-                        state.user.id,
-                        usernameController.text,
-                        emailController.text,
-                        state));
-                  },
-                  controller: emailController,
-                  validator: (value) => state.validateEmail(value ?? ""),
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    icon: Icon(Icons.email),
-                  ),
+              ),
+              TextFormField(
+                onChanged: (value) {
+                  context.read<ProfileBloc>().add(OnProfileValidate(
+                      state.user.id,
+                      usernameController.text,
+                      emailController.text,
+                      state));
+                },
+                controller: emailController,
+                validator: (value) => state.validateEmail(value ?? ""),
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  icon: Icon(Icons.email),
                 ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: ElevatedButton.icon(
-                          onPressed: () {
-                            context
-                                .read<ProfileBloc>()
-                                .add(OnProfileLoad(state.user.id));
-                          },
-                          icon: const Icon(Icons.cancel),
-                          label: const Text('Cancel')),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: ElevatedButton.icon(
-                          onPressed: () {
-                            if (_key.currentState?.validate() == true) {
-                              context.read<ProfileBloc>().add(OnProfileEdit(
-                                  state.user.id,
-                                  nameController.text,
-                                  usernameController.text,
-                                  emailController.text));
-                            }
-                          },
-                          icon: const Icon(Icons.save),
-                          label: const Text('Guardar')),
-                    ),
-                  ],
-                )
-              ],
-            )),
+              ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: ElevatedButton.icon(
+                        onPressed: () {
+                          context
+                              .read<ProfileBloc>()
+                              .add(OnProfileLoad(state.user.id));
+                        },
+                        icon: const Icon(Icons.cancel),
+                        label: const Text('Cancel')),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: ElevatedButton.icon(
+                        onPressed: () {
+                          if (_key.currentState?.validate() == true) {
+                            context.read<ProfileBloc>().add(OnProfileEdit(
+                                state.user.id,
+                                nameController.text,
+                                usernameController.text,
+                                emailController.text));
+                          }
+                        },
+                        icon: const Icon(Icons.save),
+                        label: const Text('Guardar')),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
       );
     }
     if (state is ProfileUpdatePassword) {
+      print(_passwordController);
       return Padding(
         padding: const EdgeInsets.all(10),
         child: Form(

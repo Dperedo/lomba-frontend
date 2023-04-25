@@ -3,13 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 
-import '../../../core/validators.dart';
-import '../../../core/widgets/keypad_stage_vote.dart';
 import '../../../core/widgets/show_posts.dart';
 import '../../../core/widgets/snackbar_notification.dart';
-import '../../../domain/entities/workflow/textcontent.dart';
 import '../bloc/post_bloc.dart';
-import '../bloc/post_cubit.dart';
 import '../bloc/post_event.dart';
 import '../bloc/post_state.dart';
 
@@ -73,8 +69,7 @@ class PostPage extends StatelessWidget {
       );
     }
     if (state is PostLoaded) {
-      final String content = 'Texto';
-      BlocBuilder<PostLiveCubit, PostLiveState>(builder: (context, statecubit) {
+      print(state.post.id);
         return SizedBox(
           width: 600,
           child: Column(
@@ -118,7 +113,6 @@ class PostPage extends StatelessWidget {
             ],
           ),
         );
-      });
     }
 
     return const SizedBox();
