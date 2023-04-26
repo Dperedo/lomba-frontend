@@ -1254,7 +1254,7 @@ packages:
     source: hosted
     version: "1.2.0"
   webview_flutter:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: webview_flutter
       sha256: "392c1d83b70fe2495de3ea2c84531268d5b8de2de3f01086a53334d8b6030a88"
@@ -1326,5 +1326,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.18.0 <3.0.0"
+  dart: ">=2.18.0 <4.0.0"
   flutter: ">=3.3.0"
