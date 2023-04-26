@@ -6,8 +6,10 @@ import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import '../../../core/validators.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../bloc/profile_bloc.dart';
+import '../bloc/profile_cubit.dart';
 import '../bloc/profile_event.dart';
 import '../bloc/profile_state.dart';
+import '../../../injection.dart' as di;
 
 ///Página con el perfil del usuario
 ///
@@ -75,64 +77,95 @@ class ProfilePage extends StatelessWidget {
       );
     }
     if (state is ProfileLoaded) {
-      return SizedBox(
-        width: 600,
-        child: Column(
-          children: [
-            const SizedBox(height: 40),
-            Center(
-              child: SizedBox(
-                width: 120,
-                height: 120,
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: const Icon(
-                      Icons.person,
-                      size: 70,
-                    ) //Image.network('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png')
-                    ),
+      return BlocProvider<ProfileLiveCubit>(
+      create: (context) =>
+          ProfileLiveCubit(di.locator(), di.locator(), di.locator()),
+        child: SizedBox(
+          width: 600,
+          child: Column(
+            children: [
+              const SizedBox(height: 40),
+              BlocBuilder<ProfileLiveCubit, ProfileLiveState>(
+                builder: (context, statecubit) {
+                  return Center(
+                    child:Container(
+                      width: 200,
+                      height: 200,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey,
+                      ),
+                      child: Stack(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {},
+                            child: const Icon(Icons.edit),
+                          ),
+                          const Center(
+                            child: Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 100,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ), 
+                    /*SizedBox(
+                      width: 120,
+                      height: 120,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: const Icon(
+                            Icons.person,
+                            size: 70,
+                          ) //Image.network('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png')
+                          ),
+                    ),*/
+                  );
+                }
               ),
-            ),
-            //const SizedBox(height: 15,),
-            ListTile(
-                leading: const Icon(Icons.person),
-                title: Text(state.user.name)),
-            //const SizedBox(height: 10,),
-            ListTile(
-                leading: const Icon(Icons.person_outline),
-                title: Text(state.user.username)),
-            //const SizedBox(height: 10,),
-            ListTile(
-                leading: const Icon(Icons.mail), title: Text(state.user.email)),
-            const SizedBox(
-              height: 25,
-            ),
-            SizedBox(
-              width: 200,
-              height: 30,
-              child: ElevatedButton(
-                  onPressed: (() {
-                    context
-                        .read<ProfileBloc>()
-                        .add(OnProfileEditPrepare(state.user));
-                  }),
-                  child: const Text('Editar Perfil')),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-              width: 200,
-              height: 30,
-              child: ElevatedButton(
-                  onPressed: (() {
-                    context
-                        .read<ProfileBloc>()
-                        .add(OnProfileShowPasswordModifyForm(state.user));
-                  }),
-                  child: const Text('Cambiar contraseña')),
-            ),
-          ],
+              //const SizedBox(height: 15,),
+              ListTile(
+                  leading: const Icon(Icons.person),
+                  title: Text(state.user.name)),
+              //const SizedBox(height: 10,),
+              ListTile(
+                  leading: const Icon(Icons.person_outline),
+                  title: Text(state.user.username)),
+              //const SizedBox(height: 10,),
+              ListTile(
+                  leading: const Icon(Icons.mail), title: Text(state.user.email)),
+              const SizedBox(
+                height: 25,
+              ),
+              SizedBox(
+                width: 200,
+                height: 30,
+                child: ElevatedButton(
+                    onPressed: (() {
+                      context
+                          .read<ProfileBloc>()
+                          .add(OnProfileEditPrepare(state.user));
+                    }),
+                    child: const Text('Editar Perfil')),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: 200,
+                height: 30,
+                child: ElevatedButton(
+                    onPressed: (() {
+                      context
+                          .read<ProfileBloc>()
+                          .add(OnProfileShowPasswordModifyForm(state.user));
+                    }),
+                    child: const Text('Cambiar contraseña')),
+              ),
+            ],
+          ),
         ),
       );
     }

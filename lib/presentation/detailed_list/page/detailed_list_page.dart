@@ -7,6 +7,7 @@ import '../../../core/validators.dart';
 import '../../../core/widgets/body_formatter.dart';
 import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/show_posts.dart';
+import '../../../core/widgets/show_video_player.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/workflow/flow.dart' as flw;
 import '../../../domain/entities/workflow/stage.dart';
@@ -15,6 +16,7 @@ import '../bloc/detailed_list_bloc.dart';
 import '../bloc/detailed_list_cubit.dart';
 import '../bloc/detailed_list_event.dart';
 import '../bloc/detailed_list_state.dart';
+import '../../../injection.dart' as di;
 
 ///DetailedListPage del sistema, en el futuro debe cambiar a página principal
 ///
@@ -64,7 +66,9 @@ class DetailedListPage extends StatelessWidget {
       "Modificación": "updated"
     };
     return BlocProvider<DetailedListLiveCubit>(
-      create: (context) => DetailedListLiveCubit(),
+      create: (context) => DetailedListLiveCubit(
+        di.locator(), di.locator(), di.locator()
+      ),
       child: SizedBox(
         width: 800,
         child: BlocBuilder<DetailedListBloc, DetailedListState>(
@@ -655,6 +659,115 @@ class DetailedListPage extends StatelessWidget {
                       hintText: 'Contenido del Post',
                     ),
                   ),
+                  /*const SizedBox(
+                        height: 10,
+                      ),
+                      BlocBuilder<AddContentLiveCubit, AddContentLiveState>(
+                        builder: (context, statecubit) {
+                          return Container(
+                            width: double.infinity,
+                            //width: MediaQuery.of(context).size.width,
+                            child: Stack(
+                              children: <Widget>[
+                                statecubit.fileId != ""
+                                    ? Container(
+                                        child: widgetImagenOrVideo(
+                                            statecubit.filename, statecubit),
+                                      )
+                                    : Container(
+                                        padding: const EdgeInsets.all(5.0),
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                5.0), // Radius of the border
+                                            border: Border.all(
+                                              width: 1,
+                                              color: Colors
+                                                  .grey, // Color of the border
+                                            )),
+                                        child: statecubit.showLocalProgress
+                                            ? const CircularProgressIndicator()
+                                            : ElevatedButton.icon(
+                                                onPressed: () async {
+                                                  FilePickerResult? result =
+                                                      await FilePicker.platform
+                                                          .pickFiles(
+                                                    type: FileType.custom,
+                                                    allowedExtensions: [
+                                                      'jpg',
+                                                      'png',
+                                                      'gif',
+                                                      'jpeg',
+                                                      'mp4',
+                                                      'mov',
+                                                      'wmv',
+                                                      'avi'
+                                                    ],
+                                                  );
+                                                  if (result != null) {
+                                                    context
+                                                        .read<
+                                                            AddContentLiveCubit>()
+                                                        .startProgressIndicators();
+                                                    PlatformFile file =
+                                                        result.files.first;
+                                                    if (file.size != 0) {
+                                                      Uint8List? fileBytes;
+                                                      if (!kIsWeb) {
+                                                        fileBytes = File(
+                                                                file.path!)
+                                                            .readAsBytesSync();
+                                                      } else
+                                                        fileBytes = file.bytes;
+
+                                                      contentControllerMedia
+                                                          .text = file.name;
+                                                      context
+                                                          .read<
+                                                              AddContentLiveCubit>()
+                                                          .showImageOrVideo(
+                                                            fileBytes!,
+                                                            file.name,
+                                                            state.userId,
+                                                            state.orgaId,
+                                                          );
+                                                    } else {
+                                                      snackBarNotify(
+                                                          context,
+                                                          "El archivo no puede estar vacío",
+                                                          Icons.error);
+                                                    }
+                                                  } else {
+                                                    // User canceled the picker
+                                                  }
+                                                },
+                                                icon:
+                                                    const Icon(Icons.file_open),
+                                                label: const Text(
+                                                    "Subir imagen o video")),
+                                      ),
+                                statecubit.fileId != ""
+                                    ? Container(
+                                        alignment: Alignment.topRight,
+                                        child: IconButton(
+                                          alignment: Alignment.topRight,
+                                          icon: const Icon(Icons.cancel),
+                                          onPressed: () {
+                                            context
+                                                .read<AddContentLiveCubit>()
+                                                .stopRemoteProgressIndicators();
+                                            context
+                                                .read<AddContentLiveCubit>()
+                                                .removeMedia();
+                                          },
+                                        ),
+                                      )
+                                    : const SizedBox(),
+                              ],
+                            ),
+                          );
+                        },
+                      ),*/
                   const SizedBox(
                     height: 30,
                   ),
@@ -713,5 +826,32 @@ class DetailedListPage extends StatelessWidget {
     }
 
     return AppBar(title: const Text("Todos los Post"));
+  }
+
+  Widget widgetImagenOrVideo(String filename, DetailedListLiveState statecubit) {
+    if (filename.endsWith(".jpg") ||
+        filename.endsWith(".jpeg") ||
+        filename.endsWith(".gif") ||
+        filename.endsWith(".png")) {
+      return Image.memory(
+        statecubit.mediafile,
+        fit: BoxFit.fitWidth,
+      );
+    } else if (filename.endsWith(".mp4") && statecubit.cloudFile != null ||
+        filename.endsWith(".mov") && statecubit.cloudFile != null ||
+        filename.endsWith(".wmv") && statecubit.cloudFile != null ||
+        filename.endsWith(".avi") && statecubit.cloudFile != null) {
+      return ShowVideoPlayer(videoUrl: statecubit.cloudFile?.url ?? "");
+    }
+    return Container(
+        padding: const EdgeInsets.all(5.0),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0), // Radius of the border
+            border: Border.all(
+              width: 1,
+              color: Colors.grey, // Color of the border
+            )),
+        child: const CircularProgressIndicator());
   }
 }

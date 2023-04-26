@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:url_launcher/url_launcher.dart';
@@ -203,11 +204,16 @@ class KeypadVoteRecent extends StatelessWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                  showShareButton(context, () {}),
+                  showDownloadButton(context, post),
                   const SizedBox(
                     width: 5,
                   ),
-                  showDownloadButton(context, post),
+                  showShareButton(context, () {
+                    Clipboard.setData(ClipboardData(text: '${Uri.base}p/${post.id}')).then((result) {
+                        const snackBar = SnackBar(content: Text('URL copiada al portapapeles'));
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    });
+                  }),
                 ],
               ),
             ],
@@ -271,9 +277,28 @@ Widget showDownloadButton(BuildContext context, Post post) {
       ));
 }
 
-OutlinedButton showShareButton(
+Widget showShareButton(
     BuildContext context, VoidCallback onPressedFunction) {
-  return OutlinedButton(
+  return PopupMenuButton<String>(
+    onSelected: (String result) {
+      //print('La opción seleccionada es: $result');
+      if (result == 'opcion_1') {
+        onPressedFunction();
+      }
+    },
+    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+      const PopupMenuItem<String>(
+        value: 'opcion_1',
+        child: Text('Copiar enlace'),
+      ),
+      const PopupMenuItem<String>(
+        value: 'opcion_2',
+        child: Text('Opción 2'),
+      ),
+    ],
+  );
+  
+  /*OutlinedButton(
       style: ButtonStyle(
         shape: MaterialStateProperty.resolveWith(
           (states) => RoundedRectangleBorder(
@@ -290,7 +315,7 @@ OutlinedButton showShareButton(
         Icons.share,
         size: 35,
         color: Colors.blueGrey,
-      ));
+      ));*/
 }
 
 OutlinedButton showCommentsButton(
