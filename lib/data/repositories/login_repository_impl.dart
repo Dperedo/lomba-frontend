@@ -69,7 +69,12 @@ class LoginRepositoryImpl implements LoginRepository {
           username: username,
           email: email,
           enabled: true,
-          builtIn: false);
+          builtIn: false,
+          pictureUrl: null,
+          pictureCloudFileId: null,
+          pictureThumbnailUrl: null,
+          pictureThumbnailCloudFileId: null,
+          );
       final result = await remoteDataSource.registerUser(
           userModel, orgaId, password, role);
 
@@ -121,7 +126,11 @@ class LoginRepositoryImpl implements LoginRepository {
           username: user.username,
           email: user.email,
           enabled: user.enabled,
-          builtIn: user.builtIn);
+          builtIn: user.builtIn,
+          pictureUrl: user.pictureUrl,
+          pictureCloudFileId: user.pictureCloudFileId,
+          pictureThumbnailUrl: user.pictureThumbnailUrl,
+          pictureThumbnailCloudFileId: user.pictureThumbnailCloudFileId,);
 
       final result =
           await remoteDataSource.getAuthenticateGoogle(userModel, googleToken);

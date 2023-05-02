@@ -90,11 +90,12 @@ class OnUserEdit extends UserEvent {
   final String username;
   final String email;
   final bool enabled;
+  final User user;
 
-  const OnUserEdit(this.id, this.name, this.username, this.email, this.enabled);
+  const OnUserEdit(this.id, this.name, this.username, this.email, this.enabled, this.user);
 
   @override
-  List<Object> get props => [id, name, username, email, enabled];
+  List<Object> get props => [id, name, username, email, enabled, user];
 }
 
 class OnUserEnable extends UserEvent {

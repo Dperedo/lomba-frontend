@@ -65,7 +65,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             username: '',
             email: '',
             enabled: true,
-            builtIn: true);
+            builtIn: true,
+            pictureUrl: null,
+            pictureCloudFileId: null,
+            pictureThumbnailUrl: null,
+            pictureThumbnailCloudFileId: null,);
         final result = await _getUser.execute(event.userId);
         result.fold((l) => emit(UserError(l.message)), (r) => user = r);
 
@@ -182,7 +186,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           username: event.username,
           email: event.email,
           enabled: event.enabled,
-          builtIn: false);
+          builtIn: false,
+          pictureUrl: event.user.pictureUrl,
+          pictureCloudFileId: event.user.pictureCloudFileId,
+          pictureThumbnailUrl: event.user.pictureThumbnailUrl,
+          pictureThumbnailCloudFileId: event.user.pictureThumbnailCloudFileId,);
 
       final result = await _updateUser.execute(event.id, user);
       result.fold(
@@ -286,7 +294,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             username: '',
             email: '',
             enabled: false,
-            builtIn: false);
+            builtIn: false,
+            pictureUrl: null,
+            pictureCloudFileId: null,
+            pictureThumbnailUrl: null,
+            pictureThumbnailCloudFileId: null,);
         resUser.fold((l) => emit(UserError(l.message)), (r) => {user = r});
 
         List<OrgaUser> listOrgaUsers = [];
@@ -306,7 +318,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           username: '',
           email: '',
           enabled: false,
-          builtIn: false);
+          builtIn: false,
+          pictureUrl: null,
+          pictureCloudFileId: null,
+          pictureThumbnailUrl: null,
+          pictureThumbnailCloudFileId: null,);
       final resUser = await _getUser.execute(event.orgaUser.userId);
       resUser.fold((l) => emit(UserError(l.message)), (r) => {user = r});
       //-------------

@@ -31,18 +31,21 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       (event, emit) async {
         emit(ProfileLoading());
 
-        String userId = event.id ?? '';
-        SessionModel? sessionModel;
-        if (event.id == null) {
+        String userId = event.userId ?? '';
+        String orgaId = event.orgaId ?? '';
+        if (event.userId == null || event.orgaId == null) {
           final result = await _getSession.execute();
           result.fold((l) => emit(ProfileError(l.message)),
-              (r) => userId = r.getUserId()!);
+            (r) {
+              userId = r.getUserId()!;
+              orgaId = r.getOrgaId()!;
+            });
         }
 
         final resultUser = await _getUser.execute(userId);
 
         resultUser.fold((l) => emit(ProfileError(l.message)),
-            (r) => {emit(ProfileLoaded(r))});
+            (r) => {emit(ProfileLoaded(r, orgaId))});
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );
@@ -58,7 +61,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           username: event.username,
           email: event.email,
           enabled: true,
-          builtIn: false);
+          builtIn: false,
+          pictureUrl: null,
+          pictureCloudFileId: null,
+          pictureThumbnailUrl: null,
+          pictureThumbnailCloudFileId: null,);
 
       final result = await _updateProfile.execute(event.id, user);
       result.fold(
@@ -97,6 +104,28 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
       result.fold((l) => emit(ProfileError(l.message)),
           (r) => {emit(const ProfileStart(" Contraseña Modificada"))});
+    });
+
+    on<OnProfileSaveImagen>((event, emit) async {
+      emit(ProfileLoading());
+
+      final user = User(
+          id: event.user.id,
+          name: event.user.name,
+          username: event.user.username,
+          email: event.user.email,
+          enabled: event.user.enabled,
+          builtIn: event.user.builtIn,
+          pictureUrl: event.imageUrl==''||event.imageUrl==null ? null : event.imageUrl,
+          pictureCloudFileId: event.cloudFileId==''||event.cloudFileId==null ? null : event.cloudFileId,
+          pictureThumbnailUrl: null,
+          pictureThumbnailCloudFileId: null,);
+
+      final result =
+          await _updateProfile.execute(event.user.id, user);
+
+      result.fold((l) => emit(ProfileError(l.message)),
+          (r) => {emit(const ProfileStart("Imagen de Perfil Guardada"))});
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {

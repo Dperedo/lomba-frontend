@@ -1,44 +1,54 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/domain/usecases/storage/get_cloudfile.dart';
-import 'package:lomba_frontend/domain/usecases/storage/register_cloudfile.dart';
-import 'package:lomba_frontend/domain/usecases/storage/upload_cloudfile.dart';
+import 'package:lomba_frontend/domain/usecases/storage/upload_cloudfile_profile.dart';
 
 import '../../../domain/entities/storage/cloudfile.dart';
+import '../../../domain/usecases/storage/register_cloudfile_profile.dart';
 
 class ProfileLiveCubit extends Cubit<ProfileLiveState> {
-  final UploadFile uploadFile;
-  final RegisterCloudFile _registerCloudFile;
+  final UploadFileProfile _uploadFileProfile;
+  final RegisterCloudFileProfile _registerCloudFileProfile;
   final GetCloudFile _getCloudFile;
   late int secondsPassed;
   ProfileLiveCubit(
-    this.uploadFile,
+    this._uploadFileProfile,
     this._getCloudFile,
-    this._registerCloudFile,
-  ) : super(ProfileLiveState( "",
+    this._registerCloudFileProfile,
+  ) : super(ProfileLiveState( "", "",
             "", Uint8List(0), "", false, false, null, 0, 0));
 
-  void showImage(Uint8List image, String userId, String orgaId) async {
+  void showImage(BuildContext context, Uint8List image, String userId, String orgaId) async {
     var cloudFileId = '';
+    var cloudFileIdThumbnail = '';
     secondsPassed = 0;
     var decodedImage = await decodeImageFromList(image);
 
+    if(decodedImage.height>2000 || decodedImage.height>2000) {
+      const snackBar = SnackBar(content: Text('El tamaño de la imagen es muy grande'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return;
+    } else if (image.lengthInBytes > 5500000) {
+      const snackBar = SnackBar(content: Text('El peso de la imagen es muy grande'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return;
+    }
     final imageDoubleHeight = (decodedImage.height * 450) / decodedImage.width;
     final imageHeight = imageDoubleHeight.toInt();
     const imageWidth = 450;
 
-    final resultRegister = await _registerCloudFile.execute(userId, orgaId);
-    resultRegister.fold((l) => null, (r) => cloudFileId = r.id);
+    final resultRegister = await _registerCloudFileProfile.execute(userId, orgaId);
+    resultRegister.fold((l) => null, (r) {cloudFileId = r[0].id; cloudFileIdThumbnail = r[1].id;});
 
-    await uploadFile.execute(image, cloudFileId);
+    await _uploadFileProfile.execute(userId, image, cloudFileId);
 
     emit(state.copyWithMedia(
-        id: cloudFileId,
+        cloudFileId: cloudFileId,
+        cloudFileIdThumbnail: cloudFileIdThumbnail,
         media: image,
         mediaHeight: imageHeight,
         mediaWidth: imageWidth));
@@ -60,7 +70,7 @@ class ProfileLiveCubit extends Cubit<ProfileLiveState> {
   }
 
   void removeMedia() {
-    emit(state.copyWithRemove(id: "", media: Uint8List(0)));
+    emit(state.copyWithRemove(cloudFileId: "", cloudFileIdThumbnail: "", media: Uint8List(0)));
   }
 
   void startProgressIndicators() {
@@ -77,6 +87,7 @@ class ProfileLiveCubit extends Cubit<ProfileLiveState> {
 
 class ProfileLiveState extends Equatable {
   final String fileId;
+  final String fileIdThumbnail;
   final String filename;
   final Uint8List mediafile;
 
@@ -91,6 +102,7 @@ class ProfileLiveState extends Equatable {
   @override
   List<Object?> get props => [
         fileId,
+        fileIdThumbnail,
         filename,
         mediafile,
         message,
@@ -103,6 +115,7 @@ class ProfileLiveState extends Equatable {
 
   const ProfileLiveState(
       this.fileId,
+      this.fileIdThumbnail,
       this.filename,
       this.mediafile,
       this.message,
@@ -113,26 +126,27 @@ class ProfileLiveState extends Equatable {
       this.mediaWidth,);
 
   ProfileLiveState copyWithMedia({
-    required String id,
+    required String cloudFileId,
+    required String cloudFileIdThumbnail,
     required Uint8List media,
     required int mediaHeight,
     required int mediaWidth,
   }) {
-    final ous = ProfileLiveState(id, filename, media, "Subiendo...",
+    final ous = ProfileLiveState(cloudFileId, cloudFileIdThumbnail, filename, media, "Subiendo...",
         true, true, null, mediaHeight, mediaWidth,);
     return ous;
   }
 
   ProfileLiveState copyWithRemove(
-      {required String id, required Uint8List media}) {
-    final ous = ProfileLiveState(id, "", media, "Subiendo...", false,
+      {required String cloudFileId, required String cloudFileIdThumbnail, required Uint8List media}) {
+    final ous = ProfileLiveState(cloudFileId, cloudFileIdThumbnail, "", media, "Subiendo...", false,
         false, null, 0, 0,);
     return ous;
   }
 
   ProfileLiveState copyWithProgressIndicator(
       {required bool localProgress, required bool remoteProgress}) {
-    final ous = ProfileLiveState(fileId, filename, mediafile, "",
+    final ous = ProfileLiveState(fileId, fileIdThumbnail, filename, mediafile, "",
         localProgress, remoteProgress, null, 0, 0,);
     return ous;
   }
@@ -140,7 +154,7 @@ class ProfileLiveState extends Equatable {
   ProfileLiveState copyWithCloudFile({
     required CloudFile cloudFile,
   }) {
-    final ous = ProfileLiveState(fileId, filename, mediafile, "",
+    final ous = ProfileLiveState(fileId, fileIdThumbnail, filename, mediafile, "",
         false, false, cloudFile, mediaHeight, mediaWidth,);
     return ous;
   }

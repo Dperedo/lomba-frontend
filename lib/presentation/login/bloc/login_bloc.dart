@@ -119,7 +119,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               username: credentials.user!.email ?? "",
               email: credentials.user!.email ?? "",
               enabled: true,
-              builtIn: false);
+              builtIn: false,
+              pictureUrl: null,
+              pictureCloudFileId: null,
+              pictureThumbnailUrl: null,
+              pictureThumbnailCloudFileId: null,);
 
           String userToken = await credentials.user!.getIdToken();
 
@@ -175,7 +179,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               username: credentials.user!.email ?? "",
               email: credentials.user!.email ?? "",
               enabled: true,
-              builtIn: false);
+              builtIn: false,
+              pictureUrl: null,
+              pictureCloudFileId: null,
+              pictureThumbnailUrl: null,
+              pictureThumbnailCloudFileId: null,);
 
           String userToken = await credentials.user!.getIdToken();
 

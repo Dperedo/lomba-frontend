@@ -26,7 +26,7 @@ class PostPage extends StatelessWidget {
           }
         },
         child: ScaffoldManager(
-          title: AppBar(), //_variableAppBar(context, state),
+          title: _variableAppBar(context, state),
           child: SingleChildScrollView(
               child: Center(
                   child: BodyFormatter(
@@ -38,20 +38,15 @@ class PostPage extends StatelessWidget {
     });
   }
 
-  /*AppBar _variableAppBar(BuildContext context, PostState state) {
-    if (state is PostEditing) {
+  AppBar _variableAppBar(BuildContext context, PostState state) {
+    if (state is PostLoaded) {
       return AppBar(
-          title: const Text("Editando Perfil"),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              context.read<PostBloc>().add(OnPostStarter());
-            },
-          ));
+          title: const Text("Post"),
+          );
     }
 
     return AppBar(title: const Text("Perfil"));
-  }*/
+  }
 
   Widget _bodyPost(BuildContext context, PostState state) {
     final TextEditingController contentController = TextEditingController();

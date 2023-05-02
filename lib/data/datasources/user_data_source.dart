@@ -70,7 +70,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
             username: item["username"].toString(),
             email: item["email"].toString(),
             enabled: item["enabled"].toString().toLowerCase() == 'true',
-            builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
+            builtIn: item["builtIn"].toString().toLowerCase() == 'true',
+            pictureUrl: item["pictureUrl"] != null ? item['pictureUrl'].toString() : null,
+            pictureCloudFileId: item["pictureCloudFileId"] != null ? item['pictureCloudFileId'].toString() : null,
+            pictureThumbnailUrl: item["pictureThumbnailUrl"] != null ? item['pictureThumbnailUrl'].toString() : null,
+            pictureThumbnailCloudFileId: item["pictureThumbnailCloudFileId"] != null ? item['pictureThumbnailCloudFileId'].toString() : null,));
       }
 
       return Future.value(ModelContainer<UserModel>(
@@ -118,7 +122,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
           username: item["username"].toString(),
           email: item["email"].toString(),
           enabled: item["enabled"].toString().toLowerCase() == 'true',
-          builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
+          builtIn: item["builtIn"].toString().toLowerCase() == 'true',
+          pictureUrl: item["pictureUrl"] != null ? item['pictureUrl'].toString() : null,
+          pictureCloudFileId: item["pictureCloudFileId"] != null ? item['pictureCloudFileId'].toString() : null,
+          pictureThumbnailUrl: item["pictureThumbnailUrl"] != null ? item['pictureThumbnailUrl'].toString() : null,
+          pictureThumbnailCloudFileId: item["pictureThumbnailCloudFileId"] != null ? item['pictureThumbnailCloudFileId'].toString() : null,));
     } else {
       throw ServerException();
     }
@@ -201,7 +209,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
           username: item["username"].toString(),
           email: item["email"].toString(),
           enabled: item["enabled"].toString().toLowerCase() == 'true',
-          builtIn: item["builtin"].toString().toLowerCase() == 'true'));
+          builtIn: item["builtin"].toString().toLowerCase() == 'true',
+          pictureUrl: item["pictureUrl"] != null ? item['pictureUrl'].toString() : null,
+          pictureCloudFileId: item["pictureCloudFileId"] != null ? item['pictureCloudFileId'].toString() : null,
+          pictureThumbnailUrl: item["pictureThumbnailUrl"] != null ? item['pictureThumbnailUrl'].toString() : null,
+          pictureThumbnailCloudFileId: item["pictureThumbnailCloudFileId"] != null ? item['pictureThumbnailCloudFileId'].toString() : null,));
     } else {
       throw ServerException();
     }
@@ -229,7 +241,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
           username: item["username"].toString(),
           email: item["email"].toString(),
           enabled: item["enabled"].toString().toLowerCase() == 'true',
-          builtIn: item["builtin"].toString().toLowerCase() == 'true'));
+          builtIn: item["builtin"].toString().toLowerCase() == 'true',
+          pictureUrl: item["pictureUrl"] != null ? item['pictureUrl'].toString() : null,
+          pictureCloudFileId: item["pictureCloudFileId"] != null ? item['pictureCloudFileId'].toString() : null,
+          pictureThumbnailUrl: item["pictureThumbnailUrl"] != null ? item['pictureThumbnailUrl'].toString() : null,
+          pictureThumbnailCloudFileId: item["pictureThumbnailCloudFileId"] != null ? item['pictureThumbnailCloudFileId'].toString() : null,));
     } else {
       throw ServerException();
     }
@@ -256,7 +272,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
             username: item["username"].toString(),
             email: item["email"].toString(),
             enabled: item["enabled"].toString().toLowerCase() == 'true',
-            builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
+            builtIn: item["builtIn"].toString().toLowerCase() == 'true',
+            pictureUrl: item["pictureUrl"] != null ? item['pictureUrl'].toString() : null,
+            pictureCloudFileId: item["pictureCloudFileId"] != null ? item['pictureCloudFileId'].toString() : null,
+            pictureThumbnailUrl: item["pictureThumbnailUrl"] != null ? item['pictureThumbnailUrl'].toString() : null,
+            pictureThumbnailCloudFileId: item["pictureThumbnailCloudFileId"] != null ? item['pictureThumbnailCloudFileId'].toString() : null,));
       }
       return Future.value(null);
     } else {
@@ -285,7 +305,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
             username: item["username"].toString(),
             email: item["email"].toString(),
             enabled: item["enabled"].toString().toLowerCase() == 'true',
-            builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
+            builtIn: item["builtIn"].toString().toLowerCase() == 'true',
+            pictureUrl: item["pictureUrl"] != null ? item['pictureUrl'].toString() : null,
+            pictureCloudFileId: item["pictureCloudFileId"] != null ? item['pictureCloudFileId'].toString() : null,
+            pictureThumbnailUrl: item["pictureThumbnailUrl"] != null ? item['pictureThumbnailUrl'].toString() : null,
+            pictureThumbnailCloudFileId: item["pictureThumbnailCloudFileId"] != null ? item['pictureThumbnailCloudFileId'].toString() : null,));
       }
       return Future.value(null);
     } else {
@@ -315,7 +339,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
             username: item["username"].toString(),
             email: item["email"].toString(),
             enabled: item["enabled"].toString().toLowerCase() == 'true',
-            builtIn: item["builtIn"].toString().toLowerCase() == 'true'));
+            builtIn: item["builtIn"].toString().toLowerCase() == 'true',
+            pictureUrl: item["pictureUrl"] != null ? item['pictureUrl'].toString() : null,
+            pictureCloudFileId: item["pictureCloudFileId"] != null ? item['pictureCloudFileId'].toString() : null,
+            pictureThumbnailUrl: item["pictureThumbnailUrl"] != null ? item['pictureThumbnailUrl'].toString() : null,
+            pictureThumbnailCloudFileId: item["pictureThumbnailCloudFileId"] != null ? item['pictureThumbnailCloudFileId'].toString() : null,));
       }
       return Future.value(ModelContainer<UserModel>(
           users,

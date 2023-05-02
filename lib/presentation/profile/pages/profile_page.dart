@@ -1,5 +1,11 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_network/image_network.dart';
 import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 
@@ -65,7 +71,7 @@ class ProfilePage extends StatelessWidget {
     final TextEditingController emailController = TextEditingController();
 
     if (state is ProfileStart) {
-      context.read<ProfileBloc>().add(const OnProfileLoad(null));
+      context.read<ProfileBloc>().add(const OnProfileLoad(null, null));
     }
     if (state is ProfileLoading) {
       return SizedBox(
@@ -78,93 +84,194 @@ class ProfilePage extends StatelessWidget {
     }
     if (state is ProfileLoaded) {
       return BlocProvider<ProfileLiveCubit>(
-      create: (context) =>
-          ProfileLiveCubit(di.locator(), di.locator(), di.locator()),
+        create: (context) =>
+            ProfileLiveCubit(di.locator(), di.locator(), di.locator()),
         child: SizedBox(
           width: 600,
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              BlocBuilder<ProfileLiveCubit, ProfileLiveState>(
-                builder: (context, statecubit) {
-                  return Center(
-                    child:Container(
-                      width: 200,
-                      height: 200,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey,
-                      ),
-                      child: Stack(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {},
-                            child: const Icon(Icons.edit),
-                          ),
-                          const Center(
-                            child: Icon(
-                              Icons.person,
-                              color: Colors.white,
-                              size: 100,
+          child: BlocBuilder<ProfileLiveCubit, ProfileLiveState>(
+            builder: (context, statecubit) {
+              return Column(
+                children: [
+                  const SizedBox(height: 40),
+                  Center(
+                      child: Container(
+                        width: 200,
+                        height: 200,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.grey,
+                        ),
+                        child: Stack(
+                          children: [
+                            statecubit.fileId != "" || state.user.pictureUrl != null
+                                ? state.user.pictureUrl != null && statecubit.fileId == ""
+                                ? ClipOval(
+                                  child: ImageNetwork(
+                                    image: state.user.pictureUrl!,
+                                    height: 200,
+                                    width: 200,),
+                                ) : Container(
+                                  width: 200.0,
+                                  height: 200.0,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: MemoryImage(
+                                        statecubit.mediafile,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                : statecubit.showLocalProgress
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child:
+                                            const CircularProgressIndicator())
+                                    : const Center(
+                                      child: Icon(
+                                          Icons.person,
+                                          color: Colors.white,
+                                          size: 100,
+                                        ),
+                                    ),
+                            statecubit.fileId != ""
+                                ? Container(
+                                    alignment: Alignment.topRight,
+                                    child: IconButton(
+                                      alignment: Alignment.topRight,
+                                      icon: const Icon(Icons.cancel),
+                                      onPressed: () {
+                                        context
+                                            .read<ProfileLiveCubit>()
+                                            .stopRemoteProgressIndicators();
+                                        context
+                                            .read<ProfileLiveCubit>()
+                                            .removeMedia();
+                                      },
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            ElevatedButton(
+                              onPressed: () async {
+                                FilePickerResult? result =
+                                    await FilePicker.platform
+                                        .pickFiles(
+                                  type: FileType.custom,
+                                  allowedExtensions: [
+                                    'jpg',
+                                    'png',
+                                    'gif',
+                                    'jpeg',
+                                  ],
+                                );
+                                if (result != null) {
+                                  context
+                                      .read<ProfileLiveCubit>()
+                                      .startProgressIndicators();
+                                  PlatformFile file =
+                                      result.files.first;
+                                  if (file.size != 0) {
+                                    Uint8List? fileBytes;
+                                    if (!kIsWeb) {
+                                      fileBytes = File(file.path!)
+                                          .readAsBytesSync();
+                                    } else
+                                      fileBytes = file.bytes;
+                                      context.read<ProfileLiveCubit>()
+                                        .showImage(
+                                          context,
+                                          fileBytes!,
+                                          state.user.id,
+                                          state.orgaId,
+                                        );
+                                  } else {
+                                    snackBarNotify(
+                                        context,
+                                        "El archivo no puede estar vacío",
+                                        Icons.error);
+                                  }
+                                } else {
+                                  // User canceled the picker
+                                }
+                              },
+                              child: const Icon(Icons.edit),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ), 
-                    /*SizedBox(
-                      width: 120,
-                      height: 120,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: const Icon(
-                            Icons.person,
-                            size: 70,
-                          ) //Image.network('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png')
-                          ),
-                    ),*/
-                  );
-                }
-              ),
-              //const SizedBox(height: 15,),
-              ListTile(
-                  leading: const Icon(Icons.person),
-                  title: Text(state.user.name)),
-              //const SizedBox(height: 10,),
-              ListTile(
-                  leading: const Icon(Icons.person_outline),
-                  title: Text(state.user.username)),
-              //const SizedBox(height: 10,),
-              ListTile(
-                  leading: const Icon(Icons.mail), title: Text(state.user.email)),
-              const SizedBox(
-                height: 25,
-              ),
-              SizedBox(
-                width: 200,
-                height: 30,
-                child: ElevatedButton(
-                    onPressed: (() {
-                      context
-                          .read<ProfileBloc>()
-                          .add(OnProfileEditPrepare(state.user));
-                    }),
-                    child: const Text('Editar Perfil')),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                width: 200,
-                height: 30,
-                child: ElevatedButton(
-                    onPressed: (() {
-                      context
-                          .read<ProfileBloc>()
-                          .add(OnProfileShowPasswordModifyForm(state.user));
-                    }),
-                    child: const Text('Cambiar contraseña')),
-              ),
-            ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  statecubit.cloudFile?.id!=null || statecubit.showLocalProgress
+                  ? SizedBox(
+                    width: 110,
+                    height: 30,
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.save),
+                      key: const ValueKey("btnSavedUp"),
+                      label: const Text("Guardar"),
+                      onPressed: statecubit.showRemoteProgress
+                          ? null
+                          : () {
+                              context.read<ProfileBloc>().add(OnProfileSaveImagen(
+                                    state.user,
+                                    statecubit.mediafile,
+                                    statecubit.cloudFile!.url,
+                                    statecubit.cloudFile!.id,
+                                  ));
+                            },
+                    ),
+                  ) : const SizedBox(
+                    height: 30,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  //const SizedBox(height: 15,),
+                  ListTile(
+                      leading: const Icon(Icons.person),
+                      title: Text(state.user.name)),
+                  //const SizedBox(height: 10,),
+                  ListTile(
+                      leading: const Icon(Icons.person_outline),
+                      title: Text(state.user.username)),
+                  //const SizedBox(height: 10,),
+                  ListTile(
+                      leading: const Icon(Icons.mail),
+                      title: Text(state.user.email)),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  SizedBox(
+                    width: 200,
+                    height: 30,
+                    child: ElevatedButton(
+                        onPressed: (() {
+                          context
+                              .read<ProfileBloc>()
+                              .add(OnProfileEditPrepare(state.user));
+                        }),
+                        child: const Text('Editar Perfil')),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: 200,
+                    height: 30,
+                    child: ElevatedButton(
+                        onPressed: (() {
+                          context
+                              .read<ProfileBloc>()
+                              .add(OnProfileShowPasswordModifyForm(state.user));
+                        }),
+                        child: const Text('Cambiar contraseña')),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       );
@@ -265,9 +372,8 @@ class ProfilePage extends StatelessWidget {
                                     )).then((value) => {
                                   if (value)
                                     {
-                                      context
-                                          .read<ProfileBloc>()
-                                          .add(OnProfileLoad(state.user.id))
+                                      context.read<ProfileBloc>().add(
+                                          OnProfileLoad(state.user.id, null))
                                     }
                                 });
                           },
@@ -346,7 +452,7 @@ class ProfilePage extends StatelessWidget {
                   onPressed: () {
                     context
                         .read<ProfileBloc>()
-                        .add(OnProfileLoad(state.user.id));
+                        .add(OnProfileLoad(state.user.id, null));
                   },
                 ),
                 const VerticalDivider(),

@@ -87,7 +87,11 @@ class UserRepositoryImpl implements UserRepository {
           username: username,
           email: email,
           enabled: enabled,
-          builtIn: false);
+          builtIn: false,
+          pictureUrl: null,
+          pictureCloudFileId: null,
+          pictureThumbnailUrl: null,
+          pictureThumbnailCloudFileId: null,);
 
       final result = await remoteDataSource.addUser(userModel);
 
@@ -142,7 +146,11 @@ class UserRepositoryImpl implements UserRepository {
           username: user.username,
           email: user.email,
           enabled: user.enabled,
-          builtIn: user.builtIn);
+          builtIn: user.builtIn,
+          pictureUrl: user.pictureUrl,
+          pictureCloudFileId: user.pictureCloudFileId,
+          pictureThumbnailUrl: user.pictureThumbnailUrl,
+          pictureThumbnailCloudFileId: user.pictureThumbnailCloudFileId,);
 
       final result = await remoteDataSource.updateUser(userId, userModel);
 
@@ -164,7 +172,11 @@ class UserRepositoryImpl implements UserRepository {
           username: user.username,
           email: user.email,
           enabled: user.enabled,
-          builtIn: user.builtIn);
+          builtIn: user.builtIn,
+          pictureUrl: user.pictureUrl,
+          pictureCloudFileId: user.pictureCloudFileId,
+          pictureThumbnailUrl: user.pictureThumbnailUrl,
+          pictureThumbnailCloudFileId: user.pictureThumbnailCloudFileId,);
 
       final result = await remoteDataSource.updateProfile(userId, userModel);
 

@@ -10,4 +10,7 @@ abstract class StorageRepository {
       Uint8List file, String cloudFileId);
   Future<Either<Failure, CloudFile>> registerCloudFile(String userId, String orgaId);
   Future<Either<Failure, CloudFile>> getCloudFile(String cloudFileId);
+  Future<Either<Failure, CloudFile>> uploadFileUserProfile(
+      String userId, Uint8List file, String cloudFileId);
+  Future<Either<Failure, List<CloudFile>>> registerCloudFileUserProfile(String userId, String orgaId);
 }

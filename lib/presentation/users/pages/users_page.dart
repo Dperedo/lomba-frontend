@@ -884,7 +884,8 @@ class UsersPage extends StatelessWidget {
                                   nameController.text,
                                   usernameController.text,
                                   emailController.text,
-                                  state.user.enabled));
+                                  state.user.enabled,
+                                  state.user));
                             }
                           },
                           icon: const Icon(Icons.save),

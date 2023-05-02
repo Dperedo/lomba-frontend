@@ -78,6 +78,8 @@ import 'domain/usecases/setting/updated_setting_admin.dart';
 import 'domain/usecases/setting/updated_setting_super.dart';
 import 'domain/usecases/stage/get_stage.dart';
 import 'domain/usecases/stage/get_stages.dart';
+import 'domain/usecases/storage/register_cloudfile_profile.dart';
+import 'domain/usecases/storage/upload_cloudfile_profile.dart';
 import 'domain/usecases/users/exists_profile.dart';
 import 'domain/usecases/users/update_profile.dart';
 import 'domain/usecases/users/update_profile_password.dart';
@@ -301,8 +303,10 @@ Future<void> init() async {
   locator.registerLazySingleton(() => StartRedirectLogin(locator()));
 
   locator.registerLazySingleton(() => UploadFile(locator()));
+  locator.registerLazySingleton(() => UploadFileProfile(locator()));
   locator.registerLazySingleton(() => GetCloudFile(locator()));
   locator.registerLazySingleton(() => RegisterCloudFile(locator()));
+  locator.registerLazySingleton(() => RegisterCloudFileProfile(locator()));
 
   // repository
   locator.registerLazySingleton<LoginRepository>(

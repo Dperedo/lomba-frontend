@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:equatable/equatable.dart';
 import 'package:lomba_frontend/domain/entities/user.dart';
 import 'package:lomba_frontend/presentation/profile/bloc/profile_state.dart';
@@ -9,12 +11,13 @@ abstract class ProfileEvent extends Equatable {
 }
 
 class OnProfileLoad extends ProfileEvent {
-  final String? id;
+  final String? userId;
+  final String? orgaId;
 
-  const OnProfileLoad(this.id);
+  const OnProfileLoad(this.userId, this.orgaId);
 
   @override
-  List<Object> get props => [id!];
+  List<Object> get props => [userId!, orgaId!];
 }
 
 class OnProfileEdit extends ProfileEvent {
@@ -66,6 +69,18 @@ class OnProfileShowPasswordModifyForm extends ProfileEvent {
   const OnProfileShowPasswordModifyForm(this.user);
   @override
   List<Object> get props => [user];
+}
+
+class OnProfileSaveImagen extends ProfileEvent {
+  final User user;
+  final Uint8List image;
+  final String? imageUrl;
+  final String? cloudFileId;
+
+  const OnProfileSaveImagen(this.user, this.image, this.imageUrl, this.cloudFileId);
+
+  @override
+  List<Object> get props => [user, image];
 }
 
 class OnProfileStarter extends ProfileEvent {}
