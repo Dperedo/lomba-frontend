@@ -22,9 +22,10 @@ class PostLoading extends PostState {}
 
 class PostLoaded extends PostState {
   final Post post;
-  const PostLoaded(this.post);
+  final bool validLogin;
+  const PostLoaded(this.post, this.validLogin);
   @override
-  List<Object> get props => [post];
+  List<Object> get props => [post, validLogin];
 }
 
 class PostError extends PostState {

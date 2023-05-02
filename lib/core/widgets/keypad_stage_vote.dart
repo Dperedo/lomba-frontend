@@ -15,6 +15,7 @@ import '../../presentation/nav/bloc/nav_state.dart';
 import '../../presentation/popular/bloc/popular_bloc.dart';
 import '../../presentation/popular/bloc/popular_cubit.dart';
 import '../../presentation/popular/bloc/popular_event.dart';
+import '../../presentation/post/bloc/post_cubit.dart';
 import '../../presentation/recent/bloc/recent_bloc.dart';
 import '../../presentation/recent/bloc/recent_cubit.dart';
 import '../../presentation/recent/bloc/recent_event.dart';
@@ -71,7 +72,7 @@ class KeypadVoteVoted extends StatelessWidget {
             const SizedBox(
               width: 5,
             ),
-            showShareButton(context, () {}),
+            showShareButton(context, post),
             const SizedBox(
               width: 5,
             ),
@@ -135,7 +136,7 @@ class KeypadVotePopular extends StatelessWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                  showShareButton(context, () {}),
+                  showShareButton(context, post),
                   const SizedBox(
                     width: 5,
                   ),
@@ -208,12 +209,76 @@ class KeypadVoteRecent extends StatelessWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                  showShareButton(context, () {
-                    Clipboard.setData(ClipboardData(text: '${Uri.base}p/${post.id}')).then((result) {
-                        const snackBar = SnackBar(content: Text('URL copiada al portapapeles'));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    });
+                  showShareButton(context, post),
+                ],
+              ),
+            ],
+          )
+        : Row();
+  }
+}
+
+class KeypadVotePost extends StatelessWidget {
+  const KeypadVotePost(
+      {super.key,
+      required this.context,
+      required this.post,
+      required this.statecubit,
+      required this.validLogin});
+  final BuildContext context;
+  final Post post;
+  final PostLiveState statecubit;
+  final bool validLogin;
+
+  @override
+  Widget build(BuildContext context) {
+    return (validLogin)
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  showNegativeButton(
+                      context, post.id, post.votes, statecubit.votes, () {
+                    post.votes.clear();
+                    context.read<RecentBloc>().add(OnRecentVote(post.id, -1));
+                    context.read<RecentLiveCubit>().makeVote(post.id, -1);
                   }),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  showPositiveButton(
+                      context, post.id, post.votes, statecubit.votes, () {
+                    post.votes.clear();
+                    context.read<RecentBloc>().add(OnRecentVote(post.id, 1));
+                    context.read<RecentLiveCubit>().makeVote(post.id, 1);
+                  }),
+                ],
+              ),
+              Row(
+                children: [
+                  showFavoriteButton(context, () {}),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  showBookmarkButton(context, () {}),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  showCommentsButton(context, () {
+                    BlocProvider.of<NavBloc>(context).add(NavigateTo(
+                        NavItem.pagePost,
+                        context,
+                        <String, dynamic>{"id": post.id}));
+                  }),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  showDownloadButton(context, post),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  showShareButton(context, post),
                 ],
               ),
             ],
@@ -278,12 +343,15 @@ Widget showDownloadButton(BuildContext context, Post post) {
 }
 
 Widget showShareButton(
-    BuildContext context, VoidCallback onPressedFunction) {
+    BuildContext context, Post post) {
   return PopupMenuButton<String>(
     onSelected: (String result) {
       //print('La opción seleccionada es: $result');
       if (result == 'opcion_1') {
-        onPressedFunction();
+        Clipboard.setData(ClipboardData(text: '${Uri.base}p/${post.id}')).then((result) {
+            const snackBar = SnackBar(content: Text('URL copiada al portapapeles'));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        });
       }
     },
     itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[

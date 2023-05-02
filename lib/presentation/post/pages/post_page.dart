@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 
+import '../../../core/widgets/keypad_stage_vote.dart';
 import '../../../core/widgets/show_posts.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../bloc/post_bloc.dart';
+import '../bloc/post_cubit.dart';
 import '../bloc/post_event.dart';
 import '../bloc/post_state.dart';
 
@@ -41,8 +43,8 @@ class PostPage extends StatelessWidget {
   AppBar _variableAppBar(BuildContext context, PostState state) {
     if (state is PostLoaded) {
       return AppBar(
-          title: const Text("Post"),
-          );
+        title: const Text("Post"),
+      );
     }
 
     return AppBar(title: const Text("Perfil"));
@@ -65,49 +67,55 @@ class PostPage extends StatelessWidget {
     }
     if (state is PostLoaded) {
       print(state.post.id);
-        return SizedBox(
+      return BlocProvider<PostLiveCubit>(
+      create: (context) => PostLiveCubit(),
+        child: SizedBox(
           width: 600,
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              ShowPosts(
-                post: state.post,
-                child: null,
-                /*KeypadVoteRecent(
-                    context: context,
+          child: BlocBuilder<PostLiveCubit, PostLiveState>(
+            builder: (context, statecubit) {
+              return Column(
+                children: [
+                  const SizedBox(height: 40),
+                  ShowPosts(
                     post: state.post,
-                    statecubit: statecubit,
-                    validLogin: state.validLogin,
-                  ),*/
-              ),
-              const SizedBox(height: 40),
-              /*ListTile(shape: const RoundedRectangleBorder(
-                    side: BorderSide(
-                    color: Colors.grey,
-                    width: 2),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(2))),
-                  title: Text((content),
-                  textAlign: TextAlign.center),
-                  contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 100,
-                      vertical: 100),
-                ),
-                const SizedBox(height: 40),
-                TextFormField(
-                  key: const ValueKey('txtContent'),
-                  maxLength: 300,
-                  maxLines: 3,
-                  controller: contentController,
-                  validator: (value) => Validators.validateName(value ?? ""),
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Texto',
+                    child: KeypadVotePost(
+                      context: context,
+                      post: state.post,
+                      statecubit: statecubit,
+                      validLogin: state.validLogin,
+                    ),
                   ),
-                ),*/
-            ],
+                  const SizedBox(height: 40),
+                  /*ListTile(shape: const RoundedRectangleBorder(
+                                    side: BorderSide(
+                                    color: Colors.grey,
+                                    width: 2),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(2))),
+                                  title: Text((content),
+                                  textAlign: TextAlign.center),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 100,
+                                      vertical: 100),
+                                ),
+                                const SizedBox(height: 40),
+                                TextFormField(
+                                  key: const ValueKey('txtContent'),
+                                  maxLength: 300,
+                                  maxLines: 3,
+                                  controller: contentController,
+                                  validator: (value) => Validators.validateName(value ?? ""),
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    hintText: 'Texto',
+                                  ),
+                                ),*/
+                ],
+              );
+            },
           ),
-        );
+        ),
+      );
     }
 
     return const SizedBox();
