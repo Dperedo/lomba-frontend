@@ -82,6 +82,26 @@ abstract class PostRepository {
       int pageIndex,
       int pageSize,
       int voteState);
+  Future<Either<Failure, ModelContainer<Post>>> getFavoritesPosts(
+      String orgaId,
+      String userId,
+      String flowId,
+      String stageId,
+      String searchText,
+      Map<String, int> fieldsOrder,
+      int pageIndex,
+      int pageSize,
+      int voteState);
+  Future<Either<Failure, ModelContainer<Post>>> getSavedPosts(
+      String orgaId,
+      String userId,
+      String flowId,
+      String stageId,
+      String searchText,
+      Map<String, int> fieldsOrder,
+      int pageIndex,
+      int pageSize,
+      int voteState);
   Future<Either<Failure, ModelContainer<Vote>>> votePublication(
       String orgaId,
       String userId,

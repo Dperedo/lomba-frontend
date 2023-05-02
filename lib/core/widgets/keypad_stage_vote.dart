@@ -15,7 +15,9 @@ import '../../presentation/nav/bloc/nav_state.dart';
 import '../../presentation/popular/bloc/popular_bloc.dart';
 import '../../presentation/popular/bloc/popular_cubit.dart';
 import '../../presentation/popular/bloc/popular_event.dart';
+import '../../presentation/post/bloc/post_bloc.dart';
 import '../../presentation/post/bloc/post_cubit.dart';
+import '../../presentation/post/bloc/post_event.dart';
 import '../../presentation/recent/bloc/recent_bloc.dart';
 import '../../presentation/recent/bloc/recent_cubit.dart';
 import '../../presentation/recent/bloc/recent_event.dart';
@@ -241,8 +243,8 @@ class KeypadVotePost extends StatelessWidget {
                   showNegativeButton(
                       context, post.id, post.votes, statecubit.votes, () {
                     post.votes.clear();
-                    context.read<RecentBloc>().add(OnRecentVote(post.id, -1));
-                    context.read<RecentLiveCubit>().makeVote(post.id, -1);
+                    context.read<PostBloc>().add(OnPostVote(post.id, -1));
+                    context.read<PostLiveCubit>().makeVote(post.id, -1);
                   }),
                   const SizedBox(
                     width: 5,
@@ -250,8 +252,8 @@ class KeypadVotePost extends StatelessWidget {
                   showPositiveButton(
                       context, post.id, post.votes, statecubit.votes, () {
                     post.votes.clear();
-                    context.read<RecentBloc>().add(OnRecentVote(post.id, 1));
-                    context.read<RecentLiveCubit>().makeVote(post.id, 1);
+                    context.read<PostBloc>().add(OnPostVote(post.id, 1));
+                    context.read<PostLiveCubit>().makeVote(post.id, 1);
                   }),
                 ],
               ),

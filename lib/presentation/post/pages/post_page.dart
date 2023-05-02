@@ -87,29 +87,29 @@ class PostPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 40),
                   /*ListTile(shape: const RoundedRectangleBorder(
-                                    side: BorderSide(
-                                    color: Colors.grey,
-                                    width: 2),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(2))),
-                                  title: Text((content),
-                                  textAlign: TextAlign.center),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 100,
-                                      vertical: 100),
-                                ),
-                                const SizedBox(height: 40),
-                                TextFormField(
-                                  key: const ValueKey('txtContent'),
-                                  maxLength: 300,
-                                  maxLines: 3,
-                                  controller: contentController,
-                                  validator: (value) => Validators.validateName(value ?? ""),
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    hintText: 'Texto',
-                                  ),
-                                ),*/
+                      side: BorderSide(
+                      color: Colors.grey,
+                      width: 2),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(2))),
+                    title: Text((content),
+                    textAlign: TextAlign.center),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 100,
+                        vertical: 100),
+                  ),
+                  const SizedBox(height: 40),
+                  TextFormField(
+                    key: const ValueKey('txtContent'),
+                    maxLength: 300,
+                    maxLines: 3,
+                    controller: contentController,
+                    validator: (value) => Validators.validateName(value ?? ""),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Texto',
+                    ),
+                  ),*/
                 ],
               );
             },

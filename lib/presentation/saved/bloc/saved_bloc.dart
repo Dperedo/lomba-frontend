@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/domain/usecases/post/get_uploaded_posts.dart';
 import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart';
-import 'package:lomba_frontend/presentation/voted/bloc/voted_event.dart';
-import 'package:lomba_frontend/presentation/voted/bloc/voted_state.dart';
+import 'package:lomba_frontend/presentation/saved/bloc/saved_event.dart';
+import 'package:lomba_frontend/presentation/saved/bloc/saved_state.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../core/constants.dart';
@@ -10,25 +10,25 @@ import '../../../data/models/session_model.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
 import '../../../domain/usecases/post/get_voted_posts.dart';
 
-class VotedBloc extends Bloc<VotedEvent, VotedState> {
+class SavedBloc extends Bloc<SavedEvent, SavedState> {
   final GetVotedPosts _getVotedPosts;
   final GetSession _getSession;
   final VotePublication _votePublication;
   final GetUploadedPosts _getUploadedPosts;
 
-  VotedBloc(this._getVotedPosts, this._getSession, this._votePublication,
+  SavedBloc(this._getVotedPosts, this._getSession, this._votePublication,
       this._getUploadedPosts)
-      : super(VotedStart()) {
-    on<OnVotedStarter>((event, emit) => emit(VotedStart()));
+      : super(SavedStart()) {
+    on<OnSavedStarter>((event, emit) => emit(SavedStart()));
 
-    on<OnVotedLoad>((event, emit) async {
-      emit(VotedLoading());
+    on<OnSavedLoad>((event, emit) async {
+      emit(SavedLoading());
       String flowId = Flows.votationFlowId;
       String stageId = StagesVotationFlow.stageId03Voting;
 
       var auth = const SessionModel(token: "", username: "", name: "");
       final session = await _getSession.execute();
-      session.fold((l) => emit(VotedError(l.message)), (r) => {auth = r});
+      session.fold((l) => emit(SavedError(l.message)), (r) => {auth = r});
       int voteValue = 0;
       if (event.positive) {
         voteValue = 1;
@@ -46,8 +46,8 @@ class VotedBloc extends Bloc<VotedEvent, VotedState> {
         event.pageSize,
         voteValue,
       );
-      result.fold((l) => {emit(VotedError(l.message))}, (r) {
-        VotedLoaded votedLoaded = VotedLoaded(
+      result.fold((l) => {emit(SavedError(l.message))}, (r) {
+        SavedLoaded votedLoaded = SavedLoaded(
           auth.getOrgaId()!,
           auth.getUserId()!,
           flowId,
@@ -67,16 +67,16 @@ class VotedBloc extends Bloc<VotedEvent, VotedState> {
       });
     });
 
-    on<OnVotedAddVote>((event, emit) async {
+    on<OnSavedAddVote>((event, emit) async {
       String flowId = Flows.votationFlowId;
       String stageId = StagesVotationFlow.stageId03Voting;
       var auth = const SessionModel(token: "", username: "", name: "");
       final session = await _getSession.execute();
-      session.fold((l) => emit(VotedError(l.message)), (r) => {auth = r});
+      session.fold((l) => emit(SavedError(l.message)), (r) => {auth = r});
 
       final result = await _votePublication.execute(auth.getOrgaId()!,
           auth.getUserId()!, flowId, stageId, event.postId, event.voteValue);
-      result.fold((l) => emit(VotedError(l.message)), (r) {});
+      result.fold((l) => emit(SavedError(l.message)), (r) {});
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {

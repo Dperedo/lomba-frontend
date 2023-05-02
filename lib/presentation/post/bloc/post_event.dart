@@ -23,3 +23,13 @@ class OnPostLoad extends PostEvent {
   @override
   List<Object> get props => [postId];
 }
+
+class OnPostVote extends PostEvent {
+  final String postId;
+  final int voteValue;
+
+  const OnPostVote(this.postId, this.voteValue);
+
+  @override
+  List<Object> get props => [postId, voteValue];
+}
