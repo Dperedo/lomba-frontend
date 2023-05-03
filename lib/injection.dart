@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:lomba_frontend/domain/usecases/bookmark/post_bookmark.dart';
 import 'package:lomba_frontend/domain/usecases/login/readif_redirect_login.dart';
 import 'package:lomba_frontend/domain/usecases/login/start_redirect_login.dart';
 import 'package:lomba_frontend/domain/usecases/post/add_multi_post.dart';
@@ -49,18 +50,21 @@ import 'package:lomba_frontend/presentation/users/bloc/user_bloc.dart';
 import 'package:lomba_frontend/presentation/voted/bloc/voted_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'data/datasources/bookmark_data_source.dart';
 import 'data/datasources/flow_data_source.dart';
 import 'data/datasources/post_data_source.dart';
 import 'data/datasources/local_data_source.dart';
 import 'data/datasources/setting_data_source.dart';
 import 'data/datasources/stage_data_source.dart';
 import 'data/datasources/storage_data_source.dart';
+import 'data/repositories/bookmark_repository_impl.dart';
 import 'data/repositories/flow_repository_impl.dart';
 import 'data/repositories/post_repository_impl.dart';
 import 'data/repositories/local_repository_impl.dart';
 import 'data/repositories/setting_repository_impl.dart';
 import 'data/repositories/stage_repository_impl.dart';
 import 'data/repositories/storage_repository_impl.dart';
+import 'domain/repositories/bookmark_repository.dart';
 import 'domain/repositories/flow_repository.dart';
 import 'domain/repositories/post_repository.dart';
 import 'domain/repositories/local_repository.dart';
@@ -302,6 +306,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetPost(locator()));
   locator.registerLazySingleton(() => GetFavoritesPosts(locator()));
   locator.registerLazySingleton(() => GetSavedPosts(locator()));
+  locator.registerLazySingleton(() => PostBookmark(locator()));
 
   locator.registerLazySingleton(() => GetFlow(locator()));
   locator.registerLazySingleton(() => GetFlows(locator()));
@@ -357,6 +362,9 @@ Future<void> init() async {
   locator.registerLazySingleton<SettingRepository>(
     () => SettingRepositoryImpl(remoteDataSource: locator()),
   );
+  locator.registerLazySingleton<BookmarkRepository>(
+    () => BookmarkRepositoryImpl(remoteDataSource: locator()),
+  );
 
   // data source
   locator.registerLazySingleton<RemoteDataSource>(
@@ -401,6 +409,10 @@ Future<void> init() async {
 
   locator.registerLazySingleton<SettingRemoteDataSource>(() =>
       SettingRemoteDataSourceImpl(
+          client: locator(), localDataSource: locator()));
+
+  locator.registerLazySingleton<BookmarkRemoteDataSource>(() =>
+      BookmarkRemoteDataSourceImpl(
           client: locator(), localDataSource: locator()));
 
   // external

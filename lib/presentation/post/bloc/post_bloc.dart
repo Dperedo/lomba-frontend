@@ -32,6 +32,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         emit(PostLoading());
 
         var validLogin = false;
+        var userId = '';
 
         final result = await _hasLogin.execute();
 
@@ -42,13 +43,17 @@ class PostBloc extends Bloc<PostEvent, PostState> {
               await signInAnonymously();
               // ignore: empty_catches
             } catch (e) {}
+          } else {
+            final session = await _getSession.execute();
+            session.fold((l) => emit(PostError(l.message)),
+                (r) => userId=r.getUserId()!);
           }
         });
 
         final resultPost = await _getPost.execute(event.postId);
 
         resultPost.fold((l) => emit(PostError(l.message)),
-            (r) => {emit(PostLoaded(r, validLogin))});
+            (r) => {emit(PostLoaded(r, validLogin, userId))});
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );

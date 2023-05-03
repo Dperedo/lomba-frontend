@@ -209,6 +209,7 @@ class VotedPage extends StatelessWidget {
                                         post: state.listItems[index],
                                         statecubit: statecubit,
                                         keyValidate: _key,
+                                        userId: state.userId,
                                       )
                                     );
                                   });

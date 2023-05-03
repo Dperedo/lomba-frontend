@@ -8,6 +8,7 @@ import 'package:lomba_frontend/domain/entities/workflow/videocontent.dart';
 import '../../core/constants.dart';
 import '../../core/exceptions.dart';
 import '../../core/model_container.dart';
+import '../../domain/entities/workflow/bookmark.dart';
 import '../../domain/entities/workflow/postitem.dart';
 import '../../domain/entities/workflow/stage.dart';
 import '../../domain/entities/workflow/total.dart';
@@ -144,6 +145,17 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
               ))
           .toList();
 
+      List<Bookmark> listBookmarks = item['bookmarks'] != null 
+          ? (item['bookmarks'] as List)
+          .map((e) => Bookmark(
+                userId: e["userId"].toString(),
+                postId: e["postId"].toString(),
+                markType: e["markType"].toString(),
+                enabled: e["enabled"].toString().toLowerCase() == 'true',
+              ))
+          .toList()
+        :[];
+
       List<Track> listTracks = (item['tracks'] as List)
           .map((e) => Track(
               name: e['name'].toString(),
@@ -210,6 +222,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
         totals: listTotals,
         tracks: listTracks,
         votes: listVotes,
+        bookmarks: listBookmarks,
       ));
     } else {
       throw ServerException();
@@ -317,6 +330,17 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
               ))
           .toList();
 
+      List<Bookmark> listBookmarks = item['bookmarks'] != null 
+          ? (item['bookmarks'] as List)
+          .map((e) => Bookmark(
+                userId: e["userId"].toString(),
+                postId: e["postId"].toString(),
+                markType: e["markType"].toString(),
+                enabled: e["enabled"].toString().toLowerCase() == 'true',
+              ))
+          .toList()
+        :[];
+
       List<Track> listTracks = (item['tracks'] as List)
           .map((e) => Track(
               name: e['name'].toString(),
@@ -383,6 +407,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
         totals: listTotals,
         tracks: listTracks,
         votes: listVotes,
+        bookmarks: listBookmarks,
       ));
     } else {
       throw ServerException();
@@ -518,6 +543,17 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                 ))
             .toList();
 
+        List<Bookmark> listBookmarks = item['bookmarks'] != null 
+          ? (item['bookmarks'] as List)
+          .map((e) => Bookmark(
+                userId: e["userId"].toString(),
+                postId: e["postId"].toString(),
+                markType: e["markType"].toString(),
+                enabled: e["enabled"].toString().toLowerCase() == 'true',
+              ))
+          .toList()
+        :[];
+
         List<Track> listTracks = (item['tracks'] as List)
             .map((e) => Track(
                 name: e['name'].toString(),
@@ -585,6 +621,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
           totals: listTotals,
           tracks: listTracks,
           votes: listVotes,
+          bookmarks: listBookmarks,
         ));
       }
 
@@ -731,6 +768,17 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                 ))
             .toList();
 
+        List<Bookmark> listBookmarks = item['bookmarks'] != null 
+          ? (item['bookmarks'] as List)
+          .map((e) => Bookmark(
+                userId: e["userId"].toString(),
+                postId: e["postId"].toString(),
+                markType: e["markType"].toString(),
+                enabled: e["enabled"].toString().toLowerCase() == 'true',
+              ))
+          .toList()
+        :[];
+
         List<Track> listTracks = (item['tracks'] as List)
             .map((e) => Track(
                 name: e['name'].toString(),
@@ -798,6 +846,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
           totals: listTotals,
           tracks: listTracks,
           votes: listVotes,
+          bookmarks: listBookmarks,
         ));
       }
 
@@ -1216,6 +1265,17 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
               ))
           .toList();
 
+      List<Bookmark> listBookmarks = item['bookmarks'] != null 
+          ? (item['bookmarks'] as List)
+          .map((e) => Bookmark(
+                userId: e["userId"].toString(),
+                postId: e["postId"].toString(),
+                markType: e["markType"].toString(),
+                enabled: e["enabled"].toString().toLowerCase() == 'true',
+              ))
+          .toList()
+        :[];
+
       List<Track> listTracks = (item['tracks'] as List)
           .map((e) => Track(
               name: e['name'].toString(),
@@ -1282,6 +1342,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
         totals: listTotals,
         tracks: listTracks,
         votes: listVotes,
+        bookmarks: listBookmarks,
       ));
     } else {
       throw ServerException();
@@ -1359,6 +1420,17 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
               ))
           .toList();
 
+      List<Bookmark> listBookmarks = item['bookmarks'] != null 
+          ? (item['bookmarks'] as List)
+          .map((e) => Bookmark(
+                userId: e["userId"].toString(),
+                postId: e["postId"].toString(),
+                markType: e["markType"].toString(),
+                enabled: e["enabled"].toString().toLowerCase() == 'true',
+              ))
+          .toList()
+        :[];
+
       List<Track> listTracks = (item['tracks'] as List)
           .map((e) => Track(
               name: e['name'].toString(),
@@ -1425,6 +1497,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
         totals: listTotals,
         tracks: listTracks,
         votes: listVotes,
+        bookmarks: listBookmarks,
       ));
     } else {
       throw ServerException();
@@ -1567,6 +1640,17 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                 ))
             .toList();
 
+        List<Bookmark> listBookmarks = item['bookmarks'] != null 
+          ? (item['bookmarks'] as List)
+          .map((e) => Bookmark(
+                userId: e["userId"].toString(),
+                postId: e["postId"].toString(),
+                markType: e["markType"].toString(),
+                enabled: e["enabled"].toString().toLowerCase() == 'true',
+              ))
+          .toList()
+        :[];
+
         List<Track> listTracks = (item['tracks'] as List)
             .map((e) => Track(
                 name: e['name'].toString(),
@@ -1634,6 +1718,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
           totals: listTotals,
           tracks: listTracks,
           votes: listVotes,
+          bookmarks: listBookmarks,
         ));
       }
 
@@ -1733,6 +1818,17 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                 ))
             .toList();
 
+        List<Bookmark> listBookmarks = item['bookmarks'] != null 
+          ? (item['bookmarks'] as List)
+          .map((e) => Bookmark(
+                userId: e["userId"].toString(),
+                postId: e["postId"].toString(),
+                markType: e["markType"].toString(),
+                enabled: e["enabled"].toString().toLowerCase() == 'true',
+              ))
+          .toList()
+        :[];
+
         List<Track> listTracks = (item['tracks'] as List)
             .map((e) => Track(
                 name: e['name'].toString(),
@@ -1800,6 +1896,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
           totals: listTotals,
           tracks: listTracks,
           votes: listVotes,
+          bookmarks: listBookmarks,
         ));
       }
 

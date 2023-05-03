@@ -83,6 +83,7 @@ class PostPage extends StatelessWidget {
                       post: state.post,
                       statecubit: statecubit,
                       validLogin: state.validLogin,
+                      userId: state.userId,
                     ),
                   ),
                   const SizedBox(height: 40),

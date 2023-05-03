@@ -143,6 +143,14 @@ class SettingCodes {
   static const String defaultFlow = "defaultFlow";
 }
 
+class BookmarkCodes {
+  static const String saveCode = "save";
+  static const String favCode = "fav";
+  static const String reportCode = "report";
+  static const String commentCode = "comment";
+  static const String downloadCode = "download";
+}
+
 ///Listado de los roles del sistema. Por ahora pueden seguir en esta opción.
 class Roles {
   static const String roleAnonymous = "anonymous";
@@ -169,7 +177,7 @@ class BoxPages {
   static const latestPosts = "latest";
   static const popularPosts = "popular";
   static const votedPosts = "voted";
-  static const favoritesPosts = "favorites";
+  static const favoritesPosts = "faved";
   static const savedPosts = "saved";
 
   static List<String> toList() => [

@@ -171,6 +171,7 @@ class PopularPage extends StatelessWidget {
                             post: state.listItems[index],
                             statecubit: statecubit,
                             validLogin: state.validLogin,
+                            userId: state.userId,
                           )
                         );
                       }

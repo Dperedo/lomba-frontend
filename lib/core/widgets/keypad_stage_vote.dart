@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lomba_frontend/core/constants.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../domain/entities/workflow/bookmark.dart';
 import '../../domain/entities/workflow/imagecontent.dart';
 import '../../domain/entities/workflow/post.dart';
 import '../../domain/entities/workflow/postitem.dart';
@@ -31,11 +33,13 @@ class KeypadVoteVoted extends StatelessWidget {
       required this.context,
       required this.post,
       required this.statecubit,
-      required this.keyValidate});
+      required this.keyValidate,
+      required this.userId,});
   final BuildContext context;
   final Post post;
   final VotedLiveState statecubit;
   final GlobalKey<FormState> keyValidate;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -92,11 +96,13 @@ class KeypadVotePopular extends StatelessWidget {
       required this.context,
       required this.post,
       required this.statecubit,
-      required this.validLogin});
+      required this.validLogin,
+      required this.userId,});
   final BuildContext context;
   final Post post;
   final PopularLiveState statecubit;
   final bool validLogin;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -157,11 +163,13 @@ class KeypadVoteRecent extends StatelessWidget {
       required this.context,
       required this.post,
       required this.statecubit,
-      required this.validLogin});
+      required this.validLogin,
+      required this.userId});
   final BuildContext context;
   final Post post;
   final RecentLiveState statecubit;
   final bool validLogin;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +198,11 @@ class KeypadVoteRecent extends StatelessWidget {
               ),
               Row(
                 children: [
-                  showFavoriteButton(context, () {}),
+                  showFavoriteButton2(context, isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.favCode).toList(), statecubit.favs), () {
+                    final haveMarkType = isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.favCode).toList(), statecubit.favs);
+                    post.bookmarks.clear();
+                    context.read<RecentLiveCubit>().makeBookmark(userId, post.id, BookmarkCodes.favCode, !haveMarkType);
+                  }),
                   const SizedBox(
                     width: 5,
                   ),
@@ -226,11 +238,13 @@ class KeypadVotePost extends StatelessWidget {
       required this.context,
       required this.post,
       required this.statecubit,
-      required this.validLogin});
+      required this.validLogin,
+      required this.userId,});
   final BuildContext context;
   final Post post;
   final PostLiveState statecubit;
   final bool validLogin;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -264,9 +278,6 @@ class KeypadVotePost extends StatelessWidget {
                     width: 5,
                   ),
                   showBookmarkButton(context, () {}),
-                  const SizedBox(
-                    width: 5,
-                  ),
                   showCommentsButton(context, () {
                     BlocProvider.of<NavBloc>(context).add(NavigateTo(
                         NavItem.pagePost,
@@ -428,7 +439,29 @@ OutlinedButton showFavoriteButton(
       child: const Icon(
         Icons.favorite,
         size: 35,
-        color: Colors.black12,
+        color:Colors.black12,
+      ));
+}
+
+OutlinedButton showFavoriteButton2(
+    BuildContext context, bool enabled, VoidCallback onPressedFunction) {
+  return OutlinedButton(
+      style: ButtonStyle(
+        shape: MaterialStateProperty.resolveWith(
+          (states) => RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            side: BorderSide(
+              color: Theme.of(context).secondaryHeaderColor,
+              width: 2,
+            ),
+          ),
+        ),
+      ),
+      onPressed: onPressedFunction,
+      child: Icon(
+        Icons.favorite,
+        size: 35,
+        color: enabled ? Colors.red : Colors.black12,
       ));
 }
 
@@ -526,4 +559,10 @@ bool isVoted(int voteValue, String postId, List<Vote> postVotes,
     Map<String, int> cubitVotes) {
   return postVotes.any((element) => element.value == voteValue) ||
       (cubitVotes.containsKey(postId) && cubitVotes[postId] == voteValue);
+}
+
+bool isMarked(String postId, List<Bookmark> postBookmarks,
+    Map<String, bool> cubitBookmarks) {
+  return postBookmarks.any((element) => element.enabled == true) ||
+      (cubitBookmarks.containsKey(postId) && cubitBookmarks[postId] == true);
 }
