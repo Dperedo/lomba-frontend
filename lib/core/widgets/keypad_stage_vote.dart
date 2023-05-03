@@ -342,15 +342,16 @@ Widget showDownloadButton(BuildContext context, Post post) {
       ));
 }
 
-Widget showShareButton(
-    BuildContext context, Post post) {
+Widget showShareButton(BuildContext context, Post post) {
   return PopupMenuButton<String>(
     onSelected: (String result) {
       //print('La opción seleccionada es: $result');
       if (result == 'opcion_1') {
-        Clipboard.setData(ClipboardData(text: '${Uri.base}p/${post.id}')).then((result) {
-            const snackBar = SnackBar(content: Text('URL copiada al portapapeles'));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        Clipboard.setData(ClipboardData(text: '${Uri.base}p/${post.id}'))
+            .then((result) {
+          const snackBar =
+              SnackBar(content: Text('URL copiada al portapapeles'));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
         });
       }
     },
@@ -359,13 +360,9 @@ Widget showShareButton(
         value: 'opcion_1',
         child: Text('Copiar enlace'),
       ),
-      const PopupMenuItem<String>(
-        value: 'opcion_2',
-        child: Text('Opción 2'),
-      ),
     ],
   );
-  
+
   /*OutlinedButton(
       style: ButtonStyle(
         shape: MaterialStateProperty.resolveWith(
