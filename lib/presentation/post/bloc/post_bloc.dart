@@ -9,10 +9,12 @@ import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
 import '../../../domain/usecases/local/get_has_login.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
+import '../../../domain/usecases/post/get_withuser_post.dart';
 import '../../../domain/usecases/post/vote_publication.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   final GetPost _getPost;
+  final GetWithUserPost _getWithUserPost;
   final GetHasLogIn _hasLogin;
   final FirebaseAuth _firebaseAuthInstance;
   final GetSession _getSession;
@@ -20,11 +22,12 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   PostBloc(
     this._getPost,
+    this._getWithUserPost,
     this._hasLogin,
     this._firebaseAuthInstance,
     this._getSession,
     this._votePublication,
-    ) : super(const PostStart('', '')) {
+  ) : super(const PostStart('', '')) {
     on<OnPostStarter>((event, emit) => emit(PostStart('', event.postId)));
 
     on<OnPostLoad>(
@@ -45,10 +48,25 @@ class PostBloc extends Bloc<PostEvent, PostState> {
           }
         });
 
-        final resultPost = await _getPost.execute(event.postId);
+        var auth = const SessionModel(token: "", username: "", name: "");
+        final session = await _getSession.execute();
+        session.fold((l) => emit(PostError(l.message)), (r) => {auth = r});
 
-        resultPost.fold((l) => emit(PostError(l.message)),
-            (r) => {emit(PostLoaded(r, validLogin))});
+        if (!validLogin) {
+          final resultPost = await _getPost.execute(event.postId);
+
+          resultPost.fold((l) => emit(PostError(l.message)),
+              (r) => {emit(PostLoaded(r, validLogin))});
+        } else {
+          final resultPostUser = await _getWithUserPost.execute(
+              event.postId,
+              auth.getUserId() ?? "",
+              Flows.votationFlowId,
+              StagesVotationFlow.stageId03Voting);
+
+          resultPostUser.fold((l) => emit(PostError(l.message)),
+              (r) => {emit(PostLoaded(r, validLogin))});
+        }
       },
       transformer: debounce(const Duration(milliseconds: 0)),
     );

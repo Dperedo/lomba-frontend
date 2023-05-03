@@ -18,6 +18,7 @@ import '../../presentation/popular/bloc/popular_event.dart';
 import '../../presentation/post/bloc/post_bloc.dart';
 import '../../presentation/post/bloc/post_cubit.dart';
 import '../../presentation/post/bloc/post_event.dart';
+import '../../presentation/post/pages/post_page.dart';
 import '../../presentation/recent/bloc/recent_bloc.dart';
 import '../../presentation/recent/bloc/recent_cubit.dart';
 import '../../presentation/recent/bloc/recent_event.dart';
@@ -68,8 +69,14 @@ class KeypadVoteVoted extends StatelessWidget {
               width: 5,
             ),
             showCommentsButton(context, () {
-              BlocProvider.of<NavBloc>(context).add(NavigateTo(
-                  NavItem.pagePost, context, <String, dynamic>{"id": post.id}));
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return PostPage(postId: post.id, hasReference: true);
+              }));
+
+              //BlocProvider.of<NavBloc>(context).add(NavigateTo(
+              //    NavItem.pagePost,
+              //    context,
+              //    <String, dynamic>{"id": post.id, "hasReference": true}));
             }),
             const SizedBox(
               width: 5,
@@ -130,10 +137,15 @@ class KeypadVotePopular extends StatelessWidget {
                     width: 5,
                   ),
                   showCommentsButton(context, () {
-                    BlocProvider.of<NavBloc>(context).add(NavigateTo(
-                        NavItem.pagePost,
-                        context,
-                        <String, dynamic>{"id": post.id}));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return PostPage(postId: post.id, hasReference: true);
+                    }));
+
+                    //BlocProvider.of<NavBloc>(context).add(NavigateTo(
+                    //    NavItem.pagePost,
+                    //    context,
+                    //    <String, dynamic>{"id": post.id, "hasReference": true}));
                   }),
                   const SizedBox(
                     width: 5,
@@ -199,10 +211,15 @@ class KeypadVoteRecent extends StatelessWidget {
                     width: 5,
                   ),
                   showCommentsButton(context, () {
-                    BlocProvider.of<NavBloc>(context).add(NavigateTo(
-                        NavItem.pagePost,
-                        context,
-                        <String, dynamic>{"id": post.id}));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return PostPage(postId: post.id, hasReference: true);
+                    }));
+
+                    //BlocProvider.of<NavBloc>(context).add(NavigateTo(
+                    //    NavItem.pagePost,
+                    //    context,
+                    //    <String, dynamic>{"id": post.id, "hasReference": true}));
                   }),
                   const SizedBox(
                     width: 5,
@@ -268,10 +285,15 @@ class KeypadVotePost extends StatelessWidget {
                     width: 5,
                   ),
                   showCommentsButton(context, () {
-                    BlocProvider.of<NavBloc>(context).add(NavigateTo(
-                        NavItem.pagePost,
-                        context,
-                        <String, dynamic>{"id": post.id}));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return PostPage(postId: post.id, hasReference: true);
+                    }));
+
+                    //BlocProvider.of<NavBloc>(context).add(NavigateTo(
+                    //    NavItem.pagePost,
+                    //    context,
+                    //    <String, dynamic>{"id": post.id, "hasReference": true}));
                   }),
                   const SizedBox(
                     width: 5,

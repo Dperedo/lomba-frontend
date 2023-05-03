@@ -195,7 +195,9 @@ class _MyApp extends State<MyApp> {
       return const SettingAdminPage();
     }
     if (state.selectedItem == NavItem.pagePost) {
-      return PostPage(postId: state.args!["id"].toString());
+      return PostPage(
+          postId: state.args!["id"].toString(),
+          hasReference: state.args!["hasReference"] as bool? ?? false);
     }
     if (state.selectedItem == NavItem.pageFavorites) {
       return FavoritesPage();

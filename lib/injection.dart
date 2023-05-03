@@ -76,6 +76,7 @@ import 'domain/usecases/orgas/get_orgauser.dart';
 import 'domain/usecases/post/get_detailedlist_posts.dart';
 import 'domain/usecases/post/get_favorites_posts.dart';
 import 'domain/usecases/post/get_saved_posts.dart';
+import 'domain/usecases/post/get_withuser_post.dart';
 import 'domain/usecases/setting/get_setting_admin.dart';
 import 'domain/usecases/setting/get_setting_super.dart';
 import 'domain/usecases/setting/updated_setting_admin.dart';
@@ -194,8 +195,8 @@ Future<void> init() async {
         locator(),
         locator(),
       ));
-  locator.registerFactory(
-      () => AddContentBloc(locator(), locator(), locator()));
+  locator
+      .registerFactory(() => AddContentBloc(locator(), locator(), locator()));
   locator.registerFactory(
       () => PopularBloc(locator(), locator(), locator(), locator(), locator()));
 
@@ -229,13 +230,14 @@ Future<void> init() async {
         locator(),
         locator(),
       ));
-  locator.registerFactory(
-      () => PostBloc(
+  locator.registerFactory(() => PostBloc(
         locator(),
         locator(),
         locator(),
         locator(),
-        locator(),));
+        locator(),
+        locator(),
+      ));
   locator.registerFactory(
       () => FavoritesBloc(locator(), locator(), locator(), locator()));
   locator.registerFactory(
@@ -300,6 +302,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => EnablePost(locator()));
   locator.registerLazySingleton(() => ChangeStagePost(locator()));
   locator.registerLazySingleton(() => GetPost(locator()));
+  locator.registerLazySingleton(() => GetWithUserPost(locator()));
   locator.registerLazySingleton(() => GetFavoritesPosts(locator()));
   locator.registerLazySingleton(() => GetSavedPosts(locator()));
 
@@ -352,8 +355,7 @@ Future<void> init() async {
     () => StageRepositoryImpl(remoteDataSource: locator()),
   );
   locator.registerLazySingleton<StorageRepository>(
-    () => StorageRepositoryImpl(remoteDataSource: locator())
-  );
+      () => StorageRepositoryImpl(remoteDataSource: locator()));
   locator.registerLazySingleton<SettingRepository>(
     () => SettingRepositoryImpl(remoteDataSource: locator()),
   );

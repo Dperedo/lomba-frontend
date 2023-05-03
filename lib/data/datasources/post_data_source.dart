@@ -19,12 +19,21 @@ import 'local_data_source.dart';
 abstract class PostRemoteDataSource {
   Future<PostModel> addTextPost(String orgaId, String userId, TextContent text,
       String title, String flowId, bool isDraft);
-  Future<PostModel> addMultiPost(String orgaId, String userId, TextContent? text,
-      ImageContent? image, VideoContent? video, String title, String flowId, bool isDraft);
+  Future<PostModel> addMultiPost(
+      String orgaId,
+      String userId,
+      TextContent? text,
+      ImageContent? image,
+      VideoContent? video,
+      String title,
+      String flowId,
+      bool isDraft);
   Future<PostModel> updatePost(
       String postId, String userId, TextContent text, String title);
   Future<PostModel> deletePost(String postId, String userId);
   Future<PostModel> getPost(String postId);
+  Future<PostModel> getPostWithUser(
+      String postId, String userId, String flowId, String stageId);
   Future<ModelContainer<PostModel>> getPosts(
       String orgaId,
       String userId,
@@ -46,20 +55,14 @@ abstract class PostRemoteDataSource {
       int pageIndex,
       int pageSize,
       Map<String, dynamic> params);
-  Future<ModelContainer<Vote>> votePublication(
-      String orgaId,
-      String userId,
-      String flowId,
-      String stageId,
-      String postId,
-      int voteValue);
+  Future<ModelContainer<Vote>> votePublication(String orgaId, String userId,
+      String flowId, String stageId, String postId, int voteValue);
   Future<PostModel> changeStagePost(
-      String postId,
-      String flowId,
-      String stageId,);
-  Future<bool> enablePost(
-      String postId,
-      bool enableOrDisable);
+    String postId,
+    String flowId,
+    String stageId,
+  );
+  Future<bool> enablePost(String postId, bool enableOrDisable);
 }
 
 class PostRemoteDataSourceImpl implements PostRemoteDataSource {
@@ -217,39 +220,47 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
   }
 
   @override
-  Future<PostModel> addMultiPost(String orgaId, String userId, TextContent? text,
-      ImageContent? image, VideoContent? video, String title, String flowId, bool isDraft)
-      async {
+  Future<PostModel> addMultiPost(
+      String orgaId,
+      String userId,
+      TextContent? text,
+      ImageContent? image,
+      VideoContent? video,
+      String title,
+      String flowId,
+      bool isDraft) async {
     final Map<String, dynamic> newMultiPost = {
       'userId': userId,
       'orgaId': orgaId,
       'flowId': flowId,
       'title': title,
       'isdraft': isDraft,
-      'textContent': text==null?null:{
-        'text': text.text
-        },
-      'imageContent': image==null?null:{
-        'url': image.url,
-        'size': image.size,
-        'filetype': image.filetype,
-        'cloudFileId': image.cloudFileId,
-        'width': image.width,
-        'height': image.height,
-        'description': image.description,
-        },
-      'videoContent': video==null?null:{
-        'url': video.url,
-        'size': video.size,
-        'filetype': video.filetype,
-        'cloudFileId': video.cloudFileId,
-        'width': video.width,
-        'height': video.height,
-        'description': video.description,
-        'thumbnailUrl': video.thumbnailUrl,
-        'thumbnailSize': video.thumbnailSize,
-        'thumbnailCloudFileId': video.thumbnailCloudFileId,
-        }
+      'textContent': text == null ? null : {'text': text.text},
+      'imageContent': image == null
+          ? null
+          : {
+              'url': image.url,
+              'size': image.size,
+              'filetype': image.filetype,
+              'cloudFileId': image.cloudFileId,
+              'width': image.width,
+              'height': image.height,
+              'description': image.description,
+            },
+      'videoContent': video == null
+          ? null
+          : {
+              'url': video.url,
+              'size': video.size,
+              'filetype': video.filetype,
+              'cloudFileId': video.cloudFileId,
+              'width': video.width,
+              'height': video.height,
+              'description': video.description,
+              'thumbnailUrl': video.thumbnailUrl,
+              'thumbnailSize': video.thumbnailSize,
+              'thumbnailCloudFileId': video.thumbnailCloudFileId,
+            }
     };
 
     final session = await localDataSource.getSavedSession();
@@ -391,9 +402,9 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
   @override
   Future<PostModel> getPost(
-      String postId,) async {
-    final url = Uri.parse(
-        '${UrlBackend.base}/api/v1/post/$postId');
+    String postId,
+  ) async {
+    final url = Uri.parse('${UrlBackend.base}/api/v1/post/$postId');
     final session = await localDataSource.getSavedSession();
 
     http.Response resp = await client.get(url, headers: {
@@ -431,10 +442,9 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
         //completar con lógica
         //completar con lógica
-        List<PostItem> listPostItems = (item['postitems'] as List)
-            .map((e) {
-              if (e['type'].toString()=='text') {
-              return PostItem(
+        List<PostItem> listPostItems = (item['postitems'] as List).map((e) {
+          if (e['type'].toString() == 'text') {
+            return PostItem(
                 content: TextContent(text: e['content']['text'].toString()),
                 type: e['type'].toString(),
                 order: int.parse(e['order'].toString()),
@@ -450,17 +460,16 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                 updated: e['updated'] != null
                     ? DateTime.parse(e['updated'].toString())
                     : null);
-                } else if (e['type'].toString()=='image') {
-                  return PostItem(
+          } else if (e['type'].toString() == 'image') {
+            return PostItem(
                 content: ImageContent(
-                  url: e['content']['url'].toString(),
-                  size: int.parse(e['content']['size'].toString()),
-                  filetype: e['content']['filetype'].toString(),
-                  cloudFileId: e['content']['cloudFileId'].toString(),
-                  width: int.parse(e['content']['width'].toString()),
-                  height: int.parse(e['content']['height'].toString()),
-                  description: e['content']['description'].toString()
-                ),
+                    url: e['content']['url'].toString(),
+                    size: int.parse(e['content']['size'].toString()),
+                    filetype: e['content']['filetype'].toString(),
+                    cloudFileId: e['content']['cloudFileId'].toString(),
+                    width: int.parse(e['content']['width'].toString()),
+                    height: int.parse(e['content']['height'].toString()),
+                    description: e['content']['description'].toString()),
                 type: e['type'].toString(),
                 order: int.parse(e['order'].toString()),
                 format: e['format'].toString(),
@@ -475,8 +484,8 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                 updated: e['updated'] != null
                     ? DateTime.parse(e['updated'].toString())
                     : null);
-                } else {
-                  return PostItem(
+          } else {
+            return PostItem(
                 content: VideoContent(
                   url: e['content']['url'].toString(),
                   size: int.parse(e['content']['size'].toString()),
@@ -486,8 +495,10 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                   height: int.parse(e['content']['height'].toString()),
                   description: e['content']['description'].toString(),
                   thumbnailUrl: e['content']['thumbnailUrl'].toString(),
-                  thumbnailSize: int.parse(e['content']['thumbnailSize'].toString()),
-                  thumbnailCloudFileId: e['content']['thumbnailCloudFileId'].toString(),
+                  thumbnailSize:
+                      int.parse(e['content']['thumbnailSize'].toString()),
+                  thumbnailCloudFileId:
+                      e['content']['thumbnailCloudFileId'].toString(),
                 ),
                 type: e['type'].toString(),
                 order: int.parse(e['order'].toString()),
@@ -503,10 +514,211 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                 updated: e['updated'] != null
                     ? DateTime.parse(e['updated'].toString())
                     : null);
-                }
-              }
-            )
+          }
+        }).toList();
+
+        List<Total> listTotals = (item['totals'] as List)
+            .map((e) => Total(
+                  flowId: e['flowId'].toString(),
+                  stageId: e['stageId'].toString(),
+                  totalcount: int.parse(e['totalcount'].toString()),
+                  totalnegative: int.parse(e['totalnegative'].toString()),
+                  totalpositive: int.parse(e['totalpositive'].toString()),
+                ))
             .toList();
+
+        List<Track> listTracks = (item['tracks'] as List)
+            .map((e) => Track(
+                name: e['name'].toString(),
+                description: e['description'].toString(),
+                userId: e['userId'].toString(),
+                flowId: e['flowId'].toString(),
+                stageIdOld: e['stageIdOld'].toString(),
+                stageIdNew: e['stageIdNew'].toString(),
+                change: e['change'].toString(),
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null))
+            .toList();
+
+        List<Vote> listVotes = item['votes'] != null
+            ? (item['votes'] as List)
+                .map((e) => Vote(
+                      userId: e['userId'].toString(),
+                      flowId: e['flowId'].toString(),
+                      stageId: e['stageId'].toString(),
+                      created: DateTime.parse(e['created'].toString()),
+                      updated: e['updated'] != null
+                          ? DateTime.parse(e['updated'].toString())
+                          : null,
+                      deleted: e['deleted'] != null
+                          ? DateTime.parse(e['deleted'].toString())
+                          : null,
+                      expires: e['expires'] != null
+                          ? DateTime.parse(e['expires'].toString())
+                          : null,
+                      value: int.parse(e['value'].toString()),
+                    ))
+                .toList()
+            : [];
+
+        //se agrega uno a uno cada PostModel nuevo.
+        listPostModel.add(PostModel(
+          id: item['id'].toString(),
+          enabled: item['enabled'].toString().toLowerCase() == 'true',
+          builtIn: item['builtIn'].toString().toLowerCase() == 'true',
+          title: item['title'].toString(),
+          orgaId: item['orgaId'].toString(),
+          userId: item['userId'].toString(),
+          flowId: item['flowId'].toString(),
+          stageId: item['stageId'].toString(),
+          created: DateTime.parse(item['created'].toString()),
+          updated: item['updated'] != null
+              ? DateTime.parse(item['updated'].toString())
+              : null,
+          deleted: item['deleted'] != null
+              ? DateTime.parse(item['deleted'].toString())
+              : null,
+          expires: item['expires'] != null
+              ? DateTime.parse(item['expires'].toString())
+              : null,
+          stages: listStage,
+          postitems: listPostItems,
+          totals: listTotals,
+          tracks: listTracks,
+          votes: listVotes,
+        ));
+      }
+
+      return Future.value(listPostModel[0]);
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<PostModel> getPostWithUser(
+      String postId, String userId, String flowId, String stageId) async {
+    final url = Uri.parse(
+        '${UrlBackend.base}/api/v1/post/$postId?userId=$userId&flowId=$flowId&stageId=$stageId');
+    final session = await localDataSource.getSavedSession();
+
+    http.Response resp = await client.get(url, headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      List<PostModel> listPostModel = [];
+
+      //iteración por cada item
+      for (var item in resObj['data']['items']) {
+        List<Stage> listStage = (item['stages'] as List)
+            .map((e) => Stage(
+                id: e['id'].toString(),
+                name: e['name'].toString(),
+                order: int.parse(e['order'].toString()),
+                queryOut: e['queryOut'],
+                enabled: e['enabled'].toString().toLowerCase() == 'true',
+                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+                created: DateTime.parse(e['created'].toString()),
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null,
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null))
+            .toList();
+
+        //completar con lógica
+        //completar con lógica
+        List<PostItem> listPostItems = (item['postitems'] as List).map((e) {
+          if (e['type'].toString() == 'text') {
+            return PostItem(
+                content: TextContent(text: e['content']['text'].toString()),
+                type: e['type'].toString(),
+                order: int.parse(e['order'].toString()),
+                format: e['format'].toString(),
+                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null);
+          } else if (e['type'].toString() == 'image') {
+            return PostItem(
+                content: ImageContent(
+                    url: e['content']['url'].toString(),
+                    size: int.parse(e['content']['size'].toString()),
+                    filetype: e['content']['filetype'].toString(),
+                    cloudFileId: e['content']['cloudFileId'].toString(),
+                    width: int.parse(e['content']['width'].toString()),
+                    height: int.parse(e['content']['height'].toString()),
+                    description: e['content']['description'].toString()),
+                type: e['type'].toString(),
+                order: int.parse(e['order'].toString()),
+                format: e['format'].toString(),
+                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null);
+          } else {
+            return PostItem(
+                content: VideoContent(
+                  url: e['content']['url'].toString(),
+                  size: int.parse(e['content']['size'].toString()),
+                  filetype: e['content']['filetype'].toString(),
+                  cloudFileId: e['content']['cloudFileId'].toString(),
+                  width: int.parse(e['content']['width'].toString()),
+                  height: int.parse(e['content']['height'].toString()),
+                  description: e['content']['description'].toString(),
+                  thumbnailUrl: e['content']['thumbnailUrl'].toString(),
+                  thumbnailSize:
+                      int.parse(e['content']['thumbnailSize'].toString()),
+                  thumbnailCloudFileId:
+                      e['content']['thumbnailCloudFileId'].toString(),
+                ),
+                type: e['type'].toString(),
+                order: int.parse(e['order'].toString()),
+                format: e['format'].toString(),
+                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null);
+          }
+        }).toList();
 
         List<Total> listTotals = (item['totals'] as List)
             .map((e) => Total(
@@ -644,10 +856,9 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
             .toList();
 
         //completar con lógica
-        List<PostItem> listPostItems = (item['postitems'] as List)
-            .map((e) {
-              if (e['type'].toString()=='text') {
-              return PostItem(
+        List<PostItem> listPostItems = (item['postitems'] as List).map((e) {
+          if (e['type'].toString() == 'text') {
+            return PostItem(
                 content: TextContent(text: e['content']['text'].toString()),
                 type: e['type'].toString(),
                 order: int.parse(e['order'].toString()),
@@ -663,17 +874,16 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                 updated: e['updated'] != null
                     ? DateTime.parse(e['updated'].toString())
                     : null);
-                } else if (e['type'].toString()=='image') {
-                  return PostItem(
+          } else if (e['type'].toString() == 'image') {
+            return PostItem(
                 content: ImageContent(
-                  url: e['content']['url'].toString(),
-                  size: int.parse(e['content']['size'].toString()),
-                  filetype: e['content']['filetype'].toString(),
-                  cloudFileId: e['content']['cloudFileId'].toString(),
-                  width: int.parse(e['content']['width'].toString()),
-                  height: int.parse(e['content']['height'].toString()),
-                  description: e['content']['description'].toString()
-                ),
+                    url: e['content']['url'].toString(),
+                    size: int.parse(e['content']['size'].toString()),
+                    filetype: e['content']['filetype'].toString(),
+                    cloudFileId: e['content']['cloudFileId'].toString(),
+                    width: int.parse(e['content']['width'].toString()),
+                    height: int.parse(e['content']['height'].toString()),
+                    description: e['content']['description'].toString()),
                 type: e['type'].toString(),
                 order: int.parse(e['order'].toString()),
                 format: e['format'].toString(),
@@ -688,8 +898,8 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                 updated: e['updated'] != null
                     ? DateTime.parse(e['updated'].toString())
                     : null);
-                } else {
-                  return PostItem(
+          } else {
+            return PostItem(
                 content: VideoContent(
                   url: e['content']['url'].toString(),
                   size: int.parse(e['content']['size'].toString()),
@@ -699,8 +909,10 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                   height: int.parse(e['content']['height'].toString()),
                   description: e['content']['description'].toString(),
                   thumbnailUrl: e['content']['thumbnailUrl'].toString(),
-                  thumbnailSize: int.parse(e['content']['thumbnailSize'].toString()),
-                  thumbnailCloudFileId: e['content']['thumbnailCloudFileId'].toString(),
+                  thumbnailSize:
+                      int.parse(e['content']['thumbnailSize'].toString()),
+                  thumbnailCloudFileId:
+                      e['content']['thumbnailCloudFileId'].toString(),
                 ),
                 type: e['type'].toString(),
                 order: int.parse(e['order'].toString()),
@@ -716,10 +928,8 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                 updated: e['updated'] != null
                     ? DateTime.parse(e['updated'].toString())
                     : null);
-                }
-              }
-            )
-            .toList();
+          }
+        }).toList();
 
         List<Total> listTotals = (item['totals'] as List)
             .map((e) => Total(
@@ -1480,10 +1690,9 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
             .toList();
 
         //completar con lógica
-        List<PostItem> listPostItems = (item['postitems'] as List)
-            .map((e) {
-              if (e['type'].toString()=='text') {
-              return PostItem(
+        List<PostItem> listPostItems = (item['postitems'] as List).map((e) {
+          if (e['type'].toString() == 'text') {
+            return PostItem(
                 content: TextContent(text: e['content']['text'].toString()),
                 type: e['type'].toString(),
                 order: int.parse(e['order'].toString()),
@@ -1499,17 +1708,16 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                 updated: e['updated'] != null
                     ? DateTime.parse(e['updated'].toString())
                     : null);
-                } else if (e['type'].toString()=='image') {
-                  return PostItem(
+          } else if (e['type'].toString() == 'image') {
+            return PostItem(
                 content: ImageContent(
-                  url: e['content']['url'].toString(),
-                  size: int.parse(e['content']['size'].toString()),
-                  filetype: e['content']['filetype'].toString(),
-                  cloudFileId: e['content']['cloudFileId'].toString(),
-                  width: int.parse(e['content']['width'].toString()),
-                  height: int.parse(e['content']['height'].toString()),
-                  description: e['content']['description'].toString()
-                ),
+                    url: e['content']['url'].toString(),
+                    size: int.parse(e['content']['size'].toString()),
+                    filetype: e['content']['filetype'].toString(),
+                    cloudFileId: e['content']['cloudFileId'].toString(),
+                    width: int.parse(e['content']['width'].toString()),
+                    height: int.parse(e['content']['height'].toString()),
+                    description: e['content']['description'].toString()),
                 type: e['type'].toString(),
                 order: int.parse(e['order'].toString()),
                 format: e['format'].toString(),
@@ -1524,8 +1732,8 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                 updated: e['updated'] != null
                     ? DateTime.parse(e['updated'].toString())
                     : null);
-                } else {
-                  return PostItem(
+          } else {
+            return PostItem(
                 content: VideoContent(
                   url: e['content']['url'].toString(),
                   size: int.parse(e['content']['size'].toString()),
@@ -1535,8 +1743,10 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                   height: int.parse(e['content']['height'].toString()),
                   description: e['content']['description'].toString(),
                   thumbnailUrl: e['content']['thumbnailUrl'].toString(),
-                  thumbnailSize: int.parse(e['content']['thumbnailSize'].toString()),
-                  thumbnailCloudFileId: e['content']['thumbnailCloudFileId'].toString(),
+                  thumbnailSize:
+                      int.parse(e['content']['thumbnailSize'].toString()),
+                  thumbnailCloudFileId:
+                      e['content']['thumbnailCloudFileId'].toString(),
                 ),
                 type: e['type'].toString(),
                 order: int.parse(e['order'].toString()),
@@ -1552,10 +1762,8 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                 updated: e['updated'] != null
                     ? DateTime.parse(e['updated'].toString())
                     : null);
-                }
-              }
-            )
-            .toList();
+          }
+        }).toList();
 
         List<Total> listTotals = (item['totals'] as List)
             .map((e) => Total(
@@ -1663,9 +1871,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
   @override
   Future<PostModel> changeStagePost(
-      String postId,
-      String flowId,
-      String stageId) async {
+      String postId, String flowId, String stageId) async {
     final url = Uri.parse(
         '${UrlBackend.base}/api/v1/post/stage/$postId?flowId=$flowId&stageId=$stageId');
     final session = await localDataSource.getSavedSession();
@@ -1810,9 +2016,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
   }
 
   @override
-  Future<bool> enablePost(
-      String postId,
-      bool enableOrDisable) async {
+  Future<bool> enablePost(String postId, bool enableOrDisable) async {
     final url = Uri.parse(
         '${UrlBackend.base}/api/v1/post/enable/$postId?enable=${enableOrDisable.toString()}');
     final session = await localDataSource.getSavedSession();

@@ -26,37 +26,47 @@ class PostRepositoryImpl implements PostRepository {
 
       return (Right(result.toEntity()));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
   @override
-  Future<Either<Failure, Post>> addMultiPost(String orgaId, String userId, TextContent? text,
-      ImageContent? image, VideoContent? video, String title, String flowId, bool isDraft) async {
+  Future<Either<Failure, Post>> addMultiPost(
+      String orgaId,
+      String userId,
+      TextContent? text,
+      ImageContent? image,
+      VideoContent? video,
+      String title,
+      String flowId,
+      bool isDraft) async {
     try {
       final result = await remoteDataSource.addMultiPost(
           orgaId, userId, text, image, video, title, flowId, isDraft);
 
       return (Right(result.toEntity()));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
   @override
-  Future<Either<Failure, Post>> updatePost(String postId, String userId,
-      TextContent text, String title) async {
+  Future<Either<Failure, Post>> updatePost(
+      String postId, String userId, TextContent text, String title) async {
     try {
-      final result = await remoteDataSource.updatePost(
-          postId, userId, text, title);
+      final result =
+          await remoteDataSource.updatePost(postId, userId, text, title);
 
       return (Right(result.toEntity()));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -65,37 +75,41 @@ class PostRepositoryImpl implements PostRepository {
   @override
   Future<Either<Failure, Post>> deletePost(String postId, String userId) async {
     try {
-      final result = await remoteDataSource.deletePost(
-          postId, userId);
+      final result = await remoteDataSource.deletePost(postId, userId);
 
       return (Right(result.toEntity()));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
   @override
-  Future<Either<Failure, Post>> changeStagePost(String postId, String flowId,
-    String stageId,) async {
+  Future<Either<Failure, Post>> changeStagePost(
+    String postId,
+    String flowId,
+    String stageId,
+  ) async {
     try {
-      final result = await remoteDataSource.changeStagePost(
-          postId, flowId, stageId);
+      final result =
+          await remoteDataSource.changeStagePost(postId, flowId, stageId);
 
       return (Right(result.toEntity()));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
 
   @override
-  Future<Either<Failure, Post>> enablePost(String postId, bool enableOrDisable) async {
+  Future<Either<Failure, Post>> enablePost(
+      String postId, bool enableOrDisable) async {
     try {
-      final result = await remoteDataSource.enablePost(
-          postId, enableOrDisable);
+      final result = await remoteDataSource.enablePost(postId, enableOrDisable);
 
       if (result) {
         final resultItem = await remoteDataSource.getPost(postId);
@@ -103,7 +117,8 @@ class PostRepositoryImpl implements PostRepository {
       }
       return const Left(ServerFailure('No fue posible realizar la acción'));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -116,7 +131,24 @@ class PostRepositoryImpl implements PostRepository {
 
       return Right(result.toEntity());
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Post>> getPostWithUser(
+      String postId, String userId, String flowId, String stageId) async {
+    try {
+      final result = await remoteDataSource.getPostWithUser(
+          postId, userId, flowId, stageId);
+
+      return Right(result.toEntity());
+    } on ServerException {
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -167,7 +199,8 @@ class PostRepositoryImpl implements PostRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -218,7 +251,8 @@ class PostRepositoryImpl implements PostRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -266,7 +300,8 @@ class PostRepositoryImpl implements PostRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -314,7 +349,8 @@ class PostRepositoryImpl implements PostRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -365,7 +401,8 @@ class PostRepositoryImpl implements PostRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -421,7 +458,8 @@ class PostRepositoryImpl implements PostRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -474,7 +512,8 @@ class PostRepositoryImpl implements PostRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -527,7 +566,8 @@ class PostRepositoryImpl implements PostRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -580,7 +620,8 @@ class PostRepositoryImpl implements PostRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -622,7 +663,8 @@ class PostRepositoryImpl implements PostRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
@@ -671,7 +713,8 @@ class PostRepositoryImpl implements PostRepository {
           resultModelContainer.totalPages,
           resultModelContainer.kind));
     } on ServerException {
-      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
     } on Exception {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
