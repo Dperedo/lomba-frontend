@@ -481,6 +481,112 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
+  Future<Either<Failure, ModelContainer<Post>>> getFavoritesPosts(
+      String orgaId,
+      String userId,
+      String flowId,
+      String stageId,
+      String searchText,
+      Map<String, int> fieldsOrder,
+      int pageIndex,
+      int pageSize,
+      int voteState) async {
+    try {
+      final Map<String, dynamic> params = {'voteState': voteState};
+      List<dynamic> order = [];
+      fieldsOrder.forEach((key, value) {
+        order.add([key, value == 1 ? value : -1]);
+      });
+      final resultModelContainer = await remoteDataSource.getPosts(
+          orgaId,
+          userId,
+          flowId,
+          stageId,
+          searchText,
+          order,
+          pageIndex,
+          pageSize,
+          params,
+          BoxPages.favoritesPosts);
+
+      List<Post> list = [];
+
+      if (resultModelContainer.currentItemCount > 0) {
+        for (var element in resultModelContainer.items) {
+          list.add(element.toEntity());
+        }
+      }
+
+      return Right(ModelContainer<Post>(
+          list,
+          resultModelContainer.currentItemCount,
+          resultModelContainer.itemsPerPage,
+          resultModelContainer.startIndex,
+          resultModelContainer.totalItems,
+          resultModelContainer.pageIndex,
+          resultModelContainer.totalPages,
+          resultModelContainer.kind));
+    } on ServerException {
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ModelContainer<Post>>> getSavedPosts(
+      String orgaId,
+      String userId,
+      String flowId,
+      String stageId,
+      String searchText,
+      Map<String, int> fieldsOrder,
+      int pageIndex,
+      int pageSize,
+      int voteState) async {
+    try {
+      final Map<String, dynamic> params = {'voteState': voteState};
+      List<dynamic> order = [];
+      fieldsOrder.forEach((key, value) {
+        order.add([key, value == 1 ? value : -1]);
+      });
+      final resultModelContainer = await remoteDataSource.getPosts(
+          orgaId,
+          userId,
+          flowId,
+          stageId,
+          searchText,
+          order,
+          pageIndex,
+          pageSize,
+          params,
+          BoxPages.savedPosts);
+
+      List<Post> list = [];
+
+      if (resultModelContainer.currentItemCount > 0) {
+        for (var element in resultModelContainer.items) {
+          list.add(element.toEntity());
+        }
+      }
+
+      return Right(ModelContainer<Post>(
+          list,
+          resultModelContainer.currentItemCount,
+          resultModelContainer.itemsPerPage,
+          resultModelContainer.startIndex,
+          resultModelContainer.totalItems,
+          resultModelContainer.pageIndex,
+          resultModelContainer.totalPages,
+          resultModelContainer.kind));
+    } on ServerException {
+      return const Left(ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
+    }
+  }
+
+  @override
   Future<Either<Failure, ModelContainer<Vote>>> votePublication(
       String orgaId,
       String userId,

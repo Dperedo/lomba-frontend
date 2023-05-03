@@ -5,6 +5,7 @@ import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart
 import 'package:lomba_frontend/presentation/approved/bloc/approved_bloc.dart';
 import 'package:lomba_frontend/presentation/detailed_list/bloc/detailed_list_bloc.dart';
 import 'package:lomba_frontend/presentation/detailed_list/page/detailed_list_page.dart';
+import 'package:lomba_frontend/presentation/favorites/page/favorites_page.dart';
 import 'package:lomba_frontend/presentation/flow/bloc/flow_bloc.dart';
 import 'package:lomba_frontend/presentation/flow/page/flow_page.dart';
 import 'package:lomba_frontend/presentation/nav/bloc/nav_bloc.dart';
@@ -16,6 +17,7 @@ import 'package:lomba_frontend/presentation/popular/pages/popular_page.dart';
 import 'package:lomba_frontend/presentation/post/bloc/post_bloc.dart';
 import 'package:lomba_frontend/presentation/post/pages/post_page.dart';
 import 'package:lomba_frontend/presentation/router/bloc/router_bloc.dart';
+import 'package:lomba_frontend/presentation/saved/page/saved_page.dart';
 import 'package:lomba_frontend/presentation/setting_admin/bloc/setting_admin_bloc.dart';
 import 'package:lomba_frontend/presentation/setting_admin/page/setting_admin_page.dart';
 import 'package:lomba_frontend/presentation/setting_super/bloc/setting_super_bloc.dart';
@@ -30,6 +32,7 @@ import 'package:lomba_frontend/presentation/voted/pages/voted_page.dart';
 import 'package:lomba_frontend/presentation/voted/bloc/voted_bloc.dart';
 
 import 'core/router/app_router.dart';
+import 'presentation/favorites/bloc/favorites_bloc.dart';
 import 'presentation/nav/bloc/nav_state.dart';
 import 'presentation/addcontent/pages/addcontent_page.dart';
 import 'presentation/demolist/bloc/demolist_bloc.dart';
@@ -44,6 +47,7 @@ import 'presentation/profile/pages/profile_page.dart';
 import 'presentation/rejected/pages/rejected_page.dart';
 import 'presentation/roles/bloc/role_bloc.dart';
 import 'presentation/roles/pages/role_page.dart';
+import 'presentation/saved/bloc/saved_bloc.dart';
 import 'presentation/sidedrawer/bloc/sidedrawer_bloc.dart';
 import 'presentation/stage/bloc/stage_bloc.dart';
 import 'presentation/users/bloc/user_bloc.dart';
@@ -101,6 +105,8 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<SettingSuperBloc>()),
         BlocProvider(create: (_) => di.locator<SettingAdminBloc>()),
         BlocProvider(create: (_) => di.locator<PostBloc>()),
+        BlocProvider(create: (_) => di.locator<FavoritesBloc>()),
+        BlocProvider(create: (_) => di.locator<SavedBloc>()),
       ],
       child: MaterialApp(
         title: 'App Demo',
@@ -190,6 +196,12 @@ class _MyApp extends State<MyApp> {
     }
     if (state.selectedItem == NavItem.pagePost) {
       return PostPage(postId: state.args!["id"].toString());
+    }
+    if (state.selectedItem == NavItem.pageFavorites) {
+      return FavoritesPage();
+    }
+    if (state.selectedItem == NavItem.pageSaved) {
+      return SavedPage();
     }
   }
 }

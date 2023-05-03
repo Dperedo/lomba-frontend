@@ -151,6 +151,8 @@ class LocalRepositoryImpl implements LocalRepository {
         opts.add(SideDrawerUserOptions.optViewed);
         opts.add(SideDrawerUserOptions.optPopular);
         opts.add(SideDrawerUserOptions.optUploaded);
+        opts.add(SideDrawerUserOptions.optFavorites);
+        opts.add(SideDrawerUserOptions.optSaved);
       }
       if (roles.contains(Roles.roleReviewer)) {
         opts.add(SideDrawerUserOptions.optToBeApproved);

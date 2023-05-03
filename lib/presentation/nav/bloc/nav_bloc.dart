@@ -9,6 +9,8 @@ import '../../approved/bloc/approved_event.dart';
 import '../../demolist/bloc/demolist_bloc.dart';
 import '../../demolist/bloc/demolist_event.dart';
 import '../../detailed_list/bloc/detailed_list_event.dart';
+import '../../favorites/bloc/favorites_bloc.dart';
+import '../../favorites/bloc/favorites_event.dart';
 import '../../flow/bloc/flow_bloc.dart';
 import '../../post/bloc/post_bloc.dart';
 import '../../post/bloc/post_event.dart';
@@ -26,6 +28,8 @@ import '../../rejected/bloc/rejected_bloc.dart';
 import '../../rejected/bloc/rejected_event.dart';
 import '../../roles/bloc/role_bloc.dart';
 import '../../roles/bloc/role_event.dart';
+import '../../saved/bloc/saved_bloc.dart';
+import '../../saved/bloc/saved_event.dart';
 import '../../setting_admin/bloc/setting_admin_bloc.dart';
 import '../../setting_admin/bloc/setting_admin_event.dart';
 import '../../setting_super/bloc/setting_super_bloc.dart';
@@ -164,6 +168,16 @@ class NavBloc extends Bloc<NavEvent, NavState> {
             case NavItem.pagePost:
               {
                 event.context.read<PostBloc>().add(const OnPostStarter(''));
+              }
+              break;
+            case NavItem.pageFavorites:
+              {
+                event.context.read<FavoritesBloc>().add(OnFavoritesStarter());
+              }
+              break;
+            case NavItem.pageSaved:
+              {
+                event.context.read<SavedBloc>().add(OnSavedStarter());
               }
               break;
           }

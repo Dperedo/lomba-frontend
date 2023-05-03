@@ -40,4 +40,6 @@ enum NavItem {
   pageSettingSuper,
   pageSettingAdmin,
   pagePost,
+  pageFavorites,
+  pageSaved,
 }

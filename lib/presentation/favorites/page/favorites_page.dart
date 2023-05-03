@@ -8,13 +8,13 @@ import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/show_posts.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/workflow/post.dart';
-import '../bloc/voted_bloc.dart';
-import '../bloc/voted_cubit.dart';
-import '../bloc/voted_event.dart';
-import '../bloc/voted_state.dart';
+import '../bloc/favorites_bloc.dart';
+import '../bloc/favorites_cubit.dart';
+import '../bloc/favorites_event.dart';
+import '../bloc/favorites_state.dart';
 
-class VotedPage extends StatelessWidget {
-  VotedPage({Key? key}) : super(key: key);
+class FavoritesPage extends StatelessWidget {
+  FavoritesPage({Key? key}) : super(key: key);
 
   final TextEditingController _searchController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
@@ -22,21 +22,21 @@ class VotedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<VotedBloc, VotedState>(
+    return BlocListener<FavoritesBloc, FavoritesState>(
       listener: (context, state) {
-        if (state is VotedError && state.message != "") {
+        if (state is FavoritesError && state.message != "") {
           snackBarNotify(context, state.message, Icons.cancel_outlined);
         }
       },
       child: ScaffoldManager(
-        title: AppBar(title: const Text("Votados")),
+        title: AppBar(title: const Text("Favoritos")),
         child: SingleChildScrollView(
             child: Center(
           child: Column(
             children: [
               BodyFormatter(
                   screenWidth: MediaQuery.of(context).size.width,
-                  child: _bodyVoted(context))
+                  child: _bodyFavorites(context))
             ],
           ),
         )),
@@ -44,36 +44,36 @@ class VotedPage extends StatelessWidget {
     );
   }
 
-  Widget _bodyVoted(BuildContext context) {
+  Widget _bodyFavorites(BuildContext context) {
     //Ordenamiento
     const Map<String, String> listFields = <String, String>{
       "Votación": "votes.created",
       "Creación": "created"
     };
-    return BlocProvider<VotedLiveCubit>(
-        create: (context) => VotedLiveCubit(),
+    return BlocProvider<FavoritesLiveCubit>(
+        create: (context) => FavoritesLiveCubit(),
         child: SizedBox(
             width: 800,
             child: Form(
                 key: _key,
-                child: BlocBuilder<VotedBloc, VotedState>(
+                child: BlocBuilder<FavoritesBloc, FavoritesState>(
                   builder: (context, state) {
-                    if (state is VotedStart) {
-                      context.read<VotedBloc>().add(OnVotedLoad(
+                    if (state is FavoritesStart) {
+                      context.read<FavoritesBloc>().add(OnFavoritesLoad(
                           '',
                           <String, int>{listFields.values.first: -1},
                           1,
                           _fixPageSize,
                           context
-                              .read<VotedLiveCubit>()
+                              .read<FavoritesLiveCubit>()
                               .state
                               .checks["positive"]!,
                           context
-                              .read<VotedLiveCubit>()
+                              .read<FavoritesLiveCubit>()
                               .state
                               .checks["negative"]!));
                     }
-                    if (state is VotedLoading) {
+                    if (state is FavoritesLoading) {
                       return SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height / 1.3,
@@ -82,7 +82,7 @@ class VotedPage extends StatelessWidget {
                         ),
                       );
                     }
-                    if (state is VotedLoaded) {
+                    if (state is FavoritesLoaded) {
                       return Column(
                         children: [
                           Container(
@@ -112,8 +112,8 @@ class VotedPage extends StatelessWidget {
                                     ),
                                     IconButton(
                                         onPressed: () {
-                                          context.read<VotedBloc>().add(
-                                              OnVotedLoad(
+                                          context.read<FavoritesBloc>().add(
+                                              OnFavoritesLoad(
                                                   _searchController.text,
                                                   <String, int>{
                                                     state.fieldsOrder.keys
@@ -122,11 +122,11 @@ class VotedPage extends StatelessWidget {
                                                   1,
                                                   _fixPageSize,
                                                   context
-                                                      .read<VotedLiveCubit>()
+                                                      .read<FavoritesLiveCubit>()
                                                       .state
                                                       .checks["positive"]!,
                                                   context
-                                                      .read<VotedLiveCubit>()
+                                                      .read<FavoritesLiveCubit>()
                                                       .state
                                                       .checks["negative"]!));
                                         },
@@ -136,7 +136,7 @@ class VotedPage extends StatelessWidget {
                                 const SizedBox(
                                   height: 8,
                                 ),
-                                BlocBuilder<VotedLiveCubit, VotedLiveState>(
+                                BlocBuilder<FavoritesLiveCubit, FavoritesLiveState>(
                                   builder: (context, statecubit) {
                                     return _showFilters(
                                         statecubit, context, state);
@@ -157,8 +157,8 @@ class VotedPage extends StatelessWidget {
                                           ),
                                         ),
                                         onPageChange: (int index) {
-                                          context.read<VotedBloc>().add(
-                                              OnVotedLoad(
+                                          context.read<FavoritesBloc>().add(
+                                              OnFavoritesLoad(
                                                   _searchController.text,
                                                   <String, int>{
                                                     state.fieldsOrder.keys
@@ -167,11 +167,11 @@ class VotedPage extends StatelessWidget {
                                                   index + 1,
                                                   _fixPageSize,
                                                   context
-                                                      .read<VotedLiveCubit>()
+                                                      .read<FavoritesLiveCubit>()
                                                       .state
                                                       .checks["positive"]!,
                                                   context
-                                                      .read<VotedLiveCubit>()
+                                                      .read<FavoritesLiveCubit>()
                                                       .state
                                                       .checks["negative"]!));
                                         },
@@ -195,7 +195,7 @@ class VotedPage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          BlocBuilder<VotedLiveCubit, VotedLiveState>(
+                          BlocBuilder<FavoritesLiveCubit, FavoritesLiveState>(
                             builder: (context, statecubit) {
                               return ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
@@ -204,12 +204,13 @@ class VotedPage extends StatelessWidget {
                                   itemBuilder: (context, index) {
                                     return ShowPosts(
                                       post: state.listItems[index],
-                                      child: KeypadVoteVoted(
+                                      child:null, 
+                                      /*KeypadVoteFavorites(
                                         context: context,
                                         post: state.listItems[index],
                                         statecubit: statecubit,
                                         keyValidate: _key,
-                                      )
+                                      )*/
                                     );
                                   });
                             },
@@ -223,16 +224,16 @@ class VotedPage extends StatelessWidget {
   }
 
   Column _showFilters(
-      VotedLiveState statecubit, BuildContext context, VotedLoaded state) {
+      FavoritesLiveState statecubit, BuildContext context, FavoritesLoaded state) {
     return Column(
       children: [
         SwitchListTile.adaptive(
           title: const Text('Mostrar positivos'),
           value: statecubit.checks["positive"]!,
           onChanged: (value) {
-            context.read<VotedLiveCubit>().changeCheckValue("positive", value);
+            context.read<FavoritesLiveCubit>().changeCheckValue("positive", value);
 
-            context.read<VotedBloc>().add(OnVotedLoad(
+            context.read<FavoritesBloc>().add(OnFavoritesLoad(
                 _searchController.text,
                 <String, int>{state.fieldsOrder.keys.first: -1},
                 1,
@@ -245,9 +246,9 @@ class VotedPage extends StatelessWidget {
           title: const Text('Mostrar negativos'),
           value: statecubit.checks["negative"]!,
           onChanged: (value) {
-            context.read<VotedLiveCubit>().changeCheckValue("negative", value);
+            context.read<FavoritesLiveCubit>().changeCheckValue("negative", value);
 
-            context.read<VotedBloc>().add(OnVotedLoad(
+            context.read<FavoritesBloc>().add(OnFavoritesLoad(
                 _searchController.text,
                 <String, int>{state.fieldsOrder.keys.first: -1},
                 1,
@@ -261,7 +262,7 @@ class VotedPage extends StatelessWidget {
   }
 
   DropdownButton<String> _sortDropdownButton(
-      VotedLoaded state, Map<String, String> listFields, BuildContext context) {
+      FavoritesLoaded state, Map<String, String> listFields, BuildContext context) {
     return DropdownButton(
       style: const TextStyle(fontSize: 14, color: Colors.black),
       value: state.fieldsOrder.keys.first,
@@ -272,77 +273,14 @@ class VotedPage extends StatelessWidget {
         );
       }).toList(),
       onChanged: (String? value) {
-        context.read<VotedBloc>().add(OnVotedLoad(
+        context.read<FavoritesBloc>().add(OnFavoritesLoad(
             state.searchText,
             <String, int>{value!: -1},
             state.pageIndex,
             _fixPageSize,
-            context.read<VotedLiveCubit>().state.checks["positive"]!,
-            context.read<VotedLiveCubit>().state.checks["negative"]!));
+            context.read<FavoritesLiveCubit>().state.checks["positive"]!,
+            context.read<FavoritesLiveCubit>().state.checks["negative"]!));
       },
-    );
-  }
-
-  Row _showVoteButtons(BuildContext context, Post post,
-      VotedLiveState statecubit) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        ElevatedButton(
-            style: ButtonStyle(
-              shape: MaterialStateProperty.resolveWith(
-                (states) => RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  side: BorderSide(
-                    color: Theme.of(context).secondaryHeaderColor,
-                    width: 2,
-                  ),
-                ),
-              ),
-            ),
-            onPressed: post.votes
-                        .any((element) => element.value == -1) ||
-                    (statecubit.votes.containsKey(post.id) &&
-                        statecubit.votes[post.id] == -1)
-                ? null
-                : () {
-                    post.votes.clear();
-                    context
-                        .read<VotedBloc>()
-                        .add(OnVotedAddVote(post.id, -1));
-                    context
-                        .read<VotedLiveCubit>()
-                        .makeVote(post.id, -1);
-                  },
-            child: const Icon(Icons.keyboard_arrow_down)),
-        ElevatedButton(
-            style: ButtonStyle(
-              shape: MaterialStateProperty.resolveWith(
-                (states) => RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  side: BorderSide(
-                    color: Theme.of(context).secondaryHeaderColor,
-                    width: 2,
-                  ),
-                ),
-              ),
-            ),
-            onPressed: post.votes
-                        .any((element) => element.value == 1) ||
-                    (statecubit.votes.containsKey(post.id) &&
-                        statecubit.votes[post.id] == 1)
-                ? null
-                : () {
-                    post.votes.clear();
-                    context
-                        .read<VotedBloc>()
-                        .add(OnVotedAddVote(post.id, 1));
-                    context
-                        .read<VotedLiveCubit>()
-                        .makeVote(post.id, 1);
-                  },
-            child: const Icon(Icons.keyboard_arrow_up)),
-      ],
     );
   }
 }

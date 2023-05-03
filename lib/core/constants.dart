@@ -132,6 +132,8 @@ class SideDrawerUserOptions {
   static const String optSettingSuper = "settingsuper";
   static const String optSettingAdmin = "settingadmin";
   static const String optPost = "post";
+  static const String optFavorites = "favorites";
+  static const String optSaved = "saved";
 }
 
 class SettingCodes {
@@ -167,6 +169,8 @@ class BoxPages {
   static const latestPosts = "latest";
   static const popularPosts = "popular";
   static const votedPosts = "voted";
+  static const favoritesPosts = "favorites";
+  static const savedPosts = "saved";
 
   static List<String> toList() => [
         BoxPages.uploadedPosts,
@@ -176,5 +180,7 @@ class BoxPages {
         BoxPages.latestPosts,
         BoxPages.popularPosts,
         BoxPages.votedPosts,
+        BoxPages.favoritesPosts,
+        BoxPages.savedPosts,
       ];
 }

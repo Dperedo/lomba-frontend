@@ -28,6 +28,7 @@ import 'package:lomba_frontend/domain/usecases/storage/upload_cloudfile.dart';
 import 'package:lomba_frontend/presentation/addcontent/bloc/addcontent_bloc.dart';
 import 'package:lomba_frontend/presentation/approved/bloc/approved_bloc.dart';
 import 'package:lomba_frontend/presentation/detailed_list/bloc/detailed_list_bloc.dart';
+import 'package:lomba_frontend/presentation/favorites/bloc/favorites_bloc.dart';
 import 'package:lomba_frontend/presentation/flow/bloc/flow_bloc.dart';
 import 'package:lomba_frontend/presentation/login/bloc/login_bloc.dart';
 import 'package:lomba_frontend/data/datasources/orga_data_source.dart';
@@ -39,6 +40,7 @@ import 'package:lomba_frontend/presentation/popular/bloc/popular_bloc.dart';
 import 'package:lomba_frontend/presentation/post/bloc/post_bloc.dart';
 import 'package:lomba_frontend/presentation/rejected/bloc/rejected_bloc.dart';
 import 'package:lomba_frontend/presentation/router/bloc/router_bloc.dart';
+import 'package:lomba_frontend/presentation/saved/bloc/saved_bloc.dart';
 import 'package:lomba_frontend/presentation/setting_admin/bloc/setting_admin_bloc.dart';
 import 'package:lomba_frontend/presentation/setting_super/bloc/setting_super_bloc.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_bloc.dart';
@@ -72,6 +74,8 @@ import 'domain/usecases/local/get_session_role.dart';
 import 'domain/usecases/local/get_session_status.dart';
 import 'domain/usecases/orgas/get_orgauser.dart';
 import 'domain/usecases/post/get_detailedlist_posts.dart';
+import 'domain/usecases/post/get_favorites_posts.dart';
+import 'domain/usecases/post/get_saved_posts.dart';
 import 'domain/usecases/setting/get_setting_admin.dart';
 import 'domain/usecases/setting/get_setting_super.dart';
 import 'domain/usecases/setting/updated_setting_admin.dart';
@@ -226,7 +230,16 @@ Future<void> init() async {
         locator(),
       ));
   locator.registerFactory(
-      () => PostBloc(locator(), locator(), locator(),));
+      () => PostBloc(
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+        locator(),));
+  locator.registerFactory(
+      () => FavoritesBloc(locator(), locator(), locator(), locator()));
+  locator.registerFactory(
+      () => SavedBloc(locator(), locator(), locator(), locator()));
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));
@@ -287,6 +300,8 @@ Future<void> init() async {
   locator.registerLazySingleton(() => EnablePost(locator()));
   locator.registerLazySingleton(() => ChangeStagePost(locator()));
   locator.registerLazySingleton(() => GetPost(locator()));
+  locator.registerLazySingleton(() => GetFavoritesPosts(locator()));
+  locator.registerLazySingleton(() => GetSavedPosts(locator()));
 
   locator.registerLazySingleton(() => GetFlow(locator()));
   locator.registerLazySingleton(() => GetFlows(locator()));

@@ -329,6 +329,26 @@ class SideDrawer extends StatelessWidget {
                 ));
               }
 
+              if (state.opts.contains(SideDrawerUserOptions.optFavorites)) {
+                childrenOptionsList.add(ListTile(
+                  leading: const Icon(Icons.favorite),
+                  title: const Text('Favoritos'),
+                  onTap: () {
+                    _handleItemClick(context, NavItem.pageFavorites);
+                  },
+                ));
+              }
+
+              if (state.opts.contains(SideDrawerUserOptions.optSaved)) {
+                childrenOptionsList.add(ListTile(
+                  leading: const Icon(Icons.bookmark),
+                  title: const Text('Guardados'),
+                  onTap: () {
+                    _handleItemClick(context, NavItem.pageSaved);
+                  },
+                ));
+              }
+
               if (state.opts.contains(SideDrawerUserOptions.optLogOff)) {
                 childrenOptionsList.add(ListTile(
                   leading: const Icon(Icons.logout),
