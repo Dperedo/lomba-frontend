@@ -11,13 +11,13 @@ import '../../../core/widgets/scaffold_manager.dart';
 import '../../../core/widgets/show_posts.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/workflow/post.dart';
-import '../../../domain/entities/workflow/textcontent.dart';
 import '../../login/bloc/login_event.dart';
 import '../../nav/bloc/nav_event.dart';
 import '../bloc/recent_bloc.dart';
 import '../bloc/recent_cubit.dart';
 import '../bloc/recent_event.dart';
 import '../bloc/recent_state.dart';
+import '../../../injection.dart' as di;
 
 ///RecentPage del sistema, en el futuro debe cambiar a página principal
 ///
@@ -65,7 +65,7 @@ class RecentPage extends StatelessWidget {
       "Creación": "created"
     };
     return BlocProvider<RecentLiveCubit>(
-      create: (context) => RecentLiveCubit(),
+      create: (context) => RecentLiveCubit(di.locator(),),
       child: SizedBox(
         width: 800,
         child: BlocBuilder<RecentBloc, RecentState>(builder: (context, state) {
@@ -184,6 +184,7 @@ class RecentPage extends StatelessWidget {
                               post: state.listItems[index],
                               statecubit: statecubit,
                               validLogin: state.validLogin,
+                              userId: state.userId,
                             )
                           );
                           //return ShowPosts(post: state.listItems[index], child: _showVoteButtons(context, state.listItems[index], state.validLogin, statecubit));

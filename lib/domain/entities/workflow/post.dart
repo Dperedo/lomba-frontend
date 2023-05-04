@@ -5,6 +5,8 @@ import 'package:lomba_frontend/domain/entities/workflow/total.dart';
 import 'package:lomba_frontend/domain/entities/workflow/track.dart';
 import 'package:lomba_frontend/domain/entities/workflow/vote.dart';
 
+import 'bookmark.dart';
+
 class Post extends Equatable {
   const Post({
     required this.id,
@@ -21,6 +23,7 @@ class Post extends Equatable {
     required this.totals,
     required this.tracks,
     required this.votes,
+    required this.bookmarks,
     required this.updated,
     required this.deleted,
     required this.expires,
@@ -37,6 +40,7 @@ class Post extends Equatable {
   final List<Total> totals;
   final List<Track> tracks;
   final List<Vote> votes;
+  final List<Bookmark> bookmarks;
   final bool builtIn;
   final DateTime created;
   final DateTime? updated;
@@ -59,6 +63,7 @@ class Post extends Equatable {
         postitems,
         totals,
         tracks,
-        votes
+        votes,
+        bookmarks,
       ];
 }
