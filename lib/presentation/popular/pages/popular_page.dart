@@ -13,6 +13,7 @@ import '../bloc/popular_bloc.dart';
 import '../bloc/popular_cubit.dart';
 import '../bloc/popular_event.dart';
 import '../bloc/popular_state.dart';
+import '../../../injection.dart' as di;
 
 ///Página con el contenido popular.
 ///
@@ -56,7 +57,7 @@ class PopularPage extends StatelessWidget {
       "Popular": "totals.totalpositive"
     };
     return BlocProvider<PopularLiveCubit>(
-      create: (context) => PopularLiveCubit(),
+      create: (context) => PopularLiveCubit(di.locator(),),
       child: SizedBox(
         width: 800,
         child:

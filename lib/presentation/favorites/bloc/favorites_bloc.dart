@@ -6,17 +6,17 @@ import 'package:rxdart/rxdart.dart';
 import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
-import '../../../domain/usecases/post/get_voted_posts.dart';
+import '../../../domain/usecases/post/get_favorites_posts.dart';
 import 'favorites_event.dart';
 import 'favorites_state.dart';
 
 class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
-  final GetVotedPosts _getVotedPosts;
+  final GetFavoritesPosts _getFavoritesPosts;
   final GetSession _getSession;
   final VotePublication _votePublication;
   final GetUploadedPosts _getUploadedPosts;
 
-  FavoritesBloc(this._getVotedPosts, this._getSession, this._votePublication,
+  FavoritesBloc(this._getFavoritesPosts, this._getSession, this._votePublication,
       this._getUploadedPosts)
       : super(FavoritesStart()) {
     on<OnFavoritesStarter>((event, emit) => emit(FavoritesStart()));
@@ -35,7 +35,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
       } else if (event.negative) {
         voteValue = -1;
       }
-      final result = await _getVotedPosts.execute(
+      final result = await _getFavoritesPosts.execute(
         auth.getOrgaId()!,
         auth.getUserId()!,
         flowId,

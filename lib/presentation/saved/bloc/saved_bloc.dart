@@ -8,15 +8,16 @@ import 'package:rxdart/rxdart.dart';
 import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
+import '../../../domain/usecases/post/get_saved_posts.dart';
 import '../../../domain/usecases/post/get_voted_posts.dart';
 
 class SavedBloc extends Bloc<SavedEvent, SavedState> {
-  final GetVotedPosts _getVotedPosts;
+  final GetSavedPosts _getSavedPosts;
   final GetSession _getSession;
   final VotePublication _votePublication;
   final GetUploadedPosts _getUploadedPosts;
 
-  SavedBloc(this._getVotedPosts, this._getSession, this._votePublication,
+  SavedBloc(this._getSavedPosts, this._getSession, this._votePublication,
       this._getUploadedPosts)
       : super(SavedStart()) {
     on<OnSavedStarter>((event, emit) => emit(SavedStart()));
@@ -35,7 +36,7 @@ class SavedBloc extends Bloc<SavedEvent, SavedState> {
       } else if (event.negative) {
         voteValue = -1;
       }
-      final result = await _getVotedPosts.execute(
+      final result = await _getSavedPosts.execute(
         auth.getOrgaId()!,
         auth.getUserId()!,
         flowId,

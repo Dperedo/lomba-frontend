@@ -29,7 +29,7 @@ class SavedPage extends StatelessWidget {
         }
       },
       child: ScaffoldManager(
-        title: AppBar(title: const Text("Votados")),
+        title: AppBar(title: const Text("Guardados")),
         child: SingleChildScrollView(
             child: Center(
           child: Column(
