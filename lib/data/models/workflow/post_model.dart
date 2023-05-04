@@ -1,71 +1,84 @@
 import 'package:lomba_frontend/domain/entities/workflow/post.dart';
 
-class PostModel extends Post{
-  const PostModel({
-    required id, 
-    required title, 
-    required orgaId, 
-    required userId, 
-    required flowId, 
-    required stageId, 
-    required enabled, 
-    required builtIn, 
-    required created, 
-    required stages, 
-    required postitems, 
-    required totals, 
-    required tracks, 
-    required votes,
-    required bookmarks,
-    required updated, 
-    required deleted, 
-    required expires}) 
-    : super(
-      id: id,
-      enabled: enabled,
-      builtIn: builtIn,
-      created: created,
-      stages: stages,
-      title: title,
-      orgaId: orgaId,
-      userId: userId,
-      flowId: flowId,
-      stageId: stageId,
-      postitems: postitems,
-      totals: totals,
-      tracks: tracks,
-      votes: votes,
-      bookmarks: bookmarks,
-      updated: updated,
-      deleted: deleted,
-      expires: expires
-    );
+class PostModel extends Post {
+  const PostModel(
+      {required id,
+      required title,
+      required orgaId,
+      required userId,
+      required flowId,
+      required stageId,
+      required enabled,
+      required builtIn,
+      required created,
+      required stages,
+      required postitems,
+      required totals,
+      required tracks,
+      required votes,
+      required bookmarks,
+      required updated,
+      required deleted,
+      required expires,
+      required totalfavs,
+      required totalsaves,
+      required totalcomments,
+      required totalreports,
+      required totaldownloads})
+      : super(
+            id: id,
+            enabled: enabled,
+            builtIn: builtIn,
+            created: created,
+            stages: stages,
+            title: title,
+            orgaId: orgaId,
+            userId: userId,
+            flowId: flowId,
+            stageId: stageId,
+            postitems: postitems,
+            totals: totals,
+            tracks: tracks,
+            votes: votes,
+            bookmarks: bookmarks,
+            updated: updated,
+            deleted: deleted,
+            expires: expires,
+            totalfavs: totalfavs,
+            totalsaves: totalsaves,
+            totalcomments: totalcomments,
+            totalreports: totalreports,
+            totaldownloads: totaldownloads);
 
-  factory PostModel.fromJson(Map<String, dynamic> json){
+  factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
-      id: json['id'],
-      enabled: json['enabled'],
-      builtIn: json['builtIn'],
-      created: json['created'],
-      stages: json['stages'],
-      title: json['titles'],
-      orgaId: json['orgaId'],
-      userId: json['userId'],
-      flowId: json['flowId'],
-      stageId: json['stageId'],
-      postitems: json['postitems'],
-      totals: json['totals'],
-      tracks: json['tracks'],
-      votes: json['votes'],
-      bookmarks: json['bookmarks'],
-      updated: json['updated'],
-      deleted: json['deleted'],
-      expires: json['expires']
-    );
+        id: json['id'],
+        enabled: json['enabled'],
+        builtIn: json['builtIn'],
+        created: json['created'],
+        stages: json['stages'],
+        title: json['titles'],
+        orgaId: json['orgaId'],
+        userId: json['userId'],
+        flowId: json['flowId'],
+        stageId: json['stageId'],
+        postitems: json['postitems'],
+        totals: json['totals'],
+        tracks: json['tracks'],
+        votes: json['votes'],
+        bookmarks: json['bookmarks'],
+        updated: json['updated'],
+        deleted: json['deleted'],
+        expires: json['expires'],
+        totalfavs: json['totalfavs'],
+        totalsaves: json['totalsaves'],
+        totalcomments: json['totalcomments'],
+        totalreports: json['totalreports'],
+        totaldownloads: json['totaldownloads']);
   }
 
-  Map<String, dynamic> toJson(){
-    return{
+  Map<String, dynamic> toJson() {
+    return {
       'id': id,
       'enabled': enabled,
       'builtIn': builtIn,
@@ -79,11 +92,16 @@ class PostModel extends Post{
       'postitems': postitems,
       'totals': totals,
       'tracks': tracks,
-      'votes' : votes,
+      'votes': votes,
       'bookmarks': bookmarks,
       'updated': updated,
       'deleted': deleted,
-      'expires': expires
+      'expires': expires,
+      'totalfavs': totalfavs,
+      'totalsaves': totalsaves,
+      'totalcomments': totalcomments,
+      'totalreports': totalreports,
+      'totaldownloads': totaldownloads
     };
   }
 
@@ -105,10 +123,34 @@ class PostModel extends Post{
       bookmarks: bookmarks,
       updated: updated,
       deleted: deleted,
-      expires: expires
-  );
+      expires: expires,
+      totalfavs: totalfavs,
+      totalsaves: totalsaves,
+      totalcomments: totalcomments,
+      totalreports: totalreports,
+      totaldownloads: totaldownloads);
 
   @override
-  List<Object> get props => [id, enabled, builtIn, created, stages, title,orgaId, userId,
-    flowId, stageId, postitems, totals, tracks, votes, bookmarks];
+  List<Object> get props => [
+        id,
+        enabled,
+        builtIn,
+        created,
+        stages,
+        title,
+        orgaId,
+        userId,
+        flowId,
+        stageId,
+        postitems,
+        totals,
+        tracks,
+        votes,
+        bookmarks,
+        totalfavs,
+        totalsaves,
+        totalcomments,
+        totalreports,
+        totaldownloads
+      ];
 }

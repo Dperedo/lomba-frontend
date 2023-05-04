@@ -27,6 +27,11 @@ class Post extends Equatable {
     required this.updated,
     required this.deleted,
     required this.expires,
+    required this.totalfavs,
+    required this.totalsaves,
+    required this.totalcomments,
+    required this.totalreports,
+    required this.totaldownloads,
   });
 
   final String id;
@@ -47,6 +52,11 @@ class Post extends Equatable {
   final DateTime? deleted;
   final DateTime? expires;
   final bool enabled;
+  final int totalfavs;
+  final int totalsaves;
+  final int totalreports;
+  final int totalcomments;
+  final int totaldownloads;
 
   @override
   List<Object?> get props => [
@@ -65,5 +75,10 @@ class Post extends Equatable {
         tracks,
         votes,
         bookmarks,
+        totalfavs,
+        totalsaves,
+        totalreports,
+        totalcomments,
+        totaldownloads,
       ];
 }

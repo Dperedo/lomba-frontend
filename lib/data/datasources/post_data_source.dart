@@ -98,135 +98,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
       final item = resObj['data']['items'][0];
 
-      List<Stage> listStage = (item['stages'] as List)
-          .map((e) => Stage(
-              id: e['id'].toString(),
-              name: e['name'].toString(),
-              order: int.parse(e['order'].toString()),
-              queryOut: e['queryOut'],
-              enabled: e['enabled'].toString().toLowerCase() == 'true',
-              builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-              created: DateTime.parse(e['created'].toString()),
-              updated: e['updated'] != null
-                  ? DateTime.parse(e['updated'].toString())
-                  : null,
-              deleted: e['deleted'] != null
-                  ? DateTime.parse(e['deleted'].toString())
-                  : null,
-              expires: e['expires'] != null
-                  ? DateTime.parse(e['expires'].toString())
-                  : null))
-          .toList();
-
-      //completar con lógica
-      List<PostItem> listPostItems = (item['postitems'] as List)
-          .map((e) => PostItem(
-              content: TextContent(text: e['content']['text'].toString()),
-              type: e['type'].toString(),
-              order: int.parse(e['order'].toString()),
-              format: e['format'].toString(),
-              builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-              created: DateTime.parse(e['created'].toString()),
-              deleted: e['deleted'] != null
-                  ? DateTime.parse(e['deleted'].toString())
-                  : null,
-              expires: e['expires'] != null
-                  ? DateTime.parse(e['expires'].toString())
-                  : null,
-              updated: e['updated'] != null
-                  ? DateTime.parse(e['updated'].toString())
-                  : null))
-          .toList();
-
-      List<Total> listTotals = (item['totals'] as List)
-          .map((e) => Total(
-                flowId: e['flowId'].toString(),
-                stageId: e['stageId'].toString(),
-                totalcount: int.parse(e['totalcount'].toString()),
-                totalnegative: int.parse(e['totalnegative'].toString()),
-                totalpositive: int.parse(e['totalpositive'].toString()),
-              ))
-          .toList();
-
-      List<Bookmark> listBookmarks = item['bookmarks'] != null 
-          ? (item['bookmarks'] as List)
-          .map((e) => Bookmark(
-                userId: e["userId"].toString(),
-                postId: e["postId"].toString(),
-                markType: e["markType"].toString(),
-                enabled: e["enabled"].toString().toLowerCase() == 'true',
-              ))
-          .toList()
-        :[];
-
-      List<Track> listTracks = (item['tracks'] as List)
-          .map((e) => Track(
-              name: e['name'].toString(),
-              description: e['description'].toString(),
-              userId: e['userId'].toString(),
-              flowId: e['flowId'].toString(),
-              stageIdOld: e['stageIdOld'].toString(),
-              stageIdNew: e['stageIdNew'].toString(),
-              change: e['change'].toString(),
-              created: DateTime.parse(e['created'].toString()),
-              deleted: e['deleted'] != null
-                  ? DateTime.parse(e['deleted'].toString())
-                  : null,
-              expires: e['expires'] != null
-                  ? DateTime.parse(e['expires'].toString())
-                  : null,
-              updated: e['updated'] != null
-                  ? DateTime.parse(e['updated'].toString())
-                  : null))
-          .toList();
-
-      List<Vote> listVotes = item['votes'] != null
-          ? (item['votes'] as List)
-              .map((e) => Vote(
-                    userId: e['userId'].toString(),
-                    flowId: e['flowId'].toString(),
-                    stageId: e['stageId'].toString(),
-                    created: DateTime.parse(e['created'].toString()),
-                    updated: e['updated'] != null
-                        ? DateTime.parse(e['updated'].toString())
-                        : null,
-                    deleted: e['deleted'] != null
-                        ? DateTime.parse(e['deleted'].toString())
-                        : null,
-                    expires: e['expires'] != null
-                        ? DateTime.parse(e['expires'].toString())
-                        : null,
-                    value: int.parse(e['value'].toString()),
-                  ))
-              .toList()
-          : [];
-
-      return Future.value(PostModel(
-        id: item['id'].toString(),
-        enabled: item['enabled'].toString().toLowerCase() == 'true',
-        builtIn: item['builtIn'].toString().toLowerCase() == 'true',
-        title: item['title'].toString(),
-        orgaId: item['orgaId'].toString(),
-        userId: item['userId'].toString(),
-        flowId: item['flowId'].toString(),
-        stageId: item['stageId'].toString(),
-        created: DateTime.parse(item['created'].toString()),
-        updated: item['updated'] != null
-            ? DateTime.parse(item['updated'].toString())
-            : null,
-        deleted: item['deleted'] != null
-            ? DateTime.parse(item['deleted'].toString())
-            : null,
-        expires: item['expires'] != null
-            ? DateTime.parse(item['expires'].toString())
-            : null,
-        stages: listStage,
-        postitems: listPostItems,
-        totals: listTotals,
-        tracks: listTracks,
-        votes: listVotes,
-        bookmarks: listBookmarks,
-      ));
+      return Future.value(fetchOnePost(item));
     } else {
       throw ServerException();
     }
@@ -291,135 +163,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
       final item = resObj['data']['items'][0];
 
-      List<Stage> listStage = (item['stages'] as List)
-          .map((e) => Stage(
-              id: e['id'].toString(),
-              name: e['name'].toString(),
-              order: int.parse(e['order'].toString()),
-              queryOut: e['queryOut'],
-              enabled: e['enabled'].toString().toLowerCase() == 'true',
-              builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-              created: DateTime.parse(e['created'].toString()),
-              updated: e['updated'] != null
-                  ? DateTime.parse(e['updated'].toString())
-                  : null,
-              deleted: e['deleted'] != null
-                  ? DateTime.parse(e['deleted'].toString())
-                  : null,
-              expires: e['expires'] != null
-                  ? DateTime.parse(e['expires'].toString())
-                  : null))
-          .toList();
-
-      //completar con lógica
-      List<PostItem> listPostItems = (item['postitems'] as List)
-          .map((e) => PostItem(
-              content: TextContent(text: e['content']['text'].toString()),
-              type: e['type'].toString(),
-              order: int.parse(e['order'].toString()),
-              format: e['format'].toString(),
-              builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-              created: DateTime.parse(e['created'].toString()),
-              deleted: e['deleted'] != null
-                  ? DateTime.parse(e['deleted'].toString())
-                  : null,
-              expires: e['expires'] != null
-                  ? DateTime.parse(e['expires'].toString())
-                  : null,
-              updated: e['updated'] != null
-                  ? DateTime.parse(e['updated'].toString())
-                  : null))
-          .toList();
-
-      List<Total> listTotals = (item['totals'] as List)
-          .map((e) => Total(
-                flowId: e['flowId'].toString(),
-                stageId: e['stageId'].toString(),
-                totalcount: int.parse(e['totalcount'].toString()),
-                totalnegative: int.parse(e['totalnegative'].toString()),
-                totalpositive: int.parse(e['totalpositive'].toString()),
-              ))
-          .toList();
-
-      List<Bookmark> listBookmarks = item['bookmarks'] != null 
-          ? (item['bookmarks'] as List)
-          .map((e) => Bookmark(
-                userId: e["userId"].toString(),
-                postId: e["postId"].toString(),
-                markType: e["markType"].toString(),
-                enabled: e["enabled"].toString().toLowerCase() == 'true',
-              ))
-          .toList()
-        :[];
-
-      List<Track> listTracks = (item['tracks'] as List)
-          .map((e) => Track(
-              name: e['name'].toString(),
-              description: e['description'].toString(),
-              userId: e['userId'].toString(),
-              flowId: e['flowId'].toString(),
-              stageIdOld: e['stageIdOld'].toString(),
-              stageIdNew: e['stageIdNew'].toString(),
-              change: e['change'].toString(),
-              created: DateTime.parse(e['created'].toString()),
-              deleted: e['deleted'] != null
-                  ? DateTime.parse(e['deleted'].toString())
-                  : null,
-              expires: e['expires'] != null
-                  ? DateTime.parse(e['expires'].toString())
-                  : null,
-              updated: e['updated'] != null
-                  ? DateTime.parse(e['updated'].toString())
-                  : null))
-          .toList();
-
-      List<Vote> listVotes = item['votes'] != null
-          ? (item['votes'] as List)
-              .map((e) => Vote(
-                    userId: e['userId'].toString(),
-                    flowId: e['flowId'].toString(),
-                    stageId: e['stageId'].toString(),
-                    created: DateTime.parse(e['created'].toString()),
-                    updated: e['updated'] != null
-                        ? DateTime.parse(e['updated'].toString())
-                        : null,
-                    deleted: e['deleted'] != null
-                        ? DateTime.parse(e['deleted'].toString())
-                        : null,
-                    expires: e['expires'] != null
-                        ? DateTime.parse(e['expires'].toString())
-                        : null,
-                    value: int.parse(e['value'].toString()),
-                  ))
-              .toList()
-          : [];
-
-      return Future.value(PostModel(
-        id: item['id'].toString(),
-        enabled: item['enabled'].toString().toLowerCase() == 'true',
-        builtIn: item['builtIn'].toString().toLowerCase() == 'true',
-        title: item['title'].toString(),
-        orgaId: item['orgaId'].toString(),
-        userId: item['userId'].toString(),
-        flowId: item['flowId'].toString(),
-        stageId: item['stageId'].toString(),
-        created: DateTime.parse(item['created'].toString()),
-        updated: item['updated'] != null
-            ? DateTime.parse(item['updated'].toString())
-            : null,
-        deleted: item['deleted'] != null
-            ? DateTime.parse(item['deleted'].toString())
-            : null,
-        expires: item['expires'] != null
-            ? DateTime.parse(item['expires'].toString())
-            : null,
-        stages: listStage,
-        postitems: listPostItems,
-        totals: listTotals,
-        tracks: listTracks,
-        votes: listVotes,
-        bookmarks: listBookmarks,
-      ));
+      return Future.value(fetchOnePost(item));
     } else {
       throw ServerException();
     }
@@ -443,183 +187,8 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
       List<PostModel> listPostModel = [];
 
-      //iteración por cada item
       for (var item in resObj['data']['items']) {
-        List<Stage> listStage = (item['stages'] as List)
-            .map((e) => Stage(
-                id: e['id'].toString(),
-                name: e['name'].toString(),
-                order: int.parse(e['order'].toString()),
-                queryOut: e['queryOut'],
-                enabled: e['enabled'].toString().toLowerCase() == 'true',
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null,
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null))
-            .toList();
-
-        //completar con lógica
-        //completar con lógica
-        List<PostItem> listPostItems = (item['postitems'] as List).map((e) {
-          if (e['type'].toString() == 'text') {
-            return PostItem(
-                content: TextContent(text: e['content']['text'].toString()),
-                type: e['type'].toString(),
-                order: int.parse(e['order'].toString()),
-                format: e['format'].toString(),
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null);
-          } else if (e['type'].toString() == 'image') {
-            return PostItem(
-                content: ImageContent(
-                    url: e['content']['url'].toString(),
-                    size: int.parse(e['content']['size'].toString()),
-                    filetype: e['content']['filetype'].toString(),
-                    cloudFileId: e['content']['cloudFileId'].toString(),
-                    width: int.parse(e['content']['width'].toString()),
-                    height: int.parse(e['content']['height'].toString()),
-                    description: e['content']['description'].toString()),
-                type: e['type'].toString(),
-                order: int.parse(e['order'].toString()),
-                format: e['format'].toString(),
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null);
-          } else {
-            return PostItem(
-                content: VideoContent(
-                  url: e['content']['url'].toString(),
-                  size: int.parse(e['content']['size'].toString()),
-                  filetype: e['content']['filetype'].toString(),
-                  cloudFileId: e['content']['cloudFileId'].toString(),
-                  width: int.parse(e['content']['width'].toString()),
-                  height: int.parse(e['content']['height'].toString()),
-                  description: e['content']['description'].toString(),
-                  thumbnailUrl: e['content']['thumbnailUrl'].toString(),
-                  thumbnailSize:
-                      int.parse(e['content']['thumbnailSize'].toString()),
-                  thumbnailCloudFileId:
-                      e['content']['thumbnailCloudFileId'].toString(),
-                ),
-                type: e['type'].toString(),
-                order: int.parse(e['order'].toString()),
-                format: e['format'].toString(),
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null);
-          }
-        }).toList();
-
-        List<Total> listTotals = (item['totals'] as List)
-            .map((e) => Total(
-                  flowId: e['flowId'].toString(),
-                  stageId: e['stageId'].toString(),
-                  totalcount: int.parse(e['totalcount'].toString()),
-                  totalnegative: int.parse(e['totalnegative'].toString()),
-                  totalpositive: int.parse(e['totalpositive'].toString()),
-                ))
-            .toList();
-
-        List<Track> listTracks = (item['tracks'] as List)
-            .map((e) => Track(
-                name: e['name'].toString(),
-                description: e['description'].toString(),
-                userId: e['userId'].toString(),
-                flowId: e['flowId'].toString(),
-                stageIdOld: e['stageIdOld'].toString(),
-                stageIdNew: e['stageIdNew'].toString(),
-                change: e['change'].toString(),
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null))
-            .toList();
-
-        List<Vote> listVotes = item['votes'] != null
-            ? (item['votes'] as List)
-                .map((e) => Vote(
-                      userId: e['userId'].toString(),
-                      flowId: e['flowId'].toString(),
-                      stageId: e['stageId'].toString(),
-                      created: DateTime.parse(e['created'].toString()),
-                      updated: e['updated'] != null
-                          ? DateTime.parse(e['updated'].toString())
-                          : null,
-                      deleted: e['deleted'] != null
-                          ? DateTime.parse(e['deleted'].toString())
-                          : null,
-                      expires: e['expires'] != null
-                          ? DateTime.parse(e['expires'].toString())
-                          : null,
-                      value: int.parse(e['value'].toString()),
-                    ))
-                .toList()
-            : [];
-
-        //se agrega uno a uno cada PostModel nuevo.
-        listPostModel.add(PostModel(
-          id: item['id'].toString(),
-          enabled: item['enabled'].toString().toLowerCase() == 'true',
-          builtIn: item['builtIn'].toString().toLowerCase() == 'true',
-          title: item['title'].toString(),
-          orgaId: item['orgaId'].toString(),
-          userId: item['userId'].toString(),
-          flowId: item['flowId'].toString(),
-          stageId: item['stageId'].toString(),
-          created: DateTime.parse(item['created'].toString()),
-          updated: item['updated'] != null
-              ? DateTime.parse(item['updated'].toString())
-              : null,
-          deleted: item['deleted'] != null
-              ? DateTime.parse(item['deleted'].toString())
-              : null,
-          expires: item['expires'] != null
-              ? DateTime.parse(item['expires'].toString())
-              : null,
-          stages: listStage,
-          postitems: listPostItems,
-          totals: listTotals,
-          tracks: listTracks,
-          votes: listVotes,
-        ));
+        listPostModel.add(fetchOnePost(item));
       }
 
       return Future.value(listPostModel[0]);
@@ -646,195 +215,8 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
       List<PostModel> listPostModel = [];
 
-      //iteración por cada item
       for (var item in resObj['data']['items']) {
-        List<Stage> listStage = (item['stages'] as List)
-            .map((e) => Stage(
-                id: e['id'].toString(),
-                name: e['name'].toString(),
-                order: int.parse(e['order'].toString()),
-                queryOut: e['queryOut'],
-                enabled: e['enabled'].toString().toLowerCase() == 'true',
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null,
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null))
-            .toList();
-
-        //completar con lógica
-        //completar con lógica
-        List<PostItem> listPostItems = (item['postitems'] as List).map((e) {
-          if (e['type'].toString() == 'text') {
-            return PostItem(
-                content: TextContent(text: e['content']['text'].toString()),
-                type: e['type'].toString(),
-                order: int.parse(e['order'].toString()),
-                format: e['format'].toString(),
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null);
-          } else if (e['type'].toString() == 'image') {
-            return PostItem(
-                content: ImageContent(
-                    url: e['content']['url'].toString(),
-                    size: int.parse(e['content']['size'].toString()),
-                    filetype: e['content']['filetype'].toString(),
-                    cloudFileId: e['content']['cloudFileId'].toString(),
-                    width: int.parse(e['content']['width'].toString()),
-                    height: int.parse(e['content']['height'].toString()),
-                    description: e['content']['description'].toString()),
-                type: e['type'].toString(),
-                order: int.parse(e['order'].toString()),
-                format: e['format'].toString(),
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null);
-          } else {
-            return PostItem(
-                content: VideoContent(
-                  url: e['content']['url'].toString(),
-                  size: int.parse(e['content']['size'].toString()),
-                  filetype: e['content']['filetype'].toString(),
-                  cloudFileId: e['content']['cloudFileId'].toString(),
-                  width: int.parse(e['content']['width'].toString()),
-                  height: int.parse(e['content']['height'].toString()),
-                  description: e['content']['description'].toString(),
-                  thumbnailUrl: e['content']['thumbnailUrl'].toString(),
-                  thumbnailSize:
-                      int.parse(e['content']['thumbnailSize'].toString()),
-                  thumbnailCloudFileId:
-                      e['content']['thumbnailCloudFileId'].toString(),
-                ),
-                type: e['type'].toString(),
-                order: int.parse(e['order'].toString()),
-                format: e['format'].toString(),
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null);
-          }
-        }).toList();
-
-        List<Total> listTotals = (item['totals'] as List)
-            .map((e) => Total(
-                  flowId: e['flowId'].toString(),
-                  stageId: e['stageId'].toString(),
-                  totalcount: int.parse(e['totalcount'].toString()),
-                  totalnegative: int.parse(e['totalnegative'].toString()),
-                  totalpositive: int.parse(e['totalpositive'].toString()),
-                ))
-            .toList();
-
-        List<Bookmark> listBookmarks = item['bookmarks'] != null 
-          ? (item['bookmarks'] as List)
-          .map((e) => Bookmark(
-                userId: e["userId"].toString(),
-                postId: e["postId"].toString(),
-                markType: e["markType"].toString(),
-                enabled: e["enabled"].toString().toLowerCase() == 'true',
-              ))
-          .toList()
-        :[];
-
-        List<Track> listTracks = (item['tracks'] as List)
-            .map((e) => Track(
-                name: e['name'].toString(),
-                description: e['description'].toString(),
-                userId: e['userId'].toString(),
-                flowId: e['flowId'].toString(),
-                stageIdOld: e['stageIdOld'].toString(),
-                stageIdNew: e['stageIdNew'].toString(),
-                change: e['change'].toString(),
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null))
-            .toList();
-
-        List<Vote> listVotes = item['votes'] != null
-            ? (item['votes'] as List)
-                .map((e) => Vote(
-                      userId: e['userId'].toString(),
-                      flowId: e['flowId'].toString(),
-                      stageId: e['stageId'].toString(),
-                      created: DateTime.parse(e['created'].toString()),
-                      updated: e['updated'] != null
-                          ? DateTime.parse(e['updated'].toString())
-                          : null,
-                      deleted: e['deleted'] != null
-                          ? DateTime.parse(e['deleted'].toString())
-                          : null,
-                      expires: e['expires'] != null
-                          ? DateTime.parse(e['expires'].toString())
-                          : null,
-                      value: int.parse(e['value'].toString()),
-                    ))
-                .toList()
-            : [];
-
-        //se agrega uno a uno cada PostModel nuevo.
-        listPostModel.add(PostModel(
-          id: item['id'].toString(),
-          enabled: item['enabled'].toString().toLowerCase() == 'true',
-          builtIn: item['builtIn'].toString().toLowerCase() == 'true',
-          title: item['title'].toString(),
-          orgaId: item['orgaId'].toString(),
-          userId: item['userId'].toString(),
-          flowId: item['flowId'].toString(),
-          stageId: item['stageId'].toString(),
-          created: DateTime.parse(item['created'].toString()),
-          updated: item['updated'] != null
-              ? DateTime.parse(item['updated'].toString())
-              : null,
-          deleted: item['deleted'] != null
-              ? DateTime.parse(item['deleted'].toString())
-              : null,
-          expires: item['expires'] != null
-              ? DateTime.parse(item['expires'].toString())
-              : null,
-          stages: listStage,
-          postitems: listPostItems,
-          totals: listTotals,
-          tracks: listTracks,
-          votes: listVotes,
-          bookmarks: listBookmarks,
-        ));
+        listPostModel.add(fetchOnePost(item));
       }
 
       return Future.value(listPostModel[0]);
@@ -870,390 +252,16 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
       List<PostModel> listPostModel = [];
 
-      //iteración por cada item
       for (var item in resObj['data']['items']) {
-        List<Stage> listStage = (item['stages'] as List)
-            .map((e) => Stage(
-                id: e['id'].toString(),
-                name: e['name'].toString(),
-                order: int.parse(e['order'].toString()),
-                queryOut: e['queryOut'],
-                enabled: e['enabled'].toString().toLowerCase() == 'true',
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null,
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null))
-            .toList();
-
-        //completar con lógica
-        List<PostItem> listPostItems = (item['postitems'] as List).map((e) {
-          if (e['type'].toString() == 'text') {
-            return PostItem(
-                content: TextContent(text: e['content']['text'].toString()),
-                type: e['type'].toString(),
-                order: int.parse(e['order'].toString()),
-                format: e['format'].toString(),
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null);
-          } else if (e['type'].toString() == 'image') {
-            return PostItem(
-                content: ImageContent(
-                    url: e['content']['url'].toString(),
-                    size: int.parse(e['content']['size'].toString()),
-                    filetype: e['content']['filetype'].toString(),
-                    cloudFileId: e['content']['cloudFileId'].toString(),
-                    width: int.parse(e['content']['width'].toString()),
-                    height: int.parse(e['content']['height'].toString()),
-                    description: e['content']['description'].toString()),
-                type: e['type'].toString(),
-                order: int.parse(e['order'].toString()),
-                format: e['format'].toString(),
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null);
-          } else {
-            return PostItem(
-                content: VideoContent(
-                  url: e['content']['url'].toString(),
-                  size: int.parse(e['content']['size'].toString()),
-                  filetype: e['content']['filetype'].toString(),
-                  cloudFileId: e['content']['cloudFileId'].toString(),
-                  width: int.parse(e['content']['width'].toString()),
-                  height: int.parse(e['content']['height'].toString()),
-                  description: e['content']['description'].toString(),
-                  thumbnailUrl: e['content']['thumbnailUrl'].toString(),
-                  thumbnailSize:
-                      int.parse(e['content']['thumbnailSize'].toString()),
-                  thumbnailCloudFileId:
-                      e['content']['thumbnailCloudFileId'].toString(),
-                ),
-                type: e['type'].toString(),
-                order: int.parse(e['order'].toString()),
-                format: e['format'].toString(),
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null);
-          }
-        }).toList();
-
-        List<Total> listTotals = (item['totals'] as List)
-            .map((e) => Total(
-                  flowId: e['flowId'].toString(),
-                  stageId: e['stageId'].toString(),
-                  totalcount: int.parse(e['totalcount'].toString()),
-                  totalnegative: int.parse(e['totalnegative'].toString()),
-                  totalpositive: int.parse(e['totalpositive'].toString()),
-                ))
-            .toList();
-
-        List<Bookmark> listBookmarks = item['bookmarks'] != null 
-          ? (item['bookmarks'] as List)
-          .map((e) => Bookmark(
-                userId: e["userId"].toString(),
-                postId: e["postId"].toString(),
-                markType: e["markType"].toString(),
-                enabled: e["enabled"].toString().toLowerCase() == 'true',
-              ))
-          .toList()
-        :[];
-
-        List<Track> listTracks = (item['tracks'] as List)
-            .map((e) => Track(
-                name: e['name'].toString(),
-                description: e['description'].toString(),
-                userId: e['userId'].toString(),
-                flowId: e['flowId'].toString(),
-                stageIdOld: e['stageIdOld'].toString(),
-                stageIdNew: e['stageIdNew'].toString(),
-                change: e['change'].toString(),
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null))
-            .toList();
-
-        List<Vote> listVotes = item['votes'] != null
-            ? (item['votes'] as List)
-                .map((e) => Vote(
-                      userId: e['userId'].toString(),
-                      flowId: e['flowId'].toString(),
-                      stageId: e['stageId'].toString(),
-                      created: DateTime.parse(e['created'].toString()),
-                      updated: e['updated'] != null
-                          ? DateTime.parse(e['updated'].toString())
-                          : null,
-                      deleted: e['deleted'] != null
-                          ? DateTime.parse(e['deleted'].toString())
-                          : null,
-                      expires: e['expires'] != null
-                          ? DateTime.parse(e['expires'].toString())
-                          : null,
-                      value: int.parse(e['value'].toString()),
-                    ))
-                .toList()
-            : [];
-
-        //se agrega uno a uno cada PostModel nuevo.
-        listPostModel.add(PostModel(
-          id: item['id'].toString(),
-          enabled: item['enabled'].toString().toLowerCase() == 'true',
-          builtIn: item['builtIn'].toString().toLowerCase() == 'true',
-          title: item['title'].toString(),
-          orgaId: item['orgaId'].toString(),
-          userId: item['userId'].toString(),
-          flowId: item['flowId'].toString(),
-          stageId: item['stageId'].toString(),
-          created: DateTime.parse(item['created'].toString()),
-          updated: item['updated'] != null
-              ? DateTime.parse(item['updated'].toString())
-              : null,
-          deleted: item['deleted'] != null
-              ? DateTime.parse(item['deleted'].toString())
-              : null,
-          expires: item['expires'] != null
-              ? DateTime.parse(item['expires'].toString())
-              : null,
-          stages: listStage,
-          postitems: listPostItems,
-          totals: listTotals,
-          tracks: listTracks,
-          votes: listVotes,
-          bookmarks: listBookmarks,
-        ));
+        listPostModel.add(fetchOnePost(item));
       }
 
-      return Future.value(ModelContainer<PostModel>(
-          listPostModel,
-          int.parse(resObj['data']['currentItemCount'].toString()),
-          resObj['data']['itemsPerPage'] != null
-              ? int.parse(resObj['data']['itemsPerPage'].toString())
-              : null,
-          resObj['data']['startIndex'] != null
-              ? int.parse(resObj['data']['startIndex'].toString())
-              : null,
-          resObj['data']['totalItems'] != null
-              ? int.parse(resObj['data']['totalItems'].toString())
-              : null,
-          resObj['data']['pageIndex'] != null
-              ? int.parse(resObj['data']['pageIndex'].toString())
-              : null,
-          resObj['data']['totalPages'] != null
-              ? int.parse(resObj['data']['totalPages'].toString())
-              : null,
-          resObj['data']['kind'].toString()));
+      return Future.value(createModelContainerPost(listPostModel, resObj));
     } else {
       throw ServerException();
     }
   }
 
-/*
-  @override
-  Future<ModelContainer<Post>> getVotedPosts(
-      String orgaId,
-      String userId,
-      String flowId,
-      String stageId,
-      String searchText,
-      Map<String, int> fieldsOrder,
-      int pageIndex,
-      int pageSize,
-      int voteState) async {
-    final url = Uri.parse(
-        '${UrlBackend.base}/api/v1/post/box?orgaId=$orgaId&userId=$userId&flowId=$flowId&stageId=$stageId&searchText=$searchText&fieldsOrder=$fieldsOrder&pageIndex=$pageIndex&pageSize=$pageSize&voteState=$voteState');
-    final session = await localDataSource.getSavedSession();
-
-    http.Response resp = await client.get(url, headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer ${session.token}",
-    }).timeout(const Duration(seconds: 10));
-
-    if (resp.statusCode == 200) {
-      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
-
-      List<PostModel> listPostModel = [];
-
-      //iteración por cada item
-      for (var item in resObj['data']['items']) {
-        List<Stage> listStage = (item['stages'] as List)
-            .map((e) => Stage(
-                id: e['id'].toString(),
-                name: e['name'].toString(),
-                order: int.parse(e['order'].toString()),
-                queryOut: e['queryOut'],
-                enabled: e['enabled'].toString().toLowerCase() == 'true',
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null,
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null))
-            .toList();
-
-        //completar con lógica
-        List<PostItem> listPostItems = (item['postitems'] as List)
-            .map((e) => PostItem(
-                content: e['content'],
-                type: e['type'],
-                order: int.parse(e['order'].toString()),
-                format: e['format'].toString(),
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null))
-            .toList();
-
-        List<Total> listTotals = (item['totals'] as List)
-            .map((e) => Total(
-                  flowId: e['flowId'].toString(),
-                  stageId: e['stageId'].toString(),
-                  totalcount: int.parse(e['totalcount'].toString()),
-                  totalnegative: int.parse(e['totalnegative'].toString()),
-                  totalpositive: int.parse(e['totalpositive'].toString()),
-                ))
-            .toList();
-
-        List<Track> listTracks = (item['tracks'] as List)
-            .map((e) => Track(
-                userId: e['userId'].toString(),
-                flowId: e['flowId'].toString(),
-                stageId: e['stageId'].toString(),
-                change: e['change'].toString(),
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null))
-            .toList();
-
-        List<Vote> listVotes = item['votes'] != null
-            ? (item['votes'] as List)
-                .map((e) => Vote(
-                      userId: e['userId'].toString(),
-                      flowId: e['flowId'].toString(),
-                      stageId: e['stageId'].toString(),
-                      created: DateTime.parse(e['created'].toString()),
-                      updated: e['updated'] != null
-                          ? DateTime.parse(e['updated'].toString())
-                          : null,
-                      deleted: e['deleted'] != null
-                          ? DateTime.parse(e['deleted'].toString())
-                          : null,
-                      expires: e['expires'] != null
-                          ? DateTime.parse(e['expires'].toString())
-                          : null,
-                      value: int.parse(e['value'].toString()),
-                    ))
-                .toList()
-            : [];
-
-        //se agrega uno a uno cada PostModel nuevo.
-        listPostModel.add(PostModel(
-          id: item['id'].toString(),
-          enabled: item['enabled'].toString().toLowerCase() == 'true',
-          builtIn: item['builtIn'].toString().toLowerCase() == 'true',
-          title: item['title'].toString(),
-          orgaId: item['orgaId'].toString(),
-          userId: item['userId'].toString(),
-          flowId: item['flowId'].toString(),
-          stageId: item['stageId'].toString(),
-          created: DateTime.parse(item['created'].toString()),
-          updated: item['updated'] != null
-              ? DateTime.parse(item['updated'].toString())
-              : null,
-          deleted: item['deleted'] != null
-              ? DateTime.parse(item['deleted'].toString())
-              : null,
-          expires: item['expires'] != null
-              ? DateTime.parse(item['expires'].toString())
-              : null,
-          stages: listStage,
-          postitems: listPostItems,
-          totals: listTotals,
-          tracks: listTracks,
-          votes: listVotes,
-        ));
-      }
-
-      return Future.value(ModelContainer<PostModel>(
-          listPostModel,
-          int.parse(resObj['data']['currentItemCount'].toString()),
-          resObj['data']['itemsPerPage'] != null
-              ? int.parse(resObj['data']['itemsPerPage'].toString())
-              : null,
-          resObj['data']['startIndex'] != null
-              ? int.parse(resObj['data']['startIndex'].toString())
-              : null,
-          resObj['data']['totalItems'] != null
-              ? int.parse(resObj['data']['totalItems'].toString())
-              : null,
-          resObj['data']['pageIndex'] != null
-              ? int.parse(resObj['data']['pageIndex'].toString())
-              : null,
-          resObj['data']['totalPages'] != null
-              ? int.parse(resObj['data']['totalPages'].toString())
-              : null,
-          resObj['data']['kind'].toString()));
-    } else {
-      throw ServerException();
-    }
-  }
-*/
   @override
   Future<ModelContainer<Vote>> votePublication(String orgaId, String userId,
       String flowId, String stageId, String postId, int voteValue) async {
@@ -1278,107 +286,14 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
     if (resp.statusCode == 200) {
       final Map<dynamic, dynamic> resObj = json.decode(resp.body);
-
-      List<Vote> listVote = [];
-
+      List<PostModel> listPostModel = [];
       //iteración por cada item
       for (var item in resObj['data']['items']) {
-        List<Stage> listStage = (item['stages'] as List)
-            .map((e) => Stage(
-                id: e['id'].toString(),
-                name: e['name'].toString(),
-                order: int.parse(e['order'].toString()),
-                queryOut: e['queryOut'],
-                enabled: e['enabled'].toString().toLowerCase() == 'true',
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null,
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null))
-            .toList();
-
-        //completar con lógica
-        List<PostItem> listPostItems = (item['postitems'] as List)
-            .map((e) => PostItem(
-                content: e['content'],
-                type: e['type'],
-                order: int.parse(e['order'].toString()),
-                format: e['format'].toString(),
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null))
-            .toList();
-
-        List<Total> listTotals = (item['totals'] as List)
-            .map((e) => Total(
-                  flowId: e['flowId'].toString(),
-                  stageId: e['stageId'].toString(),
-                  totalcount: int.parse(e['totalcount'].toString()),
-                  totalnegative: int.parse(e['totalnegative'].toString()),
-                  totalpositive: int.parse(e['totalpositive'].toString()),
-                ))
-            .toList();
-
-        List<Track> listTracks = (item['tracks'] as List)
-            .map((e) => Track(
-                name: e['name'].toString(),
-                description: e['description'].toString(),
-                userId: e['userId'].toString(),
-                flowId: e['flowId'].toString(),
-                stageIdOld: e['stageIdOld'].toString(),
-                stageIdNew: e['stageIdNew'].toString(),
-                change: e['change'].toString(),
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null))
-            .toList();
-
-        //se agrega uno a uno cada PostModel nuevo.
-        List<Vote> listVotes = item['votes'] != null
-            ? (item['votes'] as List)
-                .map((e) => Vote(
-                      userId: e['userId'].toString(),
-                      flowId: e['flowId'].toString(),
-                      stageId: e['stageId'].toString(),
-                      created: DateTime.parse(e['created'].toString()),
-                      updated: e['updated'] != null
-                          ? DateTime.parse(e['updated'].toString())
-                          : null,
-                      deleted: e['deleted'] != null
-                          ? DateTime.parse(e['deleted'].toString())
-                          : null,
-                      expires: e['expires'] != null
-                          ? DateTime.parse(e['expires'].toString())
-                          : null,
-                      value: int.parse(e['value'].toString()),
-                    ))
-                .toList()
-            : [];
+        listPostModel.add(fetchOnePost(item));
       }
 
       return Future.value(ModelContainer<Vote>(
-          listVote,
+          listPostModel[0].votes,
           int.parse(resObj['data']['currentItemCount'].toString()),
           resObj['data']['itemsPerPage'] != null
               ? int.parse(resObj['data']['itemsPerPage'].toString())
@@ -1422,138 +337,8 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
     if (resp.statusCode == 200) {
       final Map<dynamic, dynamic> resObj = json.decode(resp.body);
-
       final item = resObj['data']['items'][0];
-
-      List<Stage> listStage = (item['stages'] as List)
-          .map((e) => Stage(
-              id: e['id'].toString(),
-              name: e['name'].toString(),
-              order: int.parse(e['order'].toString()),
-              queryOut: e['queryOut'],
-              enabled: e['enabled'].toString().toLowerCase() == 'true',
-              builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-              created: DateTime.parse(e['created'].toString()),
-              updated: e['updated'] != null
-                  ? DateTime.parse(e['updated'].toString())
-                  : null,
-              deleted: e['deleted'] != null
-                  ? DateTime.parse(e['deleted'].toString())
-                  : null,
-              expires: e['expires'] != null
-                  ? DateTime.parse(e['expires'].toString())
-                  : null))
-          .toList();
-
-      //completar con lógica
-      List<PostItem> listPostItems = (item['postitems'] as List)
-          .map((e) => PostItem(
-              content: TextContent(text: e['content']['text'].toString()),
-              type: e['type'].toString(),
-              order: int.parse(e['order'].toString()),
-              format: e['format'].toString(),
-              builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-              created: DateTime.parse(e['created'].toString()),
-              deleted: e['deleted'] != null
-                  ? DateTime.parse(e['deleted'].toString())
-                  : null,
-              expires: e['expires'] != null
-                  ? DateTime.parse(e['expires'].toString())
-                  : null,
-              updated: e['updated'] != null
-                  ? DateTime.parse(e['updated'].toString())
-                  : null))
-          .toList();
-
-      List<Total> listTotals = (item['totals'] as List)
-          .map((e) => Total(
-                flowId: e['flowId'].toString(),
-                stageId: e['stageId'].toString(),
-                totalcount: int.parse(e['totalcount'].toString()),
-                totalnegative: int.parse(e['totalnegative'].toString()),
-                totalpositive: int.parse(e['totalpositive'].toString()),
-              ))
-          .toList();
-
-      List<Bookmark> listBookmarks = item['bookmarks'] != null 
-          ? (item['bookmarks'] as List)
-          .map((e) => Bookmark(
-                userId: e["userId"].toString(),
-                postId: e["postId"].toString(),
-                markType: e["markType"].toString(),
-                enabled: e["enabled"].toString().toLowerCase() == 'true',
-              ))
-          .toList()
-        :[];
-
-      List<Track> listTracks = (item['tracks'] as List)
-          .map((e) => Track(
-              name: e['name'].toString(),
-              description: e['description'].toString(),
-              userId: e['userId'].toString(),
-              flowId: e['flowId'].toString(),
-              stageIdOld: e['stageIdOld'].toString(),
-              stageIdNew: e['stageIdNew'].toString(),
-              change: e['change'].toString(),
-              created: DateTime.parse(e['created'].toString()),
-              deleted: e['deleted'] != null
-                  ? DateTime.parse(e['deleted'].toString())
-                  : null,
-              expires: e['expires'] != null
-                  ? DateTime.parse(e['expires'].toString())
-                  : null,
-              updated: e['updated'] != null
-                  ? DateTime.parse(e['updated'].toString())
-                  : null))
-          .toList();
-
-      List<Vote> listVotes = item['votes'] != null
-          ? (item['votes'] as List)
-              .map((e) => Vote(
-                    userId: e['userId'].toString(),
-                    flowId: e['flowId'].toString(),
-                    stageId: e['stageId'].toString(),
-                    created: DateTime.parse(e['created'].toString()),
-                    updated: e['updated'] != null
-                        ? DateTime.parse(e['updated'].toString())
-                        : null,
-                    deleted: e['deleted'] != null
-                        ? DateTime.parse(e['deleted'].toString())
-                        : null,
-                    expires: e['expires'] != null
-                        ? DateTime.parse(e['expires'].toString())
-                        : null,
-                    value: int.parse(e['value'].toString()),
-                  ))
-              .toList()
-          : [];
-
-      return Future.value(PostModel(
-        id: item['id'].toString(),
-        enabled: item['enabled'].toString().toLowerCase() == 'true',
-        builtIn: item['builtIn'].toString().toLowerCase() == 'true',
-        title: item['title'].toString(),
-        orgaId: item['orgaId'].toString(),
-        userId: item['userId'].toString(),
-        flowId: item['flowId'].toString(),
-        stageId: item['stageId'].toString(),
-        created: DateTime.parse(item['created'].toString()),
-        updated: item['updated'] != null
-            ? DateTime.parse(item['updated'].toString())
-            : null,
-        deleted: item['deleted'] != null
-            ? DateTime.parse(item['deleted'].toString())
-            : null,
-        expires: item['expires'] != null
-            ? DateTime.parse(item['expires'].toString())
-            : null,
-        stages: listStage,
-        postitems: listPostItems,
-        totals: listTotals,
-        tracks: listTracks,
-        votes: listVotes,
-        bookmarks: listBookmarks,
-      ));
+      return Future.value(fetchOnePost(item));
     } else {
       throw ServerException();
     }
@@ -1580,135 +365,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
       final item = resObj['data']['items'][0];
 
-      List<Stage> listStage = (item['stages'] as List)
-          .map((e) => Stage(
-              id: e['id'].toString(),
-              name: e['name'].toString(),
-              order: int.parse(e['order'].toString()),
-              queryOut: e['queryOut'],
-              enabled: e['enabled'].toString().toLowerCase() == 'true',
-              builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-              created: DateTime.parse(e['created'].toString()),
-              updated: e['updated'] != null
-                  ? DateTime.parse(e['updated'].toString())
-                  : null,
-              deleted: e['deleted'] != null
-                  ? DateTime.parse(e['deleted'].toString())
-                  : null,
-              expires: e['expires'] != null
-                  ? DateTime.parse(e['expires'].toString())
-                  : null))
-          .toList();
-
-      //completar con lógica
-      List<PostItem> listPostItems = (item['postitems'] as List)
-          .map((e) => PostItem(
-              content: TextContent(text: e['content']['text'].toString()),
-              type: e['type'].toString(),
-              order: int.parse(e['order'].toString()),
-              format: e['format'].toString(),
-              builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-              created: DateTime.parse(e['created'].toString()),
-              deleted: e['deleted'] != null
-                  ? DateTime.parse(e['deleted'].toString())
-                  : null,
-              expires: e['expires'] != null
-                  ? DateTime.parse(e['expires'].toString())
-                  : null,
-              updated: e['updated'] != null
-                  ? DateTime.parse(e['updated'].toString())
-                  : null))
-          .toList();
-
-      List<Total> listTotals = (item['totals'] as List)
-          .map((e) => Total(
-                flowId: e['flowId'].toString(),
-                stageId: e['stageId'].toString(),
-                totalcount: int.parse(e['totalcount'].toString()),
-                totalnegative: int.parse(e['totalnegative'].toString()),
-                totalpositive: int.parse(e['totalpositive'].toString()),
-              ))
-          .toList();
-
-      List<Bookmark> listBookmarks = item['bookmarks'] != null 
-          ? (item['bookmarks'] as List)
-          .map((e) => Bookmark(
-                userId: e["userId"].toString(),
-                postId: e["postId"].toString(),
-                markType: e["markType"].toString(),
-                enabled: e["enabled"].toString().toLowerCase() == 'true',
-              ))
-          .toList()
-        :[];
-
-      List<Track> listTracks = (item['tracks'] as List)
-          .map((e) => Track(
-              name: e['name'].toString(),
-              description: e['description'].toString(),
-              userId: e['userId'].toString(),
-              flowId: e['flowId'].toString(),
-              stageIdOld: e['stageIdOld'].toString(),
-              stageIdNew: e['stageIdNew'].toString(),
-              change: e['change'].toString(),
-              created: DateTime.parse(e['created'].toString()),
-              deleted: e['deleted'] != null
-                  ? DateTime.parse(e['deleted'].toString())
-                  : null,
-              expires: e['expires'] != null
-                  ? DateTime.parse(e['expires'].toString())
-                  : null,
-              updated: e['updated'] != null
-                  ? DateTime.parse(e['updated'].toString())
-                  : null))
-          .toList();
-
-      List<Vote> listVotes = item['votes'] != null
-          ? (item['votes'] as List)
-              .map((e) => Vote(
-                    userId: e['userId'].toString(),
-                    flowId: e['flowId'].toString(),
-                    stageId: e['stageId'].toString(),
-                    created: DateTime.parse(e['created'].toString()),
-                    updated: e['updated'] != null
-                        ? DateTime.parse(e['updated'].toString())
-                        : null,
-                    deleted: e['deleted'] != null
-                        ? DateTime.parse(e['deleted'].toString())
-                        : null,
-                    expires: e['expires'] != null
-                        ? DateTime.parse(e['expires'].toString())
-                        : null,
-                    value: int.parse(e['value'].toString()),
-                  ))
-              .toList()
-          : [];
-
-      return Future.value(PostModel(
-        id: item['id'].toString(),
-        enabled: item['enabled'].toString().toLowerCase() == 'true',
-        builtIn: item['builtIn'].toString().toLowerCase() == 'true',
-        title: item['title'].toString(),
-        orgaId: item['orgaId'].toString(),
-        userId: item['userId'].toString(),
-        flowId: item['flowId'].toString(),
-        stageId: item['stageId'].toString(),
-        created: DateTime.parse(item['created'].toString()),
-        updated: item['updated'] != null
-            ? DateTime.parse(item['updated'].toString())
-            : null,
-        deleted: item['deleted'] != null
-            ? DateTime.parse(item['deleted'].toString())
-            : null,
-        expires: item['expires'] != null
-            ? DateTime.parse(item['expires'].toString())
-            : null,
-        stages: listStage,
-        postitems: listPostItems,
-        totals: listTotals,
-        tracks: listTracks,
-        votes: listVotes,
-        bookmarks: listBookmarks,
-      ));
+      return Future.value(fetchOnePost(item));
     } else {
       throw ServerException();
     }
@@ -1740,215 +397,11 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
       List<PostModel> listPostModel = [];
 
-      //iteración por cada item
       for (var item in resObj['data']['items']) {
-        List<Stage> listStage = (item['stages'] as List)
-            .map((e) => Stage(
-                id: e['id'].toString(),
-                name: e['name'].toString(),
-                order: int.parse(e['order'].toString()),
-                queryOut: e['queryOut'],
-                enabled: e['enabled'].toString().toLowerCase() == 'true',
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null,
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null))
-            .toList();
-
-        //completar con lógica
-        List<PostItem> listPostItems = (item['postitems'] as List).map((e) {
-          if (e['type'].toString() == 'text') {
-            return PostItem(
-                content: TextContent(text: e['content']['text'].toString()),
-                type: e['type'].toString(),
-                order: int.parse(e['order'].toString()),
-                format: e['format'].toString(),
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null);
-          } else if (e['type'].toString() == 'image') {
-            return PostItem(
-                content: ImageContent(
-                    url: e['content']['url'].toString(),
-                    size: int.parse(e['content']['size'].toString()),
-                    filetype: e['content']['filetype'].toString(),
-                    cloudFileId: e['content']['cloudFileId'].toString(),
-                    width: int.parse(e['content']['width'].toString()),
-                    height: int.parse(e['content']['height'].toString()),
-                    description: e['content']['description'].toString()),
-                type: e['type'].toString(),
-                order: int.parse(e['order'].toString()),
-                format: e['format'].toString(),
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null);
-          } else {
-            return PostItem(
-                content: VideoContent(
-                  url: e['content']['url'].toString(),
-                  size: int.parse(e['content']['size'].toString()),
-                  filetype: e['content']['filetype'].toString(),
-                  cloudFileId: e['content']['cloudFileId'].toString(),
-                  width: int.parse(e['content']['width'].toString()),
-                  height: int.parse(e['content']['height'].toString()),
-                  description: e['content']['description'].toString(),
-                  thumbnailUrl: e['content']['thumbnailUrl'].toString(),
-                  thumbnailSize:
-                      int.parse(e['content']['thumbnailSize'].toString()),
-                  thumbnailCloudFileId:
-                      e['content']['thumbnailCloudFileId'].toString(),
-                ),
-                type: e['type'].toString(),
-                order: int.parse(e['order'].toString()),
-                format: e['format'].toString(),
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null);
-          }
-        }).toList();
-
-        List<Total> listTotals = (item['totals'] as List)
-            .map((e) => Total(
-                  flowId: e['flowId'].toString(),
-                  stageId: e['stageId'].toString(),
-                  totalcount: int.parse(e['totalcount'].toString()),
-                  totalnegative: int.parse(e['totalnegative'].toString()),
-                  totalpositive: int.parse(e['totalpositive'].toString()),
-                ))
-            .toList();
-
-        List<Bookmark> listBookmarks = item['bookmarks'] != null 
-          ? (item['bookmarks'] as List)
-          .map((e) => Bookmark(
-                userId: e["userId"].toString(),
-                postId: e["postId"].toString(),
-                markType: e["markType"].toString(),
-                enabled: e["enabled"].toString().toLowerCase() == 'true',
-              ))
-          .toList()
-        :[];
-
-        List<Track> listTracks = (item['tracks'] as List)
-            .map((e) => Track(
-                name: e['name'].toString(),
-                description: e['description'].toString(),
-                userId: e['userId'].toString(),
-                flowId: e['flowId'].toString(),
-                stageIdOld: e['stageIdOld'].toString(),
-                stageIdNew: e['stageIdNew'].toString(),
-                change: e['change'].toString(),
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null))
-            .toList();
-
-        List<Vote> listVotes = item['votes'] != null
-            ? (item['votes'] as List)
-                .map((e) => Vote(
-                      userId: e['userId'].toString(),
-                      flowId: e['flowId'].toString(),
-                      stageId: e['stageId'].toString(),
-                      created: DateTime.parse(e['created'].toString()),
-                      updated: e['updated'] != null
-                          ? DateTime.parse(e['updated'].toString())
-                          : null,
-                      deleted: e['deleted'] != null
-                          ? DateTime.parse(e['deleted'].toString())
-                          : null,
-                      expires: e['expires'] != null
-                          ? DateTime.parse(e['expires'].toString())
-                          : null,
-                      value: int.parse(e['value'].toString()),
-                    ))
-                .toList()
-            : [];
-
-        //se agrega uno a uno cada PostModel nuevo.
-        listPostModel.add(PostModel(
-          id: item['id'].toString(),
-          enabled: item['enabled'].toString().toLowerCase() == 'true',
-          builtIn: item['builtIn'].toString().toLowerCase() == 'true',
-          title: item['title'].toString(),
-          orgaId: item['orgaId'].toString(),
-          userId: item['userId'].toString(),
-          flowId: item['flowId'].toString(),
-          stageId: item['stageId'].toString(),
-          created: DateTime.parse(item['created'].toString()),
-          updated: item['updated'] != null
-              ? DateTime.parse(item['updated'].toString())
-              : null,
-          deleted: item['deleted'] != null
-              ? DateTime.parse(item['deleted'].toString())
-              : null,
-          expires: item['expires'] != null
-              ? DateTime.parse(item['expires'].toString())
-              : null,
-          stages: listStage,
-          postitems: listPostItems,
-          totals: listTotals,
-          tracks: listTracks,
-          votes: listVotes,
-          bookmarks: listBookmarks,
-        ));
+        listPostModel.add(fetchOnePost(item));
       }
 
-      return Future.value(ModelContainer<PostModel>(
-          listPostModel,
-          int.parse(resObj['data']['currentItemCount'].toString()),
-          resObj['data']['itemsPerPage'] != null
-              ? int.parse(resObj['data']['itemsPerPage'].toString())
-              : null,
-          resObj['data']['startIndex'] != null
-              ? int.parse(resObj['data']['startIndex'].toString())
-              : null,
-          resObj['data']['totalItems'] != null
-              ? int.parse(resObj['data']['totalItems'].toString())
-              : null,
-          resObj['data']['pageIndex'] != null
-              ? int.parse(resObj['data']['pageIndex'].toString())
-              : null,
-          resObj['data']['totalPages'] != null
-              ? int.parse(resObj['data']['totalPages'].toString())
-              : null,
-          resObj['data']['kind'].toString()));
+      return Future.value(createModelContainerPost(listPostModel, resObj));
     } else {
       throw ServerException();
     }
@@ -1972,138 +425,8 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
       List<PostModel> listPostModel = [];
 
-      //iteración por cada item
       for (var item in resObj['data']['items']) {
-        List<Stage> listStage = (item['stages'] as List)
-            .map((e) => Stage(
-                id: e['id'].toString(),
-                name: e['name'].toString(),
-                order: int.parse(e['order'].toString()),
-                queryOut: e['queryOut'],
-                enabled: e['enabled'].toString().toLowerCase() == 'true',
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null,
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null))
-            .toList();
-
-        //completar con lógica
-        List<PostItem> listPostItems = (item['postitems'] as List)
-            .map((e) => PostItem(
-                content: TextContent(text: e['content']['text'].toString()),
-                type: e['type'].toString(),
-                order: int.parse(e['order'].toString()),
-                format: e['format'].toString(),
-                builtIn: e['builtIn'].toString().toLowerCase() == 'true',
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null))
-            .toList();
-
-        List<Total> listTotals = (item['totals'] as List)
-            .map((e) => Total(
-                  flowId: e['flowId'].toString(),
-                  stageId: e['stageId'].toString(),
-                  totalcount: int.parse(e['totalcount'].toString()),
-                  totalnegative: int.parse(e['totalnegative'].toString()),
-                  totalpositive: int.parse(e['totalpositive'].toString()),
-                ))
-            .toList();
-
-        List<Bookmark> listBookmarks = item['bookmarks'] != null 
-          ? (item['bookmarks'] as List)
-          .map((e) => Bookmark(
-                userId: e["userId"].toString(),
-                postId: e["postId"].toString(),
-                markType: e["markType"].toString(),
-                enabled: e["enabled"].toString().toLowerCase() == 'true',
-              ))
-          .toList()
-        :[];
-
-        List<Track> listTracks = (item['tracks'] as List)
-            .map((e) => Track(
-                name: e['name'].toString(),
-                description: e['description'].toString(),
-                userId: e['userId'].toString(),
-                flowId: e['flowId'].toString(),
-                stageIdOld: e['stageIdOld'].toString(),
-                stageIdNew: e['stageIdNew'].toString(),
-                change: e['change'].toString(),
-                created: DateTime.parse(e['created'].toString()),
-                deleted: e['deleted'] != null
-                    ? DateTime.parse(e['deleted'].toString())
-                    : null,
-                expires: e['expires'] != null
-                    ? DateTime.parse(e['expires'].toString())
-                    : null,
-                updated: e['updated'] != null
-                    ? DateTime.parse(e['updated'].toString())
-                    : null))
-            .toList();
-
-        List<Vote> listVotes = item['votes'] != null
-            ? (item['votes'] as List)
-                .map((e) => Vote(
-                      userId: e['userId'].toString(),
-                      flowId: e['flowId'].toString(),
-                      stageId: e['stageId'].toString(),
-                      created: DateTime.parse(e['created'].toString()),
-                      updated: e['updated'] != null
-                          ? DateTime.parse(e['updated'].toString())
-                          : null,
-                      deleted: e['deleted'] != null
-                          ? DateTime.parse(e['deleted'].toString())
-                          : null,
-                      expires: e['expires'] != null
-                          ? DateTime.parse(e['expires'].toString())
-                          : null,
-                      value: int.parse(e['value'].toString()),
-                    ))
-                .toList()
-            : [];
-
-        //se agrega uno a uno cada PostModel nuevo.
-        listPostModel.add(PostModel(
-          id: item['id'].toString(),
-          enabled: item['enabled'].toString().toLowerCase() == 'true',
-          builtIn: item['builtIn'].toString().toLowerCase() == 'true',
-          title: item['title'].toString(),
-          orgaId: item['orgaId'].toString(),
-          userId: item['userId'].toString(),
-          flowId: item['flowId'].toString(),
-          stageId: item['stageId'].toString(),
-          created: DateTime.parse(item['created'].toString()),
-          updated: item['updated'] != null
-              ? DateTime.parse(item['updated'].toString())
-              : null,
-          deleted: item['deleted'] != null
-              ? DateTime.parse(item['deleted'].toString())
-              : null,
-          expires: item['expires'] != null
-              ? DateTime.parse(item['expires'].toString())
-              : null,
-          stages: listStage,
-          postitems: listPostItems,
-          totals: listTotals,
-          tracks: listTracks,
-          votes: listVotes,
-          bookmarks: listBookmarks,
-        ));
+        listPostModel.add(fetchOnePost(item));
       }
 
       return Future.value(listPostModel[0]);
@@ -2132,5 +455,207 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
     } else {
       throw ServerException();
     }
+  }
+
+  PostModel fetchOnePost(item) {
+    List<Stage> listStage = (item['stages'] as List)
+        .map((e) => Stage(
+            id: e['id'].toString(),
+            name: e['name'].toString(),
+            order: int.parse(e['order'].toString()),
+            queryOut: e['queryOut'],
+            enabled: e['enabled'].toString().toLowerCase() == 'true',
+            builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+            created: DateTime.parse(e['created'].toString()),
+            updated: e['updated'] != null
+                ? DateTime.parse(e['updated'].toString())
+                : null,
+            deleted: e['deleted'] != null
+                ? DateTime.parse(e['deleted'].toString())
+                : null,
+            expires: e['expires'] != null
+                ? DateTime.parse(e['expires'].toString())
+                : null))
+        .toList();
+
+    List<PostItem> listPostItems = (item['postitems'] as List).map((e) {
+      dynamic contentPostItem;
+      if (e['type'].toString() == 'text') {
+        contentPostItem = TextContent(text: e['content']['text'].toString());
+      } else if (e['type'].toString() == 'image') {
+        contentPostItem = ImageContent(
+            url: e['content']['url'].toString(),
+            size: int.parse(e['content']['size'].toString()),
+            filetype: e['content']['filetype'].toString(),
+            cloudFileId: e['content']['cloudFileId'].toString(),
+            width: int.parse(e['content']['width'].toString()),
+            height: int.parse(e['content']['height'].toString()),
+            description: e['content']['description'].toString());
+      } else if (e['type'].toString() == 'video') {
+        contentPostItem = VideoContent(
+          url: e['content']['url'].toString(),
+          size: int.parse(e['content']['size'].toString()),
+          filetype: e['content']['filetype'].toString(),
+          cloudFileId: e['content']['cloudFileId'].toString(),
+          width: int.parse(e['content']['width'].toString()),
+          height: int.parse(e['content']['height'].toString()),
+          description: e['content']['description'].toString(),
+          thumbnailUrl: e['content']['thumbnailUrl'].toString(),
+          thumbnailSize: int.parse(e['content']['thumbnailSize'].toString()),
+          thumbnailCloudFileId: e['content']['thumbnailCloudFileId'].toString(),
+        );
+      } else {
+        contentPostItem = null;
+      }
+
+      return PostItem(
+          content: contentPostItem,
+          type: e['type'].toString(),
+          order: int.parse(e['order'].toString()),
+          format: e['format'].toString(),
+          builtIn: e['builtIn'].toString().toLowerCase() == 'true',
+          created: DateTime.parse(e['created'].toString()),
+          deleted: e['deleted'] != null
+              ? DateTime.parse(e['deleted'].toString())
+              : null,
+          expires: e['expires'] != null
+              ? DateTime.parse(e['expires'].toString())
+              : null,
+          updated: e['updated'] != null
+              ? DateTime.parse(e['updated'].toString())
+              : null);
+    }).toList();
+
+    List<Total> listTotals = item['totals'] != null
+        ? (item['totals'] as List)
+            .map((e) => Total(
+                  flowId: e['flowId'].toString(),
+                  stageId: e['stageId'].toString(),
+                  totalcount: int.parse(e['totalcount'].toString()),
+                  totalnegative: int.parse(e['totalnegative'].toString()),
+                  totalpositive: int.parse(e['totalpositive'].toString()),
+                ))
+            .toList()
+        : [];
+
+    List<Bookmark> listBookmarks = item['bookmarks'] != null
+        ? (item['bookmarks'] as List)
+            .map((e) => Bookmark(
+                  userId: e["userId"].toString(),
+                  postId: e["postId"].toString(),
+                  markType: e["markType"].toString(),
+                  enabled: e["enabled"].toString().toLowerCase() == 'true',
+                ))
+            .toList()
+        : [];
+
+    List<Track> listTracks = item['tracks'] != null
+        ? (item['tracks'] as List)
+            .map((e) => Track(
+                name: e['name'].toString(),
+                description: e['description'].toString(),
+                userId: e['userId'].toString(),
+                flowId: e['flowId'].toString(),
+                stageIdOld: e['stageIdOld'].toString(),
+                stageIdNew: e['stageIdNew'].toString(),
+                change: e['change'].toString(),
+                created: DateTime.parse(e['created'].toString()),
+                deleted: e['deleted'] != null
+                    ? DateTime.parse(e['deleted'].toString())
+                    : null,
+                expires: e['expires'] != null
+                    ? DateTime.parse(e['expires'].toString())
+                    : null,
+                updated: e['updated'] != null
+                    ? DateTime.parse(e['updated'].toString())
+                    : null))
+            .toList()
+        : [];
+
+    List<Vote> listVotes = item['votes'] != null
+        ? (item['votes'] as List)
+            .map((e) => Vote(
+                  userId: e['userId'].toString(),
+                  flowId: e['flowId'].toString(),
+                  stageId: e['stageId'].toString(),
+                  created: DateTime.parse(e['created'].toString()),
+                  updated: e['updated'] != null
+                      ? DateTime.parse(e['updated'].toString())
+                      : null,
+                  deleted: e['deleted'] != null
+                      ? DateTime.parse(e['deleted'].toString())
+                      : null,
+                  expires: e['expires'] != null
+                      ? DateTime.parse(e['expires'].toString())
+                      : null,
+                  value: int.parse(e['value'].toString()),
+                ))
+            .toList()
+        : [];
+
+    return PostModel(
+      id: item['id'].toString(),
+      enabled: item['enabled'].toString().toLowerCase() == 'true',
+      builtIn: item['builtIn'].toString().toLowerCase() == 'true',
+      title: item['title'].toString(),
+      orgaId: item['orgaId'].toString(),
+      userId: item['userId'].toString(),
+      flowId: item['flowId'].toString(),
+      stageId: item['stageId'].toString(),
+      created: DateTime.parse(item['created'].toString()),
+      updated: item['updated'] != null
+          ? DateTime.parse(item['updated'].toString())
+          : null,
+      deleted: item['deleted'] != null
+          ? DateTime.parse(item['deleted'].toString())
+          : null,
+      expires: item['expires'] != null
+          ? DateTime.parse(item['expires'].toString())
+          : null,
+      totalfavs: item['totalfavs'] != null
+          ? int.parse(item['totalfavs'].toString())
+          : 0,
+      totalsaves: item['totalsaves'] != null
+          ? int.parse(item['totalsaves'].toString())
+          : 0,
+      totalcomments: item['totalcomments'] != null
+          ? int.parse(item['totalcomments'].toString())
+          : 0,
+      totalreports: item['totalreports'] != null
+          ? int.parse(item['totalreports'].toString())
+          : 0,
+      totaldownloads: item['totaldownloads'] != null
+          ? int.parse(item['totaldownloads'].toString())
+          : 0,
+      stages: listStage,
+      postitems: listPostItems,
+      totals: listTotals,
+      tracks: listTracks,
+      votes: listVotes,
+      bookmarks: listBookmarks,
+    );
+  }
+
+  ModelContainer<PostModel> createModelContainerPost(
+      List<PostModel> listPostModel, Map<dynamic, dynamic> resObj) {
+    return ModelContainer<PostModel>(
+        listPostModel,
+        int.parse(resObj['data']['currentItemCount'].toString()),
+        resObj['data']['itemsPerPage'] != null
+            ? int.parse(resObj['data']['itemsPerPage'].toString())
+            : null,
+        resObj['data']['startIndex'] != null
+            ? int.parse(resObj['data']['startIndex'].toString())
+            : null,
+        resObj['data']['totalItems'] != null
+            ? int.parse(resObj['data']['totalItems'].toString())
+            : null,
+        resObj['data']['pageIndex'] != null
+            ? int.parse(resObj['data']['pageIndex'].toString())
+            : null,
+        resObj['data']['totalPages'] != null
+            ? int.parse(resObj['data']['totalPages'].toString())
+            : null,
+        resObj['data']['kind'].toString());
   }
 }
