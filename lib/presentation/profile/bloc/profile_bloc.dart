@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lomba_frontend/data/models/session_model.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
 import 'package:lomba_frontend/presentation/profile/bloc/profile_event.dart';
 import 'package:lomba_frontend/presentation/profile/bloc/profile_state.dart';
@@ -118,8 +117,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           builtIn: event.user.builtIn,
           pictureUrl: event.imageUrl==''||event.imageUrl==null ? null : event.imageUrl,
           pictureCloudFileId: event.cloudFileId==''||event.cloudFileId==null ? null : event.cloudFileId,
-          pictureThumbnailUrl: null,
-          pictureThumbnailCloudFileId: null,);
+          pictureThumbnailUrl: event.imageUrl==''||event.imageUrl==null ? null : event.imageUrl,
+          pictureThumbnailCloudFileId: event.cloudFileId==''||event.cloudFileId==null ? null : event.cloudFileId,);
 
       final result =
           await _updateProfile.execute(event.user.id, user);

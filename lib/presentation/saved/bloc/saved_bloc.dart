@@ -7,18 +7,20 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
+import '../../../domain/usecases/local/get_has_login.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
 import '../../../domain/usecases/post/get_saved_posts.dart';
 import '../../../domain/usecases/post/get_voted_posts.dart';
 
 class SavedBloc extends Bloc<SavedEvent, SavedState> {
   final GetSavedPosts _getSavedPosts;
+  final GetHasLogIn _hasLogin;
   final GetSession _getSession;
   final VotePublication _votePublication;
   final GetUploadedPosts _getUploadedPosts;
 
   SavedBloc(this._getSavedPosts, this._getSession, this._votePublication,
-      this._getUploadedPosts)
+      this._getUploadedPosts, this._hasLogin)
       : super(SavedStart()) {
     on<OnSavedStarter>((event, emit) => emit(SavedStart()));
 
@@ -26,6 +28,10 @@ class SavedBloc extends Bloc<SavedEvent, SavedState> {
       emit(SavedLoading());
       String flowId = Flows.votationFlowId;
       String stageId = StagesVotationFlow.stageId03Voting;
+      var validLogin = false;
+
+      final resultLogin = await _hasLogin.execute();
+      resultLogin.fold((l) => {emit(SavedError(l.message))}, (valid) => {validLogin = valid});
 
       var auth = const SessionModel(token: "", username: "", name: "");
       final session = await _getSession.execute();
@@ -62,6 +68,7 @@ class SavedBloc extends Bloc<SavedEvent, SavedState> {
           r.currentItemCount,
           r.totalItems ?? 0,
           r.totalPages ?? 1,
+          validLogin,
         );
 
         emit(votedLoaded);

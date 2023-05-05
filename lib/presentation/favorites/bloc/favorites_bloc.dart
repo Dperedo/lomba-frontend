@@ -5,6 +5,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../core/constants.dart';
 import '../../../data/models/session_model.dart';
+import '../../../domain/usecases/local/get_has_login.dart';
 import '../../../domain/usecases/local/get_session_status.dart';
 import '../../../domain/usecases/post/get_favorites_posts.dart';
 import 'favorites_event.dart';
@@ -12,12 +13,13 @@ import 'favorites_state.dart';
 
 class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   final GetFavoritesPosts _getFavoritesPosts;
+  final GetHasLogIn _hasLogin;
   final GetSession _getSession;
   final VotePublication _votePublication;
   final GetUploadedPosts _getUploadedPosts;
 
   FavoritesBloc(this._getFavoritesPosts, this._getSession, this._votePublication,
-      this._getUploadedPosts)
+      this._getUploadedPosts, this._hasLogin)
       : super(FavoritesStart()) {
     on<OnFavoritesStarter>((event, emit) => emit(FavoritesStart()));
 
@@ -25,6 +27,10 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
       emit(FavoritesLoading());
       String flowId = Flows.votationFlowId;
       String stageId = StagesVotationFlow.stageId03Voting;
+      var validLogin = false;
+
+      final resultLogin = await _hasLogin.execute();
+      resultLogin.fold((l) => {emit(FavoritesError(l.message))}, (valid) => {validLogin = valid});
 
       var auth = const SessionModel(token: "", username: "", name: "");
       final session = await _getSession.execute();
@@ -61,6 +67,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
           r.currentItemCount,
           r.totalItems ?? 0,
           r.totalPages ?? 1,
+          validLogin,
         );
 
         emit(votedLoaded);

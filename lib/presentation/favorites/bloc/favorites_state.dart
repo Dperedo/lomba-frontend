@@ -28,6 +28,7 @@ class FavoritesLoaded extends FavoritesState {
   final int itemCount;
   final int totalItems;
   final int totalPages;
+  final bool validLogin;
 
   FavoritesLoaded(
       this.orgaId,
@@ -42,7 +43,8 @@ class FavoritesLoaded extends FavoritesState {
       this.listItems,
       this.itemCount,
       this.totalItems,
-      this.totalPages);
+      this.totalPages,
+      this.validLogin);
 }
 
 class FavoritesError extends FavoritesState {

@@ -12,6 +12,7 @@ import '../bloc/saved_bloc.dart';
 import '../bloc/saved_cubit.dart';
 import '../bloc/saved_event.dart';
 import '../bloc/saved_state.dart';
+import '../../../injection.dart' as di;
 
 class SavedPage extends StatelessWidget {
   SavedPage({Key? key}) : super(key: key);
@@ -51,7 +52,7 @@ class SavedPage extends StatelessWidget {
       "Creación": "created"
     };
     return BlocProvider<SavedLiveCubit>(
-        create: (context) => SavedLiveCubit(),
+        create: (context) => SavedLiveCubit(di.locator(),),
         child: SizedBox(
             width: 800,
             child: Form(
@@ -204,13 +205,13 @@ class SavedPage extends StatelessWidget {
                                   itemBuilder: (context, index) {
                                     return ShowPosts(
                                       post: state.listItems[index],
-                                      child: null, 
-                                      /*KeypadVoteSaved(
+                                      child: KeypadVoteSaved(
                                         context: context,
                                         post: state.listItems[index],
                                         statecubit: statecubit,
-                                        keyValidate: _key,
-                                      )*/
+                                        validLogin: state.validLogin,
+                                        userId: state.userId,
+                                      ),
                                     );
                                   });
                             },

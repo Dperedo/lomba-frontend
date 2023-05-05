@@ -28,6 +28,7 @@ class SavedLoaded extends SavedState {
   final int itemCount;
   final int totalItems;
   final int totalPages;
+  final bool validLogin;
 
   SavedLoaded(
       this.orgaId,
@@ -42,7 +43,8 @@ class SavedLoaded extends SavedState {
       this.listItems,
       this.itemCount,
       this.totalItems,
-      this.totalPages);
+      this.totalPages,
+      this.validLogin);
 }
 
 class SavedError extends SavedState {

@@ -12,6 +12,7 @@ import '../bloc/favorites_bloc.dart';
 import '../bloc/favorites_cubit.dart';
 import '../bloc/favorites_event.dart';
 import '../bloc/favorites_state.dart';
+import '../../../injection.dart' as di;
 
 class FavoritesPage extends StatelessWidget {
   FavoritesPage({Key? key}) : super(key: key);
@@ -51,7 +52,7 @@ class FavoritesPage extends StatelessWidget {
       "Creación": "created"
     };
     return BlocProvider<FavoritesLiveCubit>(
-        create: (context) => FavoritesLiveCubit(),
+        create: (context) => FavoritesLiveCubit(di.locator(),),
         child: SizedBox(
             width: 800,
             child: Form(
@@ -204,13 +205,14 @@ class FavoritesPage extends StatelessWidget {
                                   itemBuilder: (context, index) {
                                     return ShowPosts(
                                       post: state.listItems[index],
-                                      child:null, 
-                                      /*KeypadVoteFavorites(
+                                      child:
+                                      KeypadVoteFavorites(
                                         context: context,
                                         post: state.listItems[index],
                                         statecubit: statecubit,
-                                        keyValidate: _key,
-                                      )*/
+                                        validLogin: state.validLogin,
+                                        userId: state.userId,
+                                      ),
                                     );
                                   });
                             },
