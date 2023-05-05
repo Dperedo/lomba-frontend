@@ -13,6 +13,7 @@ import '../bloc/post_bloc.dart';
 import '../bloc/post_cubit.dart';
 import '../bloc/post_event.dart';
 import '../bloc/post_state.dart';
+import '../../../injection.dart' as di;
 
 class PostPage extends StatelessWidget {
   const PostPage({Key? key, required this.postId, required this.hasReference})
@@ -85,7 +86,7 @@ class PostPage extends StatelessWidget {
     if (state is PostLoaded) {
       print(state.post.id);
       return BlocProvider<PostLiveCubit>(
-        create: (context) => PostLiveCubit(),
+        create: (context) => PostLiveCubit(di.locator(),),
         child: SizedBox(
           width: 600,
           child: BlocBuilder<PostLiveCubit, PostLiveState>(

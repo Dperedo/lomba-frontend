@@ -12,6 +12,7 @@ import '../bloc/voted_bloc.dart';
 import '../bloc/voted_cubit.dart';
 import '../bloc/voted_event.dart';
 import '../bloc/voted_state.dart';
+import '../../../injection.dart' as di;
 
 class VotedPage extends StatelessWidget {
   VotedPage({Key? key}) : super(key: key);
@@ -51,7 +52,7 @@ class VotedPage extends StatelessWidget {
       "Creación": "created"
     };
     return BlocProvider<VotedLiveCubit>(
-        create: (context) => VotedLiveCubit(),
+        create: (context) => VotedLiveCubit(di.locator(),),
         child: SizedBox(
             width: 800,
             child: Form(

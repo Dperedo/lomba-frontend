@@ -23,7 +23,7 @@ class RecentLiveCubit extends Cubit<RecentLiveState> {
 
     final resultBookmark = await _postBookmark.execute(userId, postId, markType, giveOrTakeAway);
     resultBookmark.fold((l) => null, (r) {
-      print(r);
+      
       if(r.markType == BookmarkCodes.saveCode) {
         emit(state.copyWithSave(postId: postId, saveValue: giveOrTakeAway));
       } else if(r.markType == BookmarkCodes.favCode) {
