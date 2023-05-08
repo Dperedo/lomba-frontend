@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:lomba_frontend/domain/entities/workflow/post.dart';
 
+import '../../../domain/entities/workflow/comment.dart';
+
 abstract class PostState extends Equatable {
   const PostState();
 
@@ -24,9 +26,10 @@ class PostLoaded extends PostState {
   final Post post;
   final bool validLogin;
   final String userId;
-  const PostLoaded(this.post, this.validLogin, this.userId);
+  final List<Comment> commentList;
+  const PostLoaded(this.post, this.validLogin, this.userId, this.commentList);
   @override
-  List<Object> get props => [post, validLogin, userId];
+  List<Object> get props => [post, validLogin, userId, commentList];
 }
 
 class PostError extends PostState {

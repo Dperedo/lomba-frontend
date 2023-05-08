@@ -40,9 +40,14 @@ class CommentRepositoryImpl implements CommentRepository {
   }
 
   @override
-  Future<Either<Failure, List<Comment>>> getCommentsPost(String postId, String sort, int pageIndex, int pageSize, Map<String, dynamic> params,) async {
+  Future<Either<Failure, List<Comment>>> getCommentsPost(String postId, Map<String, int> fieldsOrder, int pageIndex, int pageSize, int voteState,) async {
     try {
-      final result = await remoteDataSource.getCommentsPost(postId, sort, pageIndex, pageSize, params,);
+      final Map<String, dynamic> params = {'voteState': voteState};
+      List<dynamic> order = [];
+      fieldsOrder.forEach((key, value) {
+        order.add([key, value == 1 ? value : -1]);});
+
+      final result = await remoteDataSource.getCommentsPost(postId, order, pageIndex, pageSize, params,);
 
       List<Comment> list = [];
 

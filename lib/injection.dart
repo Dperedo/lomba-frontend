@@ -51,6 +51,7 @@ import 'package:lomba_frontend/presentation/voted/bloc/voted_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'data/datasources/bookmark_data_source.dart';
+import 'data/datasources/comment_data_source.dart';
 import 'data/datasources/flow_data_source.dart';
 import 'data/datasources/post_data_source.dart';
 import 'data/datasources/local_data_source.dart';
@@ -58,6 +59,7 @@ import 'data/datasources/setting_data_source.dart';
 import 'data/datasources/stage_data_source.dart';
 import 'data/datasources/storage_data_source.dart';
 import 'data/repositories/bookmark_repository_impl.dart';
+import 'data/repositories/comment_repository_impl.dart';
 import 'data/repositories/flow_repository_impl.dart';
 import 'data/repositories/post_repository_impl.dart';
 import 'data/repositories/local_repository_impl.dart';
@@ -65,12 +67,16 @@ import 'data/repositories/setting_repository_impl.dart';
 import 'data/repositories/stage_repository_impl.dart';
 import 'data/repositories/storage_repository_impl.dart';
 import 'domain/repositories/bookmark_repository.dart';
+import 'domain/repositories/comment_repository.dart';
 import 'domain/repositories/flow_repository.dart';
 import 'domain/repositories/post_repository.dart';
 import 'domain/repositories/local_repository.dart';
 import 'domain/repositories/setting_repository.dart';
 import 'domain/repositories/stage_repository.dart';
 import 'domain/repositories/storage_repository.dart';
+import 'domain/usecases/comment/delete_comment.dart';
+import 'domain/usecases/comment/get_comments_post.dart';
+import 'domain/usecases/comment/post_comment.dart';
 import 'domain/usecases/flow/get_flow.dart';
 import 'domain/usecases/flow/get_flows.dart';
 import 'domain/usecases/local/get_has_login.dart';
@@ -241,6 +247,8 @@ Future<void> init() async {
         locator(),
         locator(),
         locator(),
+        locator(),
+        locator(),
       ));
   locator.registerFactory(
       () => FavoritesBloc(locator(), locator(), locator(), locator(), locator()));
@@ -331,6 +339,10 @@ Future<void> init() async {
   locator.registerLazySingleton(() => RegisterCloudFile(locator()));
   locator.registerLazySingleton(() => RegisterCloudFileProfile(locator()));
 
+  locator.registerLazySingleton(() => GetComments(locator()));
+  locator.registerLazySingleton(() => PostComment(locator()));
+  locator.registerLazySingleton(() => DeleteComment(locator()));
+
   // repository
   locator.registerLazySingleton<LoginRepository>(
     () => LoginRepositoryImpl(
@@ -366,6 +378,9 @@ Future<void> init() async {
   );
   locator.registerLazySingleton<BookmarkRepository>(
     () => BookmarkRepositoryImpl(remoteDataSource: locator()),
+  );
+  locator.registerLazySingleton<CommentRepository>(
+    () => CommentRepositoryImpl(remoteDataSource: locator()),
   );
 
   // data source
@@ -415,6 +430,9 @@ Future<void> init() async {
 
   locator.registerLazySingleton<BookmarkRemoteDataSource>(() =>
       BookmarkRemoteDataSourceImpl(
+          client: locator(), localDataSource: locator()));
+  locator.registerLazySingleton<CommentRemoteDataSource>(() =>
+      CommentRemoteDataSourceImpl(
           client: locator(), localDataSource: locator()));
 
   // external

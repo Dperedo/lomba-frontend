@@ -33,3 +33,14 @@ class OnPostVote extends PostEvent {
   @override
   List<Object> get props => [postId, voteValue];
 }
+
+class OnCreateComment extends PostEvent {
+  final String userId;
+  final String postId;
+  final String text;
+
+  const OnCreateComment(this.userId, this.postId, this.text);
+
+  @override
+  List<Object> get props => [userId, postId, text];
+}

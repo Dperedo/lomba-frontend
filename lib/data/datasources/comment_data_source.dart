@@ -10,7 +10,7 @@ import '../../../core/exceptions.dart';
 abstract class CommentRemoteDataSource {
   Future<CommentModel> postComment(String userId, String postId, String text);
 
-  Future<List<CommentModel>> getCommentsPost(String postId, String sort, int pageIndex, int pageSize, Map<String, dynamic> params,);
+  Future<List<CommentModel>> getCommentsPost(String postId, List<dynamic> order, int pageIndex, int pageSize, Map<String, dynamic> params,);
 
   Future<bool> deleteComment(String userId, String postId, String commentId);
 }
@@ -51,6 +51,7 @@ class CommentRemoteDataSourceImpl implements CommentRemoteDataSource {
             postId: item["postId"].toString(),
             text: item["text"].toString(),
             enabled: item["enabled"].toString().toLowerCase() == 'true',
+            created: DateTime.parse(item['created'].toString()),
             ));
     } else {
       throw ServerException();
@@ -87,9 +88,9 @@ class CommentRemoteDataSourceImpl implements CommentRemoteDataSource {
   }
 
   @override
-  Future<List<CommentModel>> getCommentsPost(String postId, String sort, int pageIndex, int pageSize, Map<String, dynamic> params,) async {
+  Future<List<CommentModel>> getCommentsPost(String postId, List<dynamic> order, int pageIndex, int pageSize, Map<String, dynamic> params,) async {
 
-    final url = Uri.parse('${UrlBackend.base}/api/v1/comment/');
+    final url = Uri.parse('${UrlBackend.base}/api/v1/comment/$postId?sort=${json.encode(order)}&pageindex=$pageIndex&pagesize=$pageSize&paramvars=${json.encode(params)}');
     final session = await localDataSource.getSavedSession();
 
     http.Response resp = await client.get(url, headers: {
@@ -110,6 +111,7 @@ class CommentRemoteDataSourceImpl implements CommentRemoteDataSource {
             postId: item["postId"].toString(),
             text: item["text"].toString(),
             enabled: item["enabled"].toString().toLowerCase() == 'true',
+            created: DateTime.parse(item['created'].toString()),
             ));
       }
 
