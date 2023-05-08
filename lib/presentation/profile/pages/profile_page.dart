@@ -94,139 +94,142 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   const SizedBox(height: 40),
                   Center(
-                      child: Container(
-                        width: 200,
-                        height: 200,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey,
-                        ),
-                        child: Stack(
-                          children: [
-                            statecubit.fileId != "" || state.user.pictureUrl != null
-                                ? state.user.pictureUrl != null && statecubit.fileId == ""
-                                ? ClipOval(
-                                  child: ImageNetwork(
-                                    image: state.user.pictureUrl!,
-                                    height: 200,
-                                    width: 200,),
-                                ) : Container(
-                                  width: 200.0,
-                                  height: 200.0,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: MemoryImage(
-                                        statecubit.mediafile,
+                    child: Container(
+                      width: 200,
+                      height: 200,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey,
+                      ),
+                      child: Stack(
+                        children: [
+                          statecubit.fileId != "" ||
+                                  state.user.pictureUrl != null
+                              ? state.user.pictureUrl != null &&
+                                      statecubit.fileId == ""
+                                  ? ClipOval(
+                                      child: ImageNetwork(
+                                        image: state.user.pictureUrl!,
+                                        height: 200,
+                                        width: 200,
+                                      ),
+                                    )
+                                  : Container(
+                                      width: 200.0,
+                                      height: 200.0,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: MemoryImage(
+                                            statecubit.mediafile,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                              : statecubit.showLocalProgress
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      child: const CircularProgressIndicator())
+                                  : const Center(
+                                      child: Icon(
+                                        Icons.person,
+                                        color: Colors.white,
+                                        size: 100,
                                       ),
                                     ),
+                          statecubit.fileId != ""
+                              ? Container(
+                                  alignment: Alignment.topRight,
+                                  child: IconButton(
+                                    alignment: Alignment.topRight,
+                                    icon: const Icon(Icons.cancel),
+                                    onPressed: () {
+                                      context
+                                          .read<ProfileLiveCubit>()
+                                          .stopRemoteProgressIndicators();
+                                      context
+                                          .read<ProfileLiveCubit>()
+                                          .removeMedia();
+                                    },
                                   ),
                                 )
-                                : statecubit.showLocalProgress
-                                    ? Container(
-                                        alignment: Alignment.center,
-                                        child:
-                                            const CircularProgressIndicator())
-                                    : const Center(
-                                      child: Icon(
-                                          Icons.person,
-                                          color: Colors.white,
-                                          size: 100,
-                                        ),
-                                    ),
-                            statecubit.fileId != ""
-                                ? Container(
-                                    alignment: Alignment.topRight,
-                                    child: IconButton(
-                                      alignment: Alignment.topRight,
-                                      icon: const Icon(Icons.cancel),
-                                      onPressed: () {
-                                        context
-                                            .read<ProfileLiveCubit>()
-                                            .stopRemoteProgressIndicators();
-                                        context
-                                            .read<ProfileLiveCubit>()
-                                            .removeMedia();
-                                      },
-                                    ),
-                                  )
-                                : const SizedBox(),
-                            ElevatedButton(
-                              onPressed: () async {
-                                FilePickerResult? result =
-                                    await FilePicker.platform
-                                        .pickFiles(
-                                  type: FileType.custom,
-                                  allowedExtensions: [
-                                    'jpg',
-                                    'png',
-                                    'gif',
-                                    'jpeg',
-                                  ],
-                                );
-                                if (result != null) {
-                                  context
-                                      .read<ProfileLiveCubit>()
-                                      .startProgressIndicators();
-                                  PlatformFile file =
-                                      result.files.first;
-                                  if (file.size != 0) {
-                                    Uint8List? fileBytes;
-                                    if (!kIsWeb) {
-                                      fileBytes = File(file.path!)
-                                          .readAsBytesSync();
-                                    } else
-                                      fileBytes = file.bytes;
-                                      context.read<ProfileLiveCubit>()
-                                        .showImage(
-                                          context,
-                                          fileBytes!,
-                                          state.user.id,
-                                          state.orgaId,
-                                        );
-                                  } else {
-                                    snackBarNotify(
+                              : const SizedBox(),
+                          ElevatedButton(
+                            onPressed: () async {
+                              FilePickerResult? result =
+                                  await FilePicker.platform.pickFiles(
+                                type: FileType.custom,
+                                allowedExtensions: [
+                                  'jpg',
+                                  'png',
+                                  'gif',
+                                  'jpeg',
+                                ],
+                              );
+                              if (result != null) {
+                                context
+                                    .read<ProfileLiveCubit>()
+                                    .startProgressIndicators();
+                                PlatformFile file = result.files.first;
+                                if (file.size != 0) {
+                                  Uint8List? fileBytes;
+                                  if (!kIsWeb) {
+                                    fileBytes =
+                                        File(file.path!).readAsBytesSync();
+                                  } else
+                                    fileBytes = file.bytes;
+                                  context.read<ProfileLiveCubit>().showImage(
                                         context,
-                                        "El archivo no puede estar vacío",
-                                        Icons.error);
-                                  }
+                                        fileBytes!,
+                                        state.user.id,
+                                        state.orgaId,
+                                      );
                                 } else {
-                                  // User canceled the picker
+                                  snackBarNotify(
+                                      context,
+                                      "El archivo no puede estar vacío",
+                                      Icons.error);
                                 }
-                              },
-                              child: const Icon(Icons.edit),
-                            ),
-                          ],
-                        ),
+                              } else {
+                                // User canceled the picker
+                              }
+                            },
+                            child: const Icon(Icons.edit),
+                          ),
+                        ],
                       ),
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  statecubit.cloudFile?.id!=null || statecubit.showLocalProgress
-                  ? SizedBox(
-                    width: 110,
-                    height: 30,
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.save),
-                      key: const ValueKey("btnSavedUp"),
-                      label: const Text("Guardar"),
-                      onPressed: statecubit.showRemoteProgress
-                          ? null
-                          : () {
-                              context.read<ProfileBloc>().add(OnProfileSaveImagen(
-                                    state.user,
-                                    statecubit.mediafile,
-                                    statecubit.cloudFile!.url,
-                                    statecubit.cloudFile!.id,
-                                    
-                                  ));
-                            },
-                    ),
-                  ) : const SizedBox(
-                    height: 30,
-                  ),
+                  statecubit.cloudFile?.id != null ||
+                          statecubit.showLocalProgress
+                      ? SizedBox(
+                          width: 110,
+                          height: 30,
+                          child: ElevatedButton.icon(
+                            icon: const Icon(Icons.save),
+                            key: const ValueKey("btnSavedUp"),
+                            label: const Text("Guardar"),
+                            onPressed: statecubit.showRemoteProgress
+                                ? null
+                                : () {
+                                    context
+                                        .read<ProfileBloc>()
+                                        .add(OnProfileSaveImagen(
+                                          state.user,
+                                          statecubit.mediafile,
+                                          statecubit.cloudFile!.url,
+                                          statecubit.cloudFile!.id,
+                                        ));
+                                  },
+                          ),
+                        )
+                      : const SizedBox(
+                          height: 30,
+                        ),
                   const SizedBox(
                     height: 10,
                   ),
@@ -279,11 +282,10 @@ class ProfilePage extends StatelessWidget {
     }
 
     if (state is ProfileEditing) {
-      print("ProfileEditing");
       nameController.text = state.user.name;
       usernameController.text = state.user.username;
       emailController.text = state.user.email;
-      print(nameController);
+
       return Padding(
         padding: const EdgeInsets.all(10),
         child: Form(
@@ -404,7 +406,6 @@ class ProfilePage extends StatelessWidget {
       );
     }
     if (state is ProfileUpdatePassword) {
-      print(_passwordController);
       return Padding(
         padding: const EdgeInsets.all(10),
         child: Form(

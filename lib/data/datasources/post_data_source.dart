@@ -15,6 +15,7 @@ import '../../domain/entities/workflow/total.dart';
 import '../../domain/entities/workflow/track.dart';
 import '../../domain/entities/workflow/vote.dart';
 import '../models/workflow/post_model.dart';
+import '../models/workflow/vote_model.dart';
 import 'local_data_source.dart';
 
 abstract class PostRemoteDataSource {
@@ -274,7 +275,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
       'voteValue': voteValue
     };
 
-    final url = Uri.parse('${UrlBackend.base}/api/v1/post/vote');
+    final url = Uri.parse('${UrlBackend.base}/api/v1/vote');
     final session = await localDataSource.getSavedSession();
 
     http.Response resp =
@@ -286,31 +287,29 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
     if (resp.statusCode == 200) {
       final Map<dynamic, dynamic> resObj = json.decode(resp.body);
-      List<PostModel> listPostModel = [];
+      List<VoteModel> listVoteModel = [];
       //iteración por cada item
       for (var item in resObj['data']['items']) {
-        listPostModel.add(fetchOnePost(item));
+        listVoteModel.add(VoteModel(
+            id: item['id'].toString(),
+            flowId: item['flowId'].toString(),
+            stageId: item['stageId'].toString(),
+            userId: item['userid'].toString(),
+            key: item['key'].toString(),
+            value: int.parse(item['value'].toString()),
+            created: DateTime.parse(item['created'].toString()),
+            updated: item['updated'] != null
+                ? DateTime.parse(item['updated'].toString())
+                : null,
+            deleted: item['deleted'] != null
+                ? DateTime.parse(item['deleted'].toString())
+                : null,
+            expires: item['expires'] != null
+                ? DateTime.parse(item['expires'].toString())
+                : null));
       }
 
-      return Future.value(ModelContainer<Vote>(
-          listPostModel[0].votes,
-          int.parse(resObj['data']['currentItemCount'].toString()),
-          resObj['data']['itemsPerPage'] != null
-              ? int.parse(resObj['data']['itemsPerPage'].toString())
-              : null,
-          resObj['data']['startIndex'] != null
-              ? int.parse(resObj['data']['startIndex'].toString())
-              : null,
-          resObj['data']['totalItems'] != null
-              ? int.parse(resObj['data']['totalItems'].toString())
-              : null,
-          resObj['data']['pageIndex'] != null
-              ? int.parse(resObj['data']['pageIndex'].toString())
-              : null,
-          resObj['data']['totalPages'] != null
-              ? int.parse(resObj['data']['totalPages'].toString())
-              : null,
-          resObj['data']['kind'].toString()));
+      return Future.value(ModelContainer.fromItem(listVoteModel[0]));
     } else {
       throw ServerException();
     }
@@ -575,6 +574,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
     List<Vote> listVotes = item['votes'] != null
         ? (item['votes'] as List)
             .map((e) => Vote(
+                  id: e['id'].toString(),
                   userId: e['userId'].toString(),
                   flowId: e['flowId'].toString(),
                   stageId: e['stageId'].toString(),
@@ -588,6 +588,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
                   expires: e['expires'] != null
                       ? DateTime.parse(e['expires'].toString())
                       : null,
+                  key: e['key'].toString(),
                   value: int.parse(e['value'].toString()),
                 ))
             .toList()

@@ -64,7 +64,7 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
         mediaWidth: imageWidth));
     Timer.periodic(const Duration(seconds: 2), (timer) async {
       secondsPassed++;
-      print(secondsPassed);
+
       final resultCloudFile = await _getCloudFile.execute(cloudFileId);
       resultCloudFile.fold((l) => null, (r) {
         if (r.size != 0) {
@@ -91,7 +91,6 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
 
     Timer.periodic(const Duration(seconds: 2), (timer) async {
       secondsPassed++;
-      print(secondsPassed);
 
       final resultCloudFile = await _getCloudFile.execute(cloudFileId);
       resultCloudFile.fold((l) => null, (r) async {

@@ -34,13 +34,14 @@ class PostLiveCubit extends Cubit<PostLiveState> {
     emit(state.copyWithMakeVote(postId: postId, voteValue: voteValue));
   }
 
-  void makeBookmark(String userId, String postId, String markType, bool giveOrTakeAway) async {
-
-    final resultBookmark = await _postBookmark.execute(userId, postId, markType, giveOrTakeAway);
+  void makeBookmark(String userId, String postId, String markType,
+      bool giveOrTakeAway) async {
+    final resultBookmark =
+        await _postBookmark.execute(userId, postId, markType, giveOrTakeAway);
     resultBookmark.fold((l) => null, (r) {
       if(r.markType == BookmarkCodes.saveCode) {
         emit(state.copyWithSave(postId: postId, saveValue: giveOrTakeAway));
-      } else if(r.markType == BookmarkCodes.favCode) {
+      } else if (r.markType == BookmarkCodes.favCode) {
         emit(state.copyWithFav(postId: postId, favValue: giveOrTakeAway));
       }
     });
@@ -101,7 +102,8 @@ class PostLiveState extends Equatable {
     return ous;
   }
 
-  PostLiveState copyWithSave({required String postId, required bool saveValue}) {
+  PostLiveState copyWithSave(
+      {required String postId, required bool saveValue}) {
     Map<String, bool> nsaves = <String, bool>{};
     nsaves.addAll(saves);
     nsaves[postId] = saveValue;

@@ -36,16 +36,16 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
   final GetUser _getUser;
 
   DetailedListBloc(
-    this._getSession,
-    this._getDetailedListPosts,
-    this._votePublication,
-    this._getSessionRole,
-    this._getStages,
-    this._getFlows,
-    this._changeStagePost,
-    this._enablePost,
-    this._updateEdit,
-    this._getUser)
+      this._getSession,
+      this._getDetailedListPosts,
+      this._votePublication,
+      this._getSessionRole,
+      this._getStages,
+      this._getFlows,
+      this._changeStagePost,
+      this._enablePost,
+      this._updateEdit,
+      this._getUser)
       : super(const DetailedListStart()) {
     ///Evento que hace la consulta de sesión del usuario en el dispositivo.
     on<OnDetailedListLoading>(
@@ -57,30 +57,28 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
         String role = '';
         List<Flow> listFlows = [
           Flow(
-            id: '',
-            name: 'Todos los Flujos',
-            enabled: true,
-            builtIn: true,
-            created: DateTime.parse('2023-02-17 19:16:08.700Z'),
-            stages: const [],
-            updated: null,
-            deleted: null,
-            expires: null
-          )
+              id: '',
+              name: 'Todos los Flujos',
+              enabled: true,
+              builtIn: true,
+              created: DateTime.now(),
+              stages: const [],
+              updated: null,
+              deleted: null,
+              expires: null)
         ];
         List<Stage> listStages = [
           Stage(
-            id: '',
-            name: 'Todas las Etapas',
-            order: 2,
-            queryOut: null,
-            enabled: true,
-            builtIn: true,
-            created: DateTime.parse('2023-02-17 19:16:08.700Z'),
-            updated: null,
-            deleted: null,
-            expires: null
-          )
+              id: '',
+              name: 'Todas las Etapas',
+              order: 2,
+              queryOut: null,
+              enabled: true,
+              builtIn: true,
+              created: DateTime.now(),
+              updated: null,
+              deleted: null,
+              expires: null)
         ];
         var validLogin = false;
 
@@ -93,12 +91,16 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
             (l) => emit(DetailedListError(l.message)), (r) => {auth = r});
         final resultGetFlows = await _getFlows.execute();
         resultGetFlows.fold(
-            (l) => emit(DetailedListError(l.message)), (r) =>
-            {for(var item in r) {listFlows.add(item)}});
+            (l) => emit(DetailedListError(l.message)),
+            (r) => {
+                  for (var item in r) {listFlows.add(item)}
+                });
         final resultGetStages = await _getStages.execute();
         resultGetStages.fold(
-            (l) => emit(DetailedListError(l.message)), (r) => 
-            {for(var item in r) {listStages.add(item)}});
+            (l) => emit(DetailedListError(l.message)),
+            (r) => {
+                  for (var item in r) {listStages.add(item)}
+                });
         int enableValue = 0;
         if (event.enabled) {
           enableValue = 1;
@@ -178,13 +180,13 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
       });
 
       final resultStage = await _getStages.execute();
-      resultStage.fold((l) => emit(DetailedListError(l.message)),
-          (r) => listStage = r);
+      resultStage.fold(
+          (l) => emit(DetailedListError(l.message)), (r) => listStage = r);
 
-      final resultUpdate = await _updateEdit.execute(
-        event.postId, event.userId, TextContent(text: event.content), event.title);
-        resultUpdate.fold((l) => emit(DetailedListError(l.message)), (r) => 
-        emit(DetailedListEdit(r, listStage, name, username)));
+      final resultUpdate = await _updateEdit.execute(event.postId, event.userId,
+          TextContent(text: event.content), event.title);
+      resultUpdate.fold((l) => emit(DetailedListError(l.message)),
+          (r) => emit(DetailedListEdit(r, listStage, name, username)));
     });
 
     on<OnDetailedListChangeStage>((event, emit) async {
@@ -199,9 +201,12 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
         username = r.username;
       });
 
-      final editStage = await _changeStagePost.execute(event.post.id,event.post.flowId,event.stageId);
-      editStage.fold((l) => emit(DetailedListError(l.message)),
-          (post) => emit(DetailedListEdit(post, event.listStage, name, username)));
+      final editStage = await _changeStagePost.execute(
+          event.post.id, event.post.flowId, event.stageId);
+      editStage.fold(
+          (l) => emit(DetailedListError(l.message)),
+          (post) =>
+              emit(DetailedListEdit(post, event.listStage, name, username)));
     });
 
     on<OnDetailedListEnable>((event, emit) async {
@@ -226,8 +231,7 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
         } else {
           emit(DetailedListError(l.message));
         }
-        },
-          (r) => emit(DetailedListEdit(r, event.listStage, name, username)));
+      }, (r) => emit(DetailedListEdit(r, event.listStage, name, username)));
     });
 
     on<OnDetailedListVote>((event, emit) async {

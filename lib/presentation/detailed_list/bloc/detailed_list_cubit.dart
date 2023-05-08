@@ -19,10 +19,19 @@ class DetailedListLiveCubit extends Cubit<DetailedListLiveState> {
     this.uploadFile,
     this._getCloudFile,
     this._registerCloudFile,
-  ) 
-    : super(DetailedListLiveState(
-      const <String, bool>{'enabled': false, 'disabled': false},
-      "","", Uint8List(0), "", false, false, null, 0, 0, "", ""));
+  ) : super(DetailedListLiveState(
+            const <String, bool>{'enabled': false, 'disabled': false},
+            "",
+            "",
+            Uint8List(0),
+            "",
+            false,
+            false,
+            null,
+            0,
+            0,
+            "",
+            ""));
 
   void changeCheckValue(String name, bool value) {
     emit(state.copyWithChangeCheck(name: name, changeState: value));
@@ -65,7 +74,7 @@ class DetailedListLiveCubit extends Cubit<DetailedListLiveState> {
         mediaWidth: imageWidth));
     Timer.periodic(const Duration(seconds: 2), (timer) async {
       secondsPassed++;
-      print(secondsPassed);
+
       final resultCloudFile = await _getCloudFile.execute(cloudFileId);
       resultCloudFile.fold((l) => null, (r) {
         if (r.size != 0) {
@@ -92,7 +101,6 @@ class DetailedListLiveCubit extends Cubit<DetailedListLiveState> {
 
     Timer.periodic(const Duration(seconds: 2), (timer) async {
       secondsPassed++;
-      print(secondsPassed);
 
       final resultCloudFile = await _getCloudFile.execute(cloudFileId);
       resultCloudFile.fold((l) => null, (r) async {
@@ -141,7 +149,7 @@ class DetailedListLiveCubit extends Cubit<DetailedListLiveState> {
 }
 
 class DetailedListLiveState extends Equatable {
-  Map<String, bool> checks;// = <String, bool>{};
+  Map<String, bool> checks; // = <String, bool>{};
   final String fileId;
   final String filename;
   final Uint8List mediafile;
@@ -159,33 +167,33 @@ class DetailedListLiveState extends Equatable {
 
   @override
   List<Object?> get props => [
-    checks,
-    fileId,
-    filename,
-    mediafile,
-    message,
-    showLocalProgress,
-    showRemoteProgress,
-    cloudFile,
-    mediaHeight,
-    mediaWidth,
-    title,
-    text
-  ];
+        checks,
+        fileId,
+        filename,
+        mediafile,
+        message,
+        showLocalProgress,
+        showRemoteProgress,
+        cloudFile,
+        mediaHeight,
+        mediaWidth,
+        title,
+        text
+      ];
 
   DetailedListLiveState(
-    this.checks,
-    this.fileId,
-    this.filename,
-    this.mediafile,
-    this.message,
-    this.showLocalProgress,
-    this.showRemoteProgress,
-    this.cloudFile,
-    this.mediaHeight,
-    this.mediaWidth,
-    this.title,
-    this.text);
+      this.checks,
+      this.fileId,
+      this.filename,
+      this.mediafile,
+      this.message,
+      this.showLocalProgress,
+      this.showRemoteProgress,
+      this.cloudFile,
+      this.mediaHeight,
+      this.mediaWidth,
+      this.title,
+      this.text);
 
   DetailedListLiveState copyWithChangeCheck(
       {required String name, required bool changeState}) {
@@ -195,36 +203,36 @@ class DetailedListLiveState extends Equatable {
     if (name == "enabled" && changeState) nchecks["disabled"] = !changeState;
     if (name == "disabled" && changeState) nchecks["enabled"] = !changeState;
     final ous = DetailedListLiveState(
-      nchecks,
-      fileId,
-      filename,
-      mediafile,
-      message,
-      showLocalProgress,
-      showRemoteProgress,
-      cloudFile,
-      mediaHeight,
-      mediaWidth,
-      title,
-      text);
+        nchecks,
+        fileId,
+        filename,
+        mediafile,
+        message,
+        showLocalProgress,
+        showRemoteProgress,
+        cloudFile,
+        mediaHeight,
+        mediaWidth,
+        title,
+        text);
     return ous;
   }
-  
+
   DetailedListLiveState copyWithMedia({
     required String id,
     required Uint8List media,
     required int mediaHeight,
     required int mediaWidth,
   }) {
-    final ous = DetailedListLiveState(checks, id, filename, media, "Subiendo...",
-        true, true, null, mediaHeight, mediaWidth, title, text);
+    final ous = DetailedListLiveState(checks, id, filename, media,
+        "Subiendo...", true, true, null, mediaHeight, mediaWidth, title, text);
     return ous;
   }
 
   DetailedListLiveState copyWithRemove(
       {required String id, required Uint8List media}) {
-    final ous = DetailedListLiveState(checks, id, "", media, "Subiendo...", false,
-        false, null, 0, 0, title, text);
+    final ous = DetailedListLiveState(checks, id, "", media, "Subiendo...",
+        false, false, null, 0, 0, title, text);
     return ous;
   }
 
