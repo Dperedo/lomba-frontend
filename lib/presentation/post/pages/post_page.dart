@@ -91,7 +91,7 @@ class PostPage extends StatelessWidget {
     }
     if (state is PostLoaded) {
       return BlocProvider<PostLiveCubit>(
-        create: (context) => PostLiveCubit(di.locator(),di.locator(),di.locator(),di.locator(),),
+        create: (context) => PostLiveCubit(di.locator(),di.locator(),di.locator(),di.locator(),di.locator(),),
         child: SizedBox(
           width: 600,
           child: BlocBuilder<PostLiveCubit, PostLiveState>(
@@ -121,8 +121,20 @@ class PostPage extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return Column(
                             children: [
-                              const SizedBox(height: 10),
-                              Stack(
+                              const SizedBox(height: 5),
+                              /*ListTile(
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(statecubit.commentList[index].user.avatar),
+                                ),
+                                //title: Text(statecubit.commentList[index].user.name),
+                                title: Text(statecubit.commentList[index].user.name),
+                                subtitle: Text('Creado: ${statecubit.commentList[index].created.toString()}'),
+                              ),*/
+                              const ListTile(
+                                //title: Text(statecubit.commentList[index].user.name),
+                                title: Text('Nombre de Usuario'),
+                              ),
+                              Row(
                                 children: [
                                   Container(
                                     padding: const EdgeInsets.all(5.0),
@@ -134,9 +146,15 @@ class PostPage extends StatelessWidget {
                                         color: Colors.grey,
                                       )
                                     ),
-                                    child: ListTile(
-                                      title: Text(statecubit.commentList[index].text),
-                                      subtitle: Text('Creado: ${statecubit.commentList[index].created.toString()}'),
+                                    child: Column(
+                                      children: [
+                                        Text(statecubit.commentList[index].text),
+                                        Text('Creado: ${statecubit.commentList[index].created.toString()}'),
+                                        /*ListTile(
+                                          title: Text(statecubit.commentList[index].text),
+                                          subtitle: Text('Creado: ${statecubit.commentList[index].created.toString()}'),
+                                        ),*/
+                                      ],
                                     ),
                                   ),
                                   state.userId == statecubit.commentList[index].userId ? Container(
@@ -169,7 +187,12 @@ class PostPage extends StatelessWidget {
                       ),
                       IconButton(
                         onPressed: () {
-                          context.read<PostLiveCubit>().postComment(state.userId, state.post.id, contentController.text, statecubit.commentList);
+                          if (contentController.text.length >= 4) {
+                            context.read<PostLiveCubit>().postComment(state.userId, state.post.id, contentController.text, statecubit.commentList);
+                            contentController.clear();
+                          } else {
+                            snackBarNotify(context, 'El comentario debe tener al menos 4 caracteres', Icons.cancel_outlined);
+                          }
                         },
                         icon: const Icon(Icons.send),
                       ),

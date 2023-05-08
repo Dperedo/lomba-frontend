@@ -7,17 +7,20 @@ import '../../../core/constants.dart';
 import '../../../domain/entities/workflow/comment.dart';
 import '../../../domain/usecases/bookmark/post_bookmark.dart';
 import '../../../domain/usecases/comment/get_comments_post.dart';
+import '../../../domain/usecases/users/get_user.dart';
 
 class PostLiveCubit extends Cubit<PostLiveState> {
   final PostBookmark _postBookmark;
   final GetComments _getComments;
   final PostComment _postComment;
   final DeleteComment _deleteComment;
+  final GetUser _getUser;
   PostLiveCubit(
     this._postBookmark,
     this._getComments,
     this._postComment,
     this._deleteComment,
+    this._getUser,
   )
       : super(const PostLiveState(
         <String, bool>{},
@@ -68,6 +71,14 @@ class PostLiveCubit extends Cubit<PostLiveState> {
     final resultDelete = await _deleteComment.execute(userId, postId, commentId);
     resultDelete.fold((l) => null, (r) {
       getComments(postId);
+    });
+  }
+
+  void getUserName(String userId) async {
+    final resultUser = await _getUser.execute(userId);
+    resultUser.fold((l) => null, (r) {
+      return r.name;
+      //getComments(postId);
     });
   }
 }
