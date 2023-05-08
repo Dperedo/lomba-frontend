@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:number_paginator/number_paginator.dart';
+
 import '../../../core/timezone.dart';
 import '../../../core/validators.dart';
 import '../../../core/widgets/body_formatter.dart';
@@ -12,11 +13,11 @@ import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/workflow/flow.dart' as flw;
 import '../../../domain/entities/workflow/stage.dart';
 import '../../../domain/entities/workflow/textcontent.dart';
+import '../../../injection.dart' as di;
 import '../bloc/detailed_list_bloc.dart';
 import '../bloc/detailed_list_cubit.dart';
 import '../bloc/detailed_list_event.dart';
 import '../bloc/detailed_list_state.dart';
-import '../../../injection.dart' as di;
 
 ///DetailedListPage del sistema, en el futuro debe cambiar a página principal
 ///
@@ -66,9 +67,8 @@ class DetailedListPage extends StatelessWidget {
       "Modificación": "updated"
     };
     return BlocProvider<DetailedListLiveCubit>(
-      create: (context) => DetailedListLiveCubit(
-        di.locator(), di.locator(), di.locator()
-      ),
+      create: (context) =>
+          DetailedListLiveCubit(di.locator(), di.locator(), di.locator()),
       child: SizedBox(
         width: 800,
         child: BlocBuilder<DetailedListBloc, DetailedListState>(
@@ -233,7 +233,9 @@ class DetailedListPage extends StatelessWidget {
                                         state.searchText,
                                         value.toString(),
                                         state.stageId,
-                                        <String, int>{state.fieldsOrder.keys.first: -1},
+                                        <String, int>{
+                                          state.fieldsOrder.keys.first: -1
+                                        },
                                         1,
                                         _fixPageSize,
                                         context
@@ -271,7 +273,9 @@ class DetailedListPage extends StatelessWidget {
                                         state.searchText,
                                         state.flowId,
                                         value.toString(),
-                                        <String, int>{state.fieldsOrder.keys.first: -1},
+                                        <String, int>{
+                                          state.fieldsOrder.keys.first: -1
+                                        },
                                         1,
                                         _fixPageSize,
                                         context
@@ -412,7 +416,8 @@ class DetailedListPage extends StatelessWidget {
                             ),
                             Row(
                               children: [
-                                Text("Etapa Actual: ${state.listItems[index].stages.last.name}"),
+                                Text(
+                                    "Etapa Actual: ${state.listItems[index].stages.last.name}"),
                               ],
                             ),
                             const Divider(),
@@ -538,39 +543,41 @@ class DetailedListPage extends StatelessWidget {
                                   value.toString(), state.liststage));*/
                           final newStageId = value.toString();
                           showDialog(
-                            context: context,
-                            builder: (context) => GestureDetector(
-                                  onTap: () => Navigator.pop(context),
-                                  child: AlertDialog(
-                                    title: const Text(
-                                        '¿Desea cambiar el estado de la publicación?'),
-                                    content: const Text(
-                                        'Puede cambiar después su elección'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        key: const ValueKey("btnConfirmEnable"),
-                                        child: const Text('Cambiar'),
-                                        onPressed: () {
-                                          Navigator.pop(context, true);
-                                        },
-                                      ),
-                                      TextButton(
-                                        key: const ValueKey("btnCancelEnable"),
-                                        child: const Text('Cancelar'),
-                                        onPressed: () {
-                                          Navigator.pop(context, false);
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                )).then((value) => {
-                              if (value)
-                                {
-                                  context.read<DetailedListBloc>().add(
-                                    OnDetailedListChangeStage(state.post,
-                                        newStageId, state.liststage))
-                                }
-                            });
+                              context: context,
+                              builder: (context) => GestureDetector(
+                                    onTap: () => Navigator.pop(context),
+                                    child: AlertDialog(
+                                      title: const Text(
+                                          '¿Desea cambiar el estado de la publicación?'),
+                                      content: const Text(
+                                          'Puede cambiar después su elección'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          key: const ValueKey(
+                                              "btnConfirmEnable"),
+                                          child: const Text('Cambiar'),
+                                          onPressed: () {
+                                            Navigator.pop(context, true);
+                                          },
+                                        ),
+                                        TextButton(
+                                          key:
+                                              const ValueKey("btnCancelEnable"),
+                                          child: const Text('Cancelar'),
+                                          onPressed: () {
+                                            Navigator.pop(context, false);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  )).then((value) => {
+                                if (value)
+                                  {
+                                    context.read<DetailedListBloc>().add(
+                                        OnDetailedListChangeStage(state.post,
+                                            newStageId, state.liststage))
+                                  }
+                              });
                         }
                       },
                     ),
@@ -630,9 +637,17 @@ class DetailedListPage extends StatelessWidget {
                 TextEditingController();
             final TextEditingController contentController =
                 TextEditingController();
+            final TextEditingController contentControllerMedia =
+                TextEditingController();
+
             titleController.text = state.post.title;
-            contentController.text =
-                (state.post.postitems[0].content as TextContent).text;
+
+            for (var element in state.post.postitems) {
+              if (element.format == "text") {
+                contentController.text = (element.content as TextContent).text;
+              }
+            }
+
             return Form(
               key: _key,
               child: Column(
@@ -651,14 +666,18 @@ class DetailedListPage extends StatelessWidget {
                   TextFormField(
                     key: const ValueKey('txtContent'),
                     maxLength: 500,
-                    maxLines: 8,
+                    maxLines: 4,
                     controller: contentController,
                     validator: (value) => Validators.validateName(value ?? ""),
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: 'Contenido del Post',
+                      hintText: 'Texto',
                     ),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+
                   /*const SizedBox(
                         height: 10,
                       ),
@@ -828,7 +847,8 @@ class DetailedListPage extends StatelessWidget {
     return AppBar(title: const Text("Todos los Post"));
   }
 
-  Widget widgetImagenOrVideo(String filename, DetailedListLiveState statecubit) {
+  Widget widgetImagenOrVideo(
+      String filename, DetailedListLiveState statecubit) {
     if (filename.endsWith(".jpg") ||
         filename.endsWith(".jpeg") ||
         filename.endsWith(".gif") ||

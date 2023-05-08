@@ -16,11 +16,11 @@ import '../bloc/post_state.dart';
 import '../../../injection.dart' as di;
 
 class PostPage extends StatelessWidget {
-  const PostPage({Key? key, required this.postId, required this.hasReference})
+  PostPage({Key? key, required this.postId, required this.hasReference})
       : super(key: key);
 
-  final String postId;
-  final bool hasReference;
+  late String postId;
+  late bool hasReference;
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +71,13 @@ class PostPage extends StatelessWidget {
   Widget _bodyPost(BuildContext context, PostState state) {
     final TextEditingController contentController = TextEditingController();
 
-    if (state is PostStart) {
+    if (postId != '') {
       context.read<PostBloc>().add(OnPostLoad(postId));
+      postId = '';
+    }
+
+    if (state is PostStart && state.postId != '') {
+      context.read<PostBloc>().add(OnPostLoad(state.postId));
     }
     if (state is PostLoading) {
       return SizedBox(
@@ -84,9 +89,10 @@ class PostPage extends StatelessWidget {
       );
     }
     if (state is PostLoaded) {
-      print(state.post.id);
       return BlocProvider<PostLiveCubit>(
-        create: (context) => PostLiveCubit(di.locator(),),
+        create: (context) => PostLiveCubit(
+          di.locator(),
+        ),
         child: SizedBox(
           width: 600,
           child: BlocBuilder<PostLiveCubit, PostLiveState>(

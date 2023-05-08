@@ -8,8 +8,12 @@ class PostLiveCubit extends Cubit<PostLiveState> {
   final PostBookmark _postBookmark;
   PostLiveCubit(
     this._postBookmark,
-  )
-      : super(const PostLiveState(<String, bool>{}, <String, int>{}, <String, bool>{}, <String, bool>{},));
+  ) : super(const PostLiveState(
+          <String, bool>{},
+          <String, int>{},
+          <String, bool>{},
+          <String, bool>{},
+        ));
 
   void changeCheckValue(String name, bool value) {
     emit(state.copyWithChangeCheck(name: name, changeState: value));
@@ -19,18 +23,17 @@ class PostLiveCubit extends Cubit<PostLiveState> {
     emit(state.copyWithMakeVote(postId: postId, voteValue: voteValue));
   }
 
-  void makeBookmark(String userId, String postId, String markType, bool giveOrTakeAway) async {
-
-    final resultBookmark = await _postBookmark.execute(userId, postId, markType, giveOrTakeAway);
+  void makeBookmark(String userId, String postId, String markType,
+      bool giveOrTakeAway) async {
+    final resultBookmark =
+        await _postBookmark.execute(userId, postId, markType, giveOrTakeAway);
     resultBookmark.fold((l) => null, (r) {
-      print(r);
-      if(r.markType == BookmarkCodes.saveCode) {
+      if (r.markType == BookmarkCodes.saveCode) {
         emit(state.copyWithSave(postId: postId, saveValue: giveOrTakeAway));
-      } else if(r.markType == BookmarkCodes.favCode) {
+      } else if (r.markType == BookmarkCodes.favCode) {
         emit(state.copyWithFav(postId: postId, favValue: giveOrTakeAway));
       }
     });
-
   }
 }
 
@@ -63,7 +66,8 @@ class PostLiveState extends Equatable {
     return ous;
   }
 
-  PostLiveState copyWithSave({required String postId, required bool saveValue}) {
+  PostLiveState copyWithSave(
+      {required String postId, required bool saveValue}) {
     Map<String, bool> nsaves = <String, bool>{};
     nsaves.addAll(saves);
     nsaves[postId] = saveValue;

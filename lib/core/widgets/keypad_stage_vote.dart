@@ -35,13 +35,14 @@ import '../../presentation/voted/bloc/voted_cubit.dart';
 import '../../presentation/voted/bloc/voted_event.dart';
 
 class KeypadVoteVoted extends StatelessWidget {
-  const KeypadVoteVoted(
-      {super.key,
-      required this.context,
-      required this.post,
-      required this.statecubit,
-      required this.keyValidate,
-      required this.userId,});
+  const KeypadVoteVoted({
+    super.key,
+    required this.context,
+    required this.post,
+    required this.statecubit,
+    required this.keyValidate,
+    required this.userId,
+  });
   final BuildContext context;
   final Post post;
   final VotedLiveState statecubit;
@@ -74,24 +75,49 @@ class KeypadVoteVoted extends StatelessWidget {
         ),
         Row(
           children: [
-            showFavoriteButton(context, isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.favCode).toList(), statecubit.favs), () {
-                    final haveMarkType = isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.favCode).toList(), statecubit.favs);
-                    post.bookmarks.clear();
-                    context.read<RecentLiveCubit>().makeBookmark(userId, post.id, BookmarkCodes.favCode, !haveMarkType);
-                  }),
+            showFavoriteButton(
+                context,
+                isMarked(
+                    post.id,
+                    post.bookmarks
+                        .where((e) => e.markType == BookmarkCodes.favCode)
+                        .toList(),
+                    statecubit.favs), () {
+              final haveMarkType = isMarked(
+                  post.id,
+                  post.bookmarks
+                      .where((e) => e.markType == BookmarkCodes.favCode)
+                      .toList(),
+                  statecubit.favs);
+              post.bookmarks.clear();
+              context.read<RecentLiveCubit>().makeBookmark(
+                  userId, post.id, BookmarkCodes.favCode, !haveMarkType);
+            }),
             const SizedBox(
               width: 5,
             ),
-            showBookmarkButton(context, isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.saveCode).toList(), statecubit.saves), () {
-                    final haveMarkType = isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.saveCode).toList(), statecubit.saves);
-                    post.bookmarks.clear();
-                    context.read<RecentLiveCubit>().makeBookmark(userId, post.id, BookmarkCodes.saveCode, !haveMarkType);
-                  }),
+            showBookmarkButton(
+                context,
+                isMarked(
+                    post.id,
+                    post.bookmarks
+                        .where((e) => e.markType == BookmarkCodes.saveCode)
+                        .toList(),
+                    statecubit.saves), () {
+              final haveMarkType = isMarked(
+                  post.id,
+                  post.bookmarks
+                      .where((e) => e.markType == BookmarkCodes.saveCode)
+                      .toList(),
+                  statecubit.saves);
+              post.bookmarks.clear();
+              context.read<RecentLiveCubit>().makeBookmark(
+                  userId, post.id, BookmarkCodes.saveCode, !haveMarkType);
+            }),
             showCommentsButton(context, () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return PostPage(postId: post.id, hasReference: true);
               }));
-
             }),
             const SizedBox(
               width: 5,
@@ -109,13 +135,14 @@ class KeypadVoteVoted extends StatelessWidget {
 }
 
 class KeypadVotePopular extends StatelessWidget {
-  const KeypadVotePopular(
-      {super.key,
-      required this.context,
-      required this.post,
-      required this.statecubit,
-      required this.validLogin,
-      required this.userId,});
+  const KeypadVotePopular({
+    super.key,
+    required this.context,
+    required this.post,
+    required this.statecubit,
+    required this.validLogin,
+    required this.userId,
+  });
   final BuildContext context;
   final Post post;
   final PopularLiveState statecubit;
@@ -149,18 +176,45 @@ class KeypadVotePopular extends StatelessWidget {
               ),
               Row(
                 children: [
-                  showFavoriteButton(context, isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.favCode).toList(), statecubit.favs), () {
-                    final haveMarkType = isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.favCode).toList(), statecubit.favs);
+                  showFavoriteButton(
+                      context,
+                      isMarked(
+                          post.id,
+                          post.bookmarks
+                              .where((e) => e.markType == BookmarkCodes.favCode)
+                              .toList(),
+                          statecubit.favs), () {
+                    final haveMarkType = isMarked(
+                        post.id,
+                        post.bookmarks
+                            .where((e) => e.markType == BookmarkCodes.favCode)
+                            .toList(),
+                        statecubit.favs);
                     post.bookmarks.clear();
-                    context.read<RecentLiveCubit>().makeBookmark(userId, post.id, BookmarkCodes.favCode, !haveMarkType);
+                    context.read<RecentLiveCubit>().makeBookmark(
+                        userId, post.id, BookmarkCodes.favCode, !haveMarkType);
                   }),
                   const SizedBox(
                     width: 5,
                   ),
-                  showBookmarkButton(context, isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.saveCode).toList(), statecubit.saves), () {
-                    final haveMarkType = isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.saveCode).toList(), statecubit.saves);
+                  showBookmarkButton(
+                      context,
+                      isMarked(
+                          post.id,
+                          post.bookmarks
+                              .where(
+                                  (e) => e.markType == BookmarkCodes.saveCode)
+                              .toList(),
+                          statecubit.saves), () {
+                    final haveMarkType = isMarked(
+                        post.id,
+                        post.bookmarks
+                            .where((e) => e.markType == BookmarkCodes.saveCode)
+                            .toList(),
+                        statecubit.saves);
                     post.bookmarks.clear();
-                    context.read<RecentLiveCubit>().makeBookmark(userId, post.id, BookmarkCodes.saveCode, !haveMarkType);
+                    context.read<RecentLiveCubit>().makeBookmark(
+                        userId, post.id, BookmarkCodes.saveCode, !haveMarkType);
                   }),
                   showCommentsButton(context, () {
                     Navigator.push(context,
@@ -230,18 +284,45 @@ class KeypadVoteRecent extends StatelessWidget {
               ),
               Row(
                 children: [
-                  showFavoriteButton(context, isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.favCode).toList(), statecubit.favs), () {
-                    final haveMarkType = isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.favCode).toList(), statecubit.favs);
+                  showFavoriteButton(
+                      context,
+                      isMarked(
+                          post.id,
+                          post.bookmarks
+                              .where((e) => e.markType == BookmarkCodes.favCode)
+                              .toList(),
+                          statecubit.favs), () {
+                    final haveMarkType = isMarked(
+                        post.id,
+                        post.bookmarks
+                            .where((e) => e.markType == BookmarkCodes.favCode)
+                            .toList(),
+                        statecubit.favs);
                     post.bookmarks.clear();
-                    context.read<RecentLiveCubit>().makeBookmark(userId, post.id, BookmarkCodes.favCode, !haveMarkType);
+                    context.read<RecentLiveCubit>().makeBookmark(
+                        userId, post.id, BookmarkCodes.favCode, !haveMarkType);
                   }),
                   const SizedBox(
                     width: 5,
                   ),
-                  showBookmarkButton(context, isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.saveCode).toList(), statecubit.saves), () {
-                    final haveMarkType = isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.saveCode).toList(), statecubit.saves);
+                  showBookmarkButton(
+                      context,
+                      isMarked(
+                          post.id,
+                          post.bookmarks
+                              .where(
+                                  (e) => e.markType == BookmarkCodes.saveCode)
+                              .toList(),
+                          statecubit.saves), () {
+                    final haveMarkType = isMarked(
+                        post.id,
+                        post.bookmarks
+                            .where((e) => e.markType == BookmarkCodes.saveCode)
+                            .toList(),
+                        statecubit.saves);
                     post.bookmarks.clear();
-                    context.read<RecentLiveCubit>().makeBookmark(userId, post.id, BookmarkCodes.saveCode, !haveMarkType);
+                    context.read<RecentLiveCubit>().makeBookmark(
+                        userId, post.id, BookmarkCodes.saveCode, !haveMarkType);
                   }),
                   const SizedBox(
                     width: 5,
@@ -269,13 +350,14 @@ class KeypadVoteRecent extends StatelessWidget {
 }
 
 class KeypadVotePost extends StatelessWidget {
-  const KeypadVotePost(
-      {super.key,
-      required this.context,
-      required this.post,
-      required this.statecubit,
-      required this.validLogin,
-      required this.userId,});
+  const KeypadVotePost({
+    super.key,
+    required this.context,
+    required this.post,
+    required this.statecubit,
+    required this.validLogin,
+    required this.userId,
+  });
   final BuildContext context;
   final Post post;
   final PostLiveState statecubit;
@@ -309,18 +391,45 @@ class KeypadVotePost extends StatelessWidget {
               ),
               Row(
                 children: [
-                  showFavoriteButton(context, isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.favCode).toList(), statecubit.favs), () {
-                    final haveMarkType = isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.favCode).toList(), statecubit.favs);
+                  showFavoriteButton(
+                      context,
+                      isMarked(
+                          post.id,
+                          post.bookmarks
+                              .where((e) => e.markType == BookmarkCodes.favCode)
+                              .toList(),
+                          statecubit.favs), () {
+                    final haveMarkType = isMarked(
+                        post.id,
+                        post.bookmarks
+                            .where((e) => e.markType == BookmarkCodes.favCode)
+                            .toList(),
+                        statecubit.favs);
                     post.bookmarks.clear();
-                    context.read<RecentLiveCubit>().makeBookmark(userId, post.id, BookmarkCodes.favCode, !haveMarkType);
+                    context.read<RecentLiveCubit>().makeBookmark(
+                        userId, post.id, BookmarkCodes.favCode, !haveMarkType);
                   }),
                   const SizedBox(
                     width: 5,
                   ),
-                  showBookmarkButton(context, isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.saveCode).toList(), statecubit.saves), () {
-                    final haveMarkType = isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.saveCode).toList(), statecubit.saves);
+                  showBookmarkButton(
+                      context,
+                      isMarked(
+                          post.id,
+                          post.bookmarks
+                              .where(
+                                  (e) => e.markType == BookmarkCodes.saveCode)
+                              .toList(),
+                          statecubit.saves), () {
+                    final haveMarkType = isMarked(
+                        post.id,
+                        post.bookmarks
+                            .where((e) => e.markType == BookmarkCodes.saveCode)
+                            .toList(),
+                        statecubit.saves);
                     post.bookmarks.clear();
-                    context.read<RecentLiveCubit>().makeBookmark(userId, post.id, BookmarkCodes.saveCode, !haveMarkType);
+                    context.read<RecentLiveCubit>().makeBookmark(
+                        userId, post.id, BookmarkCodes.saveCode, !haveMarkType);
                   }),
                   showCommentsButton(context, () {
                     Navigator.push(context,
@@ -369,7 +478,9 @@ class KeypadVoteFavorites extends StatelessWidget {
                   showNegativeButton(
                       context, post.id, post.votes, statecubit.votes, () {
                     post.votes.clear();
-                    context.read<FavoritesBloc>().add(OnFavoritesAddVote(post.id, -1));
+                    context
+                        .read<FavoritesBloc>()
+                        .add(OnFavoritesAddVote(post.id, -1));
                     context.read<FavoritesLiveCubit>().makeVote(post.id, -1);
                   }),
                   const SizedBox(
@@ -378,25 +489,54 @@ class KeypadVoteFavorites extends StatelessWidget {
                   showPositiveButton(
                       context, post.id, post.votes, statecubit.votes, () {
                     post.votes.clear();
-                    context.read<FavoritesBloc>().add(OnFavoritesAddVote(post.id, 1));
+                    context
+                        .read<FavoritesBloc>()
+                        .add(OnFavoritesAddVote(post.id, 1));
                     context.read<FavoritesLiveCubit>().makeVote(post.id, 1);
                   }),
                 ],
               ),
               Row(
                 children: [
-                  showFavoriteButton(context, isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.favCode).toList(), statecubit.favs), () {
-                    final haveMarkType = isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.favCode).toList(), statecubit.favs);
+                  showFavoriteButton(
+                      context,
+                      isMarked(
+                          post.id,
+                          post.bookmarks
+                              .where((e) => e.markType == BookmarkCodes.favCode)
+                              .toList(),
+                          statecubit.favs), () {
+                    final haveMarkType = isMarked(
+                        post.id,
+                        post.bookmarks
+                            .where((e) => e.markType == BookmarkCodes.favCode)
+                            .toList(),
+                        statecubit.favs);
                     post.bookmarks.clear();
-                    context.read<FavoritesLiveCubit>().makeBookmark(userId, post.id, BookmarkCodes.favCode, !haveMarkType);
+                    context.read<FavoritesLiveCubit>().makeBookmark(
+                        userId, post.id, BookmarkCodes.favCode, !haveMarkType);
                   }),
                   const SizedBox(
                     width: 5,
                   ),
-                  showBookmarkButton(context, isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.saveCode).toList(), statecubit.saves), () {
-                    final haveMarkType = isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.saveCode).toList(), statecubit.saves);
+                  showBookmarkButton(
+                      context,
+                      isMarked(
+                          post.id,
+                          post.bookmarks
+                              .where(
+                                  (e) => e.markType == BookmarkCodes.saveCode)
+                              .toList(),
+                          statecubit.saves), () {
+                    final haveMarkType = isMarked(
+                        post.id,
+                        post.bookmarks
+                            .where((e) => e.markType == BookmarkCodes.saveCode)
+                            .toList(),
+                        statecubit.saves);
                     post.bookmarks.clear();
-                    context.read<FavoritesLiveCubit>().makeBookmark(userId, post.id, BookmarkCodes.saveCode, !haveMarkType);
+                    context.read<FavoritesLiveCubit>().makeBookmark(
+                        userId, post.id, BookmarkCodes.saveCode, !haveMarkType);
                   }),
                   const SizedBox(
                     width: 5,
@@ -464,18 +604,45 @@ class KeypadVoteSaved extends StatelessWidget {
               ),
               Row(
                 children: [
-                  showFavoriteButton(context, isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.favCode).toList(), statecubit.favs), () {
-                    final haveMarkType = isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.favCode).toList(), statecubit.favs);
+                  showFavoriteButton(
+                      context,
+                      isMarked(
+                          post.id,
+                          post.bookmarks
+                              .where((e) => e.markType == BookmarkCodes.favCode)
+                              .toList(),
+                          statecubit.favs), () {
+                    final haveMarkType = isMarked(
+                        post.id,
+                        post.bookmarks
+                            .where((e) => e.markType == BookmarkCodes.favCode)
+                            .toList(),
+                        statecubit.favs);
                     post.bookmarks.clear();
-                    context.read<SavedLiveCubit>().makeBookmark(userId, post.id, BookmarkCodes.favCode, !haveMarkType);
+                    context.read<SavedLiveCubit>().makeBookmark(
+                        userId, post.id, BookmarkCodes.favCode, !haveMarkType);
                   }),
                   const SizedBox(
                     width: 5,
                   ),
-                  showBookmarkButton(context, isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.saveCode).toList(), statecubit.saves), () {
-                    final haveMarkType = isMarked(post.id, post.bookmarks.where((e) => e.markType==BookmarkCodes.saveCode).toList(), statecubit.saves);
+                  showBookmarkButton(
+                      context,
+                      isMarked(
+                          post.id,
+                          post.bookmarks
+                              .where(
+                                  (e) => e.markType == BookmarkCodes.saveCode)
+                              .toList(),
+                          statecubit.saves), () {
+                    final haveMarkType = isMarked(
+                        post.id,
+                        post.bookmarks
+                            .where((e) => e.markType == BookmarkCodes.saveCode)
+                            .toList(),
+                        statecubit.saves);
                     post.bookmarks.clear();
-                    context.read<SavedLiveCubit>().makeBookmark(userId, post.id, BookmarkCodes.saveCode, !haveMarkType);
+                    context.read<SavedLiveCubit>().makeBookmark(
+                        userId, post.id, BookmarkCodes.saveCode, !haveMarkType);
                   }),
                   const SizedBox(
                     width: 5,
@@ -560,7 +727,6 @@ Widget showDownloadButton(BuildContext context, Post post) {
 Widget showShareButton(BuildContext context, Post post) {
   return PopupMenuButton<String>(
     onSelected: (String result) {
-      //print('La opción seleccionada es: $result');
       if (result == 'opcion_1') {
         Clipboard.setData(ClipboardData(text: '${Uri.base}p/${post.id}'))
             .then((result) {
