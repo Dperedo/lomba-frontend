@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lomba_frontend/domain/entities/workflow/stage.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_role.dart';
 import 'package:lomba_frontend/domain/usecases/local/get_session_status.dart';
-import 'package:lomba_frontend/domain/usecases/post/update_edit.dart';
+import 'package:lomba_frontend/domain/usecases/post/update_multi_post.dart';
 import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/stage/get_stages.dart';
 import 'package:rxdart/rxdart.dart';
@@ -32,7 +32,7 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
   final GetFlows _getFlows;
   final ChangeStagePost _changeStagePost;
   final EnablePost _enablePost;
-  final UpdateEdit _updateEdit;
+  final UpdateMultiPost _updateMultiPost;
   final GetUser _getUser;
 
   DetailedListBloc(
@@ -44,7 +44,7 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
       this._getFlows,
       this._changeStagePost,
       this._enablePost,
-      this._updateEdit,
+      this._updateMultiPost,
       this._getUser)
       : super(const DetailedListStart()) {
     ///Evento que hace la consulta de sesión del usuario en el dispositivo.
@@ -183,8 +183,13 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
       resultStage.fold(
           (l) => emit(DetailedListError(l.message)), (r) => listStage = r);
 
-      final resultUpdate = await _updateEdit.execute(event.postId, event.userId,
-          TextContent(text: event.content), event.title);
+      final resultUpdate = await _updateMultiPost.execute(
+          event.postId,
+          event.userId,
+          event.textContent,
+          event.imageContent,
+          event.videoContent,
+          event.title);
       resultUpdate.fold((l) => emit(DetailedListError(l.message)),
           (r) => emit(DetailedListEdit(r, listStage, name, username)));
     });

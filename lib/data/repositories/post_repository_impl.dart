@@ -57,11 +57,16 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, Post>> updatePost(
-      String postId, String userId, TextContent text, String title) async {
+  Future<Either<Failure, Post>> updateMultiPost(
+      String postId,
+      String userId,
+      TextContent? text,
+      ImageContent? image,
+      VideoContent? video,
+      String title) async {
     try {
-      final result =
-          await remoteDataSource.updatePost(postId, userId, text, title);
+      final result = await remoteDataSource.updateMultiPost(
+          postId, userId, text, image, video, title);
 
       return (Right(result.toEntity()));
     } on ServerException {

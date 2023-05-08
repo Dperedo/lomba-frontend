@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:lomba_frontend/domain/entities/workflow/post.dart';
 
-
 abstract class UploadedState extends Equatable {
   const UploadedState();
 
@@ -25,14 +24,12 @@ class UploadedEdit extends UploadedState {
 }
 
 class UploadedPrepareForEdit extends UploadedState {
-  final String postId;
-  final String title;
-  final String content;
+  final Post post;
 
-  const UploadedPrepareForEdit(this.postId, this.title, this.content);
+  const UploadedPrepareForEdit(this.post);
 
   @override
-  List<Object> get props => [postId, title, content];
+  List<Object> get props => [post];
 }
 
 class UploadedLoaded extends UploadedState {
