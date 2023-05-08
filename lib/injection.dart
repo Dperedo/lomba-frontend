@@ -17,7 +17,7 @@ import 'package:lomba_frontend/domain/usecases/post/get_post.dart';
 import 'package:lomba_frontend/domain/usecases/post/get_rejected_posts.dart';
 import 'package:lomba_frontend/domain/usecases/post/get_uploaded_posts.dart';
 import 'package:lomba_frontend/domain/usecases/post/get_voted_posts.dart';
-import 'package:lomba_frontend/domain/usecases/post/update_edit.dart';
+import 'package:lomba_frontend/domain/usecases/post/update_multi_post.dart';
 import 'package:lomba_frontend/domain/usecases/post/vote_publication.dart';
 import 'package:lomba_frontend/domain/usecases/login/change_orga.dart';
 import 'package:lomba_frontend/domain/usecases/login/get_authenticate.dart';
@@ -250,8 +250,8 @@ Future<void> init() async {
         locator(),
         locator(),
       ));
-  locator.registerFactory(
-      () => FavoritesBloc(locator(), locator(), locator(), locator(), locator()));
+  locator.registerFactory(() =>
+      FavoritesBloc(locator(), locator(), locator(), locator(), locator()));
   locator.registerFactory(
       () => SavedBloc(locator(), locator(), locator(), locator(), locator()));
 
@@ -308,7 +308,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetUploadedPosts(locator()));
   locator.registerLazySingleton(() => GetVotedPosts(locator()));
   locator.registerLazySingleton(() => VotePublication(locator()));
-  locator.registerLazySingleton(() => UpdateEdit(locator()));
+  locator.registerLazySingleton(() => UpdateMultiPost(locator()));
   locator.registerLazySingleton(() => DeletePost(locator()));
   locator.registerLazySingleton(() => GetDetailedListPosts(locator()));
   locator.registerLazySingleton(() => EnablePost(locator()));

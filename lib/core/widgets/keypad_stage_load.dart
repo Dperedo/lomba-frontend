@@ -130,10 +130,9 @@ class KeypadLoad extends StatelessWidget {
               ),
               onPressed: post.stageId == StagesVotationFlow.stageId01Load
                   ? () {
-                      context.read<UploadedBloc>().add(OnUploadedPrepareForEdit(
-                          post.id,
-                          post.title,
-                          (post.postitems[0].content as TextContent).text));
+                      context
+                          .read<UploadedBloc>()
+                          .add(OnUploadedPrepareForEdit(post));
                     }
                   : null,
               child: Icon(

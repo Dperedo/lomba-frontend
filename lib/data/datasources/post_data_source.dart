@@ -30,8 +30,13 @@ abstract class PostRemoteDataSource {
       String title,
       String flowId,
       bool isDraft);
-  Future<PostModel> updatePost(
-      String postId, String userId, TextContent text, String title);
+  Future<PostModel> updateMultiPost(
+      String postId,
+      String userId,
+      TextContent? text,
+      ImageContent? image,
+      VideoContent? video,
+      String title);
   Future<PostModel> deletePost(String postId, String userId);
   Future<PostModel> getPost(String postId);
   Future<PostModel> getPostWithUser(
@@ -316,19 +321,50 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
   }
 
   @override
-  Future<PostModel> updatePost(
-      String postId, String userId, TextContent text, String title) async {
-    final Map<String, dynamic> editPost = {
+  Future<PostModel> updateMultiPost(
+      String postId,
+      String userId,
+      TextContent? text,
+      ImageContent? image,
+      VideoContent? video,
+      String title) async {
+    final Map<String, dynamic> editMultiPost = {
       'userId': userId,
       'postId': postId,
       'title': title,
-      'textContent': {'text': text.text}
+      'textContent': text == null ? null : {'text': text.text},
+      'imageContent': image == null
+          ? null
+          : {
+              'url': image.url,
+              'size': image.size,
+              'filetype': image.filetype,
+              'cloudFileId': image.cloudFileId,
+              'width': image.width,
+              'height': image.height,
+              'description': image.description,
+            },
+      'videoContent': video == null
+          ? null
+          : {
+              'url': video.url,
+              'size': video.size,
+              'filetype': video.filetype,
+              'cloudFileId': video.cloudFileId,
+              'width': video.width,
+              'height': video.height,
+              'description': video.description,
+              'thumbnailUrl': video.thumbnailUrl,
+              'thumbnailSize': video.thumbnailSize,
+              'thumbnailCloudFileId': video.thumbnailCloudFileId,
+            }
     };
+
     final session = await localDataSource.getSavedSession();
-    final url = Uri.parse('${UrlBackend.base}/api/v1/post');
+    final url = Uri.parse('${UrlBackend.base}/api/v1/post/multi/$postId');
 
     http.Response resp =
-        await client.put(url, body: json.encode(editPost), headers: {
+        await client.put(url, body: json.encode(editMultiPost), headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer ${session.token}",

@@ -10,17 +10,17 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../data/models/session_model.dart';
 import '../../../domain/usecases/post/delete_post.dart';
-import '../../../domain/usecases/post/update_edit.dart';
+import '../../../domain/usecases/post/update_multi_post.dart';
 
 class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
   final GetUploadedPosts _getUploadedPosts;
   final GetSession _getSession;
   final VotePublication _votePublication;
-  final UpdateEdit _updatePost;
+  final UpdateMultiPost _updateMultiPost;
   final DeletePost _deletePost;
 
   UploadedBloc(this._getUploadedPosts, this._getSession, this._votePublication,
-      this._updatePost, this._deletePost)
+      this._updateMultiPost, this._deletePost)
       : super(UploadedStart()) {
     on<OnUploadedStarter>((event, emit) => emit(UploadedStart()));
 
@@ -90,8 +90,13 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
                     token: r.token, username: r.username, name: r.name)
               });
       final userId = session?.getUserId();
-      final resultUpdate = await _updatePost.execute(
-          event.postId, userId!, TextContent(text: event.content), event.title);
+      final resultUpdate = await _updateMultiPost.execute(
+          event.postId,
+          userId!,
+          event.textContent,
+          event.imageContent,
+          event.videoContent,
+          event.title);
       resultUpdate.fold((l) => (emit(UploadedError(l.message))),
           (r) => emit(UploadedStart()));
     });
@@ -114,7 +119,7 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
     });
 
     on<OnUploadedPrepareForEdit>((event, emit) async {
-      emit(UploadedPrepareForEdit(event.postId, event.title, event.content));
+      emit(UploadedPrepareForEdit(event.post));
     });
   }
   EventTransformer<T> debounce<T>(Duration duration) {

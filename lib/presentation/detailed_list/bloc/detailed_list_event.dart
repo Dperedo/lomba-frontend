@@ -1,7 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:lomba_frontend/domain/entities/workflow/textcontent.dart';
 
+import '../../../domain/entities/workflow/imagecontent.dart';
 import '../../../domain/entities/workflow/post.dart';
 import '../../../domain/entities/workflow/stage.dart';
+import '../../../domain/entities/workflow/videocontent.dart';
 
 ///Interfaz del evento de controla la página principal.
 abstract class DetailedListEvent extends Equatable {
@@ -20,10 +23,26 @@ class OnDetailedListLoading extends DetailedListEvent {
   final bool disabled;
 
   const OnDetailedListLoading(
-      this.searchText, this.flowId, this.stageId, this.fieldsOrder, this.pageIndex, this.pageSize, this.enabled, this.disabled);
+      this.searchText,
+      this.flowId,
+      this.stageId,
+      this.fieldsOrder,
+      this.pageIndex,
+      this.pageSize,
+      this.enabled,
+      this.disabled);
 
   @override
-  List<Object> get props => [searchText, flowId, stageId, fieldsOrder, pageIndex, pageSize, enabled, disabled];
+  List<Object> get props => [
+        searchText,
+        flowId,
+        stageId,
+        fieldsOrder,
+        pageIndex,
+        pageSize,
+        enabled,
+        disabled
+      ];
 }
 
 ///Evento ocurre cuando la página de DetailedList ya fue cargada
@@ -92,8 +111,12 @@ class OnDetailedListEditContent extends DetailedListEvent {
   final String postId;
   final String userId;
   final String title;
-  final String content;
-  const OnDetailedListEditContent(this.postId, this.userId, this.title, this.content);
+  final TextContent? textContent;
+  final ImageContent? imageContent;
+  final VideoContent? videoContent;
+  const OnDetailedListEditContent(this.postId, this.userId, this.title,
+      this.textContent, this.imageContent, this.videoContent);
   @override
-  List<Object> get props => [postId,userId,title,content];
+  List<Object> get props =>
+      [postId, userId, title, textContent!, imageContent!, videoContent!];
 }

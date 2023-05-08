@@ -20,8 +20,13 @@ abstract class PostRepository {
       String title,
       String flowId,
       bool isDraft);
-  Future<Either<Failure, Post>> updatePost(
-      String postId, String userId, TextContent text, String title);
+  Future<Either<Failure, Post>> updateMultiPost(
+      String postId,
+      String userId,
+      TextContent? text,
+      ImageContent? image,
+      VideoContent? video,
+      String title);
   Future<Either<Failure, Post>> changeStagePost(
       String postId, String flowId, String stageId);
   Future<Either<Failure, Post>> getPost(String postId);

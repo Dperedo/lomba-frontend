@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_network/image_network.dart';
 import 'package:intl/intl.dart';
 import 'package:number_paginator/number_paginator.dart';
 
@@ -11,8 +12,10 @@ import '../../../core/widgets/show_posts.dart';
 import '../../../core/widgets/show_video_player.dart';
 import '../../../core/widgets/snackbar_notification.dart';
 import '../../../domain/entities/workflow/flow.dart' as flw;
+import '../../../domain/entities/workflow/imagecontent.dart';
 import '../../../domain/entities/workflow/stage.dart';
 import '../../../domain/entities/workflow/textcontent.dart';
+import '../../../domain/entities/workflow/videocontent.dart';
 import '../../../injection.dart' as di;
 import '../bloc/detailed_list_bloc.dart';
 import '../bloc/detailed_list_cubit.dart';
@@ -642,12 +645,54 @@ class DetailedListPage extends StatelessWidget {
 
             titleController.text = state.post.title;
 
+            Widget? contentMedia = null;
+            ImageContent? cimagen;
+            VideoContent? cvideo;
             for (var element in state.post.postitems) {
-              if (element.format == "text") {
+              if (element.type == "text") {
                 contentController.text = (element.content as TextContent).text;
               }
+              if (element.type == 'image') {
+                cimagen = element.content as ImageContent;
+                contentMedia = Container(
+                    padding: const EdgeInsets.all(5.0),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(
+                          width: 1,
+                          color: Colors.grey,
+                        )),
+                    child: ImageNetwork(
+                      image: cimagen.url,
+                      height: double.parse((cimagen.height).toString()),
+                      width: double.parse((cimagen.width).toString()),
+                      fitWeb: BoxFitWeb.cover,
+                      fitAndroidIos: BoxFit.cover,
+                    ));
+              } else if (element.type == 'video') {
+                cvideo = element.content as VideoContent;
+                contentMedia = Container(
+                    padding: const EdgeInsets.all(5.0),
+                    alignment: Alignment.center,
+                    //height: 400,
+                    //width: 300,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(
+                          width: 1,
+                          color: Colors.grey,
+                        )),
+                    child: ShowVideoPlayer(
+                      videoUrl: cvideo.url,
+                    )
+                    //AspectRatio(
+                    //aspectRatio: 16 / 9,
+                    //child: ShowVideoPlayer(videoUrl: video.url,)
+                    //),
+                    );
+              }
             }
-
             return Form(
               key: _key,
               child: Column(
@@ -668,7 +713,9 @@ class DetailedListPage extends StatelessWidget {
                     maxLength: 500,
                     maxLines: 4,
                     controller: contentController,
-                    validator: (value) => Validators.validateName(value ?? ""),
+                    validator: (value) => cimagen == null && cvideo == null
+                        ? Validators.validateName(value ?? "")
+                        : null,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: 'Texto',
@@ -677,116 +724,7 @@ class DetailedListPage extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-
-                  /*const SizedBox(
-                        height: 10,
-                      ),
-                      BlocBuilder<AddContentLiveCubit, AddContentLiveState>(
-                        builder: (context, statecubit) {
-                          return Container(
-                            width: double.infinity,
-                            //width: MediaQuery.of(context).size.width,
-                            child: Stack(
-                              children: <Widget>[
-                                statecubit.fileId != ""
-                                    ? Container(
-                                        child: widgetImagenOrVideo(
-                                            statecubit.filename, statecubit),
-                                      )
-                                    : Container(
-                                        padding: const EdgeInsets.all(5.0),
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                                5.0), // Radius of the border
-                                            border: Border.all(
-                                              width: 1,
-                                              color: Colors
-                                                  .grey, // Color of the border
-                                            )),
-                                        child: statecubit.showLocalProgress
-                                            ? const CircularProgressIndicator()
-                                            : ElevatedButton.icon(
-                                                onPressed: () async {
-                                                  FilePickerResult? result =
-                                                      await FilePicker.platform
-                                                          .pickFiles(
-                                                    type: FileType.custom,
-                                                    allowedExtensions: [
-                                                      'jpg',
-                                                      'png',
-                                                      'gif',
-                                                      'jpeg',
-                                                      'mp4',
-                                                      'mov',
-                                                      'wmv',
-                                                      'avi'
-                                                    ],
-                                                  );
-                                                  if (result != null) {
-                                                    context
-                                                        .read<
-                                                            AddContentLiveCubit>()
-                                                        .startProgressIndicators();
-                                                    PlatformFile file =
-                                                        result.files.first;
-                                                    if (file.size != 0) {
-                                                      Uint8List? fileBytes;
-                                                      if (!kIsWeb) {
-                                                        fileBytes = File(
-                                                                file.path!)
-                                                            .readAsBytesSync();
-                                                      } else
-                                                        fileBytes = file.bytes;
-
-                                                      contentControllerMedia
-                                                          .text = file.name;
-                                                      context
-                                                          .read<
-                                                              AddContentLiveCubit>()
-                                                          .showImageOrVideo(
-                                                            fileBytes!,
-                                                            file.name,
-                                                            state.userId,
-                                                            state.orgaId,
-                                                          );
-                                                    } else {
-                                                      snackBarNotify(
-                                                          context,
-                                                          "El archivo no puede estar vacío",
-                                                          Icons.error);
-                                                    }
-                                                  } else {
-                                                    // User canceled the picker
-                                                  }
-                                                },
-                                                icon:
-                                                    const Icon(Icons.file_open),
-                                                label: const Text(
-                                                    "Subir imagen o video")),
-                                      ),
-                                statecubit.fileId != ""
-                                    ? Container(
-                                        alignment: Alignment.topRight,
-                                        child: IconButton(
-                                          alignment: Alignment.topRight,
-                                          icon: const Icon(Icons.cancel),
-                                          onPressed: () {
-                                            context
-                                                .read<AddContentLiveCubit>()
-                                                .stopRemoteProgressIndicators();
-                                            context
-                                                .read<AddContentLiveCubit>()
-                                                .removeMedia();
-                                          },
-                                        ),
-                                      )
-                                    : const SizedBox(),
-                              ],
-                            ),
-                          );
-                        },
-                      ),*/
+                  contentMedia ?? const SizedBox(),
                   const SizedBox(
                     height: 30,
                   ),
@@ -794,9 +732,9 @@ class DetailedListPage extends StatelessWidget {
                     width: 150,
                     height: 50,
                     child: ElevatedButton.icon(
-                      icon: const Icon(Icons.publish),
+                      icon: const Icon(Icons.save),
                       key: const ValueKey("btnSavedUp"),
-                      label: const Text("Subir"),
+                      label: const Text("Actualizar"),
                       onPressed: () {
                         if (_key.currentState?.validate() == true) {
                           context.read<DetailedListBloc>().add(
@@ -804,7 +742,12 @@ class DetailedListPage extends StatelessWidget {
                                   state.post.id,
                                   state.post.userId,
                                   titleController.text,
-                                  contentController.text));
+                                  contentController.text == ""
+                                      ? null
+                                      : TextContent(
+                                          text: contentController.text),
+                                  cimagen,
+                                  cvideo));
                         }
                       },
                     ),

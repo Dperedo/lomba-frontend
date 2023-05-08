@@ -1,5 +1,10 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../domain/entities/workflow/imagecontent.dart';
+import '../../../domain/entities/workflow/post.dart';
+import '../../../domain/entities/workflow/textcontent.dart';
+import '../../../domain/entities/workflow/videocontent.dart';
+
 abstract class UploadedEvent extends Equatable {
   const UploadedEvent();
 
@@ -35,21 +40,22 @@ class OnUploadedVote extends UploadedEvent {
 class OnUploadedEdit extends UploadedEvent {
   final String postId;
   final String title;
-  final String content;
-  const OnUploadedEdit(this.postId, this.title, this.content);
+  final TextContent? textContent;
+  final ImageContent? imageContent;
+  final VideoContent? videoContent;
+  const OnUploadedEdit(this.postId, this.title, this.textContent,
+      this.imageContent, this.videoContent);
 
   @override
-  List<Object> get props => [title, content];
+  List<Object> get props => [title, textContent!, imageContent!, videoContent!];
 }
 
 class OnUploadedPrepareForEdit extends UploadedEvent {
-  final String postId;
-  final String title;
-  final String content;
-  const OnUploadedPrepareForEdit(this.postId, this.title, this.content);
+  final Post post;
+  const OnUploadedPrepareForEdit(this.post);
 
   @override
-  List<Object> get props => [postId, title, content];
+  List<Object> get props => [post];
 }
 
 class OnUploadedDelete extends UploadedEvent {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_network/image_network.dart';
 import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_cubit.dart';
@@ -9,9 +10,12 @@ import '../../../core/constants.dart';
 import '../../../core/validators.dart';
 import '../../../core/widgets/keypad_stage_load.dart';
 import '../../../core/widgets/show_posts.dart';
+import '../../../core/widgets/show_video_player.dart';
 import '../../../core/widgets/snackbar_notification.dart';
+import '../../../domain/entities/workflow/imagecontent.dart';
 import '../../../domain/entities/workflow/post.dart';
 import '../../../domain/entities/workflow/textcontent.dart';
+import '../../../domain/entities/workflow/videocontent.dart';
 import '../bloc/uploaded_bloc.dart';
 import '../bloc/uploaded_event.dart';
 import '../bloc/upoaded_state.dart';
@@ -105,8 +109,55 @@ class UploadedPage extends StatelessWidget {
       GlobalKey<FormState> key) {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController contentController = TextEditingController();
-    titleController.text = state.title;
-    contentController.text = state.content;
+    titleController.text = state.post.title;
+    Widget? contentMedia = null;
+    ImageContent? cimagen;
+    VideoContent? cvideo;
+    for (var element in state.post.postitems) {
+      if (element.type == "text") {
+        contentController.text = (element.content as TextContent).text;
+      }
+      if (element.type == 'image') {
+        cimagen = element.content as ImageContent;
+        contentMedia = Container(
+            padding: const EdgeInsets.all(5.0),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                border: Border.all(
+                  width: 1,
+                  color: Colors.grey,
+                )),
+            child: ImageNetwork(
+              image: cimagen.url,
+              height: double.parse((cimagen.height).toString()),
+              width: double.parse((cimagen.width).toString()),
+              fitWeb: BoxFitWeb.cover,
+              fitAndroidIos: BoxFit.cover,
+            ));
+      } else if (element.type == 'video') {
+        cvideo = element.content as VideoContent;
+        contentMedia = Container(
+            padding: const EdgeInsets.all(5.0),
+            alignment: Alignment.center,
+            //height: 400,
+            //width: 300,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                border: Border.all(
+                  width: 1,
+                  color: Colors.grey,
+                )),
+            child: ShowVideoPlayer(
+              videoUrl: cvideo.url,
+            )
+            //AspectRatio(
+            //aspectRatio: 16 / 9,
+            //child: ShowVideoPlayer(videoUrl: video.url,)
+            //),
+            );
+      }
+    }
 
     return Column(
       children: [
@@ -124,14 +175,20 @@ class UploadedPage extends StatelessWidget {
         TextFormField(
           key: const ValueKey('txtContent'),
           maxLength: 500,
-          maxLines: 8,
+          maxLines: 4,
           controller: contentController,
-          validator: (value) => Validators.validateName(value ?? ""),
+          validator: (value) => cimagen == null && cvideo == null
+              ? Validators.validateName(value ?? "")
+              : null,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
-            hintText: 'Contenido del Post',
+            hintText: 'Texto',
           ),
         ),
+        const SizedBox(
+          height: 10,
+        ),
+        contentMedia ?? const SizedBox(),
         const SizedBox(
           height: 30,
         ),
@@ -139,15 +196,21 @@ class UploadedPage extends StatelessWidget {
           width: 150,
           height: 50,
           child: ElevatedButton.icon(
-            icon: const Icon(Icons.publish),
+            icon: const Icon(Icons.save),
             key: const ValueKey("btnSavedUp"),
-            label: const Text("Subir"),
+            label: const Text("Actualizar"),
             onPressed: () {
               final UploadedLiveState checkos =
                   context.read<UploadedLiveCubit>().state;
               if (key.currentState?.validate() == true) {
-                context.read<UploadedBloc>().add(OnUploadedEdit(state.postId,
-                    titleController.text, contentController.text));
+                context.read<UploadedBloc>().add(OnUploadedEdit(
+                    state.post.id,
+                    titleController.text,
+                    contentController.text == ""
+                        ? null
+                        : TextContent(text: contentController.text),
+                    cimagen,
+                    cvideo));
               }
             },
           ),
@@ -271,16 +334,16 @@ class UploadedPage extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: state.listItems.length,
-                itemBuilder: (context, index) {//KeypadLoad
+                itemBuilder: (context, index) {
+                  //KeypadLoad
                   return ShowPosts(
-                    post: state.listItems[index],
-                    child: KeypadLoad(
-                      context: context,
                       post: state.listItems[index],
-                      statecubit: statecubit,
-                      keyValidate: _key,
-                    )
-                  );
+                      child: KeypadLoad(
+                        context: context,
+                        post: state.listItems[index],
+                        statecubit: statecubit,
+                        keyValidate: _key,
+                      ));
                   //return ShowPosts(post: state.listItems[index], child: showButtonPublish(context, state.listItems[index], statecubit));
                 });
           },
@@ -311,12 +374,9 @@ class UploadedPage extends StatelessWidget {
     );
   }
 
-  Row showButtonPublish(BuildContext context, Post post,
-      UploadedLiveState statecubit) {
-    return Row(
-      mainAxisAlignment:
-          MainAxisAlignment.spaceBetween,
-      children:[
+  Row showButtonPublish(
+      BuildContext context, Post post, UploadedLiveState statecubit) {
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       post.votes.any((element) => element.value == 1) ||
               (statecubit.votes.containsKey(post.id) &&
                   statecubit.votes[post.id] == 1)
@@ -324,12 +384,8 @@ class UploadedPage extends StatelessWidget {
           : ElevatedButton(
               onPressed: () {
                 if (_key.currentState?.validate() == true) {
-                  context
-                      .read<UploadedBloc>()
-                      .add(OnUploadedVote(post.id, 1));
-                  context
-                      .read<UploadedLiveCubit>()
-                      .makeVote(post.id, 1);
+                  context.read<UploadedBloc>().add(OnUploadedVote(post.id, 1));
+                  context.read<UploadedLiveCubit>().makeVote(post.id, 1);
                 }
               },
               child: const Text('Publicar')),
@@ -347,8 +403,7 @@ class UploadedPage extends StatelessWidget {
                   ),
                 ),
               ),
-              onPressed: post.stageId ==
-                      StagesVotationFlow.stageId01Load
+              onPressed: post.stageId == StagesVotationFlow.stageId01Load
                   ? () {
                       showDialog(
                           context: context,
@@ -378,8 +433,9 @@ class UploadedPage extends StatelessWidget {
                               )).then((value) => {
                             if (value)
                               {
-                                context.read<UploadedBloc>().add(
-                                    OnUploadedDelete(post.id))
+                                context
+                                    .read<UploadedBloc>()
+                                    .add(OnUploadedDelete(post.id))
                               }
                           });
                     }
@@ -397,21 +453,16 @@ class UploadedPage extends StatelessWidget {
                   ),
                 ),
               ),
-              onPressed: post.stageId ==
-                      StagesVotationFlow.stageId01Load
+              onPressed: post.stageId == StagesVotationFlow.stageId01Load
                   ? () {
-                      context.read<UploadedBloc>().add(OnUploadedPrepareForEdit(
-                          post.id,
-                          post.title,
-                          (post.postitems[0].content
-                                  as TextContent)
-                              .text));
+                      context
+                          .read<UploadedBloc>()
+                          .add(OnUploadedPrepareForEdit(post));
                     }
                   : null,
               child: const Icon(Icons.edit)),
         ],
       ),
-    ]
-    );
+    ]);
   }
 }
