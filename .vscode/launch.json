@@ -5,19 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "local debug",
+            "name": "LOCAL Debug",
             "program": "lib/main.dart",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "develop debug",
+            "name": "DEVELOP debug",
             "program": "lib/main.dart",
             "request": "launch",
             "type": "dart",
 			"args":[
 				"--dart-define=API_BASE_URL=https://lomba-develop-back.azurewebsites.net"
 			]
+        },
+        {
+            "name": "DISEÑO debug",
+            "program": "lib/design.dart",
+            "request": "launch",
+            "type": "dart"
         }
     ]
 }
