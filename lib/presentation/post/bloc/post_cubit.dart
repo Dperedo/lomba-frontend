@@ -14,13 +14,11 @@ class PostLiveCubit extends Cubit<PostLiveState> {
   final GetComments _getComments;
   final PostComment _postComment;
   final DeleteComment _deleteComment;
-  final GetUser _getUser;
   PostLiveCubit(
     this._postBookmark,
     this._getComments,
     this._postComment,
     this._deleteComment,
-    this._getUser,
   )
       : super(const PostLiveState(
         <String, bool>{},
@@ -60,7 +58,6 @@ class PostLiveCubit extends Cubit<PostLiveState> {
   }
 
   void getComments(String postId) async {
-    const Map<String, String> listFields = <String, String>{"Creación": "created"};
     final resultComments = await _getComments.execute(postId,<String, int>{"created": -1}, 1, 10, 1);
     resultComments.fold((l) => null, (r) {
       emit(state.copyWithGetComments(commentList: r));
@@ -71,14 +68,6 @@ class PostLiveCubit extends Cubit<PostLiveState> {
     final resultDelete = await _deleteComment.execute(userId, postId, commentId);
     resultDelete.fold((l) => null, (r) {
       getComments(postId);
-    });
-  }
-
-  void getUserName(String userId) async {
-    final resultUser = await _getUser.execute(userId);
-    resultUser.fold((l) => null, (r) {
-      return r.name;
-      //getComments(postId);
     });
   }
 }
@@ -129,26 +118,6 @@ class PostLiveState extends Equatable {
     final ous = PostLiveState(checks, votes, saves, nfavs, commentList);
     return ous;
   }
-
-  /*PostLiveState copyWithAddComment(
-      {required String postId, required Comment comment}) {
-    Map<String, List<Comment>> ncomments = <String, List<Comment>>{};
-    ncomments.addAll(comments);
-    if (ncomments[postId] == null) {
-      ncomments[postId] = <Comment>[];
-    }
-    ncomments[postId]!.add(comment);
-    final ous = PostLiveState(checks, votes, saves, favs);
-    return ous;
-  }*/
-
-  /*PostLiveState copyWithAddComment(
-      {required String postId, required Comment comment}) {
-    List<Comment> ncomments = commentList;
-    ncomments.add(comment);
-    final ous = PostLiveState(checks, votes, saves, favs, ncomments);
-    return ous;
-  }*/
 
   PostLiveState copyWithGetComments({required List<Comment> commentList}) {
     final ous = PostLiveState(checks, votes, saves, favs, commentList);

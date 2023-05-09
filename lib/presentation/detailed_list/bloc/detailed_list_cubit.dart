@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/entities/storage/cloudfile.dart';
+import '../../../domain/entities/workflow/comment.dart';
+import '../../../domain/usecases/comment/delete_comment.dart';
+import '../../../domain/usecases/comment/get_comments_post.dart';
 import '../../../domain/usecases/storage/get_cloudfile.dart';
 import '../../../domain/usecases/storage/register_cloudfile.dart';
 import '../../../domain/usecases/storage/upload_cloudfile.dart';
@@ -14,11 +17,15 @@ class DetailedListLiveCubit extends Cubit<DetailedListLiveState> {
   final UploadFile uploadFile;
   final RegisterCloudFile _registerCloudFile;
   final GetCloudFile _getCloudFile;
+  final GetComments _getComments;
+  final DeleteComment _deleteComment;
   late int secondsPassed;
   DetailedListLiveCubit(
     this.uploadFile,
     this._getCloudFile,
     this._registerCloudFile,
+    this._getComments,
+    this._deleteComment,
   ) : super(DetailedListLiveState(
             const <String, bool>{'enabled': false, 'disabled': false},
             "",
@@ -31,7 +38,8 @@ class DetailedListLiveCubit extends Cubit<DetailedListLiveState> {
             0,
             0,
             "",
-            ""));
+            "",
+            []));
 
   void changeCheckValue(String name, bool value) {
     emit(state.copyWithChangeCheck(name: name, changeState: value));
@@ -146,6 +154,20 @@ class DetailedListLiveCubit extends Cubit<DetailedListLiveState> {
   void changeText(String text) {
     emit(state.copyWithText(textPost: text));
   }
+
+  void getComments(String postId) async {
+    final resultComments = await _getComments.execute(postId,<String, int>{"created": -1}, 1, 10, 1);
+    resultComments.fold((l) => null, (r) {
+      emit(state.copyWithGetComments(commentList: r));
+    });
+  }
+
+  void deleteComment(String userId, String postId, String commentId) async {
+    final resultDelete = await _deleteComment.execute(userId, postId, commentId);
+    resultDelete.fold((l) => null, (r) {
+      getComments(postId);
+    });
+  }
 }
 
 class DetailedListLiveState extends Equatable {
@@ -164,6 +186,7 @@ class DetailedListLiveState extends Equatable {
   final int mediaWidth;
   final String title;
   final String text;
+  final List<Comment> commentList;
 
   @override
   List<Object?> get props => [
@@ -178,7 +201,8 @@ class DetailedListLiveState extends Equatable {
         mediaHeight,
         mediaWidth,
         title,
-        text
+        text,
+        commentList,
       ];
 
   DetailedListLiveState(
@@ -193,7 +217,8 @@ class DetailedListLiveState extends Equatable {
       this.mediaHeight,
       this.mediaWidth,
       this.title,
-      this.text);
+      this.text,
+      this.commentList);
 
   DetailedListLiveState copyWithChangeCheck(
       {required String name, required bool changeState}) {
@@ -214,7 +239,8 @@ class DetailedListLiveState extends Equatable {
         mediaHeight,
         mediaWidth,
         title,
-        text);
+        text,
+        commentList);
     return ous;
   }
 
@@ -225,21 +251,21 @@ class DetailedListLiveState extends Equatable {
     required int mediaWidth,
   }) {
     final ous = DetailedListLiveState(checks, id, filename, media,
-        "Subiendo...", true, true, null, mediaHeight, mediaWidth, title, text);
+        "Subiendo...", true, true, null, mediaHeight, mediaWidth, title, text, commentList);
     return ous;
   }
 
   DetailedListLiveState copyWithRemove(
       {required String id, required Uint8List media}) {
     final ous = DetailedListLiveState(checks, id, "", media, "Subiendo...",
-        false, false, null, 0, 0, title, text);
+        false, false, null, 0, 0, title, text, commentList);
     return ous;
   }
 
   DetailedListLiveState copyWithProgressIndicator(
       {required bool localProgress, required bool remoteProgress}) {
     final ous = DetailedListLiveState(checks, fileId, filename, mediafile, "",
-        localProgress, remoteProgress, null, 0, 0, title, text);
+        localProgress, remoteProgress, null, 0, 0, title, text, commentList);
     return ous;
   }
 
@@ -247,7 +273,7 @@ class DetailedListLiveState extends Equatable {
     required CloudFile cloudFile,
   }) {
     final ous = DetailedListLiveState(checks, fileId, filename, mediafile, "",
-        false, false, cloudFile, mediaHeight, mediaWidth, title, text);
+        false, false, cloudFile, mediaHeight, mediaWidth, title, text, commentList);
     return ous;
   }
 
@@ -266,7 +292,8 @@ class DetailedListLiveState extends Equatable {
         mediaHeight,
         mediaWidth,
         title,
-        text);
+        text,
+        commentList);
     return ous;
   }
 
@@ -285,7 +312,8 @@ class DetailedListLiveState extends Equatable {
         mediaHeight,
         mediaWidth,
         titlePost,
-        text);
+        text,
+        commentList);
     return ous;
   }
 
@@ -304,7 +332,26 @@ class DetailedListLiveState extends Equatable {
         mediaHeight,
         mediaWidth,
         title,
-        textPost);
+        textPost,
+        commentList);
+    return ous;
+  }
+
+  DetailedListLiveState copyWithGetComments({required List<Comment> commentList}) {
+    final ous = DetailedListLiveState(
+        checks,
+        fileId,
+        filename,
+        mediafile,
+        message,
+        showLocalProgress,
+        showRemoteProgress,
+        cloudFile,
+        mediaHeight,
+        mediaWidth,
+        title,
+        text,
+        commentList);
     return ous;
   }
 }

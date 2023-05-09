@@ -71,7 +71,7 @@ class DetailedListPage extends StatelessWidget {
     };
     return BlocProvider<DetailedListLiveCubit>(
       create: (context) =>
-          DetailedListLiveCubit(di.locator(), di.locator(), di.locator()),
+          DetailedListLiveCubit(di.locator(), di.locator(), di.locator(), di.locator(), di.locator()),
       child: SizedBox(
         width: 800,
         child: BlocBuilder<DetailedListBloc, DetailedListState>(
@@ -725,6 +725,87 @@ class DetailedListPage extends StatelessWidget {
                     height: 10,
                   ),
                   contentMedia ?? const SizedBox(),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  BlocBuilder<DetailedListLiveCubit, DetailedListLiveState>(
+                    builder: (context, statecubit) {
+                      context.read<DetailedListLiveCubit>().getComments(state.post.id);
+                      return Column(
+                        children: [
+                          const SizedBox(height: 40),
+                          Text('Comentarios',
+                              style: Theme.of(context).textTheme.headline6),
+                          const SizedBox(height: 20),
+                          ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: statecubit.commentList.length,
+                                itemBuilder: (context, index) {
+                                  return Column(
+                                    children: [
+                                      const SizedBox(height: 5),
+                                      Row(
+                                        children: [
+                                          statecubit.commentList[index].users[0].pictureUrl!=null ? ClipOval(
+                                            child: ImageNetwork(
+                                              image: statecubit.commentList[index].users[0].pictureUrl!,
+                                              height: 200,
+                                              width: 200,
+                                            ),
+                                          ) : const Center(
+                                              child: Icon(
+                                                Icons.person,
+                                                size: 30,
+                                              ),
+                                            ),
+                                          const SizedBox(width: 10),
+                                          Text(statecubit.commentList[index].users[0].name),
+                                        ],
+                                      ),
+                                      Wrap(
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(5.0),
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(5.0),
+                                              border: Border.all(
+                                                width: 1,
+                                                color: Colors.grey,
+                                              )
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                ListTile(
+                                                  title: Text(statecubit.commentList[index].text),
+                                                  subtitle: Text('Creado: ${statecubit.commentList[index].created.toString()}'),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.topRight,
+                                            child: IconButton(
+                                              onPressed: () {
+                                                context.read<DetailedListLiveCubit>().deleteComment(statecubit.commentList[index].users[0].id, state.post.id, statecubit.commentList[index].id);
+                                              },
+                                              icon: const Icon(Icons.close),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  );
+                                }
+                              ),
+                          
+                          const SizedBox(height: 40),
+                        ],
+                      );
+                    },
+                  ),
                   const SizedBox(
                     height: 30,
                   ),

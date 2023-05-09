@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_network/image_network.dart';
 import 'package:lomba_frontend/core/timezone.dart';
 import 'package:lomba_frontend/core/widgets/body_formatter.dart';
 import 'package:lomba_frontend/core/widgets/scaffold_manager.dart';
@@ -91,7 +92,7 @@ class PostPage extends StatelessWidget {
     }
     if (state is PostLoaded) {
       return BlocProvider<PostLiveCubit>(
-        create: (context) => PostLiveCubit(di.locator(),di.locator(),di.locator(),di.locator(),di.locator(),),
+        create: (context) => PostLiveCubit(di.locator(),di.locator(),di.locator(),di.locator(),),
         child: SizedBox(
           width: 600,
           child: BlocBuilder<PostLiveCubit, PostLiveState>(
@@ -130,11 +131,25 @@ class PostPage extends StatelessWidget {
                                 title: Text(statecubit.commentList[index].user.name),
                                 subtitle: Text('Creado: ${statecubit.commentList[index].created.toString()}'),
                               ),*/
-                              const ListTile(
-                                //title: Text(statecubit.commentList[index].user.name),
-                                title: Text('Nombre de Usuario'),
-                              ),
                               Row(
+                                children: [
+                                  statecubit.commentList[index].users[0].pictureUrl!=null ? ClipOval(
+                                    child: ImageNetwork(
+                                      image: statecubit.commentList[index].users[0].pictureUrl!,
+                                      height: 200,
+                                      width: 200,
+                                    ),
+                                  ) : const Center(
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 30,
+                                      ),
+                                    ),
+                                  const SizedBox(width: 10),
+                                  Text(statecubit.commentList[index].users[0].name),
+                                ],
+                              ),
+                              Wrap(
                                 children: [
                                   Container(
                                     padding: const EdgeInsets.all(5.0),
@@ -148,12 +163,12 @@ class PostPage extends StatelessWidget {
                                     ),
                                     child: Column(
                                       children: [
-                                        Text(statecubit.commentList[index].text),
-                                        Text('Creado: ${statecubit.commentList[index].created.toString()}'),
-                                        /*ListTile(
+                                        //Text(statecubit.commentList[index].text),
+                                        //Text('Creado: ${statecubit.commentList[index].created.toString()}'),
+                                        ListTile(
                                           title: Text(statecubit.commentList[index].text),
                                           subtitle: Text('Creado: ${statecubit.commentList[index].created.toString()}'),
-                                        ),*/
+                                        ),
                                       ],
                                     ),
                                   ),

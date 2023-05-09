@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import '../../domain/entities/user.dart';
 import '../models/workflow/comment_model.dart';
 import 'local_data_source.dart';
 
@@ -45,11 +46,28 @@ class CommentRemoteDataSourceImpl implements CommentRemoteDataSource {
 
       final item = resObj['data']['items'][0];
 
+      List<User> listUsers = item['users'] != null
+        ? (item['users'] as List)
+            .map((e) => User(
+                id: e["id"].toString(),
+                name: e["name"].toString(),
+                username: e["username"].toString(),
+                email: e["email"].toString(),
+                enabled: e["enabled"].toString().toLowerCase() == 'true',
+                builtIn: e["builtIn"].toString().toLowerCase() == 'true',
+                pictureUrl: e["pictureUrl"] != null ? e['pictureUrl'].toString() : null,
+                pictureCloudFileId: e["pictureCloudFileId"] != null ? e['pictureCloudFileId'].toString() : null,
+                pictureThumbnailUrl: e["pictureThumbnailUrl"] != null ? e['pictureThumbnailUrl'].toString() : null,
+                pictureThumbnailCloudFileId: e["pictureThumbnailCloudFileId"] != null ? e['pictureThumbnailCloudFileId'].toString() : null,))
+            .toList()
+        : [];
+
       return Future.value(CommentModel(
             id: item["id"].toString(),
             userId: item["userId"].toString(),
             postId: item["postId"].toString(),
             text: item["text"].toString(),
+            users: listUsers,
             enabled: item["enabled"].toString().toLowerCase() == 'true',
             created: DateTime.parse(item['created'].toString()),
             ));
@@ -105,11 +123,30 @@ class CommentRemoteDataSourceImpl implements CommentRemoteDataSource {
       List<CommentModel> comments = [];
 
       for (var item in resObj['data']['items']) {
+
+        List<User> listUsers = item['users'] != null
+        ? (item['users'] as List)
+            .map((e) => User(
+                id: e["id"].toString(),
+                name: e["name"].toString(),
+                username: e["username"].toString(),
+                email: e["email"].toString(),
+                enabled: e["enabled"].toString().toLowerCase() == 'true',
+                builtIn: e["builtIn"].toString().toLowerCase() == 'true',
+                pictureUrl: e["pictureUrl"] != null ? e['pictureUrl'].toString() : null,
+                pictureCloudFileId: e["pictureCloudFileId"] != null ? e['pictureCloudFileId'].toString() : null,
+                pictureThumbnailUrl: e["pictureThumbnailUrl"] != null ? e['pictureThumbnailUrl'].toString() : null,
+                pictureThumbnailCloudFileId: e["pictureThumbnailCloudFileId"] != null ? e['pictureThumbnailCloudFileId'].toString() : null,))
+            .toList()
+        : [];
+
+
         comments.add(CommentModel(
             id: item["id"].toString(),
             userId: item["userId"].toString(),
             postId: item["postId"].toString(),
             text: item["text"].toString(),
+            users: listUsers,
             enabled: item["enabled"].toString().toLowerCase() == 'true',
             created: DateTime.parse(item['created'].toString()),
             ));

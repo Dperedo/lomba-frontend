@@ -45,8 +45,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         var validLogin = false;
         var userId = '';
         List<Comment> commentList = [];
-        final commentTest1 = Comment(id: '1', userId: '1', postId: event.postId, text: 'primer comentario', enabled: true, created: DateTime.now());
-        final commentTest2 = Comment(id: '2', userId: '2', postId: event.postId, text: 'segundo comentario', enabled: true, created: DateTime.now());
+        //final commentTest1 = Comment(id: '1', userId: '1', postId: event.postId, text: 'primer comentario', enabled: true, created: DateTime.now());
+        //final commentTest2 = Comment(id: '2', userId: '2', postId: event.postId, text: 'segundo comentario', enabled: true, created: DateTime.now());
 
         final result = await _hasLogin.execute();
 

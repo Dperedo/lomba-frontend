@@ -1,8 +1,8 @@
 import '../../../domain/entities/workflow/comment.dart';
 
 class CommentModel extends Comment {
-  const CommentModel({required id, required userId, required postId, required text, required enabled, required created})
-      : super(id: id, userId: userId, postId: postId, text: text, enabled: enabled, created: created);
+  const CommentModel({required id, required userId, required postId, required text, required users, required enabled, required created})
+      : super(id: id, userId: userId, postId: postId, text: text, users: users, enabled: enabled, created: created);
 
   factory CommentModel.fromJson(Map<String, dynamic> json) {
     return CommentModel(
@@ -10,6 +10,7 @@ class CommentModel extends Comment {
       userId: json["userId"],
       postId: json["postId"],
       text: json["text"],
+      users: json["users"],
       enabled: json["enabled"],
       created: json["created"],
     );
@@ -21,6 +22,7 @@ class CommentModel extends Comment {
       'userId': userId,
       'postId': postId,
       'text': text,
+      'users': users,
       'enabled': enabled,
       'created': created,
     };
@@ -31,10 +33,11 @@ class CommentModel extends Comment {
         userId: userId,
         postId: postId,
         text: text,
+        users: users,
         enabled: enabled,
         created: created,
       );
 
   @override
-  List<Object> get props => [id, userId, postId, text, enabled, created];
+  List<Object> get props => [id, userId, postId, text, users, enabled, created];
 }
