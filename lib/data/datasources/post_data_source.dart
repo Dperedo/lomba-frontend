@@ -125,6 +125,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
       'orgaId': orgaId,
       'flowId': flowId,
       'title': title,
+      'categoryNames': [],
       'isdraft': isDraft,
       'textContent': text == null ? null : {'text': text.text},
       'imageContent': image == null
@@ -332,6 +333,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
       'userId': userId,
       'postId': postId,
       'title': title,
+      'categoryNames': [],
       'textContent': text == null ? null : {'text': text.text},
       'imageContent': image == null
           ? null
