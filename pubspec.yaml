@@ -55,6 +55,7 @@ dependencies:
   volume_controller: ^2.0.6
   chewie: ^1.4.0
   webview_flutter: ^3.0.4
+  fluttericon: ^2.0.0
 
 
 dev_dependencies:

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:image_network/image_network.dart';
+import 'package:fluttericon/entypo_icons.dart';
 
 import '../design_constants.dart';
 import '../widgets/design_body_formatter.dart';
@@ -63,7 +65,7 @@ class DesignPage extends StatelessWidget {
                             alignment: Alignment.topRight,
                             child: ElevatedButton.icon(
                               onPressed: () {},
-                              icon: const Icon(Icons.cancel),
+                              icon: const Icon(Icons.thumb_down),
                               label: const Text('20'),
                               style: ElevatedButton.styleFrom(
                                 minimumSize: const Size(74, 36),
@@ -78,7 +80,7 @@ class DesignPage extends StatelessWidget {
                             alignment: Alignment.topRight,
                             child: ElevatedButton.icon(
                               onPressed: () {},
-                              icon: const Icon(Icons.check_circle),
+                              icon: const Icon(Icons.thumb_up),
                               label: const Text('20'),
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
@@ -121,10 +123,22 @@ class DesignPage extends StatelessWidget {
                             alignment: Alignment.topRight,
                             child: ElevatedButton.icon(
                               onPressed: () {},
-                              icon: const Icon(Icons.cancel),
-                              label: const Text('20'),
+                              icon: Icon(
+                                Icons.thumb_down,
+                                color: colorFromFlutter("#E91447"),
+                                size: 20.0,
+                              ),
+                              label: Text(
+                                '20',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: colorFromFlutter("#E91447"),
+                                ),
+                              ),
                               style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(74, 36),
+                                minimumSize: const Size(74, 44),
+                                shadowColor: Colors.transparent,
+                                backgroundColor: colorFromFlutter("#F3F3F3"),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(31),
                                 ),
@@ -136,9 +150,22 @@ class DesignPage extends StatelessWidget {
                             alignment: Alignment.topRight,
                             child: ElevatedButton.icon(
                               onPressed: () {},
-                              icon: const Icon(Icons.check_circle),
-                              label: const Text('20'),
+                              icon: Icon(
+                                Icons.thumb_up,
+                                color: colorFromFlutter("#4FCA24"),
+                                size: 20.0,
+                              ),
+                              label: Text(
+                                '20',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: colorFromFlutter("#4FCA24"),
+                                ),
+                              ),
                               style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(74, 44),
+                                shadowColor: Colors.transparent,
+                                backgroundColor: colorFromFlutter("#F3F3F3"),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(31),
                                 ),
@@ -211,11 +238,12 @@ class DesignPage extends StatelessWidget {
                       children: [
                         Container(
                           padding: const EdgeInsets.only(top: 15.0, right: 16.0),
-                          child: const Text('“Distintos medios señalan el interés del club español Villareal por Claudio Bravo. Todo sigue aún en tratativas.” “Distintos medios señalan el interés del club español Villareal por Claudio Bravo. Todo sigue aún en tratativas.” “Distintos medios señalan el interés del club español Villareal por Claudio Bravo. Todo sigue aún en tratativas.” “Distintos medios señalan el interés del club español Villareal por Claudio Bravo. Todo sigue aún en tratativas.”',
+                          child: Text('“Distintos medios señalan el interés del club español Villareal por Claudio Bravo. Todo sigue aún en tratativas.” “Distintos medios señalan el interés del club español Villareal por Claudio Bravo. Todo sigue aún en tratativas.” “Distintos medios señalan el interés del club español Villareal por Claudio Bravo. Todo sigue aún en tratativas.” “Distintos medios señalan el interés del club español Villareal por Claudio Bravo. Todo sigue aún en tratativas.”',
                           style: TextStyle(
                               fontFamily: 'Lato',
                               fontSize: 16,
                               fontWeight: FontWeight.normal,
+                              color: colorFromFlutter("#808080"),
                             ),
                           ),
                         ),
@@ -251,7 +279,7 @@ class DesignPage extends StatelessWidget {
                   const ImageNetwork(
                     image: 'https://kinsta.com/wp-content/uploads/2020/08/tiger-jpg.jpg',
                     width: 700,
-                    height: 400,
+                    height: 300,
                   ),
                   Container(
                     padding: const EdgeInsets.only(top: 6.0, left: 14.0, bottom: 6.0),
@@ -259,51 +287,77 @@ class DesignPage extends StatelessWidget {
                       children: [
                         IconButton(
                           onPressed: () {},
-                          icon: const Icon(Icons.star),
-                          color: Colors.yellow,
-                        ),
-                        const Text('20',
+                          icon: Icon(
+                            Icons.star,
+                            color: colorFromFlutter("#7BFF11"),
+                          ),
+                        ),//#417618
+                        Text('20',
                           style: TextStyle(
                           fontFamily: 'Arial',
                           fontSize: 16,
                           fontWeight: FontWeight.normal,
-                          color: Colors.grey,
+                          color: colorFromFlutter("#CCCCCC"),
                         ),),
                         IconButton(
                           onPressed: () {},
-                          icon: const Icon(Icons.comment),
+                          icon: Icon(
+                            Icons.bookmark,
+                            color: colorFromFlutter("#CCCCCC"),
+                          ),
                           color: Colors.grey,
                         ),
-                        const Text('20',
+                        Text('20',
                           style: TextStyle(
                           fontFamily: 'Arial',
                           fontSize: 16,
                           fontWeight: FontWeight.normal,
-                          color: Colors.grey,
+                          color: colorFromFlutter("#CCCCCC"),
                         ),),
                         IconButton(
                           onPressed: () {},
-                          icon: const Icon(Icons.share),
+                          icon: Icon(
+                            Icons.chat_bubble,
+                            color: colorFromFlutter("#CCCCCC"),
+                          ),
                           color: Colors.grey,
                         ),
-                        const Text('20',
+                        Text('20',
                           style: TextStyle(
                           fontFamily: 'Arial',
                           fontSize: 16,
                           fontWeight: FontWeight.normal,
-                          color: Colors.grey,
+                          color: colorFromFlutter("#CCCCCC"),
                         ),),
                         IconButton(
                           onPressed: () {},
-                          icon: const Icon(Icons.file_download_outlined),
+                          icon: Icon(
+                            Entypo.export_icon,
+                            color: colorFromFlutter("#CCCCCC"),
+                          ),
                           color: Colors.grey,
                         ),
-                        const Text('20',
+                        Text('20',
                           style: TextStyle(
                           fontFamily: 'Arial',
                           fontSize: 16,
                           fontWeight: FontWeight.normal,
+                          color: colorFromFlutter("#CCCCCC"),
+                        ),),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            FontAwesome.download,
+                            color: colorFromFlutter("#CCCCCC"),
+                          ),
                           color: Colors.grey,
+                        ),
+                        Text('20',
+                          style: TextStyle(
+                          fontFamily: 'Arial',
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                          color: colorFromFlutter("#CCCCCC"),
                         ),),
                       ],
                     ),
@@ -858,5 +912,9 @@ class DesignPage extends StatelessWidget {
     } else {
       return false;
     }
+  }
+
+  Color colorFromFlutter (String color) {
+    return Color(int.parse(color.substring(1, 7), radix: 16) + 0xFF000000);
   }
 }
