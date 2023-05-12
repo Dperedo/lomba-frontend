@@ -11,7 +11,7 @@ class DesignScaffoldManager extends StatelessWidget {
       required this.child,
       this.floatingActionButton});
 
-  final PreferredSizeWidget title;
+  final PreferredSizeWidget? title;
   final Widget child;
   final Widget? floatingActionButton;
 

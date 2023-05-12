@@ -14,9 +14,9 @@ class DesignPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DesignScaffoldManager(
-      title: AppBar(
+      title: null,/*AppBar(
         title: const Text("Diseño"),
-      ),
+      ),*/
       child: SingleChildScrollView(
         child: Center(
           child: DesignBodyFormatter(
