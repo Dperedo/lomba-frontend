@@ -21,10 +21,10 @@ class DesignScaffoldManager extends StatelessWidget {
     if (screenWidth >= ScreenSize.maxScreen) {
       return Row(
         children: [
-          const SizedBox(
+          SizedBox(
             width: ScreenSize.sizeMenuBox,
             child: Drawer(
-              backgroundColor: Colors.lightGreen,
+              backgroundColor: colorFromFlutter("#DFFFC5"),
             ),
             /*SideDrawer(
               key: ValueKey("sidedrawer"),
@@ -33,7 +33,10 @@ class DesignScaffoldManager extends StatelessWidget {
           Expanded(
               child: Scaffold(
             appBar: title,
-            body: child,
+            body: Container(
+              color: colorFromFlutter("#DFFFC5"),
+              child: child
+              ),
             floatingActionButton: floatingActionButton,
           ))
         ],
@@ -41,7 +44,10 @@ class DesignScaffoldManager extends StatelessWidget {
     } else {
       return Scaffold(
         appBar: title,
-        body: child,
+        body: Container(
+          color: colorFromFlutter("#DFFFC5"),
+          child: child
+          ),
         floatingActionButton: floatingActionButton,
         drawer: const Drawer(
           backgroundColor: Colors.lightGreen,
@@ -51,5 +57,9 @@ class DesignScaffoldManager extends StatelessWidget {
         ),*/
       );
     }
+  }
+
+  Color colorFromFlutter (String color) {
+    return Color(int.parse(color.substring(1, 7), radix: 16) + 0xFF000000);
   }
 }
