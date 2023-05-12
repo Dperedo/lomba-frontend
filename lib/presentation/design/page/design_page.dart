@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:fluttericon/iconic_icons.dart';
+import 'package:fluttericon/mfg_labs_icons.dart';
 import 'package:fluttericon/octicons_icons.dart';
+import 'package:fluttericon/typicons_icons.dart';
 import 'package:image_network/image_network.dart';
 import 'package:fluttericon/entypo_icons.dart';
 
@@ -503,7 +506,7 @@ class DesignPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Image.network('https://images.videolan.org/vlc/screenshots/android/playback-medium.jpg'),
+                  Image.network('https://videoconverter.wondershare.com/images/en/video-converters/video-to-jpg-vcu-step4.jpg'),
                   keypadPostBottom(),
                 ],
               ),
@@ -575,7 +578,7 @@ class DesignPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Image.network('https://images.videolan.org/vlc/screenshots/android/playback-medium.jpg'),
+                  Image.network('https://videoconverter.wondershare.com/images/en/video-converters/video-to-jpg-vcu-step4.jpg'),
                   keypadPostBottom(),
                 ],
               ),
@@ -657,7 +660,7 @@ class DesignPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Image.network('https://images.videolan.org/vlc/screenshots/android/playback-medium.jpg'),
+                  Image.network('https://videoconverter.wondershare.com/images/en/video-converters/video-to-jpg-vcu-step4.jpg'),
                   keypadPostBottom(),
                 ],
               ),
@@ -693,61 +696,67 @@ class DesignPage extends StatelessWidget {
     );
   }
 
-  Row sourcePost() {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.only(top: 20.0, right: 6.0),
-          child: const Icon(
-            Icons.turned_in,
-            size: 18,
-            color: Colors.green,
+  Container sourcePost() {
+    return Container(
+      padding: const EdgeInsets.only(top: 20.0, right: 6.0),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(right: 6.0),
+            child: const Icon(
+              FontAwesome.tag,
+              size: 18,
+              color: Colors.green,
+            ),
           ),
-        ),
-        InkWell(
-          onTap: null,
-          child: Container(
-            padding: const EdgeInsets.only(top: 20.0, right: 12.0),
-            child: const Text('futbol, villareal, claudio bravo, españa',
-              style: TextStyle(
-                fontFamily: 'Lato',
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                color: Colors.green,
+          InkWell(
+            onTap: null,
+            child: Container(
+              padding: const EdgeInsets.only(right: 0.0),
+              child: const Text('futbol, villareal, claudio bravo, españa',
+                style: TextStyle(
+                  fontFamily: 'Lato',
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.green,
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  Row categoryPost() {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.only(top: 20.0, right: 6.0),
-          child: const Icon(
-            Octicons.link_external,
-            size: 18,
-            color: Colors.green,
+  Container categoryPost() {
+    return Container(
+      padding: const EdgeInsets.only(top: 20.0, right: 6.0),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(right: 6.0),
+            child: const Icon(
+              Octicons.link_external,
+              size: 18,
+              color: Colors.green,
+            ),
           ),
-        ),
-        InkWell(
-          onTap: null,
-          child: Container(
-            padding: const EdgeInsets.only(top: 20.0,),
-            child: const Text('Emol.com, EnCancha, Bío Bío, Radio Agricultura',
-              style: TextStyle(
-                fontFamily: 'Lato',
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                color: Colors.green,
+          InkWell(
+            onTap: null,
+            child: Container(
+              padding: const EdgeInsets.only(right: 0.0,),
+              child: const Text('Emol.com, EnCancha, Bío Bío, Radio Agricultura',
+                style: TextStyle(
+                  fontFamily: 'Lato',
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.green,
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -757,90 +766,102 @@ class DesignPage extends StatelessWidget {
       alignment: Alignment.topLeft,
       child: const CircleAvatar(
         radius: 18,
-        backgroundImage: NetworkImage('https://img.freepik.com/foto-gratis/apuesto-hombre-sonriente-confiado-manos-cruzadas-sobre-pecho_176420-18743.jpg'),
+        backgroundImage: NetworkImage('https://www.shutterstock.com/image-photo/young-handsome-man-beard-wearing-260nw-1817367890.jpg'),
       ),
     );
   }
 
   Container keypadPostBottom() {
     return Container(
-      padding: const EdgeInsets.only(top: 6.0, left: 14.0, bottom: 6.0),
+      padding: const EdgeInsets.only(top: 16.0, left: 16.0, bottom: 16.0),
       child: Row(
         children: [
-          IconButton(
+          TextButton.icon(
             onPressed: () {},
             icon: Icon(
-              Icons.star,
-              color: colorFromFlutter("#7BFF11"),
+              FontAwesome.star,
+              color: colorFromFlutter("#5AAA1C"),
+              size: 22.0,
             ),
-          ),//#417618
-          Text('20',
-            style: TextStyle(
-            fontFamily: 'Arial',
-            fontSize: 16,
-            fontWeight: FontWeight.normal,
-            color: colorFromFlutter("#CCCCCC"),
-          ),),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.bookmark,
-              color: colorFromFlutter("#CCCCCC"),
+            label: Text('20',
+              style: TextStyle(
+              fontFamily: 'Arial',
+              fontSize: 16,
+              fontWeight: FontWeight.normal,
+              color: colorFromFlutter("#5AAA1C"),
+              ),
             ),
-            color: Colors.grey,
           ),
-          Text('20',
-            style: TextStyle(
-            fontFamily: 'Arial',
-            fontSize: 16,
-            fontWeight: FontWeight.normal,
-            color: colorFromFlutter("#CCCCCC"),
-          ),),
-          IconButton(
+          TextButton.icon(
             onPressed: () {},
             icon: Icon(
-              Icons.chat_bubble,
-              color: colorFromFlutter("#CCCCCC"),
+              FontAwesome.bookmark,
+              color: colorFromFlutter("#5AAA1C"),
+              size: 20,
             ),
-            color: Colors.grey,
+            label: Text('20',
+              style: TextStyle(
+              fontFamily: 'Arial',
+              fontSize: 16,
+              fontWeight: FontWeight.normal,
+              color: colorFromFlutter("#5AAA1C"),
+              ),
+            ),
           ),
-          Text('20',
-            style: TextStyle(
-            fontFamily: 'Arial',
-            fontSize: 16,
-            fontWeight: FontWeight.normal,
-            color: colorFromFlutter("#CCCCCC"),
-          ),),
-          IconButton(
+          TextButton.icon(
             onPressed: () {},
             icon: Icon(
-              Entypo.export_icon,
-              color: colorFromFlutter("#CCCCCC"),
+              FontAwesome.comment,//MfgLabs.chat,
+              color: colorFromFlutter("#5AAA1C"),
+              size: 18,
             ),
-            color: Colors.grey,
+            label: Text('20',
+              style: TextStyle(
+              fontFamily: 'Arial',
+              fontSize: 16,
+              fontWeight: FontWeight.normal,
+              color: colorFromFlutter("#5AAA1C"),
+              ),
+            ),
           ),
-          Text('20',
-            style: TextStyle(
-            fontFamily: 'Arial',
-            fontSize: 16,
-            fontWeight: FontWeight.normal,
-            color: colorFromFlutter("#CCCCCC"),
-          ),),
-          IconButton(
+          TextButton.icon(
             onPressed: () {},
             icon: Icon(
-              FontAwesome.download,
-              color: colorFromFlutter("#CCCCCC"),
+              Icons.download,
+              color: colorFromFlutter("#5AAA1C"),
+              size: 22,
             ),
-            color: Colors.grey,
+            label: Text('20',
+              style: TextStyle(
+              fontFamily: 'Arial',
+              fontSize: 16,
+              fontWeight: FontWeight.normal,
+              color: colorFromFlutter("#5AAA1C"),
+              ),
+            ),
           ),
-          Text('20',
-            style: TextStyle(
-            fontFamily: 'Arial',
-            fontSize: 16,
-            fontWeight: FontWeight.normal,
-            color: colorFromFlutter("#CCCCCC"),
-          ),),
+          TextButton.icon(
+            onPressed: () {},
+            icon: Transform.rotate(
+              angle: -1.5708,
+              child: Transform.scale(
+                scaleX: 0.75,
+                scaleY: 1,
+                child: Icon(
+                  Iconic.arrow_curved,
+                  color: colorFromFlutter("#5AAA1C"),
+                ),
+              ),
+            ),
+            label: Text('20',
+              style: TextStyle(
+              fontFamily: 'Arial',
+              fontSize: 16,
+              fontWeight: FontWeight.normal,
+              color: colorFromFlutter("#5AAA1C"),//"#CCCCCC"
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -855,7 +876,7 @@ class DesignPage extends StatelessWidget {
           child: ElevatedButton.icon(
             onPressed: () {},
             icon: Icon(
-              Icons.thumb_down,
+              FontAwesome.thumbs_down_alt,
               color: colorFromFlutter("#E91447"),
               size: 20.0,
             ),
@@ -882,10 +903,14 @@ class DesignPage extends StatelessWidget {
           alignment: Alignment.topRight,
           child: ElevatedButton.icon(
             onPressed: () {},
-            icon: Icon(
-              Icons.thumb_up,
-              color: colorFromFlutter("#4FCA24"),
-              size: 20.0,
+            icon: Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(3.14),
+              child: Icon(
+                FontAwesome.thumbs_up_alt,
+                color: colorFromFlutter("#4FCA24"),
+                size: 20.0,
+              ),
             ),
             label: Text(
               '20',
