@@ -6,7 +6,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //usePathUrlStrategy();
-  debugPaintSizeEnabled = true;
+  debugPaintSizeEnabled = false;
   runApp(const MyDesign());
 }
 
