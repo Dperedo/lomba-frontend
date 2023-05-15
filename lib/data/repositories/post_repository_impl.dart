@@ -8,6 +8,7 @@ import 'package:lomba_frontend/domain/repositories/post_repository.dart';
 import '../../core/constants.dart';
 import '../../core/exceptions.dart';
 import '../../domain/entities/workflow/imagecontent.dart';
+import '../../domain/entities/workflow/sourcecontent.dart';
 import '../../domain/entities/workflow/videocontent.dart';
 import '../../domain/entities/workflow/vote.dart';
 import '../datasources/post_data_source.dart';
@@ -40,12 +41,13 @@ class PostRepositoryImpl implements PostRepository {
       TextContent? text,
       ImageContent? image,
       VideoContent? video,
+      List<SourceContent>? sources,
       String title,
       String flowId,
       bool isDraft) async {
     try {
       final result = await remoteDataSource.addMultiPost(
-          orgaId, userId, text, image, video, title, flowId, isDraft);
+          orgaId, userId, text, image, video, sources, title, flowId, isDraft);
 
       return (Right(result.toEntity()));
     } on ServerException {
@@ -63,10 +65,11 @@ class PostRepositoryImpl implements PostRepository {
       TextContent? text,
       ImageContent? image,
       VideoContent? video,
+      List<SourceContent>? sources,
       String title) async {
     try {
       final result = await remoteDataSource.updateMultiPost(
-          postId, userId, text, image, video, title);
+          postId, userId, text, image, video, sources, title);
 
       return (Right(result.toEntity()));
     } on ServerException {

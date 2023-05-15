@@ -189,6 +189,7 @@ class DetailedListBloc extends Bloc<DetailedListEvent, DetailedListState> {
           event.textContent,
           event.imageContent,
           event.videoContent,
+          null,
           event.title);
       resultUpdate.fold((l) => emit(DetailedListError(l.message)),
           (r) => emit(DetailedListEdit(r, listStage, name, username)));

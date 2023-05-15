@@ -10,6 +10,7 @@ import '../../core/exceptions.dart';
 import '../../core/model_container.dart';
 import '../../domain/entities/workflow/bookmark.dart';
 import '../../domain/entities/workflow/postitem.dart';
+import '../../domain/entities/workflow/sourcecontent.dart';
 import '../../domain/entities/workflow/stage.dart';
 import '../../domain/entities/workflow/total.dart';
 import '../../domain/entities/workflow/track.dart';
@@ -27,6 +28,7 @@ abstract class PostRemoteDataSource {
       TextContent? text,
       ImageContent? image,
       VideoContent? video,
+      List<SourceContent>? sources,
       String title,
       String flowId,
       bool isDraft);
@@ -36,6 +38,7 @@ abstract class PostRemoteDataSource {
       TextContent? text,
       ImageContent? image,
       VideoContent? video,
+      List<SourceContent>? sources,
       String title);
   Future<PostModel> deletePost(String postId, String userId);
   Future<PostModel> getPost(String postId);
@@ -117,6 +120,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
       TextContent? text,
       ImageContent? image,
       VideoContent? video,
+      List<SourceContent>? sources,
       String title,
       String flowId,
       bool isDraft) async {
@@ -152,7 +156,8 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
               'thumbnailUrl': video.thumbnailUrl,
               'thumbnailSize': video.thumbnailSize,
               'thumbnailCloudFileId': video.thumbnailCloudFileId,
-            }
+            },
+      'sourcesContent': sources
     };
 
     final session = await localDataSource.getSavedSession();
@@ -328,6 +333,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
       TextContent? text,
       ImageContent? image,
       VideoContent? video,
+      List<SourceContent>? sources,
       String title) async {
     final Map<String, dynamic> editMultiPost = {
       'userId': userId,
@@ -359,7 +365,8 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
               'thumbnailUrl': video.thumbnailUrl,
               'thumbnailSize': video.thumbnailSize,
               'thumbnailCloudFileId': video.thumbnailCloudFileId,
-            }
+            },
+      'sourcesContent': sources
     };
 
     final session = await localDataSource.getSavedSession();
@@ -541,6 +548,14 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
           thumbnailSize: int.parse(e['content']['thumbnailSize'].toString()),
           thumbnailCloudFileId: e['content']['thumbnailCloudFileId'].toString(),
         );
+      } else if (e['type'].toString() == 'source') {
+        contentPostItem = SourceContent(
+            externalUriId: e['content']['externalUriId'].toString(),
+            url: e['content']['url'].toString(),
+            label: e['content']['label'].toString(),
+            title: e['content']['title'].toString(),
+            shortUrl: e['content']['shortUrl'].toString(),
+            description: e['content']['description'].toString());
       } else {
         contentPostItem = null;
       }

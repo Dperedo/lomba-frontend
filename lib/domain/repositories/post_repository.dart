@@ -5,6 +5,7 @@ import 'package:lomba_frontend/domain/entities/workflow/textcontent.dart';
 import '../../core/failures.dart';
 import '../entities/workflow/imagecontent.dart';
 import '../entities/workflow/post.dart';
+import '../entities/workflow/sourcecontent.dart';
 import '../entities/workflow/videocontent.dart';
 import '../entities/workflow/vote.dart';
 
@@ -17,6 +18,7 @@ abstract class PostRepository {
       TextContent? text,
       ImageContent? image,
       VideoContent? video,
+      List<SourceContent>? sources,
       String title,
       String flowId,
       bool isDraft);
@@ -26,6 +28,7 @@ abstract class PostRepository {
       TextContent? text,
       ImageContent? image,
       VideoContent? video,
+      List<SourceContent>? sources,
       String title);
   Future<Either<Failure, Post>> changeStagePost(
       String postId, String flowId, String stageId);

@@ -96,6 +96,7 @@ class UploadedBloc extends Bloc<UploadedEvent, UploadedState> {
           event.textContent,
           event.imageContent,
           event.videoContent,
+          null,
           event.title);
       resultUpdate.fold((l) => (emit(UploadedError(l.message))),
           (r) => emit(UploadedStart()));

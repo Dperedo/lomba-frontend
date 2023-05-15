@@ -82,6 +82,7 @@ class AddContentBloc extends Bloc<AddContentEvent, AddContentState> {
                       thumbnailSize: 0,
                       thumbnailCloudFileId: '')
                   : null,
+              null,
               event.title,
               flowId,
               event.isDraft);

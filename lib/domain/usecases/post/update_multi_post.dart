@@ -4,6 +4,7 @@ import 'package:lomba_frontend/domain/entities/workflow/textcontent.dart';
 
 import '../../../core/failures.dart';
 import '../../entities/workflow/imagecontent.dart';
+import '../../entities/workflow/sourcecontent.dart';
 import '../../entities/workflow/videocontent.dart';
 import '../../repositories/post_repository.dart';
 
@@ -16,8 +17,9 @@ class UpdateMultiPost {
       TextContent? text,
       ImageContent? image,
       VideoContent? video,
+      List<SourceContent>? sources,
       String title) async {
     return await repository.updateMultiPost(
-        postId, userId, text, image, video, title);
+        postId, userId, text, image, video, sources, title);
   }
 }
