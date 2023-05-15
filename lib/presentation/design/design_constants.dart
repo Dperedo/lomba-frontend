@@ -57,11 +57,11 @@ FIREBASE_IOS_BUNDLE_ID
 */
 
 class ScreenSize {
-  static const sizeMenuBox = 300.0;
+  static const sizeMenuBox = 320.0;
   static const minBoxBody = 700.0;
   static const maxBoxBody = 800.0;
   static const minScreen = 500;
-  static const maxScreen = 1200;
+  static const maxScreen = 900;
 }
 
 class snackBarConfig {

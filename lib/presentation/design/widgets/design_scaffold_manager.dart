@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 //import '../../presentation/sidedrawer/pages/sidedrawer_page.dart';
 import '../design_constants.dart';
+import 'design_drawer_manager.dart';
 
 class DesignScaffoldManager extends StatelessWidget {
   const DesignScaffoldManager(
@@ -23,9 +24,7 @@ class DesignScaffoldManager extends StatelessWidget {
         children: [
           SizedBox(
             width: ScreenSize.sizeMenuBox,
-            child: Drawer(
-              backgroundColor: colorFromFlutter("#DFFFC5"),
-            ),
+            child: DrawerManager(),
             /*SideDrawer(
               key: ValueKey("sidedrawer"),
             ),*/
@@ -34,7 +33,7 @@ class DesignScaffoldManager extends StatelessWidget {
               child: Scaffold(
             appBar: title,
             body: Container(
-              color: colorFromFlutter("#DFFFC5"),
+              color: colorFromFlutter("#F1FFEC"),
               child: child
               ),
             floatingActionButton: floatingActionButton,
@@ -45,13 +44,11 @@ class DesignScaffoldManager extends StatelessWidget {
       return Scaffold(
         appBar: title,
         body: Container(
-          color: colorFromFlutter("#DFFFC5"),
+          color: colorFromFlutter("#F1FFEC"),
           child: child
           ),
         floatingActionButton: floatingActionButton,
-        drawer: Drawer(
-          backgroundColor: colorFromFlutter("#DFFFC5"),
-        ),
+        drawer: DrawerManager(),
         /*const SideDrawer(
           key: ValueKey("sidedrawer"),
         ),*/
