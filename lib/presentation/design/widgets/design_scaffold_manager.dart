@@ -49,8 +49,8 @@ class DesignScaffoldManager extends StatelessWidget {
           child: child
           ),
         floatingActionButton: floatingActionButton,
-        drawer: const Drawer(
-          backgroundColor: Colors.lightGreen,
+        drawer: Drawer(
+          backgroundColor: colorFromFlutter("#DFFFC5"),
         ),
         /*const SideDrawer(
           key: ValueKey("sidedrawer"),

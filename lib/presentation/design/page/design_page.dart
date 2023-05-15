@@ -45,7 +45,7 @@ class DesignPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.0),
                 border: Border.all(
                   width: 1,
-                  color: Colors.grey.shade400,
+                  color: Colors.grey.shade200,
                 )
               ),
               child: Column(
@@ -679,7 +679,7 @@ class DesignPage extends StatelessWidget {
           fontStyle: FontStyle.normal,
           fontFamily: 'Lato',
           fontSize: 24.0,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w900,
       ),
     );
   }
