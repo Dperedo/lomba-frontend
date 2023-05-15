@@ -6,7 +6,7 @@ import 'package:fluttericon/octicons_icons.dart';
 import 'package:fluttericon/typicons_icons.dart';
 import 'package:image_network/image_network.dart';
 import 'package:fluttericon/entypo_icons.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import '../design_constants.dart';
 import '../widgets/design_body_formatter.dart';
 import '../widgets/design_scaffold_manager.dart';
@@ -17,17 +17,17 @@ class DesignPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DesignScaffoldManager(
-      title: null,/*AppBar(
+      title: null,
+      /*AppBar(
         title: const Text("Diseño"),
       ),*/
       child: SingleChildScrollView(
-        child: Center(
-          child: DesignBodyFormatter(
+          child: Center(
+        child: DesignBodyFormatter(
           screenWidth: MediaQuery.of(context).size.width,
-            child: _bodyDesign(context),
-          ),
-        )
-      ),
+          child: _bodyDesign(context),
+        ),
+      )),
     );
   }
 
@@ -37,7 +37,9 @@ class DesignPage extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
-            const SizedBox(height: 50,),
+            const SizedBox(
+              height: 50,
+            ),
             Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
@@ -51,621 +53,687 @@ class DesignPage extends StatelessWidget {
               child: Column(
                 children: [
                   screenSizeSmall(context)
-                  ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: avatarPost(),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ) :
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      avatarPost(),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: titlePost(),
-                        ),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ),
-                  screenSizeSmall(context)
-                  ? Container(
-                    padding: const EdgeInsets.only(left: 16.0,bottom: 20.0,),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: titlePost(),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(top: 15.0, right: 16.0),
-                          child: textContentPost(),
-                        ),
-                        Wrap(
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            sourcePost(),
-                            categoryPost(),
+                            Expanded(
+                              child: avatarPost(),
+                            ),
+                            keypadPostVote(),
+                          ],
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            avatarPost(),
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.only(top: 20.0),
+                                child: titlePost(),
+                              ),
+                            ),
+                            keypadPostVote(),
                           ],
                         ),
-                      ],
-                    ),
-                  ) : 
-                  Container(
-                    padding: const EdgeInsets.only(left: 70.0,bottom: 20.0,),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(top: 15.0, right: 16.0),
-                          child: textContentPost(),
+                  screenSizeSmall(context)
+                      ? Container(
+                          padding: const EdgeInsets.only(
+                            left: 16.0,
+                            bottom: 20.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: titlePost(),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    top: 15.0, right: 16.0),
+                                child: textContentPost(),
+                              ),
+                              Wrap(
+                                children: [
+                                  sourcePost(),
+                                  categoryPost(),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          padding: const EdgeInsets.only(
+                            left: 70.0,
+                            bottom: 20.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    top: 15.0, right: 16.0),
+                                child: textContentPost(),
+                              ),
+                              Wrap(
+                                children: [
+                                  sourcePost(),
+                                  categoryPost(),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                        Wrap(
+                  Image.network(
+                      'https://kinsta.com/wp-content/uploads/2020/08/tiger-jpg.jpg'),
+                  keypadPostBottom(),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                  border: Border.all(
+                    width: 1,
+                    color: Colors.grey.shade400,
+                  )),
+              child: Column(
+                children: [
+                  screenSizeSmall(context)
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            sourcePost(),
-                            categoryPost(),
+                            Expanded(
+                              child: avatarPost(),
+                            ),
+                            keypadPostVote(),
+                          ],
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            avatarPost(),
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.only(top: 20.0),
+                                child: titlePost(),
+                              ),
+                            ),
+                            keypadPostVote(),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                  Image.network('https://kinsta.com/wp-content/uploads/2020/08/tiger-jpg.jpg'),
+                  screenSizeSmall(context)
+                      ? Container(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: titlePost(),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          padding: const EdgeInsets.only(left: 70.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [],
+                          ),
+                        ),
                   keypadPostBottom(),
                 ],
               ),
             ),
-            const SizedBox(height: 50,),
-            Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(
-                  width: 1,
-                  color: Colors.grey.shade400,
-                )
-              ),
-              child: Column(
-                children: [
-                  screenSizeSmall(context)
-                  ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: avatarPost(),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ) :
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      avatarPost(),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: titlePost(),
-                        ),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ),
-                  screenSizeSmall(context)
-                  ? Container(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: titlePost(),
-                        ),
-                      ],
-                    ),
-                  ) : 
-                  Container(
-                    padding: const EdgeInsets.only(left: 70.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                      ],
-                    ),
-                  ),
-                  keypadPostBottom(),
-                ],
-              ),
+            const SizedBox(
+              height: 50,
             ),
-            const SizedBox(height: 50,),
             Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(
-                  width: 1,
-                  color: Colors.grey.shade400,
-                )
-              ),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                  border: Border.all(
+                    width: 1,
+                    color: Colors.grey.shade400,
+                  )),
               child: Column(
                 children: [
                   screenSizeSmall(context)
-                  ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: avatarPost(),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ) :
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      avatarPost(),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: titlePost(),
-                        ),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ),
-                  screenSizeSmall(context)
-                  ? Container(
-                    padding: const EdgeInsets.only(left: 16.0,bottom: 20.0,),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: titlePost(),
-                        ),
-                        sourcePost(),
-                      ],
-                    ),
-                  ) : 
-                  Container(
-                    padding: const EdgeInsets.only(left: 70.0,bottom: 20.0,),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        sourcePost(),
-                      ],
-                    ),
-                  ),
-                  keypadPostBottom(),
-                ],
-              ),
-            ),
-            const SizedBox(height: 50,),
-            Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(
-                  width: 1,
-                  color: Colors.grey.shade400,
-                )
-              ),
-              child: Column(
-                children: [
-                  screenSizeSmall(context)
-                  ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: avatarPost(),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ) :
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      avatarPost(),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: titlePost(),
-                        ),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ),
-                  screenSizeSmall(context)
-                  ? Container(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: titlePost(),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(top: 15.0, right: 16.0),
-                          child: textContentPost(),
-                        ),
-                      ],
-                    ),
-                  ) : 
-                  Container(
-                    padding: const EdgeInsets.only(left: 70.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(top: 15.0, right: 16.0),
-                          child: textContentPost(),
-                        ),
-                      ],
-                    ),
-                  ),
-                  keypadPostBottom(),
-                ],
-              ),
-            ),
-            const SizedBox(height: 50,),
-            Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(
-                  width: 1,
-                  color: Colors.grey.shade400,
-                )
-              ),
-              child: Column(
-                children: [
-                  screenSizeSmall(context)
-                  ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: avatarPost(),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ) :
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      avatarPost(),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: titlePost(),
-                        ),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ),
-                  screenSizeSmall(context)
-                  ? Container(
-                    padding: const EdgeInsets.only(left: 16.0,bottom: 20.0,),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: titlePost(),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(top: 15.0, right: 16.0),
-                          child: textContentPost(),
-                        ),
-                        sourcePost(),
-                      ],
-                    ),
-                  ) : 
-                  Container(
-                    padding: const EdgeInsets.only(left: 70.0,bottom: 20.0,),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(top: 15.0, right: 16.0),
-                          child: textContentPost(),
-                        ),
-                        sourcePost(),
-                      ],
-                    ),
-                  ),
-                  keypadPostBottom(),
-                ],
-              ),
-            ),
-            const SizedBox(height: 50,),
-            Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(
-                  width: 1,
-                  color: Colors.grey.shade400,
-                )
-              ),
-              child: Column(
-                children: [
-                  screenSizeSmall(context)
-                  ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: avatarPost(),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ) :
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      avatarPost(),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: titlePost(),
-                        ),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ),
-                  screenSizeSmall(context)
-                  ? Container(
-                    padding: const EdgeInsets.only(left: 16.0,bottom: 20.0,),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: titlePost(),
-                        ),
-                        sourcePost(),
-                      ],
-                    ),
-                  ) : 
-                  Container(
-                    padding: const EdgeInsets.only(left: 70.0,bottom: 20.0,),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        sourcePost(),
-                      ],
-                    ),
-                  ),
-                  Image.network('https://kinsta.com/wp-content/uploads/2020/08/tiger-jpg.jpg'),
-                  keypadPostBottom(),
-                ],
-              ),
-            ),
-            const SizedBox(height: 50,),
-            Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(
-                  width: 1,
-                  color: Colors.grey.shade400,
-                )
-              ),
-              child: Column(
-                children: [
-                  screenSizeSmall(context)
-                  ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: avatarPost(),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ) :
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      avatarPost(),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: titlePost(),
-                        ),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ),
-                  screenSizeSmall(context)
-                  ? Container(
-                    padding: const EdgeInsets.only(left: 16.0,bottom: 20.0,),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: titlePost(),
-                        ),
-                        sourcePost(),
-                      ],
-                    ),
-                  ) : 
-                  Container(
-                    padding: const EdgeInsets.only(left: 70.0,bottom: 20.0,),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        sourcePost(),
-                      ],
-                    ),
-                  ),
-                  Image.network('https://videoconverter.wondershare.com/images/en/video-converters/video-to-jpg-vcu-step4.jpg'),
-                  keypadPostBottom(),
-                ],
-              ),
-            ),
-            const SizedBox(height: 50,),
-            Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(
-                  width: 1,
-                  color: Colors.grey.shade400,
-                )
-              ),
-              child: Column(
-                children: [
-                  screenSizeSmall(context)
-                  ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: avatarPost(),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ) :
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      avatarPost(),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: titlePost(),
-                        ),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ),
-                  screenSizeSmall(context)
-                  ? Container(
-                    padding: const EdgeInsets.only(left: 16.0,bottom: 20.0,),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: titlePost(),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(top: 15.0, right: 16.0),
-                          child: textContentPost(),
-                        ),
-                        sourcePost(),
-                      ],
-                    ),
-                  ) : 
-                  Container(
-                    padding: const EdgeInsets.only(left: 70.0,bottom: 20.0,),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(top: 15.0, right: 16.0),
-                          child: textContentPost(),
-                        ),
-                        sourcePost(),
-                      ],
-                    ),
-                  ),
-                  Image.network('https://videoconverter.wondershare.com/images/en/video-converters/video-to-jpg-vcu-step4.jpg'),
-                  keypadPostBottom(),
-                ],
-              ),
-            ),
-            const SizedBox(height: 50,),
-            Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(
-                  width: 1,
-                  color: Colors.grey.shade400,
-                )
-              ),
-              child: Column(
-                children: [
-                  screenSizeSmall(context)
-                  ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: avatarPost(),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ) :
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      avatarPost(),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: titlePost(),
-                        ),
-                      ),
-                      keypadPostVote(),
-                    ],
-                  ),
-                  screenSizeSmall(context)
-                  ? Container(
-                    padding: const EdgeInsets.only(left: 16.0,bottom: 20.0,),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: titlePost(),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(top: 15.0, right: 16.0),
-                          child: textContentPost(),
-                        ),
-                        Wrap(
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            sourcePost(),
-                            categoryPost(),
+                            Expanded(
+                              child: avatarPost(),
+                            ),
+                            keypadPostVote(),
+                          ],
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            avatarPost(),
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.only(top: 20.0),
+                                child: titlePost(),
+                              ),
+                            ),
+                            keypadPostVote(),
                           ],
                         ),
-                      ],
-                    ),
-                  ) : 
-                  Container(
-                    padding: const EdgeInsets.only(left: 70.0,bottom: 20.0,),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(top: 15.0, right: 16.0),
-                          child: textContentPost(),
+                  screenSizeSmall(context)
+                      ? Container(
+                          padding: const EdgeInsets.only(
+                            left: 16.0,
+                            bottom: 20.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: titlePost(),
+                              ),
+                              sourcePost(),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          padding: const EdgeInsets.only(
+                            left: 70.0,
+                            bottom: 20.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              sourcePost(),
+                            ],
+                          ),
                         ),
-                        Wrap(
-                          children: [
-                            sourcePost(),
-                            categoryPost(),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Image.network('https://videoconverter.wondershare.com/images/en/video-converters/video-to-jpg-vcu-step4.jpg'),
                   keypadPostBottom(),
                 ],
               ),
             ),
-            const SizedBox(height: 100,),
+            const SizedBox(
+              height: 50,
+            ),
+            Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                  border: Border.all(
+                    width: 1,
+                    color: Colors.grey.shade400,
+                  )),
+              child: Column(
+                children: [
+                  screenSizeSmall(context)
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: avatarPost(),
+                            ),
+                            keypadPostVote(),
+                          ],
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            avatarPost(),
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.only(top: 20.0),
+                                child: titlePost(),
+                              ),
+                            ),
+                            keypadPostVote(),
+                          ],
+                        ),
+                  screenSizeSmall(context)
+                      ? Container(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: titlePost(),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    top: 15.0, right: 16.0),
+                                child: textContentPost(),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          padding: const EdgeInsets.only(left: 70.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    top: 15.0, right: 16.0),
+                                child: textContentPost(),
+                              ),
+                            ],
+                          ),
+                        ),
+                  keypadPostBottom(),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                  border: Border.all(
+                    width: 1,
+                    color: Colors.grey.shade400,
+                  )),
+              child: Column(
+                children: [
+                  screenSizeSmall(context)
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: avatarPost(),
+                            ),
+                            keypadPostVote(),
+                          ],
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            avatarPost(),
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.only(top: 20.0),
+                                child: titlePost(),
+                              ),
+                            ),
+                            keypadPostVote(),
+                          ],
+                        ),
+                  screenSizeSmall(context)
+                      ? Container(
+                          padding: const EdgeInsets.only(
+                            left: 16.0,
+                            bottom: 20.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: titlePost(),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    top: 15.0, right: 16.0),
+                                child: textContentPost(),
+                              ),
+                              sourcePost(),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          padding: const EdgeInsets.only(
+                            left: 70.0,
+                            bottom: 20.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    top: 15.0, right: 16.0),
+                                child: textContentPost(),
+                              ),
+                              sourcePost(),
+                            ],
+                          ),
+                        ),
+                  keypadPostBottom(),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                  border: Border.all(
+                    width: 1,
+                    color: Colors.grey.shade400,
+                  )),
+              child: Column(
+                children: [
+                  screenSizeSmall(context)
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: avatarPost(),
+                            ),
+                            keypadPostVote(),
+                          ],
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            avatarPost(),
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.only(top: 20.0),
+                                child: titlePost(),
+                              ),
+                            ),
+                            keypadPostVote(),
+                          ],
+                        ),
+                  screenSizeSmall(context)
+                      ? Container(
+                          padding: const EdgeInsets.only(
+                            left: 16.0,
+                            bottom: 20.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: titlePost(),
+                              ),
+                              sourcePost(),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          padding: const EdgeInsets.only(
+                            left: 70.0,
+                            bottom: 20.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              sourcePost(),
+                            ],
+                          ),
+                        ),
+                  Image.network(
+                      'https://kinsta.com/wp-content/uploads/2020/08/tiger-jpg.jpg'),
+                  keypadPostBottom(),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                  border: Border.all(
+                    width: 1,
+                    color: Colors.grey.shade400,
+                  )),
+              child: Column(
+                children: [
+                  screenSizeSmall(context)
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: avatarPost(),
+                            ),
+                            keypadPostVote(),
+                          ],
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            avatarPost(),
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.only(top: 20.0),
+                                child: titlePost(),
+                              ),
+                            ),
+                            keypadPostVote(),
+                          ],
+                        ),
+                  screenSizeSmall(context)
+                      ? Container(
+                          padding: const EdgeInsets.only(
+                            left: 16.0,
+                            bottom: 20.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: titlePost(),
+                              ),
+                              sourcePost(),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          padding: const EdgeInsets.only(
+                            left: 70.0,
+                            bottom: 20.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              sourcePost(),
+                            ],
+                          ),
+                        ),
+                  Image.network(
+                      'https://videoconverter.wondershare.com/images/en/video-converters/video-to-jpg-vcu-step4.jpg'),
+                  keypadPostBottom(),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                  border: Border.all(
+                    width: 1,
+                    color: Colors.grey.shade400,
+                  )),
+              child: Column(
+                children: [
+                  screenSizeSmall(context)
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: avatarPost(),
+                            ),
+                            keypadPostVote(),
+                          ],
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            avatarPost(),
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.only(top: 20.0),
+                                child: titlePost(),
+                              ),
+                            ),
+                            keypadPostVote(),
+                          ],
+                        ),
+                  screenSizeSmall(context)
+                      ? Container(
+                          padding: const EdgeInsets.only(
+                            left: 16.0,
+                            bottom: 20.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: titlePost(),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    top: 15.0, right: 16.0),
+                                child: textContentPost(),
+                              ),
+                              sourcePost(),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          padding: const EdgeInsets.only(
+                            left: 70.0,
+                            bottom: 20.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    top: 15.0, right: 16.0),
+                                child: textContentPost(),
+                              ),
+                              sourcePost(),
+                            ],
+                          ),
+                        ),
+                  Image.network(
+                      'https://videoconverter.wondershare.com/images/en/video-converters/video-to-jpg-vcu-step4.jpg'),
+                  keypadPostBottom(),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                  border: Border.all(
+                    width: 1,
+                    color: Colors.grey.shade400,
+                  )),
+              child: Column(
+                children: [
+                  screenSizeSmall(context)
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: avatarPost(),
+                            ),
+                            keypadPostVote(),
+                          ],
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            avatarPost(),
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.only(top: 20.0),
+                                child: titlePost(),
+                              ),
+                            ),
+                            keypadPostVote(),
+                          ],
+                        ),
+                  screenSizeSmall(context)
+                      ? Container(
+                          padding: const EdgeInsets.only(
+                            left: 16.0,
+                            bottom: 20.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: titlePost(),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    top: 15.0, right: 16.0),
+                                child: textContentPost(),
+                              ),
+                              Wrap(
+                                children: [
+                                  sourcePost(),
+                                  categoryPost(),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          padding: const EdgeInsets.only(
+                            left: 70.0,
+                            bottom: 20.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    top: 15.0, right: 16.0),
+                                child: textContentPost(),
+                              ),
+                              Wrap(
+                                children: [
+                                  sourcePost(),
+                                  categoryPost(),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                  Image.network(
+                      'https://videoconverter.wondershare.com/images/en/video-converters/video-to-jpg-vcu-step4.jpg'),
+                  keypadPostBottom(),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 100,
+            ),
           ],
         ),
       ),
@@ -673,25 +741,26 @@ class DesignPage extends StatelessWidget {
   }
 
   Text titlePost() {
-    return Text('Claudio Bravo podría ir al Villareal en próxima temporada',
-      style: TextStyle(
-          color: colorFromFlutter("#202020"),
-          fontStyle: FontStyle.normal,
-          fontFamily: 'Lato',
-          fontSize: 24.0,
-          fontWeight: FontWeight.w900,
+    return Text(
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      style: GoogleFonts.getFont(
+        'Lato',
+        fontSize: 24.0,
+        color: Colors.black,
+        fontWeight: FontWeight.w900,
       ),
     );
   }
 
   Text textContentPost() {
-    return Text('“Distintos medios señalan el interés del club español Villareal por Claudio Bravo. Todo sigue aún en tratativas.” “Distintos medios señalan el interés del club español Villareal por Claudio Bravo. Todo sigue aún en tratativas.” “Distintos medios señalan el interés del club español Villareal por Claudio Bravo. Todo sigue aún en tratativas.” “Distintos medios señalan el interés del club español Villareal por Claudio Bravo. Todo sigue aún en tratativas.”',
-      style: TextStyle(
-        fontFamily: 'Lato',
-        fontSize: 20.0,
-        fontStyle: FontStyle.normal,
+    return Text(
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      style: GoogleFonts.getFont(
+        'Lato',
+        fontSize: 18.0,
         fontWeight: FontWeight.w400,
         color: colorFromFlutter("#808080"),
+        height: 1.4,
       ),
     );
   }
@@ -713,7 +782,8 @@ class DesignPage extends StatelessWidget {
             onTap: null,
             child: Container(
               padding: const EdgeInsets.only(right: 0.0),
-              child: const Text('futbol, villareal, claudio bravo, españa',
+              child: const Text(
+                'futbol, villareal, claudio bravo, españa',
                 style: TextStyle(
                   fontFamily: 'Lato',
                   fontSize: 14,
@@ -744,8 +814,11 @@ class DesignPage extends StatelessWidget {
           InkWell(
             onTap: null,
             child: Container(
-              padding: const EdgeInsets.only(right: 0.0,),
-              child: const Text('Emol.com, EnCancha, Bío Bío, Radio Agricultura',
+              padding: const EdgeInsets.only(
+                right: 0.0,
+              ),
+              child: const Text(
+                'Emol.com, EnCancha, Bío Bío, Radio Agricultura',
                 style: TextStyle(
                   fontFamily: 'Lato',
                   fontSize: 14,
@@ -762,11 +835,13 @@ class DesignPage extends StatelessWidget {
 
   Container avatarPost() {
     return Container(
-      padding: const EdgeInsets.only(top: 18.0, left: 17.0, right: 17.0, bottom: 22.0),
+      padding: const EdgeInsets.only(
+          top: 18.0, left: 17.0, right: 17.0, bottom: 22.0),
       alignment: Alignment.topLeft,
       child: const CircleAvatar(
         radius: 18,
-        backgroundImage: NetworkImage('https://www.shutterstock.com/image-photo/young-handsome-man-beard-wearing-260nw-1817367890.jpg'),
+        backgroundImage: NetworkImage(
+            'https://www.shutterstock.com/image-photo/young-handsome-man-beard-wearing-260nw-1817367890.jpg'),
       ),
     );
   }
@@ -783,12 +858,13 @@ class DesignPage extends StatelessWidget {
               color: colorFromFlutter("#5AAA1C"),
               size: 22.0,
             ),
-            label: Text('20',
+            label: Text(
+              '20',
               style: TextStyle(
-              fontFamily: 'Arial',
-              fontSize: 16,
-              fontWeight: FontWeight.normal,
-              color: colorFromFlutter("#5AAA1C"),
+                fontFamily: 'Arial',
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+                color: colorFromFlutter("#5AAA1C"),
               ),
             ),
           ),
@@ -799,28 +875,30 @@ class DesignPage extends StatelessWidget {
               color: colorFromFlutter("#5AAA1C"),
               size: 20,
             ),
-            label: Text('20',
+            label: Text(
+              '20',
               style: TextStyle(
-              fontFamily: 'Arial',
-              fontSize: 16,
-              fontWeight: FontWeight.normal,
-              color: colorFromFlutter("#5AAA1C"),
+                fontFamily: 'Arial',
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+                color: colorFromFlutter("#5AAA1C"),
               ),
             ),
           ),
           TextButton.icon(
             onPressed: () {},
             icon: Icon(
-              FontAwesome.comment,//MfgLabs.chat,
+              FontAwesome.comment, //MfgLabs.chat,
               color: colorFromFlutter("#5AAA1C"),
               size: 18,
             ),
-            label: Text('20',
+            label: Text(
+              '20',
               style: TextStyle(
-              fontFamily: 'Arial',
-              fontSize: 16,
-              fontWeight: FontWeight.normal,
-              color: colorFromFlutter("#5AAA1C"),
+                fontFamily: 'Arial',
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+                color: colorFromFlutter("#5AAA1C"),
               ),
             ),
           ),
@@ -831,12 +909,13 @@ class DesignPage extends StatelessWidget {
               color: colorFromFlutter("#5AAA1C"),
               size: 22,
             ),
-            label: Text('20',
+            label: Text(
+              '20',
               style: TextStyle(
-              fontFamily: 'Arial',
-              fontSize: 16,
-              fontWeight: FontWeight.normal,
-              color: colorFromFlutter("#5AAA1C"),
+                fontFamily: 'Arial',
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+                color: colorFromFlutter("#5AAA1C"),
               ),
             ),
           ),
@@ -853,12 +932,13 @@ class DesignPage extends StatelessWidget {
                 ),
               ),
             ),
-            label: Text('20',
+            label: Text(
+              '20',
               style: TextStyle(
-              fontFamily: 'Arial',
-              fontSize: 16,
-              fontWeight: FontWeight.normal,
-              color: colorFromFlutter("#5AAA1C"),//"#CCCCCC"
+                fontFamily: 'Arial',
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+                color: colorFromFlutter("#5AAA1C"), //"#CCCCCC"
               ),
             ),
           ),
@@ -933,7 +1013,7 @@ class DesignPage extends StatelessWidget {
     );
   }
 
-  bool screenSizeLarge (BuildContext context) {
+  bool screenSizeLarge(BuildContext context) {
     if (MediaQuery.of(context).size.width >= ScreenSize.maxScreen) {
       return true;
     } else {
@@ -941,15 +1021,16 @@ class DesignPage extends StatelessWidget {
     }
   }
 
-  bool screenSizeMedio (BuildContext context) {
-    if (MediaQuery.of(context).size.width < ScreenSize.maxScreen && MediaQuery.of(context).size.width >= ScreenSize.minScreen) {
+  bool screenSizeMedio(BuildContext context) {
+    if (MediaQuery.of(context).size.width < ScreenSize.maxScreen &&
+        MediaQuery.of(context).size.width >= ScreenSize.minScreen) {
       return true;
     } else {
       return false;
     }
   }
 
-  bool screenSizeSmall (BuildContext context) {
+  bool screenSizeSmall(BuildContext context) {
     if (MediaQuery.of(context).size.width < ScreenSize.minScreen) {
       return true;
     } else {
@@ -957,7 +1038,7 @@ class DesignPage extends StatelessWidget {
     }
   }
 
-  Color colorFromFlutter (String color) {
+  Color colorFromFlutter(String color) {
     return Color(int.parse(color.substring(1, 7), radix: 16) + 0xFF000000);
   }
 }
