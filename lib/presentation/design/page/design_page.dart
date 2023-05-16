@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttericon/elusive_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:fluttericon/iconic_icons.dart';
 import 'package:fluttericon/mfg_labs_icons.dart';
@@ -17,8 +18,7 @@ class DesignPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DesignScaffoldManager(
-      title: null,
-      /*AppBar(
+      title: null,/*AppBar(
         title: const Text("Diseño"),
       ),*/
       child: SingleChildScrollView(
@@ -43,12 +43,13 @@ class DesignPage extends StatelessWidget {
             Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.grey.shade200,
-                  )),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8.0),
+                border: Border.all(
+                  width: 1,
+                  color: Colors.grey.shade200,
+                )
+              ),
               child: Column(
                 children: [
                   screenSizeSmall(context)
@@ -771,23 +772,23 @@ class DesignPage extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.only(right: 6.0),
-            child: const Icon(
-              FontAwesome.tag,
+            child: Icon(
+              Elusive.tag,//FontAwesome.tag,
               size: 18,
-              color: Colors.green,
+              color: colorFromFlutter("#5AAA1C"),
             ),
           ),
           InkWell(
             onTap: null,
             child: Container(
               padding: const EdgeInsets.only(right: 0.0),
-              child: const Text(
+              child: Text(
                 'futbol, villareal, claudio bravo, españa',
                 style: TextStyle(
                   fontFamily: 'Lato',
                   fontSize: 14,
                   fontWeight: FontWeight.normal,
-                  color: Colors.green,
+                  color: colorFromFlutter("#5AAA1C"),
                 ),
               ),
             ),
@@ -804,10 +805,10 @@ class DesignPage extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.only(right: 6.0),
-            child: const Icon(
+            child: Icon(
               Octicons.link_external,
               size: 18,
-              color: Colors.green,
+              color: colorFromFlutter("#5AAA1C"),
             ),
           ),
           InkWell(
@@ -816,13 +817,13 @@ class DesignPage extends StatelessWidget {
               padding: const EdgeInsets.only(
                 right: 0.0,
               ),
-              child: const Text(
+              child: Text(
                 'Emol.com, EnCancha, Bío Bío, Radio Agricultura',
                 style: TextStyle(
                   fontFamily: 'Lato',
                   fontSize: 14,
                   fontWeight: FontWeight.normal,
-                  color: Colors.green,
+                  color: colorFromFlutter("#5AAA1C"),
                 ),
               ),
             ),
