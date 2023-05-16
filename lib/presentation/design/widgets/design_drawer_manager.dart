@@ -1,5 +1,10 @@
 // Dependiendo del tamaño de la pantalla mantendrá el SideDrawer visible
 import 'package:flutter/material.dart';
+import 'package:fluttericon/entypo_icons.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:fluttericon/modern_pictograms_icons.dart';
+import 'package:fluttericon/octicons_icons.dart';
+import 'package:fluttericon/web_symbols_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 //import '../../presentation/sidedrawer/pages/sidedrawer_page.dart';
@@ -11,7 +16,7 @@ class DrawerManager extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> _options = ['Default', 'System'];
+    List<String> _options = ['Default', 'System', 'Giorgio Armani', 'Codelco'];
     String? _selectedOption = 'Default';
     return Drawer(
       width: ScreenSize.sizeMenuBox,
@@ -21,52 +26,40 @@ class DrawerManager extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            //Image.asset('assets/sharmiaCaptura.JPG'),
             Container(
               padding: const EdgeInsets.only(top:0),
               child: Image.asset('assets/sharmiaCaptura.jpg'),
             ),
             Container(
-              padding: const EdgeInsets.only(top:18),
+              padding: const EdgeInsets.only(top:18, bottom: 16),
               child: TextFormField(
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
                   hintText: 'Buscar',
                   suffixIcon: Icon(
-                    Icons.search,
+                    WebSymbols.search,//Entypo.search,//Octicons.search,//WebSymbols.search,//Icons.search,
                     color: colorFromFlutter("#CCCCCC"),
                     size: 22,
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       width: 1,
                       color: Colors.grey,
                       style: BorderStyle.solid,
                     ),
                   ),
-                  disabledBorder: OutlineInputBorder(
+                  disabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(width: 40, color: Colors.grey),
                   )
                 ),
               ),
             ),
+            subTitleSideMenu('Organización'),
             Container(
-              padding: const EdgeInsets.only(top:16, bottom: 16),
-              child: Text(
-                'Organización',
-                style: GoogleFonts.getFont(
-                  'Lato',
-                  fontSize: 12,
-                  fontStyle: FontStyle.normal,
-                  color: colorFromFlutter("#202020"),
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(left: 5, right: 5),
-              height: 35,
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              height: 40,
               decoration: BoxDecoration(
                 color: colorFromFlutter("#DFFFC5"),
                 borderRadius: BorderRadius.circular(30.0),
@@ -77,9 +70,17 @@ class DrawerManager extends StatelessWidget {
                   return DropdownMenuItem(
                     value: value,
                     child: Container(
-                      padding: const EdgeInsets.only(right:6, top: 4, bottom: 4, left: 6),
-                      //color: Colors.green,//colorFromFlutter("#DFFFC5"),
-                      child: Text(value),
+                      padding: const EdgeInsets.only(left: 6, top: 4, bottom: 4, right:6),
+                      child: Text(
+                        value,
+                        style: GoogleFonts.getFont(
+                          'Lato',
+                          fontSize: 16,
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.w800,
+                          color: colorFromFlutter("#202020"),
+                        ),
+                      ),
                     ),
                   );
                 }).toList(),
@@ -89,11 +90,10 @@ class DrawerManager extends StatelessWidget {
                   } 
                 },
                 icon: Icon(
-                  Icons.arrow_drop_down,
+                  Octicons.triangle_down,//Icons.arrow_drop_down,
                   color: colorFromFlutter("#202020"),
                 ),
-                borderRadius: BorderRadius.circular(30),
-                //focusColor: colorFromFlutter("#DFFFC5"),
+                borderRadius: BorderRadius.circular(20),
                 dropdownColor: colorFromFlutter("#DFFFC5"),
                 style: GoogleFonts.getFont(
                   'Lato',
@@ -105,20 +105,9 @@ class DrawerManager extends StatelessWidget {
                 underline: Container(),
               ),
             ),
+            subTitleSideMenu('Categorías'),
             Container(
-              padding: const EdgeInsets.only(top:24),
-              child: Text(
-                'Categorías',
-                style: GoogleFonts.getFont(
-                  'Lato',
-                  fontSize: 12,
-                  fontStyle: FontStyle.normal,
-                  color: colorFromFlutter("#202020"),
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(top:16),
+              padding: const EdgeInsets.only(top:0),
               child: Wrap(
                 children: [
                   buttonSideMenu('Inicio'),
@@ -129,20 +118,9 @@ class DrawerManager extends StatelessWidget {
                 ],
               ),
             ),
+            subTitleSideMenu('Tu cuenta'),
             Container(
-              padding: const EdgeInsets.only(top:24),
-              child: Text(
-                'Tu cuenta',
-                style: GoogleFonts.getFont(
-                  'Lato',
-                  fontSize: 12,
-                  fontStyle: FontStyle.normal,
-                  color: colorFromFlutter("#202020"),
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(top:16),
+              padding: const EdgeInsets.only(top:0),
               child: Wrap(
                 children: [
                   buttonSideMenu('Subir contenido'),
@@ -152,10 +130,60 @@ class DrawerManager extends StatelessWidget {
                 ],
               ),
             ),
+            subTitleSideMenu('Escoge tu color'),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    // Acción a realizar al hacer clic en el botón
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shadowColor: Colors.transparent,
+                    shape: const CircleBorder(), // Forma circular
+                    primary: colorFromFlutter("#F1FFEC"), // Fondo blanco
+                    side: BorderSide(
+                      color: colorFromFlutter("#7BFF11"), // Borde verde
+                      width: 2.0, // Grosor del borde
+                    ),
+                  ),
+                  child: null,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // Acción a realizar al hacer clic en el botón
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shadowColor: Colors.transparent,
+                    shape: const CircleBorder(), // Forma circular
+                    primary: Colors.black, // Fondo blanco
+                    /*side: BorderSide(
+                      color: colorFromFlutter("#F1FFEC"), // Borde verde
+                      width: 2.0, // Grosor del borde
+                    ),*/
+                  ),
+                  child: null,
+                ),
+              ],
+            ),
           ],
         ),
       )
     );
+  }
+
+  Container subTitleSideMenu(String text) {
+    return Container(
+            padding: const EdgeInsets.only(top:24, bottom: 16),
+            child: Text(
+              text,
+              style: GoogleFonts.getFont(
+                'Lato',
+                fontSize: 12,
+                fontStyle: FontStyle.normal,
+                color: colorFromFlutter("#202020"),
+              ),
+            ),
+          );
   }
 
   Container buttonSideMenu(String text) {
@@ -164,7 +192,7 @@ class DrawerManager extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {},
         style: ElevatedButton.styleFrom(
-          minimumSize: const Size(74, 44),
+          minimumSize: const Size(78, 44),
           shadowColor: Colors.transparent,
           backgroundColor: colorFromFlutter("#DFFFC5"),
           shape: RoundedRectangleBorder(
@@ -175,9 +203,36 @@ class DrawerManager extends StatelessWidget {
           text,
           style: GoogleFonts.getFont(
             'Lato',
-            fontSize: 16,
+            fontSize: 17,
             fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w800,
+            color: colorFromFlutter("#202020"),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container buttonSideMenu2(String text) {
+    return Container(
+      padding: const EdgeInsets.only(right:6, top: 4, bottom: 4, left: 6),
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          minimumSize: const Size(78, 44),
+          shadowColor: Colors.transparent,
+          backgroundColor: colorFromFlutter("#DFFFC5"),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        child: Text(
+          text,
+          style: GoogleFonts.getFont(
+            'Lato',
+            fontSize: 17,
+            fontStyle: FontStyle.normal,
+            fontWeight: FontWeight.w800,
             color: colorFromFlutter("#202020"),
           ),
         ),
