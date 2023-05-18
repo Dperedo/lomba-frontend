@@ -20,7 +20,7 @@ class ProfileLiveCubit extends Cubit<ProfileLiveState> {
     this._getCloudFile,
     this._registerCloudFileProfile,
   ) : super(ProfileLiveState(
-            "", "", "", Uint8List(0), "", false, false, null, 0, 0));
+            "", "", "", Uint8List(0), "", false, false, null, null, 0, 0));
 
   void showImage(BuildContext context, Uint8List image, String userId,
       String orgaId) async {
@@ -66,13 +66,20 @@ class ProfileLiveCubit extends Cubit<ProfileLiveState> {
       resultCloudFile.fold((l) => null, (r) {
         if (r.size != 0) {
           timer.cancel();
-          emit(state.copyWithCloudFile(cloudFile: r));
+          copyWithCloudFileWithCloudFileThumbnail(r, cloudFileIdThumbnail);
         } else if (secondsPassed >= 10) {
           timer.cancel();
           emit(state.copyWithProgressIndicator(
               localProgress: false, remoteProgress: false));
         }
       });
+    });
+  }
+
+  void copyWithCloudFileWithCloudFileThumbnail(CloudFile cloudFile, String cloudFileIdThumbnail) async {
+    final resultCloudFile = await _getCloudFile.execute(cloudFileIdThumbnail);
+    resultCloudFile.fold((l) => null, (r) {
+      emit(state.copyWithCloudFile(cloudFile: cloudFile, cloudFileThumbnail: r));
     });
   }
 
@@ -103,6 +110,7 @@ class ProfileLiveState extends Equatable {
   final bool showRemoteProgress;
 
   final CloudFile? cloudFile;
+  final CloudFile? cloudFileThumbnail;
 
   final int mediaHeight;
   final int mediaWidth;
@@ -116,6 +124,7 @@ class ProfileLiveState extends Equatable {
         showLocalProgress,
         showRemoteProgress,
         cloudFile,
+        cloudFileThumbnail,
         mediaHeight,
         mediaWidth,
       ];
@@ -129,6 +138,7 @@ class ProfileLiveState extends Equatable {
     this.showLocalProgress,
     this.showRemoteProgress,
     this.cloudFile,
+    this.cloudFileThumbnail,
     this.mediaHeight,
     this.mediaWidth,
   );
@@ -149,6 +159,7 @@ class ProfileLiveState extends Equatable {
       true,
       true,
       null,
+      null,
       mediaHeight,
       mediaWidth,
     );
@@ -168,6 +179,7 @@ class ProfileLiveState extends Equatable {
       false,
       false,
       null,
+      null,
       0,
       0,
     );
@@ -185,6 +197,7 @@ class ProfileLiveState extends Equatable {
       localProgress,
       remoteProgress,
       null,
+      null,
       0,
       0,
     );
@@ -192,7 +205,8 @@ class ProfileLiveState extends Equatable {
   }
 
   ProfileLiveState copyWithCloudFile({
-    required CloudFile cloudFile,
+    required CloudFile cloudFile,//cloudFileThumbnail
+    required CloudFile cloudFileThumbnail,
   }) {
     final ous = ProfileLiveState(
       fileId,
@@ -203,6 +217,7 @@ class ProfileLiveState extends Equatable {
       false,
       false,
       cloudFile,
+      cloudFileThumbnail,
       mediaHeight,
       mediaWidth,
     );

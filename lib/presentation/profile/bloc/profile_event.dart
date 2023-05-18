@@ -76,8 +76,10 @@ class OnProfileSaveImagen extends ProfileEvent {
   final Uint8List image;
   final String? imageUrl;
   final String? cloudFileId;
+  final String? imageUrlThumbnail;
+  final String? cloudFileIdThumbnail;
 
-  const OnProfileSaveImagen(this.user, this.image, this.imageUrl, this.cloudFileId);
+  const OnProfileSaveImagen(this.user, this.image, this.imageUrl, this.cloudFileId, this.imageUrlThumbnail, this.cloudFileIdThumbnail);
 
   @override
   List<Object> get props => [user, image];

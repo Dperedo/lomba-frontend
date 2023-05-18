@@ -117,8 +117,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           builtIn: event.user.builtIn,
           pictureUrl: event.imageUrl==''||event.imageUrl==null ? null : event.imageUrl,
           pictureCloudFileId: event.cloudFileId==''||event.cloudFileId==null ? null : event.cloudFileId,
-          pictureThumbnailUrl: event.imageUrl==''||event.imageUrl==null ? null : event.imageUrl,
-          pictureThumbnailCloudFileId: event.cloudFileId==''||event.cloudFileId==null ? null : event.cloudFileId,);
+          pictureThumbnailUrl: event.imageUrlThumbnail==''||event.imageUrlThumbnail==null ? null : event.imageUrlThumbnail,
+          pictureThumbnailCloudFileId: event.cloudFileIdThumbnail==''||event.cloudFileIdThumbnail==null ? null : event.cloudFileIdThumbnail,);
 
       final result =
           await _updateProfile.execute(event.user.id, user);

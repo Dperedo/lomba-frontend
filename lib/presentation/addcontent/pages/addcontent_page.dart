@@ -60,8 +60,10 @@ class AddContentPage extends StatelessWidget {
     final TextEditingController contentController = TextEditingController();
     final TextEditingController contentControllerMedia =
         TextEditingController();
+    final TextEditingController contentControllerMediaUrl =
+        TextEditingController();
     String? _validateFields(String value) {
-      if (value.isEmpty && contentControllerMedia.text.isEmpty) {
+      if (value.isEmpty && contentControllerMedia.text.isEmpty && contentControllerMediaUrl.text.isEmpty) {
         return 'Por favor, complete al menos uno de los campos';
       }
       return null;
@@ -122,7 +124,7 @@ class AddContentPage extends StatelessWidget {
                               statecubit.fileId == "" 
                               ? TextFormField(
                                 key: const ValueKey('txtURL'),
-                                controller: contentControllerMedia,
+                                controller: contentControllerMediaUrl,
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   hintText: 'URL de imagen o video',
@@ -131,12 +133,15 @@ class AddContentPage extends StatelessWidget {
                               statecubit.fileId == "" 
                               ? ElevatedButton(
                                 onPressed: () {
-                                  context
-                                      .read<AddContentLiveCubit>()
-                                      .showExternalUri(
-                                          contentControllerMedia.text,
-                                          state.userId,
-                                          state.orgaId);
+                                  if (_key.currentState?.validate() ==
+                                      true) {
+                                    context
+                                        .read<AddContentLiveCubit>()
+                                        .showExternalUri(
+                                            contentControllerMedia.text,
+                                            state.userId,
+                                            state.orgaId);
+                                  }
                                 },
                                 child: const Text('Usar URL'),
                               ) : const SizedBox(),

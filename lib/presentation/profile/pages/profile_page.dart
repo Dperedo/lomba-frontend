@@ -223,6 +223,8 @@ class ProfilePage extends StatelessWidget {
                                           statecubit.mediafile,
                                           statecubit.cloudFile!.url,
                                           statecubit.cloudFile!.id,
+                                          statecubit.cloudFileThumbnail!.url,
+                                          statecubit.cloudFileThumbnail!.id,
                                         ));
                                   },
                           ),
