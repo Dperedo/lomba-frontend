@@ -10,16 +10,22 @@ import 'package:lomba_frontend/domain/usecases/storage/register_cloudfile.dart';
 import 'package:lomba_frontend/domain/usecases/storage/upload_cloudfile.dart';
 
 import '../../../domain/entities/storage/cloudfile.dart';
+import '../../../domain/usecases/externaluri/post_externaluri.dart';
+import '../../../domain/usecases/storage/upload_cloudfile_externaluri.dart';
 
 class AddContentLiveCubit extends Cubit<AddContentLiveState> {
   final UploadFile uploadFile;
   final RegisterCloudFile _registerCloudFile;
   final GetCloudFile _getCloudFile;
+  final PostExternalUri _postExternalUri;
+  final UploadFileExternalUri _uploadFileExternalUri;
   late int secondsPassed;
   AddContentLiveCubit(
     this.uploadFile,
     this._getCloudFile,
     this._registerCloudFile,
+    this._postExternalUri,
+    this._uploadFileExternalUri,
   ) : super(AddContentLiveState(const <String, bool>{"keepasdraft": false}, "",
             "", Uint8List(0), "", false, false, null, 0, 0, "", ""));
 
@@ -106,6 +112,45 @@ class AddContentLiveCubit extends Cubit<AddContentLiveState> {
           emit(state.copyWithCloudFile(
             cloudFile: r,
           ));
+        } else if (secondsPassed >= 10) {
+          timer.cancel();
+          emit(state.copyWithProgressIndicator(
+              localProgress: false, remoteProgress: false));
+        }
+      });
+    });
+  }
+
+  void showExternalUri(String uri, String userId, String orgaId) async {
+    var cloudFileId = '';
+    var uriId = '';
+    secondsPassed = 0;
+    emit(state.copyWithProgressIndicator(
+              localProgress: true, remoteProgress: true));
+
+    final resultExternalUri = await _postExternalUri.execute(userId, uri);
+    resultExternalUri.fold((l) => null, (r) => uriId = r.id);
+
+    final resultRegister = await _registerCloudFile.execute(userId, orgaId);
+    resultRegister.fold((l) => null, (r) => cloudFileId = r.id);
+
+    //await uploadFile.execute(image, cloudFileId);
+    await _uploadFileExternalUri.execute(userId, uriId, cloudFileId);
+
+    Timer.periodic(const Duration(seconds: 2), (timer) async {
+      secondsPassed++;
+
+      final resultCloudFile = await _getCloudFile.execute(cloudFileId);
+      resultCloudFile.fold((l) => null, (r) {
+        if (r.size != 0) {
+          timer.cancel();
+          emit(state.copyWithName(name: uri));
+          emit(state.copyWithMedia(
+              id: cloudFileId,
+              media: Uint8List(0),
+              mediaHeight: 0,
+              mediaWidth: 0));
+          emit(state.copyWithCloudFile(cloudFile: r));
         } else if (secondsPassed >= 10) {
           timer.cancel();
           emit(state.copyWithProgressIndicator(
