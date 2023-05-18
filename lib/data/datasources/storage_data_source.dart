@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
-import 'package:lomba_frontend/domain/entities/storage/cloudfile.dart';
 import '../../core/constants.dart';
 import '../../core/exceptions.dart';
 import '../models/storage/cloudfile_model.dart';
@@ -15,6 +14,8 @@ abstract class StorageRemoteDataSource {
   Future<CloudFileModel> registerCloudFile(String userId, String orgaId);
   Future<List<CloudFileModel>> registerCloudFileUserProfile(String userId, String orgaId);
   Future<CloudFileModel> getCloudFile(String cloudFileId);
+  Future<CloudFileModel> uploadFileExternalUri(
+      String userId, String uriId, String cloudFileId);
 }
 
 class StorageRemoteDataSourceImpl implements StorageRemoteDataSource {
@@ -28,14 +29,6 @@ class StorageRemoteDataSourceImpl implements StorageRemoteDataSource {
       Uint8List file, String cloudFileId) async {
     final session = await localDataSource.getSavedSession();
     final url = Uri.parse('${UrlBackend.base}/api/v1/storage');
-
-    //busca respuesta desde el servidor para la autenticación
-    /*
-    final fileEncoded = base64Encode(file);
-    final Map<String, dynamic> dataToPost = {
-      'fileEncoded': fileEncoded,
-    };
-    */
 
     var request = http.MultipartRequest('PUT', url);
 
@@ -280,6 +273,54 @@ class StorageRemoteDataSourceImpl implements StorageRemoteDataSource {
       }
 
       return Future.value(listCloudFileModel);
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<CloudFileModel> uploadFileExternalUri(
+      String userId, String uriId, String cloudFileId) async {
+    final Map<String, dynamic> uriData = {
+      'userId': userId,
+      'externalUriId': uriId,
+      'cloudFileId': cloudFileId
+      };
+    final session = await localDataSource.getSavedSession();
+    final url = Uri.parse('${UrlBackend.base}/api/v1/storage/byuri/');
+
+    http.Response resp = await client.put(url, body: json.encode(uriData), headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${session.token}",
+    }).timeout(const Duration(seconds: 10));
+
+    if (resp.statusCode == 200) {
+      final Map<dynamic, dynamic> resObj = json.decode(resp.body);
+
+      final item = resObj['data']['items'][0];
+      return Future.value(CloudFileModel(
+          id: item["id"].toString(),
+          name: item["name"].toString(),
+          path: item["path"].toString(),
+          host: item["host"].toString(),
+          url: item["url"].toString(),
+          size: int.parse(item["size"].toString()),
+          account: item["account"].toString(),
+          filetype: item["filetype"].toString(),
+          orgaId: item["orgaId"].toString(),
+          userId: item["userId"].toString(),
+          associated: item["associated"].toString().toLowerCase() == 'true',
+          enabled: item["enabled"].toString().toLowerCase() == 'true',
+          builtIn: item["builtIn"].toString().toLowerCase() == 'true',
+          created: DateTime.parse(item["created"]),
+          updated:
+              item["updated"] == null ? null : DateTime.parse(item["updated"]),
+          deleted:
+              item["deleted"] == null ? null : DateTime.parse(item["deleted"]),
+          expires: item["expires"] == null
+              ? null
+              : DateTime.parse(item["expires"])));
     } else {
       throw ServerException();
     }

@@ -52,6 +52,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'data/datasources/bookmark_data_source.dart';
 import 'data/datasources/comment_data_source.dart';
+import 'data/datasources/externaluri_data_source.dart';
 import 'data/datasources/flow_data_source.dart';
 import 'data/datasources/post_data_source.dart';
 import 'data/datasources/local_data_source.dart';
@@ -60,6 +61,7 @@ import 'data/datasources/stage_data_source.dart';
 import 'data/datasources/storage_data_source.dart';
 import 'data/repositories/bookmark_repository_impl.dart';
 import 'data/repositories/comment_repository_impl.dart';
+import 'data/repositories/externaluri_repository_impl.dart';
 import 'data/repositories/flow_repository_impl.dart';
 import 'data/repositories/post_repository_impl.dart';
 import 'data/repositories/local_repository_impl.dart';
@@ -68,6 +70,7 @@ import 'data/repositories/stage_repository_impl.dart';
 import 'data/repositories/storage_repository_impl.dart';
 import 'domain/repositories/bookmark_repository.dart';
 import 'domain/repositories/comment_repository.dart';
+import 'domain/repositories/externaluri_repository.dart';
 import 'domain/repositories/flow_repository.dart';
 import 'domain/repositories/post_repository.dart';
 import 'domain/repositories/local_repository.dart';
@@ -77,6 +80,9 @@ import 'domain/repositories/storage_repository.dart';
 import 'domain/usecases/comment/delete_comment.dart';
 import 'domain/usecases/comment/get_comments_post.dart';
 import 'domain/usecases/comment/post_comment.dart';
+import 'domain/usecases/externaluri/get_externaluri_by_id.dart';
+import 'domain/usecases/externaluri/get_externaluri_by_uri.dart';
+import 'domain/usecases/externaluri/post_externaluri.dart';
 import 'domain/usecases/flow/get_flow.dart';
 import 'domain/usecases/flow/get_flows.dart';
 import 'domain/usecases/local/get_has_login.dart';
@@ -94,6 +100,7 @@ import 'domain/usecases/setting/updated_setting_super.dart';
 import 'domain/usecases/stage/get_stage.dart';
 import 'domain/usecases/stage/get_stages.dart';
 import 'domain/usecases/storage/register_cloudfile_profile.dart';
+import 'domain/usecases/storage/upload_cloudfile_externaluri.dart';
 import 'domain/usecases/storage/upload_cloudfile_profile.dart';
 import 'domain/usecases/users/exists_profile.dart';
 import 'domain/usecases/users/update_profile.dart';
@@ -338,10 +345,15 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetCloudFile(locator()));
   locator.registerLazySingleton(() => RegisterCloudFile(locator()));
   locator.registerLazySingleton(() => RegisterCloudFileProfile(locator()));
+  locator.registerLazySingleton(() => UploadFileExternalUri(locator()));
 
   locator.registerLazySingleton(() => GetComments(locator()));
   locator.registerLazySingleton(() => PostComment(locator()));
   locator.registerLazySingleton(() => DeleteComment(locator()));
+
+  locator.registerLazySingleton(() => PostExternalUri(locator()));
+  locator.registerLazySingleton(() => GetExternalUriById(locator()));
+  locator.registerLazySingleton(() => GetExternalUriByUri(locator()));
 
   // repository
   locator.registerLazySingleton<LoginRepository>(
@@ -381,6 +393,9 @@ Future<void> init() async {
   );
   locator.registerLazySingleton<CommentRepository>(
     () => CommentRepositoryImpl(remoteDataSource: locator()),
+  );
+  locator.registerLazySingleton<ExternalUriRepository>(
+    () => ExternalUriRepositoryImpl(remoteDataSource: locator()),
   );
 
   // data source
@@ -433,6 +448,9 @@ Future<void> init() async {
           client: locator(), localDataSource: locator()));
   locator.registerLazySingleton<CommentRemoteDataSource>(() =>
       CommentRemoteDataSourceImpl(
+          client: locator(), localDataSource: locator()));
+  locator.registerLazySingleton<ExternalUriRemoteDataSource>(() =>
+      ExternalUriRemoteDataSourceImpl(
           client: locator(), localDataSource: locator()));
 
   // external

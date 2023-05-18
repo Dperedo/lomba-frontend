@@ -96,4 +96,20 @@ class StorageRepositoryImpl implements StorageRepository {
       return const Left(ConnectionFailure('No existe conexión con internet.'));
     }
   }
+
+  @override
+  Future<Either<Failure, CloudFile>> uploadFileExternalUri(
+      String userId, String uriId, String cloudFileId) async {
+    try {
+      final result =
+          await remoteDataSource.uploadFileExternalUri(userId, uriId, cloudFileId);
+
+      return Right(result.toEntity());
+    } on ServerException {
+      return const Left(
+          ServerFailure('Ocurrió un error al procesar la solicitud.'));
+    } on Exception {
+      return const Left(ConnectionFailure('No existe conexión con internet.'));
+    }
+  }
 }
