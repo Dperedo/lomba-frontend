@@ -60,13 +60,21 @@ class StorageRepositoryImpl implements StorageRepository {
   }
 
   @override
-  Future<Either<Failure, CloudFile>> uploadFileUserProfile(
+  Future<Either<Failure, List<CloudFile>>> uploadFileUserProfile(
       String userId, Uint8List file, String cloudFileId) async {
     try {
       final result =
           await remoteDataSource.uploadFileUserProfile(userId, file, cloudFileId);
 
-      return Right(result.toEntity());
+      List<CloudFile> list = [];
+
+      if (result.isNotEmpty) {
+        for (var element in result) {
+          list.add(element.toEntity());
+        }
+      }
+
+      return Right(list);
     } on ServerException {
       return const Left(
           ServerFailure('Ocurrió un error al procesar la solicitud.'));

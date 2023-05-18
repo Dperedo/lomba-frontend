@@ -9,7 +9,7 @@ import '../../repositories/storage_repository.dart';
 class UploadFileProfile {
   final StorageRepository repository;
   UploadFileProfile(this.repository);
-  Future<Either<Failure, CloudFile>> execute(
+  Future<Either<Failure, List<CloudFile>>> execute(
       String userId, Uint8List file, String cloudFileId) async {
     return await repository.uploadFileUserProfile(userId, file, cloudFileId);
   }

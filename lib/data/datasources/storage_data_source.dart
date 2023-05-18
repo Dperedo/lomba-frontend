@@ -9,7 +9,7 @@ import 'local_data_source.dart';
 abstract class StorageRemoteDataSource {
   Future<CloudFileModel> uploadFile(
       Uint8List file, String cloudFileId);
-  Future<CloudFileModel> uploadFileUserProfile(
+  Future<List<CloudFileModel>> uploadFileUserProfile(
       String userId, Uint8List file, String cloudFileId);
   Future<CloudFileModel> registerCloudFile(String userId, String orgaId);
   Future<List<CloudFileModel>> registerCloudFileUserProfile(String userId, String orgaId);
@@ -172,7 +172,7 @@ class StorageRemoteDataSourceImpl implements StorageRemoteDataSource {
   }
 
   @override
-  Future<CloudFileModel> uploadFileUserProfile(
+  Future<List<CloudFileModel>> uploadFileUserProfile(
       String userId, Uint8List file, String cloudFileId) async {
     final session = await localDataSource.getSavedSession();
     final url = Uri.parse('${UrlBackend.base}/api/v1/storage/userpicture/$userId');
@@ -191,15 +191,16 @@ class StorageRemoteDataSourceImpl implements StorageRemoteDataSource {
     });
     http.StreamedResponse resp =
         await request.send().timeout(const Duration(seconds: 300));
-
+    
     final respFromStream = await http.Response.fromStream(resp);
 
     if (resp.statusCode == 200) {
       final Map<dynamic, dynamic> resObj = json.decode(respFromStream.body);
 
-      final item = resObj['data']['items'][0];
+      List<CloudFileModel> listCloudFileModel = [];
 
-      return Future.value(CloudFileModel(
+      for (var item in resObj['data']['items']) {
+        listCloudFileModel.add(CloudFileModel(
           id: item["id"].toString(),
           name: item["name"].toString(),
           path: item["path"].toString(),
@@ -221,6 +222,9 @@ class StorageRemoteDataSourceImpl implements StorageRemoteDataSource {
           expires: item["expires"] == null
               ? null
               : DateTime.parse(item["expires"])));
+      }
+
+      return Future.value(listCloudFileModel);
     } else {
       throw ServerException();
     }
