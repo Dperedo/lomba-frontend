@@ -26,6 +26,21 @@ permissions:
   contents: read
 
 jobs:
+  slackNotification1:
+    name: Notification start build
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Slack Notification
+      uses: rtCamp/action-slack-notify@v2.2.0
+      env:
+        SLACK_COLOR: '#0040FF'
+        SLACK_ICON: https://github.com/rtCamp.png?size=48
+        SLACK_MESSAGE: 'Build Frontend Starting DEVELOP :rocket:'
+        SLACK_TITLE: Pub de FRONTEND DEVELOP
+        SLACK_USERNAME: github      
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}  
   build_and_deploy_job:
     env:
       AZURE_APP_NAME: lomba-develop-front
@@ -58,8 +73,8 @@ jobs:
           app_artifact_location: ${{ env.APP_ARTIFACT_LOCATION }}
           ###### End of Repository/Build Configurations ######
 
-  slackNotification:
-    name: Slack Notification
+  slackNotification2:
+    name: Notification finish process
     runs-on: ubuntu-latest
     if: ${{ always() }}
     needs: build_and_deploy_job
@@ -70,7 +85,7 @@ jobs:
       env:
         SLACK_COLOR: ${{ job.status }}
         SLACK_ICON: https://github.com/rtCamp.png?size=48
-        SLACK_MESSAGE: '...build and deploy DEVELOP :rocket:'
+        SLACK_MESSAGE: 'Build Frontend finish DEVELOP :rocket:'
         SLACK_TITLE: Pub de FRONTEND DEVELOP
         SLACK_USERNAME: github      
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
