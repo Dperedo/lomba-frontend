@@ -44,6 +44,7 @@ import 'package:lomba_frontend/presentation/router/bloc/router_bloc.dart';
 import 'package:lomba_frontend/presentation/saved/bloc/saved_bloc.dart';
 import 'package:lomba_frontend/presentation/setting_admin/bloc/setting_admin_bloc.dart';
 import 'package:lomba_frontend/presentation/setting_super/bloc/setting_super_bloc.dart';
+import 'package:lomba_frontend/presentation/sidedrawer/bloc/sidedrawer_cubit.dart';
 import 'package:lomba_frontend/presentation/tobeapproved/bloc/tobeapproved_bloc.dart';
 import 'package:lomba_frontend/presentation/uploaded/bloc/uploaded_bloc.dart';
 import 'package:lomba_frontend/presentation/users/bloc/user_bloc.dart';
@@ -261,6 +262,7 @@ Future<void> init() async {
       FavoritesBloc(locator(), locator(), locator(), locator(), locator()));
   locator.registerFactory(
       () => SavedBloc(locator(), locator(), locator(), locator(), locator()));
+  locator.registerFactory(() => SidedrawerLiveCubit());
 
   // usecase
   locator.registerLazySingleton(() => UpdateUserPassword(locator()));
