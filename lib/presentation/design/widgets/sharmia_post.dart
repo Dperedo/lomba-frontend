@@ -78,6 +78,15 @@ class SharmiaPostComplete extends StatelessWidget {
       return false;
     }
   }
+
+  bool screenIsNormalSize(BuildContext context) {
+    if (MediaQuery.of(context).size.width < ScreenSize.maxScreen
+     && MediaQuery.of(context).size.width >= ScreenSize.minScreen) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 class SharmiaPostCentralContentNormal extends StatelessWidget {
