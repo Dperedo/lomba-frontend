@@ -48,7 +48,6 @@ class ProfileLiveCubit extends Cubit<ProfileLiveState> {
         await _registerCloudFileProfile.execute(userId, orgaId);
     resultRegister.fold((l) => null, (r) {
       cloudFileId = r[0].id;
-      //cloudFileIdThumbnail = r[1].id;
     });
 
     final resultUpload = await _uploadFileProfile.execute(userId, image, cloudFileId);

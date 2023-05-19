@@ -13,6 +13,7 @@ import '../../nav/bloc/nav_state.dart';
 import '../../recent/bloc/recent_bloc.dart';
 import '../../../domain/entities/orga.dart';
 import '../bloc/sidedrawer_bloc.dart';
+import '../bloc/sidedrawer_cubit.dart';
 import '../bloc/sidedrawer_state.dart';
 
 class SideDrawer extends StatelessWidget {
@@ -366,6 +367,17 @@ class SideDrawer extends StatelessWidget {
                   },
                 ));
               }
+
+              childrenOptionsList.add(BlocBuilder<SidedrawerLiveCubit, SidedrawerLiveState>(
+                builder: (context, statecubit) {
+                  return Switch(
+                    value: statecubit.isDarkMode,
+                    onChanged: (bool value) {
+                      context.read<SidedrawerLiveCubit>().changeSwitchValue(value);
+                    },
+                  );
+                },
+              ));
 
               Widget listView = ListView(
                 padding: EdgeInsets.zero,

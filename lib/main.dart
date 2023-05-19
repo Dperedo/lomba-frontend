@@ -49,6 +49,7 @@ import 'presentation/roles/bloc/role_bloc.dart';
 import 'presentation/roles/pages/role_page.dart';
 import 'presentation/saved/bloc/saved_bloc.dart';
 import 'presentation/sidedrawer/bloc/sidedrawer_bloc.dart';
+import 'presentation/sidedrawer/bloc/sidedrawer_cubit.dart';
 import 'presentation/stage/bloc/stage_bloc.dart';
 import 'presentation/users/bloc/user_bloc.dart';
 import 'presentation/users/pages/users_page.dart';
@@ -79,6 +80,7 @@ class _MyApp extends State<MyApp> {
   final AppRouter _appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
+    ThemeData themeMode = ThemeData.light();
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => di.locator<NavBloc>()),
@@ -107,16 +109,21 @@ class _MyApp extends State<MyApp> {
         BlocProvider(create: (_) => di.locator<PostBloc>()),
         BlocProvider(create: (_) => di.locator<FavoritesBloc>()),
         BlocProvider(create: (_) => di.locator<SavedBloc>()),
+        BlocProvider(create: (_) => di.locator<SidedrawerLiveCubit>()),
       ],
-      child: MaterialApp(
-        title: 'App Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.deepOrange,
-        ),
-        home: BlocBuilder<NavBloc, NavState>(builder: (context, state) {
-          return _animatedSwitcher(state);
-        }),
-        onGenerateRoute: _appRouter.onGenerateRoute,
+      child: BlocBuilder<SidedrawerLiveCubit, SidedrawerLiveState>(
+        builder: (context, statecubit) {
+          return MaterialApp(
+              title: 'App Demo',
+              theme: themeMode = statecubit.isDarkMode
+              ? ThemeData.dark()
+              : ThemeData.light(),
+              home: BlocBuilder<NavBloc, NavState>(builder: (context, state) {
+                return _animatedSwitcher(state);
+              }),
+              onGenerateRoute: _appRouter.onGenerateRoute,
+            );
+        },
       ),
     );
   }
