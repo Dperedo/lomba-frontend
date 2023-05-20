@@ -36,7 +36,7 @@ class SharmiaIconVotePositive extends StatelessWidget {
       child: Icon(
         FontAwesome.thumbs_up_alt,
         color: color,
-        size: 20.0,
+        size: 21.0,
       ),
     );
   }
@@ -53,7 +53,7 @@ class SharmiaIconVoteNegative extends StatelessWidget {
     return Icon(
       FontAwesome.thumbs_down_alt,
       color: color,
-      size: 20.0,
+      size: 21.0,
     );
   }
 }
@@ -72,6 +72,7 @@ class SharmiaIconShare extends StatelessWidget {
         scaleX: 0.75,
         scaleY: 1,
         child: Icon(
+          size: 18,
           Iconic.arrow_curved,
           color: color,
         ),
@@ -91,7 +92,7 @@ class SharmiaIconFavorite extends StatelessWidget {
     return Icon(
       FontAwesome.star,
       color: color,
-      size: 22.0,
+      size: 18.0,
     );
   }
 }
@@ -107,7 +108,7 @@ class SharmiaIconBookmark extends StatelessWidget {
     return Icon(
       FontAwesome.bookmark,
       color: color,
-      size: 22.0,
+      size: 18.0,
     );
   }
 }
@@ -123,7 +124,7 @@ class SharmiaIconComment extends StatelessWidget {
     return Icon(
       FontAwesome.comment,
       color: color,
-      size: 22.0,
+      size: 18.0,
     );
   }
 }
@@ -139,7 +140,7 @@ class SharmiaIconDownload extends StatelessWidget {
     return Icon(
       FontAwesome.download,
       color: color,
-      size: 22.0,
+      size: 18.0,
     );
   }
 }
