@@ -19,7 +19,7 @@ class DesignPage extends StatelessWidget {
       ? AppBar(
         toolbarHeight: 80,
         title: Container(
-          padding: const EdgeInsets.only(top: 32.0, bottom: 16.0),
+          padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
           child: const SharmiaSideMenuLargeLogo()
         ),
         actions: const [
@@ -29,11 +29,9 @@ class DesignPage extends StatelessWidget {
         backgroundColor: SharmiaColors.sharmiaGreenBackground,
       ) : null,
       child: SingleChildScrollView(
-        child: Center(
-          child: DesignBodyFormatter(
-            screenWidth: MediaQuery.of(context).size.width,
-            child: _bodyDesign(context),
-          ),
+        child: DesignBodyFormatter(
+          screenWidth: MediaQuery.of(context).size.width,
+          child: _bodyDesign(context),
         )
       ),
     );
@@ -42,133 +40,128 @@ class DesignPage extends StatelessWidget {
   Widget _bodyDesign(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-      child: Center(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 15,
-            ),
-            Row(
-              children: [
-                Icon(
-                  Icons.arrow_downward_rounded,
-                  color: SharmiaColors.sharmiaMediumGreen,
-                  size: 17,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.arrow_downward_rounded,
+                color: SharmiaColors.sharmiaMediumGreen,
+                size: 17,
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 5.0),
+                child: Text(
+                  'Recientes',
+                  style: SharmiaTextStyles.textPageTitle(SharmiaColors.sharmiaMediumGreen),
                 ),
-                Container(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: Text(
-                    'Recientes',
-                    style: SharmiaTextStyles.textPageTitle(SharmiaColors.sharmiaMediumGreen),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            SharmiaPostComplete(
-                imageUrl:
-                    'https://kinsta.com/wp-content/uploads/2020/08/tiger-jpg.jpg',
-                textTitle:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                textContent:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                textSource: 'Emol.com, EnCancha, Bío Bío, Radio Agricultura',
-                textCategories: 'fútbol, villareal, claudio bravo, españa'),
-            SizedBox(
-              height: 50,
-            ),
-            SharmiaPostComplete(
-                imageUrl: '',
-                textTitle:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                textContent: '',
-                textSource: '',
-                textCategories: ''),
-            SizedBox(
-              height: 50,
-            ),
-            SharmiaPostComplete(
-                imageUrl: '',
-                textTitle:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                textContent: '',
-                textSource: '',
-                textCategories: 'fútbol, villareal, claudio bravo, españa'),
-            SizedBox(
-              height: 50,
-            ),
-            SharmiaPostComplete(
-                imageUrl: '',
-                textTitle:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                textContent:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                textSource: '',
-                textCategories: ''),
-            SizedBox(
-              height: 50,
-            ),
-            SharmiaPostComplete(
-                imageUrl: '',
-                textTitle:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                textContent:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                textSource: '',
-                textCategories: 'fútbol, villareal, claudio bravo, españa'),
-            SizedBox(
-              height: 50,
-            ),
-            SharmiaPostComplete(
-                imageUrl:
-                    'https://kinsta.com/wp-content/uploads/2020/08/tiger-jpg.jpg',
-                textTitle:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                textContent: '',
-                textSource: '',
-                textCategories: 'fútbol, villareal, claudio bravo, españa'),
-            SizedBox(
-              height: 50,
-            ),
-            SharmiaPostComplete(
-                imageUrl:
-                    'https://videoconverter.wondershare.com/images/en/video-converters/video-to-jpg-vcu-step4.jpg',
-                textTitle:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                textContent: '',
-                textSource: '',
-                textCategories: 'fútbol, villareal, claudio bravo, españa'),
-            SizedBox(
-              height: 50,
-            ),
-            SharmiaPostComplete(
-                imageUrl:
-                    'https://videoconverter.wondershare.com/images/en/video-converters/video-to-jpg-vcu-step4.jpg',
-                textTitle:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                textContent:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                textSource: '',
-                textCategories: 'fútbol, villareal, claudio bravo, españa'),
-            SizedBox(
-              height: 50,
-            ),
-            SharmiaPostComplete(
-                imageUrl:
-                    'https://videoconverter.wondershare.com/images/en/video-converters/video-to-jpg-vcu-step4.jpg',
-                textTitle:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                textContent:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                textSource: 'Emol.com, EnCancha, Bío Bío, Radio Agricultura',
-                textCategories: 'fútbol, villareal, claudio bravo, españa'),
-            SizedBox(
-              height: 100,
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          SharmiaPostComplete(
+              imageUrl:
+                  'https://kinsta.com/wp-content/uploads/2020/08/tiger-jpg.jpg',
+              textTitle:
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+              textContent:
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+              textSource: 'Emol.com, EnCancha, Bío Bío, Radio Agricultura',
+              textCategories: 'fútbol, villareal, claudio bravo, españa'),
+          SizedBox(
+            height: 16,
+          ),
+          SharmiaPostComplete(
+              imageUrl: '',
+              textTitle:
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+              textContent: '',
+              textSource: '',
+              textCategories: ''),
+          SizedBox(
+            height: 16,
+          ),
+          SharmiaPostComplete(
+              imageUrl: '',
+              textTitle:
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+              textContent: '',
+              textSource: '',
+              textCategories: 'fútbol, villareal, claudio bravo, españa'),
+          SizedBox(
+            height: 16,
+          ),
+          SharmiaPostComplete(
+              imageUrl: '',
+              textTitle:
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+              textContent:
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+              textSource: '',
+              textCategories: ''),
+          SizedBox(
+            height: 16,
+          ),
+          SharmiaPostComplete(
+              imageUrl: '',
+              textTitle:
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+              textContent:
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+              textSource: '',
+              textCategories: 'fútbol, villareal, claudio bravo, españa'),
+          SizedBox(
+            height: 16,
+          ),
+          SharmiaPostComplete(
+              imageUrl:
+                  'https://kinsta.com/wp-content/uploads/2020/08/tiger-jpg.jpg',
+              textTitle:
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+              textContent: '',
+              textSource: '',
+              textCategories: 'fútbol, villareal, claudio bravo, españa'),
+          SizedBox(
+            height: 16,
+          ),
+          SharmiaPostComplete(
+              imageUrl:
+                  'https://videoconverter.wondershare.com/images/en/video-converters/video-to-jpg-vcu-step4.jpg',
+              textTitle:
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+              textContent: '',
+              textSource: '',
+              textCategories: 'fútbol, villareal, claudio bravo, españa'),
+          SizedBox(
+            height: 16,
+          ),
+          SharmiaPostComplete(
+              imageUrl:
+                  'https://videoconverter.wondershare.com/images/en/video-converters/video-to-jpg-vcu-step4.jpg',
+              textTitle:
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+              textContent:
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+              textSource: '',
+              textCategories: 'fútbol, villareal, claudio bravo, españa'),
+          SizedBox(
+            height: 16,
+          ),
+          SharmiaPostComplete(
+              imageUrl:
+                  'https://videoconverter.wondershare.com/images/en/video-converters/video-to-jpg-vcu-step4.jpg',
+              textTitle:
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+              textContent:
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+              textSource: 'Emol.com, EnCancha, Bío Bío, Radio Agricultura',
+              textCategories: 'fútbol, villareal, claudio bravo, españa'),
+          SizedBox(
+            height: 100,
+          ),
+        ],
       ),
     );
   }
@@ -192,11 +185,10 @@ class SharmiaAppBarInputSearch extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 1000),
-      height: 40,
       width: screenIsSmallSize(context)
       ? 60
-      : 290,
-      padding: const EdgeInsets.only(top: 16, right: 15, bottom: 25),
+      : 305,
+      padding: const EdgeInsets.only(top: 13, right: 15, bottom: 27),
       child: TextFormField(
         textAlignVertical: TextAlignVertical.bottom,
         style: SharmiaTextStyles.textPlaceholder(SharmiaColors.sharmiaBlack),
