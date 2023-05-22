@@ -9,9 +9,15 @@ import '../widgets/sharmia_post.dart';
 import '../widgets/sharmia_sidemenu.dart';
 import '../widgets/sharmia_text_styles.dart';
 
-class DesignPage extends StatelessWidget {
+class DesignPage extends StatefulWidget {
   const DesignPage({Key? key}) : super(key: key);
 
+  @override
+  State<DesignPage> createState() => _DesignPageState();
+}
+
+class _DesignPageState extends State<DesignPage> {
+  bool isReduced = false;
   @override
   Widget build(BuildContext context) {
     return DesignScaffoldManager(
@@ -24,7 +30,7 @@ class DesignPage extends StatelessWidget {
         ),
         actions: [
           screenIsSmallSize(context)
-          ? const SharmiaAppBarInputSearchMobile()
+          ? SharmiaAppBarInputSearchMobile(isReduced: isReduced,)
           : const SharmiaAppBarInputSearch(),
         ],
         elevation: 0.0,
@@ -183,7 +189,6 @@ class DesignPage extends StatelessWidget {
       return false;
     }
   }
-
 }
 
 class SharmiaAppBarInputSearch extends StatelessWidget {
@@ -239,9 +244,11 @@ class SharmiaAppBarInputSearch extends StatelessWidget {
 }
 
 class SharmiaAppBarInputSearchMobile extends StatefulWidget {
-  const SharmiaAppBarInputSearchMobile({
-    super.key,
+   SharmiaAppBarInputSearchMobile({
+    super.key, required this.isReduced
   });
+
+  final bool isReduced;
 
   @override
   State<SharmiaAppBarInputSearchMobile> createState() => _SharmiaAppBarInputSearchMobileState();
@@ -249,6 +256,7 @@ class SharmiaAppBarInputSearchMobile extends StatefulWidget {
 
 class _SharmiaAppBarInputSearchMobileState extends State<SharmiaAppBarInputSearchMobile> {
   bool isExpanded = false;
+  
   @override
   Widget build(BuildContext context) {
     
