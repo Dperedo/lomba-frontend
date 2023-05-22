@@ -22,8 +22,10 @@ class DesignPage extends StatelessWidget {
           padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
           child: const SharmiaSideMenuLargeLogo()
         ),
-        actions: const [
-          SharmiaAppBarInputSearch(),
+        actions: [
+          screenIsSmallSize(context)
+          ? const SharmiaAppBarInputSearchMobile()
+          : const SharmiaAppBarInputSearch(),
         ],
         elevation: 0.0,
         backgroundColor: SharmiaColors.sharmiaGreenBackground,
@@ -174,6 +176,14 @@ class DesignPage extends StatelessWidget {
     }
   }
 
+  bool screenIsSmallSize(BuildContext context) {
+    if (MediaQuery.of(context).size.width <= 600) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 }
 
 class SharmiaAppBarInputSearch extends StatelessWidget {
@@ -183,8 +193,7 @@ class SharmiaAppBarInputSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 1000),
+    return Container(
       width: screenIsSmallSize(context)
       ? 60
       : 305,
@@ -208,6 +217,83 @@ class SharmiaAppBarInputSearch extends StatelessWidget {
                 SharmiaColors.sharmiaBlack20),
             hintText: 'Buscar',
             suffixIcon: SharmiaIconSearch(color: SharmiaColors.sharmiaBlack20),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6),
+              borderSide: BorderSide(
+                width: 1,
+                color: SharmiaColors.sharmiaBlack20,
+                style: BorderStyle.solid,
+              ),
+            )),
+      ),
+    );
+  }
+
+  bool screenIsSmallSize(BuildContext context) {
+    if (MediaQuery.of(context).size.width <= 600) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
+class SharmiaAppBarInputSearchMobile extends StatefulWidget {
+  const SharmiaAppBarInputSearchMobile({
+    super.key,
+  });
+
+  @override
+  State<SharmiaAppBarInputSearchMobile> createState() => _SharmiaAppBarInputSearchMobileState();
+}
+
+class _SharmiaAppBarInputSearchMobileState extends State<SharmiaAppBarInputSearchMobile> {
+  bool isExpanded = false;
+  @override
+  Widget build(BuildContext context) {
+    
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 1000),
+      width: isExpanded ? 305 : 58,
+      padding: const EdgeInsets.only(top: 11, right: 8, bottom: 27),
+      child: TextFormField(
+        onTap: () {
+          setState(() {
+            isExpanded = true;
+          });
+        },
+        textAlignVertical: TextAlignVertical.bottom,
+        style: SharmiaTextStyles.textPlaceholder(SharmiaColors.sharmiaBlack),
+        decoration: InputDecoration(
+            filled: true,
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6),
+              borderSide: BorderSide(
+                width: 1,
+                color: SharmiaColors.sharmiaBlack20,
+                style: BorderStyle.solid,
+              ),
+            ),
+            fillColor: SharmiaColors.sharmiaWhite,
+            alignLabelWithHint: true,
+            hintStyle: SharmiaTextStyles.textPlaceholderText(
+                SharmiaColors.sharmiaBlack20),
+            hintText: 'Buscar',
+            suffixIcon: isExpanded
+            ? IconButton(
+              onPressed: () {
+                setState(() {
+                  isExpanded = false;
+                });
+              },
+              icon: Icon(
+                Icons.cancel,
+                color: SharmiaColors.sharmiaUltraBlack,)//SharmiaIconClose(color: SharmiaColors.sharmiaBlack20),
+            )
+            : Padding(
+              padding: const EdgeInsetsDirectional.only(end: 9.0),
+              child: SharmiaIconSearch(color: SharmiaColors.sharmiaBlack20),
+            ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6),
               borderSide: BorderSide(
